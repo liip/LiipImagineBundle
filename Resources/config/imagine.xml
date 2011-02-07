@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
+        <parameter key="imagine.cache_dir">%imagine.web_root%/imagine</parameter>
+        <parameter key="imagine.filter.manager.class">Bundle\Avalanche\ImagineBundle\Imagine\FilterManager</parameter>
+        <parameter key="imagine.twig.extension.class">Bundle\Avalanche\ImagineBundle\Templating\ImagineExtension</parameter>
+        <parameter key="imagine.gd.class">Imagine\Gd\Imagine</parameter>
+        <parameter key="imagine.imagick.class">Imagine\Gd\Imagine</parameter>
+    </parameters>
+
+    <services>
+        <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
+            <argument type="service" id="service_container" />
+            <argument>%imagine.filters%</argument>
+        </service>
+
+        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%">
+            <argument type="service" id="imagine" />
+            <argument type="service" id="imagine.filter.manager" />
+            <argument>%imagine.web_root%</argument>
+            <argument>%imagine.cache_dir%</argument>
+        </service>
+
+        <service id="imagine.gd" class="%imagine.gd.class%" />
+
+        <service id="imagine.imagick" class="%imagine.imagick.class%" />
+    </services>
+</container>
