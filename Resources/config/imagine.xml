@@ -19,8 +19,10 @@
         </service>
 
         <service id="imagine.twig.extension" class="%imagine.twig.extension.class%">
+            <tag name="twig.extension" />
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.filter.manager" />
+            <argument type="service" id="filesystem" />
             <argument>%imagine.web_root%</argument>
             <argument>%imagine.cache_dir%</argument>
         </service>

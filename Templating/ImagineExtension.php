@@ -5,18 +5,21 @@ namespace Bundle\Avalanche\ImagineBundle\Templating;
 use Bundle\Avalanche\ImagineBundle\Imagine\FilterManager;
 use Imagine\ImagineInterface;
 use Imagine\Filter\FilterInterface;
+use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
 
 class ImagineExtension extends \Twig_Extension
 {
     private $imagine;
     private $filterManager;
+    private $filesystem;
     private $webRoot;
     private $cacheDir;
 
-    public function __construct(ImagineInterface $imagine, FilterManager $filterManager, $webRoot, $cacheDir)
+    public function __construct(ImagineInterface $imagine, FilterManager $filterManager, Filesystem $filesystem, $webRoot, $cacheDir)
     {
         $this->imagine       = $imagine;
         $this->filterManager = $filterManager;
+        $this->filesystem    = $filesystem;
         $this->webRoot       = $webRoot;
         $this->cacheDir      = $cacheDir;
 
@@ -40,14 +43,23 @@ class ImagineExtension extends \Twig_Extension
 
         if (!file_exists($cachePath)) {
             $filter = $this->filterManager->get($filter);
+            if (0 === strpos($path, '/')) {
+                $path = $this->webRoot . $path;
+            }
+
             $image  = $this->imagine->open($path);
+
+            $dir = dirname($cachePath);
+            if (!is_dir($dir)) {
+                $this->filesystem->mkdirs($dir);
+            }
 
             $filter->apply($image)->save($cachePath);
 
             unset($filter, $image);
         }
-
-        return strstr($cachePath, $this->webRoot);
+        // TODO: find a better way to remove webroot absolute path from produced path
+        return str_replace($this->webRoot, "", $cachePath);
     }
 
     public function getName()
