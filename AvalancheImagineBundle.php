@@ -8,10 +8,20 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class AvalancheImagineBundle extends Bundle
 {
+
+    public function getNamespace()
+    {
+        return __NAMESPACE__;
+    }
+
+    public function getPath()
+    {
+        return strtr(__DIR__, '\\', '/');
+    }
+
     public function registerExtensions(ContainerBuilder $container)
     {
         $container->addCompilerPass(new FiltersCompilerPass());
-
         parent::registerExtensions($container);
     }
 }

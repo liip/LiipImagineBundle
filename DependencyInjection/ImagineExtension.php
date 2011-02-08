@@ -9,9 +9,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class ImagineExtension extends Extension
 {
-    public function loadConfig(array $configs, ContainerBuilder $container)
+    public function configLoad(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'../Resources/config');
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
         $loader->load('imagine.xml');
 
         $config = $this->mergeConfig($configs);
@@ -33,5 +33,48 @@ class ImagineExtension extends Extension
                 $container->setParameter('imagine.public.'.$key, $driver[$key]);
             }
         }
+    }
+
+    private function mergeConfig(array $configs)
+    {
+        $config = array();
+
+        foreach ($configs as $cnf) {
+            $config = array_merge($config, $cnf);
+        }
+
+        return $config;
+    }
+
+    /**
+     * Returns the namespace to be used for this extension (XML namespace).
+     *
+     * @return string The XML namespace
+     */
+    function getNamespace()
+    {
+        return 'http://xmlns.avalanche123.com/dic/imagine';
+    }
+
+    /**
+     * Returns the base path for the XSD files.
+     *
+     * @return string The XSD base path
+     */
+    function getXsdValidationBasePath()
+    {
+        return __DIR__.'/../Resources/config/schema';
+    }
+
+    /**
+     * Returns the recommended alias to use in XML.
+     *
+     * This alias is also the mandatory prefix to use when using YAML.
+     *
+     * @return string The alias
+     */
+    function getAlias()
+    {
+        return 'imagine';
     }
 }
