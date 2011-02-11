@@ -1,8 +1,8 @@
 <?php
 
-namespace Bundle\Avalanche\ImagineBundle\Templating;
+namespace Avalanche\Bundle\ImagineBundle\Templating;
 
-use Bundle\Avalanche\ImagineBundle\Imagine\FilterManager;
+use Avalanche\Bundle\ImagineBundle\Imagine\FilterManager;
 use Imagine\ImagineInterface;
 use Imagine\Filter\FilterInterface;
 use Symfony\Bundle\FrameworkBundle\Util\Filesystem;

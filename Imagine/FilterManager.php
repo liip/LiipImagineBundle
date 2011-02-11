@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Avalanche\ImagineBundle\Imagine;
+namespace Avalanche\Bundle\ImagineBundle\Imagine;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Avalanche\ImagineBundle\DependencyInjection;
+namespace Avalanche\Bundle\ImagineBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bundle\Avalanche\ImagineBundle;
+namespace Avalanche\Bundle\ImagineBundle;
 
-use Bundle\Avalanche\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
+use Avalanche\Bundle\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

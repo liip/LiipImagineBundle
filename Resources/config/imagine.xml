@@ -6,8 +6,8 @@
     <parameters>
         <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
         <parameter key="imagine.cache_dir">%imagine.web_root%/imagine</parameter>
-        <parameter key="imagine.filter.manager.class">Bundle\Avalanche\ImagineBundle\Imagine\FilterManager</parameter>
-        <parameter key="imagine.twig.extension.class">Bundle\Avalanche\ImagineBundle\Templating\ImagineExtension</parameter>
+        <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\FilterManager</parameter>
+        <parameter key="imagine.twig.extension.class">Avalanche\Bundle\ImagineBundle\Templating\ImagineExtension</parameter>
         <parameter key="imagine.gd.class">Imagine\Gd\Imagine</parameter>
         <parameter key="imagine.imagick.class">Imagine\Gd\Imagine</parameter>
     </parameters>
