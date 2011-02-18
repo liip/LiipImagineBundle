@@ -5,26 +5,35 @@ ImagineBundle requires ["Imagine library"](/avalanche123/Imagine)
 #Installation#
 
  - Go to the `src` directory of your project
+
     
     cd src/
     
+
  - Install Imagine library in your vendor directory
+
     
     git clone git://github.com/avalanche123/Imagine.git vendor/imagine
     
+
  - Register Imagine in autoload.php
+
     
     $loader->registerNamespaces(array(
         // your libraries
         'Imagine' => __DIR__.'/vendor/imagine/lib',
     ));
     
+
  - Clone ImagineBundle into your src directory under Avalanche/Bundle path
+
     
     mkdir -pv Avalanche/Bundle
     git clone git://github.com/avalanche123/AvalancheImagineBundle.git Avalanche/Bundle/ImagineBundle
     
+
  - Open your kernel and register the bundle
+
     
     public function registerBundles()
     {
@@ -32,12 +41,15 @@ ImagineBundle requires ["Imagine library"](/avalanche123/Imagine)
         new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
     }
     
+
  - Register Imagine dynamic routes in your `routing.yml` or equivalent file
+
     
     _imagine:
         resource: .
         type:     imagine
     
+
  - Configure the bundle and enjoy
 
 #Configuration#
@@ -88,12 +100,14 @@ For an example of filter loader implementation, refer to `Avalanche\Bundle\Imagi
 ImagineBundle comes with the following filter loaders pre-built:
 
 * `thumbnail` - has two modes - 'outbound' and 'inset'
+
     
     filters:
         thumbnail:
             type:    thumbnail
             options: { size: [120, 90], mode: outbound }
     
+
 #Basic Usage#
 
 ImagineBundle uses Imagine to apply filters to images by path dynamically on the first request and cache them in a similar path, so that if mod_rewrite or other alternative rewrite engine is enabled, it would serve the cached image instead of handling request to Symfony2 on all subsequent requests.
