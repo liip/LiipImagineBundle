@@ -1,11 +1,11 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Templating;
+namespace Avalanche\Bundle\ImagineBundle\Templating\Helper;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
-use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
+use Symfony\Component\Templating\Helper\Helper;
 
-class ImagineExtension extends \Twig_Extension
+class ImagineHelper extends Helper
 {
     /**
      * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
@@ -23,17 +23,6 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Twig_Extension::getFilters()
-     */
-    public function getFilters()
-    {
-        return array(
-            'apply_filter' => new \Twig_Filter_Method($this, 'applyFilter'),
-        );
-    }
-
-    /**
      * Gets cache path of an image to be filtered
      *
      * @param string $path
@@ -41,14 +30,14 @@ class ImagineExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function applyFilter($path, $filter)
+    public function filter($path, $filter)
     {
         return $this->cachePathResolver->getBrowserPath($path, $filter);
     }
 
     /**
      * (non-PHPdoc)
-     * @see Twig_ExtensionInterface::getName()
+     * @see Symfony\Component\Templating\Helper.HelperInterface::getName()
      */
     public function getName()
     {

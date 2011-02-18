@@ -4,31 +4,112 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+
+        <!-- Configuration defaults -->
+
         <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
-        <parameter key="imagine.cache_dir">%imagine.web_root%/imagine</parameter>
-        <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\FilterManager</parameter>
+        <parameter key="imagine.cache_prefix">media/cache</parameter>
+        <parameter key="imagine.filters" type="collection" />
+
+        <!-- Utility classes -->
+
+        <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
+        <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
+
+        <!-- Controller class -->
+
+        <parameter key="imagine.controller.class">Avalanche\Bundle\ImagineBundle\Controller\ImagineController</parameter>
+
+        <!-- Route loader class -->
+
+        <parameter key="imagine.routing.loader.class">Avalanche\Bundle\ImagineBundle\Routing\ImagineLoader</parameter>
+
+        <!-- Templating classes -->
+
         <parameter key="imagine.twig.extension.class">Avalanche\Bundle\ImagineBundle\Templating\ImagineExtension</parameter>
+        <parameter key="imagine.templating.helper.class">Avalanche\Bundle\ImagineBundle\Templating\Helper\ImagineHelper</parameter>
+
+        <!-- ImagineInterface implementations -->
+
         <parameter key="imagine.gd.class">Imagine\Gd\Imagine</parameter>
-        <parameter key="imagine.imagick.class">Imagine\Gd\Imagine</parameter>
+        <parameter key="imagine.imagick.class">Imagine\Imagick\Imagine</parameter>
+        <parameter key="imagine.gmagick.class">Imagine\Gmagick\Imagine</parameter>
+
+        <!-- Filter loaders' classes -->
+
+        <parameter key="imagine.filter.loader.thumbnail.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
+
+        <!-- Request Listener class -->
+
+        <parameter key="imagine.listener.request.class">Avalanche\Bundle\ImagineBundle\Listener\RequestListener</parameter>
+
     </parameters>
 
     <services>
+        
+        <!-- Utility services -->
+
+        <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
+            <argument>%imagine.web_root%</argument>
+            <argument type="service" id="router" />
+        </service>
+
         <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
-            <argument type="service" id="service_container" />
             <argument>%imagine.filters%</argument>
         </service>
 
-        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%">
-            <tag name="twig.extension" />
+        <!-- Controller -->
+
+        <service id="imagine.controller" class="%imagine.controller.class%">
+            <argument type="service" id="imagine.cache.path.resolver" />
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.filter.manager" />
             <argument type="service" id="filesystem" />
             <argument>%imagine.web_root%</argument>
-            <argument>%imagine.cache_dir%</argument>
         </service>
+
+        <!-- Route Loader -->
+
+        <service id="imagine.routing.loader" class="%imagine.routing.loader.class%">
+            <tag name="routing.loader" />
+            <argument>%imagine.cache_prefix%</argument>
+            <argument>%imagine.filters%</argument>
+        </service>
+
+        <!-- ImagineInterface instances -->
+        
+        <service id="imagine" alias="imagine.gd" /> 
 
         <service id="imagine.gd" class="%imagine.gd.class%" />
 
         <service id="imagine.imagick" class="%imagine.imagick.class%" />
+
+        <service id="imagine.gmagick" class="%imagine.gmagick.class%" />
+
+        <!--  Templating helpers and extensions -->
+
+        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%">
+            <tag name="twig.extension" />
+            <argument type="service" id="imagine.cache.path.resolver" />
+        </service>
+
+        <service id="imagine.templating.helper" class="%imagine.templating.helper.class%">
+            <tag name="templating.helper" alias="imagine" />
+            <argument type="service" id="imagine.cache.path.resolver" />
+        </service>
+
+        <!-- Filter loaders -->
+
+        <service id="imagine.filter.loader.thumbnail" class="%imagine.filter.loader.thumbnail.class%">
+            <tag name="imagine.filter.loader" filter="thumbnail" />
+        </service>
+
+        <!-- Request listener -->
+
+        <service id="imagine.listener.request" class="%imagine.listener.request.class%">
+            <tag name="kernel.listener" event="core.request" method="handle" />
+            <argument type="service" id="imagine.cache.path.resolver" />
+        </service>
+
     </services>
 </container>
