@@ -6,49 +6,37 @@ ImagineBundle requires ["Imagine library"](/avalanche123/Imagine)
 
  - Go to the `src` directory of your project
 
-    
-    cd src/
-    
+    `cd src/`
 
  - Install Imagine library in your vendor directory
 
-    
-    git clone git://github.com/avalanche123/Imagine.git vendor/imagine
-    
+    `git clone git://github.com/avalanche123/Imagine.git vendor/imagine`
 
  - Register Imagine in autoload.php
 
-    
-    $loader->registerNamespaces(array(
+    `$loader->registerNamespaces(array(
         // your libraries
         'Imagine' => __DIR__.'/vendor/imagine/lib',
-    ));
-    
+    ));`
 
  - Clone ImagineBundle into your src directory under Avalanche/Bundle path
 
-    
-    mkdir -pv Avalanche/Bundle
-    git clone git://github.com/avalanche123/AvalancheImagineBundle.git Avalanche/Bundle/ImagineBundle
-    
+    `mkdir -pv Avalanche/Bundle
+    git clone git://github.com/avalanche123/AvalancheImagineBundle.git Avalanche/Bundle/ImagineBundle`
 
  - Open your kernel and register the bundle
 
-    
-    public function registerBundles()
+    `public function registerBundles()
     {
         // thrid-party bundle
         new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
-    }
-    
+    }`
 
  - Register Imagine dynamic routes in your `routing.yml` or equivalent file
 
-    
-    _imagine:
+    `_imagine:
         resource: .
-        type:     imagine
-    
+        type:     imagine`
 
  - Configure the bundle and enjoy
 
@@ -69,15 +57,15 @@ There are several configuration options available for ImagineBundle:
 
  - `web_root` - must be the absolute path to you application's web root, this is used to determine where to put generated image files, so that apache will pick them up before handing the request to Symfony2 next time they are requested
  
-    default: %kernel.root_dir%/../web
+    `default: %kernel.root_dir%/../web`
 
  - `cache_prefix` - this is also used in the path for image generation, use to not clutter your web root with cache files. E.g. if `imagine` is specified, the images would be written to web root/imagine
 
-    default: imagine
+    `default: imagine`
 
  - `driver` - one of the three 'gd', 'imagick', 'gmagick'
 
-    default: gd
+    `default: gd`
 
  - `filters` - specify filter aliases and options along with filter loader types to use
 
@@ -93,20 +81,18 @@ ImagineBundle let's you define your own `Avalanche\Bundle\ImagineBundle\Imagine\
 
 Once you have your filter loader class created, you need to register it in the DIC using `imagine.filter.loader` tag with `filter` attribute, that corresponds to `type` attribute in `filters` collection in the bundle configuration
     
-    <tag name="imagine.filter.loader" filter="thumbnail" />
+    `<tag name="imagine.filter.loader" filter="thumbnail" />`
     
 For an example of filter loader implementation, refer to `Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`
 
 ImagineBundle comes with the following filter loaders pre-built:
 
-* `thumbnail` - has two modes - 'outbound' and 'inset'
+ - `thumbnail` - has two modes - 'outbound' and 'inset'
 
-    
-    filters:
+    `filters:
         thumbnail:
             type:    thumbnail
-            options: { size: [120, 90], mode: outbound }
-    
+            options: { size: [120, 90], mode: outbound }`
 
 #Basic Usage#
 
