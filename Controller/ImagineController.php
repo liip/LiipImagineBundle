@@ -59,12 +59,15 @@ class ImagineController
      *
      * @param string $path
      * @param string $filter
+     *
+     * @return Response
      */
     public function filter($path, $filter)
     {
         $path = '/'.ltrim($path, '/');
 
-        $cachePath = $this->cachePathResolver->getCachePath($path, $filter);
+        //TODO: find out why I need double urldecode to get a valid path
+        $cachePath = urldecode(urldecode($this->cachePathResolver->getCachePath($path, $filter)));
 
          // if cache path cannot be determined, return 404
         if (null === $cachePath) {
