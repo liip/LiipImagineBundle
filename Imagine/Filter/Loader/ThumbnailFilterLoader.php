@@ -2,7 +2,7 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\Box;
+use Imagine\Image\Box;
 use Imagine\Filter\Basic\Thumbnail;
 use Imagine\ImageInterface;
 
