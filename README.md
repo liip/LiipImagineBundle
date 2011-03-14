@@ -12,11 +12,11 @@ ImagineBundle requires ["Imagine library"](/avalanche123/Imagine)
 
         git clone git://github.com/avalanche123/Imagine.git vendor/imagine
 
- 3. Register Imagine in autoload.php
+ 3. Register Imagine in `autoload.php`
 
         $loader->registerNamespaces(array(
             // your libraries
-            'Imagine' => __DIR__.'/vendor/imagine/lib',
+            'Imagine' => __DIR__.'/src/vendor/imagine/lib',
         ));
 
  4. Clone ImagineBundle into your src directory under Avalanche/Bundle path
@@ -102,7 +102,7 @@ ImagineBundle uses Imagine to apply filters to images by path dynamically on the
 
 Usage in twig is simple:
 
-    <img src="{ '/relative/path/to/image.jpg'|apply_filter('thumbnail) }" />
+    <img src="{{ '/relative/path/to/image.jpg'|apply_filter('thumbnail) }}" />
 
 ##PHP##
 
