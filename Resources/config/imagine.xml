@@ -88,7 +88,7 @@
 
         <!--  Templating helpers and extensions -->
 
-        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%">
+        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="imagine.cache.path.resolver" />
         </service>
