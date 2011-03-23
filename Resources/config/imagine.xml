@@ -107,7 +107,7 @@
         <!-- Request listener -->
 
         <service id="imagine.listener.request" class="%imagine.listener.request.class%">
-            <tag name="kernel.listener" event="core.request" method="handle" />
+            <tag name="kernel.listener" event="onCoreRequest" method="handle" />
             <argument type="service" id="imagine.cache.path.resolver" />
         </service>
 
