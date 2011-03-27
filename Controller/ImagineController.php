@@ -94,7 +94,7 @@ class ImagineController
         $dir = pathinfo($realPath, PATHINFO_DIRNAME);
 
         if (!is_dir($dir)) {
-            if (!$this->filesystem->mkdirs($dir)) {
+            if (!$this->filesystem->mkdir($dir)) {
                 throw new \RuntimeException(sprintf(
                     'Could not create directory %s', $dir
                 ));
