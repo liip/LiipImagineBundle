@@ -5,7 +5,7 @@ namespace Avalanche\Bundle\ImagineBundle\Controller;
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\ImagineInterface;
-use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
+use Symfony\Component\HttpKernel\Util\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -27,7 +27,7 @@ class ImagineController
     private $filterManager;
 
     /**
-     * @var Symfony\Bundle\FrameworkBundle\Util\Filesystem
+     * @var Symfony\Component\HttpKernel\Util\Filesystem
      */
     private $filesystem;
 
