@@ -52,7 +52,7 @@ class CachePathResolver
     {
         $path = $this->getBrowserPath($path, $filter);
 
-        if (0 === strpos($path, $this->baseUrl)) {
+        if (!empty($this->baseUrl) && 0 === strpos($path, $this->baseUrl)) {
             $path = $this->basePath.substr($path, strlen($this->baseUrl));
         }
 
