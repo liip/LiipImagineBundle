@@ -39,10 +39,6 @@
 
         <parameter key="imagine.filter.loader.thumbnail.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
 
-        <!-- Request Listener class -->
-
-        <parameter key="imagine.listener.request.class">Avalanche\Bundle\ImagineBundle\Listener\RequestListener</parameter>
-
     </parameters>
 
     <services>
@@ -60,7 +56,8 @@
 
         <!-- Controller -->
 
-        <service id="imagine.controller" class="%imagine.controller.class%">
+        <service id="imagine.controller" class="%imagine.controller.class%" scope="request">
+            <argument type="service" id="request" />
             <argument type="service" id="imagine.cache.path.resolver" />
             <argument type="service" id="imagine" />
             <argument type="service" id="imagine.filter.manager" />
@@ -102,13 +99,6 @@
 
         <service id="imagine.filter.loader.thumbnail" class="%imagine.filter.loader.thumbnail.class%">
             <tag name="imagine.filter.loader" filter="thumbnail" />
-        </service>
-
-        <!-- Request listener -->
-
-        <service id="imagine.listener.request" class="%imagine.listener.request.class%">
-            <tag name="kernel.listener" event="onCoreRequest" />
-            <argument type="service" id="imagine.cache.path.resolver" />
         </service>
 
     </services>

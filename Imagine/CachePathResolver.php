@@ -18,16 +18,6 @@ class CachePathResolver
     private $router;
 
     /**
-     * @var string
-     */
-    private $baseUrl;
-
-    /**
-     * @var string
-     */
-    private $basePath;
-
-    /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
      * @param string                                    $webRoot
@@ -37,26 +27,6 @@ class CachePathResolver
     {
         $this->webRoot = $webRoot;
         $this->router  = $router;
-    }
-
-    /**
-     * Resovles the cache path of a given web root relative path, based on the
-     * given filter, removes /index.php if the path is not rewritten
-     *
-     * @param string $path
-     * @param string $filter
-     *
-     * @return string
-     */
-    public function getCachePath($path, $filter)
-    {
-        $path = $this->getBrowserPath($path, $filter);
-
-        if (!empty($this->baseUrl) && 0 === strpos($path, $this->baseUrl)) {
-            $path = $this->basePath.substr($path, strlen($this->baseUrl));
-        }
-
-        return $path;
     }
 
     /**
@@ -84,21 +54,5 @@ class CachePathResolver
         );
 
         return $path;
-    }
-
-    /**
-     * @param string $basePath
-     */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
-    /**
-     * @param string $baseUrl
-     */
-    public function setBaseUrl($baseUrl)
-    {
-        $this->baseUrl = $baseUrl;
     }
 }

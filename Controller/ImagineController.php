@@ -6,11 +6,17 @@ use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\ImagineInterface;
 use Symfony\Component\HttpKernel\Util\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ImagineController
 {
+    /**
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
     /**
      * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
      */
@@ -39,13 +45,22 @@ class ImagineController
     /**
      * Constructs by setting $cachePathResolver
      *
+     * @param Symfony\Component\HttpFoundation\Request                 $request
      * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
-     * @param Imagine\ImagineInterface
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\FilterManager
-     * @param string
+     * @param Imagine\ImagineInterface                                 $imagine
+     * @param Avalanche\Bundle\ImagineBundle\Imagine\FilterManager     $filterManager
+     * @param string                                                   $webRoot
      */
-    public function __construct(CachePathResolver $cachePathResolver, ImagineInterface $imagine, FilterManager $filterManager, Filesystem $filesystem, $webRoot)
+    public function __construct(
+        Request $request,
+        CachePathResolver $cachePathResolver,
+        ImagineInterface $imagine,
+        FilterManager $filterManager,
+        Filesystem $filesystem,
+        $webRoot
+    )
     {
+        $this->request           = $request;
         $this->cachePathResolver = $cachePathResolver;
         $this->imagine           = $imagine;
         $this->filterManager     = $filterManager;
@@ -67,21 +82,26 @@ class ImagineController
         $path = '/'.ltrim($path, '/');
 
         //TODO: find out why I need double urldecode to get a valid path
-        $cachePath = urldecode(urldecode($this->cachePathResolver->getCachePath($path, $filter)));
+        $browserPath = urldecode(urldecode($this->cachePathResolver->getBrowserPath($path, $filter)));
+        $basePath = $this->request->getBaseUrl();
+
+        if (!empty($this->baseUrl) && 0 === strpos($browserPath, $basePath)) {
+             $browserPath = substr($browserPath, strlen($basePath));
+        }
 
          // if cache path cannot be determined, return 404
-        if (null === $cachePath) {
+        if (null === $browserPath) {
             throw new NotFoundHttpException('Image doesn\'t exist');
         }
 
-        $realPath = $this->webRoot.$cachePath;
+        $realPath = $this->webRoot.$browserPath;
         $sourcePath = $this->webRoot.$path;
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($realPath)) {
             return new Response('', 301, array(
-                'location' => $cachePath
+                'location' => $this->request->->getBasePath().$browserPath
             ));
         }
 
