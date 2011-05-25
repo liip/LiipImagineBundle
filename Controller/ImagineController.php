@@ -85,7 +85,7 @@ class ImagineController
         $browserPath = urldecode(urldecode($this->cachePathResolver->getBrowserPath($path, $filter)));
         $basePath = $this->request->getBaseUrl();
 
-        if (!empty($this->baseUrl) && 0 === strpos($browserPath, $basePath)) {
+        if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
              $browserPath = substr($browserPath, strlen($basePath));
         }
 
