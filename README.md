@@ -1,115 +1,228 @@
-#Requirements#
+AvalancheImagineBundle
+======================
 
-ImagineBundle requires ["Imagine library"](/avalanche123/Imagine)
+This bundle provides easy image manipulation support for Symfony2. For example,
+with this bundle, the following is possible:
 
-#Installation#
+``` jinja
+<img src="{{ '/relative/path/to/image.jpg' | apply_filter('thumbnail') }}" />
+````
 
- 1. Go to the `src` directory of your project
+This will perform the transformation called `thumbnail`, which you can define
+to do a number of different things, such as resizing, cropping, drawing,
+masking, etc.
 
-        cd src/
+This bundle integrates the standalone PHP "[Imagine library](/avalanche123/Imagine)".
 
- 2. Install Imagine library in your vendor directory
+## Installation
 
-        git clone git://github.com/avalanche123/Imagine.git vendor/imagine
+To install this bundle, you'll need both the [Imagine library](/avalanche123/Imagine)
+and this bundle. Installation depends on how your project is setup:
 
- 3. Register Namespaces in `autoload.php`
+### Step 1: Installation using the `bin/vendors.php` method
 
-        $loader->registerNamespaces(array(
-            // your libraries
-            'Imagine'   => __DIR__.'/src/vendor/imagine/lib',
-            'Avalanche' => __DIR__.'/vendor/bundles',
-        ));
+If you're using the `bin/vendors.php` method to manage your vendor libraries,
+add the following entries to your `bin/deps` file:
 
- 4. Clone ImagineBundle into your src directory under Avalanche/Bundle path
+```
+/                       imagine               git://github.com/avalanche123/Imagine.git
+/bundles/Avalanche/Bundle ImagineBundle       git://github.com/avalanche123/AvalancheImagineBundle.git
+```
 
-        mkdir -pv Avalanche/Bundle
-        git clone git://github.com/avalanche123/AvalancheImagineBundle.git Avalanche/Bundle/ImagineBundle
+Next, update your vendors by running:
 
- - Open your kernel and register the bundle
+``` bash
+$ php bin/vendors.php
+```
 
-        public function registerBundles()
-        {
-            // thrid-party bundle
-            new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
-        }
+Great! Now skip down to *Step 2*.
 
- - Register Imagine dynamic routes in your `routing.yml` or equivalent file
+### Step 1 (alternative): Installation with submodules
 
-        _imagine:
-            resource: .
-            type:     imagine
+If you're managing your vendor libraries with submodules, first create the
+`vendor/bundles/Avalanche/Bundle` directory:
 
- - Configure the bundle and enjoy
+``` bash
+$ mkdir -pv vendor/bundles/Avalanche/Bundle
+```
 
-#Configuration#
+Next, add the two necessary submodules:
 
-Enable the bundle extension by adding the following to your `app/config.yml`
-    
-    avalanche_imagine:
-        web_root:     %kernel.root_dir%/../web
-        cache_prefix: imagine
-        driver:       gd
-        filters:
-            thumbnail:
-                type:    thumbnail
-                options: { size: [120, 90], mode: outbound }
-    
-There are several configuration options available for ImagineBundle:
+``` bash
+$ git submodule add git://github.com/avalanche123/Imagine.git vendor/imagine
+$ git submodule add git://github.com/avalanche123/AvalancheImagineBundle.git vendor/bundles/Avalanche/Bundle/ImagineBundle
+```
 
- - `web_root` - must be the absolute path to you application's web root, this is used to determine where to put generated image files, so that apache will pick them up before handing the request to Symfony2 next time they are requested
+### Step2: Configure the autoloader
 
-    default: %kernel.root_dir%/../web
+Add the following entries to your autoloader:
 
- - `cache_prefix` - this is also used in the path for image generation, use to not clutter your web root with cache files. E.g. if `imagine` is specified, the images would be written to web root/imagine
+``` php
+<?php
+// app/autoload.php
 
-    default: imagine
+$loader->registerNamespaces(array(
+    // ...
 
- - `driver` - one of the three 'gd', 'imagick', 'gmagick'
+    'Imagine'          => __DIR__.'/../vendor/imagine/lib',
+    'Avalanche'        => __DIR__.'/../vendor/bundles',
+));
+```
 
-    default: gd
+### Step3: Enable the bundle
 
- - `filters` - specify filter aliases and options along with filter loader types to use
+Finally, enable the bundle in the kernel:
+
+``` php
+<?php
+// app/AppKernel.php
+
+public function registerBundles()
+{
+    $bundles = array(
+        // ...
+
+        new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
+    );
+}
+```
+
+### Step4: Register the bundle's routes
+
+Finally, add the following to your routing file:
+
+``` yaml
+# app/config/routing.yml
+
+_imagine:
+    resource: .
+    type:     imagine
+```
+
+Congratulations! You're ready to rock your images!
+
+## Basic Usage
+
+This bundle works by configuring a set of filters and then applying those
+filters to images inside a template So, start by creating some sort of filter
+that you need to apply somewhere in your application. For example, suppose
+you want to thumbnail an image to a size of 120x90 pixels:
+
+``` yaml
+# app/config/config.yml
+
+avalanche_imagine:
+    filters:
+        my_thumb:
+            type:    thumbnail
+            options: { size: [120, 90], mode: outbound }
+```
+
+You've now defined a filter called `my_thumb` that performs a thumbnail transformation.
+We'll learn more about available transformations later, but for now, this
+new filter can be used immediately in a template:
+
+``` jinja
+<img src="{{ '/relative/path/to/image.jpg' | apply_filter('my_thumb') }}" />
+```
+
+Or if you're using PHP templates:
+
+``` php
+<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb') ?>" />
+```
+
+Behind the scenes, the bundles apples the filter(s) to the image on the first
+request and then caches the image to a similar path. On the next request,
+the cached image would be served directly from the file system.
+
+In this example, the final rendered path would be something like
+`/media/cache/my_thumb/relative/path/to/image.jpg`. This is where Imagine
+would save the filtered image file.
+
+## Configuration
+
+The default configuration for the bundle looks like this:
+
+``` yaml
+avalanche_imagine:
+    web_root:     %kernel.root_dir%/../web
+    cache_prefix: media/cache
+    driver:       gd
+    filters:      []
+```
+
+There are several configuration options available:
+
+ - `web_root` - must be the absolute path to you application's web root. This
+    is used to determine where to put generated image files, so that apache
+    will pick them up before handing the request to Symfony2 next time they
+    are requested.
+
+    default: `%kernel.root_dir%/../web`
+
+ - `cache_prefix` - this is also used in the path for image generation, so
+    as to not clutter your web root with cached images. For example by default,
+    the images would be written to the `web/media/cache/` directory.
+
+    default: `media/cache`
+
+ - `driver` - one of the three drivers: `gd`, `imagick`, `gmagick`
+
+    default: `gd`
+
+ - `filters` - specify the filters that you want to define and use
 
 Each filter that you specify have the following options:
 
- - `type` - determine the type of loader to be used, refer to loaders section for more information
- - `options` - required for loaders that need options, can be omitted for others
- - `path` - this is an overload for globally specified `cache_prefix`, to let you direct specific to cache its results at a different location. Generated path would not contain the filter name in this case, only the specified `path` + source image path.
+ - `type` - determine the type of filter to be used, refer to *Filters* section for more information
+ - `options` - options that should be passed to the specific filter type
+ - `path` - override the global `cache_prefix` and replace it with this path
 
-#Loaders#
+## Built-in Filters
 
-ImagineBundle let's you define your own `Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface` instance, that must know how to instantiate a needed filter.
+Currently, this bundles comes with just one built-in filter: `thumbnail`.
 
-Once you have your filter loader class created, you need to register it in the DIC using `imagine.filter.loader` tag with `filter` attribute, that corresponds to `type` attribute in `filters` collection in the bundle configuration
-    
-    <tag name="imagine.filter.loader" filter="thumbnail" />
-    
-For an example of filter loader implementation, refer to `Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`
+### The `thumbnail` filter
 
-ImagineBundle comes with the following filter loaders pre-built:
+The thumbnail filter, as the name implies, performs a thumbnail transformation
+on your image. Configuration looks like this:
 
- - `thumbnail` - has two modes - 'outbound' and 'inset'
-    
-        filters:
-            thumbnail:
-                type:    thumbnail
-                options: { size: [120, 90], mode: outbound }
-    
-#Basic Usage#
+``` yaml
+filters:
+    my_thumb:
+        type:    thumbnail
+        options: { size: [120, 90], mode: outbound }
+```
 
-ImagineBundle uses Imagine to apply filters to images by path dynamically on the first request and cache them in a similar path, so that if mod_rewrite or other alternative rewrite engine is enabled, it would serve the cached image instead of handling request to Symfony2 on all subsequent requests.
+The `mode` can be either `outbound` or `inset`.
 
-##Twig##
+## Load your Custom Filters
 
-Usage in twig is simple:
+The ImagineBundle allows you to load your own custom filter classes. The only
+requirement is that each filter loader implement the following interface:
 
-    <img src="{{ '/relative/path/to/image.jpg'|apply_filter('thumbnail') }}" />
+    Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface
 
-##PHP##
+To tell the bundle about your new filter loader, register it in the service
+container and apply the following tag to it (example here in XML):
 
-Usage in PHP templates:
+``` xml
+<tag name="imagine.filter.loader" filter="my_custom_filter" />
+```
 
-    <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'thumbnail') ?>" />
+For more information on the service container, see the Symfony2
+[Service Container](http://symfony.com/doc/current/book/service_container.html) documentation.
 
-After the filter is applied, it simply rewrites the path.
-The previous examples in standard configuration would be rewritten to `/imagine/thumbnail/relative/path/to/image.jpg`. As you can see its as simple as prefixing the source path with `cache_prefix` and the filter alias.
+You can now reference and use your custom filter when defining filters you'd
+like to apply in your configuration:
+
+``` yaml
+filters:
+    my_special_filter:
+        type:    my_custom_filter
+        options: { }
+```
+
+For an example of a filter loader implementation, refer to
+`Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.
