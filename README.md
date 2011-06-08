@@ -22,17 +22,21 @@ and this bundle. Installation depends on how your project is setup:
 ### Step 1: Installation using the `bin/vendors.php` method
 
 If you're using the `bin/vendors.php` method to manage your vendor libraries,
-add the following entries to your `bin/deps` file:
+add the following entries to the `deps` in the root of your project file:
 
 ```
-/                       imagine               git://github.com/avalanche123/Imagine.git
-/bundles/Avalanche/Bundle ImagineBundle       git://github.com/avalanche123/AvalancheImagineBundle.git
+imagine                /                         git://github.com/avalanche123/Imagine.git
+ImagineBundle          /bundles/Avalanche/Bundle git://github.com/avalanche123/AvalancheImagineBundle.git
 ```
+
+**NOTE**: This location and syntax of the `deps` file changed after BETA4. If you're
+using an older version of the deps system, you may need to swap the order of the items
+in the `deps` file.
 
 Next, update your vendors by running:
 
 ``` bash
-$ php bin/vendors.php
+$ ./bin/vendors.php
 ```
 
 Great! Now skip down to *Step 2*.
