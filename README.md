@@ -36,7 +36,7 @@ in the `deps` file.
 Next, update your vendors by running:
 
 ``` bash
-$ ./bin/vendors.php
+$ ./bin/vendors
 ```
 
 Great! Now skip down to *Step 2*.
