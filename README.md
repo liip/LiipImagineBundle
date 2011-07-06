@@ -25,8 +25,13 @@ If you're using the `bin/vendors.php` method to manage your vendor libraries,
 add the following entries to the `deps` in the root of your project file:
 
 ```
-imagine                /                         git://github.com/avalanche123/Imagine.git
-ImagineBundle          /bundles/Avalanche/Bundle git://github.com/avalanche123/AvalancheImagineBundle.git
+[Imagine]
+    git=http://github.com/avalanche123/Imagine.git
+    target=imagine
+
+[AvalancheImagineBundle]
+    git=http://github.com/avalanche123/AvalancheImagineBundle.git
+    target=bundles/Avalanche/Bundle/ImagineBundle
 ```
 
 **NOTE**: This location and syntax of the `deps` file changed after BETA4. If you're
