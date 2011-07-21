@@ -68,14 +68,13 @@ class FilterManager
         }
 
         $image = $this->loaders[$options['type']]->load($options['options'])->apply($image);
+        $quality = empty($options['options']['quality']) ? 100 : $options['options']['quality'];
 
-        $quality = empty($options['quality']) ? 100 : $options['quality'];
-        if (isset($realPath)) {
-            $image->save($realPath, array('quality' => $quality));
-        } else {
-            $image->get($format, array('quality' => $quality));
+        if (empty($realPath)) {
+            return $image->get($format, array('quality' => $quality));
         }
 
-        return $image;
+        $image->save($realPath, array('quality' => $quality));
+        return file_get_contents($realPath);
     }
 }
