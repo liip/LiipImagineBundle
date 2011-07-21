@@ -2,20 +2,23 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
-use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
-use Imagine\ImagineInterface;
-use Symfony\Component\HttpKernel\Util\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
+use Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface;
+use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 
 class ImagineController
 {
     /**
-     * @var Symfony\Component\HttpFoundation\Request
+     * @var Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface
      */
-    private $request;
+    private $dataLoader;
+
+    /**
+     * @var Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager
+     */
+    private $filterManager;
 
     /**
      * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
@@ -23,49 +26,17 @@ class ImagineController
     private $cachePathResolver;
 
     /**
-     * @var Imagine\ImagineInterface
-     */
-    private $imagine;
-
-    /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\FilterManager
-     */
-    private $filterManager;
-
-    /**
-     * @var Symfony\Component\HttpKernel\Util\Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var string
-     */
-    private $webRoot;
-
-    /**
      * Constructs by setting $cachePathResolver
      *
-     * @param Symfony\Component\HttpFoundation\Request                 $request
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
-     * @param Imagine\ImagineInterface                                 $imagine
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\FilterManager     $filterManager
-     * @param string                                                   $webRoot
+     * @param Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
+     * @param Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
+     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
      */
-    public function __construct(
-        Request $request,
-        CachePathResolver $cachePathResolver,
-        ImagineInterface $imagine,
-        FilterManager $filterManager,
-        Filesystem $filesystem,
-        $webRoot
-    )
+    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
     {
-        $this->request           = $request;
-        $this->cachePathResolver = $cachePathResolver;
-        $this->imagine           = $imagine;
+        $this->dataLoader        = $dataLoader;
         $this->filterManager     = $filterManager;
-        $this->filesystem        = $filesystem;
-        $this->webRoot           = $webRoot;
+        $this->cachePathResolver = $cachePathResolver;
     }
 
     /**
@@ -79,63 +50,26 @@ class ImagineController
      */
     public function filterAction($path, $filter)
     {
-        $path = '/'.ltrim($path, '/');
-
-        //TODO: find out why I need double urldecode to get a valid path
-        $browserPath = urldecode(urldecode($this->cachePathResolver->getBrowserPath($path, $filter)));
-        $basePath = $this->request->getBaseUrl();
-
-        if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
-             $browserPath = substr($browserPath, strlen($basePath));
-        }
-
-         // if cache path cannot be determined, return 404
-        if (null === $browserPath) {
-            throw new NotFoundHttpException('Image doesn\'t exist');
-        }
-
-        $realPath = $this->webRoot.$browserPath;
-        $sourcePath = $this->webRoot.$path;
-
-        // if the file has already been cached, we're probably not rewriting
-        // correctly, hence make a 301 to proper location, so browser remembers
-        if (file_exists($realPath)) {
-            return new Response('', 301, array(
-                'location' => $this->request->getBasePath().$browserPath
-            ));
-        }
-
-        if (!file_exists($sourcePath)) {
+        list($path, $image, $format) = $this->dataLoader->find($path);
+        if (!$path) {
             throw new NotFoundHttpException(sprintf(
-                'Source image not found in "%s"', $sourcePath
+                'Source image not found in "%s"', $path
             ));
         }
 
-        $dir = pathinfo($realPath, PATHINFO_DIRNAME);
+        $realPath = null;
+        if ($this->cachePathResolver) {
+            $realPath = $this->cachePathResolver->resolve($path, $filter);
+            if (!$realPath) {
+                throw new NotFoundHttpException('Image doesn\'t exist');
+            }
 
-        if (!is_dir($dir)) {
-            if (!$this->filesystem->mkdir($dir)) {
-                throw new \RuntimeException(sprintf(
-                    'Could not create directory %s', $dir
-                ));
+            if ($realPath instanceof Response) {
+                return $realPath;
             }
         }
 
-        ob_start();
-        try {
-            // TODO: get rid of hard-coded quality and format
-            $this->filterManager->get($filter)
-                ->apply($this->imagine->open($sourcePath))
-                ->save($realPath, array('quality' => 100))
-                ->show('png');
-
-            // TODO: add more media headers
-            return new Response(ob_get_clean(), 201, array(
-                'content-type' => 'image/png',
-            ));
-        } catch (\Exception $e) {
-            ob_end_clean();
-            throw $e;
-        }
+        $image = $this->filterManager->get($filter, $image, $realPath, $format);
+        return new Response($image, 201, array('Content-Type' => 'image/'.$format));
     }
 }

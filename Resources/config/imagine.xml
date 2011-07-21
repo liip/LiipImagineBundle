@@ -9,12 +9,15 @@
 
         <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
         <parameter key="imagine.cache_prefix">/media/cache</parameter>
+        <parameter key="imagine.cache">true</parameter>
+        <parameter key="imagine.formats" type="collection" />
         <parameter key="imagine.filters" type="collection" />
 
         <!-- Utility classes -->
 
         <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
+        <parameter key="imagine.loader.filesystem.class">Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\FilesystemLoader</parameter>
 
         <!-- Controller class -->
 
@@ -53,18 +56,20 @@
         </service>
 
         <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
+            <argument type="service" id="imagine" />
             <argument>%imagine.filters%</argument>
+        </service>
+
+        <service id="imagine.loader.filesystem" class="%imagine.loader.filesystem.class%">
+            <argument>%imagine.web_root%</argument>
+            <argument>%imagine.formats%</argument>
         </service>
 
         <!-- Controller -->
 
-        <service id="imagine.controller" class="%imagine.controller.class%" scope="request">
-            <argument type="service" id="request" />
-            <argument type="service" id="imagine.cache.path.resolver" />
-            <argument type="service" id="imagine" />
+        <service id="imagine.controller" class="%imagine.controller.class%">
+            <argument type="service" id="imagine.loader.filesystem" />
             <argument type="service" id="imagine.filter.manager" />
-            <argument type="service" id="filesystem" />
-            <argument>%imagine.web_root%</argument>
         </service>
 
         <!-- Route Loader -->

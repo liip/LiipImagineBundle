@@ -6,16 +6,23 @@ use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
+use Imagine\ImagineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FilterManager
 {
+    /**
+     * @var Imagine\ImagineInterface
+     */
+    private $imagine;
+
     private $filters;
     private $loaders;
     private $services;
 
-    public function __construct( array $filters = array())
+    public function __construct(ImagineInterface $imagine, array $filters = array())
     {
+        $this->imagine   = $imagine;
         $this->filters   = $filters;
         $this->loaders   = array();
         $this->services  = array();
@@ -26,7 +33,7 @@ class FilterManager
         $this->loaders[$name] = $loader;
     }
 
-    public function get($filter)
+    public function get($filter, $image, $realPath = null, $format = 'png')
     {
         if (!isset($this->filters[$filter])) {
             throw new InvalidArgumentException(sprintf(
@@ -54,6 +61,21 @@ class FilterManager
             ));
         }
 
-        return $this->loaders[$options['type']]->load($options['options']);
+        if (is_resource($image)) {
+            $image = $this->imagine->load(stream_get_contents($image));
+        } else {
+            $image = $this->imagine->open($image);
+        }
+
+        $image = $this->loaders[$options['type']]->load($options['options'])->apply($image);
+
+        $quality = empty($options['quality']) ? 100 : $options['quality'];
+        if (isset($realPath)) {
+            $image->save($realPath, array('quality' => $quality));
+        } else {
+            $image->get($format, array('quality' => $quality));
+        }
+
+        return $image;
     }
 }

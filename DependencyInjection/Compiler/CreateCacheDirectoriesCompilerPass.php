@@ -9,6 +9,10 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        if (!$container->getParameter('imagine.cache')) {
+            return;
+        }
+
         $webRoot     = $container->getParameter('imagine.web_root');
         $cachePrefix = $container->getParameter('imagine.cache_prefix');
         $filters     = $container->getParameter('imagine.filters');
@@ -20,13 +24,11 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
                 $dir = $webRoot.'/'.$cachePrefix.'/'.$filter;
             }
 
-            if (!is_dir($dir)) {
-                if (!mkdir($dir, 0777, true)) {
-                    throw new \RuntimeException(sprintf(
-                        'Could not create directory for caching processed '.
-                        'images in "%s"', $dir
-                    ));
-                }
+            if (!is_dir($dir) && !mkdir($dir, 0777, true)) {
+                throw new \RuntimeException(sprintf(
+                    'Could not create directory for caching processed '.
+                    'images in "%s"', $dir
+                ));
             }
         }
     }

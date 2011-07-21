@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Reference;
 
 class AvalancheImagineExtension extends Extension
 {
@@ -31,11 +32,21 @@ class AvalancheImagineExtension extends Extension
         }
 
         $container->setAlias('imagine', new Alias('imagine.'.$driver));
-
-        foreach (array('cache_prefix', 'web_root', 'filters') as $key) {
+        foreach (array('cache_prefix', 'web_root', 'formats', 'cache', 'filters') as $key) {
             if (isset($config[$key])) {
                 $container->setParameter('imagine.'.$key, $config[$key]);
             }
+        }
+
+        if ($container->getParameter('imagine.cache')) {
+            $controller = $container->getDefinition('imagine.controller');
+            $controller->addArgument(new Reference('imagine.cache.path.resolver'));
+            $controller->setScope('request');
+        }
+
+        if (!empty($config['loader'])) {
+            $controller = $container->getDefinition('imagine.controller');
+            $controller->replaceArgument(0, new Reference($config['loader']));
         }
     }
 

@@ -157,7 +157,10 @@ The default configuration for the bundle looks like this:
 avalanche_imagine:
     web_root:     %kernel.root_dir%/../web
     cache_prefix: /media/cache
+    cache:        true
+    loader:       ~
     driver:       gd
+    formats:      []
     filters:      []
 ```
 
@@ -174,11 +177,19 @@ There are several configuration options available:
     as to not clutter your web root with cached images. For example by default,
     the images would be written to the `web/media/cache/` directory.
 
-    default: `media/cache`
+    default: `/media/cache`
+
+ - `cache` - if to cache the generated image in the local file system
+
+ - `loader` - service id for a custom loader
+
+    default: null (which means the standard filesystem loader is used)
 
  - `driver` - one of the three drivers: `gd`, `imagick`, `gmagick`
 
     default: `gd`
+
+ - `formats` - optional list of formats to which images may be converted to
 
  - `filters` - specify the filters that you want to define and use
 
