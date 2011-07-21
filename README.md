@@ -156,7 +156,7 @@ The default configuration for the bundle looks like this:
 ``` yaml
 avalanche_imagine:
     web_root:     %kernel.root_dir%/../web
-    cache_prefix: media/cache
+    cache_prefix: /media/cache
     driver:       gd
     filters:      []
 ```

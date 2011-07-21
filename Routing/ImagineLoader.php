@@ -34,7 +34,7 @@ class ImagineLoader extends Loader
                 if (isset($options['path'])) {
                     $pattern = '/'.trim($options['path'], '/').'/{path}';
                 } else {
-                    $pattern = '/'.trim($this->cachePrefix, '/').'/'.$filter.'/{path}';
+                    $pattern = '/'.trim($this->cachePrefix, '/').$filter.'/{path}';
                 }
 
                 $routes->add('_imagine_'.$filter, new Route(

@@ -8,7 +8,7 @@
         <!-- Configuration defaults -->
 
         <parameter key="imagine.web_root">%kernel.root_dir%/../web</parameter>
-        <parameter key="imagine.cache_prefix">media/cache</parameter>
+        <parameter key="imagine.cache_prefix">/media/cache</parameter>
         <parameter key="imagine.filters" type="collection" />
 
         <!-- Utility classes -->
