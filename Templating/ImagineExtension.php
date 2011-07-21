@@ -2,24 +2,24 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Templating;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 
 class ImagineExtension extends \Twig_Extension
 {
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
+     * @var Symfony\Component\DependencyInjection\ContainerInterface
      */
-    private $cachePathResolver;
+    private $container;
 
     /**
-     * Constructs by setting $cachePathResolver
+     * Constructs by setting $container
      *
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
+     * @param Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(ContainerInterface $container)
     {
-        $this->cachePathResolver = $cachePathResolver;
+        $this->container = $container;
     }
 
     /**
@@ -43,7 +43,7 @@ class ImagineExtension extends \Twig_Extension
      */
     public function applyFilter($path, $filter)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter);
+        return $this->container->get('imagine.cache.path.resolver')->getBrowserPath($path, $filter);
     }
 
     /**
