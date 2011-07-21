@@ -77,7 +77,7 @@ class ImagineController
      *
      * @return Response
      */
-    public function filter($path, $filter)
+    public function filterAction($path, $filter)
     {
         $path = '/'.ltrim($path, '/');
 
