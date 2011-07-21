@@ -7,12 +7,12 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @var string
      */
-    private $webRoot;
+    protected $webRoot;
 
     /**
      * @var array
      */
-    private $formats;
+    protected $formats;
 
     /**
      * Constructs
@@ -26,17 +26,16 @@ class FileSystemLoader implements LoaderInterface
         $this->formats = $formats;
     }
 
-    public function find($path)
+    protected function splitPath($path)
     {
-        $path = '/'.ltrim($path, '/');
         $name = explode('.', $path);
         if (count($name) > 1) {
-            $targetFormat = array_pop($name);
-            if (!in_array($targetFormat, $this->formats)) {
-                if ('orig' !== $targetFormat) {
-                    return array(false, false, false);
+            $format = array_pop($name);
+            if (!in_array($format, $this->formats)) {
+                if ('orig' !== $format) {
+                    return array(false, false);
                 }
-                $targetFormat = null;
+                $format = null;
             }
             $name = implode('.', $name);
         } else {
@@ -44,11 +43,23 @@ class FileSystemLoader implements LoaderInterface
             $name = $path;
         }
 
+        return array($name, $format);
+    }
+
+    public function find($path)
+    {
+        $path = '/'.ltrim($path, '/');
+        list($name, $targetFormat) = $this->splitPath($path);
+        if (!$name) {
+            return array(false, false, false);
+        }
+
         if (empty($targetFormat) || !file_exists($this->webRoot.$path)) {
-            // attempt to find format
+            // attempt to determine path and format
             $found = false;
             foreach ($this->formats as $format) {
-                if ($format !== $targetFormat
+                if ('json' === $format
+                    && $targetFormat !== $format
                     && file_exists($this->webRoot.$name.'.'.$format)
                 ) {
                     $path = $name.'.'.$format;
@@ -64,7 +75,6 @@ class FileSystemLoader implements LoaderInterface
                 return array(false, false, false);
             }
         }
-
 
         if ('json' === $targetFormat) {
             // TODO add more meta data about the image
