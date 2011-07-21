@@ -75,6 +75,7 @@ class ImagineController
 
         $image = $this->filterManager->get($filter, $image, $realPath, $format);
         $statusCode = $this->cachePathResolver ? 201 : 200;
-        return new Response($image, $statusCode, array('Content-Type' => 'image/'.$format));
+        $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
+        return new Response($image, $statusCode, array('Content-Type' => $contentType));
     }
 }
