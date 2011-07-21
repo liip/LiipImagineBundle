@@ -65,6 +65,14 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        return array($path, $this->webRoot.$path, $targetFormat);
+
+        if ('json' === $targetFormat) {
+            // TODO add more meta data about the image
+            $image = json_encode(array('format' => $targetFormat));
+        } else {
+            $image = $this->webRoot.$path;
+        }
+
+        return array($path, $image, $targetFormat);
     }
 }
