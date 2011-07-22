@@ -2,6 +2,7 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
@@ -26,17 +27,23 @@ class ImagineController
     private $cachePathResolver;
 
     /**
+     * @var Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
      * Constructs by setting $cachePathResolver
      *
      * @param Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
      * @param Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
      * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
      */
-    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
+    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null, Request $request = null)
     {
         $this->dataLoader        = $dataLoader;
         $this->filterManager     = $filterManager;
         $this->cachePathResolver = $cachePathResolver;
+        $this->request           = $request;
     }
 
     /**
@@ -63,7 +70,7 @@ class ImagineController
 
         $realPath = null;
         if ($this->cachePathResolver) {
-            $realPath = $this->cachePathResolver->resolve($path, $filter);
+            $realPath = $this->cachePathResolver->resolve($this->request, $path, $filter);
             if (!$realPath) {
                 throw new NotFoundHttpException('Image doesn\'t exist');
             }

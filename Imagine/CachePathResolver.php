@@ -10,11 +10,6 @@ use Symfony\Component\HttpKernel\Util\Filesystem;
 class CachePathResolver
 {
     /**
-     * @var Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    /**
      * @var Symfony\Component\Routing\RouterInterface
      */
     private $router;
@@ -37,9 +32,8 @@ class CachePathResolver
      * @param Symfony\Component\HttpKernel\Util\Filesystem  $filesystem
      * @param string                                        $webRoot
      */
-    public function __construct(Request $request, RouterInterface $router, Filesystem $filesystem, $webRoot)
+    public function __construct(RouterInterface $router, Filesystem $filesystem, $webRoot)
     {
-        $this->request      = $request;
         $this->router       = $router;
         $this->filesystem   = $filesystem;
         $this->webRoot      = $webRoot;
@@ -72,11 +66,11 @@ class CachePathResolver
         return $path;
     }
 
-    public function resolve($path, $filter)
+    public function resolve(Request $request, $path, $filter)
     {
         //TODO: find out why I need double urldecode to get a valid path
         $browserPath = urldecode(urldecode($this->getBrowserPath($path, $filter)));
-        $basePath = $this->request->getBaseUrl();
+        $basePath = $request->getBaseUrl();
 
         if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
              $browserPath = substr($browserPath, strlen($basePath));
@@ -93,7 +87,7 @@ class CachePathResolver
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($realPath)) {
             return new Response('', 301, array(
-                'location' => $this->request->getBasePath().$browserPath
+                'location' => $request->getBasePath().$browserPath
             ));
         }
 
