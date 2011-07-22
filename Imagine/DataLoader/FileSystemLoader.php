@@ -39,7 +39,7 @@ class FileSystemLoader implements LoaderInterface
             }
             $name = implode('.', $name);
         } else {
-            $targetFormat = null;
+            $format = null;
             $name = $path;
         }
 
