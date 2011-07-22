@@ -41,35 +41,31 @@ class FilterManager
             ));
         }
 
-        $options = $this->filters[$filter];
-
-        if (!isset($options['type'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Filter type for "%s" image filter must be specified', $filter
-            ));
-        }
-
-        if (!isset($this->loaders[$options['type']])) {
-            throw new InvalidArgumentException(sprintf(
-                'Could not find loader for "%s" filter type', $options['type']
-            ));
-        }
-
-        if (!isset($options['options'])) {
-            throw new InvalidArgumentException(sprintf(
-                'Options for filter type "%s" must be specified', $filter
-            ));
-        }
-
         if (is_resource($image)) {
             $image = $this->imagine->load(stream_get_contents($image));
         } else {
             $image = $this->imagine->open($image);
         }
 
-        $image = $this->loaders[$options['type']]->load($options['options'])->apply($image);
-        $quality = empty($options['options']['quality']) ? 100 : $options['options']['quality'];
+        $options = $this->filters[$filter];
 
+        if (isset($options['type'])) {
+            if (!isset($this->loaders[$options['type']])) {
+                throw new InvalidArgumentException(sprintf(
+                    'Could not find loader for "%s" filter type', $options['type']
+                ));
+            }
+
+            if (!isset($options['options'])) {
+                throw new InvalidArgumentException(sprintf(
+                    'Options for filter type "%s" must be specified', $filter
+                ));
+            }
+
+            $image = $this->loaders[$options['type']]->load($options['options'])->apply($image);
+        }
+
+        $quality = empty($options['options']['quality']) ? 100 : $options['options']['quality'];
         if (empty($realPath)) {
             return $image->get($format, array('quality' => $quality));
         }
