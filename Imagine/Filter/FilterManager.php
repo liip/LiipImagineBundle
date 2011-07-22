@@ -62,7 +62,7 @@ class FilterManager
                 ));
             }
 
-            $image = $this->loaders[$options['type']]->load($options['options'])->apply($image);
+            $image = $this->loaders[$options['type']]->load($image, $options['options'])->apply($image);
         }
 
         $quality = empty($options['options']['quality']) ? 100 : $options['options']['quality'];
