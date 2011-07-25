@@ -4,7 +4,6 @@ namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\Box;
 use Imagine\Filter\Basic\Thumbnail;
-use Imagine\ImageInterface;
 
 class ThumbnailFilterLoader implements LoaderInterface
 {

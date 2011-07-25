@@ -4,7 +4,7 @@ namespace Avalanche\Bundle\ImagineBundle\Controller;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
-use Imagine\ImagineInterface;
+use Imagine\Image\ImagineInterface;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ class ImagineController
     private $cachePathResolver;
 
     /**
-     * @var Imagine\ImagineInterface
+     * @var Imagine\Image\ImagineInterface
      */
     private $imagine;
 
@@ -47,7 +47,7 @@ class ImagineController
      *
      * @param Symfony\Component\HttpFoundation\Request                 $request
      * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
-     * @param Imagine\ImagineInterface                                 $imagine
+     * @param Imagine\Image\ImagineInterface                           $imagine
      * @param Avalanche\Bundle\ImagineBundle\Imagine\FilterManager     $filterManager
      * @param string                                                   $webRoot
      */
