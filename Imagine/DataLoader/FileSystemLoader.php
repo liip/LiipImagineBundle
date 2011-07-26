@@ -32,10 +32,7 @@ class FileSystemLoader implements LoaderInterface
         if (count($name) > 1) {
             $format = array_pop($name);
             if (!in_array($format, $this->formats)) {
-                if ('orig' !== $format) {
-                    return array(false, false);
-                }
-                $format = null;
+                return  array($path, null);
             }
             $name = implode('.', $name);
         } else {
