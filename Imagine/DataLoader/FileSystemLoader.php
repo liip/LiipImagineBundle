@@ -55,8 +55,7 @@ class FileSystemLoader implements LoaderInterface
             // attempt to determine path and format
             $found = false;
             foreach ($this->formats as $format) {
-                if ('json' === $format
-                    && $targetFormat !== $format
+                if ($targetFormat !== $format
                     && file_exists($this->webRoot.$name.'.'.$format)
                 ) {
                     $path = $name.'.'.$format;
@@ -75,7 +74,7 @@ class FileSystemLoader implements LoaderInterface
 
         if ('json' === $targetFormat) {
             // TODO add more meta data about the image
-            $image = json_encode(array('format' => $targetFormat));
+            $image = array('format' => $targetFormat);
         } else {
             $image = $this->webRoot.$path;
         }

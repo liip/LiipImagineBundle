@@ -65,7 +65,7 @@ class ImagineController
         }
 
         if ('json' === $format) {
-            return new Response($image, 200, array('Content-Type' => 'application/json'));
+            return new Response(json_encode($image), 200, array('Content-Type' => 'application/json'));
         }
 
         $realPath = null;
