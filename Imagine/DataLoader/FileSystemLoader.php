@@ -72,7 +72,7 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        if ('json' === $targetFormat) {
+        if ('json' === $targetFormat || 'xml' === $targetFormat) {
             // TODO add more meta data about the image
             $image = array('format' => $targetFormat);
         } else {

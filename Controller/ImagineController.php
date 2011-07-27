@@ -64,25 +64,37 @@ class ImagineController
             ));
         }
 
-        if ('json' === $format) {
-            return new Response(json_encode($image), 200, array('Content-Type' => 'application/json'));
+        switch ($format) {
+            case 'json':
+                $response = new Response(json_encode($image), 200, array('Content-Type' => 'application/json'));
+                break;
+            case 'xml':
+                $xml = new \SimpleXMLElement('<response/>');
+                foreach ($image as $key => $value) {
+                    $xml->addChild($key, $value);
+                }
+                $response = new Response($xml->asXML(), 200, array('Content-Type' => 'application/xml'));
+                break;
+            default:
+                $realPath = null;
+                if ($this->cachePathResolver) {
+                    $realPath = $this->cachePathResolver->resolve($this->request, $path, $filter);
+                    if (!$realPath) {
+                        throw new NotFoundHttpException('Image doesn\'t exist');
+                    }
+
+                    if ($realPath instanceof Response) {
+                        return $realPath;
+                    }
+                }
+
+                $image = $this->filterManager->get($filter, $image, $realPath, $format);
+                $statusCode = $this->cachePathResolver ? 201 : 200;
+                $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
+                $response = new Response($image, $statusCode, array('Content-Type' => $contentType));
+                break;
         }
 
-        $realPath = null;
-        if ($this->cachePathResolver) {
-            $realPath = $this->cachePathResolver->resolve($this->request, $path, $filter);
-            if (!$realPath) {
-                throw new NotFoundHttpException('Image doesn\'t exist');
-            }
-
-            if ($realPath instanceof Response) {
-                return $realPath;
-            }
-        }
-
-        $image = $this->filterManager->get($filter, $image, $realPath, $format);
-        $statusCode = $this->cachePathResolver ? 201 : 200;
-        $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
-        return new Response($image, $statusCode, array('Content-Type' => $contentType));
+        return $response;
     }
 }
