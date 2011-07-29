@@ -6,13 +6,13 @@ use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
-use Imagine\ImagineInterface;
+use Imagine\Image\ImagineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FilterManager
 {
     /**
-     * @var Imagine\ImagineInterface
+     * @var Imagine\Image\ImagineInterface
      */
     private $imagine;
 

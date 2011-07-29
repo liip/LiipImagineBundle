@@ -2,12 +2,12 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\ImageInterface;
+use Imagine\Image\ImageInterface;
 
 interface LoaderInterface
 {
     /**
-     * @param Imagine\ImageInterface $image
+     * @param Imagine\Image\ImagineInterface $image
      * @param array $options
      *
      * @return Imagine\Filter\FilterInterface
