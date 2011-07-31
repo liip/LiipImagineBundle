@@ -32,11 +32,12 @@ class ImagineController
     private $request;
 
     /**
-     * Constructs by setting $cachePathResolver
+     * Constructor
      *
      * @param Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
      * @param Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
      * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
+     * @param Symfony\Component\HttpFoundation\Request                          $request
      */
     public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null, Request $request = null)
     {
@@ -47,7 +48,8 @@ class ImagineController
     }
 
     /**
-     * This action applies a given filter to a given image, saves the image and
+     * This action applies a given filter to a given image,
+     * optionally saves the image and
      * outputs it to the browser at the same time
      *
      * @param string $path
