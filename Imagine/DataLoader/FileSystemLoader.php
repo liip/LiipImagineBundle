@@ -2,6 +2,8 @@
 
 namespace Avalanche\Bundle\ImagineBundle\Imagine\DataLoader;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class FileSystemLoader implements LoaderInterface
 {
     /**
@@ -48,7 +50,7 @@ class FileSystemLoader implements LoaderInterface
         $path = '/'.ltrim($path, '/');
         list($name, $targetFormat) = $this->splitPath($path);
         if (!$name) {
-            return array(false, false, false);
+            throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
         }
 
         if (empty($targetFormat) || !file_exists($this->webRoot.$path)) {
@@ -68,17 +70,10 @@ class FileSystemLoader implements LoaderInterface
             }
 
             if (!$found) {
-                return array(false, false, false);
+                throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
             }
         }
 
-        if ('json' === $targetFormat || 'xml' === $targetFormat) {
-            // TODO add more meta data about the image
-            $image = array('format' => $targetFormat);
-        } else {
-            $image = $this->webRoot.$path;
-        }
-
-        return array($path, $image, $targetFormat);
+        return array($path, $this->webRoot.$path, $targetFormat);
     }
 }

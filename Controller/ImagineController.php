@@ -47,6 +47,19 @@ class ImagineController
         $this->request           = $request;
     }
 
+    protected function resolve($path, $filter)
+    {
+        $realPath = null;
+        if ($this->cachePathResolver) {
+            $realPath = $this->cachePathResolver->resolve($this->request, $path, $filter);
+            if (!$realPath) {
+                throw new NotFoundHttpException('Image doesn\'t exist');
+            }
+        }
+
+        return $realPath;
+    }
+
     /**
      * This action applies a given filter to a given image,
      * optionally saves the image and
@@ -59,44 +72,16 @@ class ImagineController
      */
     public function filterAction($path, $filter)
     {
-        list($path, $image, $format) = $this->dataLoader->find($path);
-        if (!$path) {
-            throw new NotFoundHttpException(sprintf(
-                'Source image not found in "%s"', $path
-            ));
+        list($actualPath, $image, $format) = $this->dataLoader->find($path);
+
+        $realPath = $this->resolve($actualPath, $filter);
+        if ($realPath instanceof Response) {
+            return $realPath;
         }
 
-        switch ($format) {
-            case 'json':
-                $response = new Response(json_encode($image), 200, array('Content-Type' => 'application/json'));
-                break;
-            case 'xml':
-                $xml = new \SimpleXMLElement('<response/>');
-                foreach ($image as $key => $value) {
-                    $xml->addChild($key, $value);
-                }
-                $response = new Response($xml->asXML(), 200, array('Content-Type' => 'application/xml'));
-                break;
-            default:
-                $realPath = null;
-                if ($this->cachePathResolver) {
-                    $realPath = $this->cachePathResolver->resolve($this->request, $path, $filter);
-                    if (!$realPath) {
-                        throw new NotFoundHttpException('Image doesn\'t exist');
-                    }
-
-                    if ($realPath instanceof Response) {
-                        return $realPath;
-                    }
-                }
-
-                $image = $this->filterManager->get($filter, $image, $realPath, $format);
-                $statusCode = $this->cachePathResolver ? 201 : 200;
-                $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
-                $response = new Response($image, $statusCode, array('Content-Type' => $contentType));
-                break;
-        }
-
-        return $response;
+        $image = $this->filterManager->get($filter, $image, $realPath, $format);
+        $statusCode = $this->cachePathResolver ? 201 : 200;
+        $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
+        return new Response($image, $statusCode, array('Content-Type' => $contentType));
     }
 }
