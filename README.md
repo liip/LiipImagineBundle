@@ -189,9 +189,7 @@ There are several configuration options available:
 
     default: `gd`
 
- - `formats` - optional list of image formats to which images may be
-    converted to. note its also possible to set 'json' in which case
-    a json response is generated containing meta data about the image.
+ - `formats` - optional list of image formats to which images may be converted to.
 
  - `filters` - specify the filters that you want to define and use
 
