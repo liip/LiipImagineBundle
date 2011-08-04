@@ -41,8 +41,6 @@ class AvalancheImagineExtension extends Extension
         if ($container->getParameter('imagine.cache')) {
             $controller = $container->getDefinition('imagine.controller');
             $controller->addArgument(new Reference('imagine.cache.path.resolver'));
-            $controller->addArgument(new Reference('request'));
-            $controller->setScope('request');
         }
 
         if (!empty($config['loader'])) {
