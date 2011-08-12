@@ -14,10 +14,12 @@ class ThumbnailFilterLoader implements LoaderInterface
             ImageInterface::THUMBNAIL_INSET :
             ImageInterface::THUMBNAIL_OUTBOUND;
         list($width, $height) = $options['size'];
+
+        $size = $image->getSize();
+        $origWidth = $size->getWidth();
+        $origHeight = $size->getHeight();
+
         if (null === $width || null === $height) {
-            $size = $image->getSize();
-            $origWidth = $size->getWidth();
-            $origHeight = $size->getHeight();
             if (null === $height) {
                 $height = (int)(($width / $origWidth) * $origHeight);
             } else if (null === $width) {
@@ -25,6 +27,13 @@ class ThumbnailFilterLoader implements LoaderInterface
             }
         }
 
-        return new Thumbnail(new Box($width, $height), $mode);
+        if ((!empty($options['allow_upscale']) && $origWidth !== $width && $origHeight !== $height)
+            || ($origWidth > $width || $origHeight > $height)
+        ) {
+            $filter = new Thumbnail(new Box($width, $height), $mode);
+            $image = $filter->apply($image);
+        }
+
+        return $image;
     }
 }

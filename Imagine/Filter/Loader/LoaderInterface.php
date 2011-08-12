@@ -10,7 +10,7 @@ interface LoaderInterface
      * @param Imagine\Image\ImagineInterface $image
      * @param array $options
      *
-     * @return Imagine\Filter\FilterInterface
+     * @return Imagine\Image\ImageInterface
      */
     function load(ImageInterface $image, array $options = array());
 }
