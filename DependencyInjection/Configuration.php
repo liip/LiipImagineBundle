@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->fixXmlConfig('option', 'options')
+                        ->useAttributeAsKey('name')
                         ->children()
                             ->scalarNode('type')->end()
                             ->scalarNode('path')->end()
