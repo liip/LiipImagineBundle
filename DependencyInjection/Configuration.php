@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('web_root')->defaultValue('%kernel.root_dir%/../web')->end()
                 ->scalarNode('cache_prefix')->defaultValue('/media/cache')->end()
                 ->scalarNode('cache')->defaultTrue()->end()
+                ->scalarNode('loader')->defaultNull()->end()
                 ->arrayNode('formats')
                     ->defaultValue(array())
                     ->prototype('scalar')->end()
