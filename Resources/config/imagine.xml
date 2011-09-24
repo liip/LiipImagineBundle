@@ -9,7 +9,7 @@
 
         <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
-        <parameter key="imagine.loader.filesystem.class">Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\FilesystemLoader</parameter>
+        <parameter key="imagine.loader.filesystem.class">Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
 
         <!-- Controller class -->
 
