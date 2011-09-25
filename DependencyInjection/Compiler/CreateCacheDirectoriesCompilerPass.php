@@ -18,11 +18,9 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
         $filters     = $container->getParameter('imagine.filters');
 
         foreach ($filters as $filter => $options) {
-            if (isset($options['path'])) {
-                $dir = $webRoot.'/'.$options['path'];
-            } else {
-                $dir = $webRoot.'/'.$cachePrefix.'/'.$filter;
-            }
+            $dir = isset($options['path'])
+                ? $webRoot.$options['path']
+                : $webRoot.$cachePrefix.'/'.$filter;
 
             if (!is_dir($dir) && !mkdir($dir, 0777, true)) {
                 throw new \RuntimeException(sprintf(

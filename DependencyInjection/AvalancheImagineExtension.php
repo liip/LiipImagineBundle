@@ -22,9 +22,18 @@ class AvalancheImagineExtension extends Extension
         $loader->load('imagine.xml');
 
         $container->setAlias('imagine', new Alias('imagine.'.$config['driver']));
-        foreach (array('cache_prefix', 'web_root', 'formats', 'cache', 'filters') as $key) {
-            $container->setParameter('imagine.'.$key, $config[$key]);
+
+        $cachePrefix = $config['cache_prefix'] ? '/'.trim($config['cache_prefix'], '/') : '';
+        $container->setParameter('imagine.cache_prefix', $cachePrefix);
+        $container->setParameter('imagine.web_root', $config['web_root']);
+        $container->setParameter('imagine.formats', $config['formats']);
+        $container->setParameter('imagine.cache', $config['cache']);
+        foreach ($config['filters'] as $filter => $options) {
+            if (isset($options['path'])) {
+                $config['filters'][$filter]['path'] = '/'.trim($options['path'], '/');
+            }
         }
+        $container->setParameter('imagine.filters', $config['filters']);
 
         if ($container->getParameter('imagine.cache')) {
             $controller = $container->getDefinition('imagine.controller');
