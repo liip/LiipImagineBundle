@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('path')->end()
                             ->scalarNode('quality')->defaultValue(100)->end()
                             ->arrayNode('options')
+                                ->useAttributeAsKey('name')
                                 ->prototype('variable')->end()
                             ->end()
                         ->end()
