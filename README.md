@@ -25,10 +25,9 @@ This bundle integrates the standalone PHP "[Imagine library](/avalanche123/Imagi
 To install this bundle, you'll need both the [Imagine library](/avalanche123/Imagine)
 and this bundle. Installation depends on how your project is setup:
 
-### Step 1: Installation using the `bin/vendors.php` method
+### Step 1: Installation
 
-If you're using the `bin/vendors.php` method to manage your vendor libraries,
-add the following entries to the `deps` in the root of your project file:
+Add the following lines to your ``deps`` file
 
 ```
 [Imagine]
@@ -40,35 +39,13 @@ add the following entries to the `deps` in the root of your project file:
     target=bundles/Liip/ImagineBundle
 ```
 
-**NOTE**: This location and syntax of the `deps` file changed after BETA4. If you're
-using an older version of the deps system, you may need to swap the order of the items
-in the `deps` file.
-
 Next, update your vendors by running:
 
 ``` bash
-$ ./bin/vendors
+$ ./bin/vendors install
 ```
 
-Great! Now skip down to *Step 2*.
-
-### Step 1 (alternative): Installation with submodules
-
-If you're managing your vendor libraries with submodules, first create the
-`vendor/bundles/Liip` directory:
-
-``` bash
-$ mkdir -pv vendor/bundles/Liip
-```
-
-Next, add the two necessary submodules:
-
-``` bash
-$ git submodule add git://github.com/avalanche123/Imagine.git vendor/imagine
-$ git submodule add git://github.com/liip/LiipImagineBundle.git vendor/bundles/Liip/ImagineBundle
-```
-
-### Step2: Configure the autoloader
+### Step 2: Configure the autoloader
 
 Add the following entries to your autoloader:
 
@@ -84,7 +61,7 @@ $loader->registerNamespaces(array(
 ));
 ```
 
-### Step3: Enable the bundle
+### Step 3: Enable the bundle
 
 Finally, enable the bundle in the kernel:
 
@@ -102,7 +79,7 @@ public function registerBundles()
 }
 ```
 
-### Step4: Register the bundle's routes
+### Step 4: Register the bundle's routes
 
 Finally, add the following to your routing file:
 
