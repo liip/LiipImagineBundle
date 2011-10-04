@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\DependencyInjection;
+namespace Liip\ImagineBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('avalanche_imagine', 'array');
+        $rootNode = $treeBuilder->root('liip_imagine', 'array');
 
         $rootNode
             ->fixXmlConfig('format', 'formats')

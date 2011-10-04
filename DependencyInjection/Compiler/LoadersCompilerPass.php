@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\DependencyInjection\Compiler;
+namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

@@ -1,37 +1,37 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Controller;
+namespace Liip\ImagineBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
-use Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface;
-use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Imagine\CachePathResolver;
+use Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
 class ImagineController
 {
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface
+     * @var Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface
      */
     private $dataLoader;
 
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager
+     * @var Liip\ImagineBundle\Imagine\Filter\FilterManager
      */
     private $filterManager;
 
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
+     * @var Liip\ImagineBundle\Imagine\CachePathResolver
      */
     private $cachePathResolver;
 
     /**
      * Constructor
      *
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
+     * @param Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
+     * @param Liip\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
+     * @param Liip\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
      */
     public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
     {

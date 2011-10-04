@@ -1,8 +1,8 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Imagine\Filter;
+namespace Liip\ImagineBundle\Imagine\Filter;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;

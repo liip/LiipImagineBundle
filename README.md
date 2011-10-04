@@ -1,8 +1,14 @@
-AvalancheImagineBundle
-======================
+LiipImagineBundle
+=================
 
-This bundle provides easy image manipulation support for Symfony2. For example,
-with this bundle, the following is possible:
+This bundle is a fork of AvalancheImagineBundle which provides easy image
+manipulation support for Symfony2. The goal of the fork is to make the
+code more extensible and as a result applicable for more use cases.
+
+For more details on the reason for the fork see:
+https://github.com/avalanche123/AvalancheImagineBundle/pull/25
+
+For example with this bundle the following is possible:
 
 ``` jinja
 <img src="{{ '/relative/path/to/image.jpg' | apply_filter('thumbnail') }}" />
@@ -29,9 +35,9 @@ add the following entries to the `deps` in the root of your project file:
     git=http://github.com/avalanche123/Imagine.git
     target=imagine
 
-[AvalancheImagineBundle]
-    git=http://github.com/avalanche123/AvalancheImagineBundle.git
-    target=bundles/Avalanche/Bundle/ImagineBundle
+[LiipImagineBundle]
+    git=http://github.com/liip/LiipImagineBundle.git
+    target=bundles/Liip/ImagineBundle
 ```
 
 **NOTE**: This location and syntax of the `deps` file changed after BETA4. If you're
@@ -49,17 +55,17 @@ Great! Now skip down to *Step 2*.
 ### Step 1 (alternative): Installation with submodules
 
 If you're managing your vendor libraries with submodules, first create the
-`vendor/bundles/Avalanche/Bundle` directory:
+`vendor/bundles/Liip` directory:
 
 ``` bash
-$ mkdir -pv vendor/bundles/Avalanche/Bundle
+$ mkdir -pv vendor/bundles/Liip
 ```
 
 Next, add the two necessary submodules:
 
 ``` bash
 $ git submodule add git://github.com/avalanche123/Imagine.git vendor/imagine
-$ git submodule add git://github.com/avalanche123/AvalancheImagineBundle.git vendor/bundles/Avalanche/Bundle/ImagineBundle
+$ git submodule add git://github.com/liip/LiipImagineBundle.git vendor/bundles/Liip/ImagineBundle
 ```
 
 ### Step2: Configure the autoloader
@@ -73,8 +79,8 @@ Add the following entries to your autoloader:
 $loader->registerNamespaces(array(
     // ...
 
-    'Imagine'          => __DIR__.'/../vendor/imagine/lib',
-    'Avalanche'        => __DIR__.'/../vendor/bundles',
+    'Imagine'   => __DIR__.'/../vendor/imagine/lib',
+    'Liip'      => __DIR__.'/../vendor/bundles',
 ));
 ```
 
@@ -91,7 +97,7 @@ public function registerBundles()
     $bundles = array(
         // ...
 
-        new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
+        new Liip\ImagineBundle\LiipImagineBundle(),
     );
 }
 ```
@@ -120,7 +126,7 @@ you want to thumbnail an image to a size of 120x90 pixels:
 ``` yaml
 # app/config/config.yml
 
-avalanche_imagine:
+liip_imagine:
     filters:
         my_thumb:
             type:    thumbnail
@@ -154,7 +160,7 @@ would save the filtered image file.
 The default configuration for the bundle looks like this:
 
 ``` yaml
-avalanche_imagine:
+liip_imagine:
     web_root:     %kernel.root_dir%/../web
     cache_prefix: /media/cache
     cache:        true
@@ -223,7 +229,7 @@ The `mode` can be either `outbound` or `inset`.
 The ImagineBundle allows you to load your own custom filter classes. The only
 requirement is that each filter loader implement the following interface:
 
-    Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\LoaderInterface
+    Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface
 
 To tell the bundle about your new filter loader, register it in the service
 container and apply the following tag to it (example here in XML):
@@ -246,4 +252,4 @@ filters:
 ```
 
 For an example of a filter loader implementation, refer to
-`Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.
+`Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.

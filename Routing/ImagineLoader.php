@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Routing;
+namespace Liip\ImagineBundle\Routing;
 
 use Symfony\Component\Routing\Route;
 

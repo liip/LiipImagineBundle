@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Imagine;
+namespace Liip\ImagineBundle\Imagine;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

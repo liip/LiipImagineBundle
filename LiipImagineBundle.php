@@ -1,12 +1,12 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle;
+namespace Liip\ImagineBundle;
 
-use Avalanche\Bundle\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AvalancheImagineBundle extends Bundle
+class LiipImagineBundle extends Bundle
 {
     /**
      * @see Symfony\Component\HttpKernel\Bundle.Bundle::build()

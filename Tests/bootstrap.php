@@ -2,8 +2,8 @@
 
 spl_autoload_register(function($class) {
     $class = ltrim($class, '\\');
-    if (0 === strpos($class, 'Avalanche\Bundle\ImagineBundle\\')) {
-        $file = __DIR__.'/../'.str_replace('\\', '/', substr($class, strlen('Avalanche\Bundle\ImagineBundle\\'))).'.php';
+    if (0 === strpos($class, 'Liip\ImagineBundle\\')) {
+        $file = __DIR__.'/../'.str_replace('\\', '/', substr($class, strlen('Liip\ImagineBundle\\'))).'.php';
         if (file_exists($file)) {
             require $file;
         }

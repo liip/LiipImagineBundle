@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Imagine\DataLoader;
+namespace Liip\ImagineBundle\Imagine\DataLoader;
 
 interface LoaderInterface
 {

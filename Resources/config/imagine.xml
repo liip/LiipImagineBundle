@@ -7,22 +7,22 @@
 
         <!-- Utility classes -->
 
-        <parameter key="imagine.filter.manager.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager</parameter>
-        <parameter key="imagine.cache.path.resolver.class">Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver</parameter>
-        <parameter key="imagine.loader.filesystem.class">Avalanche\Bundle\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
+        <parameter key="imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
+        <parameter key="imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
+        <parameter key="imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
 
         <!-- Controller class -->
 
-        <parameter key="imagine.controller.class">Avalanche\Bundle\ImagineBundle\Controller\ImagineController</parameter>
+        <parameter key="imagine.controller.class">Liip\ImagineBundle\Controller\ImagineController</parameter>
 
         <!-- Route loader class -->
 
-        <parameter key="imagine.routing.loader.class">Avalanche\Bundle\ImagineBundle\Routing\ImagineLoader</parameter>
+        <parameter key="imagine.routing.loader.class">Liip\ImagineBundle\Routing\ImagineLoader</parameter>
 
         <!-- Templating classes -->
 
-        <parameter key="imagine.twig.extension.class">Avalanche\Bundle\ImagineBundle\Templating\ImagineExtension</parameter>
-        <parameter key="imagine.templating.helper.class">Avalanche\Bundle\ImagineBundle\Templating\Helper\ImagineHelper</parameter>
+        <parameter key="imagine.twig.extension.class">Liip\ImagineBundle\Templating\ImagineExtension</parameter>
+        <parameter key="imagine.templating.helper.class">Liip\ImagineBundle\Templating\Helper\ImagineHelper</parameter>
 
         <!-- ImagineInterface implementations -->
 
@@ -32,7 +32,7 @@
 
         <!-- Filter loaders' classes -->
 
-        <parameter key="imagine.filter.loader.thumbnail.class">Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
+        <parameter key="imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
 
     </parameters>
 

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Avalanche\Bundle\ImagineBundle\Tests\DependencyInjection;
+namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Avalanche\Bundle\ImagineBundle\DependencyInjection\AvalancheImagineExtension;
+use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AvalancheImagineExtensionTest extends \PHPUnit_Framework_TestCase
+class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder
@@ -28,7 +28,7 @@ class AvalancheImagineExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testUserLoadThrowsExceptionUnlessDriverIsValid()
     {
-        $loader = new AvalancheImagineExtension();
+        $loader = new LiipImagineExtension();
         $config = array('driver' => 'foo');
         $loader->load(array($config), new ContainerBuilder());
     }
@@ -65,7 +65,7 @@ class AvalancheImagineExtensionTest extends \PHPUnit_Framework_TestCase
     protected function createEmptyConfiguration()
     {
         $this->containerBuilder = new ContainerBuilder();
-        $loader = new AvalancheImagineExtension();
+        $loader = new LiipImagineExtension();
         $loader->load(array(array()), $this->containerBuilder);
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
@@ -76,7 +76,7 @@ class AvalancheImagineExtensionTest extends \PHPUnit_Framework_TestCase
     protected function createFullConfiguration()
     {
         $this->containerBuilder = new ContainerBuilder();
-        $loader = new AvalancheImagineExtension();
+        $loader = new LiipImagineExtension();
         $loader->load(array($this->getFullConfig()), $this->containerBuilder);
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }

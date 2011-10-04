@@ -1,6 +1,6 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\DependencyInjection;
+namespace Liip\ImagineBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AvalancheImagineExtension extends Extension
+class LiipImagineExtension extends Extension
 {
     /**
      * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()

@@ -12,7 +12,7 @@
          bootstrap="Tests/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="AvalancheImagineBundle Test Suite">
+        <testsuite name="LiipImagineBundle Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

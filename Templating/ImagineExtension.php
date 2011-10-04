@@ -1,21 +1,21 @@
 <?php
 
-namespace Avalanche\Bundle\ImagineBundle\Templating;
+namespace Liip\ImagineBundle\Templating;
 
-use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
+use Liip\ImagineBundle\Imagine\CachePathResolver;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 
 class ImagineExtension extends \Twig_Extension
 {
     /**
-     * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
+     * @var Liip\ImagineBundle\Imagine\CachePathResolver
      */
     private $cachePathResolver;
 
     /**
      * Constructs by setting $cachePathResolver
      *
-     * @param Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
+     * @param Liip\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
      */
     public function __construct(CachePathResolver $cachePathResolver)
     {
