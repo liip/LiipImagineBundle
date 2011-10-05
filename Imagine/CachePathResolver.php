@@ -47,25 +47,33 @@ class CachePathResolver
      */
     public function getBrowserPath($path, $filter)
     {
-        // identify if current path is not under specified web root and return
-        // unmodified path in that case
+        // identify if current path is not under specified web root
+        // and return unmodified path in that case
         $realPath = realpath($this->webRoot.$path);
 
-        if (!0 === strpos($realPath, $this->webRoot)) {
+        if (0 !== strpos($realPath, $this->webRoot)) {
             return $path;
         }
 
+        $params = array('path' => ltrim($path, '/'));
+
         $path = str_replace(
-            urlencode(ltrim($path, '/')),
-            urldecode(ltrim($path, '/')),
-            $this->router->generate('_imagine_'.$filter, array(
-                'path' => ltrim($path, '/')
-            ))
+            urlencode($params['path']),
+            urldecode($params['path']),
+            $this->router->generate('_imagine_'.$filter, $params)
         );
 
         return $path;
     }
 
+
+    /**
+     * Resolves filtered path for rendering in the browser
+     *
+     * @param Request $request
+     * @param string $path
+     * @param string $filter
+     */
     public function resolve(Request $request, $path, $filter)
     {
         //TODO: find out why I need double urldecode to get a valid path

@@ -33,6 +33,15 @@ class FilterManager
         $this->loaders[$name] = $loader;
     }
 
+    public function getFilterConfig($filter)
+    {
+        if (empty($this->filters[$filter])) {
+            new \RuntimeException('Filter not defined: '.$filter);
+        }
+
+        return $this->filters[$filter];
+    }
+
     public function get($filter, $image, $realPath = null, $format = 'png')
     {
         if (!isset($this->filters[$filter])) {
@@ -47,25 +56,25 @@ class FilterManager
             $image = $this->imagine->open($image);
         }
 
-        $options = $this->filters[$filter];
+        $config = $this->filters[$filter];
 
-        if (isset($options['type'])) {
-            if (!isset($this->loaders[$options['type']])) {
+        if (isset($config['type'])) {
+            if (!isset($this->loaders[$config['type']])) {
                 throw new InvalidArgumentException(sprintf(
-                    'Could not find loader for "%s" filter type', $options['type']
+                    'Could not find loader for "%s" filter type', $config['type']
                 ));
             }
 
-            if (!isset($options['options'])) {
+            if (!isset($config['options'])) {
                 throw new InvalidArgumentException(sprintf(
                     'Options for filter type "%s" must be specified', $filter
                 ));
             }
 
-            $image = $this->loaders[$options['type']]->load($image, $options['options']);
+            $image = $this->loaders[$config['type']]->load($image, $config['options']);
         }
 
-        $quality = empty($options['quality']) ? 100 : $options['quality'];
+        $quality = empty($config['quality']) ? 100 : $config['quality'];
         if (empty($realPath)) {
             return $image->get($format, array('quality' => $quality));
         }
