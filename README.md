@@ -33,6 +33,7 @@ Add the following lines to your ``deps`` file
 [Imagine]
     git=http://github.com/avalanche123/Imagine.git
     target=imagine
+    version=v0.2.0
 
 [LiipImagineBundle]
     git=http://github.com/liip/LiipImagineBundle.git
