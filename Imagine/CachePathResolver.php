@@ -51,7 +51,7 @@ class CachePathResolver
         // and return unmodified path in that case
         $realPath = realpath($this->webRoot.$path);
 
-        if (0 !== strpos($realPath, $this->webRoot)) {
+        if (0 !== strpos($realPath, realpath($this->webRoot))) {
             return $path;
         }
 
