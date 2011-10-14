@@ -21,27 +21,27 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
-        $container->setAlias('imagine', new Alias('imagine.'.$config['driver']));
+        $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $cachePrefix = $config['cache_prefix'] ? '/'.trim($config['cache_prefix'], '/') : '';
-        $container->setParameter('imagine.cache_prefix', $cachePrefix);
-        $container->setParameter('imagine.web_root', $config['web_root']);
-        $container->setParameter('imagine.formats', $config['formats']);
-        $container->setParameter('imagine.cache', $config['cache']);
+        $container->setParameter('liip_imagine.cache_prefix', $cachePrefix);
+        $container->setParameter('liip_imagine.web_root', $config['web_root']);
+        $container->setParameter('liip_imagine.formats', $config['formats']);
+        $container->setParameter('liip_imagine.cache', $config['cache']);
         foreach ($config['filters'] as $filter => $options) {
             if (isset($options['path'])) {
                 $config['filters'][$filter]['path'] = '/'.trim($options['path'], '/');
             }
         }
-        $container->setParameter('imagine.filters', $config['filters']);
+        $container->setParameter('liip_imagine.filters', $config['filters']);
 
-        if ($container->getParameter('imagine.cache')) {
-            $controller = $container->getDefinition('imagine.controller');
-            $controller->addArgument(new Reference('imagine.cache.path.resolver'));
+        if ($container->getParameter('liip_imagine.cache')) {
+            $controller = $container->getDefinition('liip_imagine.controller');
+            $controller->addArgument(new Reference('liip_imagine.cache.path.resolver'));
         }
 
         if (!empty($config['loader'])) {
-            $controller = $container->getDefinition('imagine.controller');
+            $controller = $container->getDefinition('liip_imagine.controller');
             $controller->replaceArgument(0, new Reference($config['loader']));
         }
     }

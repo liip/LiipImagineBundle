@@ -9,13 +9,13 @@ class CreateCacheDirectoriesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->getParameter('imagine.cache')) {
+        if (!$container->getParameter('liip_imagine.cache')) {
             return;
         }
 
-        $webRoot     = $container->getParameter('imagine.web_root');
-        $cachePrefix = $container->getParameter('imagine.cache_prefix');
-        $filters     = $container->getParameter('imagine.filters');
+        $webRoot     = $container->getParameter('liip_imagine.web_root');
+        $cachePrefix = $container->getParameter('liip_imagine.cache_prefix');
+        $filters     = $container->getParameter('liip_imagine.filters');
 
         foreach ($filters as $filter => $options) {
             $dir = isset($options['path'])

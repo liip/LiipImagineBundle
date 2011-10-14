@@ -213,7 +213,7 @@ To tell the bundle about your new filter loader, register it in the service
 container and apply the following tag to it (example here in XML):
 
 ``` xml
-<tag name="imagine.filter.loader" filter="my_custom_filter" />
+<tag name="liip_imagine.filter.loader" filter="my_custom_filter" />
 ```
 
 For more information on the service container, see the Symfony2
