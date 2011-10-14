@@ -30,6 +30,12 @@ class FilterManager
 
     public function addLoader($name, LoaderInterface $loader)
     {
+        if (isset($this->loaders[$name])) {
+            throw new \RuntimeException(sprintf(
+                'Loader for "%s" filter was already defined.', $name
+            ));
+        }
+
         $this->loaders[$name] = $loader;
     }
 
