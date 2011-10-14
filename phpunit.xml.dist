@@ -29,8 +29,8 @@
 
     <php>
         <!-- path to the Symfony src dir -->
-        <const name="SYMFONY_SRC_DIR" value="../../../../symfony/src" />
+        <const name="SYMFONY_SRC_DIR" value="../../../symfony/src" />
         <!-- path to the Imagine src dir -->
-        <const name="IMAGINE_SRC_DIR" value="../../../../imagine/src" />
+        <const name="IMAGINE_SRC_DIR" value="../../../imagine/src" />
     </php>
 </phpunit>
