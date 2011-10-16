@@ -31,53 +31,39 @@ class FileSystemLoader implements LoaderInterface
      */
     public function __construct(ImagineInterface $imagine, $webRoot, $formats)
     {
-        $this->webRoot = $webRoot;
         $this->imagine = $imagine;
+        $this->webRoot = realpath($webRoot);
         $this->formats = $formats;
-    }
-
-    protected function splitPath($path)
-    {
-        $name = explode('.', $path);
-        if (count($name) > 1) {
-            $format = array_pop($name);
-            if (!empty($this->formats) && !in_array($format, $this->formats)) {
-                return  array($path, null);
-            }
-            $name = implode('.', $name);
-        } else {
-            $format = null;
-            $name = $path;
-        }
-
-        return array($name, $format);
     }
 
     public function find($path)
     {
-        $path = '/'.ltrim($path, '/');
-        list($name, $targetFormat) = $this->splitPath($path);
-        if (!$name) {
+        $path = $this->webRoot.'/'.ltrim($path, '/');
+        $info = pathinfo($path);
+        if (!$info) {
             throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
         }
 
-        if (empty($targetFormat) || !file_exists($this->webRoot.$path)) {
+        $name = $info['dirname'].'/'.$info['filename'];
+        $targetFormat = empty($this->formats) || in_array($info['extension'], $this->formats)
+            ? $info['extension'] : null;
+
+        if (empty($targetFormat) || !file_exists($path)) {
             // attempt to determine path and format
-            $found = false;
+            $path = null;
             foreach ($this->formats as $format) {
                 if ($targetFormat !== $format
-                    && file_exists($this->webRoot.$name.'.'.$format)
+                    && file_exists($name.'.'.$format)
                 ) {
                     $path = $name.'.'.$format;
                     if (empty($targetFormat)) {
                         $targetFormat = $format;
                     }
-                    $found = true;
                     break;
                 }
             }
 
-            if (!$found) {
+            if (!$path) {
                 throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
             }
         }
