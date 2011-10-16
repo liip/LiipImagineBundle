@@ -71,6 +71,9 @@ class ImagineController
         }
 
         $contentType = $request->getMimeType($targetFormat);
+        if (empty($contentType)) {
+            $contentType = 'image/'.$targetFormat;
+        }
 
         return new Response($image, $statusCode, array('Content-Type' => $contentType));
     }
