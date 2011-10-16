@@ -31,7 +31,7 @@ Add the following lines to your ``deps`` file
 
 ```
 [Imagine]
-    git=http://github.com/avalanche123/Imagine.git
+    git=http://github.com/avalanche123/liip_imagine.git
     target=imagine
     version=v0.2.0
 
@@ -213,7 +213,7 @@ To tell the bundle about your new filter loader, register it in the service
 container and apply the following tag to it (example here in XML):
 
 ``` xml
-<tag name="imagine.filter.loader" filter="my_custom_filter" />
+<tag name="liip_imagine.filter.loader" filter="my_custom_filter" />
 ```
 
 For more information on the service container, see the Symfony2

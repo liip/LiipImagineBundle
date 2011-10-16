@@ -10,10 +10,10 @@ class LoadersCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $tags = $container->findTaggedServiceIds('imagine.filter.loader');
+        $tags = $container->findTaggedServiceIds('liip_imagine.filter.loader');
 
-        if (count($tags) > 0 && $container->hasDefinition('imagine.filter.manager')) {
-            $manager = $container->getDefinition('imagine.filter.manager');
+        if (count($tags) > 0 && $container->hasDefinition('liip_imagine.filter.manager')) {
+            $manager = $container->getDefinition('liip_imagine.filter.manager');
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addLoader', array($tag[0]['filter'], new Reference($id)));

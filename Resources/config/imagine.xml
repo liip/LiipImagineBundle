@@ -7,32 +7,32 @@
 
         <!-- Utility classes -->
 
-        <parameter key="imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
-        <parameter key="imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
-        <parameter key="imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
+        <parameter key="liip_imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
+        <parameter key="liip_imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
 
         <!-- Controller class -->
 
-        <parameter key="imagine.controller.class">Liip\ImagineBundle\Controller\ImagineController</parameter>
+        <parameter key="liip_imagine.controller.class">Liip\ImagineBundle\Controller\ImagineController</parameter>
 
         <!-- Route loader class -->
 
-        <parameter key="imagine.routing.loader.class">Liip\ImagineBundle\Routing\ImagineLoader</parameter>
+        <parameter key="liip_imagine.routing.loader.class">Liip\ImagineBundle\Routing\ImagineLoader</parameter>
 
         <!-- Templating classes -->
 
-        <parameter key="imagine.twig.extension.class">Liip\ImagineBundle\Templating\ImagineExtension</parameter>
-        <parameter key="imagine.templating.helper.class">Liip\ImagineBundle\Templating\Helper\ImagineHelper</parameter>
+        <parameter key="liip_imagine.twig.extension.class">Liip\ImagineBundle\Templating\ImagineExtension</parameter>
+        <parameter key="liip_imagine.templating.helper.class">Liip\ImagineBundle\Templating\Helper\ImagineHelper</parameter>
 
         <!-- ImagineInterface implementations -->
 
-        <parameter key="imagine.gd.class">Imagine\Gd\Imagine</parameter>
-        <parameter key="imagine.imagick.class">Imagine\Imagick\Imagine</parameter>
-        <parameter key="imagine.gmagick.class">Imagine\Gmagick\Imagine</parameter>
+        <parameter key="liip_imagine.gd.class">Imagine\Gd\Imagine</parameter>
+        <parameter key="liip_imagine.imagick.class">Imagine\Imagick\Imagine</parameter>
+        <parameter key="liip_imagine.gmagick.class">Imagine\Gmagick\Imagine</parameter>
 
         <!-- Filter loaders' classes -->
 
-        <parameter key="imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
 
     </parameters>
 
@@ -40,63 +40,63 @@
         
         <!-- Utility services -->
 
-        <service id="imagine.cache.path.resolver" class="%imagine.cache.path.resolver.class%">
+        <service id="liip_imagine.cache.path.resolver" class="%liip_imagine.cache.path.resolver.class%">
             <argument type="service" id="router" />
             <argument type="service" id="filesystem" />
-            <argument>%imagine.web_root%</argument>
+            <argument>%liip_imagine.web_root%</argument>
         </service>
 
-        <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
-            <argument>%imagine.filters%</argument>
+        <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
+            <argument>%liip_imagine.filters%</argument>
         </service>
 
-        <service id="imagine.loader.filesystem" class="%imagine.loader.filesystem.class%">
+        <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
             <argument type="service" id="imagine" />
-            <argument>%imagine.web_root%</argument>
-            <argument>%imagine.formats%</argument>
+            <argument>%liip_imagine.web_root%</argument>
+            <argument>%liip_imagine.formats%</argument>
         </service>
 
         <!-- Controller -->
 
-        <service id="imagine.controller" class="%imagine.controller.class%">
-            <argument type="service" id="imagine.loader.filesystem" />
-            <argument type="service" id="imagine.filter.manager" />
+        <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
+            <argument type="service" id="liip_imagine.loader.filesystem" />
+            <argument type="service" id="liip_imagine.filter.manager" />
         </service>
 
         <!-- Route Loader -->
 
-        <service id="imagine.routing.loader" class="%imagine.routing.loader.class%">
+        <service id="liip_imagine.routing.loader" class="%liip_imagine.routing.loader.class%">
             <tag name="routing.loader" />
-            <argument>%imagine.cache_prefix%</argument>
-            <argument>%imagine.filters%</argument>
+            <argument>%liip_imagine.cache_prefix%</argument>
+            <argument>%liip_imagine.filters%</argument>
         </service>
 
         <!-- ImagineInterface instances -->
         
-        <service id="imagine" alias="imagine.gd" /> 
+        <service id="imagine" alias="liip_imagine.gd" />
 
-        <service id="imagine.gd" class="%imagine.gd.class%" />
+        <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" />
 
-        <service id="imagine.imagick" class="%imagine.imagick.class%" />
+        <service id="liip_imagine.imagick" class="%liip_imagine.imagick.class%" />
 
-        <service id="imagine.gmagick" class="%imagine.gmagick.class%" />
+        <service id="liip_imagine.gmagick" class="%liip_imagine.gmagick.class%" />
 
         <!--  Templating helpers and extensions -->
 
-        <service id="imagine.twig.extension" class="%imagine.twig.extension.class%" public="false">
+        <service id="liip_imagine.twig.extension" class="%liip_imagine.twig.extension.class%" public="false">
             <tag name="twig.extension" />
-            <argument type="service" id="imagine.cache.path.resolver" />
+            <argument type="service" id="liip_imagine.cache.path.resolver" />
         </service>
 
-        <service id="imagine.templating.helper" class="%imagine.templating.helper.class%">
+        <service id="liip_imagine.templating.helper" class="%liip_imagine.templating.helper.class%">
             <tag name="templating.helper" alias="imagine" />
-            <argument type="service" id="imagine.cache.path.resolver" />
+            <argument type="service" id="liip_imagine.cache.path.resolver" />
         </service>
 
         <!-- Filter loaders -->
 
-        <service id="imagine.filter.loader.thumbnail" class="%imagine.filter.loader.thumbnail.class%">
-            <tag name="imagine.filter.loader" filter="thumbnail" />
+        <service id="liip_imagine.filter.loader.thumbnail" class="%liip_imagine.filter.loader.thumbnail.class%">
+            <tag name="liip_imagine.filter.loader" filter="thumbnail" />
         </service>
 
     </services>

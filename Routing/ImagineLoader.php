@@ -26,7 +26,7 @@ class ImagineLoader extends Loader
     public function load($resource, $type = null)
     {
         $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
-        $defaults     = array('_controller' => 'imagine.controller:filterAction');
+        $defaults     = array('_controller' => 'liip_imagine.controller:filterAction');
         $routes       = new RouteCollection();
 
         if (count($this->filters) > 0) {

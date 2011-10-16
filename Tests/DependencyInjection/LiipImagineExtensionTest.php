@@ -37,12 +37,12 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(true, 'imagine.cache');
-        $this->assertAlias('imagine.gd', 'imagine');
-        $this->assertHasDefinition('imagine.controller');
+        $this->assertParameter(true, 'liip_imagine.cache');
+        $this->assertAlias('liip_imagine.gd', 'liip_imagine');
+        $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition('imagine.controller'),
-            array(new Reference('imagine.loader.filesystem'), new Reference('imagine.filter.manager'), new Reference('imagine.cache.path.resolver'))
+            $this->containerBuilder->getDefinition('liip_imagine.controller'),
+            array(new Reference('liip_imagine.loader.filesystem'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.path.resolver'))
         );
     }
 
@@ -50,12 +50,12 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createFullConfiguration();
 
-        $this->assertParameter(false, 'imagine.cache');
-        $this->assertAlias('imagine.imagick', 'imagine');
-        $this->assertHasDefinition('imagine.controller');
+        $this->assertParameter(false, 'liip_imagine.cache');
+        $this->assertAlias('liip_imagine.imagick', 'liip_imagine');
+        $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition('imagine.controller'),
-            array(new Reference('acme_imagine.loader'), new Reference('imagine.filter.manager'))
+            $this->containerBuilder->getDefinition('liip_imagine.controller'),
+            array(new Reference('acme_liip_imagine.loader'), new Reference('liip_imagine.filter.manager'))
         );
     }
 
@@ -114,7 +114,7 @@ filters:
     '':
         type: ~
         options: { quality: 100 }
-loader: acme_imagine.loader
+loader: acme_liip_imagine.loader
 EOF;
         $parser = new Parser();
 
