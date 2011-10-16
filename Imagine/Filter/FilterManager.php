@@ -33,7 +33,7 @@ class FilterManager
         return $this->filters[$filter];
     }
 
-    public function get($filter, $image, $realPath = null, $format = 'png')
+    public function get($filter, $image, $format = 'png')
     {
         if (!isset($this->filters[$filter])) {
             throw new InvalidArgumentException(sprintf(
@@ -60,11 +60,8 @@ class FilterManager
         }
 
         $quality = empty($config['quality']) ? 100 : $config['quality'];
-        if (empty($realPath)) {
-            return $image->get($format, array('quality' => $quality));
-        }
+        $image = $image->get($format, array('quality' => $quality));
 
-        $image->save($realPath, array('quality' => $quality));
-        return file_get_contents($realPath);
+        return $image;
     }
 }

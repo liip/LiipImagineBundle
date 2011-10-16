@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Liip\ImagineBundle\Imagine\CachePathResolver;
 use Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -41,28 +40,6 @@ class ImagineController
     }
 
     /**
-     * Resolve the requested path to a local path or a Response
-     *
-     * @param Symfony\Component\HttpFoundation\Request $request
-     * @param string $path
-     * @param string $filter
-     *
-     * @return string|Symfony\Component\HttpFoundation\Response
-     */
-    protected function resolve(Request $request, $path, $filter)
-    {
-        $realPath = null;
-        if ($this->cachePathResolver) {
-            $realPath = $this->cachePathResolver->resolve($request, $path, $filter);
-            if (!$realPath) {
-                throw new NotFoundHttpException('Image doesn\'t exist');
-            }
-        }
-
-        return $realPath;
-    }
-
-    /**
      * This action applies a given filter to a given image,
      * optionally saves the image and
      * outputs it to the browser at the same time
@@ -75,16 +52,26 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        list($actualPath, $image, $format) = $this->dataLoader->find($path);
+        list($actualPath, $image, $targetFormat) = $this->dataLoader->find($path);
 
-        $realPath = $this->resolve($request, $actualPath, $filter);
-        if ($realPath instanceof Response) {
-            return $realPath;
+        if ($this->cachePathResolver) {
+            $targetPath = $this->cachePathResolver->resolve($request, $actualPath, $targetFormat, $filter);
+            if ($targetPath instanceof Response) {
+                return $targetPath;
+            }
         }
 
-        $image = $this->filterManager->get($filter, $image, $realPath, $format);
-        $statusCode = $this->cachePathResolver ? 201 : 200;
-        $contentType = 'image/'.($format == 'jpg' ? 'jpeg' : $format);
+        $image = $this->filterManager->get($filter, $image, $targetFormat);
+
+        if ($this->cachePathResolver) {
+            $this->cachePathResolver->store($targetPath, $image);
+            $statusCode = 201;
+        } else {
+            $statusCode = 200;
+        }
+
+        $contentType = $request->getMimeType($targetFormat);
+
         return new Response($image, $statusCode, array('Content-Type' => $contentType));
     }
 }
