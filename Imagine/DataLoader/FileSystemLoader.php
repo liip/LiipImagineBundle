@@ -4,8 +4,15 @@ namespace Liip\ImagineBundle\Imagine\DataLoader;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Imagine\Image\ImagineInterface;
+
 class FileSystemLoader implements LoaderInterface
 {
+    /**
+     * @var Imagine\Image\ImagineInterface
+     */
+    private $imagine;
+
     /**
      * @var string
      */
@@ -22,9 +29,10 @@ class FileSystemLoader implements LoaderInterface
      * @param string    $webRoot
      * @param array     $formats
      */
-    public function __construct($webRoot, $formats)
+    public function __construct(ImagineInterface $imagine, $webRoot, $formats)
     {
         $this->webRoot = $webRoot;
+        $this->imagine = $imagine;
         $this->formats = $formats;
     }
 
@@ -74,6 +82,7 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        return array($path, $this->webRoot.$path, $targetFormat);
+        $image = $this->imagine->open($path);
+        return array($path, $image, $targetFormat);
     }
 }

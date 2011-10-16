@@ -5,27 +5,18 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 use Imagine\Exception\InvalidArgumentException;
-use Imagine\Filter\FilterInterface;
-use Imagine\Image\ImagineInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FilterManager
 {
-    /**
-     * @var Imagine\Image\ImagineInterface
-     */
-    private $imagine;
-
     private $filters;
     private $loaders;
     private $services;
 
-    public function __construct(ImagineInterface $imagine, array $filters = array())
+    public function __construct(array $filters = array())
     {
-        $this->imagine   = $imagine;
-        $this->filters   = $filters;
-        $this->loaders   = array();
-        $this->services  = array();
+        $this->filters = $filters;
+        $this->loaders = array();
+        $this->services = array();
     }
 
     public function addLoader($name, LoaderInterface $loader)
@@ -48,12 +39,6 @@ class FilterManager
             throw new InvalidArgumentException(sprintf(
                 'Could not find image filter "%s"', $filter
             ));
-        }
-
-        if (is_resource($image)) {
-            $image = $this->imagine->load(stream_get_contents($image));
-        } else {
-            $image = $this->imagine->open($image);
         }
 
         $config = $this->filters[$filter];

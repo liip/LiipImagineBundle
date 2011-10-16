@@ -47,11 +47,11 @@
         </service>
 
         <service id="imagine.filter.manager" class="%imagine.filter.manager.class%">
-            <argument type="service" id="imagine" />
             <argument>%imagine.filters%</argument>
         </service>
 
         <service id="imagine.loader.filesystem" class="%imagine.loader.filesystem.class%">
+            <argument type="service" id="imagine" />
             <argument>%imagine.web_root%</argument>
             <argument>%imagine.formats%</argument>
         </service>
