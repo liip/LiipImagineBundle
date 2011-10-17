@@ -26,6 +26,7 @@ class FileSystemLoader implements LoaderInterface
     /**
      * Constructs
      *
+     * @param Imagine\Image\ImagineInterface $imagine
      * @param string    $webRoot
      * @param array     $formats
      */
