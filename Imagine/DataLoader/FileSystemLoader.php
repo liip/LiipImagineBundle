@@ -14,36 +14,30 @@ class FileSystemLoader implements LoaderInterface
     private $imagine;
 
     /**
-     * @var string
-     */
-    protected $webRoot;
-
-    /**
      * @var array
      */
-    protected $formats;
+    private $formats;
 
     /**
      * Constructs
      *
-     * @param Imagine\Image\ImagineInterface $imagine
-     * @param string    $webRoot
-     * @param array     $formats
+     * @param ImagineInterface  $imagine
+     * @param array             $formats
      */
-    public function __construct(ImagineInterface $imagine, $webRoot, $formats)
+    public function __construct(ImagineInterface $imagine, $formats)
     {
         $this->imagine = $imagine;
-        $this->webRoot = realpath($webRoot);
         $this->formats = $formats;
     }
 
+    /**
+     * @param string $path
+     *
+     * @return Imagine\Image\ImageInterface
+     */
     public function find($path)
     {
-        $path = $this->webRoot.'/'.ltrim($path, '/');
         $info = pathinfo($path);
-        if (!$info) {
-            throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
-        }
 
         $name = $info['dirname'].'/'.$info['filename'];
         $targetFormat = empty($this->formats) || in_array($info['extension'], $this->formats)
@@ -57,9 +51,6 @@ class FileSystemLoader implements LoaderInterface
                     && file_exists($name.'.'.$format)
                 ) {
                     $path = $name.'.'.$format;
-                    if (empty($targetFormat)) {
-                        $targetFormat = $format;
-                    }
                     break;
                 }
             }
@@ -69,7 +60,6 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        $image = $this->imagine->open($path);
-        return array($path, $image, $targetFormat);
+        return $this->imagine->open($path);
     }
 }

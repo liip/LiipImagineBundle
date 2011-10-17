@@ -21,6 +21,11 @@ class ImagineController
     private $filterManager;
 
     /**
+     * @var string
+     */
+    private $webRoot;
+
+    /**
      * @var Liip\ImagineBundle\Imagine\CachePathResolver
      */
     private $cachePathResolver;
@@ -32,10 +37,11 @@ class ImagineController
      * @param Liip\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
      * @param Liip\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
      */
-    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
+    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, $webRoot, CachePathResolver $cachePathResolver = null)
     {
-        $this->dataLoader        = $dataLoader;
-        $this->filterManager     = $filterManager;
+        $this->dataLoader = $dataLoader;
+        $this->filterManager = $filterManager;
+        $this->webRoot = realpath($webRoot);
         $this->cachePathResolver = $cachePathResolver;
     }
 
@@ -52,15 +58,17 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        list($actualPath, $image, $targetFormat) = $this->dataLoader->find($path);
+        $path = $this->webRoot.'/'.ltrim($path, '/');
 
         if ($this->cachePathResolver) {
-            $targetPath = $this->cachePathResolver->resolve($request, $actualPath, $targetFormat, $filter);
+            $targetPath = $this->cachePathResolver->resolve($request, $path, $filter);
             if ($targetPath instanceof Response) {
                 return $targetPath;
             }
         }
 
+        $image = $this->dataLoader->find($path);
+        $targetFormat = pathinfo($path, PATHINFO_EXTENSION);
         $image = $this->filterManager->get($filter, $image, $targetFormat);
 
         if ($this->cachePathResolver) {

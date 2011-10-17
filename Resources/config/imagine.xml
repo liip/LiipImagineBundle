@@ -52,7 +52,6 @@
 
         <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
             <argument type="service" id="imagine" />
-            <argument>%liip_imagine.web_root%</argument>
             <argument>%liip_imagine.formats%</argument>
         </service>
 
@@ -61,6 +60,7 @@
         <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
             <argument type="service" id="liip_imagine.loader.filesystem" />
             <argument type="service" id="liip_imagine.filter.manager" />
+            <argument>%liip_imagine.web_root%</argument>
         </service>
 
         <!-- Route Loader -->

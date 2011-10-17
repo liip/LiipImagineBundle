@@ -7,7 +7,7 @@ interface LoaderInterface
     /**
      * @param string $path
      *
-     * @return array
+     * @return Imagine\Image\ImageInterface
      */
     function find($path);
 }
