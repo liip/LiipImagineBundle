@@ -42,7 +42,7 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(new Reference('liip_imagine.loader.filesystem'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.path.resolver'))
+            array(new Reference('liip_imagine.loader.filesystem'), new Reference('liip_imagine.filter.manager'), '%liip_imagine.web_root%', new Reference('liip_imagine.cache.path.resolver'))
         );
     }
 
@@ -55,7 +55,7 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(new Reference('acme_liip_imagine.loader'), new Reference('liip_imagine.filter.manager'))
+            array(new Reference('acme_liip_imagine.loader'), new Reference('liip_imagine.filter.manager'), '%liip_imagine.web_root%')
         );
     }
 
