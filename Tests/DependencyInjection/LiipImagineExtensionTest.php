@@ -89,32 +89,31 @@ web_root: ../foo/bar
 cache_prefix: /imagine/cache
 cache: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
-filters:
+filter_sets:
     small:
-        type:    thumbnail
-        options: { size: [100, ~], mode: inset }
+        filters:
+            thumbnail: { size: [100, ~], mode: inset }
         quality: 80
     medium_small_cropped:
-        type:    thumbnail
-        options: { size: [223, 173], mode: outbound }
+        filters:
+            thumbnail: { size: [223, 173], mode: outbound }
     medium_cropped:
-        type:    thumbnail
-        options: { size: [232, 180], mode: outbound }
+        filters:
+            thumbnail: { size: [232, 180], mode: outbound }
     medium:
-        type:    thumbnail
-        options: { size: [232, 180], mode: inset }
+        filters:
+            thumbnail: { size: [232, 180], mode: inset }
     large_cropped:
-        type:    thumbnail
-        options: { size: [483, 350], mode: outbound }
+        filters:
+            thumbnail: { size: [483, 350], mode: outbound }
     large:
-        type:    thumbnail
-        options: { size: [483, ~], mode: inset }
+        filters:
+            thumbnail: { size: [483, ~], mode: inset }
     xxl:
-        type:    thumbnail
-        options: { size: [660, ~], mode: inset }
+        filters:
+            thumbnail: { size: [660, ~], mode: inset }
         quality: 100
     '':
-        type: ~
         quality: 100
 loader: acme_liip_imagine.loader
 EOF;

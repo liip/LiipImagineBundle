@@ -28,12 +28,12 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.web_root', $config['web_root']);
         $container->setParameter('liip_imagine.formats', $config['formats']);
         $container->setParameter('liip_imagine.cache', $config['cache']);
-        foreach ($config['filters'] as $filter => $options) {
+        foreach ($config['filter_sets'] as $filter => $options) {
             if (isset($options['path'])) {
-                $config['filters'][$filter]['path'] = '/'.trim($options['path'], '/');
+                $config['filter_sets'][$filter]['path'] = '/'.trim($options['path'], '/');
             }
         }
-        $container->setParameter('liip_imagine.filters', $config['filters']);
+        $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
 
         if ($container->getParameter('liip_imagine.cache')) {
             $controller = $container->getDefinition('liip_imagine.controller');
