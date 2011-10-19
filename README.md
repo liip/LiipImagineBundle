@@ -11,7 +11,7 @@ https://github.com/avalanche123/AvalancheImagineBundle/pull/25
 For example with this bundle the following is possible:
 
 ``` jinja
-<img src="{{ '/relative/path/to/image.jpg' | apply_filter('thumbnail') }}" />
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('thumbnail') }}" />
 ````
 
 This will perform the transformation called `thumbnail`, which you can define
@@ -117,7 +117,7 @@ We'll learn more about available transformations later, but for now, this
 new filter can be used immediately in a template:
 
 ``` jinja
-<img src="{{ '/relative/path/to/image.jpg' | apply_filter('my_thumb') }}" />
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb') }}" />
 ```
 
 Or if you're using PHP templates:

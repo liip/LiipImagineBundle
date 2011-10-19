@@ -29,7 +29,7 @@ class ImagineExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'apply_filter' => new \Twig_Filter_Method($this, 'applyFilter'),
+            'imagine_filter' => new \Twig_Filter_Method($this, 'filter'),
         );
     }
 
@@ -41,7 +41,7 @@ class ImagineExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function applyFilter($path, $filter)
+    public function filter($path, $filter)
     {
         return $this->cachePathResolver->getBrowserPath($path, $filter);
     }
