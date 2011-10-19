@@ -92,28 +92,30 @@ formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filters:
     small:
         type:    thumbnail
-        options: { size: [100, ~], mode: inset, quality: 80 }
+        options: { size: [100, ~], mode: inset }
+        quality: 80
     medium_small_cropped:
         type:    thumbnail
-        options: { size: [223, 173], mode: outbound, quality: 80 }
+        options: { size: [223, 173], mode: outbound }
     medium_cropped:
         type:    thumbnail
-        options: { size: [232, 180], mode: outbound, quality: 80 }
+        options: { size: [232, 180], mode: outbound }
     medium:
         type:    thumbnail
-        options: { size: [232, 180], mode: inset, quality: 80 }
+        options: { size: [232, 180], mode: inset }
     large_cropped:
         type:    thumbnail
-        options: { size: [483, 350], mode: outbound, quality: 100 }
+        options: { size: [483, 350], mode: outbound }
     large:
         type:    thumbnail
-        options: { size: [483, ~], mode: inset, quality: 100 }
+        options: { size: [483, ~], mode: inset }
     xxl:
         type:    thumbnail
-        options: { size: [660, ~], mode: inset, quality: 100 }
+        options: { size: [660, ~], mode: inset }
+        quality: 100
     '':
         type: ~
-        options: { quality: 100 }
+        quality: 100
 loader: acme_liip_imagine.loader
 EOF;
         $parser = new Parser();
