@@ -105,13 +105,14 @@ you want to thumbnail an image to a size of 120x90 pixels:
 # app/config/config.yml
 
 liip_imagine:
-    filters:
+    filter_sets:
         my_thumb:
-            type:    thumbnail
-            options: { size: [120, 90], mode: outbound }
+            quality: 75
+            filters:
+                thumbnail: { size: [120, 90], mode: outbound }
 ```
 
-You've now defined a filter called `my_thumb` that performs a thumbnail transformation.
+You've now defined a filter set called `my_thumb` that performs a thumbnail transformation.
 We'll learn more about available transformations later, but for now, this
 new filter can be used immediately in a template:
 
@@ -145,7 +146,7 @@ liip_imagine:
     loader:       ~
     driver:       gd
     formats:      []
-    filters:      []
+    filter_sets:  []
 ```
 
 There are several configuration options available:
@@ -175,12 +176,11 @@ There are several configuration options available:
 
  - `formats` - optional list of image formats to which images may be converted to.
 
- - `filters` - specify the filters that you want to define and use
+ - `filter_sets` - specify the filter sets that you want to define and use
 
-Each filter that you specify have the following options:
+Each filter set that you specify have the following options:
 
- - `type` - determine the type of filter to be used, refer to *Filters* section for more information
- - `options` - options that should be passed to the specific filter type
+ - `filters` - determine the type of filter to be used (refer to *Filters* section for more information) and options that should be passed to the specific filter type
  - `path` - used in place of the filter name to determine the path in combination with the global `cache_prefix`
  - `quality` - override the default quality of 100 for the generated images
 
@@ -194,10 +194,11 @@ The thumbnail filter, as the name implies, performs a thumbnail transformation
 on your image. Configuration looks like this:
 
 ``` yaml
-filters:
-    my_thumb:
-        type:    thumbnail
-        options: { size: [120, 90], mode: outbound }
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                thumbnail: { size: [120, 90], mode: outbound }
 ```
 
 The `mode` can be either `outbound` or `inset`.
@@ -219,14 +220,15 @@ container and apply the following tag to it (example here in XML):
 For more information on the service container, see the Symfony2
 [Service Container](http://symfony.com/doc/current/book/service_container.html) documentation.
 
-You can now reference and use your custom filter when defining filters you'd
+You can now reference and use your custom filter when defining filter sets you'd
 like to apply in your configuration:
 
 ``` yaml
-filters:
-    my_special_filter:
-        type:    my_custom_filter
-        options: { }
+liip_imagine:
+    filter_sets:
+        my_special_style:
+            filters:
+                my_custom_filter: { }
 ```
 
 For an example of a filter loader implementation, refer to

@@ -43,20 +43,13 @@ class FilterManager
 
         $config = $this->filters[$filter];
 
-        if (isset($config['type'])) {
-            if (!isset($this->loaders[$config['type']])) {
+        foreach ($config['filters'] as $filter => $options) {
+            if (!isset($this->loaders[$filter])) {
                 throw new InvalidArgumentException(sprintf(
-                    'Could not find loader for "%s" filter type', $config['type']
+                    'Could not find loader for "%s" filter type', $filter
                 ));
             }
-
-            if (!isset($config['options'])) {
-                throw new InvalidArgumentException(sprintf(
-                    'Options for filter type "%s" must be specified', $filter
-                ));
-            }
-
-            $image = $this->loaders[$config['type']]->load($image, $config['options']);
+            $image = $this->loaders[$filter]->load($image, $options);
         }
 
         $quality = empty($config['quality']) ? 100 : $config['quality'];

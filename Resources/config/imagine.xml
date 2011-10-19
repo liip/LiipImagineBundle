@@ -47,7 +47,7 @@
         </service>
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
-            <argument>%liip_imagine.filters%</argument>
+            <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
         <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
@@ -68,7 +68,7 @@
         <service id="liip_imagine.routing.loader" class="%liip_imagine.routing.loader.class%">
             <tag name="routing.loader" />
             <argument>%liip_imagine.cache_prefix%</argument>
-            <argument>%liip_imagine.filters%</argument>
+            <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
         <!-- ImagineInterface instances -->
