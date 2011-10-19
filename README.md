@@ -134,6 +134,15 @@ In this example, the final rendered path would be something like
 `/media/cache/my_thumb/relative/path/to/image.jpg`. This is where Imagine
 would save the filtered image file.
 
+Note: Using the ``dev`` environment you might find that the images are not properly rendered when
+using the template helper. This is likely caused by having ``intercept_redirect`` enabled in your
+application configuration. To ensure that the images are rendered disable this option:
+
+``` jinja
+web_profiler:
+    intercept_redirects: false
+```
+
 ## Configuration
 
 The default configuration for the bundle looks like this:
