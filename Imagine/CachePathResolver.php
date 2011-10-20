@@ -45,8 +45,9 @@ class CachePathResolver
      *
      * @param string $path
      * @param string $filter
+     * @param boolean $absolute
      */
-    public function getBrowserPath($targetPath, $filter)
+    public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
         if (0 === strpos($targetPath, $this->webRoot)) {
              $targetPath = substr($targetPath, strlen($this->webRoot));
@@ -57,7 +58,7 @@ class CachePathResolver
         $path = str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
-            $this->router->generate('_imagine_'.$filter, $params)
+            $this->router->generate('_imagine_'.$filter, $params, $absolute)
         );
 
         return $path;

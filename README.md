@@ -134,9 +134,22 @@ In this example, the final rendered path would be something like
 `/media/cache/my_thumb/relative/path/to/image.jpg`. This is where Imagine
 would save the filtered image file.
 
+In order to get an absolute path to the image add another parameter with the value true:
+
+``` jinja
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb', true) }}" />
+```
+
+Or if you're using PHP templates:
+
+``` php
+<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', true) ?>" />
+```
+
 Note: Using the ``dev`` environment you might find that the images are not properly rendered when
 using the template helper. This is likely caused by having ``intercept_redirect`` enabled in your
 application configuration. To ensure that the images are rendered disable this option:
+
 
 ``` jinja
 web_profiler:

@@ -27,12 +27,13 @@ class ImagineHelper extends Helper
      *
      * @param string $path
      * @param string $filter
+     * @param boolean $absolute
      *
      * @return string
      */
-    public function filter($path, $filter)
+    public function filter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter);
+        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
     }
 
     /**
