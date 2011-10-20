@@ -202,7 +202,8 @@ There are several configuration options available:
 
 Each filter set that you specify have the following options:
 
- - `filters` - determine the type of filter to be used (refer to *Filters* section for more information) and options that should be passed to the specific filter type
+ - `filters` - determine the type of filter to be used (refer to *Filters* section for more information)
+    and options that should be passed to the specific filter type
  - `path` - used in place of the filter name to determine the path in combination with the global `cache_prefix`
  - `quality` - override the default quality of 100 for the generated images
 
@@ -233,10 +234,12 @@ requirement is that each filter loader implement the following interface:
     Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface
 
 To tell the bundle about your new filter loader, register it in the service
-container and apply the following tag to it (example here in XML):
+container and apply the `liip_imagine.filter.loader` tag to it (example here in XML):
 
 ``` xml
-<tag name="liip_imagine.filter.loader" filter="my_custom_filter" />
+<service id="liip_imagine.filter.loader.my_custom_filter" class="Acme\ImagineBundle\Imagine\Filter\Loader\MyCustomFilterLoader">
+    <tag name="liip_imagine.filter.loader" filter="my_custom_filter" />
+</service>
 ```
 
 For more information on the service container, see the Symfony2
@@ -255,3 +258,33 @@ liip_imagine:
 
 For an example of a filter loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.
+
+## Custom image loaders
+
+The ImagineBundle allows you to add your custom image loader classes. The only
+requirement is that each data loader implement the following interface:
+
+    Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface
+
+To tell the bundle about your new filter loader, register it in the service
+container just like any other service:
+
+``` xml
+<service id="acme_imagine.loader.my_custom" class="Liip\ImagineBundle\Imagine\DataLoader\MyCustomDataLoader">
+    <argument type="service" id="imagine" />
+    <argument>%liip_imagine.formats%</argument>
+</service>
+```
+
+For more information on the service container, see the Symfony2
+[Service Container](http://symfony.com/doc/current/book/service_container.html) documentation.
+
+You can enable your custom data loader by adding it to the your configuration:
+
+``` yaml
+liip_imagine:
+    loader: acme_imagine.loader.my_custom
+```
+
+For an example of a filter loader implementation, refer to
+`Liip\ImagineBundle\Imagine\DataLoader\FileSystemLoader`.
