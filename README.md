@@ -206,6 +206,7 @@ Each filter set that you specify have the following options:
     and options that should be passed to the specific filter type
  - `path` - used in place of the filter name to determine the path in combination with the global `cache_prefix`
  - `quality` - override the default quality of 100 for the generated images
+ - `format` - to hardcode the output format
 
 ## Built-in Filters
 

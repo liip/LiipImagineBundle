@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('path')->end()
                             ->scalarNode('quality')->defaultValue(100)->end()
+                            ->scalarNode('format')->defaultNull()->end()
                             ->arrayNode('filters')
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')

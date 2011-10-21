@@ -53,6 +53,7 @@ class FilterManager
         }
 
         $quality = empty($config['quality']) ? 100 : $config['quality'];
+        $format = empty($config['format']) ? $format : $config['format'];
         $image = $image->get($format, array('quality' => $quality));
 
         return $image;
