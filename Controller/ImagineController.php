@@ -60,6 +60,7 @@ class ImagineController
     {
         $path = $this->webRoot.'/'.ltrim($path, '/');
 
+        $targetPath = false;
         if ($this->cachePathResolver) {
             $targetPath = $this->cachePathResolver->resolve($request, $path, $filter);
             if ($targetPath instanceof Response) {
@@ -71,7 +72,7 @@ class ImagineController
         $targetFormat = pathinfo($path, PATHINFO_EXTENSION);
         $image = $this->filterManager->get($filter, $image, $targetFormat);
 
-        if ($this->cachePathResolver) {
+        if ($targetPath) {
             $this->cachePathResolver->store($targetPath, $image);
             $statusCode = 201;
         } else {
