@@ -73,8 +73,7 @@ class ImagineController
 
         if ($targetPath) {
             $this->cachePathResolver->store($targetPath, $response->getContent());
-            $path = str_replace($this->webRoot, '', $targetPath);
-            $response = $this->cachePathResolver->redirect($request, $path);
+            $response->setStatusCode(201);
         }
 
         return $response;
