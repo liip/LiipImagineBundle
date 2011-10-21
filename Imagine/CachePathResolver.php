@@ -91,20 +91,10 @@ class CachePathResolver
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($targetPath)) {
-            return $this->redirect($request, $browserPath);
+            return new RedirectResponse($request->getBasePath().$targetPath);
         }
 
         return $targetPath;
-    }
-
-    /**
-     * @param Request $request
-     * @param string $location
-     * @return RedirectResponse
-     */
-    public function redirect(Request $request, $location)
-    {
-        return new RedirectResponse($request->getBasePath().$location);
     }
 
     /**
