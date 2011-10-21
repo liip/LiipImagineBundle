@@ -2,21 +2,22 @@
 
 namespace Liip\ImagineBundle\Imagine;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpKernel\Util\Filesystem;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\HttpFoundation\RedirectResponse,
+    Symfony\Component\Routing\RouterInterface,
+    Symfony\Component\HttpKernel\Util\Filesystem,
+    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CachePathResolver
 {
     /**
-     * @var Symfony\Component\Routing\RouterInterface
+     * @var RouterInterface
      */
     private $router;
 
     /**
-     * @var Symfony\Component\HttpKernel\Util\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
@@ -28,10 +29,10 @@ class CachePathResolver
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param Symfony\Component\HttpFoundation\Request      $request
-     * @param Symfony\Component\Routing\RouterInterface     $router
-     * @param Symfony\Component\HttpKernel\Util\Filesystem  $filesystem
-     * @param string                                        $webRoot
+     * @param Request $request
+     * @param RouterInterface $router
+     * @param Filesystem  $filesystem
+     * @param string $webRoot
      */
     public function __construct(RouterInterface $router, Filesystem $filesystem, $webRoot)
     {
@@ -46,6 +47,8 @@ class CachePathResolver
      * @param string $path
      * @param string $filter
      * @param boolean $absolute
+     *
+     * @return string
      */
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
@@ -70,6 +73,8 @@ class CachePathResolver
      * @param Request $request
      * @param string $path
      * @param string $filter
+     *
+     * @return string
      */
     public function resolve(Request $request, $targetPath, $filter)
     {
@@ -91,15 +96,20 @@ class CachePathResolver
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($targetPath)) {
-            return new Response('', 301, array(
-                'location' => $request->getBasePath().$browserPath
-            ));
+            return new RedirectResponse($request->getBasePath().$targetPath);
         }
 
         return $targetPath;
     }
 
-    public function store($targetPath, $image)
+    /**
+     * @throws \RuntimeException
+     * @param Response $response
+     * @param string $targetPath
+     * 
+     * @return Response
+     */
+    public function store(Response $response, $targetPath)
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
@@ -109,6 +119,10 @@ class CachePathResolver
             ));
         }
 
-        file_put_contents($targetPath, $image);
+        file_put_contents($targetPath, $response->getContent());
+
+        $response->setStatusCode(201);
+
+        return $response;
     }
 }
