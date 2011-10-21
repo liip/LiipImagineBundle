@@ -11,12 +11,12 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 class ImagineController
 {
     /**
-     * @var Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface
+     * @var LoaderInterface
      */
     private $dataLoader;
 
     /**
-     * @var Liip\ImagineBundle\Imagine\Filter\FilterManager
+     * @var FilterManager
      */
     private $filterManager;
 
@@ -26,16 +26,17 @@ class ImagineController
     private $webRoot;
 
     /**
-     * @var Liip\ImagineBundle\Imagine\CachePathResolver
+     * @var CachePathResolver
      */
     private $cachePathResolver;
 
     /**
      * Constructor
      *
-     * @param Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface $dataLoader
-     * @param Liip\ImagineBundle\Imagine\Filter\FilterManager       $filterManager
-     * @param Liip\ImagineBundle\Imagine\CachePathResolver          $cachePathResolver
+     * @param LoaderInterface $dataLoader
+     * @param FilterManager $filterManager
+     * @param string $webRoot
+     * @param CachePathResolver $cachePathResolver
      */
     public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, $webRoot, CachePathResolver $cachePathResolver = null)
     {

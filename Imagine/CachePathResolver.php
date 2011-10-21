@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Request,
 class CachePathResolver
 {
     /**
-     * @var Symfony\Component\Routing\RouterInterface
+     * @var RouterInterface
      */
     private $router;
 
     /**
-     * @var Symfony\Component\HttpKernel\Util\Filesystem
+     * @var Filesystem
      */
     private $filesystem;
 
@@ -29,10 +29,10 @@ class CachePathResolver
     /**
      * Constructs cache path resolver with a given web root and cache prefix
      *
-     * @param Request      $request
-     * @param RouterInterface     $router
+     * @param Request $request
+     * @param RouterInterface $router
      * @param Filesystem  $filesystem
-     * @param string                                        $webRoot
+     * @param string $webRoot
      */
     public function __construct(RouterInterface $router, Filesystem $filesystem, $webRoot)
     {
@@ -47,6 +47,8 @@ class CachePathResolver
      * @param string $path
      * @param string $filter
      * @param boolean $absolute
+     *
+     * @return string
      */
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
@@ -71,6 +73,8 @@ class CachePathResolver
      * @param Request $request
      * @param string $path
      * @param string $filter
+     *
+     * @return string
      */
     public function resolve(Request $request, $targetPath, $filter)
     {
@@ -102,6 +106,7 @@ class CachePathResolver
      * @throws \RuntimeException
      * @param Response $response
      * @param string $targetPath
+     * 
      * @return Response
      */
     public function store(Response $response, $targetPath)

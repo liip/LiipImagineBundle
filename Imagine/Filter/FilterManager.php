@@ -9,7 +9,14 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 class FilterManager
 {
+    /**
+     * @var array
+     */
     private $filters;
+
+    /**
+     * @var array
+     */
     private $loaders;
 
     /**
@@ -24,6 +31,7 @@ class FilterManager
     /**
      * @param $name
      * @param Loader\LoaderInterface $loader
+     * 
      * @return void
      */
     public function addLoader($name, LoaderInterface $loader)
@@ -33,6 +41,7 @@ class FilterManager
 
     /**
      * @param $filter
+     *
      * @return array
      */
     public function getFilterConfig($filter)
@@ -49,6 +58,7 @@ class FilterManager
      * @param $filter
      * @param $image
      * @param string $localPath
+     *
      * @return Response
      */
     public function get(Request $request, $filter, $image, $localPath)
