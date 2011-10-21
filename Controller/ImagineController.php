@@ -72,8 +72,7 @@ class ImagineController
         $response = $this->filterManager->get($request, $filter, $image, $path);
 
         if ($targetPath) {
-            $this->cachePathResolver->store($targetPath, $response->getContent());
-            $response->setStatusCode(201);
+            $response = $this->cachePathResolver->store($response, $targetPath);
         }
 
         return $response;

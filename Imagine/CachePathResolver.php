@@ -2,11 +2,12 @@
 
 namespace Liip\ImagineBundle\Imagine;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpKernel\Util\Filesystem;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\HttpFoundation\RedirectResponse,
+    Symfony\Component\Routing\RouterInterface,
+    Symfony\Component\HttpKernel\Util\Filesystem,
+    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CachePathResolver
 {
@@ -99,11 +100,11 @@ class CachePathResolver
 
     /**
      * @throws \RuntimeException
+     * @param Response $response
      * @param string $targetPath
-     * @param string $image
-     * @return void
+     * @return Response
      */
-    public function store($targetPath, $image)
+    public function store(Response $response, $targetPath)
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
@@ -113,6 +114,10 @@ class CachePathResolver
             ));
         }
 
-        file_put_contents($targetPath, $image);
+        file_put_contents($targetPath, $response->getContent());
+
+        $response->setStatusCode(201);
+
+        return $response;
     }
 }
