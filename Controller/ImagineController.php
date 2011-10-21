@@ -69,21 +69,14 @@ class ImagineController
         }
 
         $image = $this->dataLoader->find($path);
-        $targetFormat = pathinfo($path, PATHINFO_EXTENSION);
-        $image = $this->filterManager->get($filter, $image, $targetFormat);
+        $response = $this->filterManager->get($request, $filter, $image, $path);
 
         if ($targetPath) {
-            $this->cachePathResolver->store($targetPath, $image);
-            $statusCode = 201;
-        } else {
-            $statusCode = 200;
+            $this->cachePathResolver->store($targetPath, $response->getContent());
+            $path = str_replace($this->webRoot, '', $targetPath);
+            $response = $this->cachePathResolver->redirect($request, $path);
         }
 
-        $contentType = $request->getMimeType($targetFormat);
-        if (empty($contentType)) {
-            $contentType = 'image/'.$targetFormat;
-        }
-
-        return new Response($image, $statusCode, array('Content-Type' => $contentType));
+        return $response;
     }
 }

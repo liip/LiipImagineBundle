@@ -2,28 +2,39 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
-use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response;
 
-use Imagine\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 class FilterManager
 {
     private $filters;
     private $loaders;
-    private $services;
 
+    /**
+     * @param array $filters
+     */
     public function __construct(array $filters = array())
     {
         $this->filters = $filters;
         $this->loaders = array();
-        $this->services = array();
     }
 
+    /**
+     * @param $name
+     * @param Loader\LoaderInterface $loader
+     * @return void
+     */
     public function addLoader($name, LoaderInterface $loader)
     {
         $this->loaders[$name] = $loader;
     }
 
+    /**
+     * @param $filter
+     * @return array
+     */
     public function getFilterConfig($filter)
     {
         if (empty($this->filters[$filter])) {
@@ -33,10 +44,17 @@ class FilterManager
         return $this->filters[$filter];
     }
 
-    public function get($filter, $image, $format = 'png')
+    /**
+     * @param Request $request
+     * @param $filter
+     * @param $image
+     * @param string $localPath
+     * @return Response
+     */
+    public function get(Request $request, $filter, $image, $localPath)
     {
         if (!isset($this->filters[$filter])) {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Could not find image filter "%s"', $filter
             ));
         }
@@ -45,17 +63,29 @@ class FilterManager
 
         foreach ($config['filters'] as $filter => $options) {
             if (!isset($this->loaders[$filter])) {
-                throw new InvalidArgumentException(sprintf(
+                throw new \InvalidArgumentException(sprintf(
                     'Could not find loader for "%s" filter type', $filter
                 ));
             }
             $image = $this->loaders[$filter]->load($image, $options);
         }
 
+        if (empty($config['format'])) {
+            $format = pathinfo($localPath, PATHINFO_EXTENSION);
+            $format = $format ?: 'png';
+        } else {
+            $format = $config['format'];
+        }
+
         $quality = empty($config['quality']) ? 100 : $config['quality'];
-        $format = empty($config['format']) ? $format : $config['format'];
+
         $image = $image->get($format, array('quality' => $quality));
 
-        return $image;
+        $contentType = $request->getMimeType($format);
+        if (empty($contentType)) {
+            $contentType = 'image/'.$format;
+        }
+
+        return new Response($image, 200, array('Content-Type' => $contentType));
     }
 }
