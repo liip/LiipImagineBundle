@@ -52,10 +52,6 @@ class CachePathResolver
      */
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
-        if (0 === strpos($targetPath, $this->webRoot)) {
-             $targetPath = substr($targetPath, strlen($this->webRoot));
-        }
-
         $params = array('path' => ltrim($targetPath, '/'));
 
         $path = str_replace(
