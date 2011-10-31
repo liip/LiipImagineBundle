@@ -44,7 +44,7 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        $path = $this->webRoot.$path;
+        $path = $this->webRoot.'/'.ltrim($path, '/');;
 
         $info = pathinfo($path);
 
