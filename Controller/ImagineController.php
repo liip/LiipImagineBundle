@@ -21,11 +21,6 @@ class ImagineController
     private $filterManager;
 
     /**
-     * @var string
-     */
-    private $webRoot;
-
-    /**
      * @var CachePathResolver
      */
     private $cachePathResolver;
@@ -35,14 +30,12 @@ class ImagineController
      *
      * @param LoaderInterface $dataLoader
      * @param FilterManager $filterManager
-     * @param string $webRoot
      * @param CachePathResolver $cachePathResolver
      */
-    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, $webRoot, CachePathResolver $cachePathResolver = null)
+    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
     {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
-        $this->webRoot = realpath($webRoot);
         $this->cachePathResolver = $cachePathResolver;
     }
 
@@ -59,8 +52,6 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $path = $this->webRoot.'/'.ltrim($path, '/');
-
         $targetPath = false;
         if ($this->cachePathResolver) {
             $targetPath = $this->cachePathResolver->resolve($request, $path, $filter);
