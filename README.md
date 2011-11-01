@@ -200,13 +200,13 @@ There are several configuration options available:
 
  - `filter_sets` - specify the filter sets that you want to define and use
 
-Each filter set that you specify have the following options:
+Each filter set that you specify has the following options:
 
  - `filters` - determine the type of filter to be used (refer to *Filters* section for more information)
     and options that should be passed to the specific filter type
  - `path` - used in place of the filter name to determine the path in combination with the global `cache_prefix`
  - `quality` - override the default quality of 100 for the generated images
- - `format` - to hardcode the output format
+ - `format` - hardcodes the output format (aka the requested format is ignored)
 
 ## Built-in Filters
 
