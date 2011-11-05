@@ -30,7 +30,7 @@ class FilterManager
 
     /**
      * @param $name
-     * @param Loader\LoaderInterface $loader
+     * @param LoaderInterface $loader
      * 
      * @return void
      */
@@ -74,7 +74,7 @@ class FilterManager
         foreach ($config['filters'] as $filter => $options) {
             if (!isset($this->loaders[$filter])) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Could not find loader for "%s" filter type', $filter
+                    'Could not find filter loader for "%s" filter type', $filter
                 ));
             }
             $image = $this->loaders[$filter]->load($image, $options);

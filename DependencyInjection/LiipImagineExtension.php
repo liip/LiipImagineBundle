@@ -40,9 +40,6 @@ class LiipImagineExtension extends Extension
             $controller->addArgument(new Reference('liip_imagine.cache.path.resolver'));
         }
 
-        if (!empty($config['loader'])) {
-            $controller = $container->getDefinition('liip_imagine.controller');
-            $controller->replaceArgument(0, new Reference($config['loader']));
-        }
+        $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);
     }
 }

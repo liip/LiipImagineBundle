@@ -8,8 +8,8 @@
         <!-- Utility classes -->
 
         <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
+        <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
         <parameter key="liip_imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
-        <parameter key="liip_imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\DataLoader\FileSystemLoader</parameter>
 
         <!-- Controller class -->
 
@@ -34,6 +34,10 @@
 
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
 
+        <!-- Data loaders' classes -->
+
+        <parameter key="liip_imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+
     </parameters>
 
     <services>
@@ -50,16 +54,15 @@
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
-        <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
-            <argument type="service" id="imagine" />
-            <argument>%liip_imagine.formats%</argument>
-            <argument>%liip_imagine.web_root%</argument>
+        <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
+            <argument>%liip_imagine.data.loader.default%</argument>
+            <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
         <!-- Controller -->
 
         <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
-            <argument type="service" id="liip_imagine.loader.filesystem" />
+            <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
         </service>
 
@@ -96,7 +99,16 @@
         <!-- Filter loaders -->
 
         <service id="liip_imagine.filter.loader.thumbnail" class="%liip_imagine.filter.loader.thumbnail.class%">
-            <tag name="liip_imagine.filter.loader" filter="thumbnail" />
+            <tag name="liip_imagine.filter.loader" loader="thumbnail" />
+        </service>
+
+        <!-- Data loaders -->
+
+        <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
+            <tag name="liip_imagine.data.loader" loader="filesystem" />
+            <argument type="service" id="imagine" />
+            <argument>%liip_imagine.formats%</argument>
+            <argument>%liip_imagine.web_root%</argument>
         </service>
 
     </services>

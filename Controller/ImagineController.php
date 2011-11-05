@@ -5,15 +5,15 @@ namespace Liip\ImagineBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Liip\ImagineBundle\Imagine\CachePathResolver;
-use Liip\ImagineBundle\Imagine\DataLoader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
 class ImagineController
 {
     /**
-     * @var LoaderInterface
+     * @var DataManager
      */
-    private $dataLoader;
+    private $dataManager;
 
     /**
      * @var FilterManager
@@ -28,13 +28,13 @@ class ImagineController
     /**
      * Constructor
      *
-     * @param LoaderInterface $dataLoader
+     * @param DataManager $dataManager
      * @param FilterManager $filterManager
      * @param CachePathResolver $cachePathResolver
      */
-    public function __construct(LoaderInterface $dataLoader, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
+    public function __construct(DataManager $dataManager, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
     {
-        $this->dataLoader = $dataLoader;
+        $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cachePathResolver = $cachePathResolver;
     }
@@ -44,7 +44,7 @@ class ImagineController
      * optionally saves the image and
      * outputs it to the browser at the same time
      *
-     * @param Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      * @param string $path
      * @param string $filter
      *
@@ -60,7 +60,7 @@ class ImagineController
             }
         }
 
-        $image = $this->dataLoader->find($path);
+        $image = $this->dataManager->find($filter, $path);
         $response = $this->filterManager->get($request, $filter, $image, $path);
 
         if ($targetPath && $response->isSuccessful()) {
