@@ -21,20 +21,20 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @var string
      */
-    private $webRoot;
+    private $rootPath;
 
     /**
      * Constructs
      *
      * @param ImagineInterface  $imagine
      * @param array             $formats
-     * @param string            $webRoot
+     * @param string            $rootPath
      */
-    public function __construct(ImagineInterface $imagine, $formats, $webRoot)
+    public function __construct(ImagineInterface $imagine, $formats, $rootPath)
     {
         $this->imagine = $imagine;
         $this->formats = $formats;
-        $this->webRoot = realpath($webRoot);
+        $this->rootPath = realpath($rootPath);
     }
 
     /**
@@ -44,7 +44,7 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        $path = $this->webRoot.'/'.ltrim($path, '/');;
+        $path = $this->rootPath.'/'.ltrim($path, '/');;
 
         $info = pathinfo($path);
 
