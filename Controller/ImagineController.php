@@ -65,6 +65,7 @@ class ImagineController
 
         if ($targetPath && $response->isSuccessful()) {
             $response = $this->cachePathResolver->store($response, $targetPath);
+            $response->isNotModified($request);
         }
 
         return $response;
