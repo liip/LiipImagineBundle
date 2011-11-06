@@ -4,7 +4,7 @@ namespace Liip\ImagineBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Liip\ImagineBundle\Imagine\CachePathResolver;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
@@ -21,22 +21,22 @@ class ImagineController
     private $filterManager;
 
     /**
-     * @var CachePathResolver
+     * @var CacheManager
      */
-    private $cachePathResolver;
+    private $cacheManager;
 
     /**
      * Constructor
      *
      * @param DataManager $dataManager
      * @param FilterManager $filterManager
-     * @param CachePathResolver $cachePathResolver
+     * @param CacheManager $cacheManager
      */
-    public function __construct(DataManager $dataManager, FilterManager $filterManager, CachePathResolver $cachePathResolver = null)
+    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager)
     {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
-        $this->cachePathResolver = $cachePathResolver;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -52,19 +52,16 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $targetPath = false;
-        if ($this->cachePathResolver) {
-            $targetPath = $this->cachePathResolver->resolve($request, $path, $filter);
-            if ($targetPath instanceof Response) {
-                return $targetPath;
-            }
+        $targetPath = $this->cacheManager->resolve($request, $path, $filter);
+        if ($targetPath instanceof Response) {
+            return $targetPath;
         }
 
         $image = $this->dataManager->find($filter, $path);
         $response = $this->filterManager->get($request, $filter, $image, $path);
 
         if ($targetPath && $response->isSuccessful()) {
-            $response = $this->cachePathResolver->store($response, $targetPath);
+            $response = $this->cacheManager->store($response, $targetPath, $filter);
         }
 
         return $response;

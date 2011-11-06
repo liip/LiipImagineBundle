@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\ImagineBundle\Imagine;
+namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpKernel\Util\Filesystem,
     Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CachePathResolver
+class WebPathResolver implements ResolverInterface
 {
     /**
      * @var RouterInterface

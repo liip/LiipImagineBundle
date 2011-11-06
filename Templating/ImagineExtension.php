@@ -2,24 +2,24 @@
 
 namespace Liip\ImagineBundle\Templating;
 
-use Liip\ImagineBundle\Imagine\CachePathResolver;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 
 class ImagineExtension extends \Twig_Extension
 {
     /**
-     * @var Liip\ImagineBundle\Imagine\CachePathResolver
+     * @var CacheManager
      */
-    private $cachePathResolver;
+    private $cacheManager;
 
     /**
      * Constructs by setting $cachePathResolver
      *
-     * @param Liip\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
+     * @param CacheManager $cacheManager
      */
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->cachePathResolver = $cachePathResolver;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -44,7 +44,7 @@ class ImagineExtension extends \Twig_Extension
      */
     public function filter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
+        return $this->cacheManager->getBrowserPath($path, $filter, $absolute);
     }
 
     /**

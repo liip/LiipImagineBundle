@@ -2,24 +2,24 @@
 
 namespace Liip\ImagineBundle\Templating\Helper;
 
-use Liip\ImagineBundle\Imagine\CachePathResolver;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Templating\Helper\Helper;
 
 class ImagineHelper extends Helper
 {
     /**
-     * @var Liip\ImagineBundle\Imagine\CachePathResolver
+     * @var CacheManager
      */
-    private $cachePathResolver;
+    private $cacheManager;
 
     /**
      * Constructs by setting $cachePathResolver
      *
-     * @param Liip\ImagineBundle\Imagine\CachePathResolver $cachePathResolver
+     * @param CacheManager $cacheManager
      */
-    public function __construct(CachePathResolver $cachePathResolver)
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->cachePathResolver = $cachePathResolver;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -33,7 +33,7 @@ class ImagineHelper extends Helper
      */
     public function filter($path, $filter, $absolute = false)
     {
-        return $this->cachePathResolver->getBrowserPath($path, $filter, $absolute);
+        return $this->cacheManager->getBrowserPath($path, $filter, $absolute);
     }
 
     /**

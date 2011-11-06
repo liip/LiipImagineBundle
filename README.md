@@ -186,7 +186,9 @@ There are several configuration options available:
 
     default: `/media/cache`
 
- - `cache` - if to cache the generated image in the local file system
+ - `cache` - default cache resolver
+
+    default: web_path (which means the standard web_path resolver is used)
 
  - `data_loader` - name of a custom data loader
 
@@ -268,7 +270,7 @@ requirement is that each data loader implement the following interface:
 
     Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface
 
-To tell the bundle about your new filter loader, register it in the service
+To tell the bundle about your new data loader, register it in the service
 container and apply the `liip_imagine.filter.loader` tag to it (example here in XML):
 
 ``` xml
@@ -298,6 +300,52 @@ liip_imagine:
     filter_sets:
         my_special_style:
             data_loader: my_custom_data
+            filters:
+                my_custom_filter: { }
+```
+
+
+For an example of a data loader implementation, refer to
+`Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+
+## Custom cache resolver
+
+The ImagineBundle allows you to add your custom cache resolver classes. The only
+requirement is that each cache resolver loader implement the following interface:
+
+    Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
+
+To tell the bundle about your new cache resolver, register it in the service
+container and apply the `liip_imagine.cache.resolver` tag to it (example here in XML):
+
+``` xml
+<service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
+    <tag name="liip_imagine.data.loader" resolver="my_custom_cache" />
+    <argument type="service" id="router" />
+    <argument type="service" id="filesystem" />
+    <argument>%liip_imagine.web_root%</argument>
+</service>
+```
+
+For more information on the service container, see the Symfony2
+[Service Container](http://symfony.com/doc/current/book/service_container.html) documentation.
+
+You can set your custom cache reslover by adding it to the your configuration as the new
+default resolver as follows:
+
+``` yaml
+liip_imagine:
+    cache: my_custom_cache
+```
+
+Alternatively you can only set the custom cache resolver for just a specific filter set:
+
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_special_style:
+            cache: my_custom_cache
             filters:
                 my_custom_filter: { }
 ```

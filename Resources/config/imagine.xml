@@ -10,7 +10,7 @@
         <parameter key="liip_imagine.filter.configuration.class">Liip\ImagineBundle\Imagine\Filter\FilterConfiguration</parameter>
         <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
-        <parameter key="liip_imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
+        <parameter key="liip_imagine.cache.manager.class">Liip\ImagineBundle\Imagine\Cache\CacheManager</parameter>
 
         <!-- Controller class -->
 
@@ -37,19 +37,17 @@
 
         <!-- Data loaders' classes -->
 
-        <parameter key="liip_imagine.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+
+        <!-- Cache resolvers' classes -->
+
+        <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
 
     </parameters>
 
     <services>
         
         <!-- Utility services -->
-
-        <service id="liip_imagine.cache.path.resolver" class="%liip_imagine.cache.path.resolver.class%">
-            <argument type="service" id="router" />
-            <argument type="service" id="filesystem" />
-            <argument>%liip_imagine.web_root%</argument>
-        </service>
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
@@ -58,6 +56,11 @@
         <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument>%liip_imagine.data.loader.default%</argument>
+        </service>
+
+        <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">
+            <argument type="service" id="liip_imagine.filter.configuration" />
+            <argument>%liip_imagine.cache.resolver.default%</argument>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="%liip_imagine.filter.configuration.class%">
@@ -69,6 +72,7 @@
         <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
+            <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
         <!-- Route Loader -->
@@ -93,12 +97,12 @@
 
         <service id="liip_imagine.twig.extension" class="%liip_imagine.twig.extension.class%" public="false">
             <tag name="twig.extension" />
-            <argument type="service" id="liip_imagine.cache.path.resolver" />
+            <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
         <service id="liip_imagine.templating.helper" class="%liip_imagine.templating.helper.class%">
             <tag name="templating.helper" alias="imagine" />
-            <argument type="service" id="liip_imagine.cache.path.resolver" />
+            <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
         <!-- Filter loaders -->
@@ -109,10 +113,19 @@
 
         <!-- Data loaders -->
 
-        <service id="liip_imagine.loader.filesystem" class="%liip_imagine.loader.filesystem.class%">
+        <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <tag name="liip_imagine.data.loader" loader="filesystem" />
             <argument type="service" id="imagine" />
             <argument>%liip_imagine.formats%</argument>
+            <argument>%liip_imagine.web_root%</argument>
+        </service>
+
+        <!-- Cache resolver -->
+
+        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">
+            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+            <argument type="service" id="router" />
+            <argument type="service" id="filesystem" />
             <argument>%liip_imagine.web_root%</argument>
         </service>
 

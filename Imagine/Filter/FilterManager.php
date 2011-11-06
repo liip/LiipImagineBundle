@@ -17,26 +17,25 @@ class FilterManager
     /**
      * @var array
      */
-    private $loaders;
+    private $loaders = array();
 
     /**
-     * @param array $filters
+     * @param FilterConfiguration $filterConfig
      */
     public function __construct(FilterConfiguration $filterConfig)
     {
         $this->filterConfig = $filterConfig;
-        $this->loaders = array();
     }
 
     /**
-     * @param $name
+     * @param $filter
      * @param LoaderInterface $loader
      * 
      * @return void
      */
-    public function addLoader($name, LoaderInterface $loader)
+    public function addLoader($filter, LoaderInterface $loader)
     {
-        $this->loaders[$name] = $loader;
+        $this->loaders[$filter] = $loader;
     }
 
     /**
