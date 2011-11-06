@@ -117,6 +117,7 @@ class CachePathResolver
 
         file_put_contents($targetPath, $response->getContent());
 
+        $response->setLastModified(new \DateTime('@'.filemtime($targetPath)));
         $response->setStatusCode(201);
 
         return $response;
