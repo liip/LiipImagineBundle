@@ -10,9 +10,9 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 class FilterManager
 {
     /**
-     * @var array
+     * @var FilterConfiguration
      */
-    private $filters;
+    private $filterConfig;
 
     /**
      * @var array
@@ -22,9 +22,9 @@ class FilterManager
     /**
      * @param array $filters
      */
-    public function __construct(array $filters = array())
+    public function __construct(FilterConfiguration $filterConfig)
     {
-        $this->filters = $filters;
+        $this->filterConfig = $filterConfig;
         $this->loaders = array();
     }
 
@@ -40,20 +40,6 @@ class FilterManager
     }
 
     /**
-     * @param $filter
-     *
-     * @return array
-     */
-    public function getFilterConfig($filter)
-    {
-        if (empty($this->filters[$filter])) {
-            new \RuntimeException('Filter not defined: '.$filter);
-        }
-
-        return $this->filters[$filter];
-    }
-
-    /**
      * @param Request $request
      * @param $filter
      * @param $image
@@ -63,13 +49,7 @@ class FilterManager
      */
     public function get(Request $request, $filter, $image, $localPath)
     {
-        if (!isset($this->filters[$filter])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not find image filter "%s"', $filter
-            ));
-        }
-
-        $config = $this->filters[$filter];
+        $config = $this->filterConfig->get($filter);
 
         foreach ($config['filters'] as $filter => $options) {
             if (!isset($this->loaders[$filter])) {

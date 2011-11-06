@@ -2,19 +2,20 @@
 
 namespace Liip\ImagineBundle\Imagine\Data;
 
-use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface,
+    Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class DataManager
 {
     /**
+     * @var FilterConfiguration
+     */
+    private $filterConfig;
+
+    /**
      * @var string|null
      */
     private $defaultLoader;
-
-    /**
-     * @var array
-     */
-    private $filters;
 
     /**
      * @var array
@@ -25,10 +26,10 @@ class DataManager
      * @param string $defaultLoader
      * @param array $filters
      */
-    public function __construct($defaultLoader = null, array $filters = array())
+    public function __construct(FilterConfiguration $filterConfig, $defaultLoader = null)
     {
+        $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
-        $this->filters = $filters;
         $this->loaders = array();
     }
 
@@ -51,13 +52,7 @@ class DataManager
      */
     public function find($filter, $path)
     {
-        if (!isset($this->filters[$filter])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not find image filter "%s"', $filter
-            ));
-        }
-
-        $config = $this->filters[$filter];
+        $config = $this->filterConfig->get($filter);
 
         $loaderName = empty($config['data_loader']) ? $this->defaultLoader : $config['data_loader'];
         if (!isset($this->loaders[$loaderName])) {

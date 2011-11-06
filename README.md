@@ -305,3 +305,10 @@ liip_imagine:
 
 For an example of a data loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+
+## Dynamic filters
+
+With a custom data loader it is possible to dynamically modify the configuration that will
+be applied to the image. To do this simple store the filter configuration along with the
+image. Inside the data loader read this configuration and dynamically change the configuration
+for the given filter inside the ``FilterConfiguration`` instance.

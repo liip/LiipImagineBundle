@@ -7,6 +7,7 @@
 
         <!-- Utility classes -->
 
+        <parameter key="liip_imagine.filter.configuration.class">Liip\ImagineBundle\Imagine\Filter\FilterConfiguration</parameter>
         <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
         <parameter key="liip_imagine.cache.path.resolver.class">Liip\ImagineBundle\Imagine\CachePathResolver</parameter>
@@ -51,11 +52,15 @@
         </service>
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
-            <argument>%liip_imagine.filter_sets%</argument>
+            <argument type="service" id="liip_imagine.filter.configuration" />
         </service>
 
         <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
+            <argument type="service" id="liip_imagine.filter.configuration" />
             <argument>%liip_imagine.data.loader.default%</argument>
+        </service>
+
+        <service id="liip_imagine.filter.configuration" class="%liip_imagine.filter.configuration.class%">
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
