@@ -37,25 +37,12 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(true, 'liip_imagine.cache');
+        $this->assertParameter('web_path', 'liip_imagine.cache.resolver.default');
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(new Reference('liip_imagine.data.manager'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.path.resolver'))
-        );
-    }
-
-    public function testLoad()
-    {
-        $this->createFullConfiguration();
-
-        $this->assertParameter(false, 'liip_imagine.cache');
-        $this->assertAlias('liip_imagine.imagick', 'liip_imagine');
-        $this->assertHasDefinition('liip_imagine.controller');
-        $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(new Reference('liip_imagine.data.manager'), new Reference('liip_imagine.filter.manager'))
+            array(new Reference('liip_imagine.data.manager'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.manager'))
         );
     }
 
