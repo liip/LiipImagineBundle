@@ -8,24 +8,13 @@ use Symfony\Component\HttpFoundation\Request,
 interface ResolverInterface
 {
     /**
-     * Gets filtered path for rendering in the browser
-     *
-     * @param string $path
-     * @param string $filter
-     * @param boolean $absolute
-     *
-     * @return string
-     */
-    function getBrowserPath($targetPath, $filter, $absolute = false);
-
-    /**
      * Resolves filtered path for rendering in the browser
      *
      * @param Request $request
      * @param string $path
      * @param string $filter
      *
-     * @return string
+     * @return string target path
      */
     function resolve(Request $request, $targetPath, $filter);
 
@@ -33,8 +22,9 @@ interface ResolverInterface
      * @throws \RuntimeException
      * @param Response $response
      * @param string $targetPath
-     * 
+     * @param string $filter
+     *
      * @return Response
      */
-    function store(Response $response, $targetPath);
+    function store(Response $response, $targetPath, $filter);
 }

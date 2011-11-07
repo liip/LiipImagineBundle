@@ -6,7 +6,8 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface,
     Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\Routing\RouterInterface;
 
 class CacheManager
 {
@@ -14,6 +15,16 @@ class CacheManager
      * @var FilterConfiguration
      */
     private $filterConfig;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @var string
+     */
+    private $webRoot;
 
     /**
      * @var string
@@ -27,11 +38,15 @@ class CacheManager
 
     /**
      * @param FilterConfiguration $filterConfig
+     * @param Filesystem  $filesystem
+     * @param string $webRoot
      * @param string $defaultResolver
      */
-    public function __construct(FilterConfiguration $filterConfig, $defaultResolver = null)
+    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $webRoot, $defaultResolver = null)
     {
         $this->filterConfig = $filterConfig;
+        $this->router       = $router;
+        $this->webRoot      = realpath($webRoot);
         $this->defaultResolver = $defaultResolver;
     }
 
@@ -44,13 +59,33 @@ class CacheManager
     public function addResolver($filter, ResolverInterface $resolver)
     {
         $this->resolvers[$filter] = $resolver;
+
+        if ($resolver instanceof CacheManagerAwareInterface) {
+            $resolver->setCacheManager($this);
+        }
+    }
+
+    /**
+     * @return RouterInterface
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebRoot()
+    {
+        return $this->webRoot;
     }
 
     /**
      * @param $filter
      * @return ResolverInterface
      */
-    public function getResolver($filter)
+    private function getResolver($filter)
     {
         $config = $this->filterConfig->get($filter);
 
@@ -77,7 +112,15 @@ class CacheManager
      */
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
-        return $this->getResolver($filter)->getBrowserPath($targetPath, $filter, $absolute);
+        $params = array('path' => ltrim($targetPath, '/'));
+
+        $path = str_replace(
+            urlencode($params['path']),
+            urldecode($params['path']),
+            $this->router->generate('_imagine_'.$filter, $params, $absolute)
+        );
+
+        return $path;
     }
 
     /**
@@ -87,7 +130,7 @@ class CacheManager
      * @param string $path
      * @param string $filter
      *
-     * @return string
+     * @return string target path
      */
     public function resolve(Request $request, $targetPath, $filter)
     {
@@ -99,14 +142,14 @@ class CacheManager
     }
 
     /**
-     * @throws \RuntimeException
      * @param Response $response
      * @param string $targetPath
+     * @param string $filter
      *
      * @return Response
      */
     public function store(Response $response, $targetPath, $filter)
     {
-        return $this->getResolver($filter)->store($response, $targetPath);
+        return $this->getResolver($filter)->store($response, $targetPath, $filter);
     }
 }

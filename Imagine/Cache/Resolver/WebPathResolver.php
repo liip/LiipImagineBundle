@@ -2,65 +2,43 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
+    Liip\ImagineBundle\Imagine\Cache\CacheManager;
+
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\Routing\RouterInterface,
     Symfony\Component\HttpKernel\Util\Filesystem,
     Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class WebPathResolver implements ResolverInterface
+class WebPathResolver implements ResolverInterface, CacheManagerAwareInterface
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
     /**
      * @var Filesystem
      */
     private $filesystem;
 
     /**
-     * @var string
+     * @var CacheManager;
      */
-    private $webRoot;
+    private $cacheManager;
 
     /**
-     * Constructs cache path resolver with a given web root and cache prefix
+     * Constructs cache web path resolver
      *
-     * @param Request $request
-     * @param RouterInterface $router
      * @param Filesystem  $filesystem
-     * @param string $webRoot
      */
-    public function __construct(RouterInterface $router, Filesystem $filesystem, $webRoot)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->router       = $router;
         $this->filesystem   = $filesystem;
-        $this->webRoot      = realpath($webRoot);
     }
 
     /**
-     * Gets filtered path for rendering in the browser
-     *
-     * @param string $path
-     * @param string $filter
-     * @param boolean $absolute
-     *
-     * @return string
+     * @param CacheManager $cacheManager
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function setCacheManager(CacheManager $cacheManager)
     {
-        $params = array('path' => ltrim($targetPath, '/'));
-
-        $path = str_replace(
-            urlencode($params['path']),
-            urldecode($params['path']),
-            $this->router->generate('_imagine_'.$filter, $params, $absolute)
-        );
-
-        return $path;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -70,12 +48,12 @@ class WebPathResolver implements ResolverInterface
      * @param string $path
      * @param string $filter
      *
-     * @return string
+     * @return string target path
      */
     public function resolve(Request $request, $targetPath, $filter)
     {
         //TODO: find out why I need double urldecode to get a valid path
-        $browserPath = urldecode(urldecode($this->getBrowserPath($targetPath, $filter)));
+        $browserPath = urldecode(urldecode($this->cacheManager->getBrowserPath($targetPath, $filter)));
 
          // if cache path cannot be determined, return 404
         if (null === $browserPath) {
@@ -87,7 +65,7 @@ class WebPathResolver implements ResolverInterface
              $browserPath = substr($browserPath, strlen($basePath));
         }
 
-        $targetPath = $this->webRoot.$browserPath;
+        $targetPath = $this->cacheManager->getWebRoot().$browserPath;
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
@@ -102,10 +80,11 @@ class WebPathResolver implements ResolverInterface
      * @throws \RuntimeException
      * @param Response $response
      * @param string $targetPath
-     * 
+     * @param string $filter
+     *
      * @return Response
      */
-    public function store(Response $response, $targetPath)
+    public function store(Response $response, $targetPath, $filter)
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
