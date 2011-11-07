@@ -28,7 +28,7 @@ class FilterManager
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @param LoaderInterface $loader
      * 
      * @return void
@@ -40,8 +40,8 @@ class FilterManager
 
     /**
      * @param Request $request
-     * @param $filter
-     * @param $image
+     * @param string $filter
+     * @param Imagine\Image\ImageInterface $image
      * @param string $localPath
      *
      * @return Response

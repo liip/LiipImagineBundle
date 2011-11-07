@@ -45,13 +45,13 @@ class CacheManager
     public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $webRoot, $defaultResolver = null)
     {
         $this->filterConfig = $filterConfig;
-        $this->router       = $router;
-        $this->webRoot      = realpath($webRoot);
+        $this->router = $router;
+        $this->webRoot = realpath($webRoot);
         $this->defaultResolver = $defaultResolver;
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @param ResolverInterface $resolver
      * 
      * @return void
@@ -82,7 +82,7 @@ class CacheManager
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @return ResolverInterface
      */
     private function getResolver($filter)
@@ -114,13 +114,11 @@ class CacheManager
     {
         $params = array('path' => ltrim($targetPath, '/'));
 
-        $path = str_replace(
+        return str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
             $this->router->generate('_imagine_'.$filter, $params, $absolute)
         );
-
-        return $path;
     }
 
     /**

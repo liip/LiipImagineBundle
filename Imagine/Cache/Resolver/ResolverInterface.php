@@ -19,7 +19,6 @@ interface ResolverInterface
     function resolve(Request $request, $targetPath, $filter);
 
     /**
-     * @throws \RuntimeException
      * @param Response $response
      * @param string $targetPath
      * @param string $filter

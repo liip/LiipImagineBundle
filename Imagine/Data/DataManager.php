@@ -33,7 +33,7 @@ class DataManager
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @param LoaderInterface $loader
      * 
      * @return void
@@ -44,7 +44,7 @@ class DataManager
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      * @param string $path
      *
      * @return Imagine\Image\ImageInterface

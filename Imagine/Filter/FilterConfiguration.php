@@ -18,7 +18,7 @@ class FilterConfiguration
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      *
      * @return array
      */
@@ -32,11 +32,12 @@ class FilterConfiguration
     }
 
     /**
-     * @param $filter
+     * @param string $filter
+     * @param array $config
      *
      * @return array
      */
-    public function set($filter, $config)
+    public function set($filter, array $config)
     {
         return $this->filters[$filter] = $config;
     }
