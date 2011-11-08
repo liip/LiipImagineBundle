@@ -2,45 +2,12 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
-    Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
 use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpKernel\Util\Filesystem,
     Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class WebPathResolver implements ResolverInterface, CacheManagerAwareInterface
+class WebPathResolver extends Resolver
 {
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var CacheManager;
-     */
-    private $cacheManager;
-
-    /**
-     * Constructs cache web path resolver
-     *
-     * @param Filesystem  $filesystem
-     */
-    public function __construct(Filesystem $filesystem)
-    {
-        $this->filesystem   = $filesystem;
-    }
-
-    /**
-     * @param CacheManager $cacheManager
-     */
-    public function setCacheManager(CacheManager $cacheManager)
-    {
-        $this->cacheManager = $cacheManager;
-    }
-
     /**
      * Resolves filtered path for rendering in the browser
      *
@@ -74,30 +41,5 @@ class WebPathResolver implements ResolverInterface, CacheManagerAwareInterface
         }
 
         return $targetPath;
-    }
-
-    /**
-     * @throws \RuntimeException
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
-     */
-    public function store(Response $response, $targetPath, $filter)
-    {
-        $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
-
-        if (!is_dir($dir) && !$this->filesystem->mkdir($dir)) {
-            throw new \RuntimeException(sprintf(
-                'Could not create directory %s', $dir
-            ));
-        }
-
-        file_put_contents($targetPath, $response->getContent());
-
-        $response->setStatusCode(201);
-
-        return $response;
     }
 }
