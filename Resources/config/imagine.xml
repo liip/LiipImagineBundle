@@ -117,7 +117,7 @@
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <tag name="liip_imagine.data.loader" loader="filesystem" />
-            <argument type="service" id="imagine" />
+            <argument type="service" id="liip_imagine" />
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.web_root%</argument>
         </service>
