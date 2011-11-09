@@ -319,8 +319,8 @@ To tell the bundle about your new cache resolver, register it in the service
 container and apply the `liip_imagine.cache.resolver` tag to it (example here in XML):
 
 ``` xml
-<service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
-    <tag name="liip_imagine.data.loader" resolver="my_custom_cache" />
+<service id="acme_imagine.cache.resolver.my_custom" class="Acme\ImagineBundle\Imagine\Cache\Resolver\MyCustomCacheResolver">
+    <tag name="liip_imagine.cache.resolver" resolver="my_custom_cache" />
     <argument type="service" id="router" />
     <argument type="service" id="filesystem" />
     <argument>%liip_imagine.web_root%</argument>
