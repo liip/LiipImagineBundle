@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('quality')->defaultValue(100)->end()
                             ->scalarNode('format')->defaultNull()->end()
                             ->scalarNode('data_loader')->defaultNull()->end()
+                            ->scalarNode('cache')->defaultNull()->end()
                             ->arrayNode('filters')
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
