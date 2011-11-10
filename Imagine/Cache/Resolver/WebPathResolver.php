@@ -2,36 +2,19 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\RedirectResponse,
+    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
     Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpKernel\Util\Filesystem,
-    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-class WebPathResolver implements ResolverInterface, CacheManagerAwareInterface
+class WebPathResolver extends AbstractFilesystemResolver implements CacheManagerAwareInterface
 {
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
     /**
      * @var CacheManager;
      */
-    private $cacheManager;
-
-    /**
-     * Constructs cache web path resolver
-     *
-     * @param Filesystem  $filesystem
-     */
-    public function __construct(Filesystem $filesystem)
-    {
-        $this->filesystem   = $filesystem;
-    }
+    protected $cacheManager;
 
     /**
      * @param CacheManager $cacheManager
@@ -74,30 +57,5 @@ class WebPathResolver implements ResolverInterface, CacheManagerAwareInterface
         }
 
         return $targetPath;
-    }
-
-    /**
-     * @throws \RuntimeException
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
-     */
-    public function store(Response $response, $targetPath, $filter)
-    {
-        $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
-
-        if (!is_dir($dir) && !$this->filesystem->mkdir($dir)) {
-            throw new \RuntimeException(sprintf(
-                'Could not create directory %s', $dir
-            ));
-        }
-
-        file_put_contents($targetPath, $response->getContent());
-
-        $response->setStatusCode(201);
-
-        return $response;
     }
 }
