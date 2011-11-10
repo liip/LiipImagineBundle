@@ -6,8 +6,24 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\RedirectResponse,
     Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class WebPathResolver extends Resolver
+use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
+    Liip\ImagineBundle\Imagine\Cache\CacheManager;
+
+class WebPathResolver extends AbstractFilesystemResolver implements CacheManagerAwareInterface
 {
+    /**
+     * @var CacheManager;
+     */
+    protected $cacheManager;
+
+    /**
+     * @param CacheManager $cacheManager
+     */
+    public function setCacheManager(CacheManager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+    }
+
     /**
      * Resolves filtered path for rendering in the browser
      *

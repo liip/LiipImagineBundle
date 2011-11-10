@@ -2,23 +2,15 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
-    Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
 use Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpKernel\Util\Filesystem;
 
-abstract class Resolver implements ResolverInterface, CacheManagerAwareInterface
+abstract class AbstractFilesystemResolver implements ResolverInterface
 {
     /**
      * @var Filesystem
      */
     protected $filesystem;
-
-    /**
-     * @var CacheManager;
-     */
-    protected $cacheManager;
 
     /**
      * Constructs cache web path resolver
@@ -28,14 +20,6 @@ abstract class Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem   = $filesystem;
-    }
-
-    /**
-     * @param CacheManager $cacheManager
-     */
-    public function setCacheManager(CacheManager $cacheManager)
-    {
-        $this->cacheManager = $cacheManager;
     }
 
     /**
