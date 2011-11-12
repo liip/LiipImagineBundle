@@ -3,10 +3,7 @@
 
 set_time_limit(0);
 
-if (!is_dir($vendorDir = __DIR__)) {
-    mkdir($vendorDir, 0777, true);
-}
-
+$vendorDir = __DIR__;
 $deps = array(
     array('symfony', 'http://github.com/symfony/symfony', 'v2.0.5'),
     array('imagine', 'http://github.com/avalanche123/Imagine', 'v0.2.6'),
