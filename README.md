@@ -20,6 +20,8 @@ masking, etc.
 
 This bundle integrates the standalone PHP "[Imagine library](/avalanche123/Imagine)".
 
+[![Build Status](https://secure.travis-ci.org/liip/LiipImagineBundle.png)](http://travis-ci.org/liip/LiipImagineBundle)
+
 ## Installation
 
 To install this bundle, you'll need both the [Imagine library](/avalanche123/Imagine)
