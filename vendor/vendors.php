@@ -19,7 +19,5 @@ foreach ($deps as $dep) {
         system(sprintf('git clone %s %s', escapeshellarg($url), escapeshellarg($installDir)));
     }
 
-    if ($rev) {
-        system(sprintf('cd %s && git fetch origin && git reset --hard %s', escapeshellarg($installDir), escapeshellarg($rev)));
-    }
+    system(sprintf('cd %s && git fetch origin && git reset --hard %s', escapeshellarg($installDir), escapeshellarg($rev)));
 }
