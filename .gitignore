@@ -1,1 +1,4 @@
 /phpunit.xml
+
+vendor/imagine
+vendor/symfony
