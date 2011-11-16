@@ -16,7 +16,7 @@ interface ResolverInterface
      *
      * @return string target path
      */
-    function resolve(Request $request, $targetPath, $filter);
+    function resolve(Request $request, $path, $filter);
 
     /**
      * @param Response $response
