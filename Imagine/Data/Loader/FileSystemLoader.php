@@ -45,6 +45,9 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         $path = $this->rootPath.'/'.ltrim($path, '/');;
+        if (0 !== strpos($path, $this->rootPath)) {
+            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+        }
 
         $info = pathinfo($path);
 
