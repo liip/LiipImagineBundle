@@ -44,34 +44,35 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        $path = $this->rootPath.'/'.ltrim($path, '/');;
-        if (0 !== strpos($path, $this->rootPath)) {
+        if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
         }
 
-        $info = pathinfo($path);
+        $absolutePath = $this->rootPath.'/'.ltrim($path, '/');
+
+        $info = pathinfo($absolutePath);
 
         $name = $info['dirname'].'/'.$info['filename'];
         $targetFormat = empty($this->formats) || in_array($info['extension'], $this->formats)
             ? $info['extension'] : null;
 
-        if (empty($targetFormat) || !file_exists($path)) {
+        if (empty($targetFormat) || !file_exists($absolutePath)) {
             // attempt to determine path and format
-            $path = null;
+            $absolutePath = null;
             foreach ($this->formats as $format) {
                 if ($targetFormat !== $format
                     && file_exists($name.'.'.$format)
                 ) {
-                    $path = $name.'.'.$format;
+                    $absolutePath = $name.'.'.$format;
                     break;
                 }
             }
 
-            if (!$path) {
-                throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $path));
+            if (!$absolutePath) {
+                throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $absolutePath));
             }
         }
 
-        return $this->imagine->open($path);
+        return $this->imagine->open($absolutePath);
     }
 }

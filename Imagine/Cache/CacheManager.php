@@ -7,7 +7,8 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface,
 
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Routing\RouterInterface;
+    Symfony\Component\Routing\RouterInterface,
+    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CacheManager
 {
@@ -130,10 +131,14 @@ class CacheManager
      *
      * @return string target path
      */
-    public function resolve(Request $request, $targetPath, $filter)
+    public function resolve(Request $request, $path, $filter)
     {
+        if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
+//            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+        }
+
         try {
-            return $this->getResolver($filter)->resolve($request, $targetPath, $filter);
+            return $this->getResolver($filter)->resolve($request, $path, $filter);
         } catch (\InvalidArgumentException $e) {
             return false;
         }

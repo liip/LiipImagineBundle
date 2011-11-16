@@ -49,9 +49,6 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
         }
 
         $targetPath = $this->cacheManager->getWebRoot().$browserPath;
-        if (0 !== strpos($targetPath, $this->cacheManager->getWebRoot())) {
-            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
-        }
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
