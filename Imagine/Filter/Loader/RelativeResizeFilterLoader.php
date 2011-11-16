@@ -2,9 +2,10 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\Exception\InvalidArgumentException;
-use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
+
+use Imagine\Exception\InvalidArgumentException,
+    Imagine\Image\ImageInterface;
 
 /**
 * Loader for this bundle's relative resize filter.

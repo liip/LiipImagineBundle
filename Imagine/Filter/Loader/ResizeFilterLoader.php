@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Filter\Basic\Resize;
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 
 /**
  * Loader for Imagine's basic resize filter.

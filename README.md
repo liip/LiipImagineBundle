@@ -232,6 +232,20 @@ liip_imagine:
 
 The `mode` can be either `outbound` or `inset`.
 
+### The `relative_resize` filter
+
+The relative_resize filter, as the name implies, performs a resizing transformation
+where the image is either heightened by setting ``heighten`` or widened via ``widen``,
+and the respective other dimension is re-sized accordingly. Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_resize:
+            filters:
+                relative_resize: { heighten: 300 }
+```
+
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
