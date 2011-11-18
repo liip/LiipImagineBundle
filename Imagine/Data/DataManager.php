@@ -45,6 +45,7 @@ class DataManager
 
     /**
      * @param string $filter
+     *
      * @return LoaderInterface
      */
     public function getLoader($filter)
