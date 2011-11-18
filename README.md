@@ -167,7 +167,8 @@ liip_imagine:
     web_root:     %kernel.root_dir%/../web
     cache_prefix: /media/cache
     cache:        true
-    loader:       ~
+    data_loader:       ~
+    controller_action: ~
     driver:       gd
     formats:      []
     filter_sets:  []
@@ -195,6 +196,10 @@ There are several configuration options available:
  - `data_loader` - name of a custom data loader
 
     default: filesystem (which means the standard filesystem loader is used)
+
+ - `controller_action` - name of the controller action to use in the route loader
+
+    default: liip_imagine.controller:filterAction
 
  - `driver` - one of the three drivers: `gd`, `imagick`, `gmagick`
 

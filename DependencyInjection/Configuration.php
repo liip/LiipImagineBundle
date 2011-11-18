@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache_prefix')->defaultValue('/media/cache')->end()
                 ->scalarNode('cache')->defaultValue('web_path')->end()
                 ->scalarNode('data_loader')->defaultValue('filesystem')->end()
+                ->scalarNode('controller_action')->defaultValue('liip_imagine.controller:filterAction')->end()
                 ->arrayNode('formats')
                     ->defaultValue(array())
                     ->prototype('scalar')->end()

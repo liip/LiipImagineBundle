@@ -13,17 +13,17 @@ class ImagineController
     /**
      * @var DataManager
      */
-    private $dataManager;
+    protected $dataManager;
 
     /**
      * @var FilterManager
      */
-    private $filterManager;
+    protected $filterManager;
 
     /**
      * @var CacheManager
      */
-    private $cacheManager;
+    protected $cacheManager;
 
     /**
      * Constructor
