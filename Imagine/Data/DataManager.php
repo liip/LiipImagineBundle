@@ -45,11 +45,9 @@ class DataManager
 
     /**
      * @param string $filter
-     * @param string $path
-     *
-     * @return Imagine\Image\ImageInterface
+     * @return LoaderInterface
      */
-    public function find($filter, $path)
+    public function getLoader($filter)
     {
         $config = $this->filterConfig->get($filter);
 
@@ -62,6 +60,19 @@ class DataManager
             ));
         }
 
-        return $this->loaders[$loaderName]->find($path);
+        return $this->loaders[$loaderName];
+    }
+
+    /**
+     * @param string $filter
+     * @param string $path
+     *
+     * @return Imagine\Image\ImageInterface
+     */
+    public function find($filter, $path)
+    {
+        $loader = $this->getLoader($filter);
+
+        return $loader->find($path);
     }
 }
