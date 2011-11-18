@@ -215,8 +215,6 @@ Each filter set that you specify has the following options:
 
 ## Built-in Filters
 
-Currently, this bundles comes with just one built-in filter: `thumbnail`.
-
 ### The `thumbnail` filter
 
 The thumbnail filter, as the name implies, performs a thumbnail transformation
@@ -234,16 +232,28 @@ The `mode` can be either `outbound` or `inset`.
 
 ### The `relative_resize` filter
 
-The relative_resize filter, as the name implies, performs a resizing transformation
-where the image is either heightened by setting ``heighten`` or widened via ``widen``,
-and the respective other dimension is re-sized accordingly. Configuration looks like this:
+The `relative_resize` filter may be used to `heighten`, `widen`, `increase` or
+`scale` an image with respect to its existing dimensions. These options directly
+correspond to methods on Imagine's `BoxInterface`.
+
+Given an input image sized 50x40 (width, height), consider the following
+annotated configuration examples:
 
 ``` yaml
 liip_imagine:
     filter_sets:
-        my_resize:
+        my_heighten:
             filters:
-                relative_resize: { heighten: 300 }
+                relative_resize: { heighten: 60 } # Transforms 50x40 to 75x60
+        my_widen:
+            filters:
+                relative_resize: { widen: 32 }    # Transforms 50x40 to 40x32
+        my_increase:
+            filters:
+                relative_resize: { increase: 10 } # Transforms 50x40 to 60x50
+        my_widen:
+            filters:
+                relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
 ```
 
 ## Load your Custom Filters
