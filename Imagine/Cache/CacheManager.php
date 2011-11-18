@@ -138,13 +138,17 @@ class CacheManager
         }
 
         try {
-            return $this->getResolver($filter)->resolve($request, $path, $filter);
+            $resolver = $this->getResolver($filter);
         } catch (\InvalidArgumentException $e) {
             return false;
         }
+
+        return $resolver->resolve($request, $path, $filter);
     }
 
     /**
+     * Store successful responses with the cache resolver
+     *
      * @param Response $response
      * @param string $targetPath
      * @param string $filter
@@ -153,6 +157,10 @@ class CacheManager
      */
     public function store(Response $response, $targetPath, $filter)
     {
-        return $this->getResolver($filter)->store($response, $targetPath, $filter);
+        if ($response->isSuccessful()) {
+            $response = $this->getResolver($filter)->store($response, $targetPath, $filter);
+        }
+
+        return $response;
     }
 }

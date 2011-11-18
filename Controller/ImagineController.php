@@ -60,7 +60,7 @@ class ImagineController
         $image = $this->dataManager->find($filter, $path);
         $response = $this->filterManager->get($request, $filter, $image, $path);
 
-        if ($targetPath && $response->isSuccessful()) {
+        if ($targetPath) {
             $response = $this->cacheManager->store($response, $targetPath, $filter);
         }
 
