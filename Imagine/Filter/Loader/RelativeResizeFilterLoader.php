@@ -19,7 +19,7 @@ class RelativeResizeFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        foreach ($options as $method => $parameter) {
+        if (list($method, $parameter) = each($options)) {
             $filter = new RelativeResize($method, $parameter);
 
             return $filter->apply($image);
