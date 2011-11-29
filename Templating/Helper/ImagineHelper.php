@@ -42,6 +42,6 @@ class ImagineHelper extends Helper
      */
     public function getName()
     {
-        return 'imagine';
+        return 'liip_imagine';
     }
 }
