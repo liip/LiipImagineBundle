@@ -53,6 +53,6 @@ class ImagineExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'imagine';
+        return 'liip_imagine';
     }
 }
