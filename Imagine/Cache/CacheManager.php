@@ -106,7 +106,7 @@ class CacheManager
      * Gets filtered path for rendering in the browser
      *
      * @param string $path
-     * @param string $filter
+     * @param array|string $filter Filter name and parameters for the router
      * @param boolean $absolute
      *
      * @return string
@@ -114,6 +114,12 @@ class CacheManager
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
         $params = array('path' => ltrim($targetPath, '/'));
+        
+        // Merge params passed from template dynamically
+        if (is_array($filter)) {
+          $params = array_merge($params, $filter["params"]);
+          $filter = $filter["name"];
+        }
 
         return str_replace(
             urlencode($params['path']),
