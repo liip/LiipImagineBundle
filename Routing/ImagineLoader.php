@@ -42,7 +42,7 @@ class ImagineLoader extends Loader
                 }
                 
                 if (!empty($config['route']['pattern'])) {
-                    $pattern .= '/{width}x{height}';
+                    $pattern .= $config['route']['pattern'];
                 }
 
                 $defaults = array(
