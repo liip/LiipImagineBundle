@@ -407,19 +407,19 @@ liip_imagine:
     filter_sets:
         my_thumb:
             route:
+              hash: true  # true or false
               pattern: /{width}x{height}
               requirements: { width: '[\d]{1,4}', height: '[\d]{1,4}' }
         filters:
-          thumbnail: { mode: inset }
+          thumbnail: { size: [$width, $height], mode: inset }
 ```
 
-Valid image URL looks like `http://localhost/cache/my_thumb/140x250/image.jpg`
+Route variables `width` and `height` are populated in filters configuration.
 
-Sample code for specifying width and height inside ``FilterConfiguration``:
- 
-``` php
-$filter["filters"]["thumbnail"] = array(
-    "size" => array($this->request->get('width'), $this->request->get('height')),
-);
-```
+Note: When `hash` is set to false, then it allows everyone to generate images of any size (which is potential security breach).
+Make sure that you have `hash` set to true, when using routes. Be very careful with this option and always enable it on production environment!
 
+`hash` parameter is checked only when image of specified size has not been created yet.
+When image has been cached then `hash` is not verified (means that everybody can access cached image, as usually).
+
+Valid image URL looks like: `http://localhost/cache/my_thumb/140x250/image.jpg?hash=eab3`
