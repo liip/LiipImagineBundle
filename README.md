@@ -219,6 +219,7 @@ Each filter set that you specify has the following options:
  - `data_loader` - override the default data loader
  - `controller_action` - override the default controller action
  - `format` - hardcodes the output format (aka the requested format is ignored)
+ - `route` - optional array with `pattern` and `requirements` key. Used to pass variables like width/height in URI. Refer to *Routing* section for more information.
 
 ## Built-in Filters
 
@@ -393,3 +394,32 @@ With a custom data loader it is possible to dynamically modify the configuration
 be applied to the image. To do this simple store the filter configuration along with the
 image. Inside the data loader read this configuration and dynamically change the configuration
 for the given filter inside the ``FilterConfiguration`` instance.
+
+## Routing
+
+By specifying route `pattern` and `requirements` it is possible to pass parameters from URI.
+This is useful for passing image sizes dynamically and use them inside ``FilterConfiguration`` instance (refer to *Dynamic filters* for more information).
+
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            route:
+              pattern: /{width}x{height}
+              requirements: { width: '[\d]{1,4}', height: '[\d]{1,4}' }
+        filters:
+          thumbnail: { mode: inset }
+```
+
+Valid image URL looks like `http://localhost/cache/my_thumb/140x250/image.jpg`
+
+Sample code for specifying width and height inside ``FilterConfiguration``:
+ 
+``` php
+$filter["filters"]["thumbnail"] = array(
+    "size" => array($this->request->get('width'), $this->request->get('height')),
+);
+```
+
