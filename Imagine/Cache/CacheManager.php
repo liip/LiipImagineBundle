@@ -114,11 +114,11 @@ class CacheManager
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
         $params = array('path' => ltrim($targetPath, '/'));
-        
+
         // Merge params passed from template dynamically
         if (is_array($filter)) {
-          $params = array_merge($params, $filter["params"]);
-          $filter = $filter["name"];
+            $params = array_merge($params, $filter["params"]);
+            $filter = $filter["name"];
         }
 
         return str_replace(

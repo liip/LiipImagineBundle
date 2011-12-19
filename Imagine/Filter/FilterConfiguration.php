@@ -55,20 +55,17 @@ class FilterConfiguration
     public function updateFromRequest($filter, Request $request)
     {
         $filterConfiguration = $this->get($filter);
-        
-        if (!empty($filterConfiguration['route']))
-        {
-            array_walk_recursive($filterConfiguration['filters'], function(&$item, $key) use ($request)
-            {
-              if ($item !== ($lookupItem = str_replace('$', '', $item)) && $request->get($lookupItem))
-              {
-                $item = $request->get($lookupItem);
-              }
-            });
+
+        if (!empty($filterConfiguration['route'])) {
+            array_walk_recursive($filterConfiguration['filters'], function(&$item, $key) use ($request) {
+                    if ($item !== ($lookupItem = str_replace('$', '', $item)) && $request->get($lookupItem)) {
+                        $item = $request->get($lookupItem);
+                    }
+                });
 
             $filterConfiguration = $this->set($filter, $filterConfiguration);
         }
-        
+
         return $filterConfiguration;
     }
 
@@ -81,17 +78,17 @@ class FilterConfiguration
      *
      * @return boolean
      */
-    public function isValidAccessKey($filter, $path, Request $request) {
-        
+    public function isValidAccessKey($filter, $path, Request $request)
+    {
+
         $filterConfiguration = $this->get($filter);
-        
+
         if (!isset($filterConfiguration["route"]["hash"]) || false === $filterConfiguration["route"]["hash"]) {
             return true;
         }
-        
+
         $validHash = substr(md5($request->get('width') . "|" . $request->get('height') . "|" . $path), 0, 4);
-        
+
         return $request->get('hash') == $validHash;
-        
     }
 }
