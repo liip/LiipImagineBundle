@@ -11,7 +11,7 @@ $loader->registerNamespaces(array(
     'Imagine'                => array($vendorDir.'/imagine/lib'),
 ));
 $loader->registerPrefixes(array(
-    'Twig_' => __DIR__.'/vendor/twig/lib',
+    'Twig_' => $vendorDir.'/twig/lib',
 ));
 $loader->register();
 
