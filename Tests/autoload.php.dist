@@ -10,6 +10,9 @@ $loader->registerNamespaces(array(
     'Symfony'                => array($vendorDir.'/symfony/src'),
     'Imagine'                => array($vendorDir.'/imagine/lib'),
 ));
+$loader->registerPrefixes(array(
+    'Twig_' => __DIR__.'/vendor/twig/lib',
+));
 $loader->register();
 
 spl_autoload_register(function($class) {
