@@ -148,6 +148,19 @@ Or if you're using PHP templates:
 <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', true) ?>" />
 ```
 
+It is also possible to specify width and height in template. Refer to *Routing* section for more information about required configuration.
+
+``` jinja
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter(['my_thumb', 200, 300]) }}" />
+```
+
+Or if you are using PHP templates:
+
+``` php
+<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', array('my_thumb', 200, 300)) ?>" />
+```
+
+
 Note: Using the ``dev`` environment you might find that the images are not properly rendered when
 using the template helper. This is likely caused by having ``intercept_redirect`` enabled in your
 application configuration. To ensure that the images are rendered disable this option:

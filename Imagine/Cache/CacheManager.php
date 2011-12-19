@@ -115,16 +115,25 @@ class CacheManager
     {
         $params = array('path' => ltrim($targetPath, '/'));
 
-        // Merge params passed from template dynamically
+        // Params passed from template may be array
         if (is_array($filter)) {
-            $params = array_merge($params, $filter["params"]);
-            $filter = $filter["name"];
+            $filterName = $filter[0];
+
+            $config = $this->filterConfig->get($filterName);
+            if (!empty($config["route"]["hash"])) {
+                $params["hash"] = substr(md5($filter[1] . "|" . $filter[2] . "|" . $targetPath), 0, 4);
+            }
+
+            $params['width'] = $filter[1];
+            $params['height'] = $filter[2];
+        } else {
+            $filterName = $filter;
         }
 
         return str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
-            $this->router->generate('_imagine_'.$filter, $params, $absolute)
+            $this->router->generate('_imagine_'.$filterName, $params, $absolute)
         );
     }
 
