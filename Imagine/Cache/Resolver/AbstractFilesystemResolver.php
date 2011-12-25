@@ -3,7 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpKernel\Util\Filesystem;
+    Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface
 {
