@@ -309,7 +309,7 @@ container and apply the `liip_imagine.filter.loader` tag to it (example here in 
 ``` xml
 <service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
     <tag name="liip_imagine.data.loader" loader="my_custom_data" />
-    <argument type="service" id="imagine" />
+    <argument type="service" id="liip_imagine" />
     <argument>%liip_imagine.formats%</argument>
 </service>
 ```
@@ -384,8 +384,8 @@ liip_imagine:
 ```
 
 
-For an example of a data loader implementation, refer to
-`Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+For an example of a cache resolver implementation, refer to
+`Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
 
 ## Dynamic filters
 
