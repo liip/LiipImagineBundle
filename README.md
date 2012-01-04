@@ -385,7 +385,7 @@ liip_imagine:
 
 
 For an example of a data loader implementation, refer to
-`Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+`Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
 
 ## Dynamic filters
 
