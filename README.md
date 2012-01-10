@@ -296,6 +296,29 @@ liip_imagine:
 For an example of a filter loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.
 
+## Outside the web root
+
+When your setup requires your source images to live outside the web root, or if that's just the way you roll,
+you can override the DataLoader service and define a custom path, as the third argument, that replaces 
+`%liip_imagine.web_root%` (example here in XML):
+
+``` xml
+<service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
+    <tag name="liip_imagine.data.loader" loader="filesystem" />
+    <argument type="service" id="liip_imagine" />
+    <argument>%liip_imagine.formats%</argument>
+    <argument>%kernel.root_dir%/data/uploads</argument>
+</service>
+```
+
+One way to override a service is by redefining it in the services configuration file of your bundle. 
+Another way would be by modifying the service definition from your bundle's Dependency Injection Extension:
+
+``` php
+$container->getDefinition('liip_imagine.data.loader.filesystem')
+          ->replaceArgument(2, '%kernel.root_dir%/data/uploads');
+``` 
+
 ## Custom image loaders
 
 The ImagineBundle allows you to add your custom image loader classes. The only
