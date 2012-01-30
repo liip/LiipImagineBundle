@@ -40,11 +40,19 @@ class ImagineLoader extends Loader
                 } elseif ('' !== $filter) {
                     $pattern .= '/'.$filter;
                 }
+                
+                if (!empty($config['route']['pattern'])) {
+                    $pattern .= $config['route']['pattern'];
+                }
 
                 $defaults = array(
                     '_controller' => empty($config['controller_action']) ? $this->controllerAction : $config['controller_action'],
                     'filter' => $filter,
                 );
+                
+                if (!empty($config['route']['requirements'])) {
+                    $requirements = array_merge($requirements, $config['route']['requirements']);
+                }
 
                 $routes->add('_imagine_'.$filter, new Route(
                     $pattern.'/{path}',

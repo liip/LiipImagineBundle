@@ -106,7 +106,7 @@ class CacheManager
      * Gets filtered path for rendering in the browser
      *
      * @param string $path
-     * @param string $filter
+     * @param array|string $filter Filter name and parameters for the router
      * @param boolean $absolute
      *
      * @return string
@@ -115,10 +115,25 @@ class CacheManager
     {
         $params = array('path' => ltrim($targetPath, '/'));
 
+        // Params passed from template may be array
+        if (is_array($filter)) {
+            $filterName = $filter[0];
+
+            $config = $this->filterConfig->get($filterName);
+            if (!empty($config["route"]["hash"])) {
+                $params["hash"] = substr(md5($filter[1] . "|" . $filter[2] . "|" . $targetPath), 0, 4);
+            }
+
+            $params['width'] = $filter[1];
+            $params['height'] = $filter[2];
+        } else {
+            $filterName = $filter;
+        }
+
         return str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
-            $this->router->generate('_imagine_'.$filter, $params, $absolute)
+            $this->router->generate('_imagine_'.$filterName, $params, $absolute)
         );
     }
 

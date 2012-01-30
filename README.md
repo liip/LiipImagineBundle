@@ -148,6 +148,19 @@ Or if you're using PHP templates:
 <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', true) ?>" />
 ```
 
+It is also possible to specify width and height in template. Refer to *Routing* section for more information about required configuration.
+
+``` jinja
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter(['my_thumb', 200, 300]) }}" />
+```
+
+Or if you are using PHP templates:
+
+``` php
+<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', array('my_thumb', 200, 300)) ?>" />
+```
+
+
 Note: Using the ``dev`` environment you might find that the images are not properly rendered when
 using the template helper. This is likely caused by having ``intercept_redirect`` enabled in your
 application configuration. To ensure that the images are rendered disable this option:
@@ -225,6 +238,7 @@ Each filter set that you specify has the following options:
  - `data_loader` - override the default data loader
  - `controller_action` - override the default controller action
  - `format` - hardcodes the output format (aka the requested format is ignored)
+ - `route` - optional array with `pattern` and `requirements` key. Used to pass variables like width/height in URI. Refer to *Routing* section for more information.
 
 ## Built-in Filters
 
@@ -422,3 +436,32 @@ With a custom data loader it is possible to dynamically modify the configuration
 be applied to the image. To do this simple store the filter configuration along with the
 image. Inside the data loader read this configuration and dynamically change the configuration
 for the given filter inside the ``FilterConfiguration`` instance.
+
+## Routing
+
+By specifying route `pattern` and `requirements` it is possible to pass parameters from URI.
+This is useful for passing image sizes dynamically and use them inside ``FilterConfiguration`` instance (refer to *Dynamic filters* for more information).
+
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            route:
+              hash: true  # true or false
+              pattern: /{width}x{height}
+              requirements: { width: '[\d]{1,4}', height: '[\d]{1,4}' }
+        filters:
+          thumbnail: { size: [$width, $height], mode: inset }
+```
+
+Route variables `width` and `height` are populated in filters configuration.
+
+Note: When `hash` is set to false, then it allows everyone to generate images of any size (which is potential security breach).
+Make sure that you have `hash` set to true, when using routes. Be very careful with this option and always enable it on production environment!
+
+`hash` parameter is checked only when image of specified size has not been created yet.
+When image has been cached then `hash` is not verified (means that everybody can access cached image, as usually).
+
+Valid image URL looks like: `http://localhost/cache/my_thumb/140x250/image.jpg?hash=eab3`

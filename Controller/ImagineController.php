@@ -4,12 +4,19 @@ namespace Liip\ImagineBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class ImagineController
 {
+    /**
+     * @var FilterConfiguration
+     */
+    protected $filterConfiguration;
+
     /**
      * @var DataManager
      */
@@ -32,8 +39,9 @@ class ImagineController
      * @param FilterManager $filterManager
      * @param CacheManager $cacheManager
      */
-    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager)
+    public function __construct(FilterConfiguration $filterConfiguration, DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager)
     {
+        $this->filterConfiguration = $filterConfiguration;
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
@@ -52,9 +60,15 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
+        $filterConfiguration = $this->filterConfiguration->updateFromRequest($filter, $request);
+        
         $targetPath = $this->cacheManager->resolve($request, $path, $filter);
         if ($targetPath instanceof Response) {
             return $targetPath;
+        }
+        
+        if (false === $this->filterConfiguration->isValidAccessKey($filter, $path, $request)) {
+            throw new NotFoundHttpException('Incorrect hash');
         }
 
         $image = $this->dataManager->find($filter, $path);
