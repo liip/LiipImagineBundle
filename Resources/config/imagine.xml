@@ -45,6 +45,10 @@
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
 
+        <!-- Cache clearers' classes -->
+
+        <parameter key="liip_imagine.cache.clearer.class">Liip\ImagineBundle\Imagine\Cache\CacheClearer</parameter>
+
     </parameters>
 
     <services>
@@ -140,5 +144,14 @@
             <argument type="service" id="filesystem" />
         </service>
 
+        <!-- Cache Clearer -->
+        
+        <service id="liip_imagine.cache.clearer" class="%liip_imagine.cache.clearer.class%">
+            <tag name="kernel.cache_clearer" />
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <argument>%liip_imagine.cache_prefix%</argument>
+            <argument type="service" id="filesystem" />
+        </service>
+        
     </services>
 </container>
