@@ -419,6 +419,35 @@ For an example of a cache resolver implementation, refer to
 ## Dynamic filters
 
 With a custom data loader it is possible to dynamically modify the configuration that will
-be applied to the image. To do this simple store the filter configuration along with the
-image. Inside the data loader read this configuration and dynamically change the configuration
-for the given filter inside the ``FilterConfiguration`` instance.
+be applied to the image. Inside the controller you can access the ``FilterConfiguration``
+instance, dynamically adjust the filter configuration (for example based on information
+associated with the image or whatever other logic you might want) and set it again.
+
+A simple example showing how to change the filter configuration dynamically. This example
+is of course "bogus" since hardcoded values could just as well be set in the configuration
+but it illustrates the core idea.
+
+```
+    public function filterAction(Request $request, $path, $filter)
+    {
+        $targetPath = $this->cacheManager->resolve($request, $path, $filter);
+        if ($targetPath instanceof Response) {
+            return $targetPath;
+        }
+
+        $image = $this->dataManager->find($filter, $path);
+
+        $filterConfig = $this->filterManager->getFilterConfiguration();
+        $config = $filterConfig->get($filter);
+        $config['filters']['thumbnail']['size'] = array(300, 100);
+        $filterConfig->set($filter, $config);
+
+        $response = $this->filterManager->get($request, $filter, $image, $path);
+
+        if ($targetPath) {
+            $response = $this->cacheManager->store($response, $targetPath, $filter);
+        }
+
+        return $response;
+    }
+```
