@@ -1,0 +1,25 @@
+{
+    "name": "liip/imagine-bundle",
+    "type": "symfony-bundle",
+    "description": "This Bundle assists in imagine manipulation using the imagine library",
+    "keywords": ["imagine", "image"],
+    "homepage": "http://liip.ch",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Liip and other contributors",
+            "homepage": "https://github.com/liip/LiipImagineBundle/contributors"
+        }
+    ],
+
+    "require": {
+        "php":               ">=5.3.2",
+        "imagine/Imagine":   "master-dev"
+    },
+
+    "autoload": {
+        "psr-0": { "Liip\\ImagineBundle": "" }
+    },
+
+    "target-dir": "Liip/ImagineBundle"
+}
