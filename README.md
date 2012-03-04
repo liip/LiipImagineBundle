@@ -370,6 +370,27 @@ liip_imagine:
 For an example of a data loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
 
+Thanks to the `getFileInfo` method, `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`
+can be extended to manage different files type. You can see an example in
+`Liip\ImagineBundle\Imagine\Data\Loader\PdfPreviewLoader`. If you use the ``PdfPreviewLoader``
+loader, when the required file has a `pdf` extension, `getFileInfo` extracts and returns
+an image, in `png` format, of the first page of the document.
+``PdfPreviewLoader`` requires the php native extension Imagick.
+In order to work, you'll have to "force" the outputted image format:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_pdf_preview:
+            data_loader: pdfpreview
+            format: png
+            filters:
+                my_custom_filter: { }
+```
+
+Extending `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader` makes it possible
+to create previews for virtually any file type.
+
 ## Custom cache resolver
 
 The ImagineBundle allows you to add your custom cache resolver classes. The only

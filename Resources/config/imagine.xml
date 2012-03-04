@@ -40,7 +40,8 @@
         <!-- Data loaders' classes -->
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
-
+        <parameter key="liip_imagine.data.loader.pdfpreview.class">Liip\ImagineBundle\Imagine\Data\Loader\PdfPreviewLoader</parameter>
+        
         <!-- Cache resolvers' classes -->
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
@@ -128,6 +129,13 @@
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <tag name="liip_imagine.data.loader" loader="filesystem" />
+            <argument type="service" id="liip_imagine" />
+            <argument>%liip_imagine.formats%</argument>
+            <argument>%liip_imagine.data_root%</argument>
+        </service>
+        
+        <service id="liip_imagine.data.loader.pdfpreview" class="%liip_imagine.data.loader.pdfpreview.class%">
+            <tag name="liip_imagine.data.loader" loader="pdfpreview" />
             <argument type="service" id="liip_imagine" />
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.data_root%</argument>
