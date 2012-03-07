@@ -38,6 +38,19 @@ class FileSystemLoader implements LoaderInterface
     }
 
     /**
+     * Get the file info for the given path
+     *
+     * This can optionally be used to generate the given file
+     *
+     * @param $absolutePath
+     * @return array
+     */
+    protected function getFileInfo($absolutePath)
+    {
+        return pathinfo($absolutePath);
+    }
+
+    /**
      * @param string $path
      *
      * @return Imagine\Image\ImageInterface
@@ -48,9 +61,8 @@ class FileSystemLoader implements LoaderInterface
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
         }
 
-        $absolutePath = $this->rootPath.'/'.ltrim($path, '/');
-
-        $info = pathinfo($absolutePath);
+        $info = $this->getFileInfo($this->rootPath.'/'.ltrim($path, '/'));
+        $absolutePath = $info['dirname'].'/'.$info['basename'];
 
         $name = $info['dirname'].'/'.$info['filename'];
         $targetFormat = empty($this->formats) || in_array($info['extension'], $this->formats)
