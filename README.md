@@ -163,16 +163,29 @@ web_profiler:
 The default configuration for the bundle looks like this:
 
 ``` yaml
-liip_imagine:
-    web_root:     %kernel.root_dir%/../web
-    data_root:    %liip_imagine.web_root%
-    cache_prefix: /media/cache
-    cache:        true
-    data_loader:       ~
-    controller_action: ~
-    driver:       gd
-    formats:      []
-    filter_sets:  []
+liip_imagine:         
+    driver:               gd 
+    web_root:             %kernel.root_dir%/../web 
+    data_root:            %liip_imagine.web_root% 
+    cache_prefix:         /media/cache 
+    cache:                web_path 
+    data_loader:          filesystem 
+    controller_action:    liip_imagine.controller:filterAction 
+    formats:              [] 
+    filter_sets:          
+
+        # Prototype
+        name:                 
+            path:                 ~ 
+            quality:              100 
+            format:               ~ 
+            cache:                ~ 
+            data_loader:          ~ 
+            controller_action:    ~ 
+            filters:              
+
+                # Prototype
+                name:                 []
 ```
 
 There are several configuration options available:
