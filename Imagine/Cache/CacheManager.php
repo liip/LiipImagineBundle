@@ -90,8 +90,8 @@ class CacheManager
     {
         $config = $this->filterConfig->get($filter);
 
-        $resolverName = empty($config['cache_resolver'])
-            ? $this->defaultResolver : $config['cache_resolver'];
+        $resolverName = empty($config['cache'])
+            ? $this->defaultResolver : $config['cache'];
 
         if (!isset($this->resolvers[$resolverName])) {
             throw new \InvalidArgumentException(sprintf(
