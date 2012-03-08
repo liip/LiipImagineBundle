@@ -11,17 +11,17 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @var Imagine\Image\ImagineInterface
      */
-    private $imagine;
+    protected $imagine;
 
     /**
      * @var array
      */
-    private $formats;
+    protected $formats;
 
     /**
      * @var string
      */
-    private $rootPath;
+    protected $rootPath;
 
     /**
      * Constructs
