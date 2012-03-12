@@ -41,6 +41,10 @@
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
 
+        <!-- Data transformers' classes -->
+
+        <parameter key="liip_imagine.data.transformer.pdf.class">Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer</parameter>
+
         <!-- Cache resolvers' classes -->
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
@@ -123,7 +127,11 @@
         <service id="liip_imagine.filter.loader.thumbnail" class="%liip_imagine.filter.loader.thumbnail.class%">
             <tag name="liip_imagine.filter.loader" loader="thumbnail" />
         </service>
-
+        
+        <!-- Document transformers -->
+        
+        <service id="liip_imagine.data.transformer.pdf" class="%liip_imagine.data.transformer.pdf.class%" />
+        
         <!-- Data loaders -->
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
@@ -131,6 +139,9 @@
             <argument type="service" id="liip_imagine" />
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.data_root%</argument>
+            <argument type="collection">
+              <argument type="service" id="liip_imagine.data.transformer.pdf" />
+            </argument>
         </service>
 
         <!-- Cache resolver -->
