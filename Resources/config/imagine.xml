@@ -130,7 +130,9 @@
         
         <!-- Document transformers -->
         
-        <service id="liip_imagine.data.transformer.pdf" class="%liip_imagine.data.transformer.pdf.class%" />
+        <service id="liip_imagine.data.transformer.pdf" class="%liip_imagine.data.transformer.pdf.class%">
+            <tag name="liip_imagine.data.transformer.pdf" />
+        </service>
         
         <!-- Data loaders -->
 

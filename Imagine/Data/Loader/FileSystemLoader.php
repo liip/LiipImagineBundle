@@ -35,14 +35,14 @@ class FileSystemLoader implements LoaderInterface
      * @param ImagineInterface  $imagine
      * @param array             $formats
      * @param string            $rootPath
-     * @param array             $transformer
+     * @param array             $transformers
      */
-    public function __construct(ImagineInterface $imagine, $formats, $rootPath, $transofrmers)
+    public function __construct(ImagineInterface $imagine, $formats, $rootPath, $transformers)
     {
         $this->imagine = $imagine;
         $this->formats = $formats;
         $this->rootPath = realpath($rootPath);
-        $this->transformers = $transofrmers;
+        $this->transformers = $transformers;
     }
 
     /**
@@ -72,7 +72,7 @@ class FileSystemLoader implements LoaderInterface
         $info = $this->getFileInfo($this->rootPath.'/'.ltrim($path, '/'));
         $absolutePath = $info['dirname'].'/'.$info['basename'];
 
-        if ($this->transformers !== null) {
+        if (!empty($this->transformers)) {
             foreach ($this->transformers as $transformer) {
                 $absolutePath = $transformer->applyTransform($absolutePath);
             }
