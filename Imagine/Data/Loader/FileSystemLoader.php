@@ -22,12 +22,6 @@ class FileSystemLoader implements LoaderInterface
      * @var string
      */
     protected $rootPath;
-    
-    /**
-     *
-     * @var array 
-     */
-    private $transformers;
 
     /**
      * Constructs
@@ -35,14 +29,12 @@ class FileSystemLoader implements LoaderInterface
      * @param ImagineInterface  $imagine
      * @param array             $formats
      * @param string            $rootPath
-     * @param array             $transformers
      */
-    public function __construct(ImagineInterface $imagine, $formats, $rootPath, $transformers)
+    public function __construct(ImagineInterface $imagine, $formats, $rootPath)
     {
         $this->imagine = $imagine;
         $this->formats = $formats;
         $this->rootPath = realpath($rootPath);
-        $this->transformers = $transformers;
     }
 
     /**
@@ -71,13 +63,6 @@ class FileSystemLoader implements LoaderInterface
 
         $info = $this->getFileInfo($this->rootPath.'/'.ltrim($path, '/'));
         $absolutePath = $info['dirname'].'/'.$info['basename'];
-
-        if (!empty($this->transformers)) {
-            foreach ($this->transformers as $transformer) {
-                $absolutePath = $transformer->applyTransform($absolutePath);
-            }
-            $info = $this->getFileInfo($absolutePath);
-        }
 
         $name = $info['dirname'].'/'.$info['filename'];
         $targetFormat = empty($this->formats) || in_array($info['extension'], $this->formats)
