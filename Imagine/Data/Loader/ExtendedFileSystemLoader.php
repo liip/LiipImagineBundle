@@ -29,9 +29,7 @@ class ExtendedFileSystemLoader extends FileSystemLoader
     }
 
     /**
-     * Get the file info for the given path
-     *
-     * This can optionally be used to generate the given file
+     * Apply transformers to the file
      *
      * @param $absolutePath
      * @return array
