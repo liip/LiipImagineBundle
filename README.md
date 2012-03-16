@@ -397,6 +397,39 @@ liip_imagine:
 For an example of a data loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
 
+## Extending the image loader with data transformers
+
+You can extend a custom data loader to support virtually any file type using transformers.
+A data tranformer is intended to transform a file before actually rendering it. You
+can refer to `Liip\ImagineBundle\Imagine\Data\Loader\ExtendedFileSystemLoader` and
+to `Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer` as an example.
+
+ExtendedFileSystemLoader extends FileSystemLoader and takes, as argument, an array of transformers.
+In the example, when a file with the pdf extension is passed to the data loader,
+PdfTransformer uses php imagick extension to extract the first page of the document
+and returns it to the data loader as a png image.
+
+To tell the bundle about the transformers, you have to register them as services
+with the new loader:
+
+```yml
+services:
+    acme_custom_transformer:
+        class:     Acme\ImagineBundle\Imagine\Data\Transformer\MyCustomTransformer
+    custom_loader:
+        class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
+        tags:
+            -    { name: liip_imagine.data.loader, loader: custom_data_loader }
+        arguments: 
+            -    '@liip_imagine'
+            -    %liip_imagine.formats%
+            -    %liip_imagine.data_root%
+            -    [ '@acme_custom_transformer' ]
+```
+
+Now you can use your custom data loader, with its transformers, setting it
+as in the previous section.
+
 ## Custom cache resolver
 
 The ImagineBundle allows you to add your custom cache resolver classes. The only
