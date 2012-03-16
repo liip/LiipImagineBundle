@@ -255,6 +255,7 @@ liip_imagine:
 ```
 
 The `mode` can be either `outbound` or `inset`.
+There is also a option `allow_upscale` (default: false).
 
 ### The `relative_resize` filter
 
@@ -280,6 +281,19 @@ liip_imagine:
         my_widen:
             filters:
                 relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
+```
+
+### The `crop` filter
+
+The crop filter, as the name implies, performs a crop transformation
+on your image. Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                crop: { start: [10, 20], size: [120, 90] }
 ```
 
 ## Load your Custom Filters
