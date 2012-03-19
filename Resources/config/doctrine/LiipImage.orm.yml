@@ -1,0 +1,22 @@
+Liip\ImagineBundle\Entity\LiipImage:
+    type: entity
+    table: liip_image
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        data:
+            type: text             
+        mimetype:
+            type: string
+            length: 255
+        fileName:
+            type: string
+            length: 255           
+        uniqueIdentifier:
+            type: string
+            length: 255
+            unique: true
+    lifecycleCallbacks: { prePersist: [ updateUniqueIdentifier ] }
