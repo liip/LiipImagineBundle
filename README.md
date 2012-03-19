@@ -406,16 +406,20 @@ to `Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer` as an example.
 
 ExtendedFileSystemLoader extends FileSystemLoader and takes, as argument, an array of transformers.
 In the example, when a file with the pdf extension is passed to the data loader,
-PdfTransformer uses php imagick extension to extract the first page of the document
-and returns it to the data loader as a png image.
+PdfTransformer uses a php imagick object (injected via the service container) 
+to extract the first page of the document and returns it to the data loader as a png image.
 
 To tell the bundle about the transformers, you have to register them as services
 with the new loader:
 
 ```yml
 services:
+    imagick_object:
+        class:   Imagick
     acme_custom_transformer:
         class:     Acme\ImagineBundle\Imagine\Data\Transformer\MyCustomTransformer
+        arguments:
+            -    '@imagick_object'
     custom_loader:
         class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
         tags:
