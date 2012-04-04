@@ -41,6 +41,7 @@
         <!-- Data loaders' classes -->
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.gaufrette.class">Liip\ImagineBundle\Imagine\Data\Loader\GaufretteFilesystemLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
