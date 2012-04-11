@@ -90,14 +90,14 @@
         </service>
 
         <!-- ImagineInterface instances -->
-        
+
         <service id="liip_imagine" alias="liip_imagine.gd" />
 
-        <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" />
+        <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" public="false" />
 
-        <service id="liip_imagine.imagick" class="%liip_imagine.imagick.class%" />
+        <service id="liip_imagine.imagick" class="%liip_imagine.imagick.class%" public="false" />
 
-        <service id="liip_imagine.gmagick" class="%liip_imagine.gmagick.class%" />
+        <service id="liip_imagine.gmagick" class="%liip_imagine.gmagick.class%" public="false" />
 
         <!--  Templating helpers and extensions -->
 
