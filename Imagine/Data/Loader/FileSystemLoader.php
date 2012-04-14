@@ -47,6 +47,10 @@ class FileSystemLoader implements LoaderInterface
      */
     protected function getFileInfo($absolutePath)
     {
+        if (!file_exists($absolutePath)) {
+            throw new NotFoundHttpException(sprintf("Source image '%s' doesn't exist", $absolutePath));
+        }
+
         return pathinfo($absolutePath);
     }
 
@@ -61,7 +65,8 @@ class FileSystemLoader implements LoaderInterface
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
         }
 
-        $info = $this->getFileInfo($this->rootPath.'/'.ltrim($path, '/'));
+        $file = $this->rootPath.'/'.ltrim($path, '/');
+        $info = $this->getFileInfo($file);
         $absolutePath = $info['dirname'].'/'.$info['basename'];
 
         $name = $info['dirname'].'/'.$info['filename'];
