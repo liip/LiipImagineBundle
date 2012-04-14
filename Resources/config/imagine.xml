@@ -41,6 +41,7 @@
         <!-- Data loaders' classes -->
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.db.class">Liip\ImagineBundle\Imagine\Data\Loader\DbLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
@@ -137,6 +138,12 @@
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.data_root%</argument>
         </service>
+        
+        <service id="liip_imagine.data.loader.db" class="%liip_imagine.data.loader.db.class%">
+    		<tag name="liip_imagine.data.loader" loader="db" />
+    		<argument type="service" id="liip_imagine" />
+    		<argument type="service" id="doctrine" />
+		</service>
 
         <!-- Cache resolver -->
 
