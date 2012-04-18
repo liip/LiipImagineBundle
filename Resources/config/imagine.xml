@@ -41,7 +41,7 @@
         <!-- Data loaders' classes -->
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
-        <parameter key="liip_imagine.data.loader.gaufrette.class">Liip\ImagineBundle\Imagine\Data\Loader\GaufretteFilesystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.stream.class">Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
@@ -50,7 +50,7 @@
     </parameters>
 
     <services>
-        
+
         <!-- Utility services -->
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
@@ -91,7 +91,7 @@
         </service>
 
         <!-- ImagineInterface instances -->
-        
+
         <service id="liip_imagine" alias="liip_imagine.gd" />
 
         <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" />
