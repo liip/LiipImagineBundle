@@ -397,6 +397,24 @@ liip_imagine:
 For an example of a data loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
 
+### StreamLoader
+
+The `Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader` allows to read images from any stream registered
+thus allowing you to serve your images from literally anywhere.
+
+The example service definition shows how to use a stream wrapped by the [Gaufrette](https://github.com/KnpLabs/Gaufrette) filesystem abstraction layer.
+
+``` yaml
+services:
+    liip_imagine.data.loader.stream.profile_photos:
+        class: "%liip_imagine.data.loader.stream.class%"
+        arguments:
+            - "@liip_imagine"
+            - 'gaufrette://profile_photos/'
+        tags:
+            - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
+```
+
 ## Extending the image loader with data transformers
 
 You can extend a custom data loader to support virtually any file type using transformers.
