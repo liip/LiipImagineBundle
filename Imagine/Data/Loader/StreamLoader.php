@@ -23,21 +23,28 @@ class StreamLoader implements LoaderInterface
     /**
      * A stream context resource to use.
      *
-     * @var \resource|null
+     * @var resource|null
      */
     protected $context;
 
     /**
      * Constructor.
      *
+     * @throws \InvalidArgumentException
+     *
      * @param \Imagine\Image\ImagineInterface $imagine
      * @param string $wrapperPrefix
-     * @param \resource|null $context
+     * @param resource|null $context
      */
-    public function __construct(ImagineInterface $imagine, $wrapperPrefix, \resource $context = null)
+    public function __construct(ImagineInterface $imagine, $wrapperPrefix, $context = null)
     {
         $this->imagine = $imagine;
         $this->wrapperPrefix = $wrapperPrefix;
+
+        if ($context && !is_resource($context)) {
+            throw new \InvalidArgumentException('The given context is no valid resource.');
+        }
+
         $this->context = $context;
     }
 
