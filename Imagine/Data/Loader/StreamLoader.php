@@ -54,15 +54,16 @@ class StreamLoader implements LoaderInterface
          * This looks strange, but at least in PHP 5.3.8 it will raise an E_WARNING if the 4th parameter is null.
          * fopen() will be called only once with the correct arguments.
          *
-         * The error suppressing is solely to determ whether the file exists.
+         * The error suppression is solely to determine whether the file exists.
          * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
          */
-        if (($this->context and @!fopen($name, 'r', null, $this->context)) || @!fopen($name, 'r')) {
+        if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
             throw new NotFoundHttpException('Source image not found.');
         }
 
-        $image = $this->imagine->load(file_get_contents($name, null, $this->context));
+        // Closing the opened stream to avoid locking of the resource to find.
+        fclose($resource);
 
-        return $image;
+        return $this->imagine->load(file_get_contents($name, null, $this->context));
     }
 }
