@@ -403,6 +403,8 @@ The `Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader` allows to read images 
 thus allowing you to serve your images from literally anywhere.
 
 The example service definition shows how to use a stream wrapped by the [Gaufrette](https://github.com/KnpLabs/Gaufrette) filesystem abstraction layer.
+In order to have this example working, you need to register the stream wrapper first,
+refer to the [Gaufrette README](https://github.com/KnpLabs/Gaufrette/blob/master/README.markdown) on how to do this.
 
 ``` yaml
 services:
