@@ -1,0 +1,23 @@
+Liip\ImagineBundle\Entity\LiipS3Image:
+    type: entity
+    table: liip_s3image
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        data:
+            type: text             
+        url:
+            type: string
+            length: 255
+            nullable: true
+        mimetype:
+            type: string
+            length: 255           
+        filename:
+            type: string
+            length: 255
+            unique: true
+    lifecycleCallbacks: {}

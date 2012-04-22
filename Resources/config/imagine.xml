@@ -145,6 +145,30 @@
             <tag name="liip_imagine.cache.resolver" resolver="web_path" />
             <argument type="service" id="filesystem" />
         </service>
+        
+		<service id="liip_imagine.cache.resolver.amazons3" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver">
+			<tag name="liip_imagine.cache.resolver" resolver="amazons3" />
+			<argument type="service" id="filesystem" />
+			<argument type="service" id="doctrine" />
+		</service>
+		
+		<!-- S3 setup -->
+		<service id="liip_imagine.s3" class="AmazonS3">
+			<argument type="collection">
+				<argument key="key">%liip_imagine.aws_key%</argument>
+            	<argument key="secret">%liip_imagine.aws_secret_key%</argument>
+			</argument>
+		</service>
+		
+		<service id="liip_imagine.s3.adapter" class="Gaufrette\Adapter\AmazonS3">
+			<argument type="service" id="liip_imagine.s3" />
+            <argument>%liip_imagine.s3.bucket_name%</argument>
+            <argument>true</argument>
+		</service>
+		
+		<service id="liip_imagine.s3.fs" class="Gaufrette\Filesystem">
+			<argument type="service" id="liip_imagine.s3.adapter" />
+		</service>
 
     </services>
 </container>
