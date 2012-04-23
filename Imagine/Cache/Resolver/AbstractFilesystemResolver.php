@@ -13,9 +13,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     protected $filesystem;
 
     /**
-     * Constructs cache web path resolver
+     * Constructs a filesystem based cache resolver.
      *
-     * @param Filesystem  $filesystem
+     * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -23,7 +23,10 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     }
 
     /**
+     * Stores the content into a static file.
+     *
      * @throws \RuntimeException
+     *
      * @param Response $response
      * @param string $targetPath
      * @param string $filter
