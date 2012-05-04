@@ -58,25 +58,6 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
-    {
-        $filename = $this->getFilePath($targetPath, $filter);
-        $this->filesystem->remove($filename);
-
-        return file_exists($filename);
-    }
-
-    /**
-     * Return the local filepath.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     *
-     * @param string $path The resource path to convert.
-     * @param string $filter The name of the imagine filter.
-     * @param string $basePath An optional base path to remove from the path.
-     *
-     * @return string
-     */
     protected function getFilePath($path, $filter, $basePath = '')
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
