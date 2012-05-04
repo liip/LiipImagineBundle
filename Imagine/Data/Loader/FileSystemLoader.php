@@ -47,10 +47,6 @@ class FileSystemLoader implements LoaderInterface
      */
     protected function getFileInfo($absolutePath)
     {
-        if (!file_exists($absolutePath)) {
-            throw new NotFoundHttpException(sprintf("Source image '%s' doesn't exist", $absolutePath));
-        }
-
         return pathinfo($absolutePath);
     }
 
