@@ -163,26 +163,26 @@ web_profiler:
 The default configuration for the bundle looks like this:
 
 ``` yaml
-liip_imagine:         
-    driver:               gd 
-    web_root:             %kernel.root_dir%/../web 
-    data_root:            %liip_imagine.web_root% 
-    cache_prefix:         /media/cache 
-    cache:                web_path 
-    data_loader:          filesystem 
-    controller_action:    liip_imagine.controller:filterAction 
-    formats:              [] 
-    filter_sets:          
+liip_imagine:
+    driver:               gd
+    web_root:             %kernel.root_dir%/../web
+    data_root:            %liip_imagine.web_root%
+    cache_prefix:         /media/cache
+    cache:                web_path
+    data_loader:          filesystem
+    controller_action:    liip_imagine.controller:filterAction
+    formats:              []
+    filter_sets:
 
         # Prototype
-        name:                 
-            path:                 ~ 
-            quality:              100 
-            format:               ~ 
-            cache:                ~ 
-            data_loader:          ~ 
-            controller_action:    ~ 
-            filters:              
+        name:
+            path:                 ~
+            quality:              100
+            format:               ~
+            cache:                ~
+            data_loader:          ~
+            controller_action:    ~
+            filters:
 
                 # Prototype
                 name:                 []
@@ -332,7 +332,7 @@ For an example of a filter loader implementation, refer to
 ## Outside the web root
 
 When your setup requires your source images to live outside the web root, or if that's just the way you roll,
-you can override the DataLoader service and define a custom path, as the third argument, that replaces 
+you can override the DataLoader service and define a custom path, as the third argument, that replaces
 `%liip_imagine.web_root%` (example here in XML):
 
 ``` xml
@@ -344,13 +344,13 @@ you can override the DataLoader service and define a custom path, as the third a
 </service>
 ```
 
-One way to override a service is by redefining it in the services configuration file of your bundle. 
+One way to override a service is by redefining it in the services configuration file of your bundle.
 Another way would be by modifying the service definition from your bundle's Dependency Injection Extension:
 
 ``` php
 $container->getDefinition('liip_imagine.data.loader.filesystem')
           ->replaceArgument(2, '%kernel.root_dir%/data/uploads');
-``` 
+```
 
 ## Custom image loaders
 
@@ -426,7 +426,7 @@ to `Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer` as an example.
 
 ExtendedFileSystemLoader extends FileSystemLoader and takes, as argument, an array of transformers.
 In the example, when a file with the pdf extension is passed to the data loader,
-PdfTransformer uses a php imagick object (injected via the service container) 
+PdfTransformer uses a php imagick object (injected via the service container)
 to extract the first page of the document and returns it to the data loader as a png image.
 
 To tell the bundle about the transformers, you have to register them as services
@@ -444,7 +444,7 @@ services:
         class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
         tags:
             -    { name: liip_imagine.data.loader, loader: custom_data_loader }
-        arguments: 
+        arguments:
             -    '@liip_imagine'
             -    %liip_imagine.formats%
             -    %liip_imagine.data_root%
@@ -499,6 +499,57 @@ liip_imagine:
 
 For an example of a cache resolver implementation, refer to
 `Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
+
+### AmazonS3Resolver
+
+The AmazonS3Resolver requires the [aws-sdk-php](https://github.com/amazonwebservices/aws-sdk-for-php).
+
+You can add the SDK by adding those lines to your `deps` file.
+
+``` ini
+[aws-sdk]
+    git=git://github.com/amazonwebservices/aws-sdk-for-php.git
+```
+
+Afterwards, you only need to configure some information regarding your AWS account and the bucket.
+
+``` yaml
+parameters:
+    amazon_s3.key: 'your-aws-key'
+    amazon_s3.secret: 'your-aws-secret'
+    amazon_s3.bucket: 'your-bucket.example.com'
+```
+
+Now you can set up the services required:
+
+``` yaml
+services:
+    acme.amazon_s3:
+        class: AmazonS3
+        arguments:
+            -
+                key: %amazon_s3.key%
+                secret: %amazon_s3.secret%
+                # more S3 specific options, see \AmazonS3::__construct()
+
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
+Now you are ready to use the `AmazonS3Resolver` by configuring the bundle.
+The following example will configure the resolver is default.
+
+``` yaml
+liip_imagine:
+    cache: 'amazon_s3'
+```
+
+If you want to use other buckets for other images, simply alter the parameter names and create additional services!
 
 ## Dynamic filters
 
