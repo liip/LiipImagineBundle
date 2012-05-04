@@ -38,8 +38,10 @@ class CacheManager
     private $resolvers = array();
 
     /**
+     * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
+     *
      * @param FilterConfiguration $filterConfig
-     * @param Filesystem  $filesystem
+     * @param RouterInterface $router
      * @param string $webRoot
      * @param string $defaultResolver
      */
@@ -54,7 +56,7 @@ class CacheManager
     /**
      * @param string $filter
      * @param ResolverInterface $resolver
-     * 
+     *
      * @return void
      */
     public function addResolver($filter, ResolverInterface $resolver)
@@ -113,13 +115,7 @@ class CacheManager
      */
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
-        $params = array('path' => ltrim($targetPath, '/'));
-
-        return str_replace(
-            urlencode($params['path']),
-            urldecode($params['path']),
-            $this->router->generate('_imagine_'.$filter, $params, $absolute)
-        );
+        return $this->getResolver($filter)->getBrowserPath($targetPath, $filter, $absolute);
     }
 
     /**
@@ -162,5 +158,18 @@ class CacheManager
         }
 
         return $response;
+    }
+
+    /**
+     * Remove a cached image from the storage.
+     *
+     * @param string $targetPath
+     * @param string $filter
+     *
+     * @return bool
+     */
+    public function remove($targetPath, $filter)
+    {
+        return $this->getResolver($filter)->remove($targetPath, $filter);
     }
 }
