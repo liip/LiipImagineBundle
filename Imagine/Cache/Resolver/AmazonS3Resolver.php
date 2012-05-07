@@ -81,7 +81,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 
         if ($storageResponse->isOK()) {
             $response->setStatusCode(301);
-            $response->headers->set('Location', $this->storage->get_object_url($this->bucket, $targetPath));
+            $response->headers->set('Location', $this->getObjectUrl($targetPath));
         }
 
         return $response;
@@ -93,8 +93,8 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
         $objectPath = $this->getObjectPath($targetPath, $filter);
-        if ($this->storage->if_object_exists($this->bucket, $objectPath)) {
-            return $this->storage->get_object_url($this->bucket, $objectPath);
+        if ($this->objectExists($objectPath)) {
+            return $this->getObjectUrl($targetPath);
         }
 
         $params = array('path' => ltrim($targetPath, '/'));
@@ -112,7 +112,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function remove($targetPath, $filter)
     {
         $objectPath = $this->getObjectPath($targetPath, $filter);
-        if (!$this->storage->if_object_exists($this->bucket, $objectPath)) {
+        if (!$this->objectExists($objectPath)) {
             // A non-existing object to delete: done!
             return true;
         }
@@ -131,5 +131,29 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     protected function getObjectPath($path, $filter)
     {
         return str_replace('//', '/', $filter.'/'.$path);
+    }
+
+    /**
+     * Returns the URL for an object saved on Amazon S3.
+     *
+     * @param string $targetPath
+     *
+     * @return string
+     */
+    protected function getObjectUrl($targetPath)
+    {
+        return $this->storage->get_object_url($this->bucket, $targetPath);
+    }
+
+    /**
+     * Checks whether an object exists.
+     *
+     * @param string $objectPath
+     *
+     * @return bool
+     */
+    protected function objectExists($objectPath)
+    {
+        return $this->storage->if_object_exists($this->bucket, $objectPath);
     }
 }
