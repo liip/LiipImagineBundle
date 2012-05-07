@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\RedirectResponse,
     Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
+
 class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 {
     /**
@@ -39,9 +41,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     protected $objUrlOptions;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructs a cache resolver storing images on Amazon S3.
-     *
-     * @throws \S3_Exception While checking for existence of the bucket.
      *
      * @param \AmazonS3 $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
@@ -51,12 +56,21 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function __construct(AmazonS3 $storage, $bucket, $acl = AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-        $this->storage->if_bucket_exists($bucket);
 
         $this->bucket = $bucket;
         $this->acl = $acl;
 
         $this->objUrlOptions = $objUrlOptions;
+    }
+
+    /**
+     * Sets the logger to be used.
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -90,6 +104,14 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
         if ($storageResponse->isOK()) {
             $response->setStatusCode(301);
             $response->headers->set('Location', $this->getObjectUrl($targetPath));
+        } else {
+            if ($this->logger) {
+                $this->logger->warn('The object could not be created on Amazon S3.', array(
+                    'targetPath' => $targetPath,
+                    'filter' => $filter,
+                    's3_response' => $storageResponse,
+                ));
+            }
         }
 
         return $response;
