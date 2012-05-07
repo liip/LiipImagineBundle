@@ -130,6 +130,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function getObjectPath($path, $filter)
     {
-        return $filter.'/'.$path;
+        return str_replace('//', '/', $filter.'/'.$path);
     }
 }
