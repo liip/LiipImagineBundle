@@ -102,7 +102,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     {
         $objectPath = $this->getObjectPath($targetPath, $filter);
         if ($this->objectExists($objectPath)) {
-            return $this->getObjectUrl($targetPath);
+            return $this->getObjectUrl($objectPath);
         }
 
         $params = array('path' => ltrim($targetPath, '/'));
@@ -169,7 +169,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function getObjectUrl($targetPath)
     {
-        return $this->storage->get_object_url($this->bucket, $targetPath, $this->objUrlOptions);
+        return $this->storage->get_object_url($this->bucket, $targetPath, 0, $this->objUrlOptions);
     }
 
     /**
