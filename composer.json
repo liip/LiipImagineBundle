@@ -18,6 +18,14 @@
         "symfony/framework-bundle": ">=2.0,<2.2"
     },
 
+    "require-dev": {
+        "twig/twig":" >=1.0,<2.0-dev"
+    },
+
+    "suggest": {
+        "twig/twig":" >=1.0,<2.0-dev"
+    },
+
     "autoload": {
         "psr-0": { "Liip\\ImagineBundle": "" }
     },
