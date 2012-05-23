@@ -128,7 +128,7 @@ Or if you're using PHP templates:
 <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb') ?>" />
 ```
 
-Behind the scenes, the bundles apples the filter(s) to the image on the first
+Behind the scenes, the bundles applies the filter(s) to the image on the first
 request and then caches the image to a similar path. On the next request,
 the cached image would be served directly from the file system.
 
