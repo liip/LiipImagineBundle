@@ -360,7 +360,7 @@ requirement is that each data loader implement the following interface:
     Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface
 
 To tell the bundle about your new data loader, register it in the service
-container and apply the `liip_imagine.filter.loader` tag to it (example here in XML):
+container and apply the `liip_imagine.data.loader` tag to it (example here in XML):
 
 ``` xml
 <service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
