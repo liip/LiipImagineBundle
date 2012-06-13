@@ -162,7 +162,6 @@
             <tag name="kernel.cache_clearer" />
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument>%liip_imagine.cache_prefix%</argument>
-            <argument type="service" id="filesystem" />
         </service>
         
     </services>

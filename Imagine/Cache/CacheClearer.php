@@ -2,9 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache;
 
-use Symfony\Component\Finder\Finder,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
+use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 /**
  * Clears the Liip Imagine Bundle cache
@@ -28,20 +26,12 @@ class CacheClearer implements CacheClearerInterface
     private $cachePrefix;
     
     /**
-     * The filesystem utilities
-     * 
-     * @var Filesystem
-     */
-    private $filesystem;
-    
-    /**
      * @param CacheManager $cacheManager
      */
-    public function __construct(CacheManager $cacheManager, $cachePrefix, Filesystem $filesystem)
+    public function __construct(CacheManager $cacheManager, $cachePrefix)
     {
         $this->cacheManager = $cacheManager;
         $this->cachePrefix = $cachePrefix;
-        $this->filesystem = $filesystem;
     }
     
     /**
@@ -50,8 +40,7 @@ class CacheClearer implements CacheClearerInterface
      */
     public function clear($cacheDir)
     {
-        $cachePath = $this->cacheManager->getWebRoot().DIRECTORY_SEPARATOR.$this->cachePrefix;
-        
-        $this->filesystem->remove(Finder::create()->in($cachePath)->depth(0)->directories());
+        // $cacheDir contains the application cache, which we don't care about
+        $this->cacheManager->clearResolversCache($this->cachePrefix);
     }
 }

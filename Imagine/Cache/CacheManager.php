@@ -172,4 +172,11 @@ class CacheManager
     {
         return $this->getResolver($filter)->remove($targetPath, $filter);
     }
+
+    public function clearResolversCache($cachePrefix)
+    {
+        foreach ($this->resolvers as $resolver) {
+            $resolver->clear($cachePrefix);
+        }
+    }
 }

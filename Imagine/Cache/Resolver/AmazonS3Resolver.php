@@ -170,6 +170,14 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function clear($cachePrefix)
+    {
+        // TODO: implement cache clearing for Amazon S3 service
+    }
+
+    /**
      * Returns the object path within the bucket.
      *
      * @param string $path The base path of the resource.
