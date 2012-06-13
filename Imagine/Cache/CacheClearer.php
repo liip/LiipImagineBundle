@@ -1,11 +1,10 @@
 <?php
+
 namespace Liip\ImagineBundle\Imagine\Cache;
 
-use Symfony\Component\Finder\Finder;
-
-use Symfony\Component\Filesystem\Filesystem;
-
-use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
+use Symfony\Component\Finder\Finder,
+    Symfony\Component\Filesystem\Filesystem,
+    Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 /**
  * Clears the Liip Imagine Bundle cache
