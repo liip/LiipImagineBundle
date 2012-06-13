@@ -39,6 +39,14 @@ class FilterManager
     }
 
     /**
+     * @return FilterConfiguration
+     */
+    public function getFilterConfiguration()
+    {
+        return $this->filterConfig;
+    }
+
+    /**
      * @param Request $request
      * @param string $filter
      * @param Imagine\Image\ImageInterface $image

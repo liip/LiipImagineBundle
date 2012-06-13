@@ -41,7 +41,6 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->fixXmlConfig('filter', 'filters')
-                        ->useAttributeAsKey('name')
                         ->children()
                             ->scalarNode('path')->end()
                             ->scalarNode('quality')->defaultValue(100)->end()

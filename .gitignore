@@ -3,3 +3,7 @@
 vendor/imagine
 vendor/symfony
 vendor/twig
+
+composer.phar
+vendor/
+composer.lock

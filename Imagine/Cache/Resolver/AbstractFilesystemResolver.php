@@ -13,9 +13,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     protected $filesystem;
 
     /**
-     * Constructs cache web path resolver
+     * Constructs a filesystem based cache resolver.
      *
-     * @param Filesystem  $filesystem
+     * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -23,7 +23,10 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     }
 
     /**
+     * Stores the content into a static file.
+     *
      * @throws \RuntimeException
+     *
      * @param Response $response
      * @param string $targetPath
      * @param string $filter
@@ -46,4 +49,33 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
 
         return $response;
     }
+
+    /**
+     * Removes a stored image resource.
+     *
+     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $filter The name of the imagine filter in effect.
+     *
+     * @return bool Whether the file has been removed successfully.
+     */
+    public function remove($targetPath, $filter)
+    {
+        $filename = $this->getFilePath($targetPath, $filter);
+        $this->filesystem->remove($filename);
+
+        return file_exists($filename);
+    }
+
+    /**
+     * Return the local filepath.
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @param string $path The resource path to convert.
+     * @param string $filter The name of the imagine filter.
+     * @param string $basePath An optional base path to remove from the path.
+     *
+     * @return string
+     */
+    abstract protected function getFilePath($path, $filter, $basePath = '');
 }

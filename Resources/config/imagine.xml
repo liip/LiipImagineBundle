@@ -36,14 +36,17 @@
         <parameter key="liip_imagine.filter.loader.relative_resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.crop.class">Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
 
         <!-- Data loaders' classes -->
 
         <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.stream.class">Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.no_cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver</parameter>
 
         <!-- Cache clearers' classes -->
 
@@ -52,7 +55,7 @@
     </parameters>
 
     <services>
-        
+
         <!-- Utility services -->
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
@@ -93,14 +96,14 @@
         </service>
 
         <!-- ImagineInterface instances -->
-        
+
         <service id="liip_imagine" alias="liip_imagine.gd" />
 
-        <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" />
+        <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" public="false" />
 
-        <service id="liip_imagine.imagick" class="%liip_imagine.imagick.class%" />
+        <service id="liip_imagine.imagick" class="%liip_imagine.imagick.class%" public="false" />
 
-        <service id="liip_imagine.gmagick" class="%liip_imagine.gmagick.class%" />
+        <service id="liip_imagine.gmagick" class="%liip_imagine.gmagick.class%" public="false" />
 
         <!--  Templating helpers and extensions -->
 
@@ -128,6 +131,10 @@
             <tag name="liip_imagine.filter.loader" loader="thumbnail" />
         </service>
 
+        <service id="liip_imagine.filter.loader.crop" class="%liip_imagine.filter.loader.crop.class%">
+            <tag name="liip_imagine.filter.loader" loader="crop" />
+        </service>
+
         <!-- Data loaders -->
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
@@ -141,6 +148,11 @@
 
         <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">
             <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+            <argument type="service" id="filesystem" />
+        </service>
+
+        <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
+            <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
             <argument type="service" id="filesystem" />
         </service>
 

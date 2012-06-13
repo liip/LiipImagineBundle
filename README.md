@@ -164,15 +164,28 @@ The default configuration for the bundle looks like this:
 
 ``` yaml
 liip_imagine:
-    web_root:     %kernel.root_dir%/../web
-    data_root:    %liip_imagine.web_root%
-    cache_prefix: /media/cache
-    cache:        true
-    data_loader:       ~
-    controller_action: ~
-    driver:       gd
-    formats:      []
-    filter_sets:  []
+    driver:               gd
+    web_root:             %kernel.root_dir%/../web
+    data_root:            %liip_imagine.web_root%
+    cache_prefix:         /media/cache
+    cache:                web_path
+    data_loader:          filesystem
+    controller_action:    liip_imagine.controller:filterAction
+    formats:              []
+    filter_sets:
+
+        # Prototype
+        name:
+            path:                 ~
+            quality:              100
+            format:               ~
+            cache:                ~
+            data_loader:          ~
+            controller_action:    ~
+            filters:
+
+                # Prototype
+                name:                 []
 ```
 
 There are several configuration options available:
@@ -242,6 +255,7 @@ liip_imagine:
 ```
 
 The `mode` can be either `outbound` or `inset`.
+There is also a option `allow_upscale` (default: false).
 
 ### The `relative_resize` filter
 
@@ -267,6 +281,19 @@ liip_imagine:
         my_widen:
             filters:
                 relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
+```
+
+### The `crop` filter
+
+The crop filter, as the name implies, performs a crop transformation
+on your image. Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                crop: { start: [10, 20], size: [120, 90] }
 ```
 
 ## Load your Custom Filters
@@ -305,7 +332,7 @@ For an example of a filter loader implementation, refer to
 ## Outside the web root
 
 When your setup requires your source images to live outside the web root, or if that's just the way you roll,
-you can override the DataLoader service and define a custom path, as the third argument, that replaces 
+you can override the DataLoader service and define a custom path, as the third argument, that replaces
 `%liip_imagine.web_root%` (example here in XML):
 
 ``` xml
@@ -317,13 +344,13 @@ you can override the DataLoader service and define a custom path, as the third a
 </service>
 ```
 
-One way to override a service is by redefining it in the services configuration file of your bundle. 
+One way to override a service is by redefining it in the services configuration file of your bundle.
 Another way would be by modifying the service definition from your bundle's Dependency Injection Extension:
 
 ``` php
 $container->getDefinition('liip_imagine.data.loader.filesystem')
           ->replaceArgument(2, '%kernel.root_dir%/data/uploads');
-``` 
+```
 
 ## Custom image loaders
 
@@ -369,6 +396,63 @@ liip_imagine:
 
 For an example of a data loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+
+### StreamLoader
+
+The `Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader` allows to read images from any stream registered
+thus allowing you to serve your images from literally anywhere.
+
+The example service definition shows how to use a stream wrapped by the [Gaufrette](https://github.com/KnpLabs/Gaufrette) filesystem abstraction layer.
+In order to have this example working, you need to register the stream wrapper first,
+refer to the [Gaufrette README](https://github.com/KnpLabs/Gaufrette/blob/master/README.markdown) on how to do this.
+
+``` yaml
+services:
+    liip_imagine.data.loader.stream.profile_photos:
+        class: "%liip_imagine.data.loader.stream.class%"
+        arguments:
+            - "@liip_imagine"
+            - 'gaufrette://profile_photos/'
+        tags:
+            - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
+```
+
+## Extending the image loader with data transformers
+
+You can extend a custom data loader to support virtually any file type using transformers.
+A data tranformer is intended to transform a file before actually rendering it. You
+can refer to `Liip\ImagineBundle\Imagine\Data\Loader\ExtendedFileSystemLoader` and
+to `Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer` as an example.
+
+ExtendedFileSystemLoader extends FileSystemLoader and takes, as argument, an array of transformers.
+In the example, when a file with the pdf extension is passed to the data loader,
+PdfTransformer uses a php imagick object (injected via the service container)
+to extract the first page of the document and returns it to the data loader as a png image.
+
+To tell the bundle about the transformers, you have to register them as services
+with the new loader:
+
+```yml
+services:
+    imagick_object:
+        class:   Imagick
+    acme_custom_transformer:
+        class:     Acme\ImagineBundle\Imagine\Data\Transformer\MyCustomTransformer
+        arguments:
+            -    '@imagick_object'
+    custom_loader:
+        class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
+        tags:
+            -    { name: liip_imagine.data.loader, loader: custom_data_loader }
+        arguments:
+            -    '@liip_imagine'
+            -    %liip_imagine.formats%
+            -    %liip_imagine.data_root%
+            -    [ '@acme_custom_transformer' ]
+```
+
+Now you can use your custom data loader, with its transformers, setting it
+as in the previous section.
 
 ## Custom cache resolver
 
@@ -416,9 +500,89 @@ liip_imagine:
 For an example of a cache resolver implementation, refer to
 `Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
 
+### AmazonS3Resolver
+
+The AmazonS3Resolver requires the [aws-sdk-php](https://github.com/amazonwebservices/aws-sdk-for-php).
+
+You can add the SDK by adding those lines to your `deps` file.
+
+``` ini
+[aws-sdk]
+    git=git://github.com/amazonwebservices/aws-sdk-for-php.git
+```
+
+Afterwards, you only need to configure some information regarding your AWS account and the bucket.
+
+``` yaml
+parameters:
+    amazon_s3.key: 'your-aws-key'
+    amazon_s3.secret: 'your-aws-secret'
+    amazon_s3.bucket: 'your-bucket.example.com'
+```
+
+Now you can set up the services required:
+
+``` yaml
+services:
+    acme.amazon_s3:
+        class: AmazonS3
+        arguments:
+            -
+                key: %amazon_s3.key%
+                secret: %amazon_s3.secret%
+                # more S3 specific options, see \AmazonS3::__construct()
+
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
+Now you are ready to use the `AmazonS3Resolver` by configuring the bundle.
+The following example will configure the resolver is default.
+
+``` yaml
+liip_imagine:
+    cache: 'amazon_s3'
+```
+
+If you want to use other buckets for other images, simply alter the parameter names and create additional services!
+
 ## Dynamic filters
 
 With a custom data loader it is possible to dynamically modify the configuration that will
-be applied to the image. To do this simple store the filter configuration along with the
-image. Inside the data loader read this configuration and dynamically change the configuration
-for the given filter inside the ``FilterConfiguration`` instance.
+be applied to the image. Inside the controller you can access the ``FilterConfiguration``
+instance, dynamically adjust the filter configuration (for example based on information
+associated with the image or whatever other logic you might want) and set it again.
+
+A simple example showing how to change the filter configuration dynamically. This example
+is of course "bogus" since hardcoded values could just as well be set in the configuration
+but it illustrates the core idea.
+
+```
+    public function filterAction(Request $request, $path, $filter)
+    {
+        $targetPath = $this->cacheManager->resolve($request, $path, $filter);
+        if ($targetPath instanceof Response) {
+            return $targetPath;
+        }
+
+        $image = $this->dataManager->find($filter, $path);
+
+        $filterConfig = $this->filterManager->getFilterConfiguration();
+        $config = $filterConfig->get($filter);
+        $config['filters']['thumbnail']['size'] = array(300, 100);
+        $filterConfig->set($filter, $config);
+
+        $response = $this->filterManager->get($request, $filter, $image, $path);
+
+        if ($targetPath) {
+            $response = $this->cacheManager->store($response, $targetPath, $filter);
+        }
+
+        return $response;
+    }
+```
