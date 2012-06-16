@@ -53,4 +53,13 @@ interface ResolverInterface
      * @return bool Whether the file has been removed successfully.
      */
     function remove($targetPath, $filter);
+
+    /**
+     * Clear the CacheResolver cache
+     *
+     * @param string $cachePrefix The cache prefix as defined in the configuration
+     *
+     * @return void
+     */
+    function clear($cachePrefix);
 }
