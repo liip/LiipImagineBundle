@@ -500,6 +500,13 @@ liip_imagine:
 For an example of a cache resolver implementation, refer to
 `Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
 
+### Cache cleaner
+
+Custom cache resolver classes must implement the ```clear``` method, at worst doing nothing.
+
+When the ```console cache:clear``` command is run, the clear method of all the registered cache
+resolvers is automatically called.
+
 ### AmazonS3Resolver
 
 The AmazonS3Resolver requires the [aws-sdk-php](https://github.com/amazonwebservices/aws-sdk-for-php).
