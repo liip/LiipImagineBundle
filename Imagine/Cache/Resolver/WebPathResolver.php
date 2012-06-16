@@ -55,11 +55,27 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
     {
         $params = array('path' => ltrim($targetPath, '/'));
 
-        return str_replace(
+        $uri = str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
             $this->cacheManager->getRouter()->generate('_imagine_'.$filter, $params, $absolute)
         );
+
+        if (strpos($uri, '.php') !== false) {
+            $uriParts = explode('/', $uri);
+            $index = 0;
+            foreach ($uriParts as $uriIndex => $uriPart) {
+                if (strpos($uriPart, '.php') !== false) {
+                    $index = $uriIndex;
+                    break;
+                }
+            }
+
+            unset($uriParts[$index]);
+            $uri = implode('/', $uriParts);
+        }
+
+        return $uri;
     }
 
     /**
