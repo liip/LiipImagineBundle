@@ -52,7 +52,7 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createFullConfiguration();
 
-        if (version_compare(LiipImagineBundle::getSymfonyVersion(Kernel::VERSION), '2.1.0', '<')) {
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
             $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
         } else {
             $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));

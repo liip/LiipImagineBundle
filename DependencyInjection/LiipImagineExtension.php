@@ -45,7 +45,7 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
 
-        if (version_compare(LiipImagineBundle::getSymfonyVersion(Kernel::VERSION), '2.1.0', '<')) {
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
             $container->removeDefinition('liip_imagine.cache.clearer');
         }
     }
