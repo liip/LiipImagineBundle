@@ -12,6 +12,8 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
+use Liip\ImagineBundle\LiipImagineBundle;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\DependencyInjection\Reference;
@@ -44,6 +46,21 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
             array(new Reference('liip_imagine.data.manager'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.manager'))
         );
+    }
+
+    public function testCacheClearerRegistration()
+    {
+        $this->createFullConfiguration();
+
+        if (version_compare(LiipImagineBundle::getSymfonyVersion(Kernel::VERSION), '2.1.0', '<')) {
+            $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
+        } else {
+            $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
+
+            $definition = $this->containerBuilder->getDefinition('liip_imagine.cache.clearer');
+            $definition->hasTag('kernel.cache_clearer');
+            $this->assertCount(2, $definition->getArguments());
+        }
     }
 
     /**

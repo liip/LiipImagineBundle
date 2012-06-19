@@ -18,4 +18,18 @@ class LiipImagineBundle extends Bundle
 
         $container->addCompilerPass(new LoadersCompilerPass());
     }
+
+    /**
+     * Returns a cleaned version number
+     *
+     * @param string $version
+     * @return string
+     */
+    public static function getSymfonyVersion($version)
+    {
+        return implode('.', array_slice(array_map(function($val)
+        {
+            return (int)$val;
+        }, explode('.', $version)), 0, 3));
+    }
 }

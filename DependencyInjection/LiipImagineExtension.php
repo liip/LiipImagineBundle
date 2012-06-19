@@ -3,11 +3,15 @@
 namespace Liip\ImagineBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Reference;
+
+use Liip\ImagineBundle\LiipImagineBundle;
 
 class LiipImagineExtension extends Extension
 {
@@ -40,5 +44,9 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
+
+        if (version_compare(LiipImagineBundle::getSymfonyVersion(Kernel::VERSION), '2.1.0', '<')) {
+            $container->removeDefinition('liip_imagine.cache.clearer');
+        }
     }
 }
