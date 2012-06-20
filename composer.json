@@ -15,15 +15,16 @@
     "require": {
         "php":                      ">=5.3.2",
         "imagine/Imagine":          "<=0.2.8",
-        "symfony/framework-bundle": ">=2.0,<2.2-dev"
+        "symfony/framework-bundle": ">=2.0.14,<2.2-dev"
     },
 
     "require-dev": {
-        "twig/twig":" >=1.0,<2.0-dev"
+        "twig/twig":                ">=1.0,<2.0-dev",
+        "symfony/yaml":             ">=2.0,<2.2-dev"
     },
 
     "suggest": {
-        "twig/twig":" >=1.0,<2.0-dev"
+        "twig/twig":                ">=1.0,<2.0-dev"
     },
 
     "autoload": {
