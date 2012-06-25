@@ -37,10 +37,8 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
-        if (!is_dir($dir) && !$this->filesystem->mkdir($dir)) {
-            throw new \RuntimeException(sprintf(
-                'Could not create directory %s', $dir
-            ));
+        if (!is_dir($dir)) {
+            $this->filesystem->mkdir($dir);
         }
 
         file_put_contents($targetPath, $response->getContent());
