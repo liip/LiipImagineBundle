@@ -69,14 +69,6 @@ class CacheManager
     }
 
     /**
-     * @return RouterInterface
-     */
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
-    /**
      * @return string
      */
     public function getWebRoot()
@@ -116,6 +108,35 @@ class CacheManager
     public function getBrowserPath($targetPath, $filter, $absolute = false)
     {
         return $this->getResolver($filter)->getBrowserPath($targetPath, $filter, $absolute);
+    }
+
+    /**
+     * Returns a web accessible URL.
+     *
+     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $filter The name of the imagine filter in effect.
+     * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
+     *                       In case the resolver does not support relative paths, it may ignore this flag.
+     *
+     * @return string
+     */
+    public function generateUrl($targetPath, $filter, $absolute = false)
+    {
+        $config = $this->filterConfig->get($filter);
+        if (isset($config['format'])) {
+            $pathinfo = pathinfo($targetPath);
+            if ($pathinfo['extension'] !== $config['format']) {
+                $targetPath = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
+            }
+        }
+
+        $params = array('path' => ltrim($targetPath, '/'));
+
+        return str_replace(
+            urlencode($params['path']),
+            urldecode($params['path']),
+            $this->router->generate('_imagine_'.$filter, $params, $absolute)
+        );
     }
 
     /**
