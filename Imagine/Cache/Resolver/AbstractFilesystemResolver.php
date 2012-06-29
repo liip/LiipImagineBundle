@@ -3,7 +3,8 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Filesystem\Filesystem;
+    Symfony\Component\Filesystem\Filesystem,
+    Symfony\Component\HttpKernel\Kernel;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface
 {
@@ -37,7 +38,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
-        if (!is_dir($dir) && !$this->filesystem->mkdir($dir)) {
+        if (!is_dir($dir) && false === $this->filesystem->mkdir($dir)) {
             throw new \RuntimeException(sprintf(
                 'Could not create directory %s', $dir
             ));
