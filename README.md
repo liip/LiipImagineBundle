@@ -274,7 +274,7 @@ liip_imagine:
                 relative_resize: { heighten: 60 } # Transforms 50x40 to 75x60
         my_widen:
             filters:
-                relative_resize: { widen: 32 }    # Transforms 50x40 to 40x32
+                relative_resize: { widen: 32 }    # Transforms 50x40 to 32x26
         my_increase:
             filters:
                 relative_resize: { increase: 10 } # Transforms 50x40 to 60x50
