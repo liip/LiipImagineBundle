@@ -329,6 +329,32 @@ liip_imagine:
 For an example of a filter loader implementation, refer to
 `Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader`.
 
+## Using the controller as a service
+
+If you need to use the filters in a controller, you can just load `ImagineController.php` controller as a service and handle the response:
+
+``` php
+class MyController extends Controller {
+
+    public function indexAction() {
+        // RedirectResponse object
+        $imagemanagerResponse = $this->container
+            ->get('liip_imagine.controller')
+                ->filterAction(
+                    $this->getRequest(),
+                    'uploads/foo.jpg',      // original image you want to apply a filter to
+                    'my_thumb'              // filter defined in config.yml
+        );
+
+        // string to put directly in the "src" of the tag <img>
+        $srcPath = $imagemanagerResponse->headers->get('location');
+    }
+
+}
+```
+
+In case you need to add more logic the recommended solution is to either extend `ImagineController.php` controller or take the code from that controller as a basis for your own controller.
+
 ## Outside the web root
 
 When your setup requires your source images to live outside the web root, or if that's just the way you roll,
