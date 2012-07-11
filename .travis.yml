@@ -7,6 +7,7 @@ php:
 before_script:
   - wget -nc http://getcomposer.org/composer.phar
   - php composer.phar install --dev
+  - php composer.phar require symfony/symfony:2.1.*
 
 script: phpunit --coverage-text
 
