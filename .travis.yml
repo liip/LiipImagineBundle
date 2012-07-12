@@ -7,7 +7,7 @@ php:
 before_script:
   - curl -s http://getcomposer.org/installer | php --
   - php composer.phar install --dev
-  - php composer.phar require symfony/symfony:2.1.*
+  - php composer.phar require symfony/framework-bundle:dev-master
 
 script: phpunit --coverage-text
 
