@@ -5,6 +5,7 @@
     "keywords": ["imagine", "image"],
     "homepage": "http://liip.ch",
     "license": "MIT",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Liip and other contributors",
