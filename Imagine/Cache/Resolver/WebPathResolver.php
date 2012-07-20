@@ -77,7 +77,7 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
     /**
      * {@inheritDoc}
      */
-    protected function getFilePath($path, $filter, $basePath = '')
+    protected function getFilePath($path, $filter)
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
 
@@ -86,8 +86,8 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
             throw new NotFoundHttpException('Image doesn\'t exist');
         }
 
-        if (!empty($basePath) && 0 === strpos($browserPath, $basePath)) {
-            $browserPath = substr($browserPath, strlen($basePath));
+        if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
+            $browserPath = substr($browserPath, strlen($this->basePath));
         }
 
         return $this->cacheManager->getWebRoot().$browserPath;

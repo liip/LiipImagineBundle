@@ -48,5 +48,7 @@ class LiipImagineExtension extends Extension
         if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
             $container->removeDefinition('liip_imagine.cache.clearer');
         }
+
+        $container->setParameter('liip_imagine.cache.resolver.base_path', $config['cache_base_path']);
     }
 }

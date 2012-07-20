@@ -14,6 +14,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     protected $filesystem;
 
     /**
+     * @var string
+     */
+    protected $basePath = '';
+
+    /**
      * Constructs a filesystem based cache resolver.
      *
      * @param Filesystem $filesystem
@@ -21,6 +26,16 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem   = $filesystem;
+    }
+
+    /**
+     * Set the base path to
+     *
+     * @param $basePath
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
     }
 
     /**
@@ -74,9 +89,8 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
      *
      * @param string $path The resource path to convert.
      * @param string $filter The name of the imagine filter.
-     * @param string $basePath An optional base path to remove from the path.
      *
      * @return string
      */
-    abstract protected function getFilePath($path, $filter, $basePath = '');
+    abstract protected function getFilePath($path, $filter);
 }

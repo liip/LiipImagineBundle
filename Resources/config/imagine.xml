@@ -149,6 +149,9 @@
         <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">
             <tag name="liip_imagine.cache.resolver" resolver="web_path" />
             <argument type="service" id="filesystem" />
+            <call method="setBasePath">
+                <argument type="string">%liip_imagine.cache.resolver.base_path%</argument>
+            </call>
         </service>
 
         <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
