@@ -31,7 +31,8 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
     public function resolve(Request $request, $path, $filter)
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-        $targetPath = $this->getFilePath($path, $filter, $request->getBaseUrl());
+        $this->basePath = $request->getBaseUrl();
+        $targetPath = $this->getFilePath($path, $filter);
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
