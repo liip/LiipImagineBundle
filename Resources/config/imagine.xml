@@ -160,12 +160,12 @@
         </service>
 
         <!-- Cache Clearer -->
-        
+
         <service id="liip_imagine.cache.clearer" class="%liip_imagine.cache.clearer.class%">
             <tag name="kernel.cache_clearer" />
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument>%liip_imagine.cache_prefix%</argument>
         </service>
-        
+
     </services>
 </container>
