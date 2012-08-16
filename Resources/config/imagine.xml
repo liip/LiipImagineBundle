@@ -144,13 +144,6 @@
             <argument>%liip_imagine.data_root%</argument>
         </service>
 
-        <service id="liip_imagine.data.loader.grid_fs" class="Liip\ImagineBundle\Imagine\Data\Loader\GridFSLoader">
-            <tag name="liip_imagine.data.loader" loader="grid_fs" />
-            <argument type="service" id="liip_imagine" />
-            <argument type="service" id="doctrine.odm.mongodb.document_manager" />
-            <argument>%liip_imagine.image_class%</argument>
-        </service>
-
         <!-- Cache resolver -->
 
         <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">

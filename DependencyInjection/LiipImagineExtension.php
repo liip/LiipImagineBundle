@@ -45,8 +45,6 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
 
-        $container->setParameter('liip_imagine.image_class', $config['image_class']);
-
         if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
             $container->removeDefinition('liip_imagine.cache.clearer');
         }
