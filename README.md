@@ -443,6 +443,23 @@ services:
             - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
 ```
 
+### GridFSLoader
+Load your images from mongodb
+``` yaml
+liip_imagine:
+    image_class: Application\ImageBundle\Document\Image
+    filter_sets:
+        my_special_style:
+            data_loader: grid_fs
+            filters:
+                my_custom_filter: { }
+```
+
+Reference the image by its id
+``` jinja
+<img src="{{ image.id | imagine_filter('my_thumb') }}" />
+```
+
 ## Extending the image loader with data transformers
 
 You can extend a custom data loader to support virtually any file type using transformers.

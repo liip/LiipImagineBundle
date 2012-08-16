@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
                 ->scalarNode('data_loader')->defaultValue('filesystem')->end()
                 ->scalarNode('controller_action')->defaultValue('liip_imagine.controller:filterAction')->end()
+                ->scalarNode('image_class')->defaultNull()->end()
                 ->arrayNode('formats')
                     ->defaultValue(array())
                     ->prototype('scalar')->end()
