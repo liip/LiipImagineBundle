@@ -519,8 +519,8 @@ container and apply the `liip_imagine.cache.resolver` tag to it (example here in
 ``` xml
 <service id="acme_imagine.cache.resolver.my_custom" class="Acme\ImagineBundle\Imagine\Cache\Resolver\MyCustomCacheResolver">
     <tag name="liip_imagine.cache.resolver" resolver="my_custom_cache" />
-    <argument type="service" id="router" />
     <argument type="service" id="filesystem" />
+    <argument type="service" id="router" />
     <argument>%liip_imagine.web_root%</argument>
 </service>
 ```
