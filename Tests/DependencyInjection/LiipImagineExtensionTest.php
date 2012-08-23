@@ -50,7 +50,7 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheClearerRegistration()
     {
-        $this->createFullConfiguration();
+        $this->createEmptyConfiguration();
 
         if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
             $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
@@ -61,6 +61,13 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
             $definition->hasTag('kernel.cache_clearer');
             $this->assertCount(2, $definition->getArguments());
         }
+    }
+
+    public function testCacheClearerIsNotRegistered()
+    {
+        $this->createFullConfiguration();
+
+        $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
     }
 
     /**
@@ -92,6 +99,7 @@ driver: imagick
 web_root: ../foo/bar
 cache_prefix: /imagine/cache
 cache: false
+auto_clear_cache: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:
     small:
