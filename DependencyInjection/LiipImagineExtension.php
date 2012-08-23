@@ -25,6 +25,10 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
+        if ($config['auto_clear_cache']) {
+            $loader->load('cache_clearer.xml');
+        }
+
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $cachePrefix = $config['cache_prefix'] ? '/'.trim($config['cache_prefix'], '/') : '';
