@@ -99,7 +99,7 @@ driver: imagick
 web_root: ../foo/bar
 cache_prefix: /imagine/cache
 cache: false
-auto_clear_cache: false
+cache_clearer: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:
     small:
