@@ -169,7 +169,7 @@ liip_imagine:
     data_root:            %liip_imagine.web_root%
     cache_prefix:         /media/cache
     cache:                web_path
-    auto_clear_cache      true
+    cache_clearer:        true
     data_loader:          filesystem
     controller_action:    liip_imagine.controller:filterAction
     formats:              []
@@ -213,7 +213,7 @@ There are several configuration options available:
 
     default: web_path (which means the standard web_path resolver is used)
 
- - `auto_clear_cache` - Whether or not to clear the image cache when the `kernel.cache_clearer` event occurs.
+ - `cache_clearer` - Whether or not to clear the image cache when the `kernel.cache_clearer` event occurs.
     This option doesn't have any effect in symfony < 2.1
 
     default: true

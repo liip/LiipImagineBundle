@@ -25,7 +25,7 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
-        if ($config['auto_clear_cache']) {
+        if ($config['cache_clearer']) {
             $loader->load('cache_clearer.xml');
         }
 
