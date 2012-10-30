@@ -445,6 +445,9 @@ The example service definition shows how to use a stream wrapped by the [Gaufret
 In order to have this example working, you need to register the stream wrapper first,
 refer to the [Gaufrette README](https://github.com/KnpLabs/Gaufrette/blob/master/README.markdown) on how to do this.
 
+If you are using the [KnpGaufretteBundle](https://github.com/KnpLabs/KnpGaufretteBundle)
+you can make use of the [StreamWrapper configuration](https://github.com/KnpLabs/KnpGaufretteBundle#stream-wrapper) to register the filesystems.
+
 ``` yaml
 services:
     liip_imagine.data.loader.stream.profile_photos:
