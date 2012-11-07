@@ -37,6 +37,7 @@
         <parameter key="liip_imagine.filter.loader.resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.crop.class">Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.paste.class">Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader</parameter>
 
         <!-- Data loaders' classes -->
 
@@ -129,6 +130,12 @@
 
         <service id="liip_imagine.filter.loader.crop" class="%liip_imagine.filter.loader.crop.class%">
             <tag name="liip_imagine.filter.loader" loader="crop" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.paste" class="%liip_imagine.filter.loader.paste.class%">
+            <tag name="liip_imagine.filter.loader" loader="paste" />
+            <argument type="service" id="liip_imagine" />
+            <argument>%kernel.root_dir%</argument>
         </service>
 
         <!-- Data loaders -->
