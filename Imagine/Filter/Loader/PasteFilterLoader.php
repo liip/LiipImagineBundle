@@ -14,6 +14,9 @@ class PasteFilterLoader implements LoaderInterface
         $this->rootPath = $rootPath;
     }
 
+    /**
+     * @see Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
+     */
     public function load(ImageInterface $image, array $options = array())
     {
         list($x, $y) = $options['start'];
