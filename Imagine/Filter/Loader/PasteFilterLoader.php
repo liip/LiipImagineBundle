@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\Point;
-use Imagine\Filter\Basic\Paste;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 
@@ -20,9 +19,6 @@ class PasteFilterLoader implements LoaderInterface
         list($x, $y) = $options['start'];
         $destImage = $this->imagine->open($this->rootPath.'/../'.$options['image']);
 
-        $filter = new Paste($destImage, new Point($x, $y));
-        $image = $filter->apply($image);
-
-        return $image;
+        return $image->paste($destImage, new Point($x, $y));
     }
 }
