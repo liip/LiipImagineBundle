@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -57,7 +58,12 @@ class ImagineController
             return $targetPath;
         }
 
-        $image = $this->dataManager->find($filter, $path);
+        try {
+            $image = $this->dataManager->find($filter, $path);
+        } catch (NotFoundHttpException $nfhe) {
+            return new Response(null, 404);
+        }
+
         $response = $this->filterManager->get($request, $filter, $image, $path);
 
         if ($targetPath) {
