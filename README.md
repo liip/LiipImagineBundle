@@ -371,25 +371,45 @@ In case you need to add more logic the recommended solution is to either extend 
 ## Outside the web root
 
 When your setup requires your source images to live outside the web root, or if that's just the way you roll,
-you can override the DataLoader service and define a custom path, as the third argument, that replaces
-`%liip_imagine.web_root%` (example here in XML):
+you have to set the bundle's parameter `data_root` in the `config.yml` with the absolute path where your source images are
+located:
+
+``` yaml
+    liip_imagine:
+        data_root: /path/to/source/images/dir
+```
+
+Afterwards, you need to grant read access on Apache to access the images source directory. For achieving it you have
+to add the following directive to your project's vhost file:
 
 ``` xml
-<service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
-    <tag name="liip_imagine.data.loader" loader="filesystem" />
-    <argument type="service" id="liip_imagine" />
-    <argument>%liip_imagine.formats%</argument>
-    <argument>%kernel.root_dir%/data/uploads</argument>
-</service>
+    <VirtualHost *:80>
+        <!-- Rest of directives like DocumentRoot or ServerName -->
+
+        Alias /FavouriteAlias /path/to/source/images/dir
+        <Directory "/path/to/source/images/dir">
+            AllowOverride None
+            Allow form All
+        </Directory>
+    </VirtualHost>
 ```
 
-One way to override a service is by redefining it in the services configuration file of your bundle.
-Another way would be by modifying the service definition from your bundle's Dependency Injection Extension:
+Another way would be placing the directive in a separate file living inside your project. For instance,
+you can create a file `app/config/apache/photos.xml` and add to the project's vhost the following directive:
 
-``` php
-$container->getDefinition('liip_imagine.data.loader.filesystem')
-          ->replaceArgument(2, '%kernel.root_dir%/data/uploads');
+``` xml
+    <VirtualHost *:80>
+        <!-- Rest of directives like DocumentRoot or ServerName -->
+
+        Include "/path/to/your/project/app/config/apache/photos.xml"
+    </VirtualHost>
 ```
+
+This way you keep the file along with your code and you are able to change your files directory access easily or create
+different environment-dependant configuration files.
+
+Either way, once you have granted access on Apache to read the `data_root` files, the relative path of an image with this
+absolute path `/path/to/source/images/dir/logo.png` must be `/FavouriteAlias/logo.png` to be readable.
 
 ## Custom image loaders
 
