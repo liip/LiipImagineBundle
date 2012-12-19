@@ -123,9 +123,12 @@ class CacheManager
     public function generateUrl($targetPath, $filter, $absolute = false)
     {
         $config = $this->filterConfig->get($filter);
+
         if (isset($config['format'])) {
             $pathinfo = pathinfo($targetPath);
-            if ($pathinfo['extension'] !== $config['format']) {
+            // the extension should be forced and a directory is detected
+            if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
+                && isset($pathinfo['dirname'])) {
                 $targetPath = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
             }
         }
