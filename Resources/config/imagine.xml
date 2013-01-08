@@ -48,6 +48,10 @@
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.no_cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver</parameter>
 
+        <!-- Form types -->
+
+        <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
+
     </parameters>
 
     <services>
@@ -153,6 +157,12 @@
         <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
             <argument type="service" id="filesystem" />
+        </service>
+
+        <!-- Form types -->
+
+        <service id="liip_imagine.form.type.image" class="%liip_imagine.form.type.image.class%">
+            <tag name="form.type" alias="liip_imagine_image" />
         </service>
 
     </services>
