@@ -1,0 +1,19 @@
+{% block liip_imagine_image_widget %}
+    {% spaceless %}
+        {% if image_path %}
+            <div>
+                {% if link_url %}
+                    <a href="{{ link_url }}" {% for attrname, attrvalue in link_attr %}{{ attrname }}="{{ attrvalue }}" {% endfor %}>
+                {% endif %}
+
+                <img src="{{ image_path|imagine_filter(image_filter) }}" {% for attrname, attrvalue in image_attr %}{{ attrname }}="{{ attrvalue }}" {% endfor %} />
+
+                {% if link_url %}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {{ block('form_widget_simple') }}
+    {% endspaceless %}
+{% endblock %}
