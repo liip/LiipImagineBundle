@@ -55,5 +55,9 @@ class LiipImagineExtension extends Extension
         }
 
         $container->setParameter('liip_imagine.cache.resolver.base_path', $config['cache_base_path']);
+
+        $resources = $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : array();
+        $resources[] = 'LiipImagineBundle:Form:form_div_layout.html.twig';
+        $container->setParameter('twig.form.resources', $resources);
     }
 }
