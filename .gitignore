@@ -1,9 +1,4 @@
 /phpunit.xml
-
-vendor/imagine
-vendor/symfony
-vendor/twig
-
+composer.lock
 composer.phar
 vendor/
-composer.lock
