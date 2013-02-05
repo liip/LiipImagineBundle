@@ -505,6 +505,21 @@ Reference the image by its id
 <img src="{{ image.id | imagine_filter('my_thumb') }}" />
 ```
 
+### PHPCRLoader
+Load images from PHPCR
+
+This loader works the same as the GridFS loader with some minor changes in the
+service definition:
+
+``` xml
+    <service id="liip_imagine.data.loader.phpcr" class="Liip\ImagineBundle\Imagine\Data\Loader\PHPCRLoader">
+        <tag name="liip_imagine.data.loader" loader="phpcr" />
+        <argument type="service" id="liip_imagine" />
+        <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+        <argument>%symfony_cmf_create.image.model_class%</argument>
+    </service>
+```
+
 ## Extending the image loader with data transformers
 
 You can extend a custom data loader to support virtually any file type using transformers.
