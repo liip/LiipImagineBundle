@@ -5,9 +5,9 @@ namespace Liip\ImagineBundle\Imagine\Data\Loader;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Imagine\Image\ImagineInterface;
-use Doctrine\ODM\PHPCR\DocumentManager;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class PHPCRLoader implements LoaderInterface
+abstract class AbstractDoctrineLoader implements LoaderInterface
 {
     /**
      * @var Imagine\Image\ImagineInterface
@@ -15,9 +15,9 @@ class PHPCRLoader implements LoaderInterface
     protected $imagine;
 
     /**
-     * @var Doctrine\ODM\PHPCR\DocumentManager
+     * @var Doctrine\Common\Persistence\ObjectManager
      */
-    protected $dm;
+    protected $manager;
 
     /**
      * @var Image Class
@@ -28,15 +28,18 @@ class PHPCRLoader implements LoaderInterface
      * Constructs
      *
      * @param ImagineInterface  $imagine
-     * @param DocumentManager $dm
+     * @param ObjectManager $manager
      * @param string Image class
      */
-    public function __construct(ImagineInterface $imagine, DocumentManager $dm, $class)
+    public function __construct(ImagineInterface $imagine, ObjectManager $manager, $class = null)
     {
         $this->imagine = $imagine;
-        $this->dm = $dm;
+        $this->manager = $manager;
         $this->class = $class;
     }
+
+    abstract protected function getConvertId($id);
+    abstract protected function getStreamFromImage($image);
 
     /**
      * @param string $id
@@ -45,12 +48,12 @@ class PHPCRLoader implements LoaderInterface
      */
     public function find($id)
     {
-        $image = $this->dm->find($this->class, $id);
+        $image = $this->manager->find($this->class, $this->getConvertId($id));
 
         if (!$image) {
             throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $id));
         }
 
-        return $this->imagine->load(stream_get_contents($image->getContent()));
+        return $this->imagine->load(stream_get_contents($this->getStreamFromImage($image)));
     }
 }
