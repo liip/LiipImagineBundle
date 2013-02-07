@@ -39,9 +39,9 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     }
 
     /**
-     * Map the "id" (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store
+     * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store
      *
-     * @param $id
+     * @param string $path 
      * @return string
      */
     abstract protected function mapPathToId($path);
