@@ -38,20 +38,33 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
         $this->class = $class;
     }
 
-    abstract protected function getConvertId($id);
+    /**
+     * Map the "id" (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store
+     *
+     * @param $id
+     * @return string
+     */
+    abstract protected function mapPathToId($path);
+
+    /**
+     * Return a stream resource from the Doctrine entity/document with the image content
+     *
+     * @param object $image
+     * @return resource
+     */
     abstract protected function getStreamFromImage($image);
 
     /**
-     * @param string $id
+     * @param string $path
      *
      * @return Imagine\Image\ImageInterface
      */
-    public function find($id)
+    public function find($path)
     {
-        $image = $this->manager->find($this->class, $this->getConvertId($id));
+        $image = $this->manager->find($this->class, $this->mapPathToId($path));
 
         if (!$image) {
-            throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $id));
+            throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $path));
         }
 
         return $this->imagine->load(stream_get_contents($this->getStreamFromImage($image)));

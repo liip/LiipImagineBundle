@@ -26,9 +26,9 @@ class DoctrinePHPCRLoader extends AbstractDoctrineLoader
         $this->rootPath = $rootPath;
     }
 
-    protected function getConvertId($id)
+    protected function mapPathToId($path)
     {
-        return $this->rootPath.'/'.ltrim($id, '/');
+        return $this->rootPath.'/'.ltrim($path, '/');
     }
 
     protected function getStreamFromImage($image)
