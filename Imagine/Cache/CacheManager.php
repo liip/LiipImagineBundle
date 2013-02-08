@@ -15,27 +15,27 @@ class CacheManager
     /**
      * @var FilterConfiguration
      */
-    private $filterConfig;
+    protected $filterConfig;
 
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @var string
      */
-    private $webRoot;
+    protected $webRoot;
 
     /**
      * @var string
      */
-    private $defaultResolver;
+    protected $defaultResolver;
 
     /**
-     * @var array
+     * @var ResolverInterface[]
      */
-    private $resolvers = array();
+    protected $resolvers = array();
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
@@ -80,7 +80,7 @@ class CacheManager
      * @param string $filter
      * @return ResolverInterface
      */
-    private function getResolver($filter)
+    protected function getResolver($filter)
     {
         $config = $this->filterConfig->get($filter);
 
@@ -154,7 +154,7 @@ class CacheManager
     public function resolve(Request $request, $path, $filter)
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
-            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
         try {

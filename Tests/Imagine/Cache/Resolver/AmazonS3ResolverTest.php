@@ -3,15 +3,18 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class AmazonS3ResolverTest extends \PHPUnit_Framework_TestCase
+class AmazonS3ResolverTest extends AbstractTest
 {
     protected function setUp()
     {
+        parent::setUp();
+
         if (!class_exists('AmazonS3')) {
-            require_once(__DIR__.'/../../../Fixtures/AmazonS3.php');
+            require_once($this->fixturesDir.'/AmazonS3.php');
         }
     }
 
