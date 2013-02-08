@@ -7,6 +7,9 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+ */
 class AmazonS3ResolverTest extends AbstractTest
 {
     protected function setUp()

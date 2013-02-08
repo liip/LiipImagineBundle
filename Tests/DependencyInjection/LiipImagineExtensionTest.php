@@ -10,6 +10,10 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Parser;
 
+/**
+ * @covers Liip\ImagineBundle\DependencyInjection\Configuration
+ * @covers Liip\ImagineBundle\DependencyInjection\LiipImagineExtension
+ */
 class LiipImagineExtensionTest extends AbstractTest
 {
     /**
