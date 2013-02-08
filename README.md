@@ -251,7 +251,7 @@ Each filter set that you specify has the following options:
  - `cache` - override the default cache setting
  - `data_loader` - override the default data loader
  - `controller_action` - override the default controller action
- - `route` - optional list of route requirements, defaults and options using in the route loader. Add array width keys 'requirements', 'defaults' or 'options'. 
+ - `route` - optional list of route requirements, defaults and options using in the route loader. Add array with keys 'requirements', 'defaults' or 'options'. 
  
     default: empty array
     

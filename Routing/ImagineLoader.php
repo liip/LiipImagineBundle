@@ -50,13 +50,13 @@ class ImagineLoader extends Loader
                 $routeDefaults = $defaults;
                 $routeOptions = array();
 
-                if(isset($config['route']['requirements'])) {
+                if (isset($config['route']['requirements'])) {
                     $routeRequirements = array_merge($routeRequirements, $config['route']['requirements']);
                 }
-                if(isset($config['route']['defaults'])) {
+                if (isset($config['route']['defaults'])) {
                     $routeDefaults = array_merge($routeDefaults, $config['route']['defaults']);
                 }
-                if(isset($config['route']['options'])) {
+                if (isset($config['route']['options'])) {
                     $routeOptions = array_merge($routeOptions, $config['route']['options']);
                 }
 
