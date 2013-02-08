@@ -69,7 +69,18 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
     }
-
+    
+    public function testCustomRouteRequirements()
+    {
+        $this->createFullConfiguration();
+        $param = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+        
+        $this->assertTrue(isset($param['small']['filters']['route']['requirements']));
+        
+        $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
+        $this->assertEquals('value1', $variable1, sprintf('%s parameter is correct', $variable1));
+    }
+    
     /**
      * @return ContainerBuilder
      */
@@ -80,7 +91,7 @@ class LiipImagineExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load(array(array()), $this->containerBuilder);
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
-
+    
     /**
      * @return ContainerBuilder
      */
@@ -105,6 +116,8 @@ filter_sets:
     small:
         filters:
             thumbnail: { size: [100, ~], mode: inset }
+            route:
+                requirements: { variable1: 'value1' }
         quality: 80
     medium_small_cropped:
         filters:
