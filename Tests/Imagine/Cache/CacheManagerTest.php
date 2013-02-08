@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,6 +14,12 @@ use Symfony\Component\HttpFoundation\Response;
 class CacheManagerTest extends AbstractTest
 {
     protected $resolver;
+
+    public function testGetWebRoot()
+    {
+        $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
+        $this->assertEquals($this->fixturesDir.'/assets', $cacheManager->getWebRoot());
+    }
 
     public function testAddCacheManagerAwareResolver()
     {
@@ -170,5 +177,54 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->addResolver('thumbnail4', $resolver);
 
         $cacheManager->clearResolversCache('imagine_cache');
+    }
+
+    public function generateUrlProvider()
+    {
+        return array(
+            // Simple route generation
+            array(array(), '/thumbnail/cats.jpeg', 'thumbnail/cats.jpeg'),
+
+            // 'format' given, altering URL
+            array(array(
+                'format' => 'jpg',
+            ), '/thumbnail/cats.jpeg', 'thumbnail/cats.jpg'),
+
+            // No 'extension' path info
+            array(array(
+                'format' => 'jpg',
+            ), '/thumbnail/cats', 'thumbnail/cats.jpg'),
+
+            // No 'extension' path info, and no directory
+            array(array(
+                'format' => 'jpg',
+            ), '/cats', 'cats.jpg'),
+        );
+    }
+
+    /**
+     * @dataProvider generateUrlProvider
+     */
+    public function testGenerateUrl($filterConfig, $targetPath, $expectedPath)
+    {
+        $config = $this->getMockFilterConfiguration();
+        $config
+            ->expects($this->once())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue($filterConfig))
+        ;
+
+        $router = $this->getMockRouter();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->with('_imagine_thumbnail', array(
+                'path' => $expectedPath,
+            ), true)
+        ;
+
+        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets');
+        $cacheManager->generateUrl($targetPath, 'thumbnail', true);
     }
 }
