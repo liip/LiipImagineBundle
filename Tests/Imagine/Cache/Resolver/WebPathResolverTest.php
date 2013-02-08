@@ -1,0 +1,102 @@
+<?php
+
+namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
+
+use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
+use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
+ */
+class WebPathResolverTest extends AbstractTest
+{
+    protected $config;
+    protected $cacheManager;
+
+    /**
+     * @var WebPathResolver
+     */
+    protected $resolver;
+
+    protected $webRoot;
+    protected $dataRoot;
+    protected $cacheDir;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->config = $this->getMockFilterConfiguration();
+        $this->config
+            ->expects($this->any())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $this->webRoot = $this->tempDir.'/root/web';
+        $this->dataRoot = $this->fixturesDir.'/assets';
+        $this->cacheDir = $this->webRoot.'/media/cache';
+
+        $fs = new Filesystem();
+        $fs->mkdir($this->cacheDir);
+
+        $this->cacheManager = $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(
+            'generateUrl',
+        ), array(
+            $this->config, $this->getMockRouter(), $this->webRoot, 'web_path'
+        ));
+
+        $this->resolver = new WebPathResolver($fs);
+        $this->cacheManager->addResolver('web_path', $this->resolver);
+    }
+
+    public function testDefaultBehavior()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request
+            ->expects($this->atLeastOnce())
+            ->method('getBaseUrl')
+            ->will($this->returnValue('/app.php'))
+        ;
+
+        // Resolve the requested image for the given filter.
+        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
+        $this->assertEquals(realpath($this->cacheDir).'/thumbnail/cats.jpeg', $targetPath,
+            '->resolve() correctly converts the requested file into target path within webRoot.');
+        $this->assertFalse(file_exists($targetPath),
+            '->resolve() does not create the file within the target path.');
+
+        // Store the cached version of that image.
+        $content = file_get_contents($this->dataRoot.'/cats.jpeg');
+        $response = new Response($content);
+        $this->resolver->store($response, $targetPath, 'thumbnail');
+        $this->assertEquals(201, $response->getStatusCode(),
+            '->store() alters the HTTP response code to "201 - Created".');
+        $this->assertTrue(file_exists($targetPath),
+            '->store() creates the cached image file to be served.');
+        $this->assertEquals($content, file_get_contents($targetPath),
+            '->store() writes the content of the original Response into the cache file.');
+
+        // Remove the cached image.
+        $this->assertTrue($this->resolver->remove($targetPath, 'thumbnail'),
+            '->remove() reports removal of cached image file correctly.');
+        $this->assertFalse(file_exists($targetPath),
+            '->remove() actually removes the cached file from the filesystem.');
+    }
+}

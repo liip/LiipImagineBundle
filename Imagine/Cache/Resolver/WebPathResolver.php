@@ -82,11 +82,6 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
 
-        // if cache path cannot be determined, return 404
-        if (null === $browserPath) {
-            throw new NotFoundHttpException('Image doesn\'t exist');
-        }
-
         if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
             $browserPath = substr($browserPath, strlen($this->basePath));
         }

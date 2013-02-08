@@ -79,7 +79,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
         $filename = $this->getFilePath($targetPath, $filter);
         $this->filesystem->remove($filename);
 
-        return file_exists($filename);
+        return !file_exists($filename);
     }
 
     /**
