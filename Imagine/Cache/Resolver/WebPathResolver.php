@@ -2,29 +2,12 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
-    Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpKernel\Exception\NotFoundHttpException,
-    Symfony\Component\Finder\Finder;
-
-class WebPathResolver extends AbstractFilesystemResolver implements CacheManagerAwareInterface
+class WebPathResolver extends AbstractFilesystemResolver
 {
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
-
-    /**
-     * @param CacheManager $cacheManager
-     */
-    public function setCacheManager(CacheManager $cacheManager)
-    {
-        $this->cacheManager = $cacheManager;
-    }
-
     /**
      * {@inheritDoc}
      */
