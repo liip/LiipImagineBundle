@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -243,5 +242,34 @@ class WebPathResolverTest extends AbstractTest
             '->resolve() returns the HTTP response code "302 - Found".');
         $this->assertEquals('/sandbox/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
             '->resolve() returns the expected Location of the cached image.');
+    }
+
+    public function testClear()
+    {
+        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
+        $this->filesystem->mkdir(dirname($filename));
+        file_put_contents($filename, '42');
+        $this->assertTrue(file_exists($filename));
+
+        $this->resolver->clear('/media/cache');
+
+        $this->assertFalse(file_exists($filename));
+    }
+
+    public function testClearWithoutPrefix()
+    {
+        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
+        $this->filesystem->mkdir(dirname($filename));
+        file_put_contents($filename, '42');
+        $this->assertTrue(file_exists($filename));
+
+        try {
+            // This would effectively clear the web root.
+            $this->resolver->clear('');
+
+            $this->fail('Clear should not work without a valid cache prefix');
+        } catch (\Exception $e) { }
+
+        $this->assertTrue(file_exists($filename));
     }
 }
