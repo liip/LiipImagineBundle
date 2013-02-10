@@ -37,10 +37,10 @@ class WebPathResolver extends AbstractFilesystemResolver implements CacheManager
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($targetPath)) {
-            $scriptName = $request->getScriptName();
-            if (strpos($browserPath, $scriptName) === 0) {
-                // strip script name
-                $browserPath = substr($browserPath, strlen($scriptName));
+            // Strip the base URL of this request from the browserpath to not interfere with the base path.
+            $baseUrl = $request->getBaseUrl();
+            if ($baseUrl && 0 === strpos($browserPath, $baseUrl)) {
+                $browserPath = substr($browserPath, strlen($baseUrl));
             }
 
             return new RedirectResponse($request->getBasePath().$browserPath);

@@ -7,6 +7,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
+    protected $filesystem;
     protected $fixturesDir;
     protected $tempDir;
 
@@ -16,13 +17,13 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->tempDir = sys_get_temp_dir().'/liip_imagine_test';
 
-        $fs = new Filesystem();
+        $this->filesystem = new Filesystem();
 
-        if ($fs->exists($this->tempDir)) {
-            $fs->remove($this->tempDir);
+        if ($this->filesystem->exists($this->tempDir)) {
+            $this->filesystem->remove($this->tempDir);
         }
 
-        $fs->mkdir($this->tempDir);
+        $this->filesystem->mkdir($this->tempDir);
     }
 
     protected function createFilterConfiguration()
@@ -53,9 +54,8 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $fs = new Filesystem();
-        if ($fs->exists($this->tempDir)) {
-            $fs->remove($this->tempDir);
+        if ($this->filesystem->exists($this->tempDir)) {
+            $this->filesystem->remove($this->tempDir);
         }
     }
 }
