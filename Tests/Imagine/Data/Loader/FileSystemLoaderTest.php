@@ -16,7 +16,7 @@ class FileSystemLoaderTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->imagine = $this->getMock('Imagine\Image\ImagineInterface');
+        $this->imagine = $this->getMockImagine();
     }
 
     /**

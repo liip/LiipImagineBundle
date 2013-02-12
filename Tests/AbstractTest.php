@@ -75,6 +75,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('Imagine\Image\ImageInterface');
     }
 
+    protected function getMockImagine()
+    {
+        return $this->getMock('Imagine\Image\ImagineInterface');
+    }
+
     protected function tearDown()
     {
         if (!$this->filesystem) {
