@@ -10,17 +10,17 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 class GridFSLoader implements LoaderInterface
 {
     /**
-     * @var Imagine\Image\ImagineInterface
+     * @var \Imagine\Image\ImagineInterface
      */
     protected $imagine;
 
     /**
-     * @var Doctrine\ODM\MongoDB\DocumentManager
+     * @var DocumentManager
      */
     protected $dm;
 
     /**
-     * @var Image Class
+     * @var string
      */
     protected $class;
 
@@ -29,7 +29,7 @@ class GridFSLoader implements LoaderInterface
      *
      * @param ImagineInterface  $imagine
      * @param DocumentManager $dm
-     * @param string Image class
+     * @param string $class
      */
     public function __construct(ImagineInterface $imagine, DocumentManager $dm, $class)
     {
@@ -41,7 +41,7 @@ class GridFSLoader implements LoaderInterface
     /**
      * @param string $id
      *
-     * @return Imagine\Image\ImageInterface
+     * @return \Imagine\Image\ImageInterface
      */
     public function find($id)
     {

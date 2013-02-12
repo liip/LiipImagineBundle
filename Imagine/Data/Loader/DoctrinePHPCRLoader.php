@@ -17,7 +17,7 @@ class DoctrinePHPCRLoader extends AbstractDoctrineLoader
      *
      * @param ImagineInterface  $imagine
      * @param ObjectManager $manager
-     * @param string Image class
+     * @param string $class
      * @param string $rootPath
      */
     public function __construct(ImagineInterface $imagine, ObjectManager $manager, $class = null, $rootPath = '')

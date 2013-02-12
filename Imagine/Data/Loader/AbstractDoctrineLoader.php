@@ -10,26 +10,26 @@ use Doctrine\Common\Persistence\ObjectManager;
 abstract class AbstractDoctrineLoader implements LoaderInterface
 {
     /**
-     * @var Imagine\Image\ImagineInterface
+     * @var \Imagine\Image\ImagineInterface
      */
     protected $imagine;
 
     /**
-     * @var Doctrine\Common\Persistence\ObjectManager
+     * @var ObjectManager
      */
     protected $manager;
 
     /**
-     * @var Image Class
+     * @var string Class
      */
     protected $class;
 
     /**
-     * Constructs
+     * Constructor.
      *
      * @param ImagineInterface  $imagine
      * @param ObjectManager $manager
-     * @param string Image class
+     * @param string $class
      */
     public function __construct(ImagineInterface $imagine, ObjectManager $manager, $class = null)
     {
@@ -39,9 +39,10 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     }
 
     /**
-     * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store
+     * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store.
      *
-     * @param string $path 
+     * @param string $path
+     *
      * @return string
      */
     abstract protected function mapPathToId($path);
@@ -50,6 +51,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
      * Return a stream resource from the Doctrine entity/document with the image content
      *
      * @param object $image
+     *
      * @return resource
      */
     abstract protected function getStreamFromImage($image);
@@ -57,7 +59,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     /**
      * @param string $path
      *
-     * @return Imagine\Image\ImageInterface
+     * @return \Imagine\Image\ImageInterface
      */
     public function find($path)
     {

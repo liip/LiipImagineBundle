@@ -30,11 +30,11 @@ class StreamLoader implements LoaderInterface
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException
-     *
      * @param \Imagine\Image\ImagineInterface $imagine
      * @param string $wrapperPrefix
      * @param resource|null $context
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(ImagineInterface $imagine, $wrapperPrefix, $context = null)
     {
@@ -49,9 +49,7 @@ class StreamLoader implements LoaderInterface
     }
 
     /**
-     * @param string $path
-     *
-     * @return \Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($path)
     {

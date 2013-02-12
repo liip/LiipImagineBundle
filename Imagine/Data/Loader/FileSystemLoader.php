@@ -9,7 +9,7 @@ use Imagine\Image\ImagineInterface;
 class FileSystemLoader implements LoaderInterface
 {
     /**
-     * @var Imagine\Image\ImagineInterface
+     * @var \Imagine\Image\ImagineInterface
      */
     protected $imagine;
 
@@ -24,7 +24,7 @@ class FileSystemLoader implements LoaderInterface
     protected $rootPath;
 
     /**
-     * Constructs
+     * Constructor.
      *
      * @param ImagineInterface  $imagine
      * @param array             $formats
@@ -38,11 +38,12 @@ class FileSystemLoader implements LoaderInterface
     }
 
     /**
-     * Get the file info for the given path
+     * Get the file info for the given path.
      *
-     * This can optionally be used to generate the given file
+     * This can optionally be used to generate the given file.
      *
      * @param $absolutePath
+     *
      * @return array
      */
     protected function getFileInfo($absolutePath)
@@ -51,9 +52,7 @@ class FileSystemLoader implements LoaderInterface
     }
 
     /**
-     * @param string $path
-     *
-     * @return Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($path)
     {
