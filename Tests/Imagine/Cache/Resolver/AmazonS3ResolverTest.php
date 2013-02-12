@@ -215,6 +215,18 @@ class AmazonS3ResolverTest extends AbstractTest
         $this->assertTrue($resolver->remove('thumb/some-folder/targetpath.jpg', 'thumb'));
     }
 
+    public function testClearIsDisabled()
+    {
+        $s3 = $this->getMock('AmazonS3');
+        $s3
+            ->expects($this->never())
+            ->method('delete_object')
+        ;
+
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
+        $resolver->clear('');
+    }
+
     protected function getS3ResponseMock($ok = true)
     {
         $s3Response = $this->getMock('AmazonS3Response');
