@@ -10,10 +10,10 @@ class ImagineHelper extends Helper
     /**
      * @var CacheManager
      */
-    private $cacheManager;
+    protected $cacheManager;
 
     /**
-     * Constructs by setting $cachePathResolver
+     * Constructor.
      *
      * @param CacheManager $cacheManager
      */
@@ -23,7 +23,7 @@ class ImagineHelper extends Helper
     }
 
     /**
-     * Gets cache path of an image to be filtered
+     * Gets the browser path for the image and filter to apply.
      *
      * @param string $path
      * @param string $filter
@@ -37,8 +37,7 @@ class ImagineHelper extends Helper
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Symfony\Component\Templating\Helper\HelperInterface::getName()
+     * {@inheritDoc}
      */
     public function getName()
     {

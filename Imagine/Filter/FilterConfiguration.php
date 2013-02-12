@@ -18,6 +18,8 @@ class FilterConfiguration
     }
 
     /**
+     * Gets a previously configured filter.
+     *
      * @param string $filter
      *
      * @return array
@@ -34,6 +36,8 @@ class FilterConfiguration
     }
 
     /**
+     * Sets a configuration on the given filter.
+     *
      * @param string $filter
      * @param array $config
      *

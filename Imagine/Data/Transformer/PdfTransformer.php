@@ -14,6 +14,9 @@ class PdfTransformer implements TransformerInterface
         $this->imagick = $imagick;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function apply($absolutePath)
     {
         $info = pathinfo($absolutePath);

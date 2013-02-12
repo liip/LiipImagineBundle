@@ -4,12 +4,12 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use \AmazonS3;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
-    Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 

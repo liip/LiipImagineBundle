@@ -2,8 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Data;
 
-use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface,
-    Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class DataManager
 {
@@ -35,6 +35,8 @@ class DataManager
     }
 
     /**
+     * Adds a loader to retrieve images for the given filter.
+     *
      * @param string $filter
      * @param LoaderInterface $loader
      *

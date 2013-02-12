@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,8 @@ class FilterManager
     }
 
     /**
+     * Adds a loader to handle the given filter.
+     *
      * @param string $filter
      * @param LoaderInterface $loader
      *
@@ -49,6 +52,8 @@ class FilterManager
     }
 
     /**
+     * Returns a response containing the given image after applying the given filter on it.
+     *
      * @param Request $request
      * @param string $filter
      * @param ImageInterface $image

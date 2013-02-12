@@ -6,34 +6,33 @@ use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 /**
  * Clears the Liip Imagine Bundle cache
- * 
+ *
  * @author Josiah <josiah@web-dev.com.au>
  */
 class CacheClearer implements CacheClearerInterface
 {
     /**
-     * The Cache Manager
-     * 
      * @var CacheManager
      */
-    private $cacheManager;
-    
+    protected $cacheManager;
+
     /**
-     * The prefix applied to all cached images
-     * 
      * @var string
      */
-    private $cachePrefix;
-    
+    protected $cachePrefix;
+
     /**
+     * Constructor.
+     *
      * @param CacheManager $cacheManager
+     * @param string $cachePrefix The prefix applied to all cached images.
      */
     public function __construct(CacheManager $cacheManager, $cachePrefix)
     {
         $this->cacheManager = $cacheManager;
         $this->cachePrefix = $cachePrefix;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface::clear()

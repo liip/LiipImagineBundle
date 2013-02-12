@@ -2,10 +2,9 @@
 
 namespace Liip\ImagineBundle\Routing;
 
-use Symfony\Component\Routing\Route;
-
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\Loader;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 class ImagineLoader extends Loader
 {

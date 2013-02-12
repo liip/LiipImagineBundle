@@ -2,14 +2,13 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 use Imagine\Image\ImagineInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FileSystemLoader implements LoaderInterface
 {
     /**
-     * @var \Imagine\Image\ImagineInterface
+     * @var ImagineInterface
      */
     protected $imagine;
 
@@ -30,7 +29,7 @@ class FileSystemLoader implements LoaderInterface
      * @param array             $formats
      * @param string            $rootPath
      */
-    public function __construct(ImagineInterface $imagine, $formats, $rootPath)
+    public function __construct(ImagineInterface $imagine, array $formats, $rootPath)
     {
         $this->imagine = $imagine;
         $this->formats = $formats;
@@ -42,7 +41,7 @@ class FileSystemLoader implements LoaderInterface
      *
      * This can optionally be used to generate the given file.
      *
-     * @param $absolutePath
+     * @param string $absolutePath
      *
      * @return array
      */

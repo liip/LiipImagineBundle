@@ -2,13 +2,13 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache;
 
-use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface,
-    Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Routing\RouterInterface,
-    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\RouterInterface;
 
 class CacheManager
 {
@@ -54,6 +54,8 @@ class CacheManager
     }
 
     /**
+     * Adds a resolver to handle cached images for the given filter.
+     *
      * @param string $filter
      * @param ResolverInterface $resolver
      *
@@ -69,6 +71,8 @@ class CacheManager
     }
 
     /**
+     * Returns the configured web root path.
+     *
      * @return string
      */
     public function getWebRoot()
@@ -77,8 +81,15 @@ class CacheManager
     }
 
     /**
+     * Gets a resolver for the given filter.
+     *
+     * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
+     *
      * @param string $filter
+     *
      * @return ResolverInterface
+     *
+     * @throws \InvalidArgumentException If neither a specific nor a default resolver is available.
      */
     protected function getResolver($filter)
     {
@@ -97,7 +108,9 @@ class CacheManager
     }
 
     /**
-     * Gets filtered path for rendering in the browser
+     * Gets filtered path for rendering in the browser.
+     *
+     * @see ResolverInterface::getBrowserPath
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter
@@ -143,7 +156,7 @@ class CacheManager
     }
 
     /**
-     * Resolves filtered path for rendering in the browser
+     * Resolves filtered path for rendering in the browser.
      *
      * @param Request $request
      * @param string $path
@@ -167,7 +180,9 @@ class CacheManager
     }
 
     /**
-     * Store successful responses with the cache resolver
+     * Store successful responses with the cache resolver.
+     *
+     * @see ResolverInterface::store
      *
      * @param Response $response
      * @param string $targetPath
@@ -187,6 +202,8 @@ class CacheManager
     /**
      * Remove a cached image from the storage.
      *
+     * @see ResolverInterface::remove
+     *
      * @param string $targetPath
      * @param string $filter
      *
@@ -197,6 +214,15 @@ class CacheManager
         return $this->getResolver($filter)->remove($targetPath, $filter);
     }
 
+    /**
+     * Clear the cache of all resolvers.
+     *
+     * @see ResolverInterface::clear
+     *
+     * @param string $cachePrefix
+     *
+     * @return void
+     */
     public function clearResolversCache($cachePrefix)
     {
         foreach ($this->resolvers as $resolver) {
