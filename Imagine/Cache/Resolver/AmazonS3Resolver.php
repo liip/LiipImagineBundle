@@ -86,7 +86,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function resolve(Request $request, $path, $filter)
     {
-        return $this->getObjectPath($path, $filter);
+        $objectPath = $this->getObjectPath($path, $filter);
+        if ($this->objectExists($objectPath)) {
+            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
+        }
+
+        return $objectPath;
     }
 
     /**
@@ -135,13 +140,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function remove($targetPath, $filter)
     {
-        $objectPath = $this->getObjectPath($targetPath, $filter);
-        if (!$this->objectExists($objectPath)) {
+        if (!$this->objectExists($targetPath)) {
             // A non-existing object to delete: done!
             return true;
         }
 
-        return $this->storage->delete_object($this->bucket, $objectPath)->isOK();
+        return $this->storage->delete_object($this->bucket, $targetPath)->isOK();
     }
 
     /**
