@@ -10,6 +10,15 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class CacheClearerTest extends AbstractTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (!interface_exists('Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface')) {
+            $this->markTestSkipped('The CacheClearerInterface does not exist.');
+        }
+    }
+
     public function testClearIgnoresCacheDirectory()
     {
         $cacheManager = $this->getMockCacheManager();
