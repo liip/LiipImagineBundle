@@ -7,7 +7,11 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Filesystem
+     */
     protected $filesystem;
+
     protected $fixturesDir;
     protected $tempDir;
 
@@ -59,6 +63,10 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        if (!$this->filesystem) {
+            return;
+        }
+
         if ($this->filesystem->exists($this->tempDir)) {
             $this->filesystem->remove($this->tempDir);
         }
