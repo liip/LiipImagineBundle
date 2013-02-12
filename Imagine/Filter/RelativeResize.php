@@ -5,7 +5,6 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Filter\FilterInterface;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\BoxInterface;
 
 /**
  * Filter for resizing an image relative to its existing dimensions.
@@ -34,7 +33,7 @@ class RelativeResize implements FilterInterface
     }
 
     /**
-     * @see Imagine\Filter\FilterInterface::apply()
+     * {@inheritDoc}
      */
     public function apply(ImageInterface $image)
     {

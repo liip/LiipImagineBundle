@@ -4,13 +4,13 @@ namespace Liip\ImagineBundle;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class LiipImagineBundle extends Bundle
 {
     /**
-     * @see Symfony\Component\HttpKernel\Bundle.Bundle::build()
+     * {@inheritDoc}
      */
     public function build(ContainerBuilder $container)
     {

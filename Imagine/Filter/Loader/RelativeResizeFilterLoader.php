@@ -2,10 +2,10 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
+use Imagine\Exception\InvalidArgumentException;
+use Imagine\Image\ImageInterface;
 
-use Imagine\Exception\InvalidArgumentException,
-    Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
 
 /**
 * Loader for this bundle's relative resize filter.
@@ -15,7 +15,7 @@ use Imagine\Exception\InvalidArgumentException,
 class RelativeResizeFilterLoader implements LoaderInterface
 {
     /**
-     * @see Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
+     * {@inheritDoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {

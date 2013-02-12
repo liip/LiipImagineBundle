@@ -2,34 +2,33 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 use Imagine\Image\ImagineInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GridFSLoader implements LoaderInterface
 {
     /**
-     * @var Imagine\Image\ImagineInterface
+     * @var ImagineInterface
      */
     protected $imagine;
 
     /**
-     * @var Doctrine\ODM\MongoDB\DocumentManager
+     * @var DocumentManager
      */
     protected $dm;
 
     /**
-     * @var Image Class
+     * @var string
      */
     protected $class;
 
     /**
      * Constructs
      *
-     * @param ImagineInterface  $imagine
+     * @param ImagineInterface $imagine
      * @param DocumentManager $dm
-     * @param string Image class
+     * @param string $class
      */
     public function __construct(ImagineInterface $imagine, DocumentManager $dm, $class)
     {
@@ -39,9 +38,7 @@ class GridFSLoader implements LoaderInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @return Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($id)
     {

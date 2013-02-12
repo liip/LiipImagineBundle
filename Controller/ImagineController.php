@@ -2,11 +2,12 @@
 
 namespace Liip\ImagineBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImagineController
 {
@@ -26,7 +27,7 @@ class ImagineController
     protected $cacheManager;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param DataManager $dataManager
      * @param FilterManager $filterManager
@@ -40,9 +41,7 @@ class ImagineController
     }
 
     /**
-     * This action applies a given filter to a given image,
-     * optionally saves the image and
-     * outputs it to the browser at the same time
+     * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
      * @param Request $request
      * @param string $path

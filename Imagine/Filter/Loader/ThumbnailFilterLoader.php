@@ -2,12 +2,15 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
-use Imagine\Image\Box;
 use Imagine\Filter\Basic\Thumbnail;
+use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 
 class ThumbnailFilterLoader implements LoaderInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function load(ImageInterface $image, array $options = array())
     {
         $mode = $options['mode'] === 'inset' ?

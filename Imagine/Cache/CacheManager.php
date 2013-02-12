@@ -2,40 +2,40 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache;
 
-use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface,
-    Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Routing\RouterInterface,
-    Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\RouterInterface;
 
 class CacheManager
 {
     /**
      * @var FilterConfiguration
      */
-    private $filterConfig;
+    protected $filterConfig;
 
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @var string
      */
-    private $webRoot;
+    protected $webRoot;
 
     /**
      * @var string
      */
-    private $defaultResolver;
+    protected $defaultResolver;
 
     /**
-     * @var array
+     * @var ResolverInterface[]
      */
-    private $resolvers = array();
+    protected $resolvers = array();
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
@@ -54,6 +54,8 @@ class CacheManager
     }
 
     /**
+     * Adds a resolver to handle cached images for the given filter.
+     *
      * @param string $filter
      * @param ResolverInterface $resolver
      *
@@ -69,6 +71,8 @@ class CacheManager
     }
 
     /**
+     * Returns the configured web root path.
+     *
      * @return string
      */
     public function getWebRoot()
@@ -77,10 +81,17 @@ class CacheManager
     }
 
     /**
+     * Gets a resolver for the given filter.
+     *
+     * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
+     *
      * @param string $filter
+     *
      * @return ResolverInterface
+     *
+     * @throws \InvalidArgumentException If neither a specific nor a default resolver is available.
      */
-    private function getResolver($filter)
+    protected function getResolver($filter)
     {
         $config = $this->filterConfig->get($filter);
 
@@ -97,43 +108,45 @@ class CacheManager
     }
 
     /**
-     * Gets filtered path for rendering in the browser
+     * Gets filtered path for rendering in the browser.
      *
-     * @param string $path
+     * @see ResolverInterface::getBrowserPath
+     *
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter
      * @param boolean $absolute
      *
      * @return string
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false)
     {
-        return $this->getResolver($filter)->getBrowserPath($targetPath, $filter, $absolute);
+        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute);
     }
 
     /**
      * Returns a web accessible URL.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
      * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
      *                       In case the resolver does not support relative paths, it may ignore this flag.
      *
      * @return string
      */
-    public function generateUrl($targetPath, $filter, $absolute = false)
+    public function generateUrl($path, $filter, $absolute = false)
     {
         $config = $this->filterConfig->get($filter);
 
         if (isset($config['format'])) {
-            $pathinfo = pathinfo($targetPath);
+            $pathinfo = pathinfo($path);
             // the extension should be forced and a directory is detected
             if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
                 && isset($pathinfo['dirname'])) {
-                $targetPath = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
+                $path = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
             }
         }
 
-        $params = array('path' => ltrim($targetPath, '/'));
+        $params = array('path' => ltrim($path, '/'));
 
         return str_replace(
             urlencode($params['path']),
@@ -143,7 +156,7 @@ class CacheManager
     }
 
     /**
-     * Resolves filtered path for rendering in the browser
+     * Resolves filtered path for rendering in the browser.
      *
      * @param Request $request
      * @param string $path
@@ -154,7 +167,7 @@ class CacheManager
     public function resolve(Request $request, $path, $filter)
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
-            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
         try {
@@ -167,7 +180,9 @@ class CacheManager
     }
 
     /**
-     * Store successful responses with the cache resolver
+     * Store successful responses with the cache resolver.
+     *
+     * @see ResolverInterface::store
      *
      * @param Response $response
      * @param string $targetPath
@@ -187,6 +202,8 @@ class CacheManager
     /**
      * Remove a cached image from the storage.
      *
+     * @see ResolverInterface::remove
+     *
      * @param string $targetPath
      * @param string $filter
      *
@@ -197,6 +214,15 @@ class CacheManager
         return $this->getResolver($filter)->remove($targetPath, $filter);
     }
 
+    /**
+     * Clear the cache of all resolvers.
+     *
+     * @see ResolverInterface::clear
+     *
+     * @param string $cachePrefix
+     *
+     * @return void
+     */
     public function clearResolversCache($cachePrefix)
     {
         foreach ($this->resolvers as $resolver) {

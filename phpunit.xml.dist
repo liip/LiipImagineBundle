@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="./Tests/bootstrap.php" colors="true">
+<phpunit bootstrap="./Tests/bootstrap.php" colors="true" forceCoversAnnotation="true">
 
     <testsuites>
         <testsuite name="LiipImagineBundle test suite">

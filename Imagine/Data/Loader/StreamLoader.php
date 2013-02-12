@@ -2,9 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 use Imagine\Image\ImagineInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StreamLoader implements LoaderInterface
 {
@@ -30,11 +29,11 @@ class StreamLoader implements LoaderInterface
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException
-     *
-     * @param \Imagine\Image\ImagineInterface $imagine
+     * @param ImagineInterface $imagine
      * @param string $wrapperPrefix
      * @param resource|null $context
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(ImagineInterface $imagine, $wrapperPrefix, $context = null)
     {
@@ -49,9 +48,7 @@ class StreamLoader implements LoaderInterface
     }
 
     /**
-     * @param string $path
-     *
-     * @return \Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($path)
     {

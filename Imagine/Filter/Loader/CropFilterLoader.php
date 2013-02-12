@@ -2,14 +2,16 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
+use Imagine\Filter\Basic\Crop;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
-
-use Imagine\Filter\Basic\Crop;
 use Imagine\Image\ImageInterface;
 
 class CropFilterLoader implements LoaderInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function load(ImageInterface $image, array $options = array())
     {
         list($x, $y) = $options['start'];

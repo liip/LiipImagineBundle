@@ -5,9 +5,13 @@ namespace Liip\ImagineBundle\Imagine\Data\Loader;
 interface LoaderInterface
 {
     /**
-     * @param string $path
+     * Retrieve the Image represented by the given path.
      *
-     * @return Imagine\Image\ImageInterface
+     * The path may be a file path on a filesystem, or any unique identifier among the storage engine implemented by this Loader.
+     *
+     * @param mixed $path
+     *
+     * @return \Imagine\Image\ImageInterface
      */
     function find($path);
 }

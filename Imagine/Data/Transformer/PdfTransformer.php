@@ -2,32 +2,37 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Transformer;
 
-class PdfTransformer
+class PdfTransformer implements TransformerInterface
 {
     /**
-     *
      * @var \Imagick
      */
-    private $imagick;
-    
+    protected $imagick;
+
     public function __construct(\Imagick $imagick)
     {
         $this->imagick = $imagick;
     }
-    
-    public function applyTransform($absolutePath)
+
+    /**
+     * {@inheritDoc}
+     */
+    public function apply($absolutePath)
     {
         $info = pathinfo($absolutePath);
-        if (isset($info['extension']) && strpos(strtolower($info['extension']), 'pdf') !== false) {
-            //If it doesn't exists, extract the first page of the PDF
+
+        if (isset($info['extension']) && false !== strpos(strtolower($info['extension']), 'pdf')) {
+            // If it doesn't exists, extract the first page of the PDF
             if (!file_exists("$absolutePath.png")) {
                 $this->imagick->readImage($absolutePath.'[0]');
                 $this->imagick->setImageFormat('png');
                 $this->imagick->writeImage("$absolutePath.png");
                 $this->imagick->clear();
             }
+
             $absolutePath .= '.png';
         }
+
         return $absolutePath;
     }
 }
