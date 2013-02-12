@@ -35,14 +35,14 @@ interface ResolverInterface
     /**
      * Returns a web accessible URL.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
      * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
      *                       In case the resolver does not support relative paths, it may ignore this flag.
      *
      * @return string
      */
-    function getBrowserPath($targetPath, $filter, $absolute = false);
+    function getBrowserPath($path, $filter, $absolute = false);
 
     /**
      * Removes a stored image resource.

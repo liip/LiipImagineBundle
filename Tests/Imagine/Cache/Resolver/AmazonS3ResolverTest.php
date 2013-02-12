@@ -28,6 +28,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('if_object_exists')
+            ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
             ->will($this->returnValue(true))
         ;
         $s3
@@ -57,6 +58,34 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setObjectUrlOption('torrent', true);
         $resolver->getBrowserPath('/some-folder/targetpath.jpg', 'thumb');
+    }
+
+    public function testBrowserPathNotExisting()
+    {
+        $s3 = $this->getMock('AmazonS3');
+        $s3
+            ->expects($this->once())
+            ->method('if_object_exists')
+            ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
+            ->will($this->returnValue(false))
+        ;
+        $s3
+            ->expects($this->never())
+            ->method('get_object_url')
+        ;
+
+        $cacheManager = $this->getMockCacheManager();
+        $cacheManager
+            ->expects($this->once())
+            ->method('generateUrl')
+            ->with('/some-folder/targetpath.jpg', 'thumb', false)
+            ->will($this->returnValue('/media/cache/thumb/some-folder/targetpath.jpg'))
+        ;
+
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
+        $resolver->setCacheManager($cacheManager);
+
+        $this->assertEquals('/media/cache/thumb/some-folder/targetpath.jpg', $resolver->getBrowserPath('/some-folder/targetpath.jpg', 'thumb'));
     }
 
     public function testLogNotCreatedObjects()

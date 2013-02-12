@@ -37,6 +37,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $config;
     }
 
+    protected function getMockCacheManager()
+    {
+        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
+    }
+
     protected function getMockFilterConfiguration()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration');

@@ -99,41 +99,41 @@ class CacheManager
     /**
      * Gets filtered path for rendering in the browser
      *
-     * @param string $path
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter
      * @param boolean $absolute
      *
      * @return string
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false)
     {
-        return $this->getResolver($filter)->getBrowserPath($targetPath, $filter, $absolute);
+        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute);
     }
 
     /**
      * Returns a web accessible URL.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
      * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
      *                       In case the resolver does not support relative paths, it may ignore this flag.
      *
      * @return string
      */
-    public function generateUrl($targetPath, $filter, $absolute = false)
+    public function generateUrl($path, $filter, $absolute = false)
     {
         $config = $this->filterConfig->get($filter);
 
         if (isset($config['format'])) {
-            $pathinfo = pathinfo($targetPath);
+            $pathinfo = pathinfo($path);
             // the extension should be forced and a directory is detected
             if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
                 && isset($pathinfo['dirname'])) {
-                $targetPath = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
+                $path = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
             }
         }
 
-        $params = array('path' => ltrim($targetPath, '/'));
+        $params = array('path' => ltrim($path, '/'));
 
         return str_replace(
             urlencode($params['path']),
