@@ -7,10 +7,10 @@ use Imagine\Image\ImageInterface;
 interface LoaderInterface
 {
     /**
-     * @param Imagine\Image\ImagineInterface $image
+     * @param \Imagine\Image\ImagineInterface $image
      * @param array $options
      *
-     * @return Imagine\Image\ImageInterface
+     * @return \Imagine\Image\ImageInterface
      */
     function load(ImageInterface $image, array $options = array());
 }

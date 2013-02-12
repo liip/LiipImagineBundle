@@ -2,24 +2,26 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
-
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class FilterManager
 {
     /**
      * @var FilterConfiguration
      */
-    private $filterConfig;
+    protected $filterConfig;
 
     /**
-     * @var array
+     * @var LoaderInterface[]
      */
-    private $loaders = array();
+    protected $loaders = array();
 
     /**
+     * Constructor.
+     *
      * @param FilterConfiguration $filterConfig
      */
     public function __construct(FilterConfiguration $filterConfig)
@@ -30,7 +32,7 @@ class FilterManager
     /**
      * @param string $filter
      * @param LoaderInterface $loader
-     * 
+     *
      * @return void
      */
     public function addLoader($filter, LoaderInterface $loader)
@@ -49,14 +51,14 @@ class FilterManager
     /**
      * @param Request $request
      * @param string $filter
-     * @param Imagine\Image\ImageInterface $image
+     * @param ImageInterface $image
      * @param string $localPath
      *
      * @return Response
      */
-    public function get(Request $request, $filter, $image, $localPath)
+    public function get(Request $request, $filter, ImageInterface $image, $localPath)
     {
-        $config = $this->filterConfig->get($filter);
+        $config = $this->getFilterConfiguration()->get($filter);
 
         foreach ($config['filters'] as $filter => $options) {
             if (!isset($this->loaders[$filter])) {
@@ -64,6 +66,7 @@ class FilterManager
                     'Could not find filter loader for "%s" filter type', $filter
                 ));
             }
+
             $image = $this->loaders[$filter]->load($image, $options);
         }
 
