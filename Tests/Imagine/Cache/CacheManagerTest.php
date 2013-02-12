@@ -81,15 +81,6 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
     }
 
-    public function invalidPathProvider()
-    {
-        return array(
-            array($this->fixturesDir.'/assets/../../foobar.png'),
-            array($this->fixturesDir.'/assets/some_folder/../foobar.png'),
-            array('../../outside/foobar.jpg'),
-        );
-    }
-
     /**
      * @dataProvider invalidPathProvider
      */

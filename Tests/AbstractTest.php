@@ -30,6 +30,15 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->mkdir($this->tempDir);
     }
 
+    public function invalidPathProvider()
+    {
+        return array(
+            array($this->fixturesDir.'/assets/../../foobar.png'),
+            array($this->fixturesDir.'/assets/some_folder/../foobar.png'),
+            array('../../outside/foobar.jpg'),
+        );
+    }
+
     protected function createFilterConfiguration()
     {
         $config = new FilterConfiguration();
@@ -59,6 +68,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function getMockResolver()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+    }
+
+    protected function getMockImage()
+    {
+        return $this->getMock('Imagine\Image\ImageInterface');
     }
 
     protected function tearDown()

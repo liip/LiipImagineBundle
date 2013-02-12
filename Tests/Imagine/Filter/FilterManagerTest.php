@@ -181,11 +181,6 @@ class FilterManagerTest extends AbstractTest
         $this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
     }
 
-    protected function getMockImage()
-    {
-        return $this->getMock('Imagine\Image\ImageInterface');
-    }
-
     protected function getMockLoader()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');

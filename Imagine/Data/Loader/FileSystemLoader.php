@@ -71,10 +71,9 @@ class FileSystemLoader implements LoaderInterface
             // attempt to determine path and format
             $absolutePath = null;
             foreach ($this->formats as $format) {
-                if ($targetFormat !== $format
-                    && file_exists($name.'.'.$format)
-                ) {
+                if ($targetFormat !== $format && file_exists($name.'.'.$format)) {
                     $absolutePath = $name.'.'.$format;
+
                     break;
                 }
             }
