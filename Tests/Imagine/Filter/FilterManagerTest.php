@@ -181,6 +181,41 @@ class FilterManagerTest extends AbstractTest
         $this->assertEquals('image/jpeg', $response->headers->get('Content-Type'));
     }
 
+    public function testApplyFilterSet()
+    {
+        $image = $this->getMockImage();
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->getMockFilterConfiguration();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+            )))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($image, $thumbConfig)
+            ->will($this->returnValue($image))
+        ;
+
+        $filterManager = new FilterManager($config);
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $this->assertSame($image, $filterManager->applyFilter($image, 'thumbnail'));
+    }
+
     protected function getMockLoader()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');

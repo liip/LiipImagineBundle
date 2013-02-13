@@ -54,6 +54,8 @@ class FilterManager
     /**
      * Returns a response containing the given image after applying the given filter on it.
      *
+     * @uses FilterManager::applyFilterSet
+     *
      * @param Request $request
      * @param string $filter
      * @param ImageInterface $image
@@ -65,15 +67,7 @@ class FilterManager
     {
         $config = $this->getFilterConfiguration()->get($filter);
 
-        foreach ($config['filters'] as $filter => $options) {
-            if (!isset($this->loaders[$filter])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find filter loader for "%s" filter type', $filter
-                ));
-            }
-
-            $image = $this->loaders[$filter]->load($image, $options);
-        }
+        $image = $this->applyFilter($image, $filter);
 
         if (empty($config['format'])) {
             $format = pathinfo($localPath, PATHINFO_EXTENSION);
@@ -92,5 +86,32 @@ class FilterManager
         }
 
         return new Response($image, 200, array('Content-Type' => $contentType));
+    }
+
+    /**
+     * Apply the provided filter set on the given Image.
+     *
+     * @param ImageInterface $image
+     * @param string $filter
+     *
+     * @return ImageInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function applyFilter(ImageInterface $image, $filter)
+    {
+        $config = $this->getFilterConfiguration()->get($filter);
+
+        foreach ($config['filters'] as $eachFilter => $eachOptions) {
+            if (!isset($this->loaders[$eachFilter])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Could not find filter loader for "%s" filter type', $eachFilter
+                ));
+            }
+
+            $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
+        }
+
+        return $image;
     }
 }
