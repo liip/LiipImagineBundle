@@ -45,6 +45,15 @@ class FileSystemLoaderTest extends AbstractTest
         $loader->find('/invalid.jpeg');
     }
 
+    public function testFindWithNoExtensionDoesNotThrowNotice()
+    {
+        $loader = new FileSystemLoader($this->imagine, array(), $this->tempDir);
+
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+
+        $loader->find('/invalid');
+    }
+
     public function testFindRetrievesImage()
     {
         $image = $this->getMockImage();
