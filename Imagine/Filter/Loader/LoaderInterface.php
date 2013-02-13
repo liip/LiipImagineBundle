@@ -7,10 +7,12 @@ use Imagine\Image\ImageInterface;
 interface LoaderInterface
 {
     /**
-     * @param Imagine\Image\ImagineInterface $image
+     * Loads and applies a filter on the given image.
+     *
+     * @param ImageInterface $image
      * @param array $options
      *
-     * @return Imagine\Image\ImageInterface
+     * @return ImageInterface
      */
     function load(ImageInterface $image, array $options = array());
 }

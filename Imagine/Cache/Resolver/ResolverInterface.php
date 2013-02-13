@@ -2,15 +2,13 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 interface ResolverInterface
 {
     /**
      * Resolves filtered path for rendering in the browser.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException In case the path can not be resolved.
      *
      * @param Request $request The request made against a _imagine_* filter route.
      * @param string $path The path where the resolved file is expected.
@@ -18,6 +16,8 @@ interface ResolverInterface
      *
      * @return string|Response The target path to be used in other methods of this Resolver,
      *                         a Response may be returned to avoid calling store upon resolution.
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException In case the path can not be resolved.
      */
     function resolve(Request $request, $path, $filter);
 
@@ -35,14 +35,14 @@ interface ResolverInterface
     /**
      * Returns a web accessible URL.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
      * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
      *                       In case the resolver does not support relative paths, it may ignore this flag.
      *
      * @return string
      */
-    function getBrowserPath($targetPath, $filter, $absolute = false);
+    function getBrowserPath($path, $filter, $absolute = false);
 
     /**
      * Removes a stored image resource.
@@ -55,9 +55,9 @@ interface ResolverInterface
     function remove($targetPath, $filter);
 
     /**
-     * Clear the CacheResolver cache
+     * Clear the CacheResolver cache.
      *
-     * @param string $cachePrefix The cache prefix as defined in the configuration
+     * @param string $cachePrefix The cache prefix as defined in the configuration.
      *
      * @return void
      */

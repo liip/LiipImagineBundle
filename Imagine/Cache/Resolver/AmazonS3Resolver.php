@@ -4,12 +4,12 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use \AmazonS3;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface,
-    Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
@@ -86,7 +86,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function resolve(Request $request, $path, $filter)
     {
-        return $this->getObjectPath($path, $filter);
+        $objectPath = $this->getObjectPath($path, $filter);
+        if ($this->objectExists($objectPath)) {
+            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
+        }
+
+        return $objectPath;
     }
 
     /**
@@ -120,14 +125,14 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false)
     {
-        $objectPath = $this->getObjectPath($targetPath, $filter);
+        $objectPath = $this->getObjectPath($path, $filter);
         if ($this->objectExists($objectPath)) {
             return $this->getObjectUrl($objectPath);
         }
 
-        return $this->cacheManager->generateUrl($targetPath, $filter, $absolute);
+        return $this->cacheManager->generateUrl($path, $filter, $absolute);
     }
 
     /**
@@ -135,13 +140,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function remove($targetPath, $filter)
     {
-        $objectPath = $this->getObjectPath($targetPath, $filter);
-        if (!$this->objectExists($objectPath)) {
+        if (!$this->objectExists($targetPath)) {
             // A non-existing object to delete: done!
             return true;
         }
 
-        return $this->storage->delete_object($this->bucket, $objectPath)->isOK();
+        return $this->storage->delete_object($this->bucket, $targetPath)->isOK();
     }
 
     /**

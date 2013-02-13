@@ -15,7 +15,9 @@ class NoCacheResolver extends WebPathResolver
      */
     public function resolve(Request $request, $path, $filter)
     {
-        return $this->getFilePath($path, $filter, $request->getBaseUrl());
+        $this->setBasePath($request->getBaseUrl());
+
+        return $this->getFilePath($path, $filter);
     }
 
     /**

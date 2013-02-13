@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Templating;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Component\Filesystem\Filesystem;
 
 class ImagineExtension extends \Twig_Extension
 {
@@ -13,7 +12,7 @@ class ImagineExtension extends \Twig_Extension
     private $cacheManager;
 
     /**
-     * Constructs by setting $cachePathResolver
+     * Constructor.
      *
      * @param CacheManager $cacheManager
      */
@@ -23,8 +22,7 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Twig_Extension::getFilters()
+     * {@inheritDoc}
      */
     public function getFilters()
     {
@@ -34,7 +32,7 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * Gets cache path of an image to be filtered
+     * Gets the browser path for the image and filter to apply.
      *
      * @param string $path
      * @param string $filter
@@ -48,8 +46,7 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * (non-PHPdoc)
-     * @see Twig_ExtensionInterface::getName()
+     * {@inheritDoc}
      */
     public function getName()
     {

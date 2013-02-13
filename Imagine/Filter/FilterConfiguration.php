@@ -7,7 +7,7 @@ class FilterConfiguration
     /**
      * @var array
      */
-    private $filters;
+    protected $filters = array();
 
     /**
      * @param array $filters
@@ -18,20 +18,26 @@ class FilterConfiguration
     }
 
     /**
+     * Gets a previously configured filter.
+     *
      * @param string $filter
      *
      * @return array
+     *
+     * @throws \RuntimeException
      */
     public function get($filter)
     {
         if (empty($this->filters[$filter])) {
-            new \RuntimeException('Filter not defined: '.$filter);
+            throw new \RuntimeException('Filter not defined: '.$filter);
         }
 
         return $this->filters[$filter];
     }
 
     /**
+     * Sets a configuration on the given filter.
+     *
      * @param string $filter
      * @param array $config
      *

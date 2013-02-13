@@ -2,11 +2,15 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\HttpKernel\Kernel;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 
-abstract class AbstractFilesystemResolver implements ResolverInterface
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
+
+abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
     /**
      * @var Filesystem
@@ -19,6 +23,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     protected $basePath = '';
 
     /**
+     * @var CacheManager
+     */
+    protected $cacheManager;
+
+    /**
      * Constructs a filesystem based cache resolver.
      *
      * @param Filesystem $filesystem
@@ -26,6 +35,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem   = $filesystem;
+    }
+
+    /**
+     * @param CacheManager $cacheManager
+     */
+    public function setCacheManager(CacheManager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -41,22 +58,24 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
     /**
      * Stores the content into a static file.
      *
-     * @throws \RuntimeException
-     *
      * @param Response $response
      * @param string $targetPath
      * @param string $filter
      *
      * @return Response
+     *
+     * @throws \RuntimeException
      */
     public function store(Response $response, $targetPath, $filter)
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
-        if (!is_dir($dir) && false === $this->filesystem->mkdir($dir)) {
-            throw new \RuntimeException(sprintf(
-                'Could not create directory %s', $dir
-            ));
+        try {
+            if (!is_dir($dir)) {
+                $this->filesystem->mkdir($dir);
+            }
+        } catch (IOException $e) {
+            throw new \RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
         }
 
         file_put_contents($targetPath, $response->getContent());
@@ -79,7 +98,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface
         $filename = $this->getFilePath($targetPath, $filter);
         $this->filesystem->remove($filename);
 
-        return file_exists($filename);
+        return !file_exists($filename);
     }
 
     /**

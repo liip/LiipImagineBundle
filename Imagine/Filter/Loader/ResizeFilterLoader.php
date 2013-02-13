@@ -14,7 +14,7 @@ use Imagine\Image\ImageInterface;
 class ResizeFilterLoader implements LoaderInterface
 {
     /**
-     * @see Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
+     * {@inheritDoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {
