@@ -57,6 +57,19 @@ liip_imagine:
                 crop: { start: [10, 20], size: [120, 90] }
 ```
 
+### The `strip` filter
+
+The strip filter removes all profiles and comments from your image.
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                strip: ~
+```
+
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
