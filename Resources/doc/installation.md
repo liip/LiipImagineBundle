@@ -1,46 +1,30 @@
 # Installation
 
-To install this bundle, you'll need both the [Imagine library](/avalanche123/Imagine)
-and this bundle. Installation depends on how your project is setup:
+To install this bundle, you'll need both the [Imagine library](https://github.com/avalanche123/Imagine)
+and this bundle.
 
-## Step 1: Installation
+### Step 1: Download LiipImagineBundle using composer
 
-Add the following lines to your ``deps`` file
+Add LiipImagineBundle in your composer.json:
 
-```
-[Imagine]
-    git=http://github.com/avalanche123/Imagine.git
-    target=imagine
-    version=v0.2.0
-
-[LiipImagineBundle]
-    git=http://github.com/liip/LiipImagineBundle.git
-    target=bundles/Liip/ImagineBundle
+```js
+{
+    "require": {
+        "liip/imagine-bundle": "dev-master"
+    }
+}
 ```
 
-Next, update your vendors by running:
+Now tell composer to download the bundle by running the command:
 
 ``` bash
-$ ./bin/vendors install
+$ php composer.phar update liip/imagine-bundle
 ```
 
-## Step 2: Configure the autoloader
+Composer will install the bundle to your project's `vendor/liip/imagine-bundle` directory.
 
-Add the following entries to your autoloader:
 
-``` php
-<?php
-// app/autoload.php
-
-$loader->registerNamespaces(array(
-    // ...
-
-    'Imagine'   => __DIR__.'/../vendor/imagine/lib',
-    'Liip'      => __DIR__.'/../vendor/bundles',
-));
-```
-
-## Step 3: Enable the bundle
+## Step 2: Enable the bundle
 
 Finally, enable the bundle in the kernel:
 
@@ -58,7 +42,7 @@ public function registerBundles()
 }
 ```
 
-## Step 4: Register the bundle's routes
+## Step 3: Register the bundle's routes
 
 Finally, add the following to your routing file:
 
