@@ -5,20 +5,10 @@ and this bundle.
 
 ### Step 1: Download LiipImagineBundle using composer
 
-Add LiipImagineBundle in your composer.json:
-
-```js
-{
-    "require": {
-        "liip/imagine-bundle": "dev-master"
-    }
-}
-```
-
-Now tell composer to download the bundle by running the command:
+Tell composer to require LiipImagineBundle by running the command:
 
 ``` bash
-$ php composer.phar update liip/imagine-bundle
+$ php composer.phar require "liip/imagine-bundle:dev-master"
 ```
 
 Composer will install the bundle to your project's `vendor/liip/imagine-bundle` directory.
