@@ -67,8 +67,9 @@ class FileSystemLoader implements LoaderInterface
 
         $targetFormat = null;
         // set a format if an extension is found and is allowed
-        if (isset($info['extension']) &&
-            (empty($this->formats) || in_array($info['extension'], $this->formats))) {
+        if (isset($info['extension'])
+            && (empty($this->formats) || in_array($info['extension'], $this->formats))
+        ) {
             $targetFormat = $info['extension'];
         }
 
