@@ -70,6 +70,19 @@ liip_imagine:
                 strip: ~
 ```
 
+### The `background` filter
+
+The background filter sets a background color for your image, default is white (#FFF).
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                background: { color: '#00FFFF' }
+```
+
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
