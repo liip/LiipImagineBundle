@@ -62,6 +62,7 @@ class ImagineController
         if ($targetPath) {
             $response = $this->cacheManager->store($response, $targetPath, $filter);
         }
+        $response->headers->set('location', $this->cacheManager->getBrowserPath($path, $filter));
 
         return $response;
     }
