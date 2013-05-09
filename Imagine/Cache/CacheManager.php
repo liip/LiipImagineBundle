@@ -139,9 +139,15 @@ class CacheManager
 
         if (isset($config['format'])) {
             $pathinfo = pathinfo($path);
+
             // the extension should be forced and a directory is detected
             if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
                 && isset($pathinfo['dirname'])) {
+
+                if ('\\' === $pathinfo['dirname']) {
+                    $pathinfo['dirname'] = '';
+                }
+
                 $path = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
             }
         }

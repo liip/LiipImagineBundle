@@ -17,7 +17,7 @@ class CacheManagerTest extends AbstractTest
     public function testGetWebRoot()
     {
         $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
-        $this->assertEquals($this->fixturesDir.'/assets', $cacheManager->getWebRoot());
+        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, $this->fixturesDir.'/assets'), $cacheManager->getWebRoot());
     }
 
     public function testAddCacheManagerAwareResolver()

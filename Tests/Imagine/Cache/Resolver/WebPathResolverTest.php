@@ -62,7 +62,7 @@ class WebPathResolverTest extends AbstractTest
         $this->cacheManager
             ->expects($this->atLeastOnce())
             ->method('generateUrl')
-            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/media/cache/thumbnail/cats.jpeg')))
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
@@ -75,7 +75,7 @@ class WebPathResolverTest extends AbstractTest
         // Resolve the requested image for the given filter.
         $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
         // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(realpath($this->cacheDir).'/thumbnail/cats.jpeg', $targetPath,
+        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
             '->resolve() correctly converts the requested file into target path within webRoot.');
         $this->assertFalse(file_exists($targetPath),
             '->resolve() does not create the file within the target path.');
@@ -170,20 +170,20 @@ class WebPathResolverTest extends AbstractTest
         $this->cacheManager
             ->expects($this->atLeastOnce())
             ->method('generateUrl')
-            ->will($this->returnValue('/sandbox/app_dev.php/media/cache/thumbnail/cats.jpeg'))
+            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php/media/cache/thumbnail/cats.jpeg')))
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
         $request
             ->expects($this->atLeastOnce())
             ->method('getBaseUrl')
-            ->will($this->returnValue('/sandbox/app_dev.php'))
+            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php')))
         ;
 
         // Resolve the requested image for the given filter.
         $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
         // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(realpath($this->cacheDir).'/thumbnail/cats.jpeg', $targetPath,
+        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
             '->resolve() correctly converts the requested file into target path within webRoot.');
         $this->assertFalse(file_exists($targetPath),
             '->resolve() does not create the file within the target path.');
