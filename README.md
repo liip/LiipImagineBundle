@@ -125,7 +125,7 @@ class MyController extends Controller
         );
 
         // string to put directly in the "src" of the tag <img>
-		$cacheManager = $this->container->get('liip_imagine.cache.manager');
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
         $srcPath = $cacheManager->getBrowserPath('uploads/foo.jpg', 'my_thumb');
 
         // ..
