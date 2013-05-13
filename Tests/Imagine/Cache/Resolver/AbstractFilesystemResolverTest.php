@@ -13,13 +13,13 @@ class AbstractFilesystemResolverTest extends AbstractTest
 {
     public function testStoreCyrillicFilename()
     {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('file_get_contents can not read files with utf-8 file names on windows');
+        }
+
         $image = $this->fixturesDir.'/assets/АГГЗ.jpeg';
 
-        $data = @file_get_contents($image);
-
-        if (false == $data) {
-            $this->markTestSkipped('Unable to read the fixture file');
-        }
+        $data = file_get_contents($image);
 
         $response = new Response($data, 200, array(
             'content-type' => 'image/jpeg',
