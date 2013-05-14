@@ -162,7 +162,10 @@ class CacheManager
      * @param string $path
      * @param string $filter
      *
-     * @return string target path
+     * @return string|boolean|Response target path or false if filter has no
+     *      resolver or a Response object from the resolver
+     *
+     * @throws NotFoundHttpException if the path can not be resolved
      */
     public function resolve(Request $request, $path, $filter)
     {
