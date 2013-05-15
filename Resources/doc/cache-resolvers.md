@@ -1,6 +1,7 @@
 # Built-In CacheResolver
 
 * [AmazonS3](cache-resolver/amazons3.md)
+* [CacheResolver](cache-resolver/cache.md)
 
 # Custom cache resolver
 

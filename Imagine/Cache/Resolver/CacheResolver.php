@@ -30,7 +30,9 @@ class CacheResolver implements ResolverInterface
      * * global_prefix
      *   A prefix for all keys within the cache. This is useful to avoid colliding keys when using the same cache for different systems.
      * * prefix
-     *   A "local" prefix for this wrapper. This is useful when re-using the same resolver for multiple filters. This mainly affects the clear method.
+     *   A "local" prefix for this wrapper. This is useful when re-using the same resolver for multiple filters.
+     * * index_key
+     *   The name of the index key being used to save a list of created cache keys regarding one image and filter pairing.
      *
      * @param Cache $cache
      * @param ResolverInterface $cacheResolver
