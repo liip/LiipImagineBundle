@@ -13,8 +13,14 @@ class AbstractFilesystemResolverTest extends AbstractTest
 {
     public function testStoreCyrillicFilename()
     {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('file_get_contents can not read files with utf-8 file names on windows');
+        }
+
         $image = $this->fixturesDir.'/assets/АГГЗ.jpeg';
+
         $data = file_get_contents($image);
+
         $response = new Response($data, 200, array(
             'content-type' => 'image/jpeg',
         ));
@@ -30,6 +36,10 @@ class AbstractFilesystemResolverTest extends AbstractTest
 
     public function testStoreInvalidDirectory()
     {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('mkdir mode is ignored on windows');
+        }
+
         $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
 
         $this->filesystem->mkdir($this->tempDir.'/unwriteable', 0555);

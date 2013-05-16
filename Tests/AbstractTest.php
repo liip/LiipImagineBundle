@@ -19,7 +19,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->fixturesDir = __DIR__.'/Fixtures';
 
-        $this->tempDir = sys_get_temp_dir().'/liip_imagine_test';
+        $this->tempDir = str_replace('/', DIRECTORY_SEPARATOR, sys_get_temp_dir().'/liip_imagine_test');
 
         $this->filesystem = new Filesystem();
 
