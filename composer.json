@@ -18,6 +18,7 @@
         "imagine/Imagine":          "0.4.*",
         "symfony/finder":           ">=2.0.16,~2.0",
         "symfony/filesystem":       ">=2.0.16,~2.0",
+        "symfony/options-resolver": ">=2.0.16,~2.0",
         "symfony/framework-bundle": ">=2.0.16,~2.0"
     },
 
