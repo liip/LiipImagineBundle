@@ -156,7 +156,7 @@ to add the following directive to your project's vhost file:
     Alias /FavouriteAlias /path/to/source/images/dir
     <Directory "/path/to/source/images/dir">
         AllowOverride None
-        Allow form All
+        Allow from All
     </Directory>
 </VirtualHost>
 ```
