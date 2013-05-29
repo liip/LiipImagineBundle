@@ -34,6 +34,29 @@ class AbstractFilesystemResolverTest extends AbstractTest
         $this->assertEquals($data, file_get_contents($targetPath));
     }
 
+    public function testMkdirVerifyPermissionOnLastLevel () {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('mkdir mode is ignored on windows');
+        }
+
+        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+
+
+        $resolver->store(new Response(''), $this->tempDir . '/first-level/second-level/cats.jpeg', 'thumbnail');
+        $this->assertEquals(040777, fileperms($this->tempDir . '/first-level/second-level'));
+    }
+
+    public function testMkdirVerifyPermissionOnFirstLevel () {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('mkdir mode is ignored on windows');
+        }
+
+        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+
+        $resolver->store(new Response(''), $this->tempDir . '/first-level/second-level/cats.jpeg', 'thumbnail');
+        $this->assertEquals(040777, fileperms($this->tempDir . '/first-level'));
+    }
+
     public function testStoreInvalidDirectory()
     {
         if (false !== strpos(strtolower(PHP_OS), 'win')) {
