@@ -49,5 +49,38 @@ liip_imagine:
 
 If you want to use other buckets for other images, simply alter the parameter names and create additional services!
 
+## Object URL Options
+
+In order to make use of the object URL options, you can simply add a call to the service, to alter those options you need.
+
+``` yaml
+services:
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+        calls:
+             # This calls $service->setObjectUrlOption('https', true);
+             - [ setObjectUrlOption, [ 'https', true ] ]
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
+You can also use the constructor of the resolver to directly inject multiple options.
+
+``` yaml
+services:
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+            - "public-read" # AmazonS3::ACL_PUBLIC (default)
+            - { https: true, torrent: true }
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
 - [Back to cache resolvers](../cache-resolvers.md)
 - [Back to the index](../index.md)
