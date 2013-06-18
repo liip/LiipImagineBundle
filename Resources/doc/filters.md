@@ -16,7 +16,10 @@ liip_imagine:
 ```
 
 The `mode` can be either `outbound` or `inset`.
-There is also a option `allow_upscale` (default: false).
+
+There is also an option `allow_upscale` (default: `false`).
+By setting `allow_upscale` to `true`, an image which is smaller than 120x90px in the example above will be expanded to the requested size by interpolation of its content.
+Without this option, a smaller image will be left as it. This means you may get images that are smaller than the specified dimensions.
 
 ### The `relative_resize` filter
 
