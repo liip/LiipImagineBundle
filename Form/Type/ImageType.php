@@ -21,6 +21,7 @@ class ImageType extends AbstractType
         $view->vars['image_filter'] = $options['image_filter'];
         $view->vars['image_attr']   = $options['image_attr'];
         $view->vars['link_url']     = $options['link_url'];
+        $view->vars['link_filter']  = $options['link_filter'];
         $view->vars['link_attr']    = $options['link_attr'];
     }
 
@@ -34,6 +35,7 @@ class ImageType extends AbstractType
         $resolver->setDefaults(array(
             'image_attr' => array(),
             'link_url' => null,
+            'link_filter' => null,
             'link_attr' => array(),
         ));
     }
