@@ -34,6 +34,7 @@
         <!-- Filter loaders' classes -->
 
         <parameter key="liip_imagine.filter.loader.relative_resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.two_way_relative_resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\TwoWayRelativeResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.crop.class">Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
@@ -124,6 +125,10 @@
 
         <service id="liip_imagine.filter.loader.relative_resize" class="%liip_imagine.filter.loader.relative_resize.class%">
             <tag name="liip_imagine.filter.loader" loader="relative_resize" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.two_way_relative_resize" class="%liip_imagine.filter.loader.two_way_relative_resize.class%">
+            <tag name="liip_imagine.filter.loader" loader="two_way_relative_resize" />
         </service>
 
         <service id="liip_imagine.filter.loader.resize" class="%liip_imagine.filter.loader.resize.class%">
