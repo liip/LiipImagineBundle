@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 use Imagine\Image\ImageInterface;
 
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
-use Prezent\AppBundle\Imagine\Filter\AspectResize;
+use Liip\ImagineBundle\Imagine\Filter\TwoWayRelativeResize;
 
 /**
  * Loader for this bundle's two-way relative resize filter.
