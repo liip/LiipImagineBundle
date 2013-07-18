@@ -47,6 +47,34 @@ liip_imagine:
                 relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
 ```
 
+### The `two_way_relative_resize` filter
+
+The `two_way_relative_resize` filter does the same thing `relative_resize` filter does,
+but bounds the resulting image to a given height and/or width.
+
+Given an input image sized 50x40 (width, height), consider the following
+annotated configuration examples:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_only_height:
+            filters:
+                two_way_relative_resize: { height: 60 } # Transforms 50x40 to 75x60
+        my_only_width:
+            filters:
+                two_way_relative_resize: { width: 32 }    # Transforms 50x40 to 32x26
+        my_width_wins:
+            filters:
+                two_way_relative_resize: { height: 60, width: 32 } # Transforms 50x40 to 32x26
+        my_height_wins:
+            filters:
+                two_way_relative_resize: { height: 60, width: 100 }   # Transforms 50x40 to 75x60
+        my_no_change:
+            filters:
+                two_way_relative_resize: { }   # Transforms 50x40 to 50x40, so actually does no transformation at all
+```
+
 ### The `crop` filter
 
 The crop filter, as the name implies, performs a crop transformation
