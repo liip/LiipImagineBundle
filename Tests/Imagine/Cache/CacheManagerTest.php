@@ -178,7 +178,7 @@ class CacheManagerTest extends AbstractTest
             // 'format' given, altering URL
             array(array(
                 'format' => 'jpg',
-            ), '/thumbnail/cats.jpeg', 'thumbnail/cats.jpg'),
+            ), '/thumbnail/cats.jpeg', 'thumbnail/cats.jpeg.jpg'),
 
             // No 'extension' path info
             array(array(
