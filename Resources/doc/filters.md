@@ -5,17 +5,25 @@
 ### The `thumbnail` filter
 
 The thumbnail filter, as the name implies, performs a thumbnail transformation
-on your image. Configuration looks like this:
+on your image.
+
+The `mode` can be either `outbound` or `inset`.
+Option `inset` does a relative resize, where the height and the width not will exceed the values in the configuration.
+Option `outbound` does a relative resize, but the image gets cropped if with and height are not the same.
+
+Given an input image sized 50x40 (width, height), consider the following
+annotated configuration examples:
 
 ``` yaml
 liip_imagine:
     filter_sets:
-        my_thumb:
+        my_thumb_out:
             filters:
-                thumbnail: { size: [120, 90], mode: outbound }
+                thumbnail: { size: [32, 32], mode: outbound } # Transforms 50x40 to 32x32, while cropping the width
+        my_thumb_in:
+            filters:
+                thumbnail: { size: [32, 32], mode: inset } # Transforms 50x40 to 32x26, no cropping
 ```
-
-The `mode` can be either `outbound` or `inset`.
 
 There is also an option `allow_upscale` (default: `false`).
 By setting `allow_upscale` to `true`, an image which is smaller than 120x90px in the example above will be expanded to the requested size by interpolation of its content.
