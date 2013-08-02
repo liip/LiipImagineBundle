@@ -106,7 +106,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
             'acl' => $this->acl,
         ));
 
-        if ($storageResponse->isOK()) {
+        if ($storageResponse->isOK(array(200, 201, 204, 206, 301))) {
             $response->setStatusCode(301);
             $response->headers->set('Location', $this->getObjectUrl($targetPath));
         } else {
