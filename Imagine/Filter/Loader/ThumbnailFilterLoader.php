@@ -13,9 +13,11 @@ class ThumbnailFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        $mode = $options['mode'] === 'inset' ?
-            ImageInterface::THUMBNAIL_INSET :
-            ImageInterface::THUMBNAIL_OUTBOUND;
+        $mode = ImageInterface::THUMBNAIL_OUTBOUND;
+        if (!empty($options['mode']) && 'inset' === $options['mode']) {
+            $mode = ImageInterface::THUMBNAIL_INSET;
+        }
+
         list($width, $height) = $options['size'];
 
         $size = $image->getSize();
