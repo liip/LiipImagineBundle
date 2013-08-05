@@ -106,7 +106,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->returnValue($this->getS3ResponseMock(false)))
+            ->will($this->throwException(new \Exception))
         ;
 
         $logger = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Log\LoggerInterface');
@@ -127,16 +127,19 @@ class AmazonS3ResolverTest extends AbstractTest
         $response->setContent('foo');
         $response->headers->set('Content-Type', 'image/jpeg');
 
+        $responseMock = $this->getS3ResponseMock();
+
         $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->returnValue($this->getS3ResponseMock(true)))
+            ->will($this->returnValue($responseMock))
         ;
-        $s3
+
+        $responseMock
             ->expects($this->once())
-            ->method('getObjectUrl')
-            ->with('images.example.com', 'thumb/foobar.jpg', 0, array())
+            ->method('get')
+            ->with('ObjectURL')
             ->will($this->returnValue('http://images.example.com/thumb/foobar.jpg'))
         ;
 
@@ -196,8 +199,11 @@ class AmazonS3ResolverTest extends AbstractTest
         ;
         $s3
             ->expects($this->once())
-            ->method('delete_object')
-            ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
+            ->method('deleteObject')
+            ->with(array(
+                'Bucket' => 'images.example.com',
+                'Key'    => 'thumb/some-folder/targetpath.jpg',
+            ))
             ->will($this->returnValue($this->getS3ResponseMock(true)))
         ;
 
@@ -216,7 +222,7 @@ class AmazonS3ResolverTest extends AbstractTest
         ;
         $s3
             ->expects($this->never())
-            ->method('delete_object')
+            ->method('deleteObject')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
@@ -228,7 +234,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->never())
-            ->method('delete_object')
+            ->method('deleteObject')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
@@ -237,12 +243,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
     protected function getS3ResponseMock($ok = true)
     {
-        $s3Response = $this->getMock('AmazonS3Response');
-        $s3Response
-            ->expects($this->once())
-            ->method('isOK')
-            ->will($this->returnValue($ok))
-        ;
+        $s3Response = $this->getMock('Guzzle\Service\Resource\Model');
 
         return $s3Response;
     }

@@ -112,7 +112,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
                 $this->logger->warn('The object could not be created on Amazon S3.', array(
                     'targetPath'  => $targetPath,
                     'filter'      => $filter,
-                    's3_response' => $storageResponse,
                 ));
             }
 
