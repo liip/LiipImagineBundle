@@ -8,10 +8,10 @@ The thumbnail filter, as the name implies, performs a thumbnail transformation
 on your image.
 
 The `mode` can be either `outbound` or `inset`.
-Option `inset` does a relative resize, where the height and the width not will exceed the values in the configuration.
-Option `outbound` does a relative resize, but the image gets cropped if with and height are not the same.
+Option `inset` does a relative resize, where the height and the width will not exceed the values in the configuration.
+Option `outbound` does a relative resize, but the image gets cropped if width and height are not the same.
 
-Given an input image sized 50x40 (width, height), consider the following
+Given an input image sized 50x40 (width x height), consider the following
 annotated configuration examples:
 
 ``` yaml
@@ -26,7 +26,7 @@ liip_imagine:
 ```
 
 There is also an option `allow_upscale` (default: `false`).
-By setting `allow_upscale` to `true`, an image which is smaller than 120x90px in the example above will be expanded to the requested size by interpolation of its content.
+By setting `allow_upscale` to `true`, an image which is smaller than 32x32px in the example above will be expanded to the requested size by interpolation of its content.
 Without this option, a smaller image will be left as it. This means you may get images that are smaller than the specified dimensions.
 
 ### The `relative_resize` filter
