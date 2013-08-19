@@ -94,6 +94,23 @@ liip_imagine:
                 background: { color: '#00FFFF' }
 ```
 
+### The `watermark` filter
+
+The watermark filter pastes a second image onto your image while keeping its ratio.
+Configuration looks like this:
+
+``` yaml
+liip_image:
+    filter_sets:
+        my_image:
+            watermark:
+                image: Resources/data/watermark.png
+                # Size of the watermark relative to the origin images size
+                size: 0.5
+                # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
+                position: center
+```
+
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
