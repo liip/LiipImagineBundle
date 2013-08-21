@@ -17,23 +17,31 @@ class AmazonS3ResolverTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists('AmazonS3')) {
-            require_once($this->fixturesDir.'/AmazonS3.php');
+        if (!class_exists('Aws\S3\S3Client')) {
+            require_once($this->fixturesDir.'/S3Client.php');
+        }
+
+        if (!class_exists('Aws\S3\Enum\CannedAcl')) {
+            require_once($this->fixturesDir.'/CannedAcl.php');
+        }
+
+        if (!class_exists('Guzzle\Service\Resource\Model')) {
+            require_once($this->fixturesDir.'/Model.php');
         }
     }
 
     public function testNoDoubleSlashesInObjectUrl()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
             ->will($this->returnValue(true))
         ;
         $s3
             ->expects($this->once())
-            ->method('get_object_url')
+            ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
         ;
 
@@ -43,15 +51,15 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testObjUrlOptions()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->will($this->returnValue(true))
         ;
         $s3
             ->expects($this->once())
-            ->method('get_object_url')
+            ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg', 0, array('torrent' => true))
         ;
 
@@ -62,16 +70,16 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testBrowserPathNotExisting()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
             ->will($this->returnValue(false))
         ;
         $s3
             ->expects($this->never())
-            ->method('get_object_url')
+            ->method('getObjectUrl')
         ;
 
         $cacheManager = $this->getMockCacheManager();
@@ -94,11 +102,11 @@ class AmazonS3ResolverTest extends AbstractTest
         $response->setContent('foo');
         $response->headers->set('Content-Type', 'image/jpeg');
 
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('create_object')
-            ->will($this->returnValue($this->getS3ResponseMock(false)))
+            ->method('putObject')
+            ->will($this->throwException(new \Exception))
         ;
 
         $logger = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Log\LoggerInterface');
@@ -119,16 +127,19 @@ class AmazonS3ResolverTest extends AbstractTest
         $response->setContent('foo');
         $response->headers->set('Content-Type', 'image/jpeg');
 
-        $s3 = $this->getMock('AmazonS3');
+        $responseMock = $this->getS3ResponseMock();
+
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('create_object')
-            ->will($this->returnValue($this->getS3ResponseMock(true)))
+            ->method('putObject')
+            ->will($this->returnValue($responseMock))
         ;
-        $s3
+
+        $responseMock
             ->expects($this->once())
-            ->method('get_object_url')
-            ->with('images.example.com', 'thumb/foobar.jpg', 0, array())
+            ->method('get')
+            ->with('ObjectURL')
             ->will($this->returnValue('http://images.example.com/thumb/foobar.jpg'))
         ;
 
@@ -141,10 +152,10 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testResolveNewObject()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->will($this->returnValue(false))
         ;
 
@@ -156,15 +167,15 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testResolveRedirectsOnExisting()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->will($this->returnValue(true))
         ;
         $s3
             ->expects($this->once())
-            ->method('get_object_url')
+            ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg', 0, array())
             ->will($this->returnValue('http://images.example.com/some-folder/targetpath.jpg'))
         ;
@@ -179,17 +190,20 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testRemove()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
             ->will($this->returnValue(true))
         ;
         $s3
             ->expects($this->once())
-            ->method('delete_object')
-            ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
+            ->method('deleteObject')
+            ->with(array(
+                'Bucket' => 'images.example.com',
+                'Key'    => 'thumb/some-folder/targetpath.jpg',
+            ))
             ->will($this->returnValue($this->getS3ResponseMock(true)))
         ;
 
@@ -199,16 +213,16 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testRemoveNotExisting()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
+            ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/targetpath.jpg')
             ->will($this->returnValue(false))
         ;
         $s3
             ->expects($this->never())
-            ->method('delete_object')
+            ->method('deleteObject')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
@@ -217,10 +231,10 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testClearIsDisabled()
     {
-        $s3 = $this->getMock('AmazonS3');
+        $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
             ->expects($this->never())
-            ->method('delete_object')
+            ->method('deleteObject')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
@@ -229,12 +243,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
     protected function getS3ResponseMock($ok = true)
     {
-        $s3Response = $this->getMock('AmazonS3Response');
-        $s3Response
-            ->expects($this->once())
-            ->method('isOK')
-            ->will($this->returnValue($ok))
-        ;
+        $s3Response = $this->getMock('Guzzle\Service\Resource\Model');
 
         return $s3Response;
     }

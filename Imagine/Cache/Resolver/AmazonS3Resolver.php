@@ -2,7 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use \AmazonS3;
+use Aws\S3\Enum\CannedAcl;
+use Aws\S3\S3Client;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 {
     /**
-     * @var AmazonS3
+     * @var S3Client
      */
     protected $storage;
 
@@ -48,12 +49,12 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
-     * @param \AmazonS3 $storage The Amazon S3 storage API. It's required to know authentication information.
+     * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
-    public function __construct(AmazonS3 $storage, $bucket, $acl = AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
         $this->storage = $storage;
 
@@ -99,25 +100,26 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function store(Response $response, $targetPath, $filter)
     {
-        $storageResponse = $this->storage->create_object($this->bucket, $targetPath, array(
-            'body' => $response->getContent(),
-            'contentType' => $response->headers->get('Content-Type'),
-            'length' => strlen($response->getContent()),
-            'acl' => $this->acl,
-        ));
-
-        if ($storageResponse->isOK()) {
-            $response->setStatusCode(301);
-            $response->headers->set('Location', $this->getObjectUrl($targetPath));
-        } else {
+        try {
+            $storageResponse = $this->storage->putObject(array(
+                'ACL'    => $this->acl,
+                'Bucket' => $this->bucket,
+                'Key'    => $targetPath,
+                'Body'   => $response->getContent(),
+            ));
+        } catch (\Exception $e) {
             if ($this->logger) {
                 $this->logger->warn('The object could not be created on Amazon S3.', array(
-                    'targetPath' => $targetPath,
-                    'filter' => $filter,
-                    's3_response' => $storageResponse,
+                    'targetPath'  => $targetPath,
+                    'filter'      => $filter,
                 ));
             }
+
+            return $response;
         }
+
+        $response->setStatusCode(301);
+        $response->headers->set('Location', $storageResponse->get('ObjectURL'));
 
         return $response;
     }
@@ -145,7 +147,16 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
             return true;
         }
 
-        return $this->storage->delete_object($this->bucket, $targetPath)->isOK();
+        try {
+            $response = $this->storage->deleteObject(array(
+                'Bucket' => $this->bucket,
+                'Key'    => $targetPath,
+            ));
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -153,7 +164,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \AmazonS3::get_object_url() for available options.
+     * @see Aws\S3\S3Client::getObjectUrl() for available options.
      *
      * @param string $key The name of the option.
      * @param mixed $value The value to be set.
@@ -197,7 +208,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function getObjectUrl($targetPath)
     {
-        return $this->storage->get_object_url($this->bucket, $targetPath, 0, $this->objUrlOptions);
+        return $this->storage->getObjectUrl($this->bucket, $targetPath, 0, $this->objUrlOptions);
     }
 
     /**
@@ -209,6 +220,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function objectExists($objectPath)
     {
-        return $this->storage->if_object_exists($this->bucket, $objectPath);
+        return $this->storage->doesObjectExist($this->bucket, $objectPath);
     }
 }
