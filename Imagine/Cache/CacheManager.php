@@ -154,11 +154,13 @@ class CacheManager
 
         $params = array('path' => ltrim($path, '/'));
 
-        return str_replace(
+        $url = str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
             $this->router->generate('_imagine_'.$filter, $params, $absolute)
         );
+
+        return str_replace('%3F', '?', $url);
     }
 
     /**
