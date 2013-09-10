@@ -1,6 +1,6 @@
 # AwsS3Resolver
 
-The AwsS3Resolver requires the [aws-sdk-php](https://github.com/aws/aws-sdk-for-php).
+The AwsS3Resolver requires the [aws-sdk-php](https://github.com/aws/aws-sdk-php).
 
 You can add the SDK by adding those lines to your `deps` file.
 
