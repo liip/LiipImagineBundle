@@ -88,7 +88,7 @@ class FileSystemLoader implements LoaderInterface
                 if (!empty($targetFormat) && is_file($name)) {
                     $absolutePath = $name;
                 } else {
-                    throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $absolutePath));
+                    throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $file));
                 }
             }
         }
