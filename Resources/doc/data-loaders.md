@@ -1,8 +1,13 @@
 # Built-In DataLoader
 
-* [DoctrinePHPCR](data-loader/doctrine-phpcr.md)
 * [MongoDB GridFS](data-loader/gridfs.md)
 * [Stream](data-loader/stream.md)
+
+# Other data loaders
+
+* [Doctrine PHPCR-ODM](http://symfony.com/doc/master/cmf/bundles/media.html#liipimagine)
+  You can include the CmfMediaBundle alone if you just want to use the images
+  but no other CMF features.
 
 # Custom image loaders
 
