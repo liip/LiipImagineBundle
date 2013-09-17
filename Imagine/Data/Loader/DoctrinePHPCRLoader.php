@@ -6,6 +6,10 @@ use Doctrine\ODM\PHPCR\DocumentManager;
 use Imagine\Image\ImagineInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @deprecated This class is replaced by the loader of the CmfMediaBundle
+ * and will be removed in LiipImagineBundle 1.0
+ */
 class DoctrinePHPCRLoader extends FileSystemLoader
 {
     /**
