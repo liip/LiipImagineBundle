@@ -102,10 +102,11 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     {
         try {
             $storageResponse = $this->storage->putObject(array(
-                'ACL'    => $this->acl,
-                'Bucket' => $this->bucket,
-                'Key'    => $targetPath,
-                'Body'   => $response->getContent(),
+                'ACL'           => $this->acl,
+                'Bucket'        => $this->bucket,
+                'Key'           => $targetPath,
+                'Body'          => $response->getContent(),
+                'ContentType'   => $response->headers->get('Content-Type')
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
