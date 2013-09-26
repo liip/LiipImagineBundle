@@ -36,7 +36,7 @@ class UpscaleFilterLoader implements LoaderInterface
 
             $ratio = $widthRatio > $heightRatio ? $widthRatio : $heightRatio;
 
-            $filter = new Resize(new Box($$origWidth * $origHeight * $ratio));
+            $filter = new Resize(new Box($origWidth * $ratio, $origHeight * $ratio));
 
             return $filter->apply($image);
         }
