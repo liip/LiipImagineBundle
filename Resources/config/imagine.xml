@@ -41,6 +41,7 @@
         <parameter key="liip_imagine.filter.loader.watermark.class">Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.strip.class">Liip\ImagineBundle\Imagine\Filter\Loader\StripFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.background.class">Liip\ImagineBundle\Imagine\Filter\Loader\BackgroundFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.upscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader</parameter>
 
         <!-- Data loaders' classes -->
 
@@ -158,6 +159,10 @@
 
         <service id="liip_imagine.filter.loader.strip" class="%liip_imagine.filter.loader.strip.class%">
             <tag name="liip_imagine.filter.loader" loader="strip" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.upscale" class="%liip_imagine.filter.loader.upscale.class%">
+            <tag name="liip_imagine.filter.loader" loader="upscale" />
         </service>
 
         <!-- Data loaders -->
