@@ -55,6 +55,19 @@ liip_imagine:
                 relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
 ```
 
+### The `upscale` filter
+
+The upscale filter, as the name implies, performs a upscale transformation
+on your image. Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                upscale: { min: [800, 600] }
+```
+
 ### The `crop` filter
 
 The crop filter, as the name implies, performs a crop transformation
