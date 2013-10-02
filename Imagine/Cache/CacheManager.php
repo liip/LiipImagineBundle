@@ -148,7 +148,7 @@ class CacheManager
                     $pathinfo['dirname'] = '';
                 }
 
-                $path = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
+                $path = $pathinfo['dirname'].'/'.$pathinfo['basename'].'.'.$config['format'];
             }
         }
 
