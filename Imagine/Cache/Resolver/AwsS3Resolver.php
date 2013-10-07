@@ -29,6 +29,11 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * @var string
      */
+    protected $directory;
+
+    /**
+     * @var string
+     */
     protected $acl;
 
     /**
@@ -51,14 +56,16 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      *
      * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
+     * @param string $directory A directory to operate in.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
+    public function __construct(S3Client $storage, $bucket, $directory = '', $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
         $this->storage = $storage;
 
         $this->bucket = $bucket;
+        $this->directory = $directory;
         $this->acl = $acl;
 
         $this->objUrlOptions = $objUrlOptions;
@@ -197,7 +204,12 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function getObjectPath($path, $filter)
     {
-        return str_replace('//', '/', $filter.'/'.$path);
+        $path = $this->directory
+            ? sprintf('%s/%s/%s', $this->directory,  $filter, $path)
+            : sprintf('%s/%s', $filter, $path)
+        ;
+
+        return str_replace('//', '/', $path);
     }
 
     /**
