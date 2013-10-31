@@ -37,20 +37,6 @@ class FileSystemLoader implements LoaderInterface
     }
 
     /**
-     * Get the file info for the given path.
-     *
-     * This can optionally be used to generate the given file.
-     *
-     * @param string $absolutePath
-     *
-     * @return array
-     */
-    protected function getFileInfo($absolutePath)
-    {
-        return pathinfo($absolutePath);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function find($path)
