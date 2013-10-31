@@ -60,17 +60,17 @@ class FileSystemLoader implements LoaderInterface
         }
 
         $file = $this->rootPath.'/'.ltrim($path, '/');
-        $info = $this->getFileInfo($file);
-        $absolutePath = $info['dirname'].DIRECTORY_SEPARATOR.$info['basename'];
-
-        $name = $info['dirname'].DIRECTORY_SEPARATOR.$info['filename'];
-
+        $info = new \SplFileInfo($file);
+        $dirName = $info->getPath();
+        $extension = $info->getExtension();
+        $absolutePath = $dirName . DIRECTORY_SEPARATOR . $info->getFilename();
+        $name = $dirName . DIRECTORY_SEPARATOR . $info->getBasename('.'.$info->getExtension());
         $targetFormat = null;
         // set a format if an extension is found and is allowed
-        if (isset($info['extension'])
-            && (empty($this->formats) || in_array($info['extension'], $this->formats))
+        if (isset($extension)
+            && (empty($this->formats) || in_array($info->getExtension(), $this->formats))
         ) {
-            $targetFormat = $info['extension'];
+            $targetFormat = $info->getExtension();
         }
 
         if (empty($targetFormat) || !file_exists($absolutePath)) {
