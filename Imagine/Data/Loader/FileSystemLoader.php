@@ -72,7 +72,6 @@ class FileSystemLoader implements LoaderInterface
         ) {
             $targetFormat = $info->getExtension();
         }
-
         if (empty($targetFormat) || !file_exists($absolutePath)) {
             // attempt to determine path and format
             $absolutePath = null;
