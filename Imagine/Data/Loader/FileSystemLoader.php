@@ -36,6 +36,21 @@ class FileSystemLoader implements LoaderInterface
         $this->rootPath = realpath($rootPath);
     }
 
+
+    /**
+     * Get the file info for the given path.
+     *
+     * This can optionally be used to generate the given file.
+     *
+     * @param string $absolutePath
+     *
+     * @return array
+     */
+    protected function getFileInfo($absolutePath)
+    {
+        return new \SplFileInfo($absolutePath);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -46,7 +61,7 @@ class FileSystemLoader implements LoaderInterface
         }
 
         $file = $this->rootPath.'/'.ltrim($path, '/');
-        $info = new \SplFileInfo($file);
+        $info = $this->getFileInfo($file);
         $dirName = $info->getPath();
         $extension = $info->getExtension();
         $absolutePath = $dirName . DIRECTORY_SEPARATOR . $info->getFilename();
