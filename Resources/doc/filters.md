@@ -117,6 +117,7 @@ liip_image:
     filter_sets:
         my_image:
             watermark:
+                # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
                 image: Resources/data/watermark.png
                 # Size of the watermark relative to the origin images size
                 size: 0.5
