@@ -42,7 +42,7 @@ class DoctrinePHPCRLoader extends FileSystemLoader
 
     protected function getStreamFromImage($image)
     {
-        return $image->getContent();
+        return $image->getFileContentAsStream();
     }
 
     /**
