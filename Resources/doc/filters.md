@@ -160,7 +160,7 @@ For an example of a filter loader implementation, refer to
 
 ## Dynamic filters
 
-With a custom data loader it is possible to dynamically modify the configuration that will
+With a custom controller action it is possible to dynamically modify the configuration that will
 be applied to the image. Inside the controller you can access the ``FilterConfiguration``
 instance, dynamically adjust the filter configuration (for example based on information
 associated with the image or whatever other logic you might want) and set it again.
