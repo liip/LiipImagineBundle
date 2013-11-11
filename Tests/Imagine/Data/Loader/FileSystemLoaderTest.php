@@ -70,6 +70,21 @@ class FileSystemLoaderTest extends AbstractTest
         $this->assertSame($image, $loader->find('/cats.jpeg'));
     }
 
+    public function testFindWithCyrillicFilename()
+    {
+        $image = $this->getMockImage();
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with(realpath($this->fixturesDir.'/assets/АГГЗ.jpeg'))
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = new FileSystemLoader($this->imagine, array('jpeg'), $this->fixturesDir.'/assets');
+        $this->assertSame($image, $loader->find('/АГГЗ.jpeg'));
+    }
+
     public function testFindGuessesFormat()
     {
         $image = $this->getMockImage();
