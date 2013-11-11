@@ -24,7 +24,8 @@
 
     "require-dev": {
         "twig/twig":                ">=1.0,<2.0-dev",
-        "symfony/yaml":             ">=2.0.16,~2.0"
+        "symfony/yaml":             ">=2.0.16,~2.0",
+        "doctrine/cache":           "~1.1"
     },
 
     "suggest": {
