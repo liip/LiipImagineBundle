@@ -90,7 +90,7 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false, $params = array())
     {
         $key = $this->generateCacheKey('getBrowserPath', $path, $filter, array(
             $absolute ? 'absolute' : 'relative',

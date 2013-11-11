@@ -13,9 +13,10 @@ class WebPathResolver extends AbstractFilesystemResolver
      */
     public function resolve(Request $request, $path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
+        $params = $this->cacheManager->getFilterParams($request->attributes->all(), $filter);
+        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter, false, $params));
         $this->basePath = $request->getBaseUrl();
-        $targetPath = $this->getFilePath($path, $filter);
+        $targetPath = $this->getFilePath($path, $filter, $params);
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
@@ -35,9 +36,9 @@ class WebPathResolver extends AbstractFilesystemResolver
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function getBrowserPath($targetPath, $filter, $absolute = false, $params = array())
     {
-        return $this->cacheManager->generateUrl($targetPath, $filter, $absolute);
+        return $this->cacheManager->generateUrl($targetPath, $filter, $absolute, $params);
     }
 
     /**
@@ -61,9 +62,9 @@ class WebPathResolver extends AbstractFilesystemResolver
     /**
      * {@inheritDoc}
      */
-    protected function getFilePath($path, $filter)
+    protected function getFilePath($path, $filter, $params = array())
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
+        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter, false, $params));
 
         if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
             $browserPath = substr($browserPath, strlen($this->basePath));
