@@ -1,6 +1,9 @@
 LiipImagineBundle
 =================
 
+[![Build Status](https://secure.travis-ci.org/liip/LiipImagineBundle.png)](http://travis-ci.org/liip/LiipImagineBundle)
+[![Latest Stable Version](https://poser.pugx.org/liip/imagine-bundle/version.png)](https://packagist.org/packages/liip/imagine-bundle)
+
 This bundle is a fork of AvalancheImagineBundle which provides easy image
 manipulation support for Symfony2. The goal of the fork is to make the
 code more extensible and as a result applicable for more use cases.
