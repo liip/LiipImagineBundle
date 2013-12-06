@@ -4,7 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\Cache;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -55,14 +55,14 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         $key = $this->generateCacheKey('resolve', $path, $filter);
         if ($this->cache->contains($key)) {
             return $this->cache->fetch($key);
         }
 
-        $targetPath = $this->resolver->resolve($request, $path, $filter);
+        $targetPath = $this->resolver->resolve($path, $filter);
         $this->saveToCache($key, $targetPath);
 
         /*

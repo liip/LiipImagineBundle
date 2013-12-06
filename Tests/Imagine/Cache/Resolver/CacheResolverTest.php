@@ -7,7 +7,6 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\MemoryCache;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,23 +20,21 @@ class CacheResolverTest extends AbstractTest
 
     public function testResolveIsSavedToCache()
     {
-        $request = new Request();
-
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with($request, $this->path, $this->filter)
+            ->with($this->path, $this->filter)
             ->will($this->returnValue($this->targetPath))
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
+        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
 
         // Call multiple times to verify the cache is used.
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
+        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
     public function testStoreIsForwardedToResolver()
@@ -92,13 +89,11 @@ class CacheResolverTest extends AbstractTest
      */
     public function testRemoveUsesIndex()
     {
-        $request = new Request();
-
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with($request, $this->path, $this->filter)
+            ->with($this->path, $this->filter)
             ->will($this->returnValue($this->targetPath))
         ;
         $resolver
@@ -110,7 +105,7 @@ class CacheResolverTest extends AbstractTest
         $cache = new MemoryCache();
 
         $cacheResolver = new CacheResolver($cache, $resolver);
-        $cacheResolver->resolve($request, $this->path, $this->filter);
+        $cacheResolver->resolve($this->path, $this->filter);
 
         /*
          * Three items:

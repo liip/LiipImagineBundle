@@ -4,7 +4,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -72,8 +72,12 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/app.php'))
         ;
 
+        $container = new Container();
+        $container->set('request', $request);
+        $this->resolver->setContainer($container);
+
         // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $targetPath = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
         $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
             '->resolve() correctly converts the requested file into target path within webRoot.');
@@ -116,12 +120,16 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue(''))
         ;
 
+        $container = new Container();
+        $container->set('request', $request);
+        $this->resolver->setContainer($container);
+
         // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $targetPath = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->filesystem->mkdir(dirname($targetPath));
         file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $response = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
             '->resolve() returns a Response instance if the target file already exists.');
         $this->assertEquals(302, $response->getStatusCode(),
@@ -148,12 +156,16 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/app_dev.php'))
         ;
 
+        $container = new Container();
+        $container->set('request', $request);
+        $this->resolver->setContainer($container);
+
         // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $targetPath = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->filesystem->mkdir(dirname($targetPath));
         file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $response = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
             '->resolve() returns a Response instance if the target file already exists.');
         $this->assertEquals(302, $response->getStatusCode(),
@@ -180,8 +192,12 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php')))
         ;
 
+        $container = new Container();
+        $container->set('request', $request);
+        $this->resolver->setContainer($container);
+
         // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $targetPath = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
         $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
             '->resolve() correctly converts the requested file into target path within webRoot.');
@@ -230,12 +246,16 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/sandbox/app_dev.php'))
         ;
 
+        $container = new Container();
+        $container->set('request', $request);
+        $this->resolver->setContainer($container);
+
         // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $targetPath = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->filesystem->mkdir(dirname($targetPath));
         file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
+        $response = $this->resolver->resolve('cats.jpeg', 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
             '->resolve() returns a Response instance if the target file already exists.');
         $this->assertEquals(302, $response->getStatusCode(),

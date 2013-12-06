@@ -85,7 +85,7 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
         if ($this->objectExists($objectPath)) {

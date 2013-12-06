@@ -172,7 +172,7 @@ but it illustrates the core idea.
 ``` php
 public function filterAction(Request $request, $path, $filter)
 {
-    $targetPath = $this->cacheManager->resolve($request, $path, $filter);
+    $targetPath = $this->cacheManager->resolve($path, $filter);
     if ($targetPath instanceof Response) {
         return $targetPath;
     }
