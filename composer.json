@@ -27,7 +27,9 @@
     "require-dev": {
         "twig/twig":                ">=1.0,<2.0-dev",
         "symfony/yaml":             ">=2.0.16,~2.0",
-        "doctrine/cache":           "~1.1"
+        "doctrine/cache":           "~1.1",
+        "phpunit/phpunit":          "3.7"
+        
     },
 
     "suggest": {
@@ -36,6 +38,10 @@
 
     "autoload": {
         "psr-0": { "Liip\\ImagineBundle": "" }
+    },
+
+    "config": {
+        "bin-dir": "bin"
     },
 
     "target-dir": "Liip/ImagineBundle"
