@@ -4,15 +4,31 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class WebPathResolver extends AbstractFilesystemResolver
+class WebPathResolver extends AbstractFilesystemResolver implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function setContainer(ContainerInterface $container = null)
     {
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resolve($path, $filter)
+    {
+        $request = $this->container->get('request');
+
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
         $this->basePath = $request->getBaseUrl();
         $targetPath = $this->getFilePath($path, $filter);

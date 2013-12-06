@@ -185,11 +185,17 @@
             <call method="setFolderPermissions">
                 <argument type="string">%liip_imagine.cache_mkdir_mode%</argument>
             </call>
+            <call method="setContainer">
+                <argument type="service">service_container</argument>
+            </call>
         </service>
 
         <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
             <argument type="service" id="filesystem" />
+            <call method="setContainer">
+                <argument type="service">service_container</argument>
+            </call>
         </service>
 
         <!-- Form types -->

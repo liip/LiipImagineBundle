@@ -173,7 +173,7 @@ class CacheManager
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
@@ -185,7 +185,7 @@ class CacheManager
             return false;
         }
 
-        return $resolver->resolve($request, $path, $filter);
+        return $resolver->resolve($path, $filter);
     }
 
     /**
