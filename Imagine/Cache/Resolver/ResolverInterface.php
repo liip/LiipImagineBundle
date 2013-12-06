@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 interface ResolverInterface
@@ -10,7 +9,6 @@ interface ResolverInterface
     /**
      * Resolves filtered path for rendering in the browser.
      *
-     * @param Request $request The request made against a _imagine_* filter route.
      * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
      *
@@ -19,7 +17,7 @@ interface ResolverInterface
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException In case the path can not be resolved.
      */
-    function resolve(Request $request, $path, $filter);
+    function resolve($path, $filter);
 
     /**
      * Stores the content of the given Response.

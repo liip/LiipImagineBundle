@@ -160,7 +160,7 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $targetPath = $resolver->resolve(new Request(), '/some-folder/targetpath.jpg', 'thumb');
+        $targetPath = $resolver->resolve('/some-folder/targetpath.jpg', 'thumb');
 
         $this->assertEquals('thumb/some-folder/targetpath.jpg', $targetPath);
     }
@@ -181,7 +181,7 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $response = $resolver->resolve(new Request(), '/some-folder/targetpath.jpg', 'thumb');
+        $response = $resolver->resolve('/some-folder/targetpath.jpg', 'thumb');
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals(301, $response->getStatusCode());
