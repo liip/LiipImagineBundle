@@ -181,8 +181,7 @@
 
         <!-- Cache resolver -->
 
-        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">
-            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+        <service id="liip_imagine.cache.resolver.abstract_filesystem" abstract="true" public="false">
             <argument type="service" id="filesystem" />
             <call method="setBasePath">
                 <argument type="string">%liip_imagine.cache.resolver.base_path%</argument>
@@ -190,11 +189,17 @@
             <call method="setFolderPermissions">
                 <argument type="string">%liip_imagine.cache_mkdir_mode%</argument>
             </call>
+            <call method="setRequest">
+                <argument type="service" id="request" on-invalid="null" strict="false" />
+            </call>
         </service>
 
-        <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
+        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%" parent="liip_imagine.cache.resolver.abstract_filesystem" public="true">
+            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+        </service>
+
+        <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%" parent="liip_imagine.cache.resolver.abstract_filesystem" public="true">
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
-            <argument type="service" id="filesystem" />
         </service>
 
         <!-- Form types -->

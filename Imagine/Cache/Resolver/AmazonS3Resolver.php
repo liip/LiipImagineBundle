@@ -7,7 +7,6 @@ use \AmazonS3;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -84,7 +83,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
         if ($this->objectExists($objectPath)) {

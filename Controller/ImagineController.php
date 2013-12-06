@@ -51,20 +51,17 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $targetPath = $this->cacheManager->resolve($request, $path, $filter);
-        if ($targetPath instanceof Response) {
-            return $targetPath;
+        $originalImagePath = $path;
+        $filteredImagePath = $this->cacheManager->resolve($originalImagePath, $filter);
+        if ($filteredImagePath instanceof Response) {
+            return $filteredImagePath;
         }
 
-        try {
-            $image = $this->dataManager->find($filter, $path);
-            $response = $this->filterManager->get($request, $filter, $image, $path);
-        } catch (\Imagine\Exception\RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
-        }
+        $originalImage = $this->dataManager->find($filter, $originalImagePath);
+        $response = $this->filterManager->get($request, $filter, $originalImage, $originalImagePath);
 
-        if ($targetPath) {
-            $response = $this->cacheManager->store($response, $targetPath, $filter);
+        if ($filteredImagePath) {
+            $response = $this->cacheManager->store($response, $filteredImagePath, $filter);
         }
 
         return $response;
