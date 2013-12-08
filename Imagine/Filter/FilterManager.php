@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -21,13 +22,19 @@ class FilterManager
     protected $loaders = array();
 
     /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+    /**
      * Constructor.
      *
      * @param FilterConfiguration $filterConfig
      */
-    public function __construct(FilterConfiguration $filterConfig)
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine)
     {
         $this->filterConfig = $filterConfig;
+        $this->imagine = $imagine;
     }
 
     /**
@@ -52,40 +59,31 @@ class FilterManager
     }
 
     /**
-     * Returns a response containing the given image after applying the given filter on it.
+     * @deprecated
      *
-     * @uses FilterManager::applyFilterSet
+     * Returns a response containing the given filtered image.
      *
      * @param Request $request
      * @param string $filter
-     * @param ImageInterface $image
-     * @param string $localPath
+     * @param ImageInterface $filteredImage
+     * @param string $path
      *
      * @return Response
      */
-    public function get(Request $request, $filter, ImageInterface $image, $localPath)
+    public function get(Request $request, $filter, ImageInterface $filteredImage, $path)
     {
-        $config = $this->getFilterConfiguration()->get($filter);
+        $config = $this->getFilterConfiguration()->get($filter, array(
+            'format' => pathinfo($path, PATHINFO_EXTENSION),
+        ));
 
-        $image = $this->applyFilter($image, $filter);
+        $filteredImage = $filteredImage->get($config['format'], array('quality' => $config['quality']));
 
-        if (empty($config['format'])) {
-            $format = pathinfo($localPath, PATHINFO_EXTENSION);
-            $format = $format ?: 'png';
-        } else {
-            $format = $config['format'];
-        }
-
-        $quality = empty($config['quality']) ? 100 : $config['quality'];
-
-        $image = $image->get($format, array('quality' => $quality));
-
-        $contentType = $request->getMimeType($format);
+        $contentType = $request->getMimeType($config['format']);
         if (empty($contentType)) {
-            $contentType = 'image/'.$format;
+            $contentType = 'image/'.$config['format'];
         }
 
-        return new Response($image, 200, array('Content-Type' => $contentType));
+        return new Response($filteredImage, 200, array('Content-Type' => $contentType));
     }
 
     /**
@@ -93,15 +91,15 @@ class FilterManager
      *
      * @param ImageInterface $image
      * @param string $filter
+     * @param array $runtimeConfig
      *
      * @return ImageInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function applyFilter(ImageInterface $image, $filter)
+    public function applyFilter(ImageInterface $image, $filter, array $runtimeConfig = array())
     {
-        $config = $this->getFilterConfiguration()->get($filter);
-
+        $config = $this->getFilterConfiguration()->get($filter, $runtimeConfig);
         foreach ($config['filters'] as $eachFilter => $eachOptions) {
             if (!isset($this->loaders[$eachFilter])) {
                 throw new \InvalidArgumentException(sprintf(
@@ -112,6 +110,8 @@ class FilterManager
             $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
         }
 
-        return $image;
+        return $this->imagine->load(
+            $image->get($config['format'], array('quality' => $config['quality']))
+        );
     }
 }

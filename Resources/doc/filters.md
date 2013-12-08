@@ -183,7 +183,8 @@ public function filterAction(Request $request, $path, $filter)
     $config['filters']['thumbnail']['size'] = array(300, 100);
     $filterConfig->set($filter, $config);
 
-    $response = $this->filterManager->get($request, $filter, $image, $path);
+    $filteredImage = $this->filterManager->applyFilter($image, $filter);
+    $response = $this->filterManager->get($request, $filter, $filteredImage, $path);
 
     $this->cacheManager->store($response, $path, $filter);
 

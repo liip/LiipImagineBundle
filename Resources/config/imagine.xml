@@ -66,6 +66,7 @@
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
+            <argument type="service" id="liip_imagine" />
         </service>
 
         <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
