@@ -1,12 +1,12 @@
-# AmazonS3Resolver
+# AwsS3Resolver
 
-The AmazonS3Resolver requires the [aws-sdk-php](https://github.com/amazonwebservices/aws-sdk-for-php).
+The AwsS3Resolver requires the [aws-sdk-php](https://github.com/aws/aws-sdk-php).
 
 You can add the SDK by adding those lines to your `deps` file.
 
 ``` ini
 [aws-sdk]
-    git=git://github.com/amazonwebservices/aws-sdk-for-php.git
+    git=git://github.com/aws/aws-sdk-php.git
 ```
 
 Afterwards, you only need to configure some information regarding your AWS account and the bucket.
@@ -16,6 +16,7 @@ parameters:
     amazon_s3.key: 'your-aws-key'
     amazon_s3.secret: 'your-aws-secret'
     amazon_s3.bucket: 'your-bucket.example.com'
+    amazon_s3.region: 'your-bucket-region'
 ```
 
 Now you can set up the services required:
@@ -23,15 +24,17 @@ Now you can set up the services required:
 ``` yaml
 services:
     acme.amazon_s3:
-        class: AmazonS3
+        class: Aws\S3\S3Client
+        factory_class: Aws\S3\S3Client
+        factory_method:  factory
         arguments:
             -
                 key: %amazon_s3.key%
                 secret: %amazon_s3.secret%
-                # more S3 specific options, see \AmazonS3::__construct()
+                region: %amazon_s3.region%
 
     acme.imagine.cache.resolver.amazon_s3:
-        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
         arguments:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
@@ -39,7 +42,7 @@ services:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```
 
-Now you are ready to use the `AmazonS3Resolver` by configuring the bundle.
+Now you are ready to use the `AwsS3Resolver` by configuring the bundle.
 The following example will configure the resolver is default.
 
 ``` yaml
@@ -56,13 +59,13 @@ In order to make use of the object URL options, you can simply add a call to the
 ``` yaml
 services:
     acme.imagine.cache.resolver.amazon_s3:
-        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
         arguments:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
         calls:
-             # This calls $service->setObjectUrlOption('https', true);
-             - [ setObjectUrlOption, [ 'https', true ] ]
+             # This calls $service->setObjectUrlOption('Scheme', 'https');
+             - [ setObjectUrlOption, [ 'Scheme', 'https' ] ]
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```
@@ -72,12 +75,12 @@ You can also use the constructor of the resolver to directly inject multiple opt
 ``` yaml
 services:
     acme.imagine.cache.resolver.amazon_s3:
-        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
         arguments:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
-            - "public-read" # AmazonS3::ACL_PUBLIC (default)
-            - { https: true, torrent: true }
+            - "public-read" # Aws\S3\Enum\CannedAcl::PUBLIC_READ (default)
+            - { Scheme: https }
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```

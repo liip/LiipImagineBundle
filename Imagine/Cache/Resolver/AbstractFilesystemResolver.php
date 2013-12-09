@@ -28,6 +28,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     protected $cacheManager;
 
     /**
+     * @var int
+     */
+    protected $folderPermissions = 0777;
+
+    /**
      * Constructs a filesystem based cache resolver.
      *
      * @param Filesystem $filesystem
@@ -56,6 +61,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
+     * @param int $mkdirMode
+     */
+    public function setFolderPermissions ($folderPermissions)
+    {
+        $this->folderPermissions = $folderPermissions;
+    }
+
+    /**
      * Stores the content into a static file.
      *
      * @param Response $response
@@ -70,13 +83,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     {
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
-        try {
-            if (!is_dir($dir)) {
-                $this->filesystem->mkdir($dir);
-            }
-        } catch (IOException $e) {
-            throw new \RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
-        }
+        $this->makeFolder($dir);
 
         file_put_contents($targetPath, $response->getContent());
 
@@ -99,6 +106,24 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem->remove($filename);
 
         return !file_exists($filename);
+    }
+
+    /**
+     * @param string $dir
+     * @throws \RuntimeException
+     */
+    protected function makeFolder ($dir)
+    {
+        if (!is_dir($dir)) {
+            $parent = dirname($dir);
+            try {
+                $this->makeFolder($parent);
+                $this->filesystem->mkdir($dir);
+                $this->filesystem->chmod($dir, $this->folderPermissions);
+            } catch (IOException $e) {
+                throw new \RuntimeException(sprintf('Could not create directory %s', $dir), 0, $e);
+            }
+        }
     }
 
     /**

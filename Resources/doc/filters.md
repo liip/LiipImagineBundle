@@ -5,18 +5,29 @@
 ### The `thumbnail` filter
 
 The thumbnail filter, as the name implies, performs a thumbnail transformation
-on your image. Configuration looks like this:
+on your image.
+
+The `mode` can be either `outbound` or `inset`.
+Option `inset` does a relative resize, where the height and the width will not exceed the values in the configuration.
+Option `outbound` does a relative resize, but the image gets cropped if width and height are not the same.
+
+Given an input image sized 50x40 (width x height), consider the following
+annotated configuration examples:
 
 ``` yaml
 liip_imagine:
     filter_sets:
-        my_thumb:
+        my_thumb_out:
             filters:
-                thumbnail: { size: [120, 90], mode: outbound }
+                thumbnail: { size: [32, 32], mode: outbound } # Transforms 50x40 to 32x32, while cropping the width
+        my_thumb_in:
+            filters:
+                thumbnail: { size: [32, 32], mode: inset } # Transforms 50x40 to 32x26, no cropping
 ```
 
-The `mode` can be either `outbound` or `inset`.
-There is also a option `allow_upscale` (default: false).
+There is also an option `allow_upscale` (default: `false`).
+By setting `allow_upscale` to `true`, an image which is smaller than 32x32px in the example above will be expanded to the requested size by interpolation of its content.
+Without this option, a smaller image will be left as it. This means you may get images that are smaller than the specified dimensions.
 
 ### The `relative_resize` filter
 
@@ -42,6 +53,19 @@ liip_imagine:
         my_widen:
             filters:
                 relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
+```
+
+### The `upscale` filter
+
+The upscale filter, as the name implies, performs a upscale transformation
+on your image. Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                upscale: { min: [800, 600] }
 ```
 
 ### The `crop` filter
@@ -83,6 +107,24 @@ liip_imagine:
                 background: { color: '#00FFFF' }
 ```
 
+### The `watermark` filter
+
+The watermark filter pastes a second image onto your image while keeping its ratio.
+Configuration looks like this:
+
+``` yaml
+liip_image:
+    filter_sets:
+        my_image:
+            watermark:
+                # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
+                image: Resources/data/watermark.png
+                # Size of the watermark relative to the origin images size
+                size: 0.5
+                # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
+                position: center
+```
+
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
@@ -118,7 +160,7 @@ For an example of a filter loader implementation, refer to
 
 ## Dynamic filters
 
-With a custom data loader it is possible to dynamically modify the configuration that will
+With a custom controller action it is possible to dynamically modify the configuration that will
 be applied to the image. Inside the controller you can access the ``FilterConfiguration``
 instance, dynamically adjust the filter configuration (for example based on information
 associated with the image or whatever other logic you might want) and set it again.

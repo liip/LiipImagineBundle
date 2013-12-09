@@ -40,7 +40,8 @@ class FileSystemLoaderTest extends AbstractTest
 
         $loader = new FileSystemLoader($this->imagine, array('jpeg'), $this->tempDir);
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $file = realpath($this->tempDir).'/invalid.jpeg';
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Source image not found in "'.$file.'"');
 
         $loader->find('/invalid.jpeg');
     }
@@ -67,6 +68,21 @@ class FileSystemLoaderTest extends AbstractTest
 
         $loader = new FileSystemLoader($this->imagine, array('jpeg'), $this->fixturesDir.'/assets');
         $this->assertSame($image, $loader->find('/cats.jpeg'));
+    }
+
+    public function testFindWithCyrillicFilename()
+    {
+        $image = $this->getMockImage();
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with(realpath($this->fixturesDir.'/assets/АГГЗ.jpeg'))
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = new FileSystemLoader($this->imagine, array('jpeg'), $this->fixturesDir.'/assets');
+        $this->assertSame($image, $loader->find('/АГГЗ.jpeg'));
     }
 
     public function testFindGuessesFormat()
