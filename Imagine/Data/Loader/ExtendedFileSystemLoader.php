@@ -42,6 +42,6 @@ class ExtendedFileSystemLoader extends FileSystemLoader
             }
         }
 
-        return pathinfo($absolutePath);
+        return parent::getFileInfo($absolutePath);
     }
 }
