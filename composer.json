@@ -12,7 +12,9 @@
             "homepage": "https://github.com/liip/LiipImagineBundle/contributors"
         }
     ],
-
+    "archive": {
+        "exclude": ["/Tests"]
+    },
     "require": {
         "php":                      ">=5.3.2",
         "imagine/Imagine":          "0.5.*",

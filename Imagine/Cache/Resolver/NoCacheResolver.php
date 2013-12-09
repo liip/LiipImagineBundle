@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,9 +12,9 @@ class NoCacheResolver extends WebPathResolver
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
-        $this->setBasePath($request->getBaseUrl());
+        $this->setBasePath($this->container->get('request')->getBaseUrl());
 
         return $this->getFilePath($path, $filter);
     }

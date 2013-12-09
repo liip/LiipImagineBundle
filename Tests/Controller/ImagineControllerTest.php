@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 
 use Liip\ImagineBundle\Tests\AbstractTest;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -100,6 +101,11 @@ class ImagineControllerTest extends AbstractTest
         $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
 
         $request = Request::create('/media/cache/thumbnail/cats.jpeg');
+
+        $container = new Container();
+        $container->set('request', $request);
+        $webPathResolver->setContainer($container);
+
         $response = $controller->filterAction($request, 'cats.jpeg', 'thumbnail');
 
         $targetPath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
