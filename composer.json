@@ -38,5 +38,11 @@
         "psr-0": { "Liip\\ImagineBundle": "" }
     },
 
-    "target-dir": "Liip/ImagineBundle"
+    "target-dir": "Liip/ImagineBundle",
+
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
+        }
+    }
 }
