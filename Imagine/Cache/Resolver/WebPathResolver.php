@@ -4,29 +4,28 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class WebPathResolver extends AbstractFilesystemResolver
 {
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-        $this->basePath = $request->getBaseUrl();
+        $this->basePath = $this->getRequest()->getBaseUrl();
         $targetPath = $this->getFilePath($path, $filter);
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
         if (file_exists($targetPath)) {
             // Strip the base URL of this request from the browserpath to not interfere with the base path.
-            $baseUrl = $request->getBaseUrl();
+            $baseUrl = $this->getRequest()->getBaseUrl();
             if ($baseUrl && 0 === strpos($browserPath, $baseUrl)) {
                 $browserPath = substr($browserPath, strlen($baseUrl));
             }
 
-            return new RedirectResponse($request->getBasePath().$browserPath);
+            return new RedirectResponse($this->getRequest()->getBasePath().$browserPath);
         }
 
         return $targetPath;

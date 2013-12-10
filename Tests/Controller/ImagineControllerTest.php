@@ -100,6 +100,9 @@ class ImagineControllerTest extends AbstractTest
         $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
 
         $request = Request::create('/media/cache/thumbnail/cats.jpeg');
+
+        $webPathResolver->setRequest($request);
+
         $response = $controller->filterAction($request, 'cats.jpeg', 'thumbnail');
 
         $targetPath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';

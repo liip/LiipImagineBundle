@@ -8,10 +8,16 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
     /**
      * @var Filesystem
      */
@@ -40,6 +46,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem   = $filesystem;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
     }
 
     /**
@@ -106,6 +120,20 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem->remove($filename);
 
         return !file_exists($filename);
+    }
+
+    /**
+     * @return Request
+     *
+     * @throws \LogicException
+     */
+    protected function getRequest()
+    {
+        if (false == $this->request) {
+            throw new \LogicException('The request was not injected, inject it before using resolver.');
+        }
+
+        return $this->request;
     }
 
     /**
