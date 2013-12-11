@@ -25,11 +25,15 @@
     "require-dev": {
         "symfony/browser-kit":      "~2.3",
         "symfony/yaml":             "~2.3",
-        "doctrine/cache":           "~1.1"
+        "doctrine/cache":           "~1.1",
+        "aws/aws-sdk-php":          "~2.4",
+        "amazonwebservices/aws-sdk-for-php": "~1.0"
     },
 
     "suggest": {
-        "twig/twig":                ">=1.0,<2.0-dev"
+        "twig/twig":                "If you'd want to use some handy twig filters",
+        "aws/aws-sdk-php":          "Add it if you'd like to use aws v2 resolver",
+        "amazonwebservices/aws-sdk-for-php": "Add it if you'd like to use aws v1 resolver"
     },
 
     "autoload": {
