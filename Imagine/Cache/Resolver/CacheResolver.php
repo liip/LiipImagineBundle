@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\Cache;
-
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -62,7 +61,9 @@ class CacheResolver implements ResolverInterface
         }
 
         $resolved = $this->resolver->resolve($path, $filter);
-        $this->saveToCache($key, $resolved);
+        if ($resolved) {
+            $this->saveToCache($key, $resolved);
+        }
 
         return $resolved;
     }
@@ -73,25 +74,6 @@ class CacheResolver implements ResolverInterface
     public function store(Response $response, $path, $filter)
     {
         return $this->resolver->store($response, $path, $filter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBrowserPath($path, $filter, $absolute = false)
-    {
-        $key = $this->generateCacheKey('getBrowserPath', $path, $filter, array(
-            $absolute ? 'absolute' : 'relative',
-        ));
-
-        if ($this->cache->contains($key)) {
-            return $this->cache->fetch($key);
-        }
-
-        $result = $this->resolver->getBrowserPath($path, $filter, $absolute);
-        $this->saveToCache($key, $result);
-
-        return $result;
     }
 
     /**

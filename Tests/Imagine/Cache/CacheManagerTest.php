@@ -54,18 +54,19 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
     }
 
-    public function testDefaultResolverUsedIfNoneSet()
+    public function testDefaultResolverUsedIfNoneSetOnGetBrowserPath()
     {
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
-            ->method('getBrowserPath')
-            ->with('cats.jpeg', 'thumbnail', true)
+            ->method('resolve')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue('http://a/path/to/an/image.png'))
         ;
 
         $config = $this->getMockFilterConfiguration();
         $config
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('thumbnail')
             ->will($this->returnValue(array(
@@ -75,10 +76,55 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
+        $router = $this->getMockRouter();
+        $router
+            ->expects($this->never())
+            ->method('generate')
+        ;
+
+        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
         $cacheManager->addResolver('default', $resolver);
 
-        $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+
+        $this->assertEquals('http://a/path/to/an/image.png', $actualBrowserPath);
+    }
+
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPath()
+    {
+        $resolver = $this->getMockResolver();
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue(null))
+        ;
+
+        $config = $this->getMockFilterConfiguration();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $router = $this->getMockRouter();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
+        $cacheManager->addResolver('default', $resolver);
+
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+
+        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $actualBrowserPath);
     }
 
     /**

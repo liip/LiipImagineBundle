@@ -12,9 +12,7 @@ interface ResolverInterface
      * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
      *
-     * @return Response An HTTP response that either contains image content or redirects to a URL to load the image from.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException In case the path can not be resolved.
+     * @return string|null An url of cached image
      */
     function resolve($path, $filter);
 
@@ -30,19 +28,7 @@ interface ResolverInterface
     function store(Response $response, $path, $filter);
 
     /**
-     * Returns a web accessible URL.
-     *
-     * @param string $path   The path where the original file is expected to be.
-     * @param string $filter The name of the imagine filter in effect.
-     * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
-     *                       In case the resolver does not support relative paths, it may ignore this flag.
-     *
-     * @return string
-     */
-    function getBrowserPath($path, $filter, $absolute = false);
-
-    /**
-     * Removes a cached image resource.
+     * Removes a stored image resource.
      *
      * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
