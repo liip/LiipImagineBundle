@@ -6,6 +6,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -51,8 +52,8 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        if ($response = $this->cacheManager->resolve($path, $filter)) {
-            return $response;
+        if ($url = $this->cacheManager->resolve($path, $filter)) {
+            return new RedirectResponse($url, 301);
         }
 
         $image = $this->dataManager->find($filter, $path);

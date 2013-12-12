@@ -14,6 +14,7 @@ class NoCacheResolver extends WebPathResolver
      */
     public function resolve($path, $filter)
     {
+        return $this->getRequest()->getSchemeAndHttpHost().'/'.$path;
     }
 
     /**
@@ -21,7 +22,6 @@ class NoCacheResolver extends WebPathResolver
      */
     public function store(Response $response, $path, $filter)
     {
-        return $response;
     }
 
     /**

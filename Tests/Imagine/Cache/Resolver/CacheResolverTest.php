@@ -56,32 +56,46 @@ class CacheResolverTest extends AbstractTest
         $this->assertSame($response, $cacheResolver->store($response, $this->webPath, $this->filter));
     }
 
-    public function testGetBrowserPath()
+    public function testSavesToCacheIfInternalResolverReturnUrlOnResolve()
     {
-        $absolute = 'http://example.com' . $this->webPath;
-        $relative = $this->webPath;
-
         $resolver = $this->getMockResolver();
         $resolver
-            ->expects($this->at(0))
-            ->method('getBrowserPath')
-            ->with($this->path, $this->filter, true)
-            ->will($this->returnValue($absolute))
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue('/the/expected/browser'))
         ;
+
+        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $cache
+            ->expects($this->exactly(1))
+            ->method('save')
+        ;
+
+        $cacheResolver = new CacheResolver($cache, $resolver);
+
+        $cacheResolver->resolve($this->path, $this->filter);
+    }
+
+    public function testNotSavesToCacheIfInternalResolverReturnNullOnResolve()
+    {
+        $resolver = $this->getMockResolver();
         $resolver
-            ->expects($this->at(1))
-            ->method('getBrowserPath')
-            ->with($this->path, $this->filter, false)
-            ->will($this->returnValue($relative))
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue(null))
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $cache
+            ->expects($this->never())
+            ->method('save')
+        ;
 
-        $this->assertEquals($absolute, $cacheResolver->getBrowserPath($this->path, $this->filter, true));
-        $this->assertEquals($absolute, $cacheResolver->getBrowserPath($this->path, $this->filter, true));
+        $cacheResolver = new CacheResolver($cache, $resolver);
 
-        $this->assertEquals($relative, $cacheResolver->getBrowserPath($this->path, $this->filter, false));
-        $this->assertEquals($relative, $cacheResolver->getBrowserPath($this->path, $this->filter, false));
+        $cacheResolver->resolve($this->path, $this->filter);
     }
 
     /**

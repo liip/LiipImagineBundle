@@ -4,8 +4,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Tests\AbstractTest;
-
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AwsS3ResolverTest extends AbstractTest
 {
-    public function testNoDoubleSlashesInObjectUrl()
+    public function testNoDoubleSlashesInObjectUrlOnResolve()
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -29,10 +27,10 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $resolver->getBrowserPath('/some-folder/path.jpg', 'thumb');
+        $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testObjUrlOptions()
+    public function testObjUrlOptionsPassedToS3ClintOnResolve()
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -48,35 +46,7 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setObjectUrlOption('torrent', true);
-        $resolver->getBrowserPath('/some-folder/path.jpg', 'thumb');
-    }
-
-    public function testBrowserPathNotExisting()
-    {
-        $s3 = $this->getS3ClientMock();
-        $s3
-            ->expects($this->once())
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(false))
-        ;
-        $s3
-            ->expects($this->never())
-            ->method('getObjectUrl')
-        ;
-
-        $cacheManager = $this->getMockCacheManager();
-        $cacheManager
-            ->expects($this->once())
-            ->method('generateUrl')
-            ->with('/some-folder/path.jpg', 'thumb', false)
-            ->will($this->returnValue('/media/cache/thumb/some-folder/path.jpg'))
-        ;
-
-        $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $resolver->setCacheManager($cacheManager);
-
-        $this->assertEquals('/media/cache/thumb/some-folder/path.jpg', $resolver->getBrowserPath('/some-folder/path.jpg', 'thumb'));
+        $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
     public function testLogNotCreatedObjects()
@@ -147,7 +117,7 @@ class AwsS3ResolverTest extends AbstractTest
         $this->assertNull($resolver->resolve('/some-folder/path.jpg', 'thumb'));
     }
 
-    public function testResolveRedirectsOnExisting()
+    public function testReturnResolvedImageUrlOnResolve()
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -163,11 +133,11 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $response = $resolver->resolve('/some-folder/path.jpg', 'thumb');
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals(301, $response->getStatusCode());
-        $this->assertEquals('http://images.example.com/some-folder/path.jpg', $response->headers->get('Location'));
+        $this->assertEquals(
+            'http://images.example.com/some-folder/path.jpg',
+            $resolver->resolve('/some-folder/path.jpg', 'thumb')
+        );
     }
 
     public function testDeleteObjectIfObjectExistOnAmazonOnRemove()

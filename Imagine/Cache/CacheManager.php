@@ -109,8 +109,7 @@ class CacheManager
 
     /**
      * Gets filtered path for rendering in the browser.
-     *
-     * @see ResolverInterface::getBrowserPath
+     * It could be the cached one or an url of filter action.
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter
@@ -120,7 +119,13 @@ class CacheManager
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute);
+        //call it to make sure the resolver for the give filter exists.
+        $this->getResolver($filter);
+
+        return
+            $this->resolve($path, $filter) ?:
+            $this->generateUrl($path, $filter, $absolute)
+        ;
     }
 
     /**

@@ -115,13 +115,11 @@ class WebPathResolverTest extends AbstractTest
         $this->filesystem->mkdir(dirname($webFilePath));
         file_put_contents($webFilePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($path, 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $this->assertEquals(
+            '/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected Location of the cached image.'
+        );
     }
 
     /**
@@ -151,13 +149,11 @@ class WebPathResolverTest extends AbstractTest
         $this->filesystem->mkdir(dirname($filePath));
         file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($path, 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $this->assertEquals(
+            '/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected url of the cached image.'
+        );
     }
 
     /**
@@ -233,13 +229,11 @@ class WebPathResolverTest extends AbstractTest
         $this->filesystem->mkdir(dirname($filePath));
         file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
-        $response = $this->resolver->resolve($path, 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/sandbox/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $this->assertEquals(
+            '/sandbox/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected Location of the cached image.'
+        );
     }
 
     public function testClear()

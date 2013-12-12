@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class WebPathResolver extends AbstractFilesystemResolver
 {
@@ -25,7 +24,7 @@ class WebPathResolver extends AbstractFilesystemResolver
                 $browserPath = substr($browserPath, strlen($baseUrl));
             }
 
-            return new RedirectResponse($this->getRequest()->getBasePath().$browserPath);
+            return $this->getRequest()->getBasePath().$browserPath;
         }
     }
 
