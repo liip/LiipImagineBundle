@@ -6,3 +6,4 @@ Upgrade
 
 * Required minimum symfony version was updated to 2.3.
 * [CacheResolver] first argument request was removed from `resolve` method.
+* [Logger] Symfony `LoggerInterface` was replaced with PSR-3 one.
