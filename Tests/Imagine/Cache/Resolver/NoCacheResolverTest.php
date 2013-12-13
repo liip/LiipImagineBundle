@@ -11,12 +11,11 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class NoCacheResolverTest extends \Phpunit_Framework_TestCase
 {
-    public function testThrowIfRequestNotSetOnResolve()
+    public function testDoNothingOnResolve()
     {
         $resolver = new NoCacheResolver(new Filesystem);
         $resolver->setRequest(null);
 
-        $this->setExpectedException('LogicException', 'The request was not injected, inject it before using resolver.');
-        $resolver->resolve('/a/path', 'aFilter');
+        $this->assertNull($resolver->resolve('/a/path', 'aFilter'));
     }
 }

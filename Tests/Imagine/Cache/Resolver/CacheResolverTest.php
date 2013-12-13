@@ -113,9 +113,9 @@ class CacheResolverTest extends AbstractTest
          * * The result of reverse for the targetPath.
          * * The index of both entries.
          */
-        $this->assertCount(3, $cache->data);
+        $this->assertCount(2, $cache->data);
 
-        $this->assertTrue($cacheResolver->remove($this->targetPath, $this->filter));
+        $this->assertTrue($cacheResolver->remove($this->path, $this->filter));
 
         // Cache including index has been removed.
         $this->assertCount(0, $cache->data);

@@ -199,10 +199,10 @@ class CacheManager
      *
      * @return Response
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
         if ($response->isSuccessful()) {
-            $response = $this->getResolver($filter)->store($response, $targetPath, $filter);
+            $response = $this->getResolver($filter)->store($response, $path, $filter);
         }
 
         return $response;

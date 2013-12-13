@@ -195,9 +195,8 @@ but it illustrates the core idea.
 ``` php
 public function filterAction(Request $request, $path, $filter)
 {
-    $targetPath = $this->cacheManager->resolve($path, $filter);
-    if ($targetPath instanceof Response) {
-        return $targetPath;
+    if ($response = $this->cacheManager->resolve($path, $filter)) {
+        return $response;
     }
 
     $image = $this->dataManager->find($filter, $path);
@@ -209,9 +208,7 @@ public function filterAction(Request $request, $path, $filter)
 
     $response = $this->filterManager->get($request, $filter, $image, $path);
 
-    if ($targetPath) {
-        $response = $this->cacheManager->store($response, $targetPath, $filter);
-    }
+    $this->cacheManager->store($response, $path, $filter);
 
     return $response;
 }

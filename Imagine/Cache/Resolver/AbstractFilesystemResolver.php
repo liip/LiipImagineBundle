@@ -9,7 +9,6 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
@@ -83,18 +82,12 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * Stores the content into a static file.
-     *
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
+        $targetPath = $this->getFilePath($path, $filter);
+
         $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
 
         $this->makeFolder($dir);
@@ -109,17 +102,19 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * Removes a stored image resource.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The target path provided by the resolve method.
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return bool Whether the file has been removed successfully.
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        $filename = $this->getFilePath($targetPath, $filter);
-        $this->filesystem->remove($filename);
+        $this->basePath = $this->getRequest()->getBaseUrl();
+        $targetPath = $this->getFilePath($path, $filter);
 
-        return !file_exists($filename);
+        $this->filesystem->remove($targetPath);
+
+        return !file_exists($targetPath);
     }
 
     /**
@@ -140,7 +135,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      * @param string $dir
      * @throws \RuntimeException
      */
-    protected function makeFolder ($dir)
+    protected function makeFolder($dir)
     {
         if (!is_dir($dir)) {
             $parent = dirname($dir);
