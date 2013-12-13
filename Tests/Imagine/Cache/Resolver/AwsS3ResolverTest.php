@@ -92,10 +92,10 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->throwException(new \Exception))
         ;
 
-        $logger = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Log\LoggerInterface');
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger
             ->expects($this->once())
-            ->method('warn')
+            ->method('warning')
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');

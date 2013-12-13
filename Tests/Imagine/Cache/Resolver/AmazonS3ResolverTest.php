@@ -92,10 +92,10 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->getCFResponseMock(false)))
         ;
 
-        $logger = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Log\LoggerInterface');
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger
             ->expects($this->once())
-            ->method('warn')
+            ->method('warning')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
