@@ -87,16 +87,16 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
         if ($this->objectExists($objectPath)) {
             return new RedirectResponse($this->getObjectUrl($objectPath), 301);
         }
-
-        return $objectPath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
-        $storageResponse = $this->storage->create_object($this->bucket, $targetPath, array(
+        $objectPath = $this->getObjectPath($path, $filter);
+
+        $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
             'body' => $response->getContent(),
             'contentType' => $response->headers->get('Content-Type'),
             'length' => strlen($response->getContent()),
@@ -105,11 +105,11 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 
         if ($storageResponse->isOK()) {
             $response->setStatusCode(301);
-            $response->headers->set('Location', $this->getObjectUrl($targetPath));
+            $response->headers->set('Location', $this->getObjectUrl($objectPath));
         } else {
             if ($this->logger) {
                 $this->logger->warning('The object could not be created on Amazon S3.', array(
-                    'targetPath' => $targetPath,
+                    'objectPath' => $objectPath,
                     'filter' => $filter,
                     's3_response' => $storageResponse,
                 ));
@@ -135,14 +135,16 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        if (!$this->objectExists($targetPath)) {
-            // A non-existing object to delete: done!
-            return true;
+        $objectPath = $this->getObjectPath($path, $filter);
+
+        if ($this->objectExists($objectPath)) {
+            return $this->storage->delete_object($this->bucket, $objectPath)->isOK();
         }
 
-        return $this->storage->delete_object($this->bucket, $targetPath)->isOK();
+        // A non-existing object to delete: done!
+        return true;
     }
 
     /**
@@ -188,13 +190,13 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * Returns the URL for an object saved on Amazon S3.
      *
-     * @param string $targetPath
+     * @param string $path
      *
      * @return string
      */
-    protected function getObjectUrl($targetPath)
+    protected function getObjectUrl($path)
     {
-        return $this->storage->get_object_url($this->bucket, $targetPath, 0, $this->objUrlOptions);
+        return $this->storage->get_object_url($this->bucket, $path, 0, $this->objUrlOptions);
     }
 
     /**

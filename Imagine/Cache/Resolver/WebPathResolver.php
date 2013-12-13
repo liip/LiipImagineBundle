@@ -27,8 +27,6 @@ class WebPathResolver extends AbstractFilesystemResolver
 
             return new RedirectResponse($this->getRequest()->getBasePath().$browserPath);
         }
-
-        return $targetPath;
     }
 
     /**

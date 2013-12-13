@@ -87,27 +87,27 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
         if ($this->objectExists($objectPath)) {
             return new RedirectResponse($this->getObjectUrl($objectPath), 301);
         }
-
-        return $objectPath;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
+        $objectPath = $this->getObjectPath($path, $filter);
+
         try {
             $storageResponse = $this->storage->putObject(array(
                 'ACL'           => $this->acl,
                 'Bucket'        => $this->bucket,
-                'Key'           => $targetPath,
+                'Key'           => $objectPath,
                 'Body'          => $response->getContent(),
                 'ContentType'   => $response->headers->get('Content-Type')
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
                 $this->logger->warning('The object could not be created on Amazon S3.', array(
-                    'targetPath'  => $targetPath,
+                    'objectPath'  => $objectPath,
                     'filter'      => $filter,
                 ));
             }
@@ -137,17 +137,19 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        if (!$this->objectExists($targetPath)) {
+        $objectPath = $this->getObjectPath($path, $filter);
+
+        if (!$this->objectExists($objectPath)) {
             // A non-existing object to delete: done!
             return true;
         }
 
         try {
-            $response = $this->storage->deleteObject(array(
+            $this->storage->deleteObject(array(
                 'Bucket' => $this->bucket,
-                'Key'    => $targetPath,
+                'Key'    => $objectPath,
             ));
 
             return true;
@@ -199,13 +201,13 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * Returns the URL for an object saved on Amazon S3.
      *
-     * @param string $targetPath
+     * @param string $path
      *
      * @return string
      */
-    protected function getObjectUrl($targetPath)
+    protected function getObjectUrl($path)
     {
-        return $this->storage->getObjectUrl($this->bucket, $targetPath, 0, $this->objUrlOptions);
+        return $this->storage->getObjectUrl($this->bucket, $path, 0, $this->objUrlOptions);
     }
 
     /**
