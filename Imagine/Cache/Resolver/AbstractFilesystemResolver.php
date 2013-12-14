@@ -86,13 +86,13 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      */
     public function store(Response $response, $path, $filter)
     {
-        $targetPath = $this->getFilePath($path, $filter);
+        $filePath = $this->getFilePath($path, $filter);
 
-        $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
+        $dir = pathinfo($filePath, PATHINFO_DIRNAME);
 
         $this->makeFolder($dir);
 
-        file_put_contents($targetPath, $response->getContent());
+        file_put_contents($filePath, $response->getContent());
 
         $response->setStatusCode(201);
 
@@ -110,11 +110,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     public function remove($path, $filter)
     {
         $this->basePath = $this->getRequest()->getBaseUrl();
-        $targetPath = $this->getFilePath($path, $filter);
+        $filePath = $this->getFilePath($path, $filter);
 
-        $this->filesystem->remove($targetPath);
+        $this->filesystem->remove($filePath);
 
-        return !file_exists($targetPath);
+        return !file_exists($filePath);
     }
 
     /**

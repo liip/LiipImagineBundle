@@ -61,10 +61,10 @@ class CacheResolver implements ResolverInterface
             return $this->cache->fetch($key);
         }
 
-        $targetPath = $this->resolver->resolve($path, $filter);
-        $this->saveToCache($key, $targetPath);
+        $resolved = $this->resolver->resolve($path, $filter);
+        $this->saveToCache($key, $resolved);
 
-        return $targetPath;
+        return $resolved;
     }
 
     /**

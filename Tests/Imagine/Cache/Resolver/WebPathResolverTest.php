@@ -109,11 +109,11 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->setRequest($request);
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $webFilePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
         // The file has already been cached by this resolver.
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->filesystem->mkdir(dirname($webFilePath));
+        file_put_contents($webFilePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
         $response = $this->resolver->resolve($path, 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
@@ -145,11 +145,11 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->setRequest($request);
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
         // The file has already been cached by this resolver.
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
         $response = $this->resolver->resolve($path, 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
@@ -181,7 +181,7 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->setRequest($request);
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
         // Resolve the requested image for the given filter.
         $this->assertNull($this->resolver->resolve($path, 'thumbnail'));
@@ -192,9 +192,9 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->store($response, $path, 'thumbnail');
         $this->assertEquals(201, $response->getStatusCode(),
             '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertTrue(file_exists($targetPath),
+        $this->assertTrue(file_exists($filePath),
             '->store() creates the cached image file to be served.');
-        $this->assertEquals($content, file_get_contents($targetPath),
+        $this->assertEquals($content, file_get_contents($filePath),
             '->store() writes the content of the original Response into the cache file.');
     }
 
@@ -225,13 +225,13 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->setRequest($request);
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
         // Resolve the requested image for the given filter.
         $this->assertNull($this->resolver->resolve($path, 'thumbnail'));
 
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
         $response = $this->resolver->resolve($path, 'thumbnail');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
@@ -288,10 +288,10 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
 
         $this->resolver->setRequest(Request::create('/'));
 
@@ -299,7 +299,7 @@ class WebPathResolverTest extends AbstractTest
         $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
 
         $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
-        $this->assertFalse(file_exists($targetPath));
+        $this->assertFalse(file_exists($filePath));
     }
 
     public function testDoNothingIfCachedImageNotExistOnRemove()
@@ -311,14 +311,14 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $path = 'cats.jpeg';
-        $targetPath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
         // guard
-        $this->assertFalse(file_exists($targetPath));
+        $this->assertFalse(file_exists($filePath));
 
         $this->resolver->setRequest(Request::create('/'));
 
         $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
-        $this->assertFalse(file_exists($targetPath));
+        $this->assertFalse(file_exists($filePath));
     }
 }

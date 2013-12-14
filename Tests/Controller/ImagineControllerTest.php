@@ -105,12 +105,12 @@ class ImagineControllerTest extends AbstractTest
 
         $response = $controller->filterAction($request, 'cats.jpeg', 'thumbnail');
 
-        $targetPath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
+        $filePath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals(201, $response->getStatusCode());
-        $this->assertTrue(file_exists($targetPath));
-        $this->assertNotEmpty(file_get_contents($targetPath));
+        $this->assertTrue(file_exists($filePath));
+        $this->assertNotEmpty(file_get_contents($filePath));
 
         return $controller;
     }
