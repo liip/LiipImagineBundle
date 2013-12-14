@@ -14,11 +14,11 @@ class WebPathResolver extends AbstractFilesystemResolver
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
         $this->basePath = $this->getRequest()->getBaseUrl();
-        $targetPath = $this->getFilePath($path, $filter);
+        $filePath = $this->getFilePath($path, $filter);
 
         // if the file has already been cached, we're probably not rewriting
         // correctly, hence make a 301 to proper location, so browser remembers
-        if (file_exists($targetPath)) {
+        if (file_exists($filePath)) {
             // Strip the base URL of this request from the browserpath to not interfere with the base path.
             $baseUrl = $this->getRequest()->getBaseUrl();
             if ($baseUrl && 0 === strpos($browserPath, $baseUrl)) {
@@ -32,9 +32,9 @@ class WebPathResolver extends AbstractFilesystemResolver
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false)
     {
-        return $this->cacheManager->generateUrl($targetPath, $filter, $absolute);
+        return $this->cacheManager->generateUrl($path, $filter, $absolute);
     }
 
     /**

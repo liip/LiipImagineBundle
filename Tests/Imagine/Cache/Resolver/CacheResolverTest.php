@@ -16,7 +16,7 @@ class CacheResolverTest extends AbstractTest
 {
     protected $filter = 'thumbnail';
     protected $path = 'MadCat2.jpeg';
-    protected $targetPath = '/media/cache/thumbnail/MadCat2.jpeg';
+    protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
 
     public function testResolveIsSavedToCache()
     {
@@ -25,16 +25,16 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->targetPath))
+            ->will($this->returnValue($this->webPath))
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
         // Call multiple times to verify the cache is used.
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
     public function testStoreIsForwardedToResolver()
@@ -45,21 +45,21 @@ class CacheResolverTest extends AbstractTest
         $resolver
             ->expects($this->exactly(2))
             ->method('store')
-            ->with($response, $this->targetPath, $this->filter)
+            ->with($response, $this->webPath, $this->filter)
             ->will($this->returnValue($response))
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
         // Call twice, as this method should not be cached.
-        $this->assertSame($response, $cacheResolver->store($response, $this->targetPath, $this->filter));
-        $this->assertSame($response, $cacheResolver->store($response, $this->targetPath, $this->filter));
+        $this->assertSame($response, $cacheResolver->store($response, $this->webPath, $this->filter));
+        $this->assertSame($response, $cacheResolver->store($response, $this->webPath, $this->filter));
     }
 
     public function testGetBrowserPath()
     {
-        $absolute = 'http://example.com' . $this->targetPath;
-        $relative = $this->targetPath;
+        $absolute = 'http://example.com' . $this->webPath;
+        $relative = $this->webPath;
 
         $resolver = $this->getMockResolver();
         $resolver
@@ -94,7 +94,7 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->targetPath))
+            ->will($this->returnValue($this->webPath))
         ;
         $resolver
             ->expects($this->once())
@@ -110,7 +110,7 @@ class CacheResolverTest extends AbstractTest
         /*
          * Three items:
          * * The result of resolve.
-         * * The result of reverse for the targetPath.
+         * * The result of reverse for the filePath.
          * * The index of both entries.
          */
         $this->assertCount(2, $cache->data);
