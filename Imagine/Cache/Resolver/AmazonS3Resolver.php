@@ -6,11 +6,9 @@ use \AmazonS3;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 {
@@ -110,7 +108,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
             $response->headers->set('Location', $this->getObjectUrl($targetPath));
         } else {
             if ($this->logger) {
-                $this->logger->warn('The object could not be created on Amazon S3.', array(
+                $this->logger->warning('The object could not be created on Amazon S3.', array(
                     'targetPath' => $targetPath,
                     'filter' => $filter,
                     's3_response' => $storageResponse,

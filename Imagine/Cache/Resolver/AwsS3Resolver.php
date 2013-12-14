@@ -4,14 +4,11 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
-
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
 {
@@ -109,7 +106,7 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
-                $this->logger->warn('The object could not be created on Amazon S3.', array(
+                $this->logger->warning('The object could not be created on Amazon S3.', array(
                     'targetPath'  => $targetPath,
                     'filter'      => $filter,
                 ));
