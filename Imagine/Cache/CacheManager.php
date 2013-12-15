@@ -164,12 +164,10 @@ class CacheManager
     /**
      * Resolves filtered path for rendering in the browser.
      *
-     * @param Request $request
      * @param string $path
      * @param string $filter
      *
-     * @return string|boolean|Response target path or false if filter has no
-     *      resolver or a Response object from the resolver
+     * @return Response|boolean The response of the respective Resolver or false.
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
@@ -194,15 +192,15 @@ class CacheManager
      * @see ResolverInterface::store
      *
      * @param Response $response
-     * @param string $targetPath
+     * @param string $path
      * @param string $filter
      *
      * @return Response
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
         if ($response->isSuccessful()) {
-            $response = $this->getResolver($filter)->store($response, $targetPath, $filter);
+            $response = $this->getResolver($filter)->store($response, $path, $filter);
         }
 
         return $response;
@@ -213,14 +211,14 @@ class CacheManager
      *
      * @see ResolverInterface::remove
      *
-     * @param string $targetPath
+     * @param string $path
      * @param string $filter
      *
      * @return bool
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        return $this->getResolver($filter)->remove($targetPath, $filter);
+        return $this->getResolver($filter)->remove($path, $filter);
     }
 
     /**

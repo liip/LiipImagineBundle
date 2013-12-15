@@ -25,35 +25,97 @@ class AbstractFilesystemResolverTest extends AbstractTest
             'content-type' => 'image/jpeg',
         ));
 
-        $targetPath = $this->tempDir.'/cached/АГГЗ.jpeg';
+        $filePath = $this->tempDir.'/cached/АГГЗ.jpeg';
 
         $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
-        $resolver->store($response, $targetPath, 'mirror');
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->will($this->returnValue($filePath))
+        ;
 
-        $this->assertTrue(file_exists($targetPath));
-        $this->assertEquals($data, file_get_contents($targetPath));
+        $resolver->store($response, '/a/path', 'mirror');
+
+        $this->assertTrue(file_exists($filePath));
+        $this->assertEquals($data, file_get_contents($filePath));
     }
 
-    public function testMkdirVerifyPermissionOnLastLevel () {
+    public function testUsePathAndFilterToGetFilePath()
+    {
         if (false !== strpos(strtolower(PHP_OS), 'win')) {
             $this->markTestSkipped('mkdir mode is ignored on windows');
         }
 
+        $expectedPath = '/a/path';
+        $expectedFilter = 'thumbnail';
+        $expectedFilePath = $this->tempDir . '/cats.jpeg';
+
         $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue($expectedFilePath))
+        ;
 
+        $resolver->store(new Response('theImageContent'), $expectedPath, $expectedFilter);
+    }
 
-        $resolver->store(new Response(''), $this->tempDir . '/first-level/second-level/cats.jpeg', 'thumbnail');
+    public function testStoreResponseContentToFilePath()
+    {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('mkdir mode is ignored on windows');
+        }
+
+        $expectedFilePath = $this->tempDir . '/cats.jpeg';
+
+        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->will($this->returnValue($expectedFilePath))
+        ;
+
+        $resolver->store(new Response('theImageContent'), '/a/path', 'thumbnail');
+        $this->assertFileExists($expectedFilePath);
+        $this->assertEquals('theImageContent', file_get_contents($expectedFilePath));
+    }
+
+    public function testMkdirVerifyPermissionOnLastLevel()
+    {
+        if (false !== strpos(strtolower(PHP_OS), 'win')) {
+            $this->markTestSkipped('mkdir mode is ignored on windows');
+        }
+
+        $filePath = $this->tempDir . '/first-level/second-level/cats.jpeg';
+
+        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->will($this->returnValue($filePath))
+        ;
+
+        $resolver->store(new Response(''), '/a/path', 'thumbnail');
         $this->assertEquals(040777, fileperms($this->tempDir . '/first-level/second-level'));
     }
 
-    public function testMkdirVerifyPermissionOnFirstLevel () {
+    public function testMkdirVerifyPermissionOnFirstLevel()
+    {
         if (false !== strpos(strtolower(PHP_OS), 'win')) {
             $this->markTestSkipped('mkdir mode is ignored on windows');
         }
 
-        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $filePath = $this->tempDir . '/first-level/second-level/cats.jpeg';
 
-        $resolver->store(new Response(''), $this->tempDir . '/first-level/second-level/cats.jpeg', 'thumbnail');
+        $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->will($this->returnValue($filePath))
+        ;
+
+        $resolver->store(new Response(''), '/a/path', 'thumbnail');
         $this->assertEquals(040777, fileperms($this->tempDir . '/first-level'));
     }
 
@@ -63,15 +125,27 @@ class AbstractFilesystemResolverTest extends AbstractTest
             $this->markTestSkipped('mkdir mode is ignored on windows');
         }
 
+        $filePath = $this->tempDir.'/unwriteable/thumbnail/cats.jpeg';
+
         $resolver = $this->getMockAbstractFilesystemResolver(new Filesystem());
+        $resolver
+            ->expects($this->once())
+            ->method('getFilePath')
+            ->will($this->returnValue($filePath))
+        ;
 
         $this->filesystem->mkdir($this->tempDir.'/unwriteable', 0555);
 
         $this->setExpectedException('RuntimeException', 'Could not create directory '.dirname($this->tempDir.'/unwriteable/thumbnail/cats.jpeg'));
-        $resolver->store(new Response(''), $this->tempDir.'/unwriteable/thumbnail/cats.jpeg', 'thumbnail');
+        $resolver->store(new Response(''), '/a/path', 'thumbnail');
     }
 
-    protected function getMockAbstractFilesystemResolver($filesystem)
+    /**
+     * @param Filesystem $filesystem
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
+     */
+    protected function getMockAbstractFilesystemResolver(Filesystem $filesystem)
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver', array('resolve', 'clear', 'getBrowserPath', 'getFilePath'), array($filesystem));
     }

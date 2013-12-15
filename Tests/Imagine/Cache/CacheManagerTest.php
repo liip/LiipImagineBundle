@@ -194,7 +194,7 @@ class CacheManagerTest extends AbstractTest
     /**
      * @dataProvider generateUrlProvider
      */
-    public function testGenerateUrl($filterConfig, $targetPath, $expectedPath)
+    public function testGenerateUrl($filterConfig, $path, $expectedPath)
     {
         $config = $this->getMockFilterConfiguration();
         $config
@@ -214,6 +214,6 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets');
-        $cacheManager->generateUrl($targetPath, 'thumbnail', true);
+        $cacheManager->generateUrl($path, 'thumbnail', true);
     }
 }

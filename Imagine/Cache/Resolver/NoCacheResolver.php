@@ -14,15 +14,12 @@ class NoCacheResolver extends WebPathResolver
      */
     public function resolve($path, $filter)
     {
-        $this->setBasePath($this->getRequest()->getBaseUrl());
-
-        return $this->getFilePath($path, $filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
         return $response;
     }
@@ -30,7 +27,7 @@ class NoCacheResolver extends WebPathResolver
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
         return true;
     }

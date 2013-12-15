@@ -61,29 +61,18 @@ class CacheResolver implements ResolverInterface
             return $this->cache->fetch($key);
         }
 
-        $targetPath = $this->resolver->resolve($path, $filter);
-        $this->saveToCache($key, $targetPath);
+        $resolved = $this->resolver->resolve($path, $filter);
+        $this->saveToCache($key, $resolved);
 
-        /*
-         * The targetPath being a string will be forwarded to the ResolverInterface::store method.
-         * As there is no way to reverse this operation by the interface, we store this information manually.
-         *
-         * If it's not a string, it's a Response it will be returned as it without calling the store method.
-         */
-        if (is_string($targetPath)) {
-            $reverseKey = $this->generateCacheKey('reverse', $targetPath, $filter);
-            $this->saveToCache($reverseKey, $path);
-        }
-
-        return $targetPath;
+        return $resolved;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(Response $response, $path, $filter)
     {
-        return $this->resolver->store($response, $targetPath, $filter);
+        return $this->resolver->store($response, $path, $filter);
     }
 
     /**
@@ -108,18 +97,16 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        $removed = $this->resolver->remove($targetPath, $filter);
+        $removed = $this->resolver->remove($path, $filter);
 
         // If the resolver did not remove the content, we can leave the cache.
         if ($removed) {
-            $reverseKey = $this->generateCacheKey('reverse', $targetPath, $filter);
-            if ($this->cache->contains($reverseKey)) {
-                $path = $this->cache->fetch($reverseKey);
-
+            $key = $this->generateCacheKey('resolve', $path, $filter);
+            if ($this->cache->contains($key)) {
                 // The indexKey is not utilizing the method so the value is not important.
-                $indexKey = $this->generateIndexKey($this->generateCacheKey(null, $path, $filter));
+                $indexKey = $this->generateIndexKey($key);
 
                 // Retrieve the index and remove the content from the cache.
                 $index = $this->cache->fetch($indexKey);
@@ -129,7 +116,6 @@ class CacheResolver implements ResolverInterface
 
                 // Remove the auxiliary keys.
                 $this->cache->delete($indexKey);
-                $this->cache->delete($reverseKey);
             }
         }
 
