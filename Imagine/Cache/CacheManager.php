@@ -167,6 +167,19 @@ class CacheManager
     }
 
     /**
+     * Checks whether the path is already stored within the respective Resolver.
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return bool
+     */
+    public function isStored($path, $filter)
+    {
+        return $this->getResolver($filter)->isStored($path, $filter);
+    }
+
+    /**
      * Resolves filtered path for rendering in the browser.
      *
      * @param string $path

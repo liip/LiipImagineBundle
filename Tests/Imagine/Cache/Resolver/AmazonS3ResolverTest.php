@@ -16,12 +16,6 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3 = $this->getAmazonS3Mock();
         $s3
             ->expects($this->once())
-            ->method('if_object_exists')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true))
-        ;
-        $s3
-            ->expects($this->once())
             ->method('get_object_url')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
         ;
@@ -33,11 +27,6 @@ class AmazonS3ResolverTest extends AbstractTest
     public function testObjUrlOptionsPassedToAmazonOnResolve()
     {
         $s3 = $this->getAmazonS3Mock();
-        $s3
-            ->expects($this->once())
-            ->method('if_object_exists')
-            ->will($this->returnValue(true))
-        ;
         $s3
             ->expects($this->once())
             ->method('get_object_url')
@@ -100,7 +89,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $this->assertEquals('http://images.example.com/thumb/foobar.jpg', $response->headers->get('Location'));
     }
 
-    public function testResolveNewObject()
+    public function testIsStoredChecksObjectExistence()
     {
         $s3 = $this->getAmazonS3Mock();
         $s3
@@ -111,17 +100,12 @@ class AmazonS3ResolverTest extends AbstractTest
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $this->assertNull($resolver->resolve('/some-folder/path.jpg', 'thumb'));
+        $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
 
     public function testReturnResolvedImageUrlOnResolve()
     {
         $s3 = $this->getAmazonS3Mock();
-        $s3
-            ->expects($this->once())
-            ->method('if_object_exists')
-            ->will($this->returnValue(true))
-        ;
         $s3
             ->expects($this->once())
             ->method('get_object_url')
@@ -199,6 +183,9 @@ class AmazonS3ResolverTest extends AbstractTest
         return $s3Response;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\AmazonS3
+     */
     protected function getAmazonS3Mock()
     {
         $mockedMethods = array(

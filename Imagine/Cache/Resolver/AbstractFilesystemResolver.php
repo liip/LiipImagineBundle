@@ -84,6 +84,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
+    public function isStored($path, $filter)
+    {
+        return file_exists($this->getFilePath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function store(Response $response, $path, $filter)
     {
         $filePath = $this->getFilePath($path, $filter);

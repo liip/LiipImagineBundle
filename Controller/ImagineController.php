@@ -52,8 +52,8 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        if ($url = $this->cacheManager->resolve($path, $filter)) {
-            return new RedirectResponse($url, 301);
+        if ($this->cacheManager->isStored($path, $filter)) {
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
         }
 
         $image = $this->dataManager->find($filter, $path);

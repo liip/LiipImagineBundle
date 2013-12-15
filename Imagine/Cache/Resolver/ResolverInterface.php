@@ -7,12 +7,22 @@ use Symfony\Component\HttpFoundation\Response;
 interface ResolverInterface
 {
     /**
+     * Checks whether the given path is stored within this Resolver.
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return bool
+     */
+    function isStored($path, $filter);
+
+    /**
      * Resolves filtered path for rendering in the browser.
      *
      * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
      *
-     * @return string|null An url of cached image
+     * @return string The URL of the cached image.
      */
     function resolve($path, $filter);
 
