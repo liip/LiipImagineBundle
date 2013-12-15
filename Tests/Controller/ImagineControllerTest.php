@@ -120,6 +120,11 @@ class ImagineControllerTest extends AbstractTest
         $cacheManager = $this->getMockCacheManager();
         $cacheManager
             ->expects($this->once())
+            ->method('isStored')
+            ->will($this->returnValue(true))
+        ;
+        $cacheManager
+            ->expects($this->once())
             ->method('resolve')
             ->will($this->returnValue('http://foo.com/a/path/image.jpg'))
         ;
