@@ -16,12 +16,6 @@ class AwsS3ResolverTest extends AbstractTest
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true))
-        ;
-        $s3
-            ->expects($this->once())
             ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
         ;
@@ -33,11 +27,6 @@ class AwsS3ResolverTest extends AbstractTest
     public function testObjUrlOptionsPassedToS3ClintOnResolve()
     {
         $s3 = $this->getS3ClientMock();
-        $s3
-            ->expects($this->once())
-            ->method('doesObjectExist')
-            ->will($this->returnValue(true))
-        ;
         $s3
             ->expects($this->once())
             ->method('getObjectUrl')
@@ -103,7 +92,7 @@ class AwsS3ResolverTest extends AbstractTest
         $this->assertEquals('http://images.example.com/thumb/foobar.jpg', $response->headers->get('Location'));
     }
 
-    public function testResolveNewObject()
+    public function testIsStoredChecksObjectExistence()
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -114,17 +103,12 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
-        $this->assertNull($resolver->resolve('/some-folder/path.jpg', 'thumb'));
+        $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
 
     public function testReturnResolvedImageUrlOnResolve()
     {
         $s3 = $this->getS3ClientMock();
-        $s3
-            ->expects($this->once())
-            ->method('doesObjectExist')
-            ->will($this->returnValue(true))
-        ;
         $s3
             ->expects($this->once())
             ->method('getObjectUrl')
@@ -200,6 +184,9 @@ class AwsS3ResolverTest extends AbstractTest
         return $s3Response;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Aws\S3\S3Client
+     */
     protected function getS3ClientMock()
     {
         $mockedMethods = array(

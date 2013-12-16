@@ -63,11 +63,17 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
+    public function isStored($path, $filter)
+    {
+        return $this->objectExists($this->getObjectPath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function resolve($path, $filter)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
-
-        return $this->objectExists($objectPath) ? $this->getObjectUrl($objectPath): null;
+        return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
     /**
@@ -103,7 +109,6 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-
     public function remove($path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
