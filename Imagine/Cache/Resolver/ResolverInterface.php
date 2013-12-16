@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Symfony\Component\HttpFoundation\Response;
 
 interface ResolverInterface
@@ -23,6 +24,8 @@ interface ResolverInterface
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return string The URL of the cached image.
+     *
+     * @throws NotResolvableException
      */
     function resolve($path, $filter);
 
