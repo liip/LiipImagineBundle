@@ -12,8 +12,17 @@ class NoCacheResolver extends WebPathResolver
     /**
      * {@inheritDoc}
      */
+    public function isStored($path, $filter)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function resolve($path, $filter)
     {
+        return $this->getRequest()->getSchemeAndHttpHost().'/'.$path;
     }
 
     /**
@@ -21,7 +30,6 @@ class NoCacheResolver extends WebPathResolver
      */
     public function store(Response $response, $path, $filter)
     {
-        return $response;
     }
 
     /**

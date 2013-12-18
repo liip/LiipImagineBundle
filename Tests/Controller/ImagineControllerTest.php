@@ -117,19 +117,29 @@ class ImagineControllerTest extends AbstractTest
 
     public function testFilterDelegatesResolverResponse()
     {
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
-
         $cacheManager = $this->getMockCacheManager();
         $cacheManager
             ->expects($this->once())
+            ->method('isStored')
+            ->will($this->returnValue(true))
+        ;
+        $cacheManager
+            ->expects($this->once())
             ->method('resolve')
-            ->will($this->returnValue($response))
+            ->will($this->returnValue('http://foo.com/a/path/image.jpg'))
         ;
 
         $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array($this->configuration));
         $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration));
 
         $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
-        $this->assertSame($response, $controller->filterAction(Request::create('/media/cache/thumbnail/cats.jpeg'), 'cats.jpeg', 'thumbnail'));
+
+        $request = Request::create('/media/cache/thumbnail/cats.jpeg');
+
+        $response = $controller->filterAction($request, 'cats.jpeg', 'thumbnail');
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('http://foo.com/a/path/image.jpg', $response->headers->get('Location'));
+        $this->assertEquals(301, $response->getStatusCode());
     }
 }

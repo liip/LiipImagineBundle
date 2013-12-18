@@ -2,18 +2,13 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use \AmazonS3;
-
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
+class AmazonS3Resolver implements ResolverInterface
 {
     /**
-     * @var AmazonS3
+     * @var \AmazonS3
      */
     protected $storage;
 
@@ -26,11 +21,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @var string
      */
     protected $acl;
-
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
 
     /**
      * @var array
@@ -50,7 +40,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
-    public function __construct(AmazonS3 $storage, $bucket, $acl = AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
+    public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
     {
         $this->storage = $storage;
 
@@ -71,11 +61,11 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     }
 
     /**
-     * @param CacheManager $cacheManager
+     * {@inheritDoc}
      */
-    public function setCacheManager(CacheManager $cacheManager)
+    public function isStored($path, $filter)
     {
-        $this->cacheManager = $cacheManager;
+        return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
     /**
@@ -83,10 +73,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function resolve($path, $filter)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
-        }
+        return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
     /**
@@ -117,19 +104,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
         }
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBrowserPath($path, $filter, $absolute = false)
-    {
-        $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return $this->getObjectUrl($objectPath);
-        }
-
-        return $this->cacheManager->generateUrl($path, $filter, $absolute);
     }
 
     /**

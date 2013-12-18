@@ -4,13 +4,10 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
+class AwsS3Resolver implements ResolverInterface
 {
     /**
      * @var S3Client
@@ -26,11 +23,6 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @var string
      */
     protected $acl;
-
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
 
     /**
      * @var array
@@ -71,11 +63,11 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     }
 
     /**
-     * @param CacheManager $cacheManager
+     * {@inheritDoc}
      */
-    public function setCacheManager(CacheManager $cacheManager)
+    public function isStored($path, $filter)
     {
-        $this->cacheManager = $cacheManager;
+        return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
     /**
@@ -83,10 +75,7 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function resolve($path, $filter)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
-        }
+        return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
     /**
@@ -119,19 +108,6 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
         $response->headers->set('Location', $storageResponse->get('ObjectURL'));
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBrowserPath($path, $filter, $absolute = false)
-    {
-        $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return $this->getObjectUrl($objectPath);
-        }
-
-        return $this->cacheManager->generateUrl($path, $filter, $absolute);
     }
 
     /**
