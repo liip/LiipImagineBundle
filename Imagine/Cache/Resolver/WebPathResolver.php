@@ -64,4 +64,12 @@ class WebPathResolver extends AbstractFilesystemResolver
         //TODO: find out why I need double urldecode to get a valid path
         return urldecode(urldecode($browserPath));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFilePath($path, $filter)
+    {
+        return $this->cacheManager->getWebRoot().$this->resolve($path, $filter);
+    }
 }

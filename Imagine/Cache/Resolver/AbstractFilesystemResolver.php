@@ -160,13 +160,12 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * Return the local filepath.
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
      * @param string $path The resource path to convert.
      * @param string $filter The name of the imagine filter.
      *
      * @return string
      */
-    protected function getFilePath($path, $filter)
-    {
-        return $this->cacheManager->getWebRoot().$this->resolve($path, $filter);
-    }
+    abstract protected function getFilePath($path, $filter);
 }
