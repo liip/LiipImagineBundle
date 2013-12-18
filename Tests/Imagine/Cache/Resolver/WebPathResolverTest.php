@@ -76,8 +76,8 @@ class WebPathResolverTest extends AbstractTest
 
         $path = 'cats.jpeg';
 
-        // Resolve the requested image for the given filter.
-        $this->assertNull($this->resolver->resolve($path, 'thumbnail'));
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
@@ -179,8 +179,8 @@ class WebPathResolverTest extends AbstractTest
         $path = 'cats.jpeg';
         $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
-        // Resolve the requested image for the given filter.
-        $this->assertNull($this->resolver->resolve($path, 'thumbnail'));
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
@@ -223,8 +223,8 @@ class WebPathResolverTest extends AbstractTest
         $path = 'cats.jpeg';
         $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
 
-        // Resolve the requested image for the given filter.
-        $this->assertNull($this->resolver->resolve($path, 'thumbnail'));
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
 
         $this->filesystem->mkdir(dirname($filePath));
         file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));

@@ -7,25 +7,23 @@ use Symfony\Component\Finder\Finder;
 class WebPathResolver extends AbstractFilesystemResolver
 {
     /**
+     * If the file has already been cached, we're probably not rewriting
+     * correctly, hence make a 301 to proper location, so browser remembers.
+     *
+     * Strip the base URL of this request from the browserpath to not interfere with the base path.
+     *
      * {@inheritDoc}
      */
     public function resolve($path, $filter)
     {
         $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
         $this->basePath = $this->getRequest()->getBaseUrl();
-        $filePath = $this->getFilePath($path, $filter);
 
-        // if the file has already been cached, we're probably not rewriting
-        // correctly, hence make a 301 to proper location, so browser remembers
-        if (file_exists($filePath)) {
-            // Strip the base URL of this request from the browserpath to not interfere with the base path.
-            $baseUrl = $this->getRequest()->getBaseUrl();
-            if ($baseUrl && 0 === strpos($browserPath, $baseUrl)) {
-                $browserPath = substr($browserPath, strlen($baseUrl));
-            }
-
-            return $this->getRequest()->getBasePath().$browserPath;
+        if ($this->basePath && 0 === strpos($browserPath, $this->basePath)) {
+            $browserPath = substr($browserPath, strlen($this->basePath));
         }
+
+        return $this->getRequest()->getBasePath().$browserPath;
     }
 
     /**
@@ -52,20 +50,6 @@ class WebPathResolver extends AbstractFilesystemResolver
         if (is_dir($cachePath)) {
             $this->filesystem->remove(Finder::create()->in($cachePath)->depth(0)->directories());
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getFilePath($path, $filter)
-    {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-
-        if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
-            $browserPath = substr($browserPath, strlen($this->basePath));
-        }
-
-        return $this->cacheManager->getWebRoot().$browserPath;
     }
 
     /**
