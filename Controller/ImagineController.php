@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Controller;
 
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -28,17 +29,22 @@ class ImagineController
     protected $cacheManager;
 
     /**
-     * Constructor.
-     *
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+    /**
      * @param DataManager $dataManager
      * @param FilterManager $filterManager
      * @param CacheManager $cacheManager
+     * @param ImagineInterface $imagine
      */
-    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager)
+    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager, ImagineInterface $imagine)
     {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
+        $this->imagine = $imagine;
     }
 
     /**
@@ -56,7 +62,8 @@ class ImagineController
             return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
         }
 
-        $image = $this->dataManager->find($filter, $path);
+        $rawImage = $this->dataManager->find($filter, $path);
+        $image = $this->imagine->load($rawImage->getContent());
 
         $response = $this->filterManager->get($request, $filter, $image, $path);
 

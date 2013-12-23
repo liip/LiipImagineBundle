@@ -2,16 +2,12 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
+use Liip\ImagineBundle\Imagine\RawImage;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FileSystemLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
     /**
      * @var array
      */
@@ -25,13 +21,11 @@ class FileSystemLoader implements LoaderInterface
     /**
      * Constructor.
      *
-     * @param ImagineInterface  $imagine
      * @param array             $formats
      * @param string            $rootPath
      */
-    public function __construct(ImagineInterface $imagine, array $formats, $rootPath)
+    public function __construct(array $formats, $rootPath)
     {
-        $this->imagine = $imagine;
         $this->formats = $formats;
         $this->rootPath = realpath($rootPath);
     }
@@ -93,6 +87,9 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        return $this->imagine->open($absolutePath);
+        return new RawImage(
+            file_get_contents($absolutePath),
+            MimeTypeGuesser::getInstance()->guess($absolutePath)
+        );
     }
 }

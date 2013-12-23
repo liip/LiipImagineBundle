@@ -4,9 +4,16 @@ namespace Liip\ImagineBundle\Imagine\Data;
 
 use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Imagine\RawImage;
 
 class DataManager
 {
+    /**
+     * @var MimeTypeGuesserInterface
+     */
+    protected $mimeTypeGuesser;
+
     /**
      * @var FilterConfiguration
      */
@@ -23,13 +30,13 @@ class DataManager
     protected $loaders = array();
 
     /**
-     * Constructor.
-     *
+     * @param MimeTypeGuesserInterface $mimeTypeGuesser
      * @param FilterConfiguration $filterConfig
      * @param string $defaultLoader
      */
-    public function __construct(FilterConfiguration $filterConfig, $defaultLoader = null)
+    public function __construct(MimeTypeGuesserInterface $mimeTypeGuesser, FilterConfiguration $filterConfig, $defaultLoader = null)
     {
+        $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
     }
@@ -78,12 +85,26 @@ class DataManager
      * @param string $filter
      * @param string $path
      *
-     * @return \Imagine\Image\ImageInterface
+     * @throws \LogicException
+     *
+     * @return RawImage
      */
     public function find($filter, $path)
     {
         $loader = $this->getLoader($filter);
 
-        return $loader->find($path);
+        $rawImage = $loader->find($path);
+        if (false == $rawImage instanceof RawImage) {
+            $rawImage = new RawImage($rawImage, $this->mimeTypeGuesser->guess($rawImage));
+        }
+
+        if (null == $rawImage->getMimeType()) {
+            throw new \LogicException(sprintf('The mime type of image %s was not guessed.', $path));
+        }
+        if (0 !== strpos($rawImage->getMimeType(), 'image/')) {
+            throw new \LogicException(sprintf('The mime type of image %s must be image/xxx got %s.', $path, $rawImage->getMimeType()));
+        }
+
+        return $rawImage;
     }
 }

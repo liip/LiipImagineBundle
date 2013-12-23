@@ -11,6 +11,7 @@
         <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
         <parameter key="liip_imagine.cache.manager.class">Liip\ImagineBundle\Imagine\Cache\CacheManager</parameter>
+        <parameter key="liip_imagine.mime_type_guesser.class">Liip\ImagineBundle\Imagine\SimpleMimeTypeGuesser</parameter>
 
         <!-- Controller class -->
 
@@ -83,12 +84,15 @@
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
+        <service id="liip_imagine.mime_type_guesser" class="%liip_imagine.mime_type_guesser.class%" />
+
         <!-- Controller -->
 
         <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine" />
         </service>
 
         <!-- Route Loader -->
@@ -169,7 +173,6 @@
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <tag name="liip_imagine.data.loader" loader="filesystem" />
-            <argument type="service" id="liip_imagine" />
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.data_root%</argument>
         </service>

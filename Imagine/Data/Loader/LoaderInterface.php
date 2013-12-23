@@ -2,6 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
+use Liip\ImagineBundle\Imagine\RawImage;
+
 interface LoaderInterface
 {
     /**
@@ -11,7 +13,7 @@ interface LoaderInterface
      *
      * @param mixed $path
      *
-     * @return \Imagine\Image\ImageInterface
+     * @return RawImage|string An image content
      */
     function find($path);
 }

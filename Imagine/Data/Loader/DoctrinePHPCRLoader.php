@@ -31,9 +31,9 @@ class DoctrinePHPCRLoader extends FileSystemLoader
      * @param DocumentManager   $manager
      * @param string            $class
      */
-    public function __construct(ImagineInterface $imagine, array $formats, $rootPath, DocumentManager $manager, $class = null)
+    public function __construct(array $formats, $rootPath, DocumentManager $manager, $class = null)
     {
-        parent::__construct($imagine, $formats, $rootPath);
+        parent::__construct($formats, $rootPath);
 
         $this->manager = $manager;
         $this->class = $class;
@@ -46,9 +46,7 @@ class DoctrinePHPCRLoader extends FileSystemLoader
     }
 
     /**
-     * @param string $path
-     *
-     * @return \Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($path)
     {
@@ -75,6 +73,6 @@ class DoctrinePHPCRLoader extends FileSystemLoader
             throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $path));
         }
 
-        return $this->imagine->load(stream_get_contents($this->getStreamFromImage($images->first())));
+        return stream_get_contents($this->getStreamFromImage($images->first()));
     }
 }

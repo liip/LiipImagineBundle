@@ -16,6 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 
+use Liip\ImagineBundle\Imagine\SimpleMimeTypeGuesser;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -82,9 +83,9 @@ class ImagineControllerTest extends AbstractTest
             ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
         ;
 
-        $dataLoader = new FileSystemLoader($this->imagine, array(), $this->dataDir);
+        $dataLoader = new FileSystemLoader(array(), $this->dataDir);
 
-        $dataManager = new DataManager($this->configuration, 'filesystem');
+        $dataManager = new DataManager(new SimpleMimeTypeGuesser(), $this->configuration, 'filesystem');
         $dataManager->addLoader('filesystem', $dataLoader);
 
         $filterLoader = new ThumbnailFilterLoader();
@@ -97,7 +98,7 @@ class ImagineControllerTest extends AbstractTest
         $cacheManager = new CacheManager($this->configuration, $router, $this->webRoot, 'web_path');
         $cacheManager->addResolver('web_path', $webPathResolver);
 
-        $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
+        $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
 
         $request = Request::create('/media/cache/thumbnail/cats.jpeg');
 
@@ -129,10 +130,10 @@ class ImagineControllerTest extends AbstractTest
             ->will($this->returnValue('http://foo.com/a/path/image.jpg'))
         ;
 
-        $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array($this->configuration));
+        $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array(new SimpleMimeTypeGuesser(), $this->configuration));
         $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration));
 
-        $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
+        $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
 
         $request = Request::create('/media/cache/thumbnail/cats.jpeg');
 
