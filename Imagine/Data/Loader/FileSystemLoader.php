@@ -2,15 +2,23 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
+use Liip\ImagineBundle\Model\Binary;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FileSystemLoader implements LoaderInterface
 {
     /**
-     * @var ImagineInterface
+     * @var MimeTypeGuesserInterface
      */
-    protected $imagine;
+    protected $mimeTypeGuesser;
+
+    /**
+     * @var ExtensionGuesserInterface
+     */
+    protected $extensionGuesser;
 
     /**
      * @var array
@@ -23,17 +31,21 @@ class FileSystemLoader implements LoaderInterface
     protected $rootPath;
 
     /**
-     * Constructor.
-     *
-     * @param ImagineInterface  $imagine
-     * @param array             $formats
-     * @param string            $rootPath
+     * @param MimeTypeGuesserInterface  $mimeTypeGuesser
+     * @param ExtensionGuesserInterface $extensionGuesser
+     * @param array                     $formats
+     * @param string                    $rootPath
      */
-    public function __construct(ImagineInterface $imagine, array $formats, $rootPath)
-    {
-        $this->imagine = $imagine;
+    public function __construct(
+        MimeTypeGuesserInterface $mimeTypeGuesser,
+        ExtensionGuesserInterface $extensionGuesser,
+        array $formats,
+        $rootPath
+    ){
         $this->formats = $formats;
         $this->rootPath = realpath($rootPath);
+        $this->mimeTypeGuesser = $mimeTypeGuesser;
+        $this->extensionGuesser = $extensionGuesser;
     }
 
     /**
@@ -93,6 +105,12 @@ class FileSystemLoader implements LoaderInterface
             }
         }
 
-        return $this->imagine->open($absolutePath);
+        $mimeType = $this->mimeTypeGuesser->guess($absolutePath);
+
+        return new Binary(
+            file_get_contents($absolutePath),
+            $mimeType,
+            $this->extensionGuesser->guess($mimeType)
+        );
     }
 }

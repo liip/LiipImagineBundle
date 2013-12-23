@@ -9,11 +9,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class AbstractDoctrineLoader implements LoaderInterface
 {
     /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
-    /**
      * @var ObjectManager
      */
     protected $manager;
@@ -24,25 +19,12 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     protected $class;
 
     /**
-     * @var array
-     */
-    protected $formats;
-
-    /**
-     * Constructor.
-     *
-     * @param ImagineInterface $imagine
      * @param ObjectManager $manager
      * @param string $class
      * @param array $formats possible image formats to look up file ids
      */
-    public function __construct(
-        ImagineInterface $imagine,
-        ObjectManager $manager,
-        $class = null,
-        array $formats = array()
-    ) {
-        $this->imagine = $imagine;
+    public function __construct(ObjectManager $manager, $class = null)
+    {
         $this->manager = $manager;
         $this->class = $class;
         $this->formats = $formats;
@@ -67,9 +49,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     abstract protected function getStreamFromImage($image);
 
     /**
-     * @param string $path
-     *
-     * @return \Imagine\Image\ImageInterface
+     * {@inheritDoc}
      */
     public function find($path)
     {
@@ -97,6 +77,6 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
             throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $path));
         }
 
-        return $this->imagine->load(stream_get_contents($this->getStreamFromImage($image)));
+        return stream_get_contents($this->getStreamFromImage($image));
     }
 }
