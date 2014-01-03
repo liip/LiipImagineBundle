@@ -19,7 +19,7 @@ class GridFSLoader implements LoaderInterface
 
     /**
      * @param DocumentManager $dm
-     * @param string $class
+     * @param string          $class
      */
     public function __construct(DocumentManager $dm, $class)
     {

@@ -6,10 +6,7 @@ use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\RawImage;
-use Liip\ImagineBundle\Imagine\SimpleMimeTypeGuesser;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Data\DataManager

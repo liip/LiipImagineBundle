@@ -19,7 +19,6 @@ class RawImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('theContent', (string) $image);
     }
 
-
     public function testAllowGetMimeTypeSetInConstructor()
     {
         $image = new RawImage('aContent', 'image/png');

@@ -2,26 +2,21 @@
 
 namespace Liip\ImagineBundle\Controller;
 
+use Imagine\Filter\ImagineAware;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-
+use Liip\ImagineBundle\Model\Filter\ConfigurationCollection;
+use Liip\ImagineBundle\Model\Filter\ConfigurableFilterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ImagineController
 {
     /**
-     * @var DataManager
+     * @var ConfigurationCollection
      */
-    protected $dataManager;
-
-    /**
-     * @var FilterManager
-     */
-    protected $filterManager;
+    protected $configurations;
 
     /**
      * @var CacheManager
@@ -34,15 +29,17 @@ class ImagineController
     protected $imagine;
 
     /**
-     * @param DataManager $dataManager
-     * @param FilterManager $filterManager
-     * @param CacheManager $cacheManager
-     * @param ImagineInterface $imagine
+     * Constructor.
+     *
+     * @param DataManager             $dataManager
+     * @param ConfigurationCollection $configurations
+     * @param CacheManager            $cacheManager
+     * @param ImagineInterface        $imagine
      */
-    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager, ImagineInterface $imagine)
+    public function __construct(DataManager $dataManager, ConfigurationCollection $configurations, CacheManager $cacheManager, ImagineInterface $imagine)
     {
         $this->dataManager = $dataManager;
-        $this->filterManager = $filterManager;
+        $this->configurations = $configurations;
         $this->cacheManager = $cacheManager;
         $this->imagine = $imagine;
     }
@@ -50,23 +47,35 @@ class ImagineController
     /**
      * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
-     * @param Request $request
      * @param string $path
-     * @param string $filter
+     * @param string $filterset
      *
      * @return Response
      */
-    public function filterAction(Request $request, $path, $filter)
+    public function filterAction($path, $filterset)
     {
-        if ($this->cacheManager->isStored($path, $filter)) {
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        if ($this->cacheManager->isStored($path, $filterset)) {
+            return new RedirectResponse($this->cacheManager->resolve($path, $filterset), 301);
         }
 
-        $rawImage = $this->dataManager->find($filter, $path);
-        $image = $this->imagine->load($rawImage->getContent());
+        $configuration = $this->configurations->getConfiguration($filterset);
 
-        $response = $this->filterManager->get($request, $filter, $image, $path);
+        $filter = $configuration->getFilter();
+        if ($filter instanceof ImagineAware) {
+            $filter->setImagine($this->imagine);
+        }
 
-        return $this->cacheManager->store($response, $path, $filter);
+        // Apply the filter options (again), as the same filter object may be used within different configurations with different options.
+        if ($filter instanceof ConfigurableFilterInterface) {
+            $filter->configure($configuration->getOptions());
+        }
+
+        $rawImage = $this->dataManager->find($filterset, $path);
+        $image = $filter->apply($this->imagine->load($rawImage->getContent()));
+
+        // TODO: Set format dynamicly.
+        $response = new Response($image->get('jpg'), 200, 'image/jpeg');
+
+        return $this->cacheManager->store($response, $path, $filterset);
     }
 }

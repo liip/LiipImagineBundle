@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Data\Transformer\TransformerInterface;
 
 class ExtendedFileSystemLoader extends FileSystemLoader

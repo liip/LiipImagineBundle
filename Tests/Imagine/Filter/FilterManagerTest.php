@@ -2,7 +2,7 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Model\Filter\ConfigurationCollection;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,7 +27,7 @@ class FilterManagerTest extends AbstractTest
                 ),
             )))
         ;
-        $filterManager = new FilterManager($config);
+        $filterManager = new ConfigurationCollection($config);
 
         $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
         $filterManager->get(new Request(), 'thumbnail', $this->getMockImage(), 'cats.jpeg');
@@ -68,7 +68,7 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
-        $filterManager = new FilterManager($config);
+        $filterManager = new ConfigurationCollection($config);
         $filterManager->addLoader('thumbnail', $loader);
 
         $request = new Request();
@@ -116,7 +116,7 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
-        $filterManager = new FilterManager($config);
+        $filterManager = new \Liip\ImagineBundle\Model\Filter\ConfigurationCollection($config);
         $filterManager->addLoader('thumbnail', $loader);
 
         $request = new Request();
@@ -163,7 +163,7 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
-        $filterManager = new FilterManager($config);
+        $filterManager = new ConfigurationCollection($config);
         $filterManager->addLoader('thumbnail', $loader);
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
@@ -210,7 +210,7 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
-        $filterManager = new FilterManager($config);
+        $filterManager = new ConfigurationCollection($config);
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertSame($image, $filterManager->applyFilter($image, 'thumbnail'));

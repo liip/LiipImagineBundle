@@ -25,11 +25,11 @@ class DoctrinePHPCRLoader extends FileSystemLoader
     /**
      * Constructor.
      *
-     * @param ImagineInterface  $imagine
-     * @param array             $formats
-     * @param string            $rootPath
-     * @param DocumentManager   $manager
-     * @param string            $class
+     * @param ImagineInterface $imagine
+     * @param array            $formats
+     * @param string           $rootPath
+     * @param DocumentManager  $manager
+     * @param string           $class
      */
     public function __construct(array $formats, $rootPath, DocumentManager $manager, $class = null)
     {

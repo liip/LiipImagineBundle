@@ -25,7 +25,7 @@ class CacheClearer implements CacheClearerInterface
      * Constructor.
      *
      * @param CacheManager $cacheManager
-     * @param string $cachePrefix The prefix applied to all cached images.
+     * @param string       $cachePrefix  The prefix applied to all cached images.
      */
     public function __construct(CacheManager $cacheManager, $cachePrefix)
     {

@@ -5,7 +5,7 @@
     "keywords": ["imagine", "image"],
     "homepage": "http://liip.ch",
     "license": "MIT",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Liip and other contributors",
@@ -15,7 +15,7 @@
 
     "require": {
         "php":                      ">=5.3.2",
-        "imagine/Imagine":          "0.5.*",
+        "imagine/Imagine":          "~0.5",
         "symfony/finder":           "~2.3",
         "symfony/filesystem":       "~2.3",
         "symfony/options-resolver": "~2.3",

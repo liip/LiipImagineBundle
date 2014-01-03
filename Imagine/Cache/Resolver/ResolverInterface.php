@@ -15,7 +15,7 @@ interface ResolverInterface
      *
      * @return bool
      */
-    function isStored($path, $filter);
+    public function isStored($path, $filter);
 
     /**
      * Resolves filtered path for rendering in the browser.
@@ -27,7 +27,7 @@ interface ResolverInterface
      *
      * @throws NotResolvableException
      */
-    function resolve($path, $filter);
+    public function resolve($path, $filter);
 
     /**
      * Stores the content of the given Response.
@@ -38,7 +38,7 @@ interface ResolverInterface
      *
      * @return Response The (modified) response to be sent to the browser.
      */
-    function store(Response $response, $path, $filter);
+    public function store(Response $response, $path, $filter);
 
     /**
      * Removes a stored image resource.
@@ -48,7 +48,7 @@ interface ResolverInterface
      *
      * @return bool Whether the file has been removed successfully.
      */
-    function remove($path, $filter);
+    public function remove($path, $filter);
 
     /**
      * Clear the CacheResolver cache.
@@ -57,5 +57,5 @@ interface ResolverInterface
      *
      * @return void
      */
-    function clear($cachePrefix);
+    public function clear($cachePrefix);
 }

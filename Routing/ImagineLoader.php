@@ -10,13 +10,13 @@ class ImagineLoader extends Loader
 {
     private $controllerAction;
     private $cachePrefix;
-    private $filters;
+    private $filtersets;
 
-    public function __construct($controllerAction, $cachePrefix, array $filters = array())
+    public function __construct($controllerAction, $cachePrefix, array $filtersets = array())
     {
         $this->controllerAction = $controllerAction;
         $this->cachePrefix = $cachePrefix;
-        $this->filters = $filters;
+        $this->filtersets = $filtersets;
     }
 
     public function supports($resource, $type = null)
@@ -26,23 +26,23 @@ class ImagineLoader extends Loader
 
     public function load($resource, $type = null)
     {
-        $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
+        $requirements = array('_method' => 'GET', 'filterset' => '[A-z0-9_\-]*', 'path' => '.+');
         $routes       = new RouteCollection();
 
-        if (count($this->filters) > 0) {
-            foreach ($this->filters as $filter => $config) {
+        if (count($this->filtersets) > 0) {
+            foreach ($this->filtersets as $filterset => $config) {
                 $pattern = $this->cachePrefix;
                 if (isset($config['path'])) {
                     if ('/' !== $config['path']) {
                         $pattern .= '/'.trim($config['path'], '/');
                     }
-                } elseif ('' !== $filter) {
-                    $pattern .= '/'.$filter;
+                } elseif ('' !== $filterset) {
+                    $pattern .= '/'.$filterset;
                 }
 
                 $defaults = array(
                     '_controller' => empty($config['controller_action']) ? $this->controllerAction : $config['controller_action'],
-                    'filter' => $filter,
+                    'filterset' => $filterset,
                 );
 
                 $routeRequirements = $requirements;
@@ -59,7 +59,7 @@ class ImagineLoader extends Loader
                     $routeOptions = array_merge($routeOptions, $config['route']['options']);
                 }
 
-                $routes->add('_imagine_'.$filter, new Route(
+                $routes->add('_imagine_'.$filterset, new Route(
                     $pattern.'/{path}',
                     $routeDefaults,
                     $routeRequirements,

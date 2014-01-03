@@ -25,8 +25,8 @@ class ImagineHelper extends Helper
     /**
      * Gets the browser path for the image and filter to apply.
      *
-     * @param string $path
-     * @param string $filter
+     * @param string  $path
+     * @param string  $filter
      * @param boolean $absolute
      *
      * @return string

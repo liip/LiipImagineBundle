@@ -3,9 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-
-use Symfony\Component\HttpFoundation\Request;
+use Liip\ImagineBundle\Model\Filter\ConfigurationCollection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
@@ -13,9 +11,9 @@ use Symfony\Component\Routing\RouterInterface;
 class CacheManager
 {
     /**
-     * @var FilterConfiguration
+     * @var ConfigurationCollection
      */
-    protected $filterConfig;
+    protected $configurations;
 
     /**
      * @var RouterInterface
@@ -28,46 +26,17 @@ class CacheManager
     protected $webRoot;
 
     /**
-     * @var string
-     */
-    protected $defaultResolver;
-
-    /**
-     * @var ResolverInterface[]
-     */
-    protected $resolvers = array();
-
-    /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
-     * @param FilterConfiguration $filterConfig
-     * @param RouterInterface $router
-     * @param string $webRoot
-     * @param string $defaultResolver
+     * @param ConfigurationCollection $configurations
+     * @param RouterInterface         $router
+     * @param string                  $webRoot
      */
-    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $webRoot, $defaultResolver = null)
+    public function __construct(ConfigurationCollection $configurations, RouterInterface $router, $webRoot)
     {
-        $this->filterConfig = $filterConfig;
+        $this->configurations = $configurations;
         $this->router = $router;
         $this->webRoot = realpath($webRoot);
-        $this->defaultResolver = $defaultResolver;
-    }
-
-    /**
-     * Adds a resolver to handle cached images for the given filter.
-     *
-     * @param string $filter
-     * @param ResolverInterface $resolver
-     *
-     * @return void
-     */
-    public function addResolver($filter, ResolverInterface $resolver)
-    {
-        $this->resolvers[$filter] = $resolver;
-
-        if ($resolver instanceof CacheManagerAwareInterface) {
-            $resolver->setCacheManager($this);
-        }
     }
 
     /**
@@ -83,45 +52,27 @@ class CacheManager
     /**
      * Gets a resolver for the given filter.
      *
-     * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
-     *
      * @param string $filter
      *
      * @return ResolverInterface
-     *
-     * @throws \InvalidArgumentException If neither a specific nor a default resolver is available.
      */
     protected function getResolver($filter)
     {
-        $config = $this->filterConfig->get($filter);
-
-        $resolverName = empty($config['cache'])
-            ? $this->defaultResolver : $config['cache'];
-
-        if (!isset($this->resolvers[$resolverName])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not find resolver for "%s" filter type', $filter
-            ));
-        }
-
-        return $this->resolvers[$resolverName];
+        return $this->configurations->getConfiguration($filter)->getResolver();
     }
 
     /**
      * Gets filtered path for rendering in the browser.
      * It could be the cached one or an url of filter action.
      *
-     * @param string $path The path where the resolved file is expected.
-     * @param string $filter
+     * @param string  $path     The path where the resolved file is expected.
+     * @param string  $filter
      * @param boolean $absolute
      *
      * @return string
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        //call it to make sure the resolver for the give filter exists.
-        $this->getResolver($filter);
-
         return
             $this->resolve($path, $filter) ?:
             $this->generateUrl($path, $filter, $absolute)
@@ -131,16 +82,16 @@ class CacheManager
     /**
      * Returns a web accessible URL.
      *
-     * @param string $path The path where the resolved file is expected.
-     * @param string $filter The name of the imagine filter in effect.
-     * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
+     * @param string $path     The path where the resolved file is expected.
+     * @param string $filter   The name of the imagine filter in effect.
+     * @param bool   $absolute Whether to generate an absolute URL or a relative path is accepted.
      *                       In case the resolver does not support relative paths, it may ignore this flag.
      *
      * @return string
      */
     public function generateUrl($path, $filter, $absolute = false)
     {
-        $config = $this->filterConfig->get($filter);
+        $config = $this->configurations->get($filter);
 
         if (isset($config['format'])) {
             $pathinfo = pathinfo($path);
@@ -210,8 +161,8 @@ class CacheManager
      * @see ResolverInterface::store
      *
      * @param Response $response
-     * @param string $path
-     * @param string $filter
+     * @param string   $path
+     * @param string   $filter
      *
      * @return Response
      */

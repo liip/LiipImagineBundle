@@ -110,7 +110,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * Removes a stored image resource.
      *
-     * @param string $path The target path provided by the resolve method.
+     * @param string $path   The target path provided by the resolve method.
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return bool Whether the file has been removed successfully.
@@ -140,7 +140,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @param string $dir
+     * @param  string            $dir
      * @throws \RuntimeException
      */
     protected function makeFolder($dir)
@@ -162,7 +162,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
-     * @param string $path The resource path to convert.
+     * @param string $path   The resource path to convert.
      * @param string $filter The name of the imagine filter.
      *
      * @return string

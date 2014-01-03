@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Imagine;
 
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;

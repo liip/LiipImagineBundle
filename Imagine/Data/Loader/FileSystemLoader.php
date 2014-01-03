@@ -21,8 +21,8 @@ class FileSystemLoader implements LoaderInterface
     /**
      * Constructor.
      *
-     * @param array             $formats
-     * @param string            $rootPath
+     * @param array  $formats
+     * @param string $rootPath
      */
     public function __construct(array $formats, $rootPath)
     {

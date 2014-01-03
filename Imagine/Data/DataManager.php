@@ -2,8 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Data;
 
-use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Model\Filter\ConfigurationCollection;
 use Liip\ImagineBundle\Imagine\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\RawImage;
 
@@ -15,68 +14,20 @@ class DataManager
     protected $mimeTypeGuesser;
 
     /**
-     * @var FilterConfiguration
+     * @var ConfigurationCollection
      */
-    protected $filterConfig;
+    protected $configurations;
 
     /**
-     * @var string|null
-     */
-    protected $defaultLoader;
-
-    /**
-     * @var LoaderInterface[]
-     */
-    protected $loaders = array();
-
-    /**
+     * Constructor.
+     *
      * @param MimeTypeGuesserInterface $mimeTypeGuesser
-     * @param FilterConfiguration $filterConfig
-     * @param string $defaultLoader
+     * @param ConfigurationCollection  $configurations
      */
-    public function __construct(MimeTypeGuesserInterface $mimeTypeGuesser, FilterConfiguration $filterConfig, $defaultLoader = null)
+    public function __construct(MimeTypeGuesserInterface $mimeTypeGuesser, ConfigurationCollection $configurations)
     {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
-        $this->filterConfig = $filterConfig;
-        $this->defaultLoader = $defaultLoader;
-    }
-
-    /**
-     * Adds a loader to retrieve images for the given filter.
-     *
-     * @param string $filter
-     * @param LoaderInterface $loader
-     *
-     * @return void
-     */
-    public function addLoader($filter, LoaderInterface $loader)
-    {
-        $this->loaders[$filter] = $loader;
-    }
-
-    /**
-     * Returns a loader previously attached to the given filter.
-     *
-     * @param string $filter
-     *
-     * @return LoaderInterface
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function getLoader($filter)
-    {
-        $config = $this->filterConfig->get($filter);
-
-        $loaderName = empty($config['data_loader'])
-            ? $this->defaultLoader : $config['data_loader'];
-
-        if (!isset($this->loaders[$loaderName])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Could not find data loader for "%s" filter type', $filter
-            ));
-        }
-
-        return $this->loaders[$loaderName];
+        $this->configurations = $configurations;
     }
 
     /**
@@ -91,7 +42,7 @@ class DataManager
      */
     public function find($filter, $path)
     {
-        $loader = $this->getLoader($filter);
+        $loader = $this->configurations->getConfiguration($filter)->getLoader();
 
         $rawImage = $loader->find($path);
         if (false == $rawImage instanceof RawImage) {

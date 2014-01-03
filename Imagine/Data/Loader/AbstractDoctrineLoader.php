@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -20,7 +19,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
 
     /**
      * @param ObjectManager $manager
-     * @param string $class
+     * @param string        $class
      */
     public function __construct(ObjectManager $manager, $class = null)
     {

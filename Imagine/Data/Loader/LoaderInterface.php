@@ -15,5 +15,5 @@ interface LoaderInterface
      *
      * @return RawImage|string An image content
      */
-    function find($path);
+    public function find($path);
 }

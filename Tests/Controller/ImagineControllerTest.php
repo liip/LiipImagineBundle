@@ -13,7 +13,7 @@ use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader;
 
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Model\Filter\ConfigurationCollection;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 
 use Liip\ImagineBundle\Imagine\SimpleMimeTypeGuesser;
@@ -90,7 +90,7 @@ class ImagineControllerTest extends AbstractTest
 
         $filterLoader = new ThumbnailFilterLoader();
 
-        $filterManager = new FilterManager($this->configuration);
+        $filterManager = new ConfigurationCollection($this->configuration);
         $filterManager->addLoader('thumbnail', $filterLoader);
 
         $webPathResolver = new WebPathResolver($this->filesystem);

@@ -1,36 +1,29 @@
 <?php
 
-namespace Liip\ImagineBundle\Imagine\Filter\Loader;
+namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Filter\Basic\Resize;
-use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
-use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Imagine\Image\ImageInterface;
 
 /**
- * Upscale filter
- *
  * @author Maxime Colin <contact@maximecolin.fr>
  */
-class UpscaleFilterLoader implements LoaderInterface
+class UpscaleFilter extends AbstractConfigurableFilter
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function load(ImageInterface $image, array $options = array())
+    public function apply(ImageInterface $image)
     {
-        if (!isset($options['min'])) {
-            throw new InvalidArgumentException('Missing min option.');
+        if (!isset($this->options['min'])) {
+            throw new \InvalidArgumentException('Missing min option.');
         }
 
-        list($width, $height) = $options['min'];
+        list($width, $height) = $this->options['min'];
 
         $size = $image->getSize();
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
 
         if ($origWidth < $width || $origHeight < $height) {
-
             $widthRatio = $width / $origWidth ;
             $heightRatio = $height / $origHeight;
 

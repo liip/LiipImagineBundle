@@ -1,31 +1,39 @@
 <?php
 
-namespace Liip\ImagineBundle\Imagine\Filter\Loader;
+namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\Box;
-use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use Imagine\Image\Point;
 
-class WatermarkFilterLoader implements LoaderInterface
+class WatermarkFilter extends AbstractConfigurableFilter
 {
+    protected $imagine;
+    protected $rootPath;
+
     public function __construct(ImagineInterface $imagine, $rootPath)
     {
         $this->imagine = $imagine;
         $this->rootPath = $rootPath;
     }
 
-    /**
-     * @see Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     */
-    public function load(ImageInterface $image, array $options = array())
+    public function apply(ImageInterface $image)
     {
-        $options += array(
+        $options = array(
             'size' => null,
-            'position' => 'center'
+            'position' => 'center',
         );
 
-        if (substr($options['size'], -1) == '%') {
+        if (isset($this->options['size'])) {
+            $options['size'] = $this->options['size'];
+        }
+
+        if (isset($this->options['position'])) {
+            $options['position'] = $this->options['position'];
+        }
+
+        if (substr($this->options['size'], -1) == '%') {
             $options['size'] = substr($options['size'], 0, -1) / 100;
         }
 
