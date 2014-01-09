@@ -3,8 +3,11 @@
 namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
+use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,18 +19,23 @@ class FilterManager
     protected $filterConfig;
 
     /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+    /**
      * @var LoaderInterface[]
      */
     protected $loaders = array();
 
     /**
-     * Constructor.
-     *
      * @param FilterConfiguration $filterConfig
+     * @param ImagineInterface    $imagine
      */
-    public function __construct(FilterConfiguration $filterConfig)
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine)
     {
         $this->filterConfig = $filterConfig;
+        $this->imagine = $imagine;
     }
 
     /**
@@ -52,54 +60,19 @@ class FilterManager
     }
 
     /**
-     * Returns a response containing the given image after applying the given filter on it.
+     * Apply the provided filter set on the given binary.
      *
-     * @uses FilterManager::applyFilterSet
-     *
-     * @param Request $request
-     * @param string $filter
-     * @param ImageInterface $image
-     * @param string $localPath
-     *
-     * @return Response
-     */
-    public function get(Request $request, $filter, ImageInterface $image, $localPath)
-    {
-        $config = $this->getFilterConfiguration()->get($filter);
-
-        $image = $this->applyFilter($image, $filter);
-
-        if (empty($config['format'])) {
-            $format = pathinfo($localPath, PATHINFO_EXTENSION);
-            $format = $format ?: 'png';
-        } else {
-            $format = $config['format'];
-        }
-
-        $quality = empty($config['quality']) ? 100 : $config['quality'];
-
-        $image = $image->get($format, array('quality' => $quality));
-
-        $contentType = $request->getMimeType($format);
-        if (empty($contentType)) {
-            $contentType = 'image/'.$format;
-        }
-
-        return new Response($image, 200, array('Content-Type' => $contentType));
-    }
-
-    /**
-     * Apply the provided filter set on the given Image.
-     *
-     * @param ImageInterface $image
-     * @param string $filter
-     *
-     * @return ImageInterface
+     * @param BinaryInterface $binary
+     * @param string          $filter
      *
      * @throws \InvalidArgumentException
+     *
+     * @return BinaryInterface
      */
-    public function applyFilter(ImageInterface $image, $filter)
+    public function applyFilter(BinaryInterface $binary, $filter)
     {
+        $image = $this->imagine->load($binary->getContent());
+
         $config = $this->getFilterConfiguration()->get($filter);
 
         foreach ($config['filters'] as $eachFilter => $eachOptions) {
@@ -112,6 +85,10 @@ class FilterManager
             $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
         }
 
-        return $image;
+        $filteredContent = $image->get($binary->getFormat(), array(
+            'quality' => array_key_exists('quality', $config) ? $config['quality'] : 100
+        ));
+
+        return new Binary($filteredContent, $binary->getMimeType(), $binary->getFormat());
     }
 }

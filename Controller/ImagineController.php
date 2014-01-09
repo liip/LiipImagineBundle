@@ -29,43 +29,39 @@ class ImagineController
     protected $cacheManager;
 
     /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
-    /**
      * @param DataManager $dataManager
      * @param FilterManager $filterManager
      * @param CacheManager $cacheManager
-     * @param ImagineInterface $imagine
      */
-    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager, ImagineInterface $imagine)
+    public function __construct(DataManager $dataManager, FilterManager $filterManager, CacheManager $cacheManager)
     {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
-        $this->imagine = $imagine;
     }
 
     /**
      * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
-     * @param Request $request
      * @param string $path
      * @param string $filter
      *
      * @return Response
      */
-    public function filterAction(Request $request, $path, $filter)
+    public function filterAction($path, $filter)
     {
         if ($this->cacheManager->isStored($path, $filter)) {
             return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
         }
 
         $binary = $this->dataManager->find($filter, $path);
-        $image = $this->imagine->load($binary->getContent());
 
-        $response = $this->filterManager->get($request, $filter, $image, $path);
+        $filteredBinary = $this->filterManager->applyFilter($binary, $filter);
+
+        // Usage of response will be replaced by next PR.
+        $response = new Response($filteredBinary->getContent(), 200, array(
+            'Content-Type' => $filteredBinary->getMimeType(),
+        ));
 
         return $this->cacheManager->store($response, $path, $filter);
     }
