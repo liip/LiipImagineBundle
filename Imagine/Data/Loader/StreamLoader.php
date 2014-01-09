@@ -2,16 +2,10 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StreamLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
     /**
      * The wrapper prefix to append to the path to be loaded.
      *
@@ -27,17 +21,13 @@ class StreamLoader implements LoaderInterface
     protected $context;
 
     /**
-     * Constructor.
-     *
-     * @param ImagineInterface $imagine
      * @param string $wrapperPrefix
      * @param resource|null $context
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(ImagineInterface $imagine, $wrapperPrefix, $context = null)
+    public function __construct($wrapperPrefix, $context = null)
     {
-        $this->imagine = $imagine;
         $this->wrapperPrefix = $wrapperPrefix;
 
         if ($context && !is_resource($context)) {
@@ -68,6 +58,6 @@ class StreamLoader implements LoaderInterface
         // Closing the opened stream to avoid locking of the resource to find.
         fclose($resource);
 
-        return $this->imagine->load(file_get_contents($name, null, $this->context));
+        return file_get_contents($name, null, $this->context);
     }
 }

@@ -4,9 +4,23 @@ namespace Liip\ImagineBundle\Imagine\Data;
 
 use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Model\Binary;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 class DataManager
 {
+    /**
+     * @var MimeTypeGuesserInterface
+     */
+    protected $mimeTypeGuesser;
+
+    /**
+     * @var ExtensionGuesserInterface
+     */
+    protected $extensionGuesser;
+
     /**
      * @var FilterConfiguration
      */
@@ -23,15 +37,21 @@ class DataManager
     protected $loaders = array();
 
     /**
-     * Constructor.
-     *
-     * @param FilterConfiguration $filterConfig
-     * @param string $defaultLoader
+     * @param MimeTypeGuesserInterface  $mimeTypeGuesser
+     * @param ExtensionGuesserInterface $extensionGuesser
+     * @param FilterConfiguration       $filterConfig
+     * @param string                    $defaultLoader
      */
-    public function __construct(FilterConfiguration $filterConfig, $defaultLoader = null)
-    {
+    public function __construct(
+        MimeTypeGuesserInterface $mimeTypeGuesser,
+        ExtensionGuesserInterface $extensionGuesser,
+        FilterConfiguration $filterConfig,
+        $defaultLoader = null
+    ) {
+        $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
+        $this->extensionGuesser = $extensionGuesser;
     }
 
     /**
@@ -78,12 +98,33 @@ class DataManager
      * @param string $filter
      * @param string $path
      *
-     * @return \Imagine\Image\ImageInterface
+     * @throws \LogicException
+     *
+     * @return \Liip\ImagineBundle\Binary\BinaryInterface
      */
     public function find($filter, $path)
     {
         $loader = $this->getLoader($filter);
 
-        return $loader->find($path);
+        $binary = $loader->find($path);
+        if (!$binary instanceof BinaryInterface) {
+            $mimeType = $this->mimeTypeGuesser->guess($binary);
+
+            $binary = new Binary(
+                $binary,
+                $mimeType,
+                $this->extensionGuesser->guess($mimeType)
+            );
+        }
+
+        if (null === $binary->getMimeType()) {
+            throw new \LogicException(sprintf('The mime type of image %s was not guessed.', $path));
+        }
+
+        if (0 !== strpos($binary->getMimeType(), 'image/')) {
+            throw new \LogicException(sprintf('The mime type of image %s must be image/xxx got %s.', $path, $binary->getMimeType()));
+        }
+
+        return $binary;
     }
 }
