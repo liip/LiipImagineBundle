@@ -14,4 +14,5 @@ Upgrade
 * [Filter] `FilterManager::applyFilter` now return instance of `BinaryInterface`.
 * [Filter] `FilterManager::applyFilter` first argument was changed from Image instance to BinaryInterface one.
 * [Filter] `FilterManager::get` was removed.
+* [Controller] `ImagineController::filterAction` first argument Request was removed. Now the method takes only two parameters.
 * [Logger] Symfony `LoggerInterface` was replaced with PSR-3 one.
