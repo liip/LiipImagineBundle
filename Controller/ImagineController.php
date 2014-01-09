@@ -65,7 +65,10 @@ class ImagineController
         $binary = $this->dataManager->find($filter, $path);
         $image = $this->imagine->load($binary->getContent());
 
-        $response = $this->filterManager->get($request, $filter, $image, $path);
+        $filteredImage = $this->filterManager->applyFilter($image, $filter, array(
+            'format' => $binary->getFormat()
+        ));
+        $response = $this->filterManager->get($request, $filter, $filteredImage, $path);
 
         return $this->cacheManager->store($response, $path, $filter);
     }

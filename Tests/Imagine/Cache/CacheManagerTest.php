@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,6 +107,7 @@ class CacheManagerTest extends AbstractTest
             ->method('get')
             ->with('thumbnail')
             ->will($this->returnValue(array(
+                'format' => 'png',
                 'size' => array(180, 180),
                 'mode' => 'outbound',
                 'cache' => null,
@@ -242,13 +244,8 @@ class CacheManagerTest extends AbstractTest
      */
     public function testGenerateUrl($filterConfig, $path, $expectedPath)
     {
-        $config = $this->getMockFilterConfiguration();
-        $config
-            ->expects($this->once())
-            ->method('get')
-            ->with('thumbnail')
-            ->will($this->returnValue($filterConfig))
-        ;
+        $config = new FilterConfiguration;
+        $config->set('thumbnail', $filterConfig);
 
         $router = $this->getMockRouter();
         $router

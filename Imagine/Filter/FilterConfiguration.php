@@ -14,25 +14,40 @@ class FilterConfiguration
      */
     public function __construct(array $filters = array())
     {
-        $this->filters = $filters;
+        foreach ($filters as $filter => $config) {
+            $this->set($filter, $config);
+        }
     }
 
     /**
      * Gets a previously configured filter.
      *
      * @param string $filter
+     * @param array  $runtimeConfig
      *
      * @return array
      *
      * @throws \RuntimeException
      */
-    public function get($filter)
+    public function get($filter, array $runtimeConfig = array())
     {
-        if (empty($this->filters[$filter])) {
-            throw new \RuntimeException('Filter not defined: '.$filter);
+        if (false == array_key_exists($filter, $this->filters)) {
+            throw new \RuntimeException(sprintf('Could not find configuration for a filter: %s', $filter));
         }
 
-        return $this->filters[$filter];
+        $defaultConfig = $this->filters[$filter];
+        $config = array_replace_recursive($defaultConfig, $runtimeConfig);
+
+        // $defaultConfig['format'] means we always want to format an image to this format.
+        // So this adds BC with previous versions.
+        if ($defaultConfig['format']) {
+            $config['format'] = $defaultConfig['format'];
+        }
+        if (empty($config['format'])) {
+            $config['format'] = 'png';
+        }
+
+        return $config;
     }
 
     /**
@@ -45,6 +60,13 @@ class FilterConfiguration
      */
     public function set($filter, array $config)
     {
-        return $this->filters[$filter] = $config;
+        $this->filters[$filter] = array_replace(
+            array(
+                'quality' => 100,
+                'format' => null,
+                'filters' => array(),
+            ),
+            $config
+        );
     }
 }

@@ -102,7 +102,7 @@ class ImagineControllerTest extends AbstractTest
 
         $filterLoader = new ThumbnailFilterLoader();
 
-        $filterManager = new FilterManager($this->configuration);
+        $filterManager = new FilterManager($this->configuration, $this->imagine);
         $filterManager->addLoader('thumbnail', $filterLoader);
 
         $webPathResolver = new WebPathResolver($this->filesystem);
@@ -146,7 +146,7 @@ class ImagineControllerTest extends AbstractTest
         $extensionGuesser = ExtensionGuesser::getInstance();
 
         $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array($mimeTypeGuesser, $extensionGuesser, $this->configuration));
-        $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration));
+        $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration, $this->imagine));
 
         $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
 
