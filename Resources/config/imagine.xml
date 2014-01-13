@@ -102,7 +102,7 @@
             <tag name="routing.loader" />
             <argument>%liip_imagine.controller_action%</argument>
             <argument>%liip_imagine.cache_prefix%</argument>
-            <argument>%liip_imagine.filter_sets%</argument>
+            <argument type="service" id="liip_imagine.filter.configuration" />
         </service>
 
         <!-- ImagineInterface instances -->

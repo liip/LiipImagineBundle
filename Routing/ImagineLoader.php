@@ -2,35 +2,61 @@
 
 namespace Liip\ImagineBundle\Routing;
 
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class ImagineLoader extends Loader
 {
+    /**
+     * @var string
+     */
     private $controllerAction;
-    private $cachePrefix;
-    private $filters;
 
-    public function __construct($controllerAction, $cachePrefix, array $filters = array())
+    /**
+     * @var string
+     */
+    private $cachePrefix;
+
+    /**
+     * @var \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration
+     */
+    private $filterConfig;
+
+    /**
+     * Constructor
+     *
+     * @param string $controllerAction
+     * @param string $cachePrefix
+     * @param FilterConfiguration $filterConfig
+     */
+    public function __construct($controllerAction, $cachePrefix, FilterConfiguration $filterConfig)
     {
         $this->controllerAction = $controllerAction;
         $this->cachePrefix = $cachePrefix;
-        $this->filters = $filters;
+        $this->filterConfig = $filterConfig;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function supports($resource, $type = null)
     {
         return $type === 'imagine';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load($resource, $type = null)
     {
         $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
         $routes       = new RouteCollection();
+        $filters      = $this->filterConfig->all();
 
-        if (count($this->filters) > 0) {
-            foreach ($this->filters as $filter => $config) {
+        if (count($filters) > 0) {
+            foreach ($filters as $filter => $config) {
                 $pattern = $this->cachePrefix;
                 if (isset($config['path'])) {
                     if ('/' !== $config['path']) {
