@@ -2,11 +2,9 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -185,7 +183,7 @@ class CacheManager
      * @param string $path
      * @param string $filter
      *
-     * @return Response|boolean The response of the respective Resolver or false.
+     * @return string The url of resolved image.
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
@@ -205,23 +203,15 @@ class CacheManager
     }
 
     /**
-     * Store successful responses with the cache resolver.
-     *
      * @see ResolverInterface::store
      *
-     * @param Response $response
-     * @param string $path
-     * @param string $filter
-     *
-     * @return Response
+     * @param BinaryInterface $binary
+     * @param string          $path
+     * @param string          $filter
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
-        if ($response->isSuccessful()) {
-            $response = $this->getResolver($filter)->store($response, $path, $filter);
-        }
-
-        return $response;
+        $this->getResolver($filter)->store($binary, $path, $filter);
     }
 
     /**

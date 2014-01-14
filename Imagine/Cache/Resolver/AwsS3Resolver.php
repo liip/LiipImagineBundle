@@ -4,8 +4,8 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class AwsS3Resolver implements ResolverInterface
 {
@@ -81,17 +81,17 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
         try {
-            $storageResponse = $this->storage->putObject(array(
+            $this->storage->putObject(array(
                 'ACL'           => $this->acl,
                 'Bucket'        => $this->bucket,
                 'Key'           => $objectPath,
-                'Body'          => $response->getContent(),
-                'ContentType'   => $response->headers->get('Content-Type')
+                'Body'          => $binary->getContent(),
+                'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
@@ -101,13 +101,8 @@ class AwsS3Resolver implements ResolverInterface
                 ));
             }
 
-            return $response;
+            throw $e;
         }
-
-        $response->setStatusCode(301);
-        $response->headers->set('Location', $storageResponse->get('ObjectURL'));
-
-        return $response;
     }
 
     /**

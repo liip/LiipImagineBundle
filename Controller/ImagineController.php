@@ -46,23 +46,20 @@ class ImagineController
      * @param string $path
      * @param string $filter
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function filterAction($path, $filter)
     {
-        if ($this->cacheManager->isStored($path, $filter)) {
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        if (!$this->cacheManager->isStored($path, $filter)) {
+            $binary = $this->dataManager->find($filter, $path);
+
+            $this->cacheManager->store(
+                $this->filterManager->applyFilter($binary, $filter),
+                $path,
+                $filter
+            );
         }
 
-        $binary = $this->dataManager->find($filter, $path);
-
-        $filteredBinary = $this->filterManager->applyFilter($binary, $filter);
-
-        // Usage of response will be replaced by next PR.
-        $response = new Response($filteredBinary->getContent(), 200, array(
-            'Content-Type' => $filteredBinary->getMimeType(),
-        ));
-
-        return $this->cacheManager->store($response, $path, $filter);
+        return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
     }
 }
