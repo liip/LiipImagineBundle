@@ -2,8 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class AmazonS3Resolver implements ResolverInterface
 {
@@ -79,21 +79,18 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
         $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
-            'body' => $response->getContent(),
-            'contentType' => $response->headers->get('Content-Type'),
-            'length' => strlen($response->getContent()),
+            'body' => $binary->getContent(),
+            'contentType' => $binary->getMimeType(),
+            'length' => strlen($binary->getContent()),
             'acl' => $this->acl,
         ));
 
-        if ($storageResponse->isOK()) {
-            $response->setStatusCode(301);
-            $response->headers->set('Location', $this->getObjectUrl($objectPath));
-        } else {
+        if (!$storageResponse->isOK()) {
             if ($this->logger) {
                 $this->logger->warning('The object could not be created on Amazon S3.', array(
                     'objectPath' => $objectPath,
@@ -101,9 +98,9 @@ class AmazonS3Resolver implements ResolverInterface
                     's3_response' => $storageResponse,
                 ));
             }
-        }
 
-        return $response;
+            //TODO: throw exception here ???
+        }
     }
 
     /**
