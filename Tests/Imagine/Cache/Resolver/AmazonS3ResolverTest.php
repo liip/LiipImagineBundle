@@ -3,8 +3,8 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
@@ -40,9 +40,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
     public function testLogNotCreatedObjects()
     {
-        $response = new Response();
-        $response->setContent('foo');
-        $response->headers->set('Content-Type', 'image/jpeg');
+        $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
         $s3 = $this->getAmazonS3Mock();
         $s3
@@ -60,14 +58,12 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
-        $this->assertSame($response, $resolver->store($response, 'foobar.jpg', 'thumb'));
+        $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
-    public function testCreatedObjectRedirects()
+    public function testCreatedObjectOnAmazon()
     {
-        $response = new Response();
-        $response->setContent('foo');
-        $response->headers->set('Content-Type', 'image/jpeg');
+        $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
         $s3 = $this->getAmazonS3Mock();
         $s3
@@ -75,18 +71,10 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('create_object')
             ->will($this->returnValue($this->getCFResponseMock(true)))
         ;
-        $s3
-            ->expects($this->once())
-            ->method('get_object_url')
-            ->with('images.example.com', 'thumb/foobar.jpg', 0, array())
-            ->will($this->returnValue('http://images.example.com/thumb/foobar.jpg'))
-        ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $this->assertSame($response, $resolver->store($response, 'foobar.jpg', 'thumb'));
-        $this->assertEquals(301, $response->getStatusCode());
-        $this->assertEquals('http://images.example.com/thumb/foobar.jpg', $response->headers->get('Location'));
+        $this->assertNull($resolver->store($binary, 'foobar.jpg', 'thumb'));
     }
 
     public function testIsStoredChecksObjectExistence()

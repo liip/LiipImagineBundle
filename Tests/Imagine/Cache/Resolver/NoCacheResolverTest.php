@@ -3,10 +3,10 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
@@ -44,6 +44,10 @@ class NoCacheResolverTest extends AbstractTest
         $resolver = new NoCacheResolver(new Filesystem);
         $resolver->setRequest(null);
 
-        $this->assertNull($resolver->store(new Response(), 'a/path', 'aFilter'));
+        $this->assertNull($resolver->store(
+            new Binary('aContent', 'image/jpeg', 'jpg'),
+            'a/path',
+            'aFilter')
+        );
     }
 }

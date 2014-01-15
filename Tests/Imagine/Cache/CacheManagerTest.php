@@ -3,9 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\CacheManager
@@ -147,7 +147,7 @@ class CacheManagerTest extends AbstractTest
 
     public function testFallbackToDefaultResolver()
     {
-        $response = new Response('', 200);
+        $binary = new Binary('aContent', 'image/png', 'png');
 
         $resolver = $this->getMockResolver();
         $resolver
@@ -159,8 +159,8 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('store')
-            ->with($response, '/thumbs/cats.jpeg', 'thumbnail')
-            ->will($this->returnValue($response))
+            ->with($binary, '/thumbs/cats.jpeg', 'thumbnail')
+            ->will($this->returnValue($binary))
         ;
         $resolver
             ->expects($this->once())
@@ -187,8 +187,7 @@ class CacheManagerTest extends AbstractTest
         // Resolve fallback to default resolver
         $this->assertEquals('/thumbs/cats.jpeg', $cacheManager->resolve('cats.jpeg', 'thumbnail'));
 
-        // Store fallback to default resolver
-        $this->assertEquals($response, $cacheManager->store($response, '/thumbs/cats.jpeg', 'thumbnail'));
+        $this->assertNull($cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail'));
 
         // Remove fallback to default resolver
         $this->assertTrue($cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail'));

@@ -3,9 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
@@ -81,11 +81,8 @@ class WebPathResolverTest extends AbstractTest
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $path, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertEquals($content, $response->getContent());
+        $binary = new Binary($content, 'image/jpeg', 'jpeg');
+        $this->assertNull($this->resolver->store($binary, $path, 'thumbnail'));
     }
 
     /**
@@ -184,14 +181,13 @@ class WebPathResolverTest extends AbstractTest
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $path, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
+        $binary = new Binary($content, 'image/jpeg', 'jpeg');
+        $this->resolver->store($binary, $path, 'thumbnail');
+
         $this->assertTrue(file_exists($filePath),
             '->store() creates the cached image file to be served.');
         $this->assertEquals($content, file_get_contents($filePath),
-            '->store() writes the content of the original Response into the cache file.');
+            '->store() writes the content of the original binary into the cache file.');
     }
 
     /**
