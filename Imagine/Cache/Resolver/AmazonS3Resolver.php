@@ -4,11 +4,9 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
-class AmazonS3Resolver implements ResolverInterface, LoggerAwareInterface
+class AmazonS3Resolver implements ResolverInterface
 {
     /**
      * @var \AmazonS3
@@ -49,12 +47,10 @@ class AmazonS3Resolver implements ResolverInterface, LoggerAwareInterface
         $this->bucket = $bucket;
         $this->acl = $acl;
         $this->objUrlOptions = $objUrlOptions;
-
-        $this->logger = new NullLogger;
     }
 
     /**
-     * {@inheritDoc}
+     * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -92,11 +88,13 @@ class AmazonS3Resolver implements ResolverInterface, LoggerAwareInterface
         ));
 
         if (!$storageResponse->isOK()) {
-            $this->logger->error('The object could not be created on Amazon S3.', array(
-                'objectPath' => $objectPath,
-                'filter' => $filter,
-                's3_response' => $storageResponse,
-            ));
+            if ($this->logger) {
+                $this->logger->error('The object could not be created on Amazon S3.', array(
+                    'objectPath' => $objectPath,
+                    'filter' => $filter,
+                    's3_response' => $storageResponse,
+                ));
+            }
 
             throw new NotStorableException('The object could not be created on Amazon S3.');
         }
