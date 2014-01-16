@@ -5,9 +5,12 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
-class AwsS3Resolver implements ResolverInterface
+class AwsS3Resolver implements ResolverInterface, LoggerAwareInterface
 {
     /**
      * @var S3Client
@@ -50,17 +53,14 @@ class AwsS3Resolver implements ResolverInterface
     public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-
         $this->bucket = $bucket;
         $this->acl = $acl;
-
         $this->objUrlOptions = $objUrlOptions;
+        $this->logger = new NullLogger;
     }
 
     /**
-     * Sets the logger to be used.
-     *
-     * @param LoggerInterface $logger
+     * {@inheritDoc}
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -99,14 +99,12 @@ class AwsS3Resolver implements ResolverInterface
                 'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
-            if ($this->logger) {
-                $this->logger->warning('The object could not be created on Amazon S3.', array(
-                    'objectPath'  => $objectPath,
-                    'filter'      => $filter,
-                ));
-            }
+            $this->logger->warning('The object could not be created on Amazon S3.', array(
+                'objectPath'  => $objectPath,
+                'filter'      => $filter,
+            ));
 
-            throw $e;
+            throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
     }
 

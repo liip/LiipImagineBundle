@@ -11,6 +11,27 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class AmazonS3ResolverTest extends AbstractTest
 {
+    public function testImplementsResolverInterface()
+    {
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver');
+
+        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+    }
+
+    public function testImplementsLoggerAwareInterface()
+    {
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver');
+
+        $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
+    }
+
+    public function testSetNullLoggerInConstructor()
+    {
+        $resolver = new AmazonS3Resolver($this->getAmazonS3Mock(), 'images.example.com');
+
+        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $resolver);
+    }
+
     public function testNoDoubleSlashesInObjectUrlOnResolve()
     {
         $s3 = $this->getAmazonS3Mock();
@@ -38,7 +59,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testLogNotCreatedObjects()
+    public function testThrowsAndLogIfCanNotCreateObjectOnAmazon()
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
@@ -52,12 +73,16 @@ class AmazonS3ResolverTest extends AbstractTest
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger
             ->expects($this->once())
-            ->method('warning')
+            ->method('error')
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException',
+            'The object could not be created on Amazon S3.'
+        );
         $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
