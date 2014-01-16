@@ -6,11 +6,9 @@ use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
-class AwsS3Resolver implements ResolverInterface, LoggerAwareInterface
+class AwsS3Resolver implements ResolverInterface
 {
     /**
      * @var S3Client
@@ -56,11 +54,10 @@ class AwsS3Resolver implements ResolverInterface, LoggerAwareInterface
         $this->bucket = $bucket;
         $this->acl = $acl;
         $this->objUrlOptions = $objUrlOptions;
-        $this->logger = new NullLogger;
     }
 
     /**
-     * {@inheritDoc}
+     * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -99,10 +96,12 @@ class AwsS3Resolver implements ResolverInterface, LoggerAwareInterface
                 'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
-            $this->logger->error('The object could not be created on Amazon S3.', array(
-                'objectPath'  => $objectPath,
-                'filter'      => $filter,
-            ));
+            if ($this->logger) {
+                $this->logger->error('The object could not be created on Amazon S3.', array(
+                    'objectPath'  => $objectPath,
+                    'filter'      => $filter,
+                ));
+            }
 
             throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }

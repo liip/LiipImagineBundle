@@ -18,20 +18,6 @@ class AmazonS3ResolverTest extends AbstractTest
         $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
     }
 
-    public function testImplementsLoggerAwareInterface()
-    {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver');
-
-        $this->assertTrue($rc->implementsInterface('Psr\Log\LoggerAwareInterface'));
-    }
-
-    public function testSetNullLoggerInConstructor()
-    {
-        $resolver = new AmazonS3Resolver($this->getAmazonS3Mock(), 'images.example.com');
-
-        $this->assertAttributeInstanceOf('Psr\Log\NullLogger', 'logger', $resolver);
-    }
-
     public function testNoDoubleSlashesInObjectUrlOnResolve()
     {
         $s3 = $this->getAmazonS3Mock();
