@@ -12,8 +12,13 @@ Upgrade
 * [CacheResolver] The method `getBrowserPath` was removed.
 * [CacheResolver] The method `ResolverInterface::store` accept `BinaryInterface` as first argument.
 * [CacheResolver] The method `ResolverInterface::store` return nothing.
+* [CacheResolver] The method `ResolverInterface::remove` return nothing.
+* [CacheResolver] The method `ResolverInterface::remove` takes required array of filter as first argument.
+* [CacheResolver] The method `ResolverInterface::remove` takes optional path as second argument.
+* [CacheResolver] The method `ResolverInterface::clean` was removed.
 * [CacheResolver] The method `CacheManager::store` accept `BinaryInterface` as first argument.
 * [CacheResolver] The method `CacheManager::store` return nothing.
+* [CacheResolver] The method `CacheManager::clearResolversCache` was removed.
 * [DataLoader] `LoaderInterface::find` now can return string or `BinaryInterface` instance.
 * [DataLoader] `DataManager::find` now can return `BinaryInterface` instance only.
 * [Filter] `FilterManager::applyFilter` now return instance of `BinaryInterface`.
