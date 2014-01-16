@@ -73,7 +73,7 @@ class AwsS3ResolverTest extends AbstractTest
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger
             ->expects($this->once())
-            ->method('warning')
+            ->method('error')
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');

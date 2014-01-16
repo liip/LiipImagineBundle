@@ -94,7 +94,7 @@ class AwsS3Resolver implements ResolverInterface, LoggerAwareInterface
                 'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
-            $this->logger->warning('The object could not be created on Amazon S3.', array(
+            $this->logger->error('The object could not be created on Amazon S3.', array(
                 'objectPath'  => $objectPath,
                 'filter'      => $filter,
             ));
