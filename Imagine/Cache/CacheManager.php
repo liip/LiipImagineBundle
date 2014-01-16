@@ -87,7 +87,7 @@ class CacheManager
      *
      * @return ResolverInterface
      *
-     * @throws \InvalidArgumentException If neither a specific nor a default resolver is available.
+     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available.
      */
     protected function getResolver($filter)
     {
@@ -97,7 +97,7 @@ class CacheManager
             ? $this->defaultResolver : $config['cache'];
 
         if (!isset($this->resolvers[$resolverName])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \OutOfBoundsException(sprintf(
                 'Could not find resolver for "%s" filter type', $filter
             ));
         }
@@ -193,13 +193,7 @@ class CacheManager
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        try {
-            $resolver = $this->getResolver($filter);
-        } catch (\InvalidArgumentException $e) {
-            return false;
-        }
-
-        return $resolver->resolve($path, $filter);
+        return $this->getResolver($filter)->resolve($path, $filter);
     }
 
     /**

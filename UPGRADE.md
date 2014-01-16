@@ -6,6 +6,7 @@ Upgrade
 
 * Required minimum symfony version was updated to 2.3.
 * [CacheResolver] first argument request was removed from `resolve` method.
+* [CacheResolver] `CacheManager::resolve` may throw OutOfBoundsException if required resolver does not exist.
 * [CacheResolver] Now resolve method has to return the url of the image.
 * [CacheResolver] New `isStored` method was added.
 * [CacheResolver] The method `getBrowserPath` was removed.
