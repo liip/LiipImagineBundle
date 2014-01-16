@@ -161,7 +161,6 @@ class CacheManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('store')
             ->with($binary, '/thumbs/cats.jpeg', 'thumbnail')
-            ->will($this->returnValue($binary))
         ;
         $resolver
             ->expects($this->once())
@@ -188,7 +187,7 @@ class CacheManagerTest extends AbstractTest
         // Resolve fallback to default resolver
         $this->assertEquals('/thumbs/cats.jpeg', $cacheManager->resolve('cats.jpeg', 'thumbnail'));
 
-        $this->assertNull($cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail'));
+        $cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail');
 
         // Remove fallback to default resolver
         $this->assertTrue($cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail'));

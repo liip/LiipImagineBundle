@@ -99,7 +99,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $this->assertNull($resolver->store($binary, 'foobar.jpg', 'thumb'));
+        $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
     public function testIsStoredChecksObjectExistence()
