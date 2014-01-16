@@ -50,7 +50,7 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager = new CacheManager($config, $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find resolver for "thumbnail" filter type');
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
     }
 
@@ -138,10 +138,11 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve($path, 'thumbnail');
     }
 
-    public function testResolveWithoutResolver()
+    public function testThrowsIfConcreteResolverNotExists()
     {
         $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
 
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
     }
 
