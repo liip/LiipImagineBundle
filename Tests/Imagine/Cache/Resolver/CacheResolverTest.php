@@ -3,11 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
-
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\MemoryCache;
-
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver
@@ -39,21 +37,20 @@ class CacheResolverTest extends AbstractTest
 
     public function testStoreIsForwardedToResolver()
     {
-        $response = new Response();
+        $binary = new Binary('aContent', 'image/jpeg', 'jpg');
 
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->exactly(2))
             ->method('store')
-            ->with($response, $this->webPath, $this->filter)
-            ->will($this->returnValue($response))
+            ->with($this->identicalTo($binary), $this->webPath, $this->filter)
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
         // Call twice, as this method should not be cached.
-        $this->assertSame($response, $cacheResolver->store($response, $this->webPath, $this->filter));
-        $this->assertSame($response, $cacheResolver->store($response, $this->webPath, $this->filter));
+        $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
+        $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
     }
 
     public function testSavesToCacheIfInternalResolverReturnUrlOnResolve()

@@ -4,8 +4,9 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class AwsS3Resolver implements ResolverInterface
 {
@@ -45,16 +46,12 @@ class AwsS3Resolver implements ResolverInterface
     public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-
         $this->bucket = $bucket;
         $this->acl = $acl;
-
         $this->objUrlOptions = $objUrlOptions;
     }
 
     /**
-     * Sets the logger to be used.
-     *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
@@ -81,33 +78,28 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
         try {
-            $storageResponse = $this->storage->putObject(array(
+            $this->storage->putObject(array(
                 'ACL'           => $this->acl,
                 'Bucket'        => $this->bucket,
                 'Key'           => $objectPath,
-                'Body'          => $response->getContent(),
-                'ContentType'   => $response->headers->get('Content-Type')
+                'Body'          => $binary->getContent(),
+                'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
-                $this->logger->warning('The object could not be created on Amazon S3.', array(
+                $this->logger->error('The object could not be created on Amazon S3.', array(
                     'objectPath'  => $objectPath,
                     'filter'      => $filter,
                 ));
             }
 
-            return $response;
+            throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
-
-        $response->setStatusCode(301);
-        $response->headers->set('Location', $storageResponse->get('ObjectURL'));
-
-        return $response;
     }
 
     /**

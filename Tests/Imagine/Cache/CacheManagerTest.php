@@ -3,9 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\CacheManager
@@ -50,7 +50,7 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager = new CacheManager($config, $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find resolver for "thumbnail" filter type');
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
     }
 
@@ -138,16 +138,17 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve($path, 'thumbnail');
     }
 
-    public function testResolveWithoutResolver()
+    public function testThrowsIfConcreteResolverNotExists()
     {
         $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
 
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
     }
 
     public function testFallbackToDefaultResolver()
     {
-        $response = new Response('', 200);
+        $binary = new Binary('aContent', 'image/png', 'png');
 
         $resolver = $this->getMockResolver();
         $resolver
@@ -159,8 +160,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('store')
-            ->with($response, '/thumbs/cats.jpeg', 'thumbnail')
-            ->will($this->returnValue($response))
+            ->with($binary, '/thumbs/cats.jpeg', 'thumbnail')
         ;
         $resolver
             ->expects($this->once())
@@ -187,8 +187,7 @@ class CacheManagerTest extends AbstractTest
         // Resolve fallback to default resolver
         $this->assertEquals('/thumbs/cats.jpeg', $cacheManager->resolve('cats.jpeg', 'thumbnail'));
 
-        // Store fallback to default resolver
-        $this->assertEquals($response, $cacheManager->store($response, '/thumbs/cats.jpeg', 'thumbnail'));
+        $cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail');
 
         // Remove fallback to default resolver
         $this->assertTrue($cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail'));

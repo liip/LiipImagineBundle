@@ -2,8 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
-use Symfony\Component\HttpFoundation\Response;
 
 interface ResolverInterface
 {
@@ -30,15 +30,15 @@ interface ResolverInterface
     function resolve($path, $filter);
 
     /**
-     * Stores the content of the given Response.
+     * Stores the content of the given binary.
      *
-     * @param Response $response The response provided by the _imagine_* filter route.
-     * @param string   $path     The path where the original file is expected to be.
-     * @param string   $filter   The name of the imagine filter in effect.
+     * @param BinaryInterface $binary The image binary to store.
+     * @param string          $path     The path where the original file is expected to be.
+     * @param string          $filter   The name of the imagine filter in effect.
      *
-     * @return Response The (modified) response to be sent to the browser.
+     * @return void
      */
-    function store(Response $response, $path, $filter);
+    function store(BinaryInterface $binary, $path, $filter);
 
     /**
      * Removes a stored image resource.

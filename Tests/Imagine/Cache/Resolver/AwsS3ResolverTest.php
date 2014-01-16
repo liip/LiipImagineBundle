@@ -3,14 +3,21 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
  */
 class AwsS3ResolverTest extends AbstractTest
 {
+    public function testImplementsResolverInterface()
+    {
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver');
+
+        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+    }
+
     public function testNoDoubleSlashesInObjectUrlOnResolve()
     {
         $s3 = $this->getS3ClientMock();
@@ -40,56 +47,45 @@ class AwsS3ResolverTest extends AbstractTest
 
     public function testLogNotCreatedObjects()
     {
-        $response = new Response();
-        $response->setContent('foo');
-        $response->headers->set('Content-Type', 'image/jpeg');
+        $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->throwException(new \Exception))
+            ->will($this->throwException(new \Exception('Put object on amazon failed')))
         ;
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger
             ->expects($this->once())
-            ->method('warning')
+            ->method('error')
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
-        $this->assertSame($response, $resolver->store($response, 'foobar.jpg', 'thumb'));
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException',
+            'The object could not be created on Amazon S3.'
+        );
+        $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
-    public function testCreatedObjectRedirects()
+    public function testCreateObjectOnAmazon()
     {
-        $response = new Response();
-        $response->setContent('foo');
-        $response->headers->set('Content-Type', 'image/jpeg');
-
-        $responseMock = $this->getS3ResponseMock();
+        $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->returnValue($responseMock))
-        ;
-
-        $responseMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('ObjectURL')
-            ->will($this->returnValue('http://images.example.com/thumb/foobar.jpg'))
+            ->will($this->returnValue($this->getS3ResponseMock()))
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
-        $this->assertSame($response, $resolver->store($response, 'thumb/foobar.jpg', 'thumb'));
-        $this->assertEquals(301, $response->getStatusCode());
-        $this->assertEquals('http://images.example.com/thumb/foobar.jpg', $response->headers->get('Location'));
+        $this->assertNull($resolver->store($binary, 'thumb/foobar.jpg', 'thumb'));
     }
 
     public function testIsStoredChecksObjectExistence()

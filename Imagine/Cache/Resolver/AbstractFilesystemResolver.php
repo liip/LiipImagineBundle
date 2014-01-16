@@ -2,12 +2,11 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
@@ -92,7 +91,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $filePath = $this->getFilePath($path, $filter);
 
@@ -100,11 +99,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
         $this->makeFolder($dir);
 
-        file_put_contents($filePath, $response->getContent());
-
-        $response->setStatusCode(201);
-
-        return $response;
+        file_put_contents($filePath, $binary->getContent());
     }
 
     /**

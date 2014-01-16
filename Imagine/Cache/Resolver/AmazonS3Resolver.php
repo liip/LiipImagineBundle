@@ -2,8 +2,9 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class AmazonS3Resolver implements ResolverInterface
 {
@@ -43,16 +44,12 @@ class AmazonS3Resolver implements ResolverInterface
     public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-
         $this->bucket = $bucket;
         $this->acl = $acl;
-
         $this->objUrlOptions = $objUrlOptions;
     }
 
     /**
-     * Sets the logger to be used.
-     *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
@@ -79,31 +76,28 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
         $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
-            'body' => $response->getContent(),
-            'contentType' => $response->headers->get('Content-Type'),
-            'length' => strlen($response->getContent()),
+            'body' => $binary->getContent(),
+            'contentType' => $binary->getMimeType(),
+            'length' => strlen($binary->getContent()),
             'acl' => $this->acl,
         ));
 
-        if ($storageResponse->isOK()) {
-            $response->setStatusCode(301);
-            $response->headers->set('Location', $this->getObjectUrl($objectPath));
-        } else {
+        if (!$storageResponse->isOK()) {
             if ($this->logger) {
-                $this->logger->warning('The object could not be created on Amazon S3.', array(
+                $this->logger->error('The object could not be created on Amazon S3.', array(
                     'objectPath' => $objectPath,
                     'filter' => $filter,
                     's3_response' => $storageResponse,
                 ));
             }
-        }
 
-        return $response;
+            throw new NotStorableException('The object could not be created on Amazon S3.');
+        }
     }
 
     /**

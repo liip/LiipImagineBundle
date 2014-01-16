@@ -2,9 +2,9 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
@@ -21,9 +21,7 @@ class AbstractFilesystemResolverTest extends AbstractTest
 
         $data = file_get_contents($image);
 
-        $response = new Response($data, 200, array(
-            'content-type' => 'image/jpeg',
-        ));
+        $binary = new Binary($data, 'image/jpeg', 'jpeg');
 
         $filePath = $this->tempDir.'/cached/АГГЗ.jpeg';
 
@@ -34,7 +32,7 @@ class AbstractFilesystemResolverTest extends AbstractTest
             ->will($this->returnValue($filePath))
         ;
 
-        $resolver->store($response, '/a/path', 'mirror');
+        $resolver->store($binary, '/a/path', 'mirror');
 
         $this->assertTrue(file_exists($filePath));
         $this->assertEquals($data, file_get_contents($filePath));
@@ -58,10 +56,12 @@ class AbstractFilesystemResolverTest extends AbstractTest
             ->will($this->returnValue($expectedFilePath))
         ;
 
-        $resolver->store(new Response('theImageContent'), $expectedPath, $expectedFilter);
+        $binary = new Binary('theImageContent', 'image/jpeg', 'jpg');
+
+        $resolver->store($binary, $expectedPath, $expectedFilter);
     }
 
-    public function testStoreResponseContentToFilePath()
+    public function testStoreBinaryContentToFilePath()
     {
         if (false !== strpos(strtolower(PHP_OS), 'win')) {
             $this->markTestSkipped('mkdir mode is ignored on windows');
@@ -76,7 +76,9 @@ class AbstractFilesystemResolverTest extends AbstractTest
             ->will($this->returnValue($expectedFilePath))
         ;
 
-        $resolver->store(new Response('theImageContent'), '/a/path', 'thumbnail');
+        $binary = new Binary('theImageContent', 'image/jpeg', 'jpeg');
+
+        $resolver->store($binary, '/a/path', 'thumbnail');
         $this->assertFileExists($expectedFilePath);
         $this->assertEquals('theImageContent', file_get_contents($expectedFilePath));
     }
@@ -96,7 +98,7 @@ class AbstractFilesystemResolverTest extends AbstractTest
             ->will($this->returnValue($filePath))
         ;
 
-        $resolver->store(new Response(''), '/a/path', 'thumbnail');
+        $resolver->store(new Binary('aContent', 'image/jpeg', 'jpg'), '/a/path', 'thumbnail');
         $this->assertEquals(040777, fileperms($this->tempDir . '/first-level/second-level'));
     }
 
@@ -115,7 +117,7 @@ class AbstractFilesystemResolverTest extends AbstractTest
             ->will($this->returnValue($filePath))
         ;
 
-        $resolver->store(new Response(''), '/a/path', 'thumbnail');
+        $resolver->store(new Binary('aContent', 'image/jpeg', 'jpg'), '/a/path', 'thumbnail');
         $this->assertEquals(040777, fileperms($this->tempDir . '/first-level'));
     }
 
@@ -137,7 +139,7 @@ class AbstractFilesystemResolverTest extends AbstractTest
         $this->filesystem->mkdir($this->tempDir.'/unwriteable', 0555);
 
         $this->setExpectedException('RuntimeException', 'Could not create directory '.dirname($this->tempDir.'/unwriteable/thumbnail/cats.jpeg'));
-        $resolver->store(new Response(''), '/a/path', 'thumbnail');
+        $resolver->store(new Binary('aContent', 'image/jpeg', 'jpg'), '/a/path', 'thumbnail');
     }
 
     /**
