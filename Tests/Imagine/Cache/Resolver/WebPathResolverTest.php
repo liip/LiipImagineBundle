@@ -232,35 +232,6 @@ class WebPathResolverTest extends AbstractTest
         );
     }
 
-    public function testClear()
-    {
-        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
-        $this->filesystem->mkdir(dirname($filename));
-        file_put_contents($filename, '42');
-        $this->assertTrue(file_exists($filename));
-
-        $this->resolver->clear('/media/cache');
-
-        $this->assertFalse(file_exists($filename));
-    }
-
-    public function testClearWithoutPrefix()
-    {
-        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
-        $this->filesystem->mkdir(dirname($filename));
-        file_put_contents($filename, '42');
-        $this->assertTrue(file_exists($filename));
-
-        try {
-            // This would effectively clear the web root.
-            $this->resolver->clear('');
-
-            $this->fail('Clear should not work without a valid cache prefix');
-        } catch (\Exception $e) { }
-
-        $this->assertTrue(file_exists($filename));
-    }
-
     public function testThrowIfRequestNotSetOnResolve()
     {
         $this->resolver->setRequest(null);
@@ -288,7 +259,7 @@ class WebPathResolverTest extends AbstractTest
         // guard
         $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
 
-        $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
+        $this->assertTrue($this->resolver->remove('thumbnail', $path));
         $this->assertFalse(file_exists($filePath));
     }
 
@@ -308,7 +279,7 @@ class WebPathResolverTest extends AbstractTest
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
+        $this->assertTrue($this->resolver->remove('thumbnail', $path));
         $this->assertFalse(file_exists($filePath));
     }
 }

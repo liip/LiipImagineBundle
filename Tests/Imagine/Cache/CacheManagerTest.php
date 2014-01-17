@@ -165,7 +165,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with('/thumbs/cats.jpeg', 'thumbnail')
+            ->with('thumbnail', '/thumbs/cats.jpeg')
             ->will($this->returnValue(true))
         ;
 
@@ -190,27 +190,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail');
 
         // Remove fallback to default resolver
-        $this->assertTrue($cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail'));
-    }
-
-    public function testClearResolversCacheClearsAll()
-    {
-        $resolver = $this->getMockResolver();
-        $resolver
-            ->expects($this->exactly(5))
-            ->method('clear')
-            ->with('imagine_cache')
-        ;
-
-        $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
-
-        $cacheManager->addResolver('default', $resolver);
-        $cacheManager->addResolver('thumbnail1', $resolver);
-        $cacheManager->addResolver('thumbnail2', $resolver);
-        $cacheManager->addResolver('thumbnail3', $resolver);
-        $cacheManager->addResolver('thumbnail4', $resolver);
-
-        $cacheManager->clearResolversCache('imagine_cache');
+        $cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail');
     }
 
     public function generateUrlProvider()

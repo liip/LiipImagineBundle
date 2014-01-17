@@ -35,24 +35,6 @@ class WebPathResolver extends AbstractFilesystemResolver
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function clear($cachePrefix)
-    {
-        // Let's just avoid to remove the web/ directory content if cache prefix is empty
-        if ($cachePrefix === '') {
-            throw new \InvalidArgumentException("Cannot clear the Imagine cache because the cache_prefix is empty in your config.");
-        }
-
-        $cachePath = $this->cacheManager->getWebRoot() . $cachePrefix;
-
-        // Avoid an exception if the cache path does not exist (i.e. Imagine didn't yet render any image)
-        if (is_dir($cachePath)) {
-            $this->filesystem->remove(Finder::create()->in($cachePath)->depth(0)->directories());
-        }
-    }
-
-    /**
      * Decodes the URL encoded browser path.
      *
      * @param string $browserPath

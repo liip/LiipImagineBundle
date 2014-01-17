@@ -137,7 +137,7 @@ class AmazonS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
-        $this->assertTrue($resolver->remove('some-folder/path.jpg', 'thumb'));
+        $this->assertTrue($resolver->remove('thumb', 'some-folder/path.jpg'));
     }
 
     public function testDoNothingIfObjectNotExistOnAmazonOnRemove()
@@ -155,19 +155,7 @@ class AmazonS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
-        $this->assertTrue($resolver->remove('some-folder/path.jpg', 'thumb'));
-    }
-
-    public function testClearIsDisabled()
-    {
-        $s3 = $this->getAmazonS3Mock();
-        $s3
-            ->expects($this->never())
-            ->method('delete_object')
-        ;
-
-        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
-        $resolver->clear('');
+        $this->assertTrue($resolver->remove('thumb', 'some-folder/path.jpg'));
     }
 
     protected function getCFResponseMock($ok = true)
