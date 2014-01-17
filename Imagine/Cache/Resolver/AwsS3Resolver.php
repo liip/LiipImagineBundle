@@ -96,12 +96,12 @@ class AwsS3Resolver implements ResolverInterface
                 'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
-            if ($this->logger) {
-                $this->logger->error('The object could not be created on Amazon S3.', array(
-                    'objectPath'  => $objectPath,
-                    'filter'      => $filter,
-                ));
-            }
+            $this->logError('The object could not be created on Amazon S3.', array(
+                'objectPath'  => $objectPath,
+                'filter'      => $filter,
+                'bucket'      => $this->bucket,
+                'exception'   => $e,
+            ));
 
             throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
@@ -112,11 +112,23 @@ class AwsS3Resolver implements ResolverInterface
      */
     public function remove($filter, $path = null)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
+        if (null == $path) {
+            try {
+                $this->storage->deleteMatchingObjects($this->bucket, $filter);
+            } catch (\Exception $e) {
+                $this->logError('The object could not be deleted from Amazon S3.', array(
+                    'filter'      => $filter,
+                    'bucket'      => $this->bucket,
+                    'exception'   => $e,
+                ));
+            }
 
+            return;
+        }
+
+        $objectPath = $this->getObjectPath($path, $filter);
         if (!$this->objectExists($objectPath)) {
-            // A non-existing object to delete: done!
-            return true;
+            return;
         }
 
         try {
@@ -124,10 +136,13 @@ class AwsS3Resolver implements ResolverInterface
                 'Bucket' => $this->bucket,
                 'Key'    => $objectPath,
             ));
-
-            return true;
         } catch (\Exception $e) {
-            return false;
+            $this->logError('The object could not be deleted from Amazon S3.', array(
+                'objectPath'  => $objectPath,
+                'filter'      => $filter,
+                'bucket'      => $this->bucket,
+                'exception'   => $e,
+            ));
         }
     }
 
@@ -189,5 +204,16 @@ class AwsS3Resolver implements ResolverInterface
     protected function objectExists($objectPath)
     {
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
+    }
+
+    /**
+     * @param mixed $message
+     * @param array $context
+     */
+    protected function logError($message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->error($message, $context);
+        }
     }
 }

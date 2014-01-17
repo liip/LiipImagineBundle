@@ -216,11 +216,8 @@ class CacheManager
      */
     public function remove($path = null, $filter = null)
     {
-        if (null === $path && null === $filter) {
-            return;
-        }
-        if ($path && null === $filter) {
-            $filter = array(/* TODO: set all configured filters to $filter. */);
+        if (null === $filter) {
+            $filter = array_keys($this->filterConfig->all());
         }
 
         if (!is_array($filter)) {
