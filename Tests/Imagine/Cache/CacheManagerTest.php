@@ -59,6 +59,12 @@ class CacheManagerTest extends AbstractTest
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
+            ->method('isStored')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue(true))
+        ;
+        $resolver
+            ->expects($this->once())
             ->method('resolve')
             ->with('cats.jpeg', 'thumbnail')
             ->will($this->returnValue('http://a/path/to/an/image.png'))
@@ -95,9 +101,13 @@ class CacheManagerTest extends AbstractTest
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
-            ->method('resolve')
+            ->method('isStored')
             ->with('cats.jpeg', 'thumbnail')
-            ->will($this->returnValue(null))
+            ->will($this->returnValue(false))
+        ;
+        $resolver
+            ->expects($this->never())
+            ->method('resolve')
         ;
 
         $config = $this->getMockFilterConfiguration();

@@ -117,11 +117,8 @@ class CacheManager
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        //call it to make sure the resolver for the give filter exists.
-        $this->getResolver($filter);
-
-        return
-            $this->resolve($path, $filter) ?:
+        return $this->isStored($path, $filter) ?
+            $this->resolve($path, $filter) :
             $this->generateUrl($path, $filter, $absolute)
         ;
     }
