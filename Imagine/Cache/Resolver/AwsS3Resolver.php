@@ -105,7 +105,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($path, $filter)
+    public function remove($filter, $path = null)
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
@@ -143,14 +143,6 @@ class AwsS3Resolver implements ResolverInterface
         $this->objUrlOptions[$key] = $value;
 
         return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clear($cachePrefix)
-    {
-        // TODO: implement cache clearing for Amazon S3 service
     }
 
     /**

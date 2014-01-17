@@ -110,7 +110,6 @@ class CacheResolverTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->will($this->returnValue(true))
         ;
 
         $cache = new MemoryCache();
@@ -126,7 +125,7 @@ class CacheResolverTest extends AbstractTest
          */
         $this->assertCount(2, $cache->data);
 
-        $this->assertTrue($cacheResolver->remove($this->path, $this->filter));
+        $cacheResolver->remove($this->filter, $this->path);
 
         // Cache including index has been removed.
         $this->assertCount(0, $cache->data);

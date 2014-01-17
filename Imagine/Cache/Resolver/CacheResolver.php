@@ -88,29 +88,24 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($path, $filter)
+    public function remove($filter, $path = null)
     {
-        $removed = $this->resolver->remove($path, $filter);
+        $this->resolver->remove($filter, $path);
 
-        // If the resolver did not remove the content, we can leave the cache.
-        if ($removed) {
-            $key = $this->generateCacheKey('resolve', $path, $filter);
-            if ($this->cache->contains($key)) {
-                // The indexKey is not utilizing the method so the value is not important.
-                $indexKey = $this->generateIndexKey($key);
+        $key = $this->generateCacheKey('resolve', $path, $filter);
+        if ($this->cache->contains($key)) {
+            // The indexKey is not utilizing the method so the value is not important.
+            $indexKey = $this->generateIndexKey($key);
 
-                // Retrieve the index and remove the content from the cache.
-                $index = $this->cache->fetch($indexKey);
-                foreach ($index as $eachCacheKey) {
-                    $this->cache->delete($eachCacheKey);
-                }
-
-                // Remove the auxiliary keys.
-                $this->cache->delete($indexKey);
+            // Retrieve the index and remove the content from the cache.
+            $index = $this->cache->fetch($indexKey);
+            foreach ($index as $eachCacheKey) {
+                $this->cache->delete($eachCacheKey);
             }
-        }
 
-        return $removed;
+            // Remove the auxiliary keys.
+            $this->cache->delete($indexKey);
+        }
     }
 
     /**
