@@ -100,9 +100,9 @@
 
         <service id="liip_imagine.routing.loader" class="%liip_imagine.routing.loader.class%">
             <tag name="routing.loader" />
+            <argument type="service" id="liip_imagine.filter.configuration" />
             <argument>%liip_imagine.controller_action%</argument>
             <argument>%liip_imagine.cache_prefix%</argument>
-            <argument type="service" id="liip_imagine.filter.configuration" />
         </service>
 
         <!-- ImagineInterface instances -->

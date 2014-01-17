@@ -20,22 +20,20 @@ class ImagineLoader extends Loader
     private $cachePrefix;
 
     /**
-     * @var \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration
+     * @var FilterConfiguration
      */
     private $filterConfig;
 
     /**
-     * Constructor
-     *
-     * @param string $controllerAction
-     * @param string $cachePrefix
      * @param FilterConfiguration $filterConfig
+     * @param string $controllerAction
+     * @param string $cachePrefi
      */
-    public function __construct($controllerAction, $cachePrefix, FilterConfiguration $filterConfig)
+    public function __construct(FilterConfiguration $filterConfig, $controllerAction, $cachePrefix)
     {
+        $this->filterConfig = $filterConfig;
         $this->controllerAction = $controllerAction;
         $this->cachePrefix = $cachePrefix;
-        $this->filterConfig = $filterConfig;
     }
 
     /**
