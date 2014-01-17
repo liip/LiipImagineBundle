@@ -28,6 +28,23 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertEquals($config, $filterConfiguration->get('profile_photo'));
     }
 
+    public function testReturnAllFilters()
+    {
+        $filterConfiguration = new FilterConfiguration();
+        $filterConfiguration->set('foo', array('fooConfig'));
+        $filterConfiguration->set('bar', array('barConfig'));
+
+        $filters = $filterConfiguration->all();
+
+        $this->assertInternalType('array', $filters);
+
+        $this->assertArrayHasKey('foo', $filters);
+        $this->assertEquals(array('fooConfig'), $filters['foo']);
+
+        $this->assertArrayHasKey('bar', $filters);
+        $this->assertEquals(array('barConfig'), $filters['bar']);
+    }
+
     public function testGetUndefinedFilter()
     {
         $filterConfiguration = new FilterConfiguration();
