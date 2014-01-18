@@ -88,13 +88,11 @@ class AmazonS3Resolver implements ResolverInterface
         ));
 
         if (!$storageResponse->isOK()) {
-            if ($this->logger) {
-                $this->logger->error('The object could not be created on Amazon S3.', array(
-                    'objectPath' => $objectPath,
-                    'filter' => $filter,
-                    's3_response' => $storageResponse,
-                ));
-            }
+            $this->logError('The object could not be created on Amazon S3.', array(
+                'objectPath' => $objectPath,
+                'filter' => $filter,
+                's3_response' => $storageResponse,
+            ));
 
             throw new NotStorableException('The object could not be created on Amazon S3.');
         }
@@ -105,14 +103,27 @@ class AmazonS3Resolver implements ResolverInterface
      */
     public function remove($filter, $path = null)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
+        if (null === $path) {
+            if (!$this->storage->delete_all_objects($this->bucket, sprintf('/%s/i', $filter))) {
+                $this->logError('The objects could not be deleted from Amazon S3.', array(
+                    'filter'      => $filter,
+                    'bucket'      => $this->bucket,
+                ));
+            }
 
-        if ($this->objectExists($objectPath)) {
-            return $this->storage->delete_object($this->bucket, $objectPath)->isOK();
+            return;
         }
 
-        // A non-existing object to delete: done!
-        return true;
+        $objectPath = $this->getObjectPath($path, $filter);
+        if ($this->objectExists($objectPath)) {
+            if (!$this->storage->delete_object($this->bucket, $objectPath)->isOK()) {
+                $this->logError('The objects could not be deleted from Amazon S3.', array(
+                    'filter'      => $filter,
+                    'bucket'      => $this->bucket,
+                    'path'        => $path,
+                ));
+            }
+        }
     }
 
     /**
@@ -169,5 +180,16 @@ class AmazonS3Resolver implements ResolverInterface
     protected function objectExists($objectPath)
     {
         return $this->storage->if_object_exists($this->bucket, $objectPath);
+    }
+
+    /**
+     * @param mixed $message
+     * @param array $context
+     */
+    protected function logError($message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->error($message, $context);
+        }
     }
 }
