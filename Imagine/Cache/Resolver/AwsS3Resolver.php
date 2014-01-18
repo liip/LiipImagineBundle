@@ -111,7 +111,7 @@ class AwsS3Resolver implements ResolverInterface
             try {
                 $this->storage->deleteMatchingObjects($this->bucket, $filter);
             } catch (\Exception $e) {
-                $this->logError('The object could not be deleted from Amazon S3.', array(
+                $this->logError('The objects could not be deleted from Amazon S3.', array(
                     'filter'      => $filter,
                     'bucket'      => $this->bucket,
                     'exception'   => $e,
