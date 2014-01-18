@@ -168,6 +168,70 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->remove('thumb', 'some-folder/path.jpg');
     }
 
+    public function testLogIfSingleObjectDeletionFaildOnRemove()
+    {
+        $s3 = $this->getAmazonS3Mock();
+        $s3
+            ->expects($this->once())
+            ->method('if_object_exists')
+            ->with('images.example.com', 'thumb/some-folder/path.jpg')
+            ->will($this->returnValue(true))
+        ;
+        $s3
+            ->expects($this->once())
+            ->method('delete_object')
+            ->will($this->returnValue($this->getCFResponseMock(false)))
+        ;
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger
+            ->expects($this->once())
+            ->method('error')
+        ;
+
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
+        $resolver->setLogger($logger);
+
+        $resolver->remove('thumb', 'some-folder/path.jpg');
+    }
+
+    public function testRemoveAllFilterCacheOnRemove()
+    {
+        $s3 = $this->getAmazonS3Mock();
+        $s3
+            ->expects($this->once())
+            ->method('delete_all_objects')
+            ->with('images.example.com', '/thumb/i')
+            ->will($this->returnValue(true))
+        ;
+
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
+
+        $resolver->remove('thumb');
+    }
+
+    public function testLogIfRemoveAllFilterCacheFailedOnRemove()
+    {
+        $s3 = $this->getAmazonS3Mock();
+        $s3
+            ->expects($this->once())
+            ->method('delete_all_objects')
+            ->with('images.example.com', '/thumb/i')
+            ->will($this->returnValue(false))
+        ;
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger
+            ->expects($this->once())
+            ->method('error')
+        ;
+
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
+        $resolver->setLogger($logger);
+
+        $resolver->remove('thumb');
+    }
+
     protected function getCFResponseMock($ok = true)
     {
         $s3Response = $this->getMock('CFResponse', array('isOK'), array(), '', false);
@@ -190,7 +254,8 @@ class AmazonS3ResolverTest extends AbstractTest
             'create_object',
             'get_object_url',
             'delete_object',
-            'authenticate'
+            'delete_all_objects',
+            'authenticate',
         );
 
         return $this->getMock('AmazonS3', $mockedMethods, array(), '', false);
