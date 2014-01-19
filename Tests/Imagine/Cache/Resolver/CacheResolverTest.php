@@ -2,10 +2,10 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Liip\ImagineBundle\Tests\Fixtures\MemoryCache;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver
@@ -26,7 +26,7 @@ class CacheResolverTest extends AbstractTest
             ->will($this->returnValue($this->webPath))
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
@@ -46,7 +46,7 @@ class CacheResolverTest extends AbstractTest
             ->with($this->identicalTo($binary), $this->webPath, $this->filter)
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         // Call twice, as this method should not be cached.
         $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
@@ -74,31 +74,7 @@ class CacheResolverTest extends AbstractTest
         $cacheResolver->resolve($this->path, $this->filter);
     }
 
-    public function testNotSavesToCacheIfInternalResolverReturnNullOnResolve()
-    {
-        $resolver = $this->getMockResolver();
-        $resolver
-            ->expects($this->once())
-            ->method('resolve')
-            ->with($this->path, $this->filter)
-            ->will($this->returnValue(null))
-        ;
-
-        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
-        $cache
-            ->expects($this->never())
-            ->method('save')
-        ;
-
-        $cacheResolver = new CacheResolver($cache, $resolver);
-
-        $cacheResolver->resolve($this->path, $this->filter);
-    }
-
-    /**
-     * @depends testResolveIsSavedToCache
-     */
-    public function testRemoveUsesIndex()
+    public function testRemoveSinglePathCacheOnRemove()
     {
         $resolver = $this->getMockResolver();
         $resolver
@@ -112,22 +88,57 @@ class CacheResolverTest extends AbstractTest
             ->method('remove')
         ;
 
-        $cache = new MemoryCache();
+        $cache = new ArrayCache;
 
         $cacheResolver = new CacheResolver($cache, $resolver);
         $cacheResolver->resolve($this->path, $this->filter);
 
-        /*
+        /**
          * Three items:
-         * * The result of resolve.
-         * * The result of reverse for the filePath.
-         * * The index of both entries.
+         * * The result of one resolve execution.
+         * * The index of entity.
+         * * The array cache meta info
          */
-        $this->assertCount(2, $cache->data);
+        $this->assertCount(3, $this->readAttribute($cache, 'data'));
 
         $cacheResolver->remove($this->filter, $this->path);
 
         // Cache including index has been removed.
-        $this->assertCount(0, $cache->data);
+        $this->assertCount(1, $this->readAttribute($cache, 'data'));
+    }
+
+    public function testRemoveAllFilterCacheOnRemove()
+    {
+        $resolver = $this->getMockResolver();
+        $resolver
+            ->expects($this->exactly(4))
+            ->method('resolve')
+            ->will($this->returnValue('aCachePath'))
+        ;
+        $resolver
+            ->expects($this->once())
+            ->method('remove')
+        ;
+
+        $cache = new ArrayCache;
+
+        $cacheResolver = new CacheResolver($cache, $resolver);
+        $cacheResolver->resolve('aPathFoo', 'thumbnail_233x233');
+        $cacheResolver->resolve('aPathBar', 'thumbnail_233x233');
+        $cacheResolver->resolve('aPathFoo', 'thumbnail_100x100');
+        $cacheResolver->resolve('aPathBar', 'thumbnail_100x100');
+
+        /**
+         * Seven items:
+         * * The result of four resolve execution.
+         * * The index of two entities.
+         * * The array cache meta info
+         */
+        $this->assertCount(7, $this->readAttribute($cache, 'data'));
+
+        $cacheResolver->remove('thumbnail_233x233');
+
+        // Cache including index has been removed.
+        $this->assertCount(4, $this->readAttribute($cache, 'data'));
     }
 }
