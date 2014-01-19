@@ -445,4 +445,48 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager->remove();
     }
+
+    public function testRemoveCacheForPathAndAllFiltersOnRemove()
+    {
+        $expectedFilterOne = 'theFilterOne';
+        $expectedFilterTwo = 'theFilterTwo';
+        $expectedPath = 'thePath';
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->at(0))
+            ->method('remove')
+            ->with($expectedFilterOne, $expectedPath)
+        ;
+        $resolver
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with($expectedFilterTwo, $expectedPath)
+        ;
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->will($this->returnCallback(function($filter) {
+                return array(
+                    'cache' => $filter,
+                );
+            }))
+        ;
+        $config
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue(array(
+                $expectedFilterOne => array(),
+                $expectedFilterTwo => array(),
+            )))
+        ;
+
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager->addResolver($expectedFilterOne, $resolver);
+        $cacheManager->addResolver($expectedFilterTwo, $resolver);
+
+        $cacheManager->remove($expectedPath);
+    }
 }
