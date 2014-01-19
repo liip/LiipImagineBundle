@@ -29,7 +29,7 @@ class WebPathResolverTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->config = $this->getMockFilterConfiguration();
+        $this->config = $this->createFilterConfigurationMock();
         $this->config
             ->expects($this->any())
             ->method('get')
@@ -50,7 +50,7 @@ class WebPathResolverTest extends AbstractTest
         $this->cacheManager = $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(
             'generateUrl',
         ), array(
-            $this->config, $this->getMockRouter(), $this->webRoot, 'web_path'
+            $this->config, $this->createRouterMock(), $this->webRoot, 'web_path'
         ));
 
         $this->resolver = new WebPathResolver($this->filesystem);

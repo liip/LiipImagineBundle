@@ -18,7 +18,7 @@ class CacheResolverTest extends AbstractTest
 
     public function testResolveIsSavedToCache()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -39,7 +39,7 @@ class CacheResolverTest extends AbstractTest
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpg');
 
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->exactly(2))
             ->method('store')
@@ -55,7 +55,7 @@ class CacheResolverTest extends AbstractTest
 
     public function testSavesToCacheIfInternalResolverReturnUrlOnResolve()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -76,7 +76,7 @@ class CacheResolverTest extends AbstractTest
 
     public function testRemoveSinglePathCacheOnRemove()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -109,7 +109,7 @@ class CacheResolverTest extends AbstractTest
 
     public function testRemoveAllFilterCacheOnRemove()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->exactly(4))
             ->method('resolve')
