@@ -6,3 +6,4 @@
 * [Filters](filters.md)
 * [DataLoaders](data-loaders.md)
 * [CacheResolvers](cache-resolvers.md)
+* [CacheManager](cache-manager.md)
