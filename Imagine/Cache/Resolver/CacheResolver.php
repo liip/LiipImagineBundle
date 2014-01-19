@@ -160,9 +160,14 @@ class CacheResolver implements ResolverInterface
         ));
     }
 
+    /**
+     * @param string $cacheKeyPart
+     *
+     * @return string
+     */
     protected function sanitizeCacheKeyPart($cacheKeyPart)
     {
-        return str_replace('.', '-', $cacheKeyPart);
+        return str_replace('.', '_', $cacheKeyPart);
     }
 
     /**
