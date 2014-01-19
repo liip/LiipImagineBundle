@@ -206,23 +206,31 @@ class CacheManager
     }
 
     /**
-     * @param string|null          $path
-     * @param string|string[]|null $filter
+     * @param string|string[]|null $paths
+     * @param string|string[]|null $filters
      *
      * @return void
      */
-    public function remove($path = null, $filter = null)
+    public function remove($paths = null, $filters = null)
     {
-        if (null === $filter) {
-            $filter = array_keys($this->filterConfig->all());
+        if (null === $filters) {
+            $filters = array_keys($this->filterConfig->all());
+        }
+        if (!is_array($filters)) {
+            $filters = array($filters);
+        }
+        if (!is_array($paths)) {
+            $paths = array($paths);
         }
 
-        if (!is_array($filter)) {
-            $filter = array($filter);
-        }
-
-        foreach ($filter as $filter) {
-            $this->getResolver($filter)->remove($filter, $path);
+        foreach ($filters as $filter) {
+            if (empty($paths)) {
+                $this->getResolver($filter)->remove($filter);
+            } else {
+                foreach ($paths as $path) {
+                    $this->getResolver($filter)->remove($filter, $path);
+                }
+            }
         }
     }
 }
