@@ -259,7 +259,7 @@ class WebPathResolverTest extends AbstractTest
         // guard
         $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
 
-        $this->assertTrue($this->resolver->remove('thumbnail', $path));
+        $this->resolver->remove('thumbnail', $path);
         $this->assertFalse(file_exists($filePath));
     }
 
@@ -279,7 +279,30 @@ class WebPathResolverTest extends AbstractTest
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->assertTrue($this->resolver->remove('thumbnail', $path));
+        $this->resolver->remove('thumbnail', $path);
         $this->assertFalse(file_exists($filePath));
+    }
+
+    public function testRemoveAllFilterCacheOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $subFilePath = $this->webRoot.'/media/cache/thumbnail/sub/cats.jpeg';
+        $this->filesystem->mkdir(dirname($subFilePath));
+        file_put_contents($subFilePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        $this->resolver->remove('thumbnail');
+        $this->assertFalse(file_exists($filePath));
+        $this->assertFalse(file_exists($subFilePath));
     }
 }
