@@ -110,14 +110,22 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove(array $paths, array $filters)
     {
-        if (null == $path) {
+        if (empty($paths) && empty($filters)) {
+            // or exception ???
+            return;
+        }
+
+        if (empty($paths)) {
             try {
-                $this->storage->deleteMatchingObjects($this->bucket, $filter);
+                $this->storage->deleteMatchingObjects($this->bucket, null, sprintf(
+                    '/%s/i',
+                    implode('|', $filters)
+                ));
             } catch (\Exception $e) {
                 $this->logError('The objects could not be deleted from Amazon S3.', array(
-                    'filter'      => $filter,
+                    'filter'      => implode(', ', $filters),
                     'bucket'      => $this->bucket,
                     'exception'   => $e,
                 ));
@@ -126,23 +134,27 @@ class AwsS3Resolver implements ResolverInterface
             return;
         }
 
-        $objectPath = $this->getObjectPath($path, $filter);
-        if (!$this->objectExists($objectPath)) {
-            return;
-        }
+        foreach ($filters as $filter) {
+            foreach ($paths as $path) {
+                $objectPath = $this->getObjectPath($path, $filter);
+                if (!$this->objectExists($objectPath)) {
+                    return;
+                }
 
-        try {
-            $this->storage->deleteObject(array(
-                'Bucket' => $this->bucket,
-                'Key'    => $objectPath,
-            ));
-        } catch (\Exception $e) {
-            $this->logError('The object could not be deleted from Amazon S3.', array(
-                'objectPath'  => $objectPath,
-                'filter'      => $filter,
-                'bucket'      => $this->bucket,
-                'exception'   => $e,
-            ));
+                try {
+                    $this->storage->deleteObject(array(
+                        'Bucket' => $this->bucket,
+                        'Key'    => $objectPath,
+                    ));
+                } catch (\Exception $e) {
+                    $this->logError('The object could not be deleted from Amazon S3.', array(
+                        'objectPath'  => $objectPath,
+                        'filter'      => $filter,
+                        'bucket'      => $this->bucket,
+                        'exception'   => $e,
+                    ));
+                }
+            }
         }
     }
 
