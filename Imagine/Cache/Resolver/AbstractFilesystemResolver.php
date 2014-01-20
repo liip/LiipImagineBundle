@@ -7,7 +7,6 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
@@ -114,13 +113,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
             $filterCachePath = $rootCachePath.$filter;
             if (is_dir($filterCachePath)) {
-                $finder = Finder::create()
-                    ->in($filterCachePath)
-                    ->ignoreDotFiles(true)
-                    ->ignoreVCS(true)
-                ;
-
-                $this->filesystem->remove($finder);
+                $this->filesystem->remove($filterCachePath);
             }
 
             return;
