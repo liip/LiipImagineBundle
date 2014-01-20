@@ -106,30 +106,36 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove(array $paths, array $filters)
     {
-        if (null === $path) {
-            // TODO: this logic has to be refactored.
-            list($rootCachePath) = explode($filter, $this->getFilePath('whateverpath', $filter));
+        if (empty($paths) && empty($filters)) {
+            // or exception ??
+            return;
+        }
 
-            $filterCachePath = $rootCachePath.$filter;
-            if (is_dir($filterCachePath)) {
-                $finder = Finder::create()
-                    ->in($filterCachePath)
-                    ->ignoreDotFiles(true)
-                    ->ignoreVCS(true)
-                ;
+        // TODO: this logic has to be refactored.
+        list($rootCachePath) = explode(current($filters), $this->getFilePath('whateverpath', current($filters)));
 
-                $this->filesystem->remove($finder);
+        if (empty($paths)) {
+
+            $filtersCachePaths = array();
+            foreach ($filters as $filter) {
+                $filterCachePath = $rootCachePath.$filter;
+                if (is_dir($filterCachePath)) {
+                    $filtersCachePaths[] = $filterCachePath;
+                }
             }
+
+            $this->filesystem->remove($filtersCachePaths);
 
             return;
         }
 
-        $this->basePath = $this->getRequest()->getBaseUrl();
-        $filePath = $this->getFilePath($path, $filter);
-
-        $this->filesystem->remove($filePath);
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                $this->filesystem->remove($this->getFilePath($path, $filter));
+            }
+        }
     }
 
     /**
