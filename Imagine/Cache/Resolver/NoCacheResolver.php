@@ -37,6 +37,5 @@ class NoCacheResolver extends WebPathResolver
      */
     public function remove($path, $filter)
     {
-        return true;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Liip\ImagineBundle\Tests\Routing;
 
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Routing\ImagineLoader;
 
 /**
@@ -17,23 +18,30 @@ class ImagineLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnTrueIfResourceTypeImagineOnSupports()
     {
-        $loader = new ImagineLoader('anAction', '', array());
+        $loader = new ImagineLoader($this->createFilterConfigurationMock(), 'anAction', '');
 
         $this->assertTrue($loader->supports('aResource', 'imagine'));
     }
 
     public function testReturnFalseIfResourceTypeNotImagineOnSupports()
     {
-        $loader = new ImagineLoader('anAction', '', array());
+        $loader = new ImagineLoader($this->createFilterConfigurationMock(), 'anAction', '');
 
         $this->assertFalse($loader->supports('aResource', 'notImagine'));
     }
 
     public function testReturnCollectionWithOneRouterIfOneFilterPassedOnLoad()
     {
-        $loader = new ImagineLoader('liip_imagine.controller:filterAction', '/media/cache', array(
-            'thumbnail' => array('filter_config_here')
-        ));
+        $filterConfiguration = $this->createFilterConfigurationMock();
+        $filterConfiguration
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue(array(
+                'thumbnail' => array('filter_config_here')
+            )))
+        ;
+
+        $loader = new ImagineLoader($filterConfiguration, 'liip_imagine.controller:filterAction', '/media/cache');
 
         $result = $loader->load('aResource', 'aType');
 
@@ -48,5 +56,13 @@ class ImagineLoaderTest extends \PHPUnit_Framework_TestCase
             ),
             $route->getDefaults()
         );
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FilterConfiguration
+     */
+    protected function createFilterConfigurationMock()
+    {
+        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration', array(), array(), '', false);
     }
 }

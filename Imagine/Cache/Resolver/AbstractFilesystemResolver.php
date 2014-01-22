@@ -73,9 +73,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @param int $mkdirMode
+     * @param int $folderPermissions
      */
-    public function setFolderPermissions ($folderPermissions)
+    public function setFolderPermissions($folderPermissions)
     {
         $this->folderPermissions = $folderPermissions;
     }
@@ -103,21 +103,26 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * Removes a stored image resource.
-     *
-     * @param string $path The target path provided by the resolve method.
-     * @param string $filter The name of the imagine filter in effect.
-     *
-     * @return bool Whether the file has been removed successfully.
+     * {@inheritDoc}
      */
     public function remove($path, $filter)
     {
+        if (null === $path) {
+            // TODO: this logic has to be refactored.
+            list($rootCachePath) = explode($filter, $this->getFilePath('whateverpath', $filter));
+
+            $filterCachePath = $rootCachePath.$filter;
+            if (is_dir($filterCachePath)) {
+                $this->filesystem->remove($filterCachePath);
+            }
+
+            return;
+        }
+
         $this->basePath = $this->getRequest()->getBaseUrl();
         $filePath = $this->getFilePath($path, $filter);
 
         $this->filesystem->remove($filePath);
-
-        return !file_exists($filePath);
     }
 
     /**

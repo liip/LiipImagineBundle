@@ -41,21 +41,10 @@ interface ResolverInterface
     function store(BinaryInterface $binary, $path, $filter);
 
     /**
-     * Removes a stored image resource.
-     *
-     * @param string $path   The path where the original file is expected to be.
-     * @param string $filter The name of the imagine filter in effect.
-     *
-     * @return bool Whether the file has been removed successfully.
-     */
-    function remove($path, $filter);
-
-    /**
-     * Clear the CacheResolver cache.
-     *
-     * @param string $cachePrefix The cache prefix as defined in the configuration.
+     * @param string|null $path   The path where the original file is expected to be.
+     * @param string      $filter The name of the imagine filter in effect.
      *
      * @return void
      */
-    function clear($cachePrefix);
+    function remove($path, $filter);
 }

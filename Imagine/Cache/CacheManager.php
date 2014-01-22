@@ -206,33 +206,31 @@ class CacheManager
     }
 
     /**
-     * Remove a cached image from the storage.
-     *
-     * @see ResolverInterface::remove
-     *
-     * @param string $path
-     * @param string $filter
-     *
-     * @return bool
-     */
-    public function remove($path, $filter)
-    {
-        return $this->getResolver($filter)->remove($path, $filter);
-    }
-
-    /**
-     * Clear the cache of all resolvers.
-     *
-     * @see ResolverInterface::clear
-     *
-     * @param string $cachePrefix
+     * @param string|string[]|null $paths
+     * @param string|string[]|null $filters
      *
      * @return void
      */
-    public function clearResolversCache($cachePrefix)
+    public function remove($paths = null, $filters = null)
     {
-        foreach ($this->resolvers as $resolver) {
-            $resolver->clear($cachePrefix);
+        if (null === $filters) {
+            $filters = array_keys($this->filterConfig->all());
+        }
+        if (!is_array($filters)) {
+            $filters = array($filters);
+        }
+        if (!is_array($paths)) {
+            $paths = array($paths);
+        }
+
+        foreach ($filters as $filter) {
+            if (empty($paths)) {
+                $this->getResolver($filter)->remove(null, $filter);
+            } else {
+                foreach ($paths as $path) {
+                    $this->getResolver($filter)->remove($path, $filter);
+                }
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ class FilterManagerTest extends AbstractTest
 {
     public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter()
     {
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -49,7 +49,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -105,7 +105,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -160,7 +160,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -215,7 +215,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -269,7 +269,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')

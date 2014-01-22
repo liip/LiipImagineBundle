@@ -75,7 +75,7 @@ class ImagineControllerTest extends AbstractTest
 
     public function testFilterActionLive()
     {
-        $router = $this->getMockRouter();
+        $router = $this->createRouterMock();
         $router
             ->expects($this->any())
             ->method('generate')
