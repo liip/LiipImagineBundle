@@ -259,7 +259,7 @@ class WebPathResolverTest extends AbstractTest
         // guard
         $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
 
-        $this->resolver->remove('thumbnail', $path);
+        $this->resolver->remove($path, 'thumbnail');
         $this->assertFalse(file_exists($filePath));
     }
 
@@ -279,7 +279,7 @@ class WebPathResolverTest extends AbstractTest
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->resolver->remove('thumbnail', $path);
+        $this->resolver->remove($path, 'thumbnail');
         $this->assertFalse(file_exists($filePath));
     }
 
@@ -301,7 +301,7 @@ class WebPathResolverTest extends AbstractTest
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->resolver->remove('thumbnail');
+        $this->resolver->remove(null, 'thumbnail');
         $this->assertFalse(file_exists($filePath));
         $this->assertFalse(file_exists($subFilePath));
     }

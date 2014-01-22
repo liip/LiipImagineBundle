@@ -225,10 +225,10 @@ class CacheManager
 
         foreach ($filters as $filter) {
             if (empty($paths)) {
-                $this->getResolver($filter)->remove($filter);
+                $this->getResolver($filter)->remove(null, $filter);
             } else {
                 foreach ($paths as $path) {
-                    $this->getResolver($filter)->remove($filter, $path);
+                    $this->getResolver($filter)->remove($path, $filter);
                 }
             }
         }

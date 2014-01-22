@@ -141,7 +141,7 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testDoNothingIfObjectNotExistOnAmazonOnRemove()
@@ -159,7 +159,7 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testCatchAndLogExceptionsWhileSingleObjectDeletionOnRemove()
@@ -185,7 +185,7 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testRemoveAllFilterCacheOnRemove()
@@ -202,7 +202,7 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, $expectedBucket);
 
-        $resolver->remove($expectedFilter, $path = null);
+        $resolver->remove(null, $expectedFilter);
     }
 
     public function testCatchAndLogExceptionWhenRemoveAllFilterCacheOnRemove()
@@ -226,7 +226,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver = new AwsS3Resolver($s3, $expectedBucket);
         $resolver->setLogger($logger);
 
-        $resolver->remove($expectedFilter, $path = null);
+        $resolver->remove(null, $expectedFilter);
     }
 
     protected function getS3ResponseMock($ok = true)

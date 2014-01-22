@@ -105,7 +105,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove($path, $filter)
     {
         if (null === $path) {
             // TODO: this logic has to be refactored.

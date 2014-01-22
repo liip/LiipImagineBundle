@@ -101,7 +101,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove($path, $filter)
     {
         if (null === $path) {
             if (!$this->storage->delete_all_objects($this->bucket, sprintf('/%s/i', $filter))) {

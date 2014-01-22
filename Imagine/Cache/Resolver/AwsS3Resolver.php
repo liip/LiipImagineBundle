@@ -105,7 +105,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove($path, $filter)
     {
         if (null == $path) {
             try {

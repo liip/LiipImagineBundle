@@ -175,7 +175,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with('thumbnail', '/thumbs/cats.jpeg')
+            ->with('/thumbs/cats.jpeg', 'thumbnail')
             ->will($this->returnValue(true))
         ;
 
@@ -261,7 +261,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilter, $expectedPath)
+            ->with($expectedPath, $expectedFilter)
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -291,12 +291,12 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->at(0))
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPath)
+            ->with($expectedPath, $expectedFilterOne)
         ;
         $resolver
             ->expects($this->at(1))
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPath)
+            ->with($expectedPath, $expectedFilterTwo)
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -327,12 +327,12 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->at(0))
             ->method('remove')
-            ->with($expectedFilter, $expectedPathOne)
+            ->with($expectedPathOne, $expectedFilter)
         ;
         $resolver
             ->expects($this->at(1))
             ->method('remove')
-            ->with($expectedFilter, $expectedPathTwo)
+            ->with($expectedPathTwo, $expectedFilter)
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -364,22 +364,22 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->at(0))
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPathOne)
+            ->with($expectedPathOne, $expectedFilterOne)
         ;
         $resolver
             ->expects($this->at(1))
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPathTwo)
+            ->with($expectedPathTwo, $expectedFilterOne)
         ;
         $resolver
             ->expects($this->at(2))
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPathOne)
+            ->with($expectedPathOne, $expectedFilterTwo)
         ;
         $resolver
             ->expects($this->at(3))
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPathTwo)
+            ->with($expectedPathTwo, $expectedFilterTwo)
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -412,12 +412,12 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->at(0))
             ->method('remove')
-            ->with($expectedFilterOne, null)
+            ->with(null, $expectedFilterOne)
         ;
         $resolver
             ->expects($this->at(1))
             ->method('remove')
-            ->with($expectedFilterTwo, null)
+            ->with(null, $expectedFilterTwo)
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -456,12 +456,12 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->at(0))
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPath)
+            ->with($expectedPath, $expectedFilterOne)
         ;
         $resolver
             ->expects($this->at(1))
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPath)
+            ->with($expectedPath, $expectedFilterTwo)
         ;
 
         $config = $this->createFilterConfigurationMock();

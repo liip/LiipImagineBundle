@@ -87,9 +87,9 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove($path, $filter)
     {
-        $this->resolver->remove($filter, $path);
+        $this->resolver->remove($path, $filter);
 
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         if (!$this->cache->contains($indexKey)) {

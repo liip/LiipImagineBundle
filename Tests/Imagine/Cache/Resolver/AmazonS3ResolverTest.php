@@ -142,7 +142,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testDoNothingIfSingleObjectNotExistOnAmazonOnRemove()
@@ -165,7 +165,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testLogIfSingleObjectDeletionFaildOnRemove()
@@ -192,7 +192,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
-        $resolver->remove('thumb', 'some-folder/path.jpg');
+        $resolver->remove('some-folder/path.jpg', 'thumb');
     }
 
     public function testRemoveAllFilterCacheOnRemove()
@@ -207,7 +207,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
-        $resolver->remove('thumb');
+        $resolver->remove(null, 'thumb');
     }
 
     public function testLogIfRemoveAllFilterCacheFailedOnRemove()
@@ -229,7 +229,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
-        $resolver->remove('thumb');
+        $resolver->remove(null, 'thumb');
     }
 
     protected function getCFResponseMock($ok = true)
