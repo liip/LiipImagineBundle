@@ -20,7 +20,7 @@ class UpscaleFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = array())
     {
         if (!isset($options['min'])) {
-            throw new InvalidArgumentException('Missing min option.');
+            throw new \InvalidArgumentException('Missing min option.');
         }
 
         list($width, $height) = $options['min'];
