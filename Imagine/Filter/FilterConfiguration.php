@@ -47,4 +47,14 @@ class FilterConfiguration
     {
         return $this->filters[$filter] = $config;
     }
+
+    /**
+     * Get all filters
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->filters;
+    }
 }
