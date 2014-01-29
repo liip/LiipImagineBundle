@@ -125,6 +125,18 @@ liip_image:
                 position: center
 ```
 
+### The `auto_rotate` filter
+
+The auto_rotate filter rotates the image based on its EXIF data. **(this filter should be called as early as possible)**
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                auto_rotate: ~
+```
 ## Load your Custom Filters
 
 The ImagineBundle allows you to load your own custom filter classes. The only
