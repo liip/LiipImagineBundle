@@ -101,7 +101,7 @@ class CacheResolverTest extends AbstractTest
          */
         $this->assertCount(3, $this->readAttribute($cache, 'data'));
 
-        $cacheResolver->remove($this->filter, $this->path);
+        $cacheResolver->remove(array($this->path), array($this->filter));
 
         // Cache including index has been removed.
         $this->assertCount(1, $this->readAttribute($cache, 'data'));
@@ -136,7 +136,7 @@ class CacheResolverTest extends AbstractTest
          */
         $this->assertCount(7, $this->readAttribute($cache, 'data'));
 
-        $cacheResolver->remove('thumbnail_233x233');
+        $cacheResolver->remove(array(), array('thumbnail_233x233'));
 
         // Cache including index has been removed.
         $this->assertCount(4, $this->readAttribute($cache, 'data'));
