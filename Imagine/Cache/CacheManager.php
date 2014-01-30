@@ -223,14 +223,22 @@ class CacheManager
             $paths = array($paths);
         }
 
+        $paths = array_filter($paths);
+        $filters = array_filter($filters);
+
+        $mapping = new \SplObjectStorage();
         foreach ($filters as $filter) {
-            if (empty($paths)) {
-                $this->getResolver($filter)->remove($filter);
-            } else {
-                foreach ($paths as $path) {
-                    $this->getResolver($filter)->remove($filter, $path);
-                }
-            }
+            $resolver = $this->getResolver($filter);
+
+            $list = isset($mapping[$resolver]) ? $mapping[$resolver] : array();
+
+            $list[] = $filter;
+
+            $mapping[$resolver] = $list;
+        }
+
+        foreach ($mapping as $resolver) {
+            $resolver->remove($paths, $mapping[$resolver]);
         }
     }
 }

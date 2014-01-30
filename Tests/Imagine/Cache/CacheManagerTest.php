@@ -175,7 +175,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with('thumbnail', '/thumbs/cats.jpeg')
+            ->with(array('/thumbs/cats.jpeg'), array('thumbnail'))
             ->will($this->returnValue(true))
         ;
 
@@ -261,7 +261,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilter, $expectedPath)
+            ->with(array($expectedPath), array($expectedFilter))
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -287,16 +287,18 @@ class CacheManagerTest extends AbstractTest
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
 
-        $resolver = $this->createResolverMock();
-        $resolver
-            ->expects($this->at(0))
+        $resolverOne = $this->createResolverMock();
+        $resolverOne
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPath)
+            ->with(array($expectedPath), array($expectedFilterOne))
         ;
-        $resolver
-            ->expects($this->at(1))
+
+        $resolverTwo = $this->createResolverMock();
+        $resolverTwo
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPath)
+            ->with(array($expectedPath), array($expectedFilterTwo))
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -311,8 +313,8 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
-        $cacheManager->addResolver($expectedFilterOne, $resolver);
-        $cacheManager->addResolver($expectedFilterTwo, $resolver);
+        $cacheManager->addResolver($expectedFilterOne, $resolverOne);
+        $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
         $cacheManager->remove($expectedPath, array($expectedFilterOne, $expectedFilterTwo));
     }
@@ -325,14 +327,12 @@ class CacheManagerTest extends AbstractTest
 
         $resolver = $this->createResolverMock();
         $resolver
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilter, $expectedPathOne)
-        ;
-        $resolver
-            ->expects($this->at(1))
-            ->method('remove')
-            ->with($expectedFilter, $expectedPathTwo)
+            ->with(
+                array($expectedPathOne, $expectedPathTwo),
+                array($expectedFilter)
+            )
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -347,7 +347,6 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
-        $cacheManager->addResolver($expectedFilter, $resolver);
         $cacheManager->addResolver($expectedFilter, $resolver);
 
         $cacheManager->remove(array($expectedPathOne, $expectedPathTwo), $expectedFilter);
@@ -360,26 +359,18 @@ class CacheManagerTest extends AbstractTest
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
 
-        $resolver = $this->createResolverMock();
-        $resolver
-            ->expects($this->at(0))
+        $resolverOne = $this->createResolverMock();
+        $resolverOne
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPathOne)
+            ->with(array($expectedPathOne, $expectedPathTwo), array($expectedFilterOne))
         ;
-        $resolver
-            ->expects($this->at(1))
+
+        $resolverTwo = $this->createResolverMock();
+        $resolverTwo
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPathTwo)
-        ;
-        $resolver
-            ->expects($this->at(2))
-            ->method('remove')
-            ->with($expectedFilterTwo, $expectedPathOne)
-        ;
-        $resolver
-            ->expects($this->at(3))
-            ->method('remove')
-            ->with($expectedFilterTwo, $expectedPathTwo)
+            ->with(array($expectedPathOne, $expectedPathTwo), array($expectedFilterTwo))
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -394,8 +385,8 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
-        $cacheManager->addResolver($expectedFilterOne, $resolver);
-        $cacheManager->addResolver($expectedFilterTwo, $resolver);
+        $cacheManager->addResolver($expectedFilterOne, $resolverOne);
+        $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
         $cacheManager->remove(
             array($expectedPathOne, $expectedPathTwo),
@@ -408,16 +399,18 @@ class CacheManagerTest extends AbstractTest
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
 
-        $resolver = $this->createResolverMock();
-        $resolver
-            ->expects($this->at(0))
+        $resolverOne = $this->createResolverMock();
+        $resolverOne
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterOne, null)
+            ->with(array(), array($expectedFilterOne))
         ;
-        $resolver
-            ->expects($this->at(1))
+
+        $resolverTwo = $this->createResolverMock();
+        $resolverTwo
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterTwo, null)
+            ->with(array(), array($expectedFilterTwo))
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -440,8 +433,8 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
-        $cacheManager->addResolver($expectedFilterOne, $resolver);
-        $cacheManager->addResolver($expectedFilterTwo, $resolver);
+        $cacheManager->addResolver($expectedFilterOne, $resolverOne);
+        $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
         $cacheManager->remove();
     }
@@ -452,16 +445,18 @@ class CacheManagerTest extends AbstractTest
         $expectedFilterTwo = 'theFilterTwo';
         $expectedPath = 'thePath';
 
-        $resolver = $this->createResolverMock();
-        $resolver
-            ->expects($this->at(0))
+        $resolverOne = $this->createResolverMock();
+        $resolverOne
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterOne, $expectedPath)
+            ->with(array($expectedPath), array($expectedFilterOne))
         ;
-        $resolver
-            ->expects($this->at(1))
+
+        $resolverTwo = $this->createResolverMock();
+        $resolverTwo
+            ->expects($this->once())
             ->method('remove')
-            ->with($expectedFilterTwo, $expectedPath)
+            ->with(array($expectedPath), array($expectedFilterTwo))
         ;
 
         $config = $this->createFilterConfigurationMock();
@@ -484,9 +479,39 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager->addResolver($expectedFilterOne, $resolverOne);
+        $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
+
+        $cacheManager->remove($expectedPath);
+    }
+
+    public function testAggregateFiltersByResolverOnRemove()
+    {
+        $expectedFilterOne = 'theFilterOne';
+        $expectedFilterTwo = 'theFilterTwo';
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->once())
+            ->method('remove')
+            ->with(array(), array($expectedFilterOne, $expectedFilterTwo))
+        ;
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->will($this->returnCallback(function($filter) {
+                return array(
+                    'cache' => $filter,
+                );
+            }))
+        ;
+
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
         $cacheManager->addResolver($expectedFilterOne, $resolver);
         $cacheManager->addResolver($expectedFilterTwo, $resolver);
 
-        $cacheManager->remove($expectedPath);
+        $cacheManager->remove(null, array($expectedFilterOne, $expectedFilterTwo));
     }
 }
