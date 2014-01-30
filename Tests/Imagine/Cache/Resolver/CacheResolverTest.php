@@ -35,6 +35,44 @@ class CacheResolverTest extends AbstractTest
         $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
+    public function testNotCallInternalResolverIfCachedOnIsStored()
+    {
+        $resolver = $this->getMockResolver();
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue($this->webPath))
+        ;
+        $resolver
+            ->expects($this->never())
+            ->method('isStored')
+        ;
+
+        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+
+        $cacheResolver->resolve($this->path, $this->filter);
+
+        // Call multiple times to verify the cache is used.
+        $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
+        $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
+    }
+
+    public function testCallInternalResolverIfNotCachedOnIsStored()
+    {
+        $resolver = $this->getMockResolver();
+        $resolver
+            ->expects($this->exactly(2))
+            ->method('isStored')
+            ->will($this->returnValue(true))
+        ;
+
+        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+
+        $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
+        $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
+    }
+
     public function testStoreIsForwardedToResolver()
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpg');
