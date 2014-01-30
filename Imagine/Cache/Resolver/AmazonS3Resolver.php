@@ -121,14 +121,16 @@ class AmazonS3Resolver implements ResolverInterface
         foreach ($filters as $filter) {
             foreach ($paths as $path) {
                 $objectPath = $this->getObjectPath($path, $filter);
-                if ($this->objectExists($objectPath)) {
-                    if (!$this->storage->delete_object($this->bucket, $objectPath)->isOK()) {
-                        $this->logError('The objects could not be deleted from Amazon S3.', array(
-                            'filter'      => $filter,
-                            'bucket'      => $this->bucket,
-                            'path'        => $path,
-                        ));
-                    }
+                if (!$this->objectExists($objectPath)) {
+                    continue;
+                }
+
+                if (!$this->storage->delete_object($this->bucket, $objectPath)->isOK()) {
+                    $this->logError('The objects could not be deleted from Amazon S3.', array(
+                        'filter'      => $filter,
+                        'bucket'      => $this->bucket,
+                        'path'        => $path,
+                    ));
                 }
             }
         }

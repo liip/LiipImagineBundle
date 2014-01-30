@@ -137,7 +137,7 @@ class AwsS3Resolver implements ResolverInterface
             foreach ($paths as $path) {
                 $objectPath = $this->getObjectPath($path, $filter);
                 if (!$this->objectExists($objectPath)) {
-                    return;
+                    continue;
                 }
 
                 try {
