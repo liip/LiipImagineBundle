@@ -310,6 +310,66 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
+    public function testPassRuntimeConfigToFilterConfigurationOnApplyFilter()
+    {
+        $binary = new Binary('aContent', 'image/png', 'png');
+
+        $runtimeConfig = array(
+            'filters' => array(
+                'thumbnail' => array(
+                    'size' => array(100, 100)
+                )
+            )
+        );
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->getMockFilterConfiguration();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail', $runtimeConfig)
+            ->will($this->returnValue(array(
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+            )))
+        ;
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('aFilteredContent'))
+        ;
+
+        $imagine = $this->getMockImagine();
+        $imagine
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager($config, $imagine);
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $this->assertInstanceOf(
+            'Liip\ImagineBundle\Model\Binary',
+            $filterManager->applyFilter($binary, 'thumbnail', $runtimeConfig)
+        );
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
      */
