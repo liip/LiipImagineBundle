@@ -89,12 +89,21 @@ class CacheResolver implements ResolverInterface
      */
     public function remove(array $paths, array $filters)
     {
-        if (empty($paths) && empty($filters)) {
-            return;
+        $this->resolver->remove($paths, $filters);
+
+        foreach ($filters as $filter) {
+            if (empty($paths)) {
+                $this->removePathAndFilter(null, $filter);
+            } else {
+                foreach ($paths as $path) {
+                    $this->removePathAndFilter($path, $filter);
+                }
+            }
         }
+    }
 
-        $this->resolver->remove($filter, $path);
-
+    protected function removePathAndFilter($path, $filter)
+    {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         if (!$this->cache->contains($indexKey)) {
             return;

@@ -51,19 +51,27 @@ class NoCacheResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingOnRemove()
+    public function testDoNothingForPathAndFilterOnRemove()
     {
         $resolver = new NoCacheResolver(new Filesystem);
         $resolver->setRequest(null);
 
-        $resolver->remove('aFilter', 'a/path');
+        $resolver->remove(array('a/path'), array('aFilter'));
     }
 
-    public function testDoNothingWhenRemovingAllCacheOnRemove()
+    public function testDoNothingForSomePathsAndSomeFiltersOnRemove()
     {
         $resolver = new NoCacheResolver(new Filesystem);
         $resolver->setRequest(null);
 
-        $resolver->remove('aFilter');
+        $resolver->remove(array('foo', 'bar'), array('foo', 'bar'));
+    }
+
+    public function testDoNothingForEmptyPathAndEmptyFilterOnRemove()
+    {
+        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver->setRequest(null);
+
+        $resolver->remove(array(), array());
     }
 }
