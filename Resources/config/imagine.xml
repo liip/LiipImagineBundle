@@ -82,6 +82,7 @@
         <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
+            <argument type="service" id="liip_imagine.uri_signer" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
         </service>
 
@@ -95,6 +96,7 @@
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine.uri_signer" />
         </service>
 
         <!-- Route Loader -->
@@ -242,5 +244,6 @@
             <argument type="service" id="liip_imagine.mime_type_guesser" />
         </service>
 
+        <service id="liip_imagine.uri_signer" alias="uri_signer" />
     </services>
 </container>

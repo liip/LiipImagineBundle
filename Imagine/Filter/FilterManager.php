@@ -60,20 +60,24 @@ class FilterManager
     }
 
     /**
-     * Apply the provided filter set on the given binary.
-     *
      * @param BinaryInterface $binary
-     * @param string          $filter
+     * @param array $config
      *
      * @throws \InvalidArgumentException
      *
-     * @return BinaryInterface
+     * @return Binary
      */
-    public function applyFilter(BinaryInterface $binary, $filter)
+    public function apply(BinaryInterface $binary, array $config)
     {
-        $image = $this->imagine->load($binary->getContent());
+        $config = array_replace(
+            array(
+                'filters' => array(),
+                'quality' => 100
+            ),
+            $config
+        );
 
-        $config = $this->getFilterConfiguration()->get($filter);
+        $image = $this->imagine->load($binary->getContent());
 
         foreach ($config['filters'] as $eachFilter => $eachOptions) {
             if (!isset($this->loaders[$eachFilter])) {
@@ -86,9 +90,30 @@ class FilterManager
         }
 
         $filteredContent = $image->get($binary->getFormat(), array(
-            'quality' => array_key_exists('quality', $config) ? $config['quality'] : 100
+            'quality' => $config['quality']
         ));
 
         return new Binary($filteredContent, $binary->getMimeType(), $binary->getFormat());
+    }
+
+    /**
+     * Apply the provided filter set on the given binary.
+     *
+     * @param BinaryInterface $binary
+     * @param string          $filter
+     * @param array           $runtimeConfig
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return BinaryInterface
+     */
+    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = array())
+    {
+        $config = array_replace_recursive(
+            $this->getFilterConfiguration()->get($filter),
+            $runtimeConfig
+        );
+
+        return $this->apply($binary, $config);
     }
 }
