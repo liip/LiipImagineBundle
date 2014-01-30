@@ -240,30 +240,12 @@ class WebPathResolverTest extends AbstractTest
         $this->resolver->resolve('/a/path', 'aFilter');
     }
 
-    public function testRemoveCachedImageWhenExistOnRemove()
+    public function testDoNothingIfFiltersAndPathsEmptyOnRemove()
     {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
-        ;
-
-        $path = 'cats.jpeg';
-        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
-
-        $this->filesystem->mkdir(dirname($filePath));
-        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
-
-        $this->resolver->setRequest(Request::create('/'));
-
-        // guard
-        $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
-
-        $this->resolver->remove('thumbnail', $path);
-        $this->assertFalse(file_exists($filePath));
+        $this->resolver->remove(array(), array());
     }
 
-    public function testDoNothingIfCachedImageNotExistOnRemove()
+    public function testRemoveCacheForPathAndFilterOnRemove()
     {
         $this->cacheManager
             ->expects($this->atLeastOnce())
@@ -271,19 +253,81 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
         ;
 
-        $path = 'cats.jpeg';
-        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
-
-        // guard
-        $this->assertFalse(file_exists($filePath));
+        $expectedFilePath = $this->createCache('cats.jpeg', 'thumbnail');
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->resolver->remove('thumbnail', $path);
-        $this->assertFalse(file_exists($filePath));
+        $this->resolver->remove(array('cats.jpeg'), array('thumbnail'));
+
+        $this->assertFileNotExists($expectedFilePath);
     }
 
-    public function testRemoveAllFilterCacheOnRemove()
+    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->at(0))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+        $this->cacheManager
+            ->expects($this->at(1))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.gif'))
+        ;
+
+        $expectedFilePathOne = $this->createCache('cats.jpeg', 'thumbnail');
+        $expectedFilePathTwo = $this->createCache('dogs.jpeg', 'thumbnail');
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        $this->resolver->remove(array('cats.jpeg', 'dogs.jpeg'), array('thumbnail'));
+
+        $this->assertFileNotExists($expectedFilePathOne);
+        $this->assertFileNotExists($expectedFilePathTwo);
+    }
+
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->at(0))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filterOne/cats.jpeg'))
+        ;
+        $this->cacheManager
+            ->expects($this->at(1))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filterOne/cats.gif'))
+        ;
+        $this->cacheManager
+            ->expects($this->at(3))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filterTwo/cats.jpeg'))
+        ;
+        $this->cacheManager
+            ->expects($this->at(4))
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filterTwo/cats.gif'))
+        ;
+
+        $expectedFilePathOne = $this->createCache('cats.jpeg', 'filterOne');
+        $expectedFilePathTwo = $this->createCache('dogs.jpeg', 'filterOne');
+        $expectedFilePathThree = $this->createCache('cats.jpeg', 'filterTwo');
+        $expectedFilePathFour = $this->createCache('dogs.jpeg', 'filterTwo');
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        $this->resolver->remove(
+            array('cats.jpeg', 'dogs.jpeg'),
+            array('filterOne', 'filterTwo')
+        );
+
+        $this->assertFileNotExists($expectedFilePathOne);
+        $this->assertFileNotExists($expectedFilePathTwo);
+        $this->assertFileNotExists($expectedFilePathThree);
+        $this->assertFileNotExists($expectedFilePathFour);
+    }
+
+    public function testDoNothingWhenFileNotExistForPathAndFilterOnRemove()
     {
         $this->cacheManager
             ->expects($this->atLeastOnce())
@@ -291,18 +335,60 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
         ;
 
-        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
-        $this->filesystem->mkdir(dirname($filePath));
-        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->resolver->setRequest(Request::create('/'));
 
-        $subFilePath = $this->webRoot.'/media/cache/thumbnail/sub/cats.jpeg';
-        $this->filesystem->mkdir(dirname($subFilePath));
-        file_put_contents($subFilePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->resolver->remove(array('cats.jpeg'), array('thumbnail'));
+    }
+
+    public function testRemoveCacheForFilterOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filter/cats.jpeg'))
+        ;
+
+        $filePathOne = $this->createCache('cats.jpeg', 'filter');
+        $filePathTwo = $this->createCache('dogs.jpeg', 'filter');
 
         $this->resolver->setRequest(Request::create('/'));
 
-        $this->resolver->remove('thumbnail');
-        $this->assertFalse(file_exists($filePath));
-        $this->assertFalse(file_exists($subFilePath));
+        $this->resolver->remove(array(), array('filter'));
+
+        $this->assertFileNotExists($filePathOne);
+        $this->assertFileNotExists($filePathTwo);
+    }
+
+    public function testRemoveCacheForSomeFiltersOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/filterOne/cats.jpeg'))
+        ;
+
+        $filePathOne = $this->createCache('cats.jpeg', 'filterOne');
+        $filePathTwo = $this->createCache('dogs.jpeg', 'filterOne');
+        $filePathThree = $this->createCache('cats.jpeg', 'filterTwo');
+        $filePathFour = $this->createCache('dogs.jpeg', 'filterTwo');
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        $this->resolver->remove(array(), array('filterOne', 'filterTwo'));
+
+        $this->assertFileNotExists($filePathOne);
+        $this->assertFileNotExists($filePathTwo);
+        $this->assertFileNotExists($filePathThree);
+        $this->assertFileNotExists($filePathFour);
+    }
+
+    protected function createCache($path, $filter, $fixtureFile = 'cats.jpeg')
+    {
+        $filePath = $this->webRoot."/media/cache/{$filter}/{$path}";
+
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/'.$fixtureFile));
+
+        return $filePath;
     }
 }
