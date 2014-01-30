@@ -64,16 +64,17 @@ class FilterManager
      *
      * @param BinaryInterface $binary
      * @param string          $filter
+     * @param array           $runtimeConfig
      *
      * @throws \InvalidArgumentException
      *
      * @return BinaryInterface
      */
-    public function applyFilter(BinaryInterface $binary, $filter)
+    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = array())
     {
         $image = $this->imagine->load($binary->getContent());
 
-        $config = $this->getFilterConfiguration()->get($filter);
+        $config = $this->getFilterConfiguration()->get($filter, $runtimeConfig);
 
         foreach ($config['filters'] as $eachFilter => $eachOptions) {
             if (!isset($this->loaders[$eachFilter])) {
