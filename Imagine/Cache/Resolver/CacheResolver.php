@@ -3,9 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\Cache;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -55,72 +53,55 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function isStored($path, $filter)
+    {
+        $cacheKey = $this->generateCacheKey('resolve', $path, $filter);
+
+        return
+            $this->cache->contains($cacheKey) ||
+            $this->resolver->isStored($path, $filter)
+        ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resolve($path, $filter)
     {
         $key = $this->generateCacheKey('resolve', $path, $filter);
         if ($this->cache->contains($key)) {
             return $this->cache->fetch($key);
         }
 
-        $targetPath = $this->resolver->resolve($request, $path, $filter);
-        $this->saveToCache($key, $targetPath);
-
-        /*
-         * The targetPath being a string will be forwarded to the ResolverInterface::store method.
-         * As there is no way to reverse this operation by the interface, we store this information manually.
-         *
-         * If it's not a string, it's a Response it will be returned as it without calling the store method.
-         */
-        if (is_string($targetPath)) {
-            $reverseKey = $this->generateCacheKey('reverse', $targetPath, $filter);
-            $this->saveToCache($reverseKey, $path);
+        $resolved = $this->resolver->resolve($path, $filter);
+        if ($resolved) {
+            $this->saveToCache($key, $resolved);
         }
 
-        return $targetPath;
+        return $resolved;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
-        return $this->resolver->store($response, $targetPath, $filter);
+        $this->resolver->store($binary, $path, $filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function remove($path, $filter)
     {
-        $key = $this->generateCacheKey('getBrowserPath', $path, $filter, array(
-            $absolute ? 'absolute' : 'relative',
-        ));
-
-        if ($this->cache->contains($key)) {
-            return $this->cache->fetch($key);
-        }
-
-        $result = $this->resolver->getBrowserPath($path, $filter, $absolute);
-        $this->saveToCache($key, $result);
-
-        return $result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function remove($targetPath, $filter)
-    {
-        $removed = $this->resolver->remove($targetPath, $filter);
+        $removed = $this->resolver->remove($path, $filter);
 
         // If the resolver did not remove the content, we can leave the cache.
         if ($removed) {
-            $reverseKey = $this->generateCacheKey('reverse', $targetPath, $filter);
-            if ($this->cache->contains($reverseKey)) {
-                $path = $this->cache->fetch($reverseKey);
-
+            $key = $this->generateCacheKey('resolve', $path, $filter);
+            if ($this->cache->contains($key)) {
                 // The indexKey is not utilizing the method so the value is not important.
-                $indexKey = $this->generateIndexKey($this->generateCacheKey(null, $path, $filter));
+                $indexKey = $this->generateIndexKey($key);
 
                 // Retrieve the index and remove the content from the cache.
                 $index = $this->cache->fetch($indexKey);
@@ -130,7 +111,6 @@ class CacheResolver implements ResolverInterface
 
                 // Remove the auxiliary keys.
                 $this->cache->delete($indexKey);
-                $this->cache->delete($reverseKey);
             }
         }
 

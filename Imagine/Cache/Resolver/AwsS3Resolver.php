@@ -4,17 +4,11 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
+use Psr\Log\LoggerInterface;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
-
-class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
+class AwsS3Resolver implements ResolverInterface
 {
     /**
      * @var S3Client
@@ -30,11 +24,6 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @var string
      */
     protected $acl;
-
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
 
     /**
      * @var array
@@ -57,16 +46,12 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-
         $this->bucket = $bucket;
         $this->acl = $acl;
-
         $this->objUrlOptions = $objUrlOptions;
     }
 
     /**
-     * Sets the logger to be used.
-     *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
@@ -75,83 +60,64 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     }
 
     /**
-     * @param CacheManager $cacheManager
+     * {@inheritDoc}
      */
-    public function setCacheManager(CacheManager $cacheManager)
+    public function isStored($path, $filter)
     {
-        $this->cacheManager = $cacheManager;
+        return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
+    {
+        return $this->getObjectUrl($this->getObjectPath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
-        }
 
-        return $objectPath;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function store(Response $response, $targetPath, $filter)
-    {
         try {
-            $storageResponse = $this->storage->putObject(array(
+            $this->storage->putObject(array(
                 'ACL'           => $this->acl,
                 'Bucket'        => $this->bucket,
-                'Key'           => $targetPath,
-                'Body'          => $response->getContent(),
-                'ContentType'   => $response->headers->get('Content-Type')
+                'Key'           => $objectPath,
+                'Body'          => $binary->getContent(),
+                'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
             if ($this->logger) {
-                $this->logger->warn('The object could not be created on Amazon S3.', array(
-                    'targetPath'  => $targetPath,
+                $this->logger->error('The object could not be created on Amazon S3.', array(
+                    'objectPath'  => $objectPath,
                     'filter'      => $filter,
                 ));
             }
 
-            return $response;
+            throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
-
-        $response->setStatusCode(301);
-        $response->headers->set('Location', $storageResponse->get('ObjectURL'));
-
-        return $response;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function remove($path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return $this->getObjectUrl($objectPath);
-        }
 
-        return $this->cacheManager->generateUrl($path, $filter, $absolute);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function remove($targetPath, $filter)
-    {
-        if (!$this->objectExists($targetPath)) {
+        if (!$this->objectExists($objectPath)) {
             // A non-existing object to delete: done!
             return true;
         }
 
         try {
-            $response = $this->storage->deleteObject(array(
+            $this->storage->deleteObject(array(
                 'Bucket' => $this->bucket,
-                'Key'    => $targetPath,
+                'Key'    => $objectPath,
             ));
 
             return true;
@@ -203,13 +169,13 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * Returns the URL for an object saved on Amazon S3.
      *
-     * @param string $targetPath
+     * @param string $path
      *
      * @return string
      */
-    protected function getObjectUrl($targetPath)
+    protected function getObjectUrl($path)
     {
-        return $this->storage->getObjectUrl($this->bucket, $targetPath, 0, $this->objUrlOptions);
+        return $this->storage->getObjectUrl($this->bucket, $path, 0, $this->objUrlOptions);
     }
 
     /**

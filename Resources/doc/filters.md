@@ -182,27 +182,26 @@ is of course "bogus" since hardcoded values could just as well be set in the con
 but it illustrates the core idea.
 
 ``` php
-public function filterAction(Request $request, $path, $filter)
+public function filterAction($path, $filter)
 {
-    $targetPath = $this->cacheManager->resolve($request, $path, $filter);
-    if ($targetPath instanceof Response) {
-        return $targetPath;
+    if ($this->cacheManager->isStored($path, $filter)) {
+        return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
     }
 
-    $image = $this->dataManager->find($filter, $path);
+    $binary = $this->dataManager->find($filter, $path);
 
     $filterConfig = $this->filterManager->getFilterConfiguration();
     $config = $filterConfig->get($filter);
     $config['filters']['thumbnail']['size'] = array(300, 100);
     $filterConfig->set($filter, $config);
 
-    $response = $this->filterManager->get($request, $filter, $image, $path);
+    $filteredBinary = $this->filterManager->applyFilter($binary, $filter);
 
-    if ($targetPath) {
-        $response = $this->cacheManager->store($response, $targetPath, $filter);
-    }
+    $response = new Response($filteredBinary->getContent(), 200, array(
+        'Content-Type' => $filteredBinary->getMimeType(),
+    ));
 
-    return $response;
+    return $this->cacheManager->store($response, $path, $filter);
 }
 ```
 

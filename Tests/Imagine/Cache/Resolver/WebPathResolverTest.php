@@ -3,9 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
@@ -72,30 +72,17 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/app.php'))
         ;
 
-        // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
-            '->resolve() correctly converts the requested file into target path within webRoot.');
-        $this->assertFalse(file_exists($targetPath),
-            '->resolve() does not create the file within the target path.');
+        $this->resolver->setRequest($request);
+
+        $path = 'cats.jpeg';
+
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $targetPath, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertTrue(file_exists($targetPath),
-            '->store() creates the cached image file to be served.');
-        $this->assertEquals($content, file_get_contents($targetPath),
-            '->store() writes the content of the original Response into the cache file.');
-
-        // Remove the cached image.
-        $this->assertTrue($this->resolver->remove($targetPath, 'thumbnail'),
-            '->remove() reports removal of cached image file correctly.');
-        $this->assertFalse(file_exists($targetPath),
-            '->remove() actually removes the cached file from the filesystem.');
+        $binary = new Binary($content, 'image/jpeg', 'jpeg');
+        $this->assertNull($this->resolver->store($binary, $path, 'thumbnail'));
     }
 
     /**
@@ -116,18 +103,20 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue(''))
         ;
 
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->resolver->setRequest($request);
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $path = 'cats.jpeg';
+        $webFilePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        // The file has already been cached by this resolver.
+        $this->filesystem->mkdir(dirname($webFilePath));
+        file_put_contents($webFilePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $this->assertEquals(
+            '/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected Location of the cached image.'
+        );
     }
 
     /**
@@ -148,18 +137,20 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/app_dev.php'))
         ;
 
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->resolver->setRequest($request);
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $path = 'cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        // The file has already been cached by this resolver.
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $this->assertEquals(
+            '/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected url of the cached image.'
+        );
     }
 
     /**
@@ -180,30 +171,23 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php')))
         ;
 
-        // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
-            '->resolve() correctly converts the requested file into target path within webRoot.');
-        $this->assertFalse(file_exists($targetPath),
-            '->resolve() does not create the file within the target path.');
+        $this->resolver->setRequest($request);
+
+        $path = 'cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
 
         // Store the cached version of that image.
         $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $targetPath, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertTrue(file_exists($targetPath),
-            '->store() creates the cached image file to be served.');
-        $this->assertEquals($content, file_get_contents($targetPath),
-            '->store() writes the content of the original Response into the cache file.');
+        $binary = new Binary($content, 'image/jpeg', 'jpeg');
+        $this->resolver->store($binary, $path, 'thumbnail');
 
-        // Remove the cached image.
-        $this->assertTrue($this->resolver->remove($targetPath, 'thumbnail'),
-            '->remove() reports removal of cached image file correctly.');
-        $this->assertFalse(file_exists($targetPath),
-            '->remove() actually removes the cached file from the filesystem.');
+        $this->assertTrue(file_exists($filePath),
+            '->store() creates the cached image file to be served.');
+        $this->assertEquals($content, file_get_contents($filePath),
+            '->store() writes the content of the original binary into the cache file.');
     }
 
     /**
@@ -230,18 +214,22 @@ class WebPathResolverTest extends AbstractTest
             ->will($this->returnValue('/sandbox/app_dev.php'))
         ;
 
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+        $this->resolver->setRequest($request);
 
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/sandbox/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
+        $path = 'cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        // guard
+        $this->assertFalse($this->resolver->isStored($path, 'thumbnail'));
+
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $this->assertEquals(
+            '/sandbox/media/cache/thumbnail/cats.jpeg',
+            $this->resolver->resolve($path, 'thumbnail'),
+            '->resolve() returns the expected Location of the cached image.'
+        );
     }
 
     public function testClear()
@@ -271,5 +259,56 @@ class WebPathResolverTest extends AbstractTest
         } catch (\Exception $e) { }
 
         $this->assertTrue(file_exists($filename));
+    }
+
+    public function testThrowIfRequestNotSetOnResolve()
+    {
+        $this->resolver->setRequest(null);
+
+        $this->setExpectedException('LogicException', 'The request was not injected, inject it before using resolver.');
+        $this->resolver->resolve('/a/path', 'aFilter');
+    }
+
+    public function testRemoveCachedImageWhenExistOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $path = 'cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        $this->filesystem->mkdir(dirname($filePath));
+        file_put_contents($filePath, file_get_contents($this->dataRoot.'/cats.jpeg'));
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        // guard
+        $this->assertNotNull($this->resolver->resolve($path, 'thumbnail'));
+
+        $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
+        $this->assertFalse(file_exists($filePath));
+    }
+
+    public function testDoNothingIfCachedImageNotExistOnRemove()
+    {
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('generateUrl')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $path = 'cats.jpeg';
+        $filePath = $this->webRoot.'/media/cache/thumbnail/cats.jpeg';
+
+        // guard
+        $this->assertFalse(file_exists($filePath));
+
+        $this->resolver->setRequest(Request::create('/'));
+
+        $this->assertTrue($this->resolver->remove($path, 'thumbnail'));
+        $this->assertFalse(file_exists($filePath));
     }
 }
