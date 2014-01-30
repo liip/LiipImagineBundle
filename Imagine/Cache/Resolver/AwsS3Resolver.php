@@ -108,7 +108,6 @@ class AwsS3Resolver implements ResolverInterface
     public function remove(array $paths, array $filters)
     {
         if (empty($paths) && empty($filters)) {
-            // or exception ???
             return;
         }
 

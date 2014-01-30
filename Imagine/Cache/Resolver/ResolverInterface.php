@@ -41,10 +41,10 @@ interface ResolverInterface
     function store(BinaryInterface $binary, $path, $filter);
 
     /**
-     * @param string[] $filter The name of the imagine filter in effect.
-     * @param string[] $path   The path where the original file is expected to be.
+     * @param string[] $paths   The paths where the original files are expected to be.
+     * @param string[] $filters The imagine filters in effect.
      *
      * @return void
      */
-    function remove(array $paths, array $filter);
+    function remove(array $paths, array $filters);
 }

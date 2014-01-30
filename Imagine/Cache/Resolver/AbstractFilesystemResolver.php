@@ -7,7 +7,6 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
@@ -109,7 +108,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     public function remove(array $paths, array $filters)
     {
         if (empty($paths) && empty($filters)) {
-            // or exception ??
             return;
         }
 

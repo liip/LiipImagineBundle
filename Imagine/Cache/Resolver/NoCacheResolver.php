@@ -35,7 +35,7 @@ class NoCacheResolver extends WebPathResolver
     /**
      * {@inheritDoc}
      */
-    public function remove($filter, $path = null)
+    public function remove(array $paths, array $filters)
     {
     }
 }
