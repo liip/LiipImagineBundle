@@ -36,15 +36,15 @@ class ImagineExtension extends \Twig_Extension
      *
      * @param string $path
      * @param string $filter
-     * @param boolean $absolute
+     * @param array $runtimeConfig
      *
      * @return \Twig_Markup
      */
-    public function filter($path, $filter, $absolute = false)
+    public function filter($path, $filter, array $runtimeConfig = array())
     {
         return new \Twig_Markup(
-            $this->cacheManager->getBrowserPath($path, $filter, $absolute),
-            'utf-8'
+            $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig),
+            'utf8'
         );
     }
 

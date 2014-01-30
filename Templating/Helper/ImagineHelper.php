@@ -13,8 +13,6 @@ class ImagineHelper extends Helper
     protected $cacheManager;
 
     /**
-     * Constructor.
-     *
      * @param CacheManager $cacheManager
      */
     public function __construct(CacheManager $cacheManager)
@@ -27,13 +25,13 @@ class ImagineHelper extends Helper
      *
      * @param string $path
      * @param string $filter
-     * @param boolean $absolute
+     * @param array $runtimeConfig
      *
      * @return string
      */
-    public function filter($path, $filter, $absolute = false)
+    public function filter($path, $filter, array $runtimeConfig = array())
     {
-        return $this->cacheManager->getBrowserPath($path, $filter, $absolute);
+        return $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig);
     }
 
     /**

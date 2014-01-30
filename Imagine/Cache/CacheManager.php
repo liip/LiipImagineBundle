@@ -6,6 +6,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\RouterInterface;
 
 class CacheManager
@@ -21,27 +22,34 @@ class CacheManager
     protected $router;
 
     /**
-     * @var string
-     */
-    protected $defaultResolver;
-
-    /**
      * @var ResolverInterface[]
      */
     protected $resolvers = array();
+
+    /**
+     * @var UriSigner
+     */
+    protected $uriSigner;
+
+    /**
+     * @var string
+     */
+    protected $defaultResolver;
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
      * @param FilterConfiguration $filterConfig
      * @param RouterInterface $router
+     * @param UriSigner $uriSigner
      * @param string $defaultResolver
      */
-    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $defaultResolver = null)
+    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, UriSigner $uriSigner, $defaultResolver = null)
     {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
-        $this->defaultResolver = $defaultResolver;
+        $this->uriSigner = $uriSigner;
+        $this->defaultResolver = $defaultResolver ?: 'default';
     }
 
     /**
@@ -94,15 +102,19 @@ class CacheManager
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter
-     * @param boolean $absolute
+     * @param array $runtimeConfig
      *
      * @return string
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, array $runtimeConfig = array())
     {
+        if (!empty($runtimeConfig)) {
+            return $this->generateUrl($path, $filter, $runtimeConfig);
+        }
+
         return $this->isStored($path, $filter) ?
             $this->resolve($path, $filter) :
-            $this->generateUrl($path, $filter, $absolute)
+            $this->generateUrl($path, $filter)
         ;
     }
 
@@ -111,33 +123,27 @@ class CacheManager
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter The name of the imagine filter in effect.
-     * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
-     *                       In case the resolver does not support relative paths, it may ignore this flag.
+     * @param array $runtimeConfig
      *
      * @return string
      */
-    public function generateUrl($path, $filter, $absolute = false)
+    public function generateUrl($path, $filter, array $runtimeConfig = array())
     {
-        $config = $this->filterConfig->get($filter);
+        $params = array(
+            'path' => ltrim($path, '/'),
+        );
 
-        if (isset($config['format'])) {
-            $pathinfo = pathinfo($path);
-
-            // the extension should be forced and a directory is detected
-            if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
-                && isset($pathinfo['dirname'])) {
-
-                if ('\\' === $pathinfo['dirname']) {
-                    $pathinfo['dirname'] = '';
-                }
-
-                $path = $pathinfo['dirname'].'/'.$pathinfo['filename'].'.'.$config['format'];
-            }
+        if (!empty($runtimeConfig)) {
+            $params['filters'] = $runtimeConfig;
         }
 
-        $params = array('path' => ltrim($path, '/'));
+        $filterUrl = $this->router->generate('_imagine_'.$filter, $params, true);
 
-        return $this->router->generate('_imagine_'.$filter, $params, $absolute);
+        if (!empty($runtimeConfig)) {
+            $filterUrl = $this->uriSigner->sign($filterUrl);
+        }
+
+        return $filterUrl;
     }
 
     /**
