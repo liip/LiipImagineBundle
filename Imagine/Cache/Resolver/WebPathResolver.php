@@ -2,8 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\Finder\Finder;
-
 class WebPathResolver extends AbstractFilesystemResolver
 {
     /**
