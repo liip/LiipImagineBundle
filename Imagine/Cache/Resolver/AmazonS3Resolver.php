@@ -2,21 +2,14 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use \AmazonS3;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
+use Psr\Log\LoggerInterface;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
-
-class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
+class AmazonS3Resolver implements ResolverInterface
 {
     /**
-     * @var AmazonS3
+     * @var \AmazonS3
      */
     protected $storage;
 
@@ -29,11 +22,6 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @var string
      */
     protected $acl;
-
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
 
     /**
      * @var array
@@ -53,19 +41,15 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
-    public function __construct(AmazonS3 $storage, $bucket, $acl = AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
+    public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
     {
         $this->storage = $storage;
-
         $this->bucket = $bucket;
         $this->acl = $acl;
-
         $this->objUrlOptions = $objUrlOptions;
     }
 
     /**
-     * Sets the logger to be used.
-     *
      * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
@@ -74,78 +58,61 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     }
 
     /**
-     * @param CacheManager $cacheManager
+     * {@inheritDoc}
      */
-    public function setCacheManager(CacheManager $cacheManager)
+    public function isStored($path, $filter)
     {
-        $this->cacheManager = $cacheManager;
+        return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
+    {
+        return $this->getObjectUrl($this->getObjectPath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
-        if ($this->objectExists($objectPath)) {
-            return new RedirectResponse($this->getObjectUrl($objectPath), 301);
-        }
 
-        return $objectPath;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function store(Response $response, $targetPath, $filter)
-    {
-        $storageResponse = $this->storage->create_object($this->bucket, $targetPath, array(
-            'body' => $response->getContent(),
-            'contentType' => $response->headers->get('Content-Type'),
-            'length' => strlen($response->getContent()),
+        $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
+            'body' => $binary->getContent(),
+            'contentType' => $binary->getMimeType(),
+            'length' => strlen($binary->getContent()),
             'acl' => $this->acl,
         ));
 
-        if ($storageResponse->isOK()) {
-            $response->setStatusCode(301);
-            $response->headers->set('Location', $this->getObjectUrl($targetPath));
-        } else {
+        if (!$storageResponse->isOK()) {
             if ($this->logger) {
-                $this->logger->warn('The object could not be created on Amazon S3.', array(
-                    'targetPath' => $targetPath,
+                $this->logger->error('The object could not be created on Amazon S3.', array(
+                    'objectPath' => $objectPath,
                     'filter' => $filter,
                     's3_response' => $storageResponse,
                 ));
             }
-        }
 
-        return $response;
+            throw new NotStorableException('The object could not be created on Amazon S3.');
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function remove($path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
+
         if ($this->objectExists($objectPath)) {
-            return $this->getObjectUrl($objectPath);
+            return $this->storage->delete_object($this->bucket, $objectPath)->isOK();
         }
 
-        return $this->cacheManager->generateUrl($path, $filter, $absolute);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function remove($targetPath, $filter)
-    {
-        if (!$this->objectExists($targetPath)) {
-            // A non-existing object to delete: done!
-            return true;
-        }
-
-        return $this->storage->delete_object($this->bucket, $targetPath)->isOK();
+        // A non-existing object to delete: done!
+        return true;
     }
 
     /**
@@ -191,13 +158,13 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * Returns the URL for an object saved on Amazon S3.
      *
-     * @param string $targetPath
+     * @param string $path
      *
      * @return string
      */
-    protected function getObjectUrl($targetPath)
+    protected function getObjectUrl($path)
     {
-        return $this->storage->get_object_url($this->bucket, $targetPath, 0, $this->objUrlOptions);
+        return $this->storage->get_object_url($this->bucket, $path, 0, $this->objUrlOptions);
     }
 
     /**

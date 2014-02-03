@@ -47,15 +47,12 @@ The images will be created upon first request and will remain in their static ca
 
 A `CacheResolver` implements the `Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface`.
 
-It knows about two different, important paths:
-
-1. The so-called `path`, which is the identifier you use, when addressing the original image, e.g. in your template. This path relates to the path used in the `DataLoader`.
-2. The `targetPath`, which is a representation of the image filepath on the resolver itself.
+It handles the so-called `path`, which is the identifier you use, when addressing the original image, e.g. in your template. This path relates to the path used in the `DataLoader`.
 
 The responsibilities of the `CacheResolver` are:
 
-1. to resolve a given `path` into a `targetPath`,
-2. store a cached image under the resolved `targetPath`,
+1. to resolve a given `path` into a `Response`, if possible,
+2. store given content under a given `path` to be resolved later,
 3. generate an URI to address the cached image directly,
 4. remove a cached image.
 

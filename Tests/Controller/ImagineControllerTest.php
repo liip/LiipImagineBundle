@@ -16,8 +16,11 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 
+use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -82,14 +85,24 @@ class ImagineControllerTest extends AbstractTest
             ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
         ;
 
-        $dataLoader = new FileSystemLoader($this->imagine, array(), $this->dataDir);
+        $dataLoader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            array(),
+            $this->dataDir
+        );
 
-        $dataManager = new DataManager($this->configuration, 'filesystem');
+        $dataManager = new DataManager(
+            new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance()),
+            ExtensionGuesser::getInstance(),
+            $this->configuration,
+            'filesystem'
+        );
         $dataManager->addLoader('filesystem', $dataLoader);
 
         $filterLoader = new ThumbnailFilterLoader();
 
-        $filterManager = new FilterManager($this->configuration);
+        $filterManager = new FilterManager($this->configuration, $this->imagine);
         $filterManager->addLoader('thumbnail', $filterLoader);
 
         $webPathResolver = new WebPathResolver($this->filesystem);
@@ -97,36 +110,50 @@ class ImagineControllerTest extends AbstractTest
         $cacheManager = new CacheManager($this->configuration, $router, $this->webRoot, 'web_path');
         $cacheManager->addResolver('web_path', $webPathResolver);
 
-        $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
+        $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
 
         $request = Request::create('/media/cache/thumbnail/cats.jpeg');
-        $response = $controller->filterAction($request, 'cats.jpeg', 'thumbnail');
 
-        $targetPath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
+        $webPathResolver->setRequest($request);
+
+        $response = $controller->filterAction('cats.jpeg', 'thumbnail');
+
+        $filePath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals(201, $response->getStatusCode());
-        $this->assertTrue(file_exists($targetPath));
-        $this->assertNotEmpty(file_get_contents($targetPath));
+        $this->assertEquals(301, $response->getStatusCode());
+        $this->assertTrue(file_exists($filePath));
+        $this->assertNotEmpty(file_get_contents($filePath));
 
         return $controller;
     }
 
     public function testFilterDelegatesResolverResponse()
     {
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
-
         $cacheManager = $this->getMockCacheManager();
         $cacheManager
             ->expects($this->once())
+            ->method('isStored')
+            ->will($this->returnValue(true))
+        ;
+        $cacheManager
+            ->expects($this->once())
             ->method('resolve')
-            ->will($this->returnValue($response))
+            ->will($this->returnValue('http://foo.com/a/path/image.jpg'))
         ;
 
-        $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array($this->configuration));
-        $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration));
+        $mimeTypeGuesser = new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
+        $extensionGuesser = ExtensionGuesser::getInstance();
 
-        $controller = new ImagineController($dataManager, $filterManager, $cacheManager);
-        $this->assertSame($response, $controller->filterAction(Request::create('/media/cache/thumbnail/cats.jpeg'), 'cats.jpeg', 'thumbnail'));
+        $dataManager = $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array($mimeTypeGuesser, $extensionGuesser, $this->configuration));
+        $filterManager = $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array($this->configuration, $this->imagine));
+
+        $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
+
+        $response = $controller->filterAction('cats.jpeg', 'thumbnail');
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('http://foo.com/a/path/image.jpg', $response->headers->get('Location'));
+        $this->assertEquals(301, $response->getStatusCode());
     }
 }

@@ -2,57 +2,53 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 
 interface ResolverInterface
 {
     /**
+     * Checks whether the given path is stored within this Resolver.
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return bool
+     */
+    function isStored($path, $filter);
+
+    /**
      * Resolves filtered path for rendering in the browser.
      *
-     * @param Request $request The request made against a _imagine_* filter route.
-     * @param string $path The path where the resolved file is expected.
+     * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
      *
-     * @return string|Response The target path to be used in other methods of this Resolver,
-     *                         a Response may be returned to avoid calling store upon resolution.
+     * @return string The URL of the cached image.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException In case the path can not be resolved.
+     * @throws NotResolvableException
      */
-    function resolve(Request $request, $path, $filter);
+    function resolve($path, $filter);
 
     /**
-     * Stores the content of the given Response.
+     * Stores the content of the given binary.
      *
-     * @param Response $response The response provided by the _imagine_* filter route.
-     * @param string $targetPath The target path provided by the resolve method.
-     * @param string $filter The name of the imagine filter in effect.
+     * @param BinaryInterface $binary The image binary to store.
+     * @param string          $path     The path where the original file is expected to be.
+     * @param string          $filter   The name of the imagine filter in effect.
      *
-     * @return Response The (modified) response to be sent to the browser.
+     * @return void
      */
-    function store(Response $response, $targetPath, $filter);
-
-    /**
-     * Returns a web accessible URL.
-     *
-     * @param string $path The path where the resolved file is expected.
-     * @param string $filter The name of the imagine filter in effect.
-     * @param bool $absolute Whether to generate an absolute URL or a relative path is accepted.
-     *                       In case the resolver does not support relative paths, it may ignore this flag.
-     *
-     * @return string
-     */
-    function getBrowserPath($path, $filter, $absolute = false);
+    function store(BinaryInterface $binary, $path, $filter);
 
     /**
      * Removes a stored image resource.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return bool Whether the file has been removed successfully.
      */
-    function remove($targetPath, $filter);
+    function remove($path, $filter);
 
     /**
      * Clear the CacheResolver cache.

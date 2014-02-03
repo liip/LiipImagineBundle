@@ -2,16 +2,20 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
     /**
      * @var Filesystem
      */
@@ -43,6 +47,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
+    }
+
+    /**
      * @param CacheManager $cacheManager
      */
     public function setCacheManager(CacheManager $cacheManager)
@@ -69,50 +81,64 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * Stores the content into a static file.
-     *
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function isStored($path, $filter)
     {
-        $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
+        return file_exists($this->getFilePath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(BinaryInterface $binary, $path, $filter)
+    {
+        $filePath = $this->getFilePath($path, $filter);
+
+        $dir = pathinfo($filePath, PATHINFO_DIRNAME);
 
         $this->makeFolder($dir);
 
-        file_put_contents($targetPath, $response->getContent());
-
-        $response->setStatusCode(201);
-
-        return $response;
+        file_put_contents($filePath, $binary->getContent());
     }
 
     /**
      * Removes a stored image resource.
      *
-     * @param string $targetPath The target path provided by the resolve method.
+     * @param string $path The target path provided by the resolve method.
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return bool Whether the file has been removed successfully.
      */
-    public function remove($targetPath, $filter)
+    public function remove($path, $filter)
     {
-        $filename = $this->getFilePath($targetPath, $filter);
-        $this->filesystem->remove($filename);
+        $this->basePath = $this->getRequest()->getBaseUrl();
+        $filePath = $this->getFilePath($path, $filter);
 
-        return !file_exists($filename);
+        $this->filesystem->remove($filePath);
+
+        return !file_exists($filePath);
+    }
+
+    /**
+     * @return Request
+     *
+     * @throws \LogicException
+     */
+    protected function getRequest()
+    {
+        if (false == $this->request) {
+            throw new \LogicException('The request was not injected, inject it before using resolver.');
+        }
+
+        return $this->request;
     }
 
     /**
      * @param string $dir
      * @throws \RuntimeException
      */
-    protected function makeFolder ($dir)
+    protected function makeFolder($dir)
     {
         if (!is_dir($dir)) {
             $parent = dirname($dir);

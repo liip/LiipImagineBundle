@@ -11,7 +11,7 @@ interface LoaderInterface
      *
      * @param mixed $path
      *
-     * @return \Imagine\Image\ImageInterface
+     * @return \Liip\ImagineBundle\Binary\BinaryInterface|string An image binary content
      */
     function find($path);
 }

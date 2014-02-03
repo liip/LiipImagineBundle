@@ -10,64 +10,44 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class StreamLoaderTest extends AbstractTest
 {
-    protected $imagine;
-
-    protected function setUp()
+    public function testThrowsIfInvalidPathGivenOnFind()
     {
-        parent::setUp();
-
-        $this->imagine = $this->getMockImagine();
-    }
-
-    public function testFindInvalidFile()
-    {
-        $this->imagine
-            ->expects($this->never())
-            ->method('load')
-        ;
-
-        $loader = new StreamLoader($this->imagine, 'file://');
+        $loader = new StreamLoader('file://');
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
         $loader->find($this->tempDir.'/invalid.jpeg');
     }
 
-    public function testFindLoadsFile()
+    public function testReturnImageContentOnFind()
     {
-        $image = $this->getMockImage();
+        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
 
-        $this->imagine
-            ->expects($this->once())
-            ->method('load')
-            ->with(file_get_contents($this->fixturesDir.'/assets/cats.jpeg'))
-            ->will($this->returnValue($image))
-        ;
+        $loader = new StreamLoader('file://');
 
-        $loader = new StreamLoader($this->imagine, 'file://');
-        $this->assertSame($image, $loader->find($this->fixturesDir.'/assets/cats.jpeg'));
+        $this->assertSame(
+            $expectedContent,
+            $loader->find($this->fixturesDir.'/assets/cats.jpeg')
+        );
     }
 
-    public function testFindWithContext()
+    public function testReturnImageContentWhenStreamContextProvidedOnFind()
     {
-        $image = $this->getMockImage();
-
-        $this->imagine
-            ->expects($this->once())
-            ->method('load')
-            ->with(file_get_contents($this->fixturesDir.'/assets/cats.jpeg'))
-            ->will($this->returnValue($image))
-        ;
+        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
 
         $context = stream_context_create();
 
-        $loader = new StreamLoader($this->imagine, 'file://', $context);
-        $this->assertSame($image, $loader->find($this->fixturesDir.'/assets/cats.jpeg'));
+        $loader = new StreamLoader('file://', $context);
+
+        $this->assertSame(
+            $expectedContent,
+            $loader->find($this->fixturesDir.'/assets/cats.jpeg')
+        );
     }
 
-    public function testConstructorInvalidContext()
+    public function testThrowsIfInvalidResourceGivenInConstructor()
     {
         $this->setExpectedException('InvalidArgumentException', 'The given context is no valid resource.');
 
-        new StreamLoader($this->imagine, 'file://', true);
+        new StreamLoader('not valid resource', true);
     }
 }
