@@ -3,12 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
-
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\MemoryCache;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver
@@ -17,74 +14,85 @@ class CacheResolverTest extends AbstractTest
 {
     protected $filter = 'thumbnail';
     protected $path = 'MadCat2.jpeg';
-    protected $targetPath = '/media/cache/thumbnail/MadCat2.jpeg';
+    protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
 
     public function testResolveIsSavedToCache()
     {
-        $request = new Request();
-
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with($request, $this->path, $this->filter)
-            ->will($this->returnValue($this->targetPath))
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue($this->webPath))
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
         // Call multiple times to verify the cache is used.
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
-        $this->assertEquals($this->targetPath, $cacheResolver->resolve($request, $this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
     public function testStoreIsForwardedToResolver()
     {
-        $response = new Response();
+        $binary = new Binary('aContent', 'image/jpeg', 'jpg');
 
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->exactly(2))
             ->method('store')
-            ->with($response, $this->targetPath, $this->filter)
-            ->will($this->returnValue($response))
+            ->with($this->identicalTo($binary), $this->webPath, $this->filter)
         ;
 
         $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
 
         // Call twice, as this method should not be cached.
-        $this->assertSame($response, $cacheResolver->store($response, $this->targetPath, $this->filter));
-        $this->assertSame($response, $cacheResolver->store($response, $this->targetPath, $this->filter));
+        $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
+        $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
     }
 
-    public function testGetBrowserPath()
+    public function testSavesToCacheIfInternalResolverReturnUrlOnResolve()
     {
-        $absolute = 'http://example.com' . $this->targetPath;
-        $relative = $this->targetPath;
-
         $resolver = $this->getMockResolver();
         $resolver
-            ->expects($this->at(0))
-            ->method('getBrowserPath')
-            ->with($this->path, $this->filter, true)
-            ->will($this->returnValue($absolute))
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue('/the/expected/browser'))
         ;
+
+        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $cache
+            ->expects($this->exactly(1))
+            ->method('save')
+        ;
+
+        $cacheResolver = new CacheResolver($cache, $resolver);
+
+        $cacheResolver->resolve($this->path, $this->filter);
+    }
+
+    public function testNotSavesToCacheIfInternalResolverReturnNullOnResolve()
+    {
+        $resolver = $this->getMockResolver();
         $resolver
-            ->expects($this->at(1))
-            ->method('getBrowserPath')
-            ->with($this->path, $this->filter, false)
-            ->will($this->returnValue($relative))
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue(null))
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cache = $this->getMock('Doctrine\Common\Cache\Cache');
+        $cache
+            ->expects($this->never())
+            ->method('save')
+        ;
 
-        $this->assertEquals($absolute, $cacheResolver->getBrowserPath($this->path, $this->filter, true));
-        $this->assertEquals($absolute, $cacheResolver->getBrowserPath($this->path, $this->filter, true));
+        $cacheResolver = new CacheResolver($cache, $resolver);
 
-        $this->assertEquals($relative, $cacheResolver->getBrowserPath($this->path, $this->filter, false));
-        $this->assertEquals($relative, $cacheResolver->getBrowserPath($this->path, $this->filter, false));
+        $cacheResolver->resolve($this->path, $this->filter);
     }
 
     /**
@@ -92,14 +100,12 @@ class CacheResolverTest extends AbstractTest
      */
     public function testRemoveUsesIndex()
     {
-        $request = new Request();
-
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with($request, $this->path, $this->filter)
-            ->will($this->returnValue($this->targetPath))
+            ->with($this->path, $this->filter)
+            ->will($this->returnValue($this->webPath))
         ;
         $resolver
             ->expects($this->once())
@@ -110,17 +116,17 @@ class CacheResolverTest extends AbstractTest
         $cache = new MemoryCache();
 
         $cacheResolver = new CacheResolver($cache, $resolver);
-        $cacheResolver->resolve($request, $this->path, $this->filter);
+        $cacheResolver->resolve($this->path, $this->filter);
 
         /*
          * Three items:
          * * The result of resolve.
-         * * The result of reverse for the targetPath.
+         * * The result of reverse for the filePath.
          * * The index of both entries.
          */
-        $this->assertCount(3, $cache->data);
+        $this->assertCount(2, $cache->data);
 
-        $this->assertTrue($cacheResolver->remove($this->targetPath, $this->filter));
+        $this->assertTrue($cacheResolver->remove($this->path, $this->filter));
 
         // Cache including index has been removed.
         $this->assertCount(0, $cache->data);

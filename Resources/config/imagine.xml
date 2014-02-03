@@ -11,6 +11,7 @@
         <parameter key="liip_imagine.filter.manager.class">Liip\ImagineBundle\Imagine\Filter\FilterManager</parameter>
         <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
         <parameter key="liip_imagine.cache.manager.class">Liip\ImagineBundle\Imagine\Cache\CacheManager</parameter>
+        <parameter key="liip_imagine.binary.mime_type_guesser.class">Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser</parameter>
 
         <!-- Controller class -->
 
@@ -66,9 +67,12 @@
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
+            <argument type="service" id="liip_imagine" />
         </service>
 
         <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
+            <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
+            <argument type="service" id="liip_imagine.extension_guesser" />
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument>%liip_imagine.data.loader.default%</argument>
         </service>
@@ -174,15 +178,15 @@
 
         <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <tag name="liip_imagine.data.loader" loader="filesystem" />
-            <argument type="service" id="liip_imagine" />
+            <argument type="service" id="liip_imagine.mime_type_guesser" />
+            <argument type="service" id="liip_imagine.extension_guesser" />
             <argument>%liip_imagine.formats%</argument>
             <argument>%liip_imagine.data_root%</argument>
         </service>
 
         <!-- Cache resolver -->
 
-        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%">
-            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+        <service id="liip_imagine.cache.resolver.abstract_filesystem" abstract="true" public="false">
             <argument type="service" id="filesystem" />
             <call method="setBasePath">
                 <argument type="string">%liip_imagine.cache.resolver.base_path%</argument>
@@ -190,17 +194,43 @@
             <call method="setFolderPermissions">
                 <argument type="string">%liip_imagine.cache_mkdir_mode%</argument>
             </call>
+            <call method="setRequest">
+                <argument type="service" id="request" on-invalid="null" strict="false" />
+            </call>
         </service>
 
-        <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%">
+        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%" parent="liip_imagine.cache.resolver.abstract_filesystem" public="true">
+            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+        </service>
+
+        <service id="liip_imagine.cache.resolver.no_cache" class="%liip_imagine.cache.resolver.no_cache.class%" parent="liip_imagine.cache.resolver.abstract_filesystem" public="true">
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
-            <argument type="service" id="filesystem" />
         </service>
 
         <!-- Form types -->
 
         <service id="liip_imagine.form.type.image" class="%liip_imagine.form.type.image.class%">
             <tag name="form.type" alias="liip_imagine_image" />
+        </service>
+
+        <!-- Guessers -->
+
+        <service
+            id="liip_imagine.mime_type_guesser"
+            class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface"
+            factory-class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser"
+            factory-method="getInstance"
+        />
+
+        <service
+            id="liip_imagine.extension_guesser"
+            class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface"
+            factory-class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser"
+            factory-method="getInstance"
+        />
+
+        <service id="liip_imagine.binary.mime_type_guesser" class="%liip_imagine.binary.mime_type_guesser.class%">
+            <argument type="service" id="liip_imagine.mime_type_guesser" />
         </service>
 
     </services>

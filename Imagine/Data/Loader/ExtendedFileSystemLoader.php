@@ -13,16 +13,13 @@ class ExtendedFileSystemLoader extends FileSystemLoader
     protected $transformers;
 
     /**
-     * Constructor.
-     *
-     * @param ImagineInterface       $imagine
      * @param array                  $formats
      * @param string                 $rootPath
      * @param TransformerInterface[] $transformers
      */
-    public function __construct(ImagineInterface $imagine, $formats, $rootPath, array $transformers)
+    public function __construct($formats, $rootPath, array $transformers)
     {
-        parent::__construct($imagine, $formats, $rootPath);
+        parent::__construct($formats, $rootPath);
 
         $this->transformers = $transformers;
     }

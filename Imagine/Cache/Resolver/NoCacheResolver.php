@@ -2,8 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
  * NoCacheResolver.
@@ -13,25 +12,30 @@ class NoCacheResolver extends WebPathResolver
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function isStored($path, $filter)
     {
-        $this->setBasePath($request->getBaseUrl());
-
-        return $this->getFilePath($path, $filter);
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function resolve($path, $filter)
     {
-        return $response;
+        return $this->getRequest()->getSchemeAndHttpHost().'/'.$path;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($path, $filter)
     {
         return true;
     }

@@ -2,17 +2,11 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GridFSLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
     /**
      * @var DocumentManager
      */
@@ -24,15 +18,11 @@ class GridFSLoader implements LoaderInterface
     protected $class;
 
     /**
-     * Constructs
-     *
-     * @param ImagineInterface $imagine
      * @param DocumentManager $dm
      * @param string $class
      */
-    public function __construct(ImagineInterface $imagine, DocumentManager $dm, $class)
+    public function __construct(DocumentManager $dm, $class)
     {
-        $this->imagine = $imagine;
         $this->dm = $dm;
         $this->class = $class;
     }
@@ -52,6 +42,6 @@ class GridFSLoader implements LoaderInterface
             throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $id));
         }
 
-        return $this->imagine->load($image['file']->getBytes());
+        return $image['file']->getBytes();
     }
 }

@@ -3,9 +3,9 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\CacheManager
@@ -50,22 +50,29 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager = new CacheManager($config, $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find resolver for "thumbnail" filter type');
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
     }
 
-    public function testDefaultResolverUsedIfNoneSet()
+    public function testDefaultResolverUsedIfNoneSetOnGetBrowserPath()
     {
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
-            ->method('getBrowserPath')
-            ->with('cats.jpeg', 'thumbnail', true)
+            ->method('isStored')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue(true))
+        ;
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue('http://a/path/to/an/image.png'))
         ;
 
         $config = $this->getMockFilterConfiguration();
         $config
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
             ->with('thumbnail')
             ->will($this->returnValue(array(
@@ -75,10 +82,59 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->getMockRouter(), $this->fixturesDir.'/assets', 'default');
+        $router = $this->getMockRouter();
+        $router
+            ->expects($this->never())
+            ->method('generate')
+        ;
+
+        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
         $cacheManager->addResolver('default', $resolver);
 
-        $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+
+        $this->assertEquals('http://a/path/to/an/image.png', $actualBrowserPath);
+    }
+
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPath()
+    {
+        $resolver = $this->getMockResolver();
+        $resolver
+            ->expects($this->once())
+            ->method('isStored')
+            ->with('cats.jpeg', 'thumbnail')
+            ->will($this->returnValue(false))
+        ;
+        $resolver
+            ->expects($this->never())
+            ->method('resolve')
+        ;
+
+        $config = $this->getMockFilterConfiguration();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $router = $this->getMockRouter();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
+        ;
+
+        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
+        $cacheManager->addResolver('default', $resolver);
+
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
+
+        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $actualBrowserPath);
     }
 
     /**
@@ -89,33 +145,32 @@ class CacheManagerTest extends AbstractTest
         $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-        $cacheManager->resolve(new Request(), $path, 'thumbnail');
+        $cacheManager->resolve($path, 'thumbnail');
     }
 
-    public function testResolveWithoutResolver()
+    public function testThrowsIfConcreteResolverNotExists()
     {
         $cacheManager = new CacheManager($this->getMockFilterConfiguration(), $this->getMockRouter(), $this->fixturesDir.'/assets');
 
-        $this->assertFalse($cacheManager->resolve(new Request(), 'cats.jpeg', 'thumbnail'));
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
+        $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
     }
 
     public function testFallbackToDefaultResolver()
     {
-        $response = new Response('', 200);
-        $request = new Request();
+        $binary = new Binary('aContent', 'image/png', 'png');
 
         $resolver = $this->getMockResolver();
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with($request, 'cats.jpeg', 'thumbnail')
+            ->with('cats.jpeg', 'thumbnail')
             ->will($this->returnValue('/thumbs/cats.jpeg'))
         ;
         $resolver
             ->expects($this->once())
             ->method('store')
-            ->with($response, '/thumbs/cats.jpeg', 'thumbnail')
-            ->will($this->returnValue($response))
+            ->with($binary, '/thumbs/cats.jpeg', 'thumbnail')
         ;
         $resolver
             ->expects($this->once())
@@ -140,10 +195,9 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->addResolver('default', $resolver);
 
         // Resolve fallback to default resolver
-        $this->assertEquals('/thumbs/cats.jpeg', $cacheManager->resolve($request, 'cats.jpeg', 'thumbnail'));
+        $this->assertEquals('/thumbs/cats.jpeg', $cacheManager->resolve('cats.jpeg', 'thumbnail'));
 
-        // Store fallback to default resolver
-        $this->assertEquals($response, $cacheManager->store($response, '/thumbs/cats.jpeg', 'thumbnail'));
+        $cacheManager->store($binary, '/thumbs/cats.jpeg', 'thumbnail');
 
         // Remove fallback to default resolver
         $this->assertTrue($cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail'));
@@ -195,7 +249,7 @@ class CacheManagerTest extends AbstractTest
     /**
      * @dataProvider generateUrlProvider
      */
-    public function testGenerateUrl($filterConfig, $targetPath, $expectedPath)
+    public function testGenerateUrl($filterConfig, $path, $expectedPath)
     {
         $config = $this->getMockFilterConfiguration();
         $config
@@ -215,6 +269,6 @@ class CacheManagerTest extends AbstractTest
         ;
 
         $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets');
-        $cacheManager->generateUrl($targetPath, 'thumbnail', true);
+        $cacheManager->generateUrl($path, 'thumbnail', true);
     }
 }

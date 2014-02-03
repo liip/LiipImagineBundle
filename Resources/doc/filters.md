@@ -173,36 +173,30 @@ For an example of a filter loader implementation, refer to
 ## Dynamic filters
 
 With a custom controller action it is possible to dynamically modify the configuration that will
-be applied to the image. Inside the controller you can access the ``FilterConfiguration``
-instance, dynamically adjust the filter configuration (for example based on information
-associated with the image or whatever other logic you might want) and set it again.
+be applied to the image. Inside the controller you can access ``FilterManager``
+instance, pass configuration as third parameter of `applyFilter` method (for example based on information
+associated with the image or whatever other logic you might want).
 
-A simple example showing how to change the filter configuration dynamically. This example
-is of course "bogus" since hardcoded values could just as well be set in the configuration
-but it illustrates the core idea.
+A simple example showing how to change the filter configuration dynamically.
 
 ``` php
-public function filterAction(Request $request, $path, $filter)
+public function filterAction($path, $filter)
 {
-    $targetPath = $this->cacheManager->resolve($request, $path, $filter);
-    if ($targetPath instanceof Response) {
-        return $targetPath;
+    if (!$this->cacheManager->isStored($path, $filter)) {
+        $binary = $this->dataManager->find($filter, $path);
+
+        $filteredBinary = $this->filterManager->applyFilter($binary, $filter, array(
+            'filters' => array(
+                'thumbnail => array(
+                    'size' => array(300, 100)
+                )
+            )
+        ));
+
+        $this->cacheManager->store($filteredBinary, $path, $filter);
     }
 
-    $image = $this->dataManager->find($filter, $path);
-
-    $filterConfig = $this->filterManager->getFilterConfiguration();
-    $config = $filterConfig->get($filter);
-    $config['filters']['thumbnail']['size'] = array(300, 100);
-    $filterConfig->set($filter, $config);
-
-    $response = $this->filterManager->get($request, $filter, $image, $path);
-
-    if ($targetPath) {
-        $response = $this->cacheManager->store($response, $targetPath, $filter);
-    }
-
-    return $response;
+    return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
 }
 ```
 

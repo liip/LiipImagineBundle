@@ -2,12 +2,16 @@
 
 namespace Liip\ImagineBundle\Controller;
 
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\UriSigner;
 
 class ImagineController
 {
@@ -27,8 +31,6 @@ class ImagineController
     protected $cacheManager;
 
     /**
-     * Constructor.
-     *
      * @param DataManager $dataManager
      * @param FilterManager $filterManager
      * @param CacheManager $cacheManager
@@ -43,26 +45,35 @@ class ImagineController
     /**
      * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
-     * @param Request $request
      * @param string $path
      * @param string $filter
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function filterAction(Request $request, $path, $filter)
+    public function filterAction($path, $filter, Request $request)
     {
-        $targetPath = $this->cacheManager->resolve($request, $path, $filter);
-        if ($targetPath instanceof Response) {
-            return $targetPath;
+        $runtimeConfig = array();
+        $filterPostfix = '';
+        if ($runtimeFilters = $request->query->get('filters', array())) {
+            $signer = new UriSigner('aSecret');
+            if (false == $signer->check($request->getRequestUri())) {
+//                throw new BadRequestHttpException('');
+            }
+
+            $runtimeConfig['filters'] = $runtimeFilters;
+            $filterPostfix = '+'.substr($request->query->get('_hash'), 0, 8);
         }
 
-        $image = $this->dataManager->find($filter, $path);
-        $response = $this->filterManager->get($request, $filter, $image, $path);
+        if (!$this->cacheManager->isStored($path, $filter, $filterPostfix)) {
+            $binary = $this->dataManager->find($filter, $path);
 
-        if ($targetPath) {
-            $response = $this->cacheManager->store($response, $targetPath, $filter);
+            $this->cacheManager->store(
+                $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),
+                $path,
+                $filter
+            );
         }
 
-        return $response;
+        return new RedirectResponse($this->cacheManager->resolve($path, $filter, $filterPostfix), 301);
     }
 }
