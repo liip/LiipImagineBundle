@@ -38,11 +38,14 @@ class ImagineExtension extends \Twig_Extension
      * @param string $filter
      * @param boolean $absolute
      *
-     * @return string
+     * @return \Twig_Markup
      */
     public function filter($path, $filter, $absolute = false)
     {
-        return $this->cacheManager->getBrowserPath($path, $filter, $absolute);
+        return new \Twig_Markup(
+            $this->cacheManager->getBrowserPath($path, $filter, $absolute),
+            'utf-8'
+        );
     }
 
     /**
