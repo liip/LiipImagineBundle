@@ -6,6 +6,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\RouterInterface;
 
 class CacheManager
@@ -154,11 +155,20 @@ class CacheManager
 
         $params = array('path' => ltrim($path, '/'));
 
-        return str_replace(
+        $params['filters'] = array(
+            'crop' => array('start' => [10, 20], 'size' => [120, 90]),
+        );
+
+        $filterUrl = str_replace(
             urlencode($params['path']),
             urldecode($params['path']),
             $this->router->generate('_imagine_'.$filter, $params, $absolute)
         );
+
+        $signer = new UriSigner('aSecret');
+        $filterUrl = $signer->sign($filterUrl);
+
+        return $filterUrl;
     }
 
     /**
@@ -169,9 +179,9 @@ class CacheManager
      *
      * @return bool
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $filterPostfix = '')
     {
-        return $this->getResolver($filter)->isStored($path, $filter);
+        return $this->getResolver($filter)->isStored($path, $filter.$filterPostfix);
     }
 
     /**
@@ -184,13 +194,13 @@ class CacheManager
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $filterPostfix = '')
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        return $this->getResolver($filter)->resolve($path, $filter);
+        return $this->getResolver($filter)->resolve($path, $filter.$filterPostfix);
     }
 
     /**
