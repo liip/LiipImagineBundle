@@ -73,9 +73,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @param int $mkdirMode
+     * @param int $folderPermissions
      */
-    public function setFolderPermissions ($folderPermissions)
+    public function setFolderPermissions($folderPermissions)
     {
         $this->folderPermissions = $folderPermissions;
     }
@@ -103,21 +103,36 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * Removes a stored image resource.
-     *
-     * @param string $path The target path provided by the resolve method.
-     * @param string $filter The name of the imagine filter in effect.
-     *
-     * @return bool Whether the file has been removed successfully.
+     * {@inheritDoc}
      */
-    public function remove($path, $filter)
+    public function remove(array $paths, array $filters)
     {
-        $this->basePath = $this->getRequest()->getBaseUrl();
-        $filePath = $this->getFilePath($path, $filter);
+        if (empty($paths) && empty($filters)) {
+            return;
+        }
 
-        $this->filesystem->remove($filePath);
+        // TODO: this logic has to be refactored.
+        list($rootCachePath) = explode(current($filters), $this->getFilePath('whateverpath', current($filters)));
 
-        return !file_exists($filePath);
+        if (empty($paths)) {
+            $filtersCachePaths = array();
+            foreach ($filters as $filter) {
+                $filterCachePath = $rootCachePath.$filter;
+                if (is_dir($filterCachePath)) {
+                    $filtersCachePaths[] = $filterCachePath;
+                }
+            }
+
+            $this->filesystem->remove($filtersCachePaths);
+
+            return;
+        }
+
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                $this->filesystem->remove($this->getFilePath($path, $filter));
+            }
+        }
     }
 
     /**

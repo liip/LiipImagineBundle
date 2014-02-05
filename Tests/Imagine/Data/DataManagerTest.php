@@ -21,7 +21,7 @@ class DataManagerTest extends AbstractTest
             ->with('cats.jpeg')
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -55,7 +55,7 @@ class DataManagerTest extends AbstractTest
             ->with('cats.jpeg')
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -89,7 +89,7 @@ class DataManagerTest extends AbstractTest
             ->with('cats.jpeg')
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -125,7 +125,7 @@ class DataManagerTest extends AbstractTest
             ->will($this->returnValue('content'))
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -161,7 +161,7 @@ class DataManagerTest extends AbstractTest
             ->will($this->returnValue(new Binary('content', null)))
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -198,7 +198,7 @@ class DataManagerTest extends AbstractTest
             ->will($this->returnValue($binary))
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -225,7 +225,7 @@ class DataManagerTest extends AbstractTest
 
     public function testThrowIfLoaderNotRegisteredForGivenFilterOnFind()
     {
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -263,7 +263,7 @@ class DataManagerTest extends AbstractTest
             ->will($this->returnValue($expectedMimeType))
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
@@ -314,7 +314,7 @@ class DataManagerTest extends AbstractTest
             ->will($this->returnValue($expectedFormat))
         ;
 
-        $config = $this->getMockFilterConfiguration();
+        $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')

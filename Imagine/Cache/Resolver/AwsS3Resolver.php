@@ -91,12 +91,12 @@ class AwsS3Resolver implements ResolverInterface
                 'ContentType'   => $binary->getMimeType()
             ));
         } catch (\Exception $e) {
-            if ($this->logger) {
-                $this->logger->error('The object could not be created on Amazon S3.', array(
-                    'objectPath'  => $objectPath,
-                    'filter'      => $filter,
-                ));
-            }
+            $this->logError('The object could not be created on Amazon S3.', array(
+                'objectPath'  => $objectPath,
+                'filter'      => $filter,
+                'bucket'      => $this->bucket,
+                'exception'   => $e,
+            ));
 
             throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
@@ -105,24 +105,50 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($path, $filter)
+    public function remove(array $paths, array $filters)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
-
-        if (!$this->objectExists($objectPath)) {
-            // A non-existing object to delete: done!
-            return true;
+        if (empty($paths) && empty($filters)) {
+            return;
         }
 
-        try {
-            $this->storage->deleteObject(array(
-                'Bucket' => $this->bucket,
-                'Key'    => $objectPath,
-            ));
+        if (empty($paths)) {
+            try {
+                $this->storage->deleteMatchingObjects($this->bucket, null, sprintf(
+                    '/%s/i',
+                    implode('|', $filters)
+                ));
+            } catch (\Exception $e) {
+                $this->logError('The objects could not be deleted from Amazon S3.', array(
+                    'filter'      => implode(', ', $filters),
+                    'bucket'      => $this->bucket,
+                    'exception'   => $e,
+                ));
+            }
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
+            return;
+        }
+
+        foreach ($filters as $filter) {
+            foreach ($paths as $path) {
+                $objectPath = $this->getObjectPath($path, $filter);
+                if (!$this->objectExists($objectPath)) {
+                    continue;
+                }
+
+                try {
+                    $this->storage->deleteObject(array(
+                        'Bucket' => $this->bucket,
+                        'Key'    => $objectPath,
+                    ));
+                } catch (\Exception $e) {
+                    $this->logError('The object could not be deleted from Amazon S3.', array(
+                        'objectPath'  => $objectPath,
+                        'filter'      => $filter,
+                        'bucket'      => $this->bucket,
+                        'exception'   => $e,
+                    ));
+                }
+            }
         }
     }
 
@@ -143,14 +169,6 @@ class AwsS3Resolver implements ResolverInterface
         $this->objUrlOptions[$key] = $value;
 
         return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clear($cachePrefix)
-    {
-        // TODO: implement cache clearing for Amazon S3 service
     }
 
     /**
@@ -188,5 +206,16 @@ class AwsS3Resolver implements ResolverInterface
     protected function objectExists($objectPath)
     {
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
+    }
+
+    /**
+     * @param mixed $message
+     * @param array $context
+     */
+    protected function logError($message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->error($message, $context);
+        }
     }
 }

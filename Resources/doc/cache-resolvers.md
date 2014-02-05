@@ -48,11 +48,4 @@ liip_imagine:
 For an example of a cache resolver implementation, refer to
 `Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
 
-## CacheClearer
-
-Custom cache resolver classes must implement the ```clear``` method, at worst doing nothing.
-
-When the ```console cache:clear``` command is run, the clear method of all the registered cache
-resolvers is automatically called.
-
 [Back to the index](index.md)

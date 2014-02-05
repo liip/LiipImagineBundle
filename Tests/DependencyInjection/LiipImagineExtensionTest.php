@@ -48,28 +48,6 @@ class LiipImagineExtensionTest extends AbstractTest
         );
     }
 
-    public function testCacheClearerRegistration()
-    {
-        $this->createEmptyConfiguration();
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
-        } else {
-            $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
-
-            $definition = $this->containerBuilder->getDefinition('liip_imagine.cache.clearer');
-            $definition->hasTag('kernel.cache_clearer');
-            $this->assertCount(2, $definition->getArguments());
-        }
-    }
-
-    public function testCacheClearerIsNotRegistered()
-    {
-        $this->createFullConfiguration();
-
-        $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
-    }
-
     public function testCustomRouteRequirements()
     {
         $this->createFullConfiguration();
@@ -110,7 +88,6 @@ driver: imagick
 web_root: ../foo/bar
 cache_prefix: /imagine/cache
 cache: false
-cache_clearer: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:
     small:

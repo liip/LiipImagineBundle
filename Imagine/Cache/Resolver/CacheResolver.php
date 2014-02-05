@@ -68,15 +68,14 @@ class CacheResolver implements ResolverInterface
      */
     public function resolve($path, $filter)
     {
-        $key = $this->generateCacheKey('resolve', $path, $filter);
+        $key = $this->generateCacheKey($path, $filter);
         if ($this->cache->contains($key)) {
             return $this->cache->fetch($key);
         }
 
         $resolved = $this->resolver->resolve($path, $filter);
-        if ($resolved) {
-            $this->saveToCache($key, $resolved);
-        }
+
+        $this->saveToCache($key, $resolved);
 
         return $resolved;
     }
@@ -92,37 +91,49 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($path, $filter)
+    public function remove(array $paths, array $filters)
     {
-        $removed = $this->resolver->remove($path, $filter);
+        $this->resolver->remove($paths, $filters);
 
-        // If the resolver did not remove the content, we can leave the cache.
-        if ($removed) {
-            $key = $this->generateCacheKey('resolve', $path, $filter);
-            if ($this->cache->contains($key)) {
-                // The indexKey is not utilizing the method so the value is not important.
-                $indexKey = $this->generateIndexKey($key);
-
-                // Retrieve the index and remove the content from the cache.
-                $index = $this->cache->fetch($indexKey);
-                foreach ($index as $eachCacheKey) {
-                    $this->cache->delete($eachCacheKey);
+        foreach ($filters as $filter) {
+            if (empty($paths)) {
+                $this->removePathAndFilter(null, $filter);
+            } else {
+                foreach ($paths as $path) {
+                    $this->removePathAndFilter($path, $filter);
                 }
+            }
+        }
+    }
 
-                // Remove the auxiliary keys.
-                $this->cache->delete($indexKey);
+    protected function removePathAndFilter($path, $filter)
+    {
+        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
+        if (!$this->cache->contains($indexKey)) {
+            return;
+        }
+
+        $index = $this->cache->fetch($indexKey);
+
+        if (null === $path) {
+            foreach ($index as $eachCacheKey) {
+                $this->cache->delete($eachCacheKey);
+            }
+
+            $index = array();
+        } else {
+            $cacheKey = $this->generateCacheKey($path, $filter);
+            if (false !== $indexIndex = array_search($cacheKey, $index)) {
+                unset($index[$indexIndex]);
+                $this->cache->delete($cacheKey);
             }
         }
 
-        return $removed;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clear($cachePrefix)
-    {
-        // TODO: implement cache clearing
+        if (empty($index)) {
+            $this->cache->delete($indexKey);
+        } else {
+            $this->cache->save($indexKey, $index);
+        }
     }
 
     /**
@@ -130,24 +141,19 @@ class CacheResolver implements ResolverInterface
      *
      * When overriding this method, ensure generateIndexKey is adjusted accordingly.
      *
-     * @param string $method The cached method.
      * @param string $path The image path in use.
      * @param string $filter The filter in use.
-     * @param array $suffixes An optional list of additional parameters to use to create the key.
      *
      * @return string
      */
-    public function generateCacheKey($method, $path, $filter, array $suffixes = array())
+    public function generateCacheKey($path, $filter)
     {
-        $keyStack = array(
-            $this->options['global_prefix'],
-            $this->options['prefix'],
-            $filter,
-            $path,
-            $method,
-        );
-
-        return implode('.', array_merge($keyStack, $suffixes));
+        return implode('.', array(
+            $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+            $this->sanitizeCacheKeyPart($this->options['prefix']),
+            $this->sanitizeCacheKeyPart($filter),
+            $this->sanitizeCacheKeyPart($path),
+        ));
     }
 
     /**
@@ -163,15 +169,22 @@ class CacheResolver implements ResolverInterface
     {
         $cacheKeyStack = explode('.', $cacheKey);
 
-        $indexKeyStack = array(
-            $this->options['global_prefix'],
-            $this->options['prefix'],
-            $this->options['index_key'],
-            $cacheKeyStack[2], // filter
-            $cacheKeyStack[3], // path
-        );
+        return implode('.', array(
+            $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+            $this->sanitizeCacheKeyPart($this->options['prefix']),
+            $this->sanitizeCacheKeyPart($this->options['index_key']),
+            $this->sanitizeCacheKeyPart($cacheKeyStack[2]), // filter
+        ));
+    }
 
-        return implode('.', $indexKeyStack);
+    /**
+     * @param string $cacheKeyPart
+     *
+     * @return string
+     */
+    protected function sanitizeCacheKeyPart($cacheKeyPart)
+    {
+        return str_replace('.', '_', $cacheKeyPart);
     }
 
     /**

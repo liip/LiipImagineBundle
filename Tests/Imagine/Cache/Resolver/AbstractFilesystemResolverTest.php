@@ -149,6 +149,6 @@ class AbstractFilesystemResolverTest extends AbstractTest
      */
     protected function getMockAbstractFilesystemResolver(Filesystem $filesystem)
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver', array('resolve', 'clear', 'getBrowserPath', 'getFilePath'), array($filesystem));
+        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver', array('resolve', 'getBrowserPath', 'getFilePath'), array($filesystem));
     }
 }
