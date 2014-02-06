@@ -3,9 +3,18 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Symfony\Component\Routing\RequestContext;
 
-class NoCacheWebPathResolver extends WebPathResolver
+class NoCacheWebPathResolver implements ResolverInterface
 {
+    /**
+     * @param RequestContext $requestContext
+     */
+    public function __construct(RequestContext $requestContext)
+    {
+        $this->requestContext = $requestContext;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -19,7 +28,11 @@ class NoCacheWebPathResolver extends WebPathResolver
      */
     public function resolve($path, $filter)
     {
-        return $this->getRequest()->getSchemeAndHttpHost().'/'.$path;
+        return sprintf('%s://%s/%s',
+            $this->requestContext->getScheme(),
+            $this->requestContext->getHost(),
+            ltrim($path, '/')
+        );
     }
 
     /**
@@ -36,3 +49,4 @@ class NoCacheWebPathResolver extends WebPathResolver
     {
     }
 }
+

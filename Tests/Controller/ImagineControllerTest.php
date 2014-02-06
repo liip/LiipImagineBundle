@@ -22,6 +22,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
@@ -75,16 +76,6 @@ class ImagineControllerTest extends AbstractTest
 
     public function testFilterActionLive()
     {
-        $router = $this->createRouterMock();
-        $router
-            ->expects($this->any())
-            ->method('generate')
-            ->with('_imagine_thumbnail', array(
-                'path' => 'cats.jpeg'
-            ), false)
-            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
-        ;
-
         $dataLoader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
@@ -105,23 +96,31 @@ class ImagineControllerTest extends AbstractTest
         $filterManager = new FilterManager($this->configuration, $this->imagine);
         $filterManager->addLoader('thumbnail', $filterLoader);
 
-        $webPathResolver = new WebPathResolver($this->filesystem);
+        $webPathResolver = new WebPathResolver(
+            $this->filesystem,
+            new RequestContext,
+            $this->webRoot
+        );
 
-        $cacheManager = new CacheManager($this->configuration, $router, $this->webRoot, 'web_path');
+        $cacheManager = new CacheManager(
+            $this->configuration,
+            $this->createRouterMock(),
+            'web_path'
+        );
+
         $cacheManager->addResolver('web_path', $webPathResolver);
 
         $controller = new ImagineController($dataManager, $filterManager, $cacheManager, $this->imagine);
-
-        $request = Request::create('/media/cache/thumbnail/cats.jpeg');
-
-        $webPathResolver->setRequest($request);
 
         $response = $controller->filterAction('cats.jpeg', 'thumbnail');
 
         $filePath = realpath($this->webRoot).'/media/cache/thumbnail/cats.jpeg';
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+
+        $this->assertEquals('http://localhost/media/cache/thumbnail/cats.jpeg', $response->getTargetUrl());
         $this->assertEquals(301, $response->getStatusCode());
+
         $this->assertTrue(file_exists($filePath));
         $this->assertNotEmpty(file_get_contents($filePath));
 
