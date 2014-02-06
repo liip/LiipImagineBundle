@@ -55,7 +55,7 @@ class CacheResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        $cacheKey = $this->generateCacheKey('resolve', $path, $filter);
+        $cacheKey = $this->generateCacheKey($path, $filter);
 
         return
             $this->cache->contains($cacheKey) ||

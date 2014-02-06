@@ -37,7 +37,7 @@ class CacheResolverTest extends AbstractTest
 
     public function testNotCallInternalResolverIfCachedOnIsStored()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -49,7 +49,7 @@ class CacheResolverTest extends AbstractTest
             ->method('isStored')
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $cacheResolver->resolve($this->path, $this->filter);
 
@@ -60,14 +60,14 @@ class CacheResolverTest extends AbstractTest
 
     public function testCallInternalResolverIfNotCachedOnIsStored()
     {
-        $resolver = $this->getMockResolver();
+        $resolver = $this->createResolverMock();
         $resolver
             ->expects($this->exactly(2))
             ->method('isStored')
             ->will($this->returnValue(true))
         ;
 
-        $cacheResolver = new CacheResolver(new MemoryCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
