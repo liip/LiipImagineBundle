@@ -2,7 +2,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
@@ -10,15 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
  */
-class NoCacheResolverTest extends AbstractTest
+class NoCacheWebPathResolverTest extends AbstractTest
 {
     public function testReturnAbsoluteUrlOfOriginalImageOnResolve()
     {
         $request = Request::create('http://foo.com');
 
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest($request);
 
         $this->assertEquals('http://foo.com/a/path', $resolver->resolve('a/path', 'aFilter'));
@@ -33,7 +33,7 @@ class NoCacheResolverTest extends AbstractTest
         // guard
         $this->assertNotNull($request->getBaseUrl());
 
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest($request);
 
         $this->assertEquals('http://foo.com/a/path', $resolver->resolve('a/path', 'aFilter'));
@@ -41,7 +41,7 @@ class NoCacheResolverTest extends AbstractTest
 
     public function testDoNothingOnStore()
     {
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest(null);
 
         $this->assertNull($resolver->store(
@@ -53,7 +53,7 @@ class NoCacheResolverTest extends AbstractTest
 
     public function testDoNothingForPathAndFilterOnRemove()
     {
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest(null);
 
         $resolver->remove(array('a/path'), array('aFilter'));
@@ -61,7 +61,7 @@ class NoCacheResolverTest extends AbstractTest
 
     public function testDoNothingForSomePathsAndSomeFiltersOnRemove()
     {
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest(null);
 
         $resolver->remove(array('foo', 'bar'), array('foo', 'bar'));
@@ -69,7 +69,7 @@ class NoCacheResolverTest extends AbstractTest
 
     public function testDoNothingForEmptyPathAndEmptyFilterOnRemove()
     {
-        $resolver = new NoCacheResolver(new Filesystem);
+        $resolver = new NoCacheWebPathResolver(new Filesystem);
         $resolver->setRequest(null);
 
         $resolver->remove(array(), array());

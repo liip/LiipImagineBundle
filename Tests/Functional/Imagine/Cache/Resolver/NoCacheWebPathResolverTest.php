@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
  */
-class NoCacheResolverTest extends WebTestCase
+class NoCacheWebPathResolverTest extends WebTestCase
 {
     public function testCouldBeGetFromContainer()
     {
@@ -19,6 +19,6 @@ class NoCacheResolverTest extends WebTestCase
 
         $resolver = self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver', $resolver);
+        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver', $resolver);
     }
 }
