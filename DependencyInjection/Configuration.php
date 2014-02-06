@@ -29,7 +29,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('web_root')->defaultValue('%kernel.root_dir%/../web')->end()
                 ->scalarNode('data_root')->defaultValue('%liip_imagine.web_root%')->end()
-                ->scalarNode('cache_mkdir_mode')->defaultValue(0777)->end()
                 ->scalarNode('cache_prefix')->defaultValue('/media/cache')->end()
                 ->scalarNode('cache')->defaultValue('web_path')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()

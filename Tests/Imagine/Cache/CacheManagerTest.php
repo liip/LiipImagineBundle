@@ -14,15 +14,9 @@ class CacheManagerTest extends AbstractTest
 {
     protected $resolver;
 
-    public function testGetWebRoot()
-    {
-        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock(), $this->fixturesDir.'/assets');
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, $this->fixturesDir.'/assets'), $cacheManager->getWebRoot());
-    }
-
     public function testAddCacheManagerAwareResolver()
     {
-        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock(), $this->fixturesDir.'/assets');
+        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock());
 
         $resolver = $this->getMock('Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver');
         $resolver
@@ -48,7 +42,7 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), $this->fixturesDir.'/assets', 'default');
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'default');
 
         $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
@@ -88,7 +82,7 @@ class CacheManagerTest extends AbstractTest
             ->method('generate')
         ;
 
-        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
+        $cacheManager = new CacheManager($config, $router, 'default');
         $cacheManager->addResolver('default', $resolver);
 
         $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
@@ -129,7 +123,7 @@ class CacheManagerTest extends AbstractTest
             ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
         ;
 
-        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets', 'default');
+        $cacheManager = new CacheManager($config, $router, 'default');
         $cacheManager->addResolver('default', $resolver);
 
         $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', true);
@@ -142,7 +136,7 @@ class CacheManagerTest extends AbstractTest
      */
     public function testResolveInvalidPath($path)
     {
-        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock(), $this->fixturesDir.'/assets');
+        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock());
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
         $cacheManager->resolve($path, 'thumbnail');
@@ -150,7 +144,7 @@ class CacheManagerTest extends AbstractTest
 
     public function testThrowsIfConcreteResolverNotExists()
     {
-        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock(), $this->fixturesDir.'/assets');
+        $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock());
 
         $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
         $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
@@ -191,7 +185,7 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), $this->fixturesDir.'/assets', 'default');
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'default');
         $cacheManager->addResolver('default', $resolver);
 
         // Resolve fallback to default resolver
@@ -248,7 +242,7 @@ class CacheManagerTest extends AbstractTest
             ), true)
         ;
 
-        $cacheManager = new CacheManager($config, $router, $this->fixturesDir.'/assets');
+        $cacheManager = new CacheManager($config, $router);
         $cacheManager->generateUrl($path, 'thumbnail', true);
     }
 
@@ -275,7 +269,7 @@ class CacheManagerTest extends AbstractTest
             }))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilter, $resolver);
 
         $cacheManager->remove($expectedPath, $expectedFilter);
@@ -312,7 +306,7 @@ class CacheManagerTest extends AbstractTest
             }))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilterOne, $resolverOne);
         $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
@@ -346,7 +340,7 @@ class CacheManagerTest extends AbstractTest
             }))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilter, $resolver);
 
         $cacheManager->remove(array($expectedPathOne, $expectedPathTwo), $expectedFilter);
@@ -384,7 +378,7 @@ class CacheManagerTest extends AbstractTest
             }))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilterOne, $resolverOne);
         $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
@@ -432,7 +426,7 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilterOne, $resolverOne);
         $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
@@ -478,7 +472,7 @@ class CacheManagerTest extends AbstractTest
             )))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilterOne, $resolverOne);
         $cacheManager->addResolver($expectedFilterTwo, $resolverTwo);
 
@@ -508,7 +502,7 @@ class CacheManagerTest extends AbstractTest
             }))
         ;
 
-        $cacheManager = new CacheManager($config, $this->createRouterMock(), 'aWebRoot');
+        $cacheManager = new CacheManager($config, $this->createRouterMock());
         $cacheManager->addResolver($expectedFilterOne, $resolver);
         $cacheManager->addResolver($expectedFilterTwo, $resolver);
 

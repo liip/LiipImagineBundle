@@ -23,7 +23,7 @@ interface ResolverInterface
      * @param string $path   The path where the original file is expected to be.
      * @param string $filter The name of the imagine filter in effect.
      *
-     * @return string The URL of the cached image.
+     * @return string The ABSOLUTE URL of the cached image.
      *
      * @throws NotResolvableException
      */

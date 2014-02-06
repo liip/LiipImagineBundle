@@ -7,70 +7,55 @@ use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RequestContext;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
  */
 class NoCacheWebPathResolverTest extends AbstractTest
 {
-    public function testReturnAbsoluteUrlOfOriginalImageOnResolve()
+    public function testCouldBeConstructedWithRequestContextAsArgument()
     {
-        $request = Request::create('http://foo.com');
-
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest($request);
-
-        $this->assertEquals('http://foo.com/a/path', $resolver->resolve('a/path', 'aFilter'));
+        new NoCacheWebPathResolver(new RequestContext);
     }
 
-    public function testReturnAbsoluteUrlOfOriginalImageExcludingBaseUrlOnResolve()
+    public function testComposeSchemaHostAndPathOnResolve()
     {
-        $request = Request::create('http://foo.com');
-        $request->server->set('SCRIPT_FILENAME', 'app.php');
-        $request->server->set('SCRIPT_NAME', 'app.php');
+        $context = new RequestContext('', 'GET', 'theHost', 'theSchema');
 
-        // guard
-        $this->assertNotNull($request->getBaseUrl());
+        $resolver = new NoCacheWebPathResolver($context);
 
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest($request);
-
-        $this->assertEquals('http://foo.com/a/path', $resolver->resolve('a/path', 'aFilter'));
+        $this->assertEquals('theschema://theHost/aPath', $resolver->resolve('aPath', 'aFilter'));
     }
 
     public function testDoNothingOnStore()
     {
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest(null);
+        $resolver = new NoCacheWebPathResolver(new RequestContext);
 
         $this->assertNull($resolver->store(
             new Binary('aContent', 'image/jpeg', 'jpg'),
             'a/path',
-            'aFilter')
-        );
+            'aFilter'
+        ));
     }
 
     public function testDoNothingForPathAndFilterOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest(null);
+        $resolver = new NoCacheWebPathResolver(new RequestContext);
 
         $resolver->remove(array('a/path'), array('aFilter'));
     }
 
     public function testDoNothingForSomePathsAndSomeFiltersOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest(null);
+        $resolver = new NoCacheWebPathResolver(new RequestContext);
 
         $resolver->remove(array('foo', 'bar'), array('foo', 'bar'));
     }
 
     public function testDoNothingForEmptyPathAndEmptyFilterOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new Filesystem);
-        $resolver->setRequest(null);
+        $resolver = new NoCacheWebPathResolver(new RequestContext);
 
         $resolver->remove(array(), array());
     }

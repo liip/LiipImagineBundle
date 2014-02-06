@@ -2,47 +2,107 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-class WebPathResolver extends AbstractFilesystemResolver
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\RequestContext;
+
+class WebPathResolver implements ResolverInterface
 {
     /**
-     * If the file has already been cached, we're probably not rewriting
-     * correctly, hence make a 301 to proper location, so browser remembers.
-     *
-     * Strip the base URL of this request from the browserpath to not interfere with the base path.
-     *
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var RequestContext
+     */
+    protected $requestContext;
+
+    /**
+     * @var string
+     */
+    protected $webRoot;
+    /**
+     * @var string
+     */
+    protected $cachePrefix;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param RequestContext $requestContext
+     * @param string $webRootDir
+     * @param string $cachePrefix
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        RequestContext $requestContext,
+        $webRootDir,
+        $cachePrefix = 'media/cache'
+    ) {
+        $this->filesystem = $filesystem;
+        $this->requestContext = $requestContext;
+
+        $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
+        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
+        $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function resolve($path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-        $this->basePath = $this->getRequest()->getBaseUrl();
-
-        if ($this->basePath && 0 === strpos($browserPath, $this->basePath)) {
-            $browserPath = substr($browserPath, strlen($this->basePath));
-        }
-
-        return $this->getRequest()->getBasePath().$browserPath;
+        return sprintf('%s://%s/%s',
+            $this->requestContext->getScheme(),
+            $this->requestContext->getHost(),
+            $this->getFileUrl($path, $filter)
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function isStored($path, $filter)
     {
-        return $this->cacheManager->generateUrl($path, $filter, $absolute);
+        return $this->filesystem->exists($this->getFilePath($path, $filter));
     }
 
     /**
-     * Decodes the URL encoded browser path.
-     *
-     * @param string $browserPath
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    protected function decodeBrowserPath($browserPath)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
-        //TODO: find out why I need double urldecode to get a valid path
-        return urldecode(urldecode($browserPath));
+        $this->filesystem->dumpFile(
+            $this->getFilePath($path, $filter),
+            $binary->getContent()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(array $paths, array $filters)
+    {
+        if (empty($paths) && empty($filters)) {
+            return;
+        }
+
+        if (empty($paths)) {
+            $filtersCacheDir = array();
+            foreach ($filters as $filter) {
+                $filtersCacheDir[] = $this->cacheRoot.'/'.$filter;
+            }
+
+            $this->filesystem->remove($filtersCacheDir);
+
+            return;
+        }
+
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                $this->filesystem->remove($this->getFilePath($path, $filter));
+            }
+        }
     }
 
     /**
@@ -50,6 +110,15 @@ class WebPathResolver extends AbstractFilesystemResolver
      */
     protected function getFilePath($path, $filter)
     {
-        return $this->cacheManager->getWebRoot().$this->resolve($path, $filter);
+        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFileUrl($path, $filter)
+    {
+        return $this->cachePrefix.'/'.$filter.'/'.$path;
     }
 }
+

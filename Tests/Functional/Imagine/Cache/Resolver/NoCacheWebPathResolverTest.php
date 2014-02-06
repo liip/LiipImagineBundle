@@ -2,10 +2,8 @@
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
  */
 class NoCacheWebPathResolverTest extends WebTestCase
@@ -14,10 +12,7 @@ class NoCacheWebPathResolverTest extends WebTestCase
     {
         $this->createClient();
 
-        self::$kernel->getContainer()->enterScope('request');
-        self::$kernel->getContainer()->set('request', new Request, 'request');
-
-        $resolver = self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache');
+        $resolver = self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache_web_path');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver', $resolver);
     }
