@@ -107,6 +107,16 @@ liip_imagine:
                 background: { color: '#00FFFF' }
 ```
 
+If you provide a `size` it will create a new image (this size and given color), and apply the original image on top:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                background: { size: [1026, 684], color: '#fff' }
+```
+
 ### The `watermark` filter
 
 The watermark filter pastes a second image onto your image while keeping its ratio.
