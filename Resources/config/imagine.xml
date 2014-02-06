@@ -53,7 +53,7 @@
         <!-- Cache resolvers' classes -->
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
-        <parameter key="liip_imagine.cache.resolver.no_cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.no_cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver</parameter>
 
         <!-- Form types -->
 

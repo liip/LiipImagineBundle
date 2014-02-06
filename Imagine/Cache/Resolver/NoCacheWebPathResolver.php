@@ -4,10 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
 
-/**
- * NoCacheResolver.
- */
-class NoCacheResolver extends WebPathResolver
+class NoCacheWebPathResolver extends WebPathResolver
 {
     /**
      * {@inheritDoc}
