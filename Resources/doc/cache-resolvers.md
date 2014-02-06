@@ -3,6 +3,7 @@
 * [AmazonS3](cache-resolver/amazons3.md)
 * [AwsS3](cache-resolver/aws_s3.md) - for SDK version 2
 * [CacheResolver](cache-resolver/cache.md)
+* [ProxyResolver](cache-resolver/proxy.md)
 
 # Custom cache resolver
 
