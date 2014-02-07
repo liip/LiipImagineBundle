@@ -45,7 +45,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame('theCachePrefix', 'cachePrefix', $resolver);
     }
 
-    public function testTrimLeftSlashFromWebPathOnConstruct()
+    public function testTrimRightSlashFromWebPathOnConstruct()
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
