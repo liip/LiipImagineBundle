@@ -9,6 +9,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 
 
 /**
@@ -45,7 +46,12 @@ class ProxyResolverTest extends AbstractTest
         $result = $this->resolver->resolve(new Request(), '/foo/bar/bazz.png', 'test');
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
+        } else {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+        }
     }
 
     public function testResolveWithoutResponse()
@@ -70,7 +76,12 @@ class ProxyResolverTest extends AbstractTest
         $result = $this->resolver->store(new Response(), '/foo/bar/bazz.png', 'test');
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
+        } else {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+        }
     }
 
     public function testStoreWithoutResponse()
@@ -95,7 +106,12 @@ class ProxyResolverTest extends AbstractTest
         $result = $this->resolver->getBrowserPath('/foo/bar/bazz.png', 'test');
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
+        } else {
+            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
+        }
     }
 
     public function testGetBrowserPathWithoutResponse()

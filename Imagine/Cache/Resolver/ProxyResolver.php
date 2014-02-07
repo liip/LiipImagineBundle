@@ -1,12 +1,11 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * ProxyResolver
@@ -87,12 +86,25 @@ class ProxyResolver implements ResolverInterface
 
     private function rewriteResponse($response)
     {
-        if ($response instanceof RedirectResponse && $this->hosts) {
-            $path = parse_url($response->getTargetUrl(), PHP_URL_PATH);
-            if ($path == $response->getTargetUrl()) {
-                //relative path, so strip of SCRIPT_FILE_NAME if existient
-                $path = substr($path, (strpos($path, '.php') !== false ? strpos($path, '.php') + 4 : 0));
-            }
+        if (!$response instanceof RedirectResponse || !$this->hosts) {
+            return;
+        }
+
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $redirectLocation = $response->headers->get('Location');
+        } else {
+            $redirectLocation = $response->getTargetUrl();
+        }
+        $path = parse_url($redirectLocation, PHP_URL_PATH);
+
+        if ($path == $redirectLocation) {
+            //relative path, so strip of SCRIPT_FILE_NAME if existient
+            $path = substr($path, (strpos($path, '.php') !== false ? strpos($path, '.php') + 4 : 0));
+        }
+
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $response->headers->set('Location', $this->createProxyUrl($path));
+        } else {
             $response->setTargetUrl($this->createProxyUrl($path));
         }
     }
