@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Controller;
 
-use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -60,8 +59,8 @@ class ImagineController
         try {
             $image = $this->dataManager->find($filter, $path);
             $response = $this->filterManager->get($request, $filter, $image, $path);
-        } catch (RuntimeException $e) {
-            throw new RuntimeException('unable to create image for '.$path.' error was: '.$e->getMessage(), 0, $e);
+        } catch (\Imagine\Exception\RuntimeException $e) {
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
 
         if ($targetPath) {
