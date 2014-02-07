@@ -23,11 +23,6 @@ class CacheManager
     /**
      * @var string
      */
-    protected $webRoot;
-
-    /**
-     * @var string
-     */
     protected $defaultResolver;
 
     /**
@@ -40,14 +35,12 @@ class CacheManager
      *
      * @param FilterConfiguration $filterConfig
      * @param RouterInterface $router
-     * @param string $webRoot
      * @param string $defaultResolver
      */
-    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $webRoot, $defaultResolver = null)
+    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $defaultResolver = null)
     {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
-        $this->webRoot = realpath($webRoot);
         $this->defaultResolver = $defaultResolver;
     }
 
@@ -66,16 +59,6 @@ class CacheManager
         if ($resolver instanceof CacheManagerAwareInterface) {
             $resolver->setCacheManager($this);
         }
-    }
-
-    /**
-     * Returns the configured web root path.
-     *
-     * @return string
-     */
-    public function getWebRoot()
-    {
-        return $this->webRoot;
     }
 
     /**
