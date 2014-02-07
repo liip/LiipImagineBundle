@@ -56,8 +56,12 @@ class ImagineController
             return $targetPath;
         }
 
-        $image = $this->dataManager->find($filter, $path);
-        $response = $this->filterManager->get($request, $filter, $image, $path);
+        try {
+            $image = $this->dataManager->find($filter, $path);
+            $response = $this->filterManager->get($request, $filter, $image, $path);
+        } catch (\Imagine\Exception\RuntimeException $e) {
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
+        }
 
         if ($targetPath) {
             $response = $this->cacheManager->store($response, $targetPath, $filter);
