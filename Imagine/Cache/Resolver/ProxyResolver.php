@@ -62,8 +62,7 @@ class ProxyResolver implements ResolverInterface
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        $response = $this->resolver->getBrowserPath($path, $filter, $absolute);
-        $this->rewriteResponse($response);
+        $response = $this->rewriteUrl($this->resolver->getBrowserPath($path, $filter, $absolute));
 
         return $response;
     }
@@ -90,27 +89,24 @@ class ProxyResolver implements ResolverInterface
             return;
         }
 
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $redirectLocation = $response->headers->get('Location');
-        } else {
-            $redirectLocation = $response->getTargetUrl();
-        }
-        $path = parse_url($redirectLocation, PHP_URL_PATH);
+        $url = $this->rewriteUrl($response->headers->get('Location'));
 
-        if ($path == $redirectLocation) {
+        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
+            $response->headers->set('Location', $url);
+        } else {
+            $response->setTargetUrl($url);
+        }
+    }
+
+    private function rewriteUrl($url)
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if ($path == $url) {
             //relative path, so strip of SCRIPT_FILE_NAME if existient
             $path = substr($path, (strpos($path, '.php') !== false ? strpos($path, '.php') + 4 : 0));
         }
 
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $response->headers->set('Location', $this->createProxyUrl($path));
-        } else {
-            $response->setTargetUrl($this->createProxyUrl($path));
-        }
-    }
-
-    private function createProxyUrl($path)
-    {
         $domain = $this->hosts[rand(0, count($this->hosts) - 1)];
 
         return $domain . $path;

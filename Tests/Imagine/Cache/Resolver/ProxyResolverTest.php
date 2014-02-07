@@ -96,25 +96,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertEquals('http://foo.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testGetBrowserPathWithResponse()
-    {
-        $this->primaryResolver
-            ->expects($this->once())
-            ->method('getBrowserPath')
-            ->will($this->returnValue(new RedirectResponse('s3://myfunkybucket/thumbs/foo/bar/bazz.png')));
-
-        $result = $this->resolver->getBrowserPath('/foo/bar/bazz.png', 'test');
-
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
-        } else {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
-        }
-    }
-
-    public function testGetBrowserPathWithoutResponse()
+    public function testGetBrowserPath()
     {
         $this->primaryResolver
             ->expects($this->once())
@@ -123,7 +105,7 @@ class ProxyResolverTest extends AbstractTest
 
         $result = $this->resolver->getBrowserPath('/foo/bar/bazz.png', 'test');
 
-        $this->assertEquals('s3://myfunkybucket/thumbs/foo/bar/bazz.png', $result);
+        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
     public function testRemove()
