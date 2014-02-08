@@ -28,8 +28,8 @@ class FilterConfiguration
      */
     public function get($filter)
     {
-        if (empty($this->filters[$filter])) {
-            throw new \RuntimeException('Filter not defined: '.$filter);
+        if (false == array_key_exists($filter, $this->filters)) {
+            throw new \RuntimeException(sprintf('Could not find configuration for a filter: %s', $filter));
         }
 
         return $this->filters[$filter];
@@ -45,7 +45,7 @@ class FilterConfiguration
      */
     public function set($filter, array $config)
     {
-        return $this->filters[$filter] = $config;
+        $this->filters[$filter] = $config;
     }
 
     /**
