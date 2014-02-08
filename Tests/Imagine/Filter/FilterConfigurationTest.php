@@ -83,47 +83,4 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertInternalType('array', $filterConfiguration->get('profile_photo'));
         $this->assertInternalType('array', $filterConfiguration->get('thumbnail'));
     }
-
-    public function testMergeDefaultAndRuntimeConfigOnGet()
-    {
-        $defaultConfig = array(
-            'filters' => array(
-                'thumbnail' => array(
-                    'size' => array(180, 180),
-                    'mode' => 'outbound',
-                ),
-            ),
-            'cache' => 'web_path',
-        );
-
-        $runtimeConfig = array(
-            'quality' => 85,
-            'format' => 'jpg',
-            'filters' => array(
-                'thumbnail' => array(
-                    'size' => array(100, 100),
-                )
-            )
-        );
-
-        $expectedConfig = array(
-            'quality' => 85,
-            'format' => 'jpg',
-            'filters' => array(
-                'thumbnail' => array(
-                    'size' => array(100, 100),
-                    'mode' => 'outbound',
-                ),
-            ),
-            'cache' => 'web_path',
-        );
-
-        $filterConfiguration = new FilterConfiguration();
-        $filterConfiguration->set('profile_photo', $defaultConfig);
-
-        $this->assertEquals(
-            $expectedConfig,
-            $filterConfiguration->get('profile_photo', $runtimeConfig)
-        );
-    }
 }

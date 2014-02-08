@@ -310,7 +310,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
-    public function testPassRuntimeConfigToFilterConfigurationOnApplyFilter()
+    public function testMergeRuntimeConfigWithOneFromFilterConfigurationOnApplyFilter()
     {
         $binary = new Binary('aContent', 'image/png', 'png');
 
@@ -327,11 +327,16 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
+        $thumbMergedConfig = array(
+            'size' => array(100, 100),
+            'mode' => 'outbound',
+        );
+
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->with('thumbnail', $runtimeConfig)
+            ->with('thumbnail')
             ->will($this->returnValue(array(
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
@@ -357,7 +362,7 @@ class FilterManagerTest extends AbstractTest
         $loader
             ->expects($this->once())
             ->method('load')
-            ->with($this->identicalTo($image), $thumbConfig)
+            ->with($this->identicalTo($image), $thumbMergedConfig)
             ->will($this->returnArgument(0))
         ;
 

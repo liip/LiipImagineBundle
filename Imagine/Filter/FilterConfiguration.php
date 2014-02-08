@@ -21,19 +21,18 @@ class FilterConfiguration
      * Gets a previously configured filter.
      *
      * @param string $filter
-     * @param array  $runtimeConfig
      *
      * @return array
      *
      * @throws \RuntimeException
      */
-    public function get($filter, array $runtimeConfig = array())
+    public function get($filter)
     {
         if (false == array_key_exists($filter, $this->filters)) {
             throw new \RuntimeException(sprintf('Could not find configuration for a filter: %s', $filter));
         }
 
-        return array_replace_recursive($this->filters[$filter], $runtimeConfig);
+        return $this->filters[$filter];
     }
 
     /**
