@@ -4,10 +4,8 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -35,7 +33,7 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter('web_path', 'liip_imagine.cache.resolver.default');
+        $this->assertParameter('default', 'liip_imagine.cache.resolver.default');
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
@@ -85,8 +83,6 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $yaml = <<<EOF
 driver: imagick
-web_root: ../foo/bar
-cache_prefix: /imagine/cache
 cache: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:

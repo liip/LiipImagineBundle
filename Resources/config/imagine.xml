@@ -54,6 +54,8 @@
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.no_cache_web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.aws_s3.class">Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver</parameter>
 
         <!-- Form types -->
 
@@ -183,15 +185,30 @@
             <argument>%liip_imagine.data_root%</argument>
         </service>
 
+        <service id="liip_imagine.data.loader.prototype.stream" class="%liip_imagine.data.loader.stream.class%">
+            <argument><!-- will be injected by StreamLoaderFactory --></argument>
+            <argument><!-- will be injected by StreamLoaderFactory --></argument>
+        </service>
+
         <!-- Cache resolver -->
 
-        <service id="liip_imagine.cache.resolver.web_path" class="%liip_imagine.cache.resolver.web_path.class%" public="true">
+        <service id="liip_imagine.cache.resolver.prototype.web_path" class="%liip_imagine.cache.resolver.web_path.class%" public="true" abstract="true">
             <argument type="service" id="filesystem" />
             <argument type="service" id="router.request_context" />
-            <argument>%liip_imagine.web_root%</argument>
-            <argument>%liip_imagine.cache_prefix%</argument>
+            <argument><!-- will be injected by WebPathResolverFactory --></argument>
+            <argument><!-- will be injected by WebPathResolverFactory --></argument>
+        </service>
 
-            <tag name="liip_imagine.cache.resolver" resolver="web_path" />
+        <service id="liip_imagine.cache.resolver.prototype.aws_s3" class="%liip_imagine.cache.resolver.aws_s3.class%" public="true" abstract="true">
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.cache.resolver.prototype.cache" class="%liip_imagine.cache.resolver.cache.class%" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
         </service>
 
         <service id="liip_imagine.cache.resolver.no_cache_web_path" class="%liip_imagine.cache.resolver.no_cache_web_path.class%" public="true">
