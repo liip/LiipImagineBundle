@@ -1,5 +1,15 @@
 # StreamLoader
 
+## Using factory
+
+liip_imagine:
+    loaders:
+        stream.profile_photos:
+            stream:
+                wrapper: gaufrette://profile_photos
+
+## Custom
+
 The `Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader` allows to read images from any stream registered
 thus allowing you to serve your images from literally anywhere.
 
@@ -12,13 +22,22 @@ you can make use of the [StreamWrapper configuration](https://github.com/KnpLabs
 
 ``` yaml
 services:
-    liip_imagine.data.loader.stream.profile_photos:
+    acme.liip_imagine.data.loader.stream.profile_photos:
         class: "%liip_imagine.data.loader.stream.class%"
         arguments:
-            - "@liip_imagine"
             - 'gaufrette://profile_photos/'
         tags:
             - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
+```
+
+## Usage
+
+Now you are ready to use the `AwsS3Resolver` by configuring the bundle.
+The following example will configure the resolver is default.
+
+``` yaml
+liip_imagine:
+    data_loader: stream.profile_photos
 ```
 
 - [Back to data loaders](../data-loaders.md)

@@ -1,5 +1,6 @@
 # Built-In CacheResolver
 
+* [Web path](cache-resolver/web_path.md)
 * [AmazonS3](cache-resolver/amazons3.md)
 * [AwsS3](cache-resolver/aws_s3.md) - for SDK version 2
 * [CacheResolver](cache-resolver/cache.md)
