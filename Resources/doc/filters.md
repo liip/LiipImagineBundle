@@ -126,13 +126,14 @@ Configuration looks like this:
 liip_image:
     filter_sets:
         my_image:
-            watermark:
-                # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
-                image: Resources/data/watermark.png
-                # Size of the watermark relative to the origin images size
-                size: 0.5
-                # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
-                position: center
+            filters:
+                watermark:
+                    # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
+                    image: Resources/data/watermark.png
+                    # Size of the watermark relative to the origin images size
+                    size: 0.5
+                    # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
+                    position: center
 ```
 
 ### The `auto_rotate` filter
