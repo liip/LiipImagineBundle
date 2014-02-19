@@ -44,14 +44,12 @@ class GridFSLoader implements LoaderInterface
     {
         $image = $this->dm
             ->getRepository($this->class)
-            ->findAll()
-            ->getCollection()
-            ->findOne(array("_id" => new \MongoId($id)));
+            ->find(new \MongoId($id));
 
         if (!$image) {
             throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $id));
         }
 
-        return $this->imagine->load($image['file']->getBytes());
+        return $this->imagine->load($image->getFile()->getBytes());
     }
 }
