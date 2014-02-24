@@ -122,7 +122,6 @@ class MyController extends Controller
         $imagemanagerResponse = $this->container
             ->get('liip_imagine.controller')
                 ->filterAction(
-                    $this->getRequest(),
                     'uploads/foo.jpg',      // original image you want to apply a filter to
                     'my_thumb'              // filter defined in config.yml
         );

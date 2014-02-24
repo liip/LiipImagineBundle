@@ -7,7 +7,6 @@ liip_imagine:
     driver:               gd
     web_root:             %kernel.root_dir%/../web
     data_root:            %liip_imagine.web_root%
-    cache_mkdir_mode:     0777
     cache_prefix:         /media/cache
     cache:                web_path
     cache_clearer:        true
@@ -44,12 +43,6 @@ There are several configuration options available:
     be sourced from. This option only changes the standard filesystem loader.
 
     default: `%kernel.root_dir%/../web`
-
- - `cache_mkdir_mode` - permissions to set on generated cache directories.
-    Must be specified as an octal number, which means it should begin with a
-    leading zero. mode is ignored on Windows.
-
-    default: `0777`
 
  - `cache_prefix` - this is also used in the path for image generation, so
     as to not clutter your web root with cached images. For example by default,

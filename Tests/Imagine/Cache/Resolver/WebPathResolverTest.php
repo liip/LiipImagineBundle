@@ -3,273 +3,322 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
+use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\RequestContext;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractFilesystemResolver
  * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
  */
-class WebPathResolverTest extends AbstractTest
+class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 {
-    protected $config;
-    protected $cacheManager;
+    public function testImplementsResolverInterface()
+    {
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver');
+
+        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+    }
+
+    public function testCouldBeConstructedWithRequiredArguments()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $requestContext = new RequestContext;
+        $webRoot = 'theWebRoot';
+
+        $resolver = new WebPathResolver($filesystemMock, $requestContext, $webRoot);
+
+        $this->assertAttributeSame($filesystemMock, 'filesystem', $resolver);
+        $this->assertAttributeSame($requestContext, 'requestContext', $resolver);
+        $this->assertAttributeSame($webRoot, 'webRoot', $resolver);
+    }
+
+    public function testCouldBeConstructedWithOptionalArguments()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            'aWebRoot',
+            'theCachePrefix'
+        );
+
+        $this->assertAttributeSame('theCachePrefix', 'cachePrefix', $resolver);
+    }
+
+    public function testTrimRightSlashFromWebPathOnConstruct()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            'aWebRoot/',
+            'theCachePrefix'
+        );
+
+        $this->assertAttributeSame('aWebRoot', 'webRoot', $resolver);
+    }
+
+    public function testRemoveDoubleSlashFromWebRootOnConstruct()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            'aWeb//Root',
+            '/aCachePrefix'
+        );
+
+        $this->assertAttributeSame('aWeb/Root', 'webRoot', $resolver);
+    }
+
+    public function testTrimRightSlashFromCachePrefixOnConstruct()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            'aWebRoot',
+            '/aCachePrefix'
+        );
+
+        $this->assertAttributeSame('aCachePrefix', 'cachePrefix', $resolver);
+    }
+
+    public function testRemoveDoubleSlashFromCachePrefixOnConstruct()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            'aWebRoot',
+            'aCache//Prefix'
+        );
+
+        $this->assertAttributeSame('aCache/Prefix', 'cachePrefix', $resolver);
+    }
+
+    public function testReturnTrueIfFileExistsOnIsStore()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
+            ->will($this->returnValue(true))
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertTrue($resolver->isStored('aPath', 'aFilter'));
+    }
+
+    public function testReturnFalseIfFileNotExistsOnIsStore()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('exists')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
+            ->will($this->returnValue(false))
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertFalse($resolver->isStored('aPath', 'aFilter'));
+    }
+
+    public function testComposeSchemaHostAndFileUrlOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('theHost');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'theschema://theHost/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
+    public function testDumpBinaryContentOnStore()
+    {
+        $binary = new Binary('theContent', 'aMimeType', 'aFormat');
+
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('dumpFile')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath', 'theContent')
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertNull($resolver->store($binary, 'aPath', 'aFilter'));
+    }
+
+    public function testDoNothingIfFiltersAndPathsEmptyOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->never())
+            ->method('remove')
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(array(), array());
+    }
+
+    public function testRemoveCacheForPathAndFilterOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(array('aPath'), array('aFilter'));
+    }
+
+    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->at(0))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPathOne')
+        ;
+        $filesystemMock
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPathTwo')
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(array('aPathOne', 'aPathTwo'), array('aFilter'));
+    }
+
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->at(0))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathOne')
+        ;
+        $filesystemMock
+            ->expects($this->at(1))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathOne')
+        ;
+        $filesystemMock
+            ->expects($this->at(2))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathTwo')
+        ;
+        $filesystemMock
+            ->expects($this->at(3))
+            ->method('remove')
+            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathTwo')
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(
+            array('aPathOne', 'aPathTwo'),
+            array('aFilterOne', 'aFilterTwo')
+        );
+    }
+
+    public function testRemoveCacheForFilterOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('remove')
+            ->with(array(
+                '/aWebRoot/aCachePrefix/aFilter',
+            ))
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(array(), array('aFilter'));
+    }
+
+    public function testRemoveCacheForSomeFiltersOnRemove()
+    {
+        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock
+            ->expects($this->once())
+            ->method('remove')
+            ->with(array(
+                '/aWebRoot/aCachePrefix/aFilterOne',
+                '/aWebRoot/aCachePrefix/aFilterTwo'
+            ))
+        ;
+
+        $resolver = new WebPathResolver(
+            $filesystemMock,
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $resolver->remove(array(), array('aFilterOne', 'aFilterTwo'));
+    }
 
     /**
-     * @var WebPathResolver
+     * @return \PHPUnit_Framework_MockObject_MockObject|Filesystem
      */
-    protected $resolver;
-
-    protected $webRoot;
-    protected $dataRoot;
-    protected $cacheDir;
-
-    protected function setUp()
+    protected function createFilesystemMock()
     {
-        parent::setUp();
-
-        $this->config = $this->getMockFilterConfiguration();
-        $this->config
-            ->expects($this->any())
-            ->method('get')
-            ->with('thumbnail')
-            ->will($this->returnValue(array(
-                'size' => array(180, 180),
-                'mode' => 'outbound',
-                'cache' => null,
-            )))
-        ;
-
-        $this->webRoot = $this->tempDir.'/root/web';
-        $this->dataRoot = $this->fixturesDir.'/assets';
-        $this->cacheDir = $this->webRoot.'/media/cache';
-
-        $this->filesystem->mkdir($this->cacheDir);
-
-        $this->cacheManager = $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(
-            'generateUrl',
-        ), array(
-            $this->config, $this->getMockRouter(), $this->webRoot, 'web_path'
-        ));
-
-        $this->resolver = new WebPathResolver($this->filesystem);
-        $this->cacheManager->addResolver('web_path', $this->resolver);
-    }
-
-    public function testDefaultBehavior()
-    {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/media/cache/thumbnail/cats.jpeg')))
-        ;
-
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('/app.php'))
-        ;
-
-        // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
-            '->resolve() correctly converts the requested file into target path within webRoot.');
-        $this->assertFalse(file_exists($targetPath),
-            '->resolve() does not create the file within the target path.');
-
-        // Store the cached version of that image.
-        $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $targetPath, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertTrue(file_exists($targetPath),
-            '->store() creates the cached image file to be served.');
-        $this->assertEquals($content, file_get_contents($targetPath),
-            '->store() writes the content of the original Response into the cache file.');
-
-        // Remove the cached image.
-        $this->assertTrue($this->resolver->remove($targetPath, 'thumbnail'),
-            '->remove() reports removal of cached image file correctly.');
-        $this->assertFalse(file_exists($targetPath),
-            '->remove() actually removes the cached file from the filesystem.');
-    }
-
-    /**
-     * @depends testDefaultBehavior
-     */
-    public function testMissingRewrite()
-    {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue('/media/cache/thumbnail/cats.jpeg'))
-        ;
-
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBaseUrl')
-            ->will($this->returnValue(''))
-        ;
-
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
-
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
-    }
-
-    /**
-     * @depends testMissingRewrite
-     */
-    public function testMissingRewriteWithBaseUrl()
-    {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue('/app_dev.php/media/cache/thumbnail/cats.jpeg'))
-        ;
-
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('/app_dev.php'))
-        ;
-
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
-
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
-    }
-
-    /**
-     * @depends testDefaultBehavior
-     */
-    public function testResolveWithBasePath()
-    {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php/media/cache/thumbnail/cats.jpeg')))
-        ;
-
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBaseUrl')
-            ->will($this->returnValue(str_replace('/', DIRECTORY_SEPARATOR, '/sandbox/app_dev.php')))
-        ;
-
-        // Resolve the requested image for the given filter.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        // The realpath() is important for filesystems that are virtual in some way (encrypted, different mount options, ..)
-        $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, realpath($this->cacheDir).'/thumbnail/cats.jpeg'), $targetPath,
-            '->resolve() correctly converts the requested file into target path within webRoot.');
-        $this->assertFalse(file_exists($targetPath),
-            '->resolve() does not create the file within the target path.');
-
-        // Store the cached version of that image.
-        $content = file_get_contents($this->dataRoot.'/cats.jpeg');
-        $response = new Response($content);
-        $this->resolver->store($response, $targetPath, 'thumbnail');
-        $this->assertEquals(201, $response->getStatusCode(),
-            '->store() alters the HTTP response code to "201 - Created".');
-        $this->assertTrue(file_exists($targetPath),
-            '->store() creates the cached image file to be served.');
-        $this->assertEquals($content, file_get_contents($targetPath),
-            '->store() writes the content of the original Response into the cache file.');
-
-        // Remove the cached image.
-        $this->assertTrue($this->resolver->remove($targetPath, 'thumbnail'),
-            '->remove() reports removal of cached image file correctly.');
-        $this->assertFalse(file_exists($targetPath),
-            '->remove() actually removes the cached file from the filesystem.');
-    }
-
-    /**
-     * @depends testMissingRewrite
-     * @depends testResolveWithBasePath
-     */
-    public function testMissingRewriteWithBasePathWithScriptname()
-    {
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('generateUrl')
-            ->will($this->returnValue('/sandbox/app_dev.php/media/cache/thumbnail/cats.jpeg'))
-        ;
-
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBasePath')
-            ->will($this->returnValue('/sandbox'))
-        ;
-        $request
-            ->expects($this->atLeastOnce())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('/sandbox/app_dev.php'))
-        ;
-
-        // The file has already been cached by this resolver.
-        $targetPath = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->filesystem->mkdir(dirname($targetPath));
-        file_put_contents($targetPath, file_get_contents($this->dataRoot.'/cats.jpeg'));
-
-        $response = $this->resolver->resolve($request, 'cats.jpeg', 'thumbnail');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response,
-            '->resolve() returns a Response instance if the target file already exists.');
-        $this->assertEquals(302, $response->getStatusCode(),
-            '->resolve() returns the HTTP response code "302 - Found".');
-        $this->assertEquals('/sandbox/media/cache/thumbnail/cats.jpeg', $response->headers->get('Location'),
-            '->resolve() returns the expected Location of the cached image.');
-    }
-
-    public function testClear()
-    {
-        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
-        $this->filesystem->mkdir(dirname($filename));
-        file_put_contents($filename, '42');
-        $this->assertTrue(file_exists($filename));
-
-        $this->resolver->clear('/media/cache');
-
-        $this->assertFalse(file_exists($filename));
-    }
-
-    public function testClearWithoutPrefix()
-    {
-        $filename = $this->cacheDir.'/thumbnails/cats.jpeg';
-        $this->filesystem->mkdir(dirname($filename));
-        file_put_contents($filename, '42');
-        $this->assertTrue(file_exists($filename));
-
-        try {
-            // This would effectively clear the web root.
-            $this->resolver->clear('');
-
-            $this->fail('Clear should not work without a valid cache prefix');
-        } catch (\Exception $e) { }
-
-        $this->assertTrue(file_exists($filename));
+        return $this->getMock('Symfony\Component\Filesystem\Filesystem');
     }
 }

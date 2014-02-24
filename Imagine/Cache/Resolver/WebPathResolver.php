@@ -2,59 +2,106 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\RequestContext;
 
-class WebPathResolver extends AbstractFilesystemResolver
+class WebPathResolver implements ResolverInterface
 {
     /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var RequestContext
+     */
+    protected $requestContext;
+
+    /**
+     * @var string
+     */
+    protected $webRoot;
+    /**
+     * @var string
+     */
+    protected $cachePrefix;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param RequestContext $requestContext
+     * @param string $webRootDir
+     * @param string $cachePrefix
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        RequestContext $requestContext,
+        $webRootDir,
+        $cachePrefix = 'media/cache'
+    ) {
+        $this->filesystem = $filesystem;
+        $this->requestContext = $requestContext;
+
+        $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
+        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
+        $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-        $this->basePath = $request->getBaseUrl();
-        $targetPath = $this->getFilePath($path, $filter);
+        return sprintf('%s://%s/%s',
+            $this->requestContext->getScheme(),
+            $this->requestContext->getHost(),
+            $this->getFileUrl($path, $filter)
+        );
+    }
 
-        // if the file has already been cached, we're probably not rewriting
-        // correctly, hence make a 301 to proper location, so browser remembers
-        if (file_exists($targetPath)) {
-            // Strip the base URL of this request from the browserpath to not interfere with the base path.
-            $baseUrl = $request->getBaseUrl();
-            if ($baseUrl && 0 === strpos($browserPath, $baseUrl)) {
-                $browserPath = substr($browserPath, strlen($baseUrl));
+    /**
+     * {@inheritDoc}
+     */
+    public function isStored($path, $filter)
+    {
+        return $this->filesystem->exists($this->getFilePath($path, $filter));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function store(BinaryInterface $binary, $path, $filter)
+    {
+        $this->filesystem->dumpFile(
+            $this->getFilePath($path, $filter),
+            $binary->getContent()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(array $paths, array $filters)
+    {
+        if (empty($paths) && empty($filters)) {
+            return;
+        }
+
+        if (empty($paths)) {
+            $filtersCacheDir = array();
+            foreach ($filters as $filter) {
+                $filtersCacheDir[] = $this->cacheRoot.'/'.$filter;
             }
 
-            return new RedirectResponse($request->getBasePath().$browserPath);
+            $this->filesystem->remove($filtersCacheDir);
+
+            return;
         }
 
-        return $targetPath;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBrowserPath($targetPath, $filter, $absolute = false)
-    {
-        return $this->cacheManager->generateUrl($targetPath, $filter, $absolute);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function clear($cachePrefix)
-    {
-        // Let's just avoid to remove the web/ directory content if cache prefix is empty
-        if ($cachePrefix === '') {
-            throw new \InvalidArgumentException("Cannot clear the Imagine cache because the cache_prefix is empty in your config.");
-        }
-
-        $cachePath = $this->cacheManager->getWebRoot() . $cachePrefix;
-
-        // Avoid an exception if the cache path does not exist (i.e. Imagine didn't yet render any image)
-        if (is_dir($cachePath)) {
-            $this->filesystem->remove(Finder::create()->in($cachePath)->depth(0)->directories());
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                $this->filesystem->remove($this->getFilePath($path, $filter));
+            }
         }
     }
 
@@ -63,25 +110,15 @@ class WebPathResolver extends AbstractFilesystemResolver
      */
     protected function getFilePath($path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
-
-        if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
-            $browserPath = substr($browserPath, strlen($this->basePath));
-        }
-
-        return $this->cacheManager->getWebRoot().$browserPath;
+        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
     }
 
     /**
-     * Decodes the URL encoded browser path.
-     *
-     * @param string $browserPath
-     *
-     * @return string
+     * {@inheritDoc}
      */
-    protected function decodeBrowserPath($browserPath)
+    protected function getFileUrl($path, $filter)
     {
-        //TODO: find out why I need double urldecode to get a valid path
-        return urldecode(urldecode($browserPath));
+        return $this->cachePrefix.'/'.$filter.'/'.$path;
     }
 }
+

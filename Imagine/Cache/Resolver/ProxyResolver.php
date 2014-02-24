@@ -2,10 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
  * ProxyResolver
@@ -17,17 +14,18 @@ class ProxyResolver implements ResolverInterface
     /**
      * @var ResolverInterface
      */
-    private $resolver;
+    protected $resolver;
 
     /**
      * a list of proxy hosts (picks a random one for each generation to seed browser requests among multiple hosts)
      *
      * @var array
      */
-    private $hosts = array();
+    protected $hosts = array();
 
     /**
      * @param ResolverInterface $resolver
+     * @param string[]          $hosts
      */
     public function __construct(ResolverInterface $resolver, array $hosts)
     {
@@ -38,77 +36,49 @@ class ProxyResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
-        $response = $this->resolver->resolve($request, $path, $filter);
-        $this->rewriteResponse($response);
-
-        return $response;
+        return $this->rewriteUrl($this->resolver->resolve($path, $filter));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(BinaryInterface $binary, $targetPath, $filter)
     {
-        $response = $this->resolver->store($response, $targetPath, $filter);
-        $this->rewriteResponse($response);
-
-        return $response;
+        return $this->resolver->store($binary, $targetPath, $filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function isStored($path, $filter)
     {
-        $response = $this->rewriteUrl($this->resolver->getBrowserPath($path, $filter, $absolute));
-
-        return $response;
+        return $this->resolver->isStored($path, $filter);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function remove(array $paths, array $filters)
     {
-        return $this->resolver->remove($targetPath, $filter);
+        return $this->resolver->remove($paths, $filters);
     }
 
     /**
-     * {@inheritDoc}
+     * @param $url
+     *
+     * @return string
      */
-    public function clear($cachePrefix)
+    protected function rewriteUrl($url)
     {
-        $this->resolver->clear($cachePrefix);
-    }
-
-    private function rewriteResponse($response)
-    {
-        if (!$response instanceof RedirectResponse || !$this->hosts) {
-            return;
+        if (empty($this->hosts)) {
+            return $url;
         }
 
-        $url = $this->rewriteUrl($response->headers->get('Location'));
+        $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
+        $proxyHost = $this->hosts[rand(0, count($this->hosts) - 1)];
 
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $response->headers->set('Location', $url);
-        } else {
-            $response->setTargetUrl($url);
-        }
-    }
-
-    private function rewriteUrl($url)
-    {
-        $path = parse_url($url, PHP_URL_PATH);
-
-        if ($path == $url) {
-            //relative path, so strip of SCRIPT_FILE_NAME if existient
-            $path = substr($path, (strpos($path, '.php') !== false ? strpos($path, '.php') + 4 : 0));
-        }
-
-        $domain = $this->hosts[rand(0, count($this->hosts) - 1)];
-
-        return $domain . $path;
+        return str_replace($host, $proxyHost, $url);
     }
 }

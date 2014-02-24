@@ -23,17 +23,12 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
-        if ($config['cache_clearer']) {
-            $loader->load('cache_clearer.xml');
-        }
-
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $cachePrefix = $config['cache_prefix'] ? '/'.trim($config['cache_prefix'], '/') : '';
         $container->setParameter('liip_imagine.cache_prefix', $cachePrefix);
         $container->setParameter('liip_imagine.web_root', $config['web_root']);
         $container->setParameter('liip_imagine.data_root', $config['data_root']);
-        $container->setParameter('liip_imagine.cache_mkdir_mode', $config['cache_mkdir_mode']);
         $container->setParameter('liip_imagine.formats', $config['formats']);
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
@@ -47,10 +42,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $container->removeDefinition('liip_imagine.cache.clearer');
-        }
 
         $container->setParameter('liip_imagine.cache.resolver.base_path', $config['cache_base_path']);
 

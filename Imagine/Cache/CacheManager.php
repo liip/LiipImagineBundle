@@ -2,11 +2,9 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -25,11 +23,6 @@ class CacheManager
     /**
      * @var string
      */
-    protected $webRoot;
-
-    /**
-     * @var string
-     */
     protected $defaultResolver;
 
     /**
@@ -42,14 +35,12 @@ class CacheManager
      *
      * @param FilterConfiguration $filterConfig
      * @param RouterInterface $router
-     * @param string $webRoot
      * @param string $defaultResolver
      */
-    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $webRoot, $defaultResolver = null)
+    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, $defaultResolver = null)
     {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
-        $this->webRoot = realpath($webRoot);
         $this->defaultResolver = $defaultResolver;
     }
 
@@ -71,16 +62,6 @@ class CacheManager
     }
 
     /**
-     * Returns the configured web root path.
-     *
-     * @return string
-     */
-    public function getWebRoot()
-    {
-        return $this->webRoot;
-    }
-
-    /**
      * Gets a resolver for the given filter.
      *
      * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
@@ -89,7 +70,7 @@ class CacheManager
      *
      * @return ResolverInterface
      *
-     * @throws \InvalidArgumentException If neither a specific nor a default resolver is available.
+     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available.
      */
     protected function getResolver($filter)
     {
@@ -99,7 +80,7 @@ class CacheManager
             ? $this->defaultResolver : $config['cache'];
 
         if (!isset($this->resolvers[$resolverName])) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \OutOfBoundsException(sprintf(
                 'Could not find resolver for "%s" filter type', $filter
             ));
         }
@@ -109,8 +90,7 @@ class CacheManager
 
     /**
      * Gets filtered path for rendering in the browser.
-     *
-     * @see ResolverInterface::getBrowserPath
+     * It could be the cached one or an url of filter action.
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter
@@ -120,7 +100,10 @@ class CacheManager
      */
     public function getBrowserPath($path, $filter, $absolute = false)
     {
-        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute);
+        return $this->isStored($path, $filter) ?
+            $this->resolve($path, $filter) :
+            $this->generateUrl($path, $filter, $absolute)
+        ;
     }
 
     /**
@@ -162,80 +145,83 @@ class CacheManager
     }
 
     /**
-     * Resolves filtered path for rendering in the browser.
+     * Checks whether the path is already stored within the respective Resolver.
      *
-     * @param Request $request
      * @param string $path
      * @param string $filter
      *
-     * @return string|boolean|Response target path or false if filter has no
-     *      resolver or a Response object from the resolver
+     * @return bool
+     */
+    public function isStored($path, $filter)
+    {
+        return $this->getResolver($filter)->isStored($path, $filter);
+    }
+
+    /**
+     * Resolves filtered path for rendering in the browser.
+     *
+     * @param string $path
+     * @param string $filter
+     *
+     * @return string The url of resolved image.
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
-    public function resolve(Request $request, $path, $filter)
+    public function resolve($path, $filter)
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        try {
-            $resolver = $this->getResolver($filter);
-        } catch (\InvalidArgumentException $e) {
-            return false;
-        }
-
-        return $resolver->resolve($request, $path, $filter);
+        return $this->getResolver($filter)->resolve($path, $filter);
     }
 
     /**
-     * Store successful responses with the cache resolver.
-     *
      * @see ResolverInterface::store
      *
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
+     * @param BinaryInterface $binary
+     * @param string          $path
+     * @param string          $filter
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
-        if ($response->isSuccessful()) {
-            $response = $this->getResolver($filter)->store($response, $targetPath, $filter);
-        }
-
-        return $response;
+        $this->getResolver($filter)->store($binary, $path, $filter);
     }
 
     /**
-     * Remove a cached image from the storage.
-     *
-     * @see ResolverInterface::remove
-     *
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return bool
-     */
-    public function remove($targetPath, $filter)
-    {
-        return $this->getResolver($filter)->remove($targetPath, $filter);
-    }
-
-    /**
-     * Clear the cache of all resolvers.
-     *
-     * @see ResolverInterface::clear
-     *
-     * @param string $cachePrefix
+     * @param string|string[]|null $paths
+     * @param string|string[]|null $filters
      *
      * @return void
      */
-    public function clearResolversCache($cachePrefix)
+    public function remove($paths = null, $filters = null)
     {
-        foreach ($this->resolvers as $resolver) {
-            $resolver->clear($cachePrefix);
+        if (null === $filters) {
+            $filters = array_keys($this->filterConfig->all());
+        }
+        if (!is_array($filters)) {
+            $filters = array($filters);
+        }
+        if (!is_array($paths)) {
+            $paths = array($paths);
+        }
+
+        $paths = array_filter($paths);
+        $filters = array_filter($filters);
+
+        $mapping = new \SplObjectStorage();
+        foreach ($filters as $filter) {
+            $resolver = $this->getResolver($filter);
+
+            $list = isset($mapping[$resolver]) ? $mapping[$resolver] : array();
+
+            $list[] = $filter;
+
+            $mapping[$resolver] = $list;
+        }
+
+        foreach ($mapping as $resolver) {
+            $resolver->remove($paths, $mapping[$resolver]);
         }
     }
 }

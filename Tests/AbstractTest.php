@@ -2,8 +2,10 @@
 
 namespace Liip\ImagineBundle\Tests;
 
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\RouterInterface;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,17 +57,26 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
     }
 
-    protected function getMockFilterConfiguration()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FilterConfiguration
+     */
+    protected function createFilterConfigurationMock()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration');
     }
 
-    protected function getMockRouter()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     */
+    protected function createRouterMock()
     {
         return $this->getMock('Symfony\Component\Routing\RouterInterface');
     }
 
-    protected function getMockResolver()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     */
+    protected function createResolverMock()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
     }

@@ -2,16 +2,20 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManagerAwareInterface;
-
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
     /**
      * @var Filesystem
      */
@@ -43,6 +47,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
+    }
+
+    /**
      * @param CacheManager $cacheManager
      */
     public function setCacheManager(CacheManager $cacheManager)
@@ -61,58 +73,87 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @param int $mkdirMode
+     * @param int $folderPermissions
      */
-    public function setFolderPermissions ($folderPermissions)
+    public function setFolderPermissions($folderPermissions)
     {
         $this->folderPermissions = $folderPermissions;
     }
 
     /**
-     * Stores the content into a static file.
-     *
-     * @param Response $response
-     * @param string $targetPath
-     * @param string $filter
-     *
-     * @return Response
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
-    public function store(Response $response, $targetPath, $filter)
+    public function isStored($path, $filter)
     {
-        $dir = pathinfo($targetPath, PATHINFO_DIRNAME);
-
-        $this->makeFolder($dir);
-
-        file_put_contents($targetPath, $response->getContent());
-
-        $response->setStatusCode(201);
-
-        return $response;
+        return file_exists($this->getFilePath($path, $filter));
     }
 
     /**
-     * Removes a stored image resource.
-     *
-     * @param string $targetPath The target path provided by the resolve method.
-     * @param string $filter The name of the imagine filter in effect.
-     *
-     * @return bool Whether the file has been removed successfully.
+     * {@inheritDoc}
      */
-    public function remove($targetPath, $filter)
+    public function store(BinaryInterface $binary, $path, $filter)
     {
-        $filename = $this->getFilePath($targetPath, $filter);
-        $this->filesystem->remove($filename);
+        $filePath = $this->getFilePath($path, $filter);
 
-        return !file_exists($filename);
+        $dir = pathinfo($filePath, PATHINFO_DIRNAME);
+
+        $this->makeFolder($dir);
+
+        file_put_contents($filePath, $binary->getContent());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove(array $paths, array $filters)
+    {
+        if (empty($paths) && empty($filters)) {
+            return;
+        }
+
+        // TODO: this logic has to be refactored.
+        list($rootCachePath) = explode(current($filters), $this->getFilePath('whateverpath', current($filters)));
+
+        if (empty($paths)) {
+            $filtersCachePaths = array();
+            foreach ($filters as $filter) {
+                $filterCachePath = $rootCachePath.$filter;
+                if (is_dir($filterCachePath)) {
+                    $filtersCachePaths[] = $filterCachePath;
+                }
+            }
+
+            $this->filesystem->remove($filtersCachePaths);
+
+            return;
+        }
+
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                $this->filesystem->remove($this->getFilePath($path, $filter));
+            }
+        }
+    }
+
+    /**
+     * @return Request
+     *
+     * @throws \LogicException
+     */
+    protected function getRequest()
+    {
+        if (false == $this->request) {
+            throw new \LogicException('The request was not injected, inject it before using resolver.');
+        }
+
+        return $this->request;
     }
 
     /**
      * @param string $dir
      * @throws \RuntimeException
      */
-    protected function makeFolder ($dir)
+    protected function makeFolder($dir)
     {
         if (!is_dir($dir)) {
             $parent = dirname($dir);
