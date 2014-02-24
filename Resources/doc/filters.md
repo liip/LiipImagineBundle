@@ -107,6 +107,16 @@ liip_imagine:
                 background: { color: '#00FFFF' }
 ```
 
+If you provide a `size` it will create a new image (this size and given color), and apply the original image on top:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                background: { size: [1026, 684], color: '#fff' }
+```
+
 ### The `watermark` filter
 
 The watermark filter pastes a second image onto your image while keeping its ratio.
@@ -116,13 +126,14 @@ Configuration looks like this:
 liip_image:
     filter_sets:
         my_image:
-            watermark:
-                # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
-                image: Resources/data/watermark.png
-                # Size of the watermark relative to the origin images size
-                size: 0.5
-                # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
-                position: center
+            filters:
+                watermark:
+                    # Relative path to the watermark file (prepended with "%kernel.root_dir%/")
+                    image: Resources/data/watermark.png
+                    # Size of the watermark relative to the origin images size
+                    size: 0.5
+                    # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
+                    position: center
 ```
 
 ### The `auto_rotate` filter
