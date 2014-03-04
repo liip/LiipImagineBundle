@@ -1,6 +1,7 @@
 <?php
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
+use Imagine\Image\Box;
 use Imagine\Image\Color;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
@@ -20,7 +21,16 @@ class BackgroundFilterLoader implements LoaderInterface
     {
         $background = new Color(isset($options['color']) ? $options['color'] : '#fff');
         $topLeft = new Point(0, 0);
-        $canvas = $this->imagine->create($image->getSize(), $background);
+        $size = $image->getSize();
+
+        if (isset($options['size'])) {
+            list($width, $height) = $options['size'];
+
+            $size = new Box($width, $height);
+            $topLeft = new Point(($width - $image->getSize()->getWidth()) / 2, ($height - $image->getSize()->getHeight()) / 2);
+        }
+
+        $canvas = $this->imagine->create($size, $background);
 
         return $canvas->paste($image, $topLeft);
     }

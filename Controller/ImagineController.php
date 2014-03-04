@@ -2,14 +2,11 @@
 
 namespace Liip\ImagineBundle\Controller;
 
-use Imagine\Image\ImagineInterface;
+use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class ImagineController
 {
@@ -50,16 +47,20 @@ class ImagineController
      */
     public function filterAction($path, $filter)
     {
-        if (!$this->cacheManager->isStored($path, $filter)) {
-            $binary = $this->dataManager->find($filter, $path);
+        try {
+            if (!$this->cacheManager->isStored($path, $filter)) {
+                $binary = $this->dataManager->find($filter, $path);
 
-            $this->cacheManager->store(
-                $this->filterManager->applyFilter($binary, $filter),
-                $path,
-                $filter
-            );
+                $this->cacheManager->store(
+                    $this->filterManager->applyFilter($binary, $filter),
+                    $path,
+                    $filter
+                );
+            }
+
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        } catch (RuntimeException $e) {
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
-
-        return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
     }
 }
