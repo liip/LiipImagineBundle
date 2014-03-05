@@ -229,16 +229,16 @@ class AwsS3ResolverTest extends AbstractTest
         $this->assertTrue($resolver->remove('thumb/some-folder/targetpath.jpg', 'thumb'));
     }
 
-    public function testClearIsDisabled()
+    public function testClear()
     {
         $s3 = $this->getMock('Aws\S3\S3Client');
         $s3
-            ->expects($this->never())
-            ->method('deleteObject')
+            ->expects($this->once())
+            ->method('deleteMatchingObjects')
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $resolver->clear('');
+        $this->assertTrue($resolver->clear('cache'));
     }
 
     protected function getS3ResponseMock($ok = true)

@@ -184,7 +184,13 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function clear($cachePrefix)
     {
-        // TODO: implement cache clearing for Amazon S3 service
+        try {
+            $response = $this->storage->deleteMatchingObjects($this->bucket, ltrim($cachePrefix, '/') . '/');
+            
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
