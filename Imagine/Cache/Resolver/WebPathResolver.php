@@ -13,7 +13,7 @@ class WebPathResolver extends AbstractFilesystemResolver
      */
     public function resolve(Request $request, $path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
+        $browserPath = $this->getBrowserPath($path, $filter);
         $this->basePath = $request->getBaseUrl();
         $targetPath = $this->getFilePath($path, $filter);
 
@@ -63,25 +63,12 @@ class WebPathResolver extends AbstractFilesystemResolver
      */
     protected function getFilePath($path, $filter)
     {
-        $browserPath = $this->decodeBrowserPath($this->getBrowserPath($path, $filter));
+        $browserPath = $this->getBrowserPath($path, $filter);
 
         if (!empty($this->basePath) && 0 === strpos($browserPath, $this->basePath)) {
             $browserPath = substr($browserPath, strlen($this->basePath));
         }
 
         return $this->cacheManager->getWebRoot().$browserPath;
-    }
-
-    /**
-     * Decodes the URL encoded browser path.
-     *
-     * @param string $browserPath
-     *
-     * @return string
-     */
-    protected function decodeBrowserPath($browserPath)
-    {
-        //TODO: find out why I need double urldecode to get a valid path
-        return urldecode(urldecode($browserPath));
     }
 }
