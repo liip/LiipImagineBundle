@@ -199,7 +199,7 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     {
         // Let's just avoid to clear the whole bucket if cache prefix is empty
         if ($cachePrefix === '')
-            throw new \InvalidArgumentException("Cannot clear the Imagine cache because the cache_prefix is empty in your config.");
+            return;
 
         try {
             $response = $this->storage->deleteMatchingObjects($this->bucket, ltrim($cachePrefix, '/') . '/');

@@ -249,8 +249,6 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('deleteMatchingObjects')
         ;
 
-        $this->setExpectedException('InvalidArgumentException', 'Cannot clear the Imagine cache because the cache_prefix is empty in your config.');
-
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->clear('');
     }
