@@ -54,7 +54,12 @@ you want to thumbnail an image to a size of 120x90 pixels:
 # app/config/config.yml
 
 liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
     filter_sets:
+        cache: default
         my_thumb:
             quality: 75
             filters:
