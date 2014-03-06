@@ -14,7 +14,7 @@ before_script:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
   - composer install --dev --prefer-source
 
-script: phpunit --coverage-text
+script: ./bin/phpunit --coverage-text
 
 notifications:
   email:
