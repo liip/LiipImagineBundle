@@ -47,6 +47,11 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     protected $logger;
 
     /**
+     * @var string
+     */
+    protected $cachePrefix;
+
+    /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
      * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
@@ -80,6 +85,14 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function setCacheManager(CacheManager $cacheManager)
     {
         $this->cacheManager = $cacheManager;
+    }
+
+    /**
+     * @param string $cachePrefix
+     */
+    public function setCachePrefix($cachePrefix)
+    {
+        $this->cachePrefix = $cachePrefix;
     }
 
     /**
@@ -184,7 +197,18 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     public function clear($cachePrefix)
     {
-        // TODO: implement cache clearing for Amazon S3 service
+        // Let's just avoid to clear the whole bucket if cache prefix is empty
+        if ($cachePrefix === '') {
+            return;
+        }
+
+        try {
+            $response = $this->storage->deleteMatchingObjects($this->bucket, ltrim($cachePrefix, '/') . '/');
+            
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -197,7 +221,11 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
      */
     protected function getObjectPath($path, $filter)
     {
-        return str_replace('//', '/', $filter.'/'.$path);
+        $path = $this->cachePrefix
+            ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
+            : sprintf('%s/%s', $filter, $path);
+
+        return str_replace('//', '/', $path);
     }
 
     /**

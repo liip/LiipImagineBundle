@@ -13,4 +13,6 @@ class S3Client
     public function deleteObject($args) { }
 
     public function getObjectUrl($bucket, $key, $expires = 0, $args = array()) { }
+
+    public function deleteMatchingObjects($bucket, $prefix = '', $regex = '', array $options = array()) { }
 }
