@@ -198,8 +198,9 @@ class AwsS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     public function clear($cachePrefix)
     {
         // Let's just avoid to clear the whole bucket if cache prefix is empty
-        if ($cachePrefix === '')
+        if ($cachePrefix === '') {
             return;
+        }
 
         try {
             $response = $this->storage->deleteMatchingObjects($this->bucket, ltrim($cachePrefix, '/') . '/');
