@@ -10,7 +10,7 @@ composer require "aws/aws-sdk-php:~2"
 
 Afterwards, you only need to configure some information regarding your AWS account and the bucket.
 
-``` yaml
+```yaml
 parameters:
     amazon.s3.key:    'your-aws-key'
     amazon.s3.secret: 'your-aws-secret'
@@ -20,6 +20,7 @@ parameters:
 
 ## Create resolver using factory
 
+```yaml
 liip_imagine:
     resolvers:
        profile_photos:
@@ -29,12 +30,13 @@ liip_imagine:
                   secret: %amazon.s3.secret%
                   region: %amazon.s3.region%
               bucket:     %amazon.s3.cache_bucket%
+```
 
 ## Create resolver as a service
 
 You have to set up the services required:
 
-``` yaml
+```yaml
 services:
     acme.amazon_s3:
         class: Aws\S3\S3Client
@@ -60,7 +62,7 @@ services:
 Now you are ready to use the `AwsS3Resolver` by configuring the bundle.
 The following example will configure the resolver is default.
 
-``` yaml
+```yaml
 liip_imagine:
     cache: profile_photos
 ```

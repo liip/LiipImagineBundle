@@ -4,12 +4,14 @@ The default configuration for the bundle looks like this:
 
 ``` yaml
 liip_imagine:
+# add default loader
+#    resolvers:
+#        default:
+#            web_path: ~
+
     driver:               gd
-    web_root:             %kernel.root_dir%/../web
     data_root:            %liip_imagine.web_root%
-    cache_prefix:         /media/cache
-    cache:                web_path
-    cache_clearer:        true
+    cache:                default
     data_loader:          filesystem
     controller_action:    liip_imagine.controller:filterAction
     formats:              []
@@ -32,23 +34,11 @@ liip_imagine:
 
 There are several configuration options available:
 
- - `web_root` - must be the absolute path to you application's web root. This
-    is used to determine where to put generated image files, so that apache
-    will pick them up before handing the request to Symfony2 next time they
-    are requested.
-
-    default: `%kernel.root_dir%/../web`
 
  - `data_root` - the absolute path to the location that original files should
     be sourced from. This option only changes the standard filesystem loader.
 
     default: `%kernel.root_dir%/../web`
-
- - `cache_prefix` - this is also used in the path for image generation, so
-    as to not clutter your web root with cached images. For example by default,
-    the images would be written to the `web/media/cache/` directory.
-
-    default: `/media/cache`
 
  - `cache` - default cache resolver
 
