@@ -54,7 +54,12 @@ you want to thumbnail an image to a size of 120x90 pixels:
 # app/config/config.yml
 
 liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
     filter_sets:
+        cache: default
         my_thumb:
             quality: 75
             filters:
@@ -122,7 +127,6 @@ class MyController extends Controller
         $imagemanagerResponse = $this->container
             ->get('liip_imagine.controller')
                 ->filterAction(
-                    $this->getRequest(),
                     'uploads/foo.jpg',      // original image you want to apply a filter to
                     'my_thumb'              // filter defined in config.yml
         );

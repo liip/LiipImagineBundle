@@ -2,24 +2,37 @@
 
 The AwsS3Resolver requires the [aws-sdk-php](https://github.com/aws/aws-sdk-php).
 
-You can add the SDK by adding those lines to your `deps` file.
+You can add the SDK by runnig composer.
 
-``` ini
-[aws-sdk]
-    git=git://github.com/aws/aws-sdk-php.git
+```bash
+composer require "aws/aws-sdk-php:~2"
 ```
 
 Afterwards, you only need to configure some information regarding your AWS account and the bucket.
 
 ``` yaml
 parameters:
-    amazon_s3.key: 'your-aws-key'
-    amazon_s3.secret: 'your-aws-secret'
-    amazon_s3.bucket: 'your-bucket.example.com'
-    amazon_s3.region: 'your-bucket-region'
+    amazon.s3.key:    'your-aws-key'
+    amazon.s3.secret: 'your-aws-secret'
+    amazon.s3.bucket: 'your-bucket.example.com'
+    amazon.s3.region: 'your-bucket-region'
 ```
 
-Now you can set up the services required:
+## Create resolver using factory
+
+liip_imagine:
+    resolvers:
+       profile_photos:
+          aws_s3:
+              client_config:
+                  key:    %amazon.s3.key%
+                  secret: %amazon.s3.secret%
+                  region: %amazon.s3.region%
+              bucket:     %amazon.s3.cache_bucket%
+
+## Create resolver as a service
+
+You have to set up the services required:
 
 ``` yaml
 services:
@@ -29,25 +42,27 @@ services:
         factory_method:  factory
         arguments:
             -
-                key: %amazon_s3.key%
-                secret: %amazon_s3.secret%
-                region: %amazon_s3.region%
+                key: %amazon.s3.key%
+                secret: %amazon.s3.secret%
+                region: %amazon.s3.region%
 
     acme.imagine.cache.resolver.amazon_s3:
         class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
         arguments:
             - "@acme.amazon_s3"
-            - "%amazon_s3.bucket%"
+            - "%amazon.s3.bucket%"
         tags:
-            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+            - { name: 'liip_imagine.cache.resolver', resolver: 'profile_photos' }
 ```
+
+## Usage
 
 Now you are ready to use the `AwsS3Resolver` by configuring the bundle.
 The following example will configure the resolver is default.
 
 ``` yaml
 liip_imagine:
-    cache: 'amazon_s3'
+    cache: profile_photos
 ```
 
 If you want to use other buckets for other images, simply alter the parameter names and create additional services!

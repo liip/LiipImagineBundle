@@ -1,5 +1,6 @@
 # Built-In CacheResolver
 
+* [Web path](cache-resolver/web_path.md)
 * [AmazonS3](cache-resolver/amazons3.md)
 * [AwsS3](cache-resolver/aws_s3.md) - for SDK version 2
 * [CacheResolver](cache-resolver/cache.md)
@@ -48,12 +49,5 @@ liip_imagine:
 
 For an example of a cache resolver implementation, refer to
 `Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver`.
-
-## CacheClearer
-
-Custom cache resolver classes must implement the ```clear``` method, at worst doing nothing.
-
-When the ```console cache:clear``` command is run, the clear method of all the registered cache
-resolvers is automatically called.
 
 [Back to the index](index.md)

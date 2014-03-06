@@ -4,10 +4,8 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -35,35 +33,17 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter('web_path', 'liip_imagine.cache.resolver.default');
+        $this->assertParameter('default', 'liip_imagine.cache.resolver.default');
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(new Reference('liip_imagine.data.manager'), new Reference('liip_imagine.filter.manager'), new Reference('liip_imagine.cache.manager'))
+            array(
+                new Reference('liip_imagine.data.manager'),
+                new Reference('liip_imagine.filter.manager'),
+                new Reference('liip_imagine.cache.manager'),
+            )
         );
-    }
-
-    public function testCacheClearerRegistration()
-    {
-        $this->createEmptyConfiguration();
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
-        } else {
-            $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
-
-            $definition = $this->containerBuilder->getDefinition('liip_imagine.cache.clearer');
-            $definition->hasTag('kernel.cache_clearer');
-            $this->assertCount(2, $definition->getArguments());
-        }
-    }
-
-    public function testCacheClearerIsNotRegistered()
-    {
-        $this->createFullConfiguration();
-
-        $this->assertFalse($this->containerBuilder->hasDefinition('liip_imagine.cache.clearer'));
     }
 
     public function testCustomRouteRequirements()
@@ -103,10 +83,7 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $yaml = <<<EOF
 driver: imagick
-web_root: ../foo/bar
-cache_prefix: /imagine/cache
 cache: false
-cache_clearer: false
 formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:
     small:
