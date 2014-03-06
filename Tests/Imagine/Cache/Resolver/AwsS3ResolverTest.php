@@ -241,6 +241,20 @@ class AwsS3ResolverTest extends AbstractTest
         $this->assertTrue($resolver->clear('cache'));
     }
 
+    public function testClearWithoutPrefix()
+    {
+        $s3 = $this->getMock('Aws\S3\S3Client');
+        $s3
+            ->expects($this->never())
+            ->method('deleteMatchingObjects')
+        ;
+
+        $this->setExpectedException('InvalidArgumentException', 'Cannot clear the Imagine cache because the cache_prefix is empty in your config.');
+
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
+        $resolver->clear('');
+    }
+
     protected function getS3ResponseMock($ok = true)
     {
         $s3Response = $this->getMock('Guzzle\Service\Resource\Model');
