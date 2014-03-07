@@ -94,6 +94,11 @@ Or if you're using PHP templates:
 ``` php
 <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', true) ?>" />
 ```
+If you need to access filtered image URL in your controller:
+
+``` php
+$this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb', true),
+```
 
 Note: Using the ``dev`` environment you might find that the images are not properly rendered when
 using the template helper. This is likely caused by having ``intercept_redirect`` enabled in your
