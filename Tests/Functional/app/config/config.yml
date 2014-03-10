@@ -2,6 +2,8 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    liip_imagine.web_root: %kernel.root_dir%/web
+
 framework:
     #esi:             ~
     #translator:      { fallback: %locale% }
@@ -16,7 +18,9 @@ framework:
 liip_imagine:
     resolvers:
         default:
-            web_path: ~
+            web_path:
+                web_root: %kernel.root_dir%/web
+                cache_prefix: media/cache
 
     filter_sets:
         thumbnail_web_path:
