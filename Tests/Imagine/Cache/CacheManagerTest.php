@@ -65,7 +65,7 @@ class CacheManagerTest extends AbstractTest
 
         $config = $this->getMockFilterConfiguration();
         $config
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
             ->will($this->returnValue(array(

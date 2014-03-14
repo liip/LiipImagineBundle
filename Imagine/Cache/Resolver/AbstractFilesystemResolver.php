@@ -136,5 +136,5 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @return string
      */
-    abstract protected function getFilePath($path, $filter);
+    abstract protected function getFilePath($path, $filter, $params = array());
 }

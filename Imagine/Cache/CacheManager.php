@@ -118,9 +118,9 @@ class CacheManager
      *
      * @return string
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false, $params = array())
     {
-        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute);
+        return $this->getResolver($filter)->getBrowserPath($path, $filter, $absolute, $this->getFilterParams($params, $filter));
     }
 
     /**
@@ -133,7 +133,7 @@ class CacheManager
      *
      * @return string
      */
-    public function generateUrl($path, $filter, $absolute = false)
+    public function generateUrl($path, $filter, $absolute = false, $params = array())
     {
         $config = $this->filterConfig->get($filter);
 
@@ -152,7 +152,7 @@ class CacheManager
             }
         }
 
-        $params = array('path' => ltrim($path, '/'));
+        $params = array_merge(array('path' => ltrim($path, '/')), $params);
 
         return str_replace(
             urlencode($params['path']),
@@ -237,5 +237,17 @@ class CacheManager
         foreach ($this->resolvers as $resolver) {
             $resolver->clear($cachePrefix);
         }
+    }
+
+    public function getFilterParams($params, $filter)
+    {
+        $result = array();
+        $config = $this->filterConfig->get($filter);
+        foreach($params as $key => $value) {
+            if (isset($config['route']['variables']) && in_array($key, $config['route']['variables'])) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
     }
 }

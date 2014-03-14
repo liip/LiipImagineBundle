@@ -40,6 +40,11 @@ class ImagineLoader extends Loader
                     $pattern .= '/'.$filter;
                 }
 
+                if (isset($config['route']['variables'])) {
+                    foreach ($config['route']['variables'] as $variable) {
+                        $pattern .= '/{'.$variable.'}';
+                    }
+                }
                 $defaults = array(
                     '_controller' => empty($config['controller_action']) ? $this->controllerAction : $config['controller_action'],
                     'filter' => $filter,

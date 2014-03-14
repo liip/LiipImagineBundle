@@ -42,7 +42,7 @@ interface ResolverInterface
      *
      * @return string
      */
-    function getBrowserPath($path, $filter, $absolute = false);
+    function getBrowserPath($path, $filter, $absolute = false, $params = array());
 
     /**
      * Removes a stored image resource.

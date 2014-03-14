@@ -125,7 +125,7 @@ class AmazonS3Resolver implements ResolverInterface, CacheManagerAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function getBrowserPath($path, $filter, $absolute = false)
+    public function getBrowserPath($path, $filter, $absolute = false, $params = array())
     {
         $objectPath = $this->getObjectPath($path, $filter);
         if ($this->objectExists($objectPath)) {

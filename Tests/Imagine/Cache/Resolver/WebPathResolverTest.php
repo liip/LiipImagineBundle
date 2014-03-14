@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -66,6 +67,7 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->attributes = new ParameterBag();
         $request
             ->expects($this->atLeastOnce())
             ->method('getBaseUrl')
@@ -110,6 +112,7 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->attributes = new ParameterBag();
         $request
             ->expects($this->atLeastOnce())
             ->method('getBaseUrl')
@@ -142,6 +145,7 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->attributes = new ParameterBag();
         $request
             ->expects($this->atLeastOnce())
             ->method('getBaseUrl')
@@ -174,6 +178,7 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->attributes = new ParameterBag();
         $request
             ->expects($this->atLeastOnce())
             ->method('getBaseUrl')
@@ -219,6 +224,7 @@ class WebPathResolverTest extends AbstractTest
         ;
 
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->attributes = new ParameterBag();
         $request
             ->expects($this->atLeastOnce())
             ->method('getBasePath')

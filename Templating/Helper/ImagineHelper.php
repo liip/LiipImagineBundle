@@ -31,9 +31,9 @@ class ImagineHelper extends Helper
      *
      * @return string
      */
-    public function filter($path, $filter, $absolute = false)
+    public function filter($path, $filter, $absolute = false, $params = array())
     {
-        return $this->cacheManager->getBrowserPath($path, $filter, $absolute);
+        return $this->cacheManager->getBrowserPath($path, $filter, $absolute, $params);
     }
 
     /**
