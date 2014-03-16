@@ -198,7 +198,7 @@ public function filterAction($path, $filter)
 
         $filteredBinary = $this->filterManager->applyFilter($binary, $filter, array(
             'filters' => array(
-                'thumbnail => array(
+                'thumbnail' => array(
                     'size' => array(300, 100)
                 )
             )
