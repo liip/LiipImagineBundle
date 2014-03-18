@@ -112,7 +112,7 @@ class FileSystemLoaderTest extends AbstractTest
         $this->assertEquals('image/jpeg', $binary->getMimeType());
     }
 
-    public function testFindFileWithoutExtension()
+    public function testFindFileWithoutExtensionButRequestWithExtension()
     {
         $this->filesystem->copy($this->fixturesDir.'/assets/cats.jpeg', $this->tempDir.'/cats');
 
@@ -126,6 +126,26 @@ class FileSystemLoaderTest extends AbstractTest
         );
 
         $binary = $loader->find('/cats.jpeg');
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
+        $this->assertEquals($expectedContent, $binary->getContent());
+        $this->assertEquals('image/jpeg', $binary->getMimeType());
+    }
+
+    public function testFindFileWithoutExtensionButRequestWithoutExtension()
+    {
+        $this->filesystem->copy($this->fixturesDir.'/assets/cats.jpeg', $this->tempDir.'/cats');
+
+        $expectedContent = file_get_contents(realpath($this->tempDir.'/cats'));
+
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            array(),
+            $this->tempDir
+        );
+
+        $binary = $loader->find('/cats');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
         $this->assertEquals($expectedContent, $binary->getContent());
