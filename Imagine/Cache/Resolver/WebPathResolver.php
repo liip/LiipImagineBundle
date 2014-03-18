@@ -52,9 +52,8 @@ class WebPathResolver implements ResolverInterface
      */
     public function resolve($path, $filter)
     {
-        return sprintf('%s://%s/%s',
-            $this->requestContext->getScheme(),
-            $this->requestContext->getHost(),
+        return sprintf('%s/%s',
+            $this->getBaseUrl(),
             $this->getFileUrl($path, $filter)
         );
     }
@@ -119,6 +118,21 @@ class WebPathResolver implements ResolverInterface
     protected function getFileUrl($path, $filter)
     {
         return $this->cachePrefix.'/'.$filter.'/'.$path;
+    }
+
+    protected function getBaseurl()
+    {
+        if ($this->requestContext->getScheme() == 'http') {
+            $port = $this->requestContext->getHttpPort() != 80 ? ':'.$this->requestContext->getHttpPort() : '';
+        } else {
+            $port = $this->requestContext->getHttpsPort() != 443 ? ':'.$this->requestContext->getHttpsPort() : '';
+        }
+        $pathinfo = pathinfo($this->requestContext->getBaseurl());
+        $subpath = $pathinfo['dirname'] != '/' ? $pathinfo['dirname'] : '';
+        return sprintf('%s://%s',
+            $this->requestContext->getScheme(),
+            $this->requestContext->getHost().$port.$subpath
+        );
     }
 }
 
