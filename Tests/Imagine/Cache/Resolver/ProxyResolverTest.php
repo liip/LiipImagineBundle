@@ -1,15 +1,9 @@
 <?php
-
-
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
-use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
+use Liip\ImagineBundle\Model\Binary;
 
 
 /**
@@ -17,7 +11,7 @@ use Symfony\Component\HttpKernel\Kernel;
  *
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
  */
-class ProxyResolverTest extends AbstractTest
+class ProxyResolverTest extends \Phpunit_Framework_TestCase
 {
     /**
      * @var ResolverInterface
@@ -36,94 +30,81 @@ class ProxyResolverTest extends AbstractTest
         $this->resolver = new ProxyResolver($this->primaryResolver, array('http://images.example.com'));
     }
 
-    public function testResolveWithResponse()
+    public function testProxyCallAndRewriteReturnedUrlOnResolve()
     {
+        $expectedPath = '/foo/bar/bazz.png';
+        $expectedFilter = 'test';
+
         $this->primaryResolver
             ->expects($this->once())
             ->method('resolve')
-            ->will($this->returnValue(new RedirectResponse('app_dev.php/thumbs/foo/bar/bazz.png')));
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
+        ;
 
-        $result = $this->resolver->resolve(new Request(), '/foo/bar/bazz.png', 'test');
-
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
-        } else {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
-        }
-    }
-
-    public function testResolveWithoutResponse()
-    {
-        $this->primaryResolver
-            ->expects($this->once())
-            ->method('resolve')
-            ->will($this->returnValue('app_dev.php/thumbs/foo/bar/bazz.png'));
-
-        $result = $this->resolver->resolve(new Request(), '/foo/bar/bazz.png', 'test');
-
-        $this->assertEquals('app_dev.php/thumbs/foo/bar/bazz.png', $result);
-    }
-
-    public function testStoreWithResponse()
-    {
-        $this->primaryResolver
-            ->expects($this->once())
-            ->method('store')
-            ->will($this->returnValue(new RedirectResponse('http://foo.com/thumbs/foo/bar/bazz.png')));
-
-        $result = $this->resolver->store(new Response(), '/foo/bar/bazz.png', 'test');
-
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $result);
-
-        if ('2' == Kernel::MAJOR_VERSION && '0' == Kernel::MINOR_VERSION) {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->headers->get('Location'));
-        } else {
-            $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result->getTargetUrl());
-        }
-    }
-
-    public function testStoreWithoutResponse()
-    {
-        $this->primaryResolver
-            ->expects($this->once())
-            ->method('store')
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
-
-        $result = $this->resolver->store(new Response(), '/foo/bar/bazz.png', 'test');
-
-        $this->assertEquals('http://foo.com/thumbs/foo/bar/bazz.png', $result);
-    }
-
-    public function testGetBrowserPath()
-    {
-        $this->primaryResolver
-            ->expects($this->once())
-            ->method('getBrowserPath')
-            ->will($this->returnValue('s3://myfunkybucket/thumbs/foo/bar/bazz.png'));
-
-        $result = $this->resolver->getBrowserPath('/foo/bar/bazz.png', 'test');
+        $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
         $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testRemove()
+    public function testProxyCallAndRewriteReturnedUrlEvenSchemesDiffersOnResolve()
     {
+        $expectedPath = '/foo/bar/bazz.png';
+        $expectedFilter = 'test';
+
         $this->primaryResolver
             ->expects($this->once())
-            ->method('remove');
+            ->method('resolve')
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
+        ;
 
-        $this->resolver->remove('/foo/bar/bazz.png', 'test');
+        $result = $this->resolver->resolve($expectedPath, $expectedFilter);
+
+        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testClear()
+    public function testProxyCallAndReturnedValueOnIsStored()
     {
+        $expectedPath = 'thePath';
+        $expectedFilter = 'theFilter';
+
         $this->primaryResolver
             ->expects($this->once())
-            ->method('clear');
+            ->method('isStored')
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue(true))
+        ;
 
-        $this->resolver->clear('test');
+        $this->assertTrue($this->resolver->isStored($expectedPath, $expectedFilter));
     }
 
-} 
+    public function testProxyCallOnStore()
+    {
+        $expectedPath = 'thePath';
+        $expectedFilter = 'theFilter';
+        $expectedBinary = new Binary('aContent', 'image/png', 'png');
+
+        $this->primaryResolver
+            ->expects($this->once())
+            ->method('store')
+            ->with($expectedBinary, $expectedPath, $expectedFilter)
+        ;
+
+        $this->resolver->store($expectedBinary, $expectedPath, $expectedFilter);
+    }
+
+    public function testProxyCallOnRemove()
+    {
+        $expectedPaths = array('thePath');
+        $expectedFilters = array('theFilter');
+
+        $this->primaryResolver
+            ->expects($this->once())
+            ->method('remove')
+            ->with($expectedPaths, $expectedFilters)
+        ;
+
+        $this->resolver->remove($expectedPaths, $expectedFilters);
+    }
+}
