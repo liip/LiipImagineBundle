@@ -144,7 +144,7 @@ class CacheManager
             if ((!isset($pathinfo['extension']) || $pathinfo['extension'] !== $config['format'])
                 && isset($pathinfo['dirname'])) {
 
-                if ('\\' === $pathinfo['dirname']) {
+                if ('\\' === $pathinfo['dirname'] || '.' === $pathinfo['dirname']) {
                     $pathinfo['dirname'] = '';
                 }
 

@@ -189,6 +189,9 @@ class CacheManagerTest extends AbstractTest
             array(array(
                 'format' => 'jpg',
             ), '/cats', 'cats.jpg'),
+
+            // No first slash in path, and no directory
+            array(array('format' => 'jpg'), 'cats', 'cats.jpg'),
         );
     }
 
