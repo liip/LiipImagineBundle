@@ -100,7 +100,7 @@ class FileSystemLoaderTest extends AbstractTest
         $this->assertSame($image, $loader->find('/cats.jpg'));
     }
 
-    public function testFindFileWithoutExtension()
+    public function testFindFileWithoutExtensionButRequestWithExtension()
     {
         $image = $this->getMockImage();
 
@@ -115,5 +115,22 @@ class FileSystemLoaderTest extends AbstractTest
 
         $loader = new FileSystemLoader($this->imagine, array(), $this->tempDir);
         $this->assertSame($image, $loader->find('/cats.jpeg'));
+    }
+
+    public function testFindFileWithoutExtensionButRequestWithoutExtension()
+    {
+        $image = $this->getMockImage();
+
+        $this->filesystem->copy($this->fixturesDir.'/assets/cats.jpeg', $this->tempDir.'/cats');
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with(realpath($this->tempDir.'/cats'))
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = new FileSystemLoader($this->imagine, array(), $this->tempDir);
+        $this->assertSame($image, $loader->find('/cats'));
     }
 }

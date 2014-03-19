@@ -62,30 +62,18 @@ class FileSystemLoader implements LoaderInterface
         $file = $this->rootPath.'/'.ltrim($path, '/');
         $info = $this->getFileInfo($file);
         $absolutePath = $info['dirname'].DIRECTORY_SEPARATOR.$info['basename'];
-
-        $name = $info['dirname'].DIRECTORY_SEPARATOR.$info['filename'];
-
-        $targetFormat = null;
-        // set a format if an extension is found and is allowed
-        if (isset($info['extension'])
-            && (empty($this->formats) || in_array($info['extension'], $this->formats))
-        ) {
-            $targetFormat = $info['extension'];
-        }
-
-        if (empty($targetFormat) || !file_exists($absolutePath)) {
+        if (!file_exists($absolutePath)) {
             // attempt to determine path and format
+            $name = $info['dirname'].DIRECTORY_SEPARATOR.$info['filename'];
             $absolutePath = null;
             foreach ($this->formats as $format) {
-                if ($targetFormat !== $format && file_exists($name.'.'.$format)) {
+                if (file_exists($name.'.'.$format)) {
                     $absolutePath = $name.'.'.$format;
-
                     break;
                 }
             }
-
-            if (!$absolutePath) {
-                if (!empty($targetFormat) && is_file($name)) {
+            if (null === $absolutePath) {
+                if (file_exists($name)) {
                     $absolutePath = $name;
                 } else {
                     throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $file));
