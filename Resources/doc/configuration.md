@@ -44,11 +44,6 @@ There are several configuration options available:
 
     default: web_path (which means the standard web_path resolver is used)
 
- - `cache_clearer` - Whether or not to clear the image cache when the `kernel.cache_clearer` event occurs.
-    This option doesn't have any effect in symfony < 2.1
-
-    default: true
-
  - `data_loader` - name of a custom data loader
 
     default: filesystem (which means the standard filesystem loader is used)
