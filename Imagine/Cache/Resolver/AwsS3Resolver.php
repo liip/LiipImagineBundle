@@ -63,6 +63,14 @@ class AwsS3Resolver implements ResolverInterface
     {
         $this->logger = $logger;
     }
+    
+    /**
+     * @param string $cachePrefix
+     */
+    public function setCachePrefix($cachePrefix)
+    {
+        $this->cachePrefix = $cachePrefix;
+    }
 
     /**
      * {@inheritDoc}
