@@ -152,6 +152,86 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testComposeSchemaHostAndBasePathWithPhpFileAndFileUrlOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('theHost');
+        $requestContext->setBaseUrl('/theBasePath/app.php');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'theschema://theHost/theBasePath/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
+    public function testComposeSchemaHostAndBasePathWithDirsOnlyAndFileUrlOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('theHost');
+        $requestContext->setBaseUrl('/theBasePath/theSubBasePath');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'theschema://theHost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
+    public function testComposeSchemaHttpAndCustomPortAndFileUrlOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('http');
+        $requestContext->setHost('theHost');
+        $requestContext->setHttpPort(88);
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'http://theHost:88/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
+    public function testComposeSchemaHttpsAndCustomPortAndFileUrlOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('https');
+        $requestContext->setHost('theHost');
+        $requestContext->setHttpsPort(444);
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'https://theHost:444/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
     public function testDumpBinaryContentOnStore()
     {
         $binary = new Binary('theContent', 'aMimeType', 'aFormat');
