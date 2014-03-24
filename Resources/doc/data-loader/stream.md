@@ -2,11 +2,13 @@
 
 ## Using factory
 
+``` yaml
 liip_imagine:
     loaders:
         stream.profile_photos:
             stream:
                 wrapper: gaufrette://profile_photos
+```
 
 ## Custom
 
