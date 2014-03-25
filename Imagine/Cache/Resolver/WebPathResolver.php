@@ -52,9 +52,8 @@ class WebPathResolver implements ResolverInterface
      */
     public function resolve($path, $filter)
     {
-        return sprintf('%s://%s/%s',
-            $this->requestContext->getScheme(),
-            $this->requestContext->getHost(),
+        return sprintf('%s/%s',
+            $this->getBaseUrl(),
             $this->getFileUrl($path, $filter)
         );
     }
@@ -120,5 +119,32 @@ class WebPathResolver implements ResolverInterface
     {
         return $this->cachePrefix.'/'.$filter.'/'.$path;
     }
-}
 
+    /**
+     * @return string
+     */
+    protected function getBaseUrl()
+    {
+        $port = '';
+        if ('https' == $this->requestContext->getScheme() && $this->requestContext->getHttpsPort() != 443) {
+            $port =  ":{$this->requestContext->getHttpsPort()}";
+        }
+
+        if ('http' == $this->requestContext->getScheme() && $this->requestContext->getHttpPort() != 80) {
+            $port =  ":{$this->requestContext->getHttpPort()}";
+        }
+
+        $baseUrl = $this->requestContext->getBaseUrl();
+        if ('.php' == substr($this->requestContext->getBaseUrl(), -4)) {
+            $baseUrl = pathinfo($this->requestContext->getBaseurl(), PATHINFO_DIRNAME);
+        }
+        $baseUrl = rtrim($baseUrl, '/');
+
+        return sprintf('%s://%s%s%s',
+            $this->requestContext->getScheme(),
+            $this->requestContext->getHost(),
+            $port,
+            $baseUrl
+        );
+    }
+}
