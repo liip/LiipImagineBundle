@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection;
 use Liip\ImagineBundle\DependencyInjection\Configuration;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -75,7 +76,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testInjectResolverFactoryConfig()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new BarResolverFactory), array()),
+            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
@@ -98,7 +99,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testAllowToUseResolverFactorySeveralTimes()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new BarResolverFactory), array()),
+            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
@@ -119,6 +120,42 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('resolvers', $config);
         $this->assertArrayHasKey('aResolver', $config['resolvers']);
         $this->assertArrayHasKey('anotherResolver', $config['resolvers']);
+    }
+
+    public function testSetWebPathAsDefaultResolverIfNotDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(array(new WebPathResolverFactory), array()),
+            array(array(
+                'resolvers' => array(
+                )
+            ))
+        );
+
+        $this->assertArrayHasKey('resolvers', $config);
+        $this->assertArrayHasKey('default', $config['resolvers']);
+        $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
+    }
+
+    public function testShouldNotOverwriteDefaultResolverIfDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
+            array(array(
+                'resolvers' => array(
+                    'default' => array(
+                        'bar' => array(
+                            'bar_option' => 'theValue'
+                        )
+                    ),
+                )
+
+            ))
+        );
+
+        $this->assertArrayHasKey('resolvers', $config);
+        $this->assertArrayHasKey('default', $config['resolvers']);
+        $this->assertArrayHasKey('bar', $config['resolvers']['default']);
     }
 
     /**
