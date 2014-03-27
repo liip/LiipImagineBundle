@@ -78,7 +78,6 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->fixXmlConfig('filter', 'filters')
                         ->children()
-                            ->scalarNode('path')->end()
                             ->scalarNode('quality')->defaultValue(100)->end()
                             ->scalarNode('cache')->defaultNull()->end()
                             ->scalarNode('data_loader')->defaultNull()->end()
