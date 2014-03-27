@@ -41,8 +41,20 @@ class Configuration implements ConfigurationInterface
         $resolversPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('resolvers')
-                    ->useAttributeAsKey('name')
-                    ->prototype('array')
+                ->beforeNormalization()
+                    ->ifTrue(function ($v) { return !is_array($v) || (is_array($v) && !array_key_exists('default', $v)); })
+                    ->then(function ($v) {
+                        if (false == is_array($v)) {
+                            $v = array();
+                        }
+
+                        $v['default'] = array('web_path' => null);
+
+                        return $v;
+                    })
+                ->end()
+                ->useAttributeAsKey('name')
+                ->prototype('array')
         ;
         $this->addResolversSections($resolversPrototypeNode);
 
