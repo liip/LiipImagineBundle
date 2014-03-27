@@ -179,12 +179,10 @@
 
         <!-- Data loaders -->
 
-        <service id="liip_imagine.data.loader.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
-            <tag name="liip_imagine.data.loader" loader="filesystem" />
+        <service id="liip_imagine.data.loader.prototype.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
             <argument type="service" id="liip_imagine.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
-            <argument>%liip_imagine.formats%</argument>
-            <argument>%liip_imagine.data_root%</argument>
+            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
         <service id="liip_imagine.data.loader.prototype.stream" class="%liip_imagine.data.loader.stream.class%">

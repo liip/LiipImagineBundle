@@ -33,16 +33,13 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @param MimeTypeGuesserInterface  $mimeTypeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
-     * @param array                     $formats
      * @param string                    $rootPath
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
-        array $formats,
         $rootPath
     ){
-        $this->formats = $formats;
         $this->rootPath = realpath($rootPath);
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->extensionGuesser = $extensionGuesser;
@@ -78,12 +75,6 @@ class FileSystemLoader implements LoaderInterface
             // attempt to determine path and format
             $name = $info['dirname'].DIRECTORY_SEPARATOR.$info['filename'];
             $absolutePath = null;
-            foreach ($this->formats as $format) {
-                if (file_exists($name.'.'.$format)) {
-                    $absolutePath = $name.'.'.$format;
-                    break;
-                }
-            }
             if (null === $absolutePath) {
                 if (file_exists($name)) {
                     $absolutePath = $name;

@@ -32,7 +32,7 @@ class ImagineControllerTest extends WebTestCase
 
         $this->client = $this->createClient();
 
-        $this->webRoot = self::$kernel->getContainer()->getParameter('liip_imagine.web_root');
+        $this->webRoot = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/web';
         $this->cacheRoot = $this->webRoot.'/'.self::$kernel->getContainer()->getParameter('liip_imagine.cache_prefix');
 
         $this->filesystem = new Filesystem;

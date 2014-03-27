@@ -21,7 +21,6 @@ container and apply the `liip_imagine.cache.resolver` tag to it (example here in
     <tag name="liip_imagine.cache.resolver" resolver="my_custom_cache" />
     <argument type="service" id="filesystem" />
     <argument type="service" id="router" />
-    <argument>%liip_imagine.web_root%</argument>
 </service>
 ```
 

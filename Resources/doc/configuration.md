@@ -10,11 +10,9 @@ liip_imagine:
 #            web_path: ~
 
     driver:               gd
-    data_root:            %liip_imagine.web_root%
     cache:                default
-    data_loader:          filesystem
+    data_loader:          default
     controller_action:    liip_imagine.controller:filterAction
-    formats:              []
     filter_sets:
 
         # Prototype

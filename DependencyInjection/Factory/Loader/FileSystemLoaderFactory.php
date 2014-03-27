@@ -5,16 +5,15 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
-class StreamLoaderFactory implements LoaderFactoryInterface
+class FileSystemLoaderFactory implements LoaderFactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $loaderDefinition = new DefinitionDecorator('liip_imagine.data.loader.prototype.stream');
-        $loaderDefinition->replaceArgument(0, $config['wrapper']);
-        $loaderDefinition->replaceArgument(1, $config['context']);
+        $loaderDefinition = new DefinitionDecorator('liip_imagine.data.loader.prototype.filesystem');
+        $loaderDefinition->replaceArgument(2, $config['data_root']);
         $loaderDefinition->addTag('liip_imagine.data.loader', array(
             'loader' => $loaderName
         ));
@@ -30,7 +29,7 @@ class StreamLoaderFactory implements LoaderFactoryInterface
      */
     public function getName()
     {
-        return 'stream';
+        return 'filesystem';
     }
 
     /**
@@ -41,8 +40,7 @@ class StreamLoaderFactory implements LoaderFactoryInterface
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->scalarNode('wrapper')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('context')->defaultValue(null)->end()
+                ->scalarNode('data_root')->defaultValue('%kernel.root_dir%/../web')->cannotBeEmpty()->end()
             ->end()
         ;
     }
