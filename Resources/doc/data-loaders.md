@@ -1,5 +1,6 @@
 # Built-In DataLoader
 
+* [FileSystem](data-loader/filesystem.md)
 * [MongoDB GridFS](data-loader/gridfs.md)
 * [Stream](data-loader/stream.md)
 
