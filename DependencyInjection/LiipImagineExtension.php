@@ -62,11 +62,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.formats', $config['formats']);
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
-        foreach ($config['filter_sets'] as $filter => $options) {
-            if (isset($options['path'])) {
-                $config['filter_sets'][$filter]['path'] = '/'.trim($options['path'], '/');
-            }
-        }
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
 
         $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);

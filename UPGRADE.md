@@ -31,3 +31,9 @@ Upgrade
 * [Filter] `FilterManager::applyFilter` now return instance of `BinaryInterface`.
 * [Filter] `FilterManager::applyFilter` first argument was changed from Image instance to BinaryInterface one.
 * [Filter] `FilterManager::get` was removed.
+* [Configuration] `liip_imagine.filter_sets.path` option was removed.
+* [Configuration] `liip_imagine.filter_sets.format` option was removed.
+* [Configuration] `liip_imagine.cache_mkdir_mode` option was removed.
+* [Configuration] `liip_imagine.cache_prefix` option was removed.
+* [Configuration] `liip_imagine.web_root` option was removed.
+* [Configuration] `liip_imagine.cache` default value was changed from `web_path`to `default`.
