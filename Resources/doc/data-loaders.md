@@ -81,7 +81,7 @@ services:
             -    { name: liip_imagine.data.loader, loader: custom_data_loader }
         arguments:
             -    '@liip_imagine'
-            -    %kernel.web_root%/../web
+            -    %kernel.root_dir%/../web
             -    [ '@acme_custom_transformer' ]
 ```
 
