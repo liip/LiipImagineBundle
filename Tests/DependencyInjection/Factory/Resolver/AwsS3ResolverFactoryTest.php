@@ -109,6 +109,31 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertEquals('liip_imagine.cache.resolver.theresolvername.internal', $resolverDefinition->getArgument(1));
     }
 
+    public function testSetCachePrefixIfDefined()
+    {
+        $container = new ContainerBuilder;
+
+        $resolver = new AwsS3ResolverFactory;
+
+        $resolver->create($container, 'theResolverName', array(
+            'client_config' => array(),
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'url_options' => array(),
+            'cache_prefix' => 'theCachePrefix',
+            'cache' => null,
+        ));
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+
+        $methodCalls = $resolverDefinition->getMethodCalls();
+
+        $this->assertCount(1, $methodCalls);
+        $this->assertEquals('setCachePrefix', $methodCalls[0][0]);
+        $this->assertEquals(array('theCachePrefix'), $methodCalls[0][1]);
+    }
+
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "bucket" at path "aws_s3" must be configured.
@@ -128,7 +153,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage The child node "client_config" at path "aws_s3" must be configured.
      */
-    public function testThrowClientConfinNotSetOnAddConfiguration()
+    public function testThrowClientConfigNotSetOnAddConfiguration()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
@@ -147,7 +172,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Invalid type for path "aws_s3.client_config". Expected array, but got string
      */
-    public function testThrowClientConfinNotArrayOnAddConfiguration()
+    public function testThrowClientConfigNotArrayOnAddConfiguration()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
@@ -175,6 +200,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         );
         $expectedBucket = 'theBucket';
         $expectedAcl = 'theAcl';
+        $expectedCachePrefix = 'theCachePrefix';
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
@@ -187,7 +213,8 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
                 'bucket' => $expectedBucket,
                 'acl' => $expectedAcl,
                 'client_config' => $expectedClientConfig,
-                'url_options' => $expectedUrlOptions
+                'url_options' => $expectedUrlOptions,
+                'cache_prefix' => $expectedCachePrefix,
             )
         ));
 
@@ -202,6 +229,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals($expectedUrlOptions, $config['url_options']);
+
+        $this->assertArrayHasKey('cache_prefix', $config);
+        $this->assertEquals($expectedCachePrefix, $config['cache_prefix']);
     }
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
@@ -226,6 +256,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals(array(), $config['url_options']);
+
+        $this->assertArrayHasKey('cache_prefix', $config);
+        $this->assertNull($config['cache_prefix']);
     }
 
     /**
