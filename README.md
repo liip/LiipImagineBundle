@@ -59,7 +59,7 @@ liip_imagine:
           web_path: ~
 
     filter_sets:
-        cache: default
+        cache: ~
         my_thumb:
             quality: 75
             filters:
