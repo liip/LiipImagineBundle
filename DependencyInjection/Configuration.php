@@ -89,7 +89,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('cache')->defaultValue('default')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
-                ->scalarNode('data_loader')->defaultValue('filesystem')->end()
+                ->scalarNode('data_loader')->defaultValue('default')->end()
                 ->scalarNode('controller_action')->defaultValue('liip_imagine.controller:filterAction')->end()
                 ->arrayNode('filter_sets')
                     ->useAttributeAsKey('name')

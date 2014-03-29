@@ -85,7 +85,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $yaml = <<<EOF
 driver: imagick
 cache: false
-formats: ['json', 'xml', 'jpg', 'png', 'gif']
 filter_sets:
     small:
         filters:

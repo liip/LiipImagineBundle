@@ -47,7 +47,7 @@ class LiipImagineExtension extends Extension
             new Configuration($this->resolversFactories, $this->loadersFactories),
             $configs
         );
-
+        
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
