@@ -103,6 +103,6 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $binary = $loader->find($path);
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals('text/x-php', $binary->getMimeType());
+        $this->assertStringStartsWith('text/', $binary->getMimeType());
     }
 }

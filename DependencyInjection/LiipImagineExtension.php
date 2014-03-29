@@ -47,7 +47,7 @@ class LiipImagineExtension extends Extension
             new Configuration($this->resolversFactories, $this->loadersFactories),
             $configs
         );
-        
+
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
@@ -64,8 +64,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
-
-        $container->setParameter('liip_imagine.cache.resolver.base_path', $config['cache_base_path']);
 
         $resources = $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : array();
         $resources[] = 'LiipImagineBundle:Form:form_div_layout.html.twig';
