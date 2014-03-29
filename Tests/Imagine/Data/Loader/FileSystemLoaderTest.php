@@ -14,7 +14,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     public static function provideLoadCases()
     {
         $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
-var_dump(array(__DIR__, $fileName));
+
         return array(
             array(__DIR__, $fileName),
             array(__DIR__.'/', $fileName),
