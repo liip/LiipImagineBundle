@@ -57,9 +57,6 @@ class LiipImagineExtension extends Extension
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $container->setParameter('liip_imagine.cache_prefix', 'media/cache');
-        $container->setParameter('liip_imagine.web_root', '%kernel.root_dir%/../web');
-        $container->setParameter('liip_imagine.data_root', $config['data_root']);
-        $container->setParameter('liip_imagine.formats', $config['formats']);
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
@@ -67,8 +64,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.data.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
-
-        $container->setParameter('liip_imagine.cache.resolver.base_path', $config['cache_base_path']);
 
         $resources = $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : array();
         $resources[] = 'LiipImagineBundle:Form:form_div_layout.html.twig';

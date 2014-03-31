@@ -3,151 +3,106 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Data\Loader;
 
 use Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader;
-use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 
-/**
- * @covers Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader
- */
-class FileSystemLoaderTest extends AbstractTest
+class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    public static function provideLoadCases()
+    {
+        $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
+
+        return array(
+            array(__DIR__, $fileName),
+            array(__DIR__.'/', $fileName),
+            array(__DIR__, '/'.$fileName),
+            array(__DIR__.'/', '/'.$fileName),
+            array(realpath(__DIR__.'/../..'), 'Data/Loader/'.$fileName),
+            array(realpath(__DIR__.'/../../'), '/Data/Loader/'.$fileName),
+        );
+    }
+
+    public function testShouldImplementLoaderInterface()
+    {
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader');
+
+        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface'));
+    }
+
+    public function testCouldBeConstructedWithExpectedArguments()
+    {
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__
+        );
+    }
+
+    public function testThrowExceptionIfPathHasDoublePointSlashAtBegging()
+    {
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__
+        );
+
+        $this->setExpectedException(
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Source image was searched with'
+        );
+
+        $loader->find('../foo/bar');
+    }
+
+    public function testThrowExceptionIfPathHasDoublePointSlashInTheMiddle()
+    {
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__
+        );
+
+        $this->setExpectedException(
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Source image was searched with'
+        );
+
+        $loader->find('foo/../bar');
+    }
+
+    public function testThrowExceptionIfFileNotExist()
+    {
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__
+        );
+
+        $this->setExpectedException(
+            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Source image not found'
+        );
+
+        $loader->find('fileNotExist');
+    }
+
     /**
-     * @dataProvider invalidPathProvider
+     * @dataProvider provideLoadCases
      */
-    public function testFindInvalidPath($path)
+    public function testLoad($rootDir, $path)
     {
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            array(),
-            $this->fixturesDir.'/assets'
+            $rootDir
         );
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-
-        $loader->find($path);
-    }
-
-    public function testFindNotExisting()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array('jpeg'),
-            $this->tempDir
-        );
-
-        $file = realpath($this->tempDir).'/invalid.jpeg';
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Source image not found in "'.$file.'"');
-
-        $loader->find('/invalid.jpeg');
-    }
-
-    public function testFindWithNoExtensionDoesNotThrowNotice()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(),
-            $this->tempDir
-        );
-
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-
-        $loader->find('/invalid');
-    }
-
-    public function testFindRetrievesImage()
-    {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
-
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array('jpeg'),
-            $this->fixturesDir.'/assets'
-        );
-
-        $binary = $loader->find('/cats.jpeg');
+        $binary = $loader->find($path);
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals($expectedContent, $binary->getContent());
-        $this->assertEquals('image/jpeg', $binary->getMimeType());
-    }
-
-    public function testFindWithCyrillicFilename()
-    {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/АГГЗ.jpeg');
-
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array('jpeg'),
-            $this->fixturesDir.'/assets'
-        );
-
-        $binary = $loader->find('/АГГЗ.jpeg');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals($expectedContent, $binary->getContent());
-        $this->assertEquals('image/jpeg', $binary->getMimeType());
-    }
-
-    public function testFindGuessesFormat()
-    {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
-
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array('jpeg'),
-            $this->fixturesDir.'/assets'
-        );
-
-        $binary = $loader->find('/cats.jpg');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals($expectedContent, $binary->getContent());
-        $this->assertEquals('image/jpeg', $binary->getMimeType());
-    }
-
-    public function testFindFileWithoutExtensionButRequestWithExtension()
-    {
-        $this->filesystem->copy($this->fixturesDir.'/assets/cats.jpeg', $this->tempDir.'/cats');
-
-        $expectedContent = file_get_contents(realpath($this->tempDir.'/cats'));
-
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(),
-            $this->tempDir
-        );
-
-        $binary = $loader->find('/cats.jpeg');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals($expectedContent, $binary->getContent());
-        $this->assertEquals('image/jpeg', $binary->getMimeType());
-    }
-
-    public function testFindFileWithoutExtensionButRequestWithoutExtension()
-    {
-        $this->filesystem->copy($this->fixturesDir.'/assets/cats.jpeg', $this->tempDir.'/cats');
-
-        $expectedContent = file_get_contents(realpath($this->tempDir.'/cats'));
-
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(),
-            $this->tempDir
-        );
-
-        $binary = $loader->find('/cats');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
-        $this->assertEquals($expectedContent, $binary->getContent());
+        $this->assertStringStartsWith('text/', $binary->getMimeType());
     }
 }

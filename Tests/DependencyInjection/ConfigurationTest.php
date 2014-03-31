@@ -2,6 +2,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Liip\ImagineBundle\DependencyInjection\Configuration;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
@@ -27,7 +28,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testInjectLoaderFactoryConfig()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FooLoaderFactory)),
+            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
@@ -50,7 +51,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testAllowToUseLoaderFactorySeveralTimes()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FooLoaderFactory)),
+            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
@@ -71,6 +72,42 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('loaders', $config);
         $this->assertArrayHasKey('aLoader', $config['loaders']);
         $this->assertArrayHasKey('anotherLoader', $config['loaders']);
+    }
+
+    public function testSetFilesystemLoaderAsDefaultLoaderIfNotDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(array(), array(new FileSystemLoaderFactory)),
+            array(array(
+                'loaders' => array(
+                )
+            ))
+        );
+
+        $this->assertArrayHasKey('loaders', $config);
+        $this->assertArrayHasKey('default', $config['loaders']);
+        $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
+    }
+
+    public function testShouldNotOverwriteDefaultLoaderIfDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
+            array(array(
+                'loaders' => array(
+                    'default' => array(
+                        'foo' => array(
+                            'foo_option' => 'theValue'
+                        )
+                    ),
+                )
+
+            ))
+        );
+
+        $this->assertArrayHasKey('loaders', $config);
+        $this->assertArrayHasKey('default', $config['loaders']);
+        $this->assertArrayHasKey('foo', $config['loaders']['default']);
     }
 
     public function testInjectResolverFactoryConfig()

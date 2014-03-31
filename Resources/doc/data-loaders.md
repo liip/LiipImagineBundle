@@ -1,5 +1,6 @@
 # Built-In DataLoader
 
+* [FileSystem](data-loader/filesystem.md)
 * [MongoDB GridFS](data-loader/gridfs.md)
 * [Stream](data-loader/stream.md)
 
@@ -23,7 +24,6 @@ container and apply the `liip_imagine.data.loader` tag to it (example here in XM
 <service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
     <tag name="liip_imagine.data.loader" loader="my_custom_data" />
     <argument type="service" id="liip_imagine" />
-    <argument>%liip_imagine.formats%</argument>
 </service>
 ```
 
@@ -82,8 +82,7 @@ services:
             -    { name: liip_imagine.data.loader, loader: custom_data_loader }
         arguments:
             -    '@liip_imagine'
-            -    %liip_imagine.formats%
-            -    %liip_imagine.data_root%
+            -    %kernel.root_dir%/../web
             -    [ '@acme_custom_transformer' ]
 ```
 

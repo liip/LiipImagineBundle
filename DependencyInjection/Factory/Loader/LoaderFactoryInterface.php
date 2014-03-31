@@ -1,5 +1,4 @@
 <?php
-
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;

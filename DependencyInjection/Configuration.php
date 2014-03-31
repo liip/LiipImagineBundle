@@ -61,13 +61,24 @@ class Configuration implements ConfigurationInterface
         $loadersPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('loaders')
+                    ->beforeNormalization()
+                        ->ifTrue(function ($v) { return !is_array($v) || (is_array($v) && !array_key_exists('default', $v)); })
+                        ->then(function ($v) {
+                            if (false == is_array($v)) {
+                                $v = array();
+                            }
+
+                            $v['default'] = array('filesystem' => null);
+
+                            return $v;
+                        })
+                    ->end()
                     ->useAttributeAsKey('name')
                     ->prototype('array')
         ;
         $this->addLoadersSections($loadersPrototypeNode);
 
         $rootNode
-            ->fixXmlConfig('format', 'formats')
             ->fixXmlConfig('filter_set', 'filter_sets')
             ->children()
                 ->scalarNode('driver')->defaultValue('gd')
@@ -76,15 +87,10 @@ class Configuration implements ConfigurationInterface
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
                 ->end()
-                ->scalarNode('data_root')->defaultValue('%liip_imagine.web_root%')->end()
                 ->scalarNode('cache')->defaultValue('default')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
-                ->scalarNode('data_loader')->defaultValue('filesystem')->end()
+                ->scalarNode('data_loader')->defaultValue('default')->end()
                 ->scalarNode('controller_action')->defaultValue('liip_imagine.controller:filterAction')->end()
-                ->arrayNode('formats')
-                    ->defaultValue(array())
-                    ->prototype('scalar')->end()
-                ->end()
                 ->arrayNode('filter_sets')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
