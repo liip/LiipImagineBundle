@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Loader;
 
-use Imagine\Image\ImagineInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,13 +20,11 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     /**
      * @param ObjectManager $manager
      * @param string $class
-     * @param array $formats possible image formats to look up file ids
      */
     public function __construct(ObjectManager $manager, $class = null)
     {
         $this->manager = $manager;
         $this->class = $class;
-        $this->formats = $formats;
     }
 
     /**
@@ -59,13 +56,6 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
             // try to find the image without extension
             $info = pathinfo($path);
             $name = $info['dirname'].'/'.$info['filename'];
-
-            // attempt to determine available format
-            foreach ($this->formats as $format) {
-                if ($image = $this->manager->find($this->class, $this->mapPathToId($name.'.'.$format))) {
-                    break;
-                }
-            }
 
             // maybe the image has an id without extension
             if (!$image) {
