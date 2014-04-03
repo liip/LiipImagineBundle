@@ -3,14 +3,14 @@
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
-use Liip\ImagineBundle\Command\ResolveCommand;
+use Liip\ImagineBundle\Command\ResolveCacheCommand;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ResolveTest extends WebTestCase
+class ResolveCacheTest extends WebTestCase
 {
     protected $client;
 
@@ -38,7 +38,7 @@ class ResolveTest extends WebTestCase
     {
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
-        $output = $this->executeConsole(new ResolveCommand(), array(
+        $output = $this->executeConsole(new ResolveCacheCommand(), array(
             'path' => 'images/cats.jpeg',
             'filters' => array('thumbnail_web_path')
         ));
@@ -54,7 +54,7 @@ class ResolveTest extends WebTestCase
             'anImageContent'
         );
 
-        $output = $this->executeConsole(new ResolveCommand(), array(
+        $output = $this->executeConsole(new ResolveCacheCommand(), array(
             'path' => 'images/cats.jpeg',
             'filters' => array('thumbnail_web_path')
         ));
@@ -64,7 +64,7 @@ class ResolveTest extends WebTestCase
 
     public function testShouldResolveWithFewFiltersInParams()
     {
-        $output = $this->executeConsole(new ResolveCommand(), array(
+        $output = $this->executeConsole(new ResolveCacheCommand(), array(
             'path'    => 'images/cats.jpeg',
             'filters' => array('thumbnail_web_path', 'thumbnail_default')
         ));
@@ -75,7 +75,7 @@ class ResolveTest extends WebTestCase
 
     public function testShouldResolveWithoutFiltersInParams()
     {
-        $output = $this->executeConsole(new ResolveCommand(), array(
+        $output = $this->executeConsole(new ResolveCacheCommand(), array(
             'path' => 'images/cats.jpeg',
         ));
 

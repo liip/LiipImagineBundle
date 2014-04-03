@@ -7,12 +7,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ResolveCommand extends ContainerAwareCommand
+class ResolveCacheCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('liip_imagine:cache:resolve')
+            ->setName('liip:imagine:cache:resolve')
             ->setDescription('Resolve cache for given path and set of filters.')
             ->addArgument('path', InputArgument::REQUIRED, 'Image path')
             ->addArgument('filters', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Filters list');
@@ -20,7 +20,7 @@ class ResolveCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path    = $input->getArgument('path');
+        $path = $input->getArgument('path');
         $filters = $input->getArgument('filters');
 
         /** @var FilterManager filterManager */
