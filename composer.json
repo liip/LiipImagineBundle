@@ -33,7 +33,8 @@
         "aws/aws-sdk-php":          "~2.4",
         "amazonwebservices/aws-sdk-for-php": "~1.0",
         "psr/log":                  "~1.0",
-        "ext-gd":                   "*"
+        "ext-gd":                   "*",
+        "symfony/console":          "~2.3"
     },
 
     "suggest": {
