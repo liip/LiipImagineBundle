@@ -28,3 +28,6 @@ liip_imagine:
         thumbnail_web_path:
             filters:
                 thumbnail: { size: [223, 223], mode: inset }
+        thumbnail_default:
+            filters:
+                thumbnail: { size: [223, 223], mode: inset }
