@@ -15,7 +15,7 @@ class ResolveCommand extends ContainerAwareCommand
             ->setName('liip_imagine:cache:resolve')
             ->setDescription('Resolve url for image')
             ->addArgument('path', InputArgument::REQUIRED, 'Image path')
-            ->addArgument('filters', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Filters separated by comma');
+            ->addArgument('filters', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Filters list');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
