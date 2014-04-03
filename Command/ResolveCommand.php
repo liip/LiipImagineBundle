@@ -23,8 +23,11 @@ class ResolveCommand extends ContainerAwareCommand
         $path    = $input->getArgument('path');
         $filters = $input->getArgument('filters');
 
+        /** @var FilterManager filterManager */
         $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
+        /** @var CacheManager cacheManager */
         $cacheManager  = $this->getContainer()->get('liip_imagine.cache.manager');
+        /** @var DataManager dataManager */
         $dataManager   = $this->getContainer()->get('liip_imagine.data.manager');
 
         if (empty($filters)) {
