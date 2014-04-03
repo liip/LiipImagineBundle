@@ -62,34 +62,25 @@ class ResolveTest extends WebTestCase
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
     }
 
-    /**
-     * @dataProvider providerFiltersSet
-     */
-    public function testShouldResolveAgainstFiltersSet(array $filters, array $contains)
+    public function testShouldResolveWithFewFiltersInParams()
+    {
+        $output = $this->executeConsole(new ResolveCommand(), array(
+            'path'    => 'images/cats.jpeg',
+            'filters' => array('thumbnail_web_path', 'thumbnail_default')
+        ));
+
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+    }
+
+    public function testShouldResolveWithoutFiltersInParams()
     {
         $output = $this->executeConsole(new ResolveCommand(), array(
             'path' => 'images/cats.jpeg',
-            'filters' => $filters
         ));
 
-        foreach ($contains as $phrase) {
-            $this->assertContains($phrase, $output);
-        }
-    }
-
-    /**
-     * Data provider for filters test
-     */
-    public static function providerFiltersSet()
-    {
-        return array(
-            array(array('thumbnail_web_path', 'thumbnail_default'), array(
-                'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg',
-                'http://localhost/media/cache/thumbnail_default/images/cats.jpeg')),
-            array(array(), array(
-                'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg',
-                'http://localhost/media/cache/thumbnail_default/images/cats.jpeg'))
-        );
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
     }
 
     /**
@@ -115,4 +106,4 @@ class ResolveTest extends WebTestCase
 
         return $commandTester->getDisplay();
     }
-} 
+}
