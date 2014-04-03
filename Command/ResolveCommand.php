@@ -13,7 +13,7 @@ class ResolveCommand extends ContainerAwareCommand
     {
         $this
             ->setName('liip_imagine:cache:resolve')
-            ->setDescription('Resolve url for image')
+            ->setDescription('Resolve cache for given path and set of filters.')
             ->addArgument('path', InputArgument::REQUIRED, 'Image path')
             ->addArgument('filters', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Filters list');
     }
