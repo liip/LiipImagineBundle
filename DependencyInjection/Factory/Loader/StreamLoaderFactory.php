@@ -12,13 +12,13 @@ class StreamLoaderFactory implements LoaderFactoryInterface
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $loaderDefinition = new DefinitionDecorator('liip_imagine.data.loader.prototype.stream');
+        $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.stream');
         $loaderDefinition->replaceArgument(0, $config['wrapper']);
         $loaderDefinition->replaceArgument(1, $config['context']);
-        $loaderDefinition->addTag('liip_imagine.data.loader', array(
+        $loaderDefinition->addTag('liip_imagine.binary.loader', array(
             'loader' => $loaderName
         ));
-        $loaderId = 'liip_imagine.data.loader.'.$loaderName;
+        $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
 
         $container->setDefinition($loaderId, $loaderDefinition);
 

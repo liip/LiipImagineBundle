@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\ImagineBundle\Tests\Imagine\Data\Loader;
+namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\StreamLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;

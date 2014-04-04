@@ -24,12 +24,12 @@ you can make use of the [StreamWrapper configuration](https://github.com/KnpLabs
 
 ``` yaml
 services:
-    acme.liip_imagine.data.loader.stream.profile_photos:
-        class: "%liip_imagine.data.loader.stream.class%"
+    acme.liip_imagine.binary.loader.stream.profile_photos:
+        class: "%liip_imagine.binary.loader.stream.class%"
         arguments:
             - 'gaufrette://profile_photos/'
         tags:
-            - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
+            - { name: 'liip_imagine.binary.loader', loader: 'stream.profile_photos' }
 ```
 
 ## Usage

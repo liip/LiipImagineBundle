@@ -12,12 +12,12 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $loaderDefinition = new DefinitionDecorator('liip_imagine.data.loader.prototype.filesystem');
+        $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.filesystem');
         $loaderDefinition->replaceArgument(2, $config['data_root']);
-        $loaderDefinition->addTag('liip_imagine.data.loader', array(
+        $loaderDefinition->addTag('liip_imagine.binary.loader', array(
             'loader' => $loaderName
         ));
-        $loaderId = 'liip_imagine.data.loader.'.$loaderName;
+        $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
 
         $container->setDefinition($loaderId, $loaderDefinition);
 

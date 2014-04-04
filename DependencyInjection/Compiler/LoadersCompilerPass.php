@@ -20,7 +20,7 @@ class LoadersCompilerPass implements CompilerPassInterface
             }
         }
 
-        $tags = $container->findTaggedServiceIds('liip_imagine.data.loader');
+        $tags = $container->findTaggedServiceIds('liip_imagine.binary.loader');
 
         if (count($tags) > 0 && $container->hasDefinition('liip_imagine.data.manager')) {
             $manager = $container->getDefinition('liip_imagine.data.manager');

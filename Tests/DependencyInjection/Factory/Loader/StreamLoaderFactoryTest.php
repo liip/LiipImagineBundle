@@ -38,11 +38,11 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
             'context' => 'theContext',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.data.loader.theloadername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.theloadername'));
 
-        $loaderDefinition = $container->getDefinition('liip_imagine.data.loader.theloadername');
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.theloadername');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
-        $this->assertEquals('liip_imagine.data.loader.prototype.stream', $loaderDefinition->getParent());
+        $this->assertEquals('liip_imagine.binary.loader.prototype.stream', $loaderDefinition->getParent());
 
         $this->assertEquals('theWrapper', $loaderDefinition->getArgument(0));
         $this->assertEquals('theContext', $loaderDefinition->getArgument(1));

@@ -18,11 +18,11 @@ requirement is that each data loader implement the following interface:
     Liip\ImagineBundle\Binary\Loader\LoaderInterface
 
 To tell the bundle about your new data loader, register it in the service
-container and apply the `liip_imagine.data.loader` tag to it (example here in XML):
+container and apply the `liip_imagine.binary.loader` tag to it (example here in XML):
 
 ``` xml
 <service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Binary\Loader\MyCustomDataLoader">
-    <tag name="liip_imagine.data.loader" loader="my_custom_data" />
+    <tag name="liip_imagine.binary.loader" loader="my_custom_data" />
     <argument type="service" id="liip_imagine" />
 </service>
 ```
@@ -79,7 +79,7 @@ services:
     custom_loader:
         class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
         tags:
-            -    { name: liip_imagine.data.loader, loader: custom_data_loader }
+            -    { name: liip_imagine.binary.loader, loader: custom_data_loader }
         arguments:
             -    '@liip_imagine'
             -    %kernel.root_dir%/../web

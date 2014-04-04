@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\ImagineBundle\Tests\Imagine\Data\Loader;
+namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Symfony\Component\Filesystem\Filesystem;
@@ -20,8 +20,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             array(__DIR__.'/', $fileName),
             array(__DIR__, '/'.$fileName),
             array(__DIR__.'/', '/'.$fileName),
-            array(realpath(__DIR__.'/../..'), 'Data/Loader/'.$fileName),
-            array(realpath(__DIR__.'/../../'), '/Data/Loader/'.$fileName),
+            array(realpath(__DIR__.'/..'), 'Loader/'.$fileName),
+            array(realpath(__DIR__.'/../'), '/Loader/'.$fileName),
         );
     }
 
