@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\ImagineBundle\Imagine\Data\Loader;
+namespace Liip\ImagineBundle\Binary\Loader;
 
 interface LoaderInterface
 {

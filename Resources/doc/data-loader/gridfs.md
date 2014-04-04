@@ -14,7 +14,7 @@ liip_imagine:
 Add loader to your services:
 
 ``` xml
-<service id="liip_imagine.data.loader.grid_fs" class="Liip\ImagineBundle\Imagine\Data\Loader\GridFSLoader">
+<service id="liip_imagine.data.loader.grid_fs" class="Liip\ImagineBundle\Binary\Loader\GridFSLoader">
     <tag name="liip_imagine.data.loader" loader="grid_fs" />
     <argument type="service" id="liip_imagine" />
     <argument type="service" id="doctrine.odm.mongodb.document_manager" />

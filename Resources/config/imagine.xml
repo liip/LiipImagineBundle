@@ -47,8 +47,8 @@
 
         <!-- Data loaders' classes -->
 
-        <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
-        <parameter key="liip_imagine.data.loader.stream.class">Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader</parameter>
+        <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Binary\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.data.loader.stream.class">Liip\ImagineBundle\Binary\Loader\StreamLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
