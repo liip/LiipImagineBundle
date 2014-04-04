@@ -3,4 +3,4 @@
 composer.lock
 composer.phar
 vendor/
-/Tests/Functional/app/web/media/cache
+Tests/Functional/app/web/media/cache
