@@ -18,12 +18,6 @@ This will perform the transformation called `thumbnail`, which you can define
 to do a number of different things, such as resizing, cropping, drawing,
 masking, etc.
 
-Same result you can get from cli command:
-
-``` jinja
-app/console liip:imagine:cache:resolve relative/path/to/image.jpg thumbnail
-````
-
 This bundle integrates the standalone PHP "[Imagine library](https://github.com/avalanche123/Imagine)".
 
 [![Build Status](https://secure.travis-ci.org/liip/LiipImagineBundle.png)](http://travis-ci.org/liip/LiipImagineBundle)
@@ -114,6 +108,12 @@ $runtimeConfig = array(
 
 <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', $runtimeConfig) ?>" />
 ```
+Also you can resolve image url from console:
+```jinja
+app/console liip:imagine:cache:resolve images/dream.jpg images/dream2.jpg --filters=thumbnail_web_path --filters=thumbnail_default
+```
+Where only paths required parameter. They are separated by space. If you omit filters option will be applied all available filters.
+
 If you need to access filtered image URL in your controller:
 
 ``` php
