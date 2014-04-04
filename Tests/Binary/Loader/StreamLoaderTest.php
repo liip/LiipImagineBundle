@@ -1,12 +1,12 @@
 <?php
 
-namespace Liip\ImagineBundle\Tests\Imagine\Data\Loader;
+namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
-use Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader;
+use Liip\ImagineBundle\Binary\Loader\StreamLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader
+ * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader
  */
 class StreamLoaderTest extends AbstractTest
 {

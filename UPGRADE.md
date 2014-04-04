@@ -28,6 +28,12 @@ Upgrade
 * [Cache] `AbstractFilesystemResolver` was removed.
 * [Data] `LoaderInterface::find` now can return string or `BinaryInterface` instance.
 * [Data] `DataManager::find` now can return `BinaryInterface` instance only.
+* [Data] All data loaders moved to `Binary/Loader` folder.
+* [Data] Tag name `liip_imagine.data.loader` changed to `liip_imagine.binary.loader`
+* [Data] Parameter key `liip_imagine.data.loader.filesystem.class` changed to `liip_imagine.binary.loader.filesystem.class`
+* [Data] Parameter key `liip_imagine.data.loader.stream.class` changed to `liip_imagine.binary.loader.stream.class`
+* [Data] Service id `liip_imagine.data.loader.prototype.filesystem` changed to `liip_imagine.binary.loader.prototype.filesystem`
+* [Data] Service id `liip_imagine.data.loader.prototype.stream` changed to `liip_imagine.binary.loader.prototype.stream`
 * [Filter] `FilterManager::applyFilter` now return instance of `BinaryInterface`.
 * [Filter] `FilterManager::applyFilter` first argument was changed from Image instance to BinaryInterface one.
 * [Filter] `FilterManager::get` was removed.

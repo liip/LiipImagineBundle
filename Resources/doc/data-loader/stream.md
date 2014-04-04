@@ -12,7 +12,7 @@ liip_imagine:
 
 ## Custom
 
-The `Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader` allows to read images from any stream registered
+The `Liip\ImagineBundle\Binary\Loader\StreamLoader` allows to read images from any stream registered
 thus allowing you to serve your images from literally anywhere.
 
 The example service definition shows how to use a stream wrapped by the [Gaufrette](https://github.com/KnpLabs/Gaufrette) filesystem abstraction layer.
@@ -24,12 +24,12 @@ you can make use of the [StreamWrapper configuration](https://github.com/KnpLabs
 
 ``` yaml
 services:
-    acme.liip_imagine.data.loader.stream.profile_photos:
-        class: "%liip_imagine.data.loader.stream.class%"
+    acme.liip_imagine.binary.loader.stream.profile_photos:
+        class: "%liip_imagine.binary.loader.stream.class%"
         arguments:
             - 'gaufrette://profile_photos/'
         tags:
-            - { name: 'liip_imagine.data.loader', loader: 'stream.profile_photos' }
+            - { name: 'liip_imagine.binary.loader', loader: 'stream.profile_photos' }
 ```
 
 ## Usage

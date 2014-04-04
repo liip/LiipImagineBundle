@@ -1,8 +1,8 @@
 <?php
 
-namespace Liip\ImagineBundle\Tests\Imagine\Data\Loader;
+namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
-use Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader;
+use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
@@ -20,16 +20,16 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             array(__DIR__.'/', $fileName),
             array(__DIR__, '/'.$fileName),
             array(__DIR__.'/', '/'.$fileName),
-            array(realpath(__DIR__.'/../..'), 'Data/Loader/'.$fileName),
-            array(realpath(__DIR__.'/../../'), '/Data/Loader/'.$fileName),
+            array(realpath(__DIR__.'/..'), 'Loader/'.$fileName),
+            array(realpath(__DIR__.'/../'), '/Loader/'.$fileName),
         );
     }
 
     public function testShouldImplementLoaderInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader');
+        $rc = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FileSystemLoader');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface'));
+        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Binary\Loader\LoaderInterface'));
     }
 
     public function testCouldBeConstructedWithExpectedArguments()

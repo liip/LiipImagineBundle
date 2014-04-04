@@ -15,14 +15,14 @@
 The ImagineBundle allows you to add your custom image loader classes. The only
 requirement is that each data loader implement the following interface:
 
-    Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface
+    Liip\ImagineBundle\Binary\Loader\LoaderInterface
 
 To tell the bundle about your new data loader, register it in the service
-container and apply the `liip_imagine.data.loader` tag to it (example here in XML):
+container and apply the `liip_imagine.binary.loader` tag to it (example here in XML):
 
 ``` xml
-<service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader">
-    <tag name="liip_imagine.data.loader" loader="my_custom_data" />
+<service id="acme_imagine.data.loader.my_custom" class="Acme\ImagineBundle\Binary\Loader\MyCustomDataLoader">
+    <tag name="liip_imagine.binary.loader" loader="my_custom_data" />
     <argument type="service" id="liip_imagine" />
 </service>
 ```
@@ -51,13 +51,13 @@ liip_imagine:
 
 
 For an example of a data loader implementation, refer to
-`Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader`.
+`Liip\ImagineBundle\Binary\Loader\FileSystemLoader`.
 
 ## Extending the image loader with data transformers
 
 You can extend a custom data loader to support virtually any file type using transformers.
 A data tranformer is intended to transform a file before actually rendering it. You
-can refer to `Liip\ImagineBundle\Imagine\Data\Loader\ExtendedFileSystemLoader` and
+can refer to `Liip\ImagineBundle\Binary\Loader\ExtendedFileSystemLoader` and
 to `Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer` as an example.
 
 ExtendedFileSystemLoader extends FileSystemLoader and takes, as argument, an array of transformers.
@@ -79,7 +79,7 @@ services:
     custom_loader:
         class:     Acme\ImagineBundle\Imagine\Data\Loader\MyCustomDataLoader
         tags:
-            -    { name: liip_imagine.data.loader, loader: custom_data_loader }
+            -    { name: liip_imagine.binary.loader, loader: custom_data_loader }
         arguments:
             -    '@liip_imagine'
             -    %kernel.root_dir%/../web

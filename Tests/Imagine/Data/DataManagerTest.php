@@ -3,7 +3,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Data;
 
 use Liip\ImagineBundle\Imagine\Data\DataManager;
-use Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -340,7 +340,7 @@ class DataManagerTest extends AbstractTest
      */
     protected function getMockLoader()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Data\Loader\LoaderInterface');
+        return $this->getMock('Liip\ImagineBundle\Binary\Loader\LoaderInterface');
     }
 
     /**

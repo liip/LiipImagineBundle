@@ -47,8 +47,8 @@
 
         <!-- Data loaders' classes -->
 
-        <parameter key="liip_imagine.data.loader.filesystem.class">Liip\ImagineBundle\Imagine\Data\Loader\FileSystemLoader</parameter>
-        <parameter key="liip_imagine.data.loader.stream.class">Liip\ImagineBundle\Imagine\Data\Loader\StreamLoader</parameter>
+        <parameter key="liip_imagine.binary.loader.filesystem.class">Liip\ImagineBundle\Binary\Loader\FileSystemLoader</parameter>
+        <parameter key="liip_imagine.binary.loader.stream.class">Liip\ImagineBundle\Binary\Loader\StreamLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
@@ -76,7 +76,7 @@
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument type="service" id="liip_imagine.filter.configuration" />
-            <argument>%liip_imagine.data.loader.default%</argument>
+            <argument>%liip_imagine.binary.loader.default%</argument>
         </service>
 
         <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">
@@ -179,13 +179,13 @@
 
         <!-- Data loaders -->
 
-        <service id="liip_imagine.data.loader.prototype.filesystem" class="%liip_imagine.data.loader.filesystem.class%">
+        <service id="liip_imagine.binary.loader.prototype.filesystem" class="%liip_imagine.binary.loader.filesystem.class%">
             <argument type="service" id="liip_imagine.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
-        <service id="liip_imagine.data.loader.prototype.stream" class="%liip_imagine.data.loader.stream.class%">
+        <service id="liip_imagine.binary.loader.prototype.stream" class="%liip_imagine.binary.loader.stream.class%">
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
         </service>

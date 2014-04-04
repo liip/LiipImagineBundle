@@ -37,11 +37,11 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
             'data_root' => 'theDataRoot',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.data.loader.theloadername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.theloadername'));
 
-        $loaderDefinition = $container->getDefinition('liip_imagine.data.loader.theloadername');
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.theloadername');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
-        $this->assertEquals('liip_imagine.data.loader.prototype.filesystem', $loaderDefinition->getParent());
+        $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
         $this->assertEquals('theDataRoot', $loaderDefinition->getArgument(2));
     }
