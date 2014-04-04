@@ -38,10 +38,11 @@ class ResolveCacheTest extends WebTestCase
     {
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
-        $output = $this->executeConsole(new ResolveCacheCommand(), array(
-            'path' => 'images/cats.jpeg',
-            'filters' => array('thumbnail_web_path')
-        ));
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg')),
+            array('filters' => array('thumbnail_web_path'))
+        );
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
@@ -54,33 +55,71 @@ class ResolveCacheTest extends WebTestCase
             'anImageContent'
         );
 
-        $output = $this->executeConsole(new ResolveCacheCommand(), array(
-            'path' => 'images/cats.jpeg',
-            'filters' => array('thumbnail_web_path')
-        ));
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg')),
+            array('filters' => array('thumbnail_web_path'))
+        );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
     }
 
-    public function testShouldResolveWithFewFiltersInParams()
+    public function testShouldResolveWithFewPaths()
     {
-        $output = $this->executeConsole(new ResolveCacheCommand(), array(
-            'path'    => 'images/cats.jpeg',
-            'filters' => array('thumbnail_web_path', 'thumbnail_default')
-        ));
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg')),
+            array('filters' => array('thumbnail_web_path'))
+        );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
     }
 
-    public function testShouldResolveWithoutFiltersInParams()
+    public function testShouldResolveWithFewPathsAndPartiallyFullCache()
     {
-        $output = $this->executeConsole(new ResolveCacheCommand(), array(
-            'path' => 'images/cats.jpeg',
-        ));
+        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats2.jpeg',
+            'anImageContent'
+        );
+
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg')),
+            array('filters' => array('thumbnail_web_path'))
+        );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+    }
+
+    public function testShouldResolveWithFewPathsAndFewFilters()
+    {
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg')),
+            array('filters' => array('thumbnail_web_path', 'thumbnail_default'))
+        );
+
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
         $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
+    }
+
+    public function testShouldResolveWithFewPathsAndWithoutFilters()
+    {
+        $output = $this->executeConsole(
+            new ResolveCacheCommand(),
+            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
+        );
+
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
     }
 
     /**

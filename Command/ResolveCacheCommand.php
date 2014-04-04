@@ -5,6 +5,7 @@ namespace Liip\ImagineBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ResolveCacheCommand extends ContainerAwareCommand
@@ -14,14 +15,19 @@ class ResolveCacheCommand extends ContainerAwareCommand
         $this
             ->setName('liip:imagine:cache:resolve')
             ->setDescription('Resolve cache for given path and set of filters.')
-            ->addArgument('path', InputArgument::REQUIRED, 'Image path')
-            ->addArgument('filters', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Filters list');
+            ->addArgument('paths', InputArgument::REQUIRED|InputArgument::IS_ARRAY, 'Image paths')
+            ->addOption(
+                'filters',
+                'f',
+                InputOption::VALUE_OPTIONAL|InputOption::VALUE_IS_ARRAY,
+                'Filters list'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getArgument('path');
-        $filters = $input->getArgument('filters');
+        $paths = $input->getArgument('paths');
+        $filters = $input->getOption('filters');
 
         /** @var FilterManager filterManager */
         $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
@@ -34,18 +40,20 @@ class ResolveCacheCommand extends ContainerAwareCommand
             $filters = array_keys($filterManager->getFilterConfiguration()->all());
         }
 
-        foreach ($filters as $filter) {
-            if (!$cacheManager->isStored($path, $filter)) {
-                $binary = $dataManager->find($filter, $path);
+        foreach ($paths as $path) {
+            foreach ($filters as $filter) {
+                if (!$cacheManager->isStored($path, $filter)) {
+                    $binary = $dataManager->find($filter, $path);
 
-                $cacheManager->store(
-                    $filterManager->applyFilter($binary, $filter),
-                    $path,
-                    $filter
-                );
+                    $cacheManager->store(
+                        $filterManager->applyFilter($binary, $filter),
+                        $path,
+                        $filter
+                    );
+                }
+
+                $output->writeln($cacheManager->resolve($path, $filter));
             }
-
-            $output->writeln($cacheManager->resolve($path, $filter));
         }
     }
 }
