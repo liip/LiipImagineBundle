@@ -67,7 +67,6 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('bucket')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('cache')->defaultValue(false)->end()

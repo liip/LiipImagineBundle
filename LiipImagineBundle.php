@@ -2,7 +2,9 @@
 
 namespace Liip\ImagineBundle;
 
+use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
@@ -20,7 +22,9 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new LoadersCompilerPass());
+        $container->addCompilerPass(new LoadersCompilerPass);
+        $container->addCompilerPass(new FiltersCompilerPass);
+        $container->addCompilerPass(new ResolversCompilerPass);
 
         /** @var $extension LiipImagineExtension */
         $extension = $container->getExtension('liip_imagine');

@@ -39,7 +39,6 @@ class StreamLoaderFactory implements LoaderFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('wrapper')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('context')->defaultValue(null)->end()

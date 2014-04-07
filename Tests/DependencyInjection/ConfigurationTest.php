@@ -28,7 +28,15 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testInjectLoaderFactoryConfig()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FooLoaderFactory,
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
@@ -51,7 +59,15 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testAllowToUseLoaderFactorySeveralTimes()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FooLoaderFactory,
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
@@ -77,7 +93,14 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testSetFilesystemLoaderAsDefaultLoaderIfNotDefined()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FileSystemLoaderFactory)),
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'loaders' => array(
                 )
@@ -89,10 +112,56 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
+    public function testSetFilesystemLoaderAsDefaultIfLoadersSectionNotDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array())
+        );
+
+        $this->assertArrayHasKey('loaders', $config);
+        $this->assertArrayHasKey('default', $config['loaders']);
+        $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
+    }
+
+    public function testSetWebPathResolversAsDefaultIfResolversSectionNotDefined()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array())
+        );
+
+        $this->assertArrayHasKey('resolvers', $config);
+        $this->assertArrayHasKey('default', $config['resolvers']);
+        $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
+    }
+
     public function testShouldNotOverwriteDefaultLoaderIfDefined()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(), array(new FooLoaderFactory, new FileSystemLoaderFactory)),
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FooLoaderFactory,
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'loaders' => array(
                     'default' => array(
@@ -113,7 +182,14 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testInjectResolverFactoryConfig()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
+            new Configuration(
+                array(
+                    new BarResolverFactory,
+                    new WebPathResolverFactory
+                ), array(
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
@@ -136,7 +212,15 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testAllowToUseResolverFactorySeveralTimes()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
+            new Configuration(
+                array(
+                    new BarResolverFactory,
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
@@ -162,7 +246,13 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testSetWebPathAsDefaultResolverIfNotDefined()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new WebPathResolverFactory), array()),
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ), array(
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'resolvers' => array(
                 )
@@ -177,7 +267,15 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
     public function testShouldNotOverwriteDefaultResolverIfDefined()
     {
         $config = $this->processConfiguration(
-            new Configuration(array(new BarResolverFactory, new WebPathResolverFactory), array()),
+            new Configuration(
+                array(
+                    new BarResolverFactory,
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
             array(array(
                 'resolvers' => array(
                     'default' => array(

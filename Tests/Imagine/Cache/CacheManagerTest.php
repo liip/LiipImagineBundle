@@ -45,7 +45,7 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager = new CacheManager($config, $this->createRouterMock(), new UriSigner('secret'));
 
-        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver "default" for "thumbnail" filter type');
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail');
     }
 
@@ -147,7 +147,7 @@ class CacheManagerTest extends AbstractTest
     {
         $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterMock(), new UriSigner('secret'));
 
-        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver for "thumbnail" filter type');
+        $this->setExpectedException('OutOfBoundsException', 'Could not find resolver "default" for "thumbnail" filter type');
         $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
     }
 
