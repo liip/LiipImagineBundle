@@ -21,6 +21,28 @@ class ResolveCacheCommand extends ContainerAwareCommand
                 'f',
                 InputOption::VALUE_OPTIONAL|InputOption::VALUE_IS_ARRAY,
                 'Filters list'
+            )->setHelp(<<<EOF
+The <info>%command.name%</info> command resolves cache by specified parameters.
+It returns list of urls.
+
+<info>php app/console %command.name% path1 path2 --filters=thumb1</info>
+Cache for this two paths will be resolved with passed filter.
+As a result you will get<info>
+    http://localhost/media/cache/thumb1/path1
+    http://localhost/media/cache/thumb1/path2</info>
+
+You can pass few filters:
+<info>php app/console %command.name% path1 --filters=thumb1 --filters=thumb2</info>
+As a result you will get<info>
+    http://localhost/media/cache/thumb1/path1
+    http://localhost/media/cache/thumb2/path1</info>
+
+If you omit --filters parameter then to resolve given paths will be used all configured and available filters in application:
+<info>php app/console %command.name% path1</info>
+As a result you will get<info>
+    http://localhost/media/cache/thumb1/path1
+    http://localhost/media/cache/thumb2/path1</info>
+EOF
             );
     }
 
