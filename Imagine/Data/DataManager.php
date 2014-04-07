@@ -72,20 +72,21 @@ class DataManager
      *
      * @param string $filter
      *
-     * @return LoaderInterface
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return LoaderInterface
      */
     public function getLoader($filter)
     {
         $config = $this->filterConfig->get($filter);
 
-        $loaderName = empty($config['data_loader'])
-            ? $this->defaultLoader : $config['data_loader'];
+        $loaderName = empty($config['data_loader']) ? $this->defaultLoader : $config['data_loader'];
 
         if (!isset($this->loaders[$loaderName])) {
             throw new \InvalidArgumentException(sprintf(
-                'Could not find data loader for "%s" filter type', $filter
+                'Could not find data loader "%s" for "%s" filter type',
+                $loaderName,
+                $filter
             ));
         }
 

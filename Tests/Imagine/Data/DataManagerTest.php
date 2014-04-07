@@ -239,7 +239,7 @@ class DataManagerTest extends AbstractTest
 
         $dataManager = new DataManager($this->getMockMimeTypeGuesser(), $this->getMockExtensionGuesser(), $config);
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find data loader for "thumbnail" filter type');
+        $this->setExpectedException('InvalidArgumentException', 'Could not find data loader "" for "thumbnail" filter type');
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 

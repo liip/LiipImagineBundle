@@ -84,12 +84,13 @@ class CacheManager
     {
         $config = $this->filterConfig->get($filter);
 
-        $resolverName = empty($config['cache'])
-            ? $this->defaultResolver : $config['cache'];
+        $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
 
         if (!isset($this->resolvers[$resolverName])) {
             throw new \OutOfBoundsException(sprintf(
-                'Could not find resolver for "%s" filter type', $filter
+                'Could not find resolver "%s" for "%s" filter type',
+                $resolverName,
+                $filter
             ));
         }
 

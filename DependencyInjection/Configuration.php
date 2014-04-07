@@ -41,42 +41,50 @@ class Configuration implements ConfigurationInterface
         $resolversPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('resolvers')
-                ->beforeNormalization()
-                    ->ifTrue(function ($v) { return !is_array($v) || (is_array($v) && !array_key_exists('default', $v)); })
-                    ->then(function ($v) {
-                        if (false == is_array($v)) {
-                            $v = array();
-                        }
-
-                        $v['default'] = array('web_path' => null);
-
-                        return $v;
-                    })
-                ->end()
-                ->useAttributeAsKey('name')
-                ->prototype('array')
+                    ->useAttributeAsKey('name')
+                    ->prototype('array')
         ;
         $this->addResolversSections($resolversPrototypeNode);
 
         $loadersPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('loaders')
-                    ->beforeNormalization()
-                        ->ifTrue(function ($v) { return !is_array($v) || (is_array($v) && !array_key_exists('default', $v)); })
-                        ->then(function ($v) {
-                            if (false == is_array($v)) {
-                                $v = array();
-                            }
-
-                            $v['default'] = array('filesystem' => null);
-
-                            return $v;
-                        })
-                    ->end()
                     ->useAttributeAsKey('name')
                     ->prototype('array')
         ;
         $this->addLoadersSections($loadersPrototypeNode);
+
+        $rootNode
+            ->beforeNormalization()
+                ->ifTrue(function ($v) {
+                    return
+                        empty($v['loaders']) ||
+                        !array_key_exists('default', $v['loaders']) ||
+                        empty($v['resolvers']) ||
+                        !array_key_exists('default', $v['resolvers'])
+                    ;
+                })
+                ->then(function ($v) {
+                    if (false == array_key_exists('loaders', $v)) {
+                        $v['loaders'] = array();
+                    }
+
+                    if (false == array_key_exists('default', $v['loaders'])) {
+                        $v['loaders']['default'] = array('filesystem' => null);
+                    }
+
+                    if (false == array_key_exists('resolvers', $v)) {
+                        $v['resolvers'] = array();
+                    }
+
+                    if (false == array_key_exists('default', $v['resolvers'])) {
+                        $v['resolvers']['default'] = array('web_path' => null);
+                    }
+
+                    return $v;
+                })
+            ->end()
+        ;
 
         $rootNode
             ->fixXmlConfig('filter_set', 'filter_sets')

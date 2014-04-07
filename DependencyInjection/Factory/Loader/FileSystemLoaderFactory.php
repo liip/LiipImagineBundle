@@ -38,7 +38,6 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder
-            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('data_root')->defaultValue('%kernel.root_dir%/../web')->cannotBeEmpty()->end()
             ->end()
