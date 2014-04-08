@@ -8,6 +8,11 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\Event;
+use Liip\ImagineBundle\ImagineEvents;
+use Liip\ImagineBundle\Events\PreResolveEvent;
+use Liip\ImagineBundle\Events\PostResolveEvent;
 
 class CacheManager
 {
@@ -31,6 +36,8 @@ class CacheManager
      */
     protected $uriSigner;
 
+    protected $dispatcher;
+
     /**
      * @var string
      */
@@ -44,11 +51,17 @@ class CacheManager
      * @param UriSigner $uriSigner
      * @param string $defaultResolver
      */
-    public function __construct(FilterConfiguration $filterConfig, RouterInterface $router, UriSigner $uriSigner, $defaultResolver = null)
-    {
+    public function __construct(
+        FilterConfiguration $filterConfig,
+        RouterInterface $router,
+        UriSigner $uriSigner,
+        EventDispatcherInterface $dispatcher,
+        $defaultResolver = null
+    ) {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
         $this->uriSigner = $uriSigner;
+        $this->dispatcher = $dispatcher;
         $this->defaultResolver = $defaultResolver ?: 'default';
     }
 
@@ -176,7 +189,15 @@ class CacheManager
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        return $this->getResolver($filter)->resolve($path, $filter);
+        $resolver = $this->getResolver($filter);
+
+        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, new PreResolveEvent($resolver, $path, $filter));
+
+        $url = $resolver->resolve($path, $filter);
+
+        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, new PostResolveEvent($resolver, $path, $filter, $url));
+
+        return $url;
     }
 
     /**
