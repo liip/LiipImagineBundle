@@ -5,10 +5,22 @@ use Symfony\Component\EventDispatcher\Event;
 
 class CacheResolveEvent extends Event
 {
+    /**
+     * Resource path
+     * @var string
+     */
     protected $path;
 
+    /**
+     * Filter name
+     * @var string
+     */
     protected $filter;
 
+    /**
+     * Resource url
+     * @var null
+     */
     protected $url;
 
     public function __construct($path, $filter, $url = null)
@@ -18,31 +30,61 @@ class CacheResolveEvent extends Event
         $this->url = $url;
     }
 
+    /**
+     * Sets resource path
+     *
+     * @param $path
+     */
     public function setPath($path)
     {
         $this->path = $path;
     }
 
+    /**
+     * Returns resource path
+     *
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;
     }
 
+    /**
+     * Sets filter name
+     *
+     * @param $filter
+     */
     public function setFilter($filter)
     {
         $this->filter = $filter;
     }
 
+    /**
+     * Returns filter name
+     *
+     * @return string
+     */
     public function getFilter()
     {
         return $this->filter;
     }
 
+    /**
+     * Sets resource url
+     *
+     * @param $url
+     */
     public function setUrl($url)
     {
         $this->url = $url;
     }
 
+    /**
+     * Returns resource url
+     *
+     * @return null
+     */
     public function getUrl()
     {
         return $this->url;
