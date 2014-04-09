@@ -4,9 +4,9 @@ namespace Liip\ImagineBundle;
 
 final class ImagineEvents
 {
-    const PRE_RESOLVE = 'imagine.pre_resolve';
+    const PRE_RESOLVE = 'liip_imagine.pre_resolve';
 
-    const POST_RESOLVE = 'imagine.post_resolve';
+    const POST_RESOLVE = 'liip_imagine.post_resolve';
 
     private function __construct()
     {
