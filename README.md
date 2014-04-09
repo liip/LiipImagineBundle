@@ -169,12 +169,15 @@ In case you need to add more logic the recommended solution is to either extend 
 ## Outside the web root
 
 When your setup requires your source images to live outside the web root, or if that's just the way you roll,
-you have to set the bundle's parameter `data_root` in the `config.yml` with the absolute path where your source images are
+you have to set your loader's parameter `data_root` in the `config.yml` with the absolute path where your source images are
 located:
 
 ``` yaml
 liip_imagine:
-    data_root: /path/to/source/images/dir
+    loaders:
+        default:
+            filesystem:
+                data_root: /path/to/source/images/dir
 ```
 
 Afterwards, you need to grant read access on Apache to access the images source directory. For achieving it you have

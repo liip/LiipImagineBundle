@@ -4,10 +4,15 @@ The default configuration for the bundle looks like this:
 
 ``` yaml
 liip_imagine:
-# add default loader
-#    resolvers:
-#        default:
-#            web_path: ~
+
+    resolvers:
+        default:
+            web_path: ~
+
+    loaders:
+        default:
+            filesystem:
+                data_root: ~  # %kernel.root_dir%../web/
 
     driver:               gd
     cache:                default
@@ -31,12 +36,6 @@ liip_imagine:
 ```
 
 There are several configuration options available:
-
-
- - `data_root` - the absolute path to the location that original files should
-    be sourced from. This option only changes the standard filesystem loader.
-
-    default: `%kernel.root_dir%/../web`
 
  - `cache` - default cache resolver
 
