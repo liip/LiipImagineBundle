@@ -8,7 +8,7 @@ final class ImagineEvents
 
     const POST_RESOLVE = 'imagine.post_resolve';
 
-    protected function __construct()
+    private function __construct()
     {
     }
 }

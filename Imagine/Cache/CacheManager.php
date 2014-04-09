@@ -11,8 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Liip\ImagineBundle\ImagineEvents;
-use Liip\ImagineBundle\Events\PreResolveEvent;
-use Liip\ImagineBundle\Events\PostResolveEvent;
+use Liip\ImagineBundle\Events\CacheResolveEvent;
 
 class CacheManager
 {
@@ -189,15 +188,23 @@ class CacheManager
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        $resolver = $this->getResolver($filter);
+        /** @var CacheResolveEvent $event */
+        $event = $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, new CacheResolveEvent(
+            $this->getResolver($filter),
+            $path,
+            $filter
+        ));
 
-        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, new PreResolveEvent($resolver, $path, $filter));
+        $url = $event->getResolver()->resolve($event->getPath(), $event->getFilter());
 
-        $url = $resolver->resolve($path, $filter);
+        $event = $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, new CacheResolveEvent(
+            $event->getResolver(),
+            $event->getPath(),
+            $event->getFilter(),
+            $url
+        ));
 
-        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, new PostResolveEvent($resolver, $path, $filter, $url));
-
-        return $url;
+        return $event->getUrl();
     }
 
     /**
