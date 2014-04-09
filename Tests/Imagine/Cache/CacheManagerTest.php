@@ -530,4 +530,72 @@ class CacheManagerTest extends AbstractTest
 
         $cacheManager->remove(null, array($expectedFilterOne, $expectedFilterTwo));
     }
+
+    public function testPreResolveEvent()
+    {
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->once())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
+        $dispatcher->addListener(ImagineEvents::PRE_RESOLVE, function ($event) {
+            $event->setPath('cats.jpg');
+        });
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->equalTo('cats.jpg'), $this->equalTo('thumbnail'))
+            ->will($this->returnValue('/thumbnail/cats.jpg'));
+
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), new UriSigner('secret'), $dispatcher);
+        $cacheManager->addResolver('default', $resolver);
+
+        $resolvedUrl = $cacheManager->resolve('invalid_path', 'thumbnail');
+
+        $this->assertEquals($resolvedUrl, '/thumbnail/cats.jpg');
+    }
+
+    public function testPostResolveEvent()
+    {
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->once())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
+        $dispatcher->addListener(ImagineEvents::POST_RESOLVE, function ($event) {
+            $event->setUrl('/thumbnail/cats.jpg');
+        });
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($this->equalTo('invalid_path'), $this->equalTo('thumbnail'))
+            ->will($this->returnValue('/invalid_path/cats.jpg'));
+
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), new UriSigner('secret'), $dispatcher);
+        $cacheManager->addResolver('default', $resolver);
+
+        $resolvedUrl = $cacheManager->resolve('invalid_path', 'thumbnail');
+
+        $this->assertEquals($resolvedUrl, '/thumbnail/cats.jpg');
+    }
 }
