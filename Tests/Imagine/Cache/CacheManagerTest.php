@@ -510,7 +510,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove(null, array($expectedFilterOne, $expectedFilterTwo));
     }
 
-    public function testShouldBeDispatchedCachePreResolveEvent()
+    public function testShouldDispatchCachePreResolveEvent()
     {
         $dispatcher = $this->createEventDispatcherMock();
         $dispatcher
@@ -530,7 +530,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
-    public function testShouldBeDispatchedCachePostResolveEvent()
+    public function testShouldDispatchCachePostResolveEvent()
     {
         $dispatcher = $this->createEventDispatcherMock();
         $dispatcher
@@ -548,5 +548,97 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->addResolver('default', $this->createResolverMock());
 
         $cacheManager->resolve('cats.jpg', 'thumbnail');
+    }
+
+    public function testShouldAllowToPassChangedDataFromPreResolveEventToResolver()
+    {
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->at(0))
+            ->method('dispatch')
+            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf('Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->will($this->returnCallback(function ($name, $event) {
+                $event->setPath('changed_path');
+                $event->setFilter('changed_filter');
+            }))
+        ;
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('changed_path', 'changed_filter')
+        ;
+
+        $cacheManager = new CacheManager(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterMock(),
+            new UriSigner('secret'),
+            $dispatcher
+        );
+        $cacheManager->addResolver('default', $resolver);
+
+        $cacheManager->resolve('cats.jpg', 'thumbnail');
+    }
+
+    public function testShouldAllowToPassChangedDataFromPreResolveEventToPostResolveEvent()
+    {
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->at(0))
+            ->method('dispatch')
+            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf('Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->will($this->returnCallback(function ($name, $event) {
+                $event->setPath('changed_path');
+                $event->setFilter('changed_filter');
+            }))
+        ;
+
+        $dispatcher
+            ->expects($this->at(1))
+            ->method('dispatch')
+            ->with(
+                ImagineEvents::POST_RESOLVE,
+                $this->logicalAnd(
+                    $this->isInstanceOf('Liip\ImagineBundle\Events\CacheResolveEvent'),
+                    $this->attributeEqualTo('path', 'changed_path'),
+                    $this->attributeEqualTo('filter', 'changed_filter')
+            ))
+        ;
+
+        $cacheManager = new CacheManager(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterMock(),
+            new UriSigner('secret'),
+            $dispatcher
+        );
+        $cacheManager->addResolver('default', $this->createResolverMock());
+
+        $cacheManager->resolve('cats.jpg', 'thumbnail');
+    }
+
+    public function testShouldReturnUrlChangedInPostResolveEvent()
+    {
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->at(1))
+            ->method('dispatch')
+            ->with(ImagineEvents::POST_RESOLVE, $this->isInstanceOf('Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->will($this->returnCallback(function ($name, $event) {
+                $event->setUrl('changed_url');
+            }))
+        ;
+
+        $cacheManager = new CacheManager(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterMock(),
+            new UriSigner('secret'),
+            $dispatcher
+        );
+        $cacheManager->addResolver('default', $this->createResolverMock());
+
+        $url = $cacheManager->resolve('cats.jpg', 'thumbnail');
+
+        $this->assertEquals('changed_url', $url);
     }
 }
