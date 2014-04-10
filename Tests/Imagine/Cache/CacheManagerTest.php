@@ -581,6 +581,34 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
+    public function testShouldAllowToGetResolverByFilterChangedInPreResolveEvent()
+    {
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->at(0))
+            ->method('dispatch')
+            ->will($this->returnCallback(function ($name, $event) {
+                $event->setFilter('thumbnail');
+            }))
+        ;
+
+        $cacheManager = $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array('getResolver'), array(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterMock(),
+            new UriSigner('secret'),
+            $dispatcher
+        ));
+
+        $cacheManager
+            ->expects($this->once())
+            ->method('getResolver')
+            ->with('thumbnail')
+            ->will($this->returnValue($this->createResolverMock()))
+        ;
+
+        $cacheManager->resolve('cats.jpg', 'default');
+    }
+
     public function testShouldAllowToPassChangedDataFromPreResolveEventToPostResolveEvent()
     {
         $dispatcher = $this->createEventDispatcherMock();
