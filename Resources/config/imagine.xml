@@ -83,6 +83,7 @@
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
             <argument type="service" id="liip_imagine.uri_signer" />
+            <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
         </service>
 

@@ -6,6 +6,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,6 +80,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function createResolverMock()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+    }
+
+    protected function createEventDispatcherMock()
+    {
+        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 
     protected function getMockImage()
