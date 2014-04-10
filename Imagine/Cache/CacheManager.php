@@ -194,7 +194,7 @@ class CacheManager
         $preEvent = new CacheResolveEvent($path, $filter);
         $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
 
-        $url = $this->getResolver($filter)->resolve($preEvent->getPath(), $preEvent->getFilter());
+        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
         $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
