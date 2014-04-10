@@ -188,21 +188,15 @@ class CacheManager
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        /** @var CacheResolveEvent $event */
-        $event = $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, new CacheResolveEvent(
-            $path,
-            $filter
-        ));
+        $preEvent = new CacheResolveEvent($path, $filter);
+        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
 
-        $url = $this->getResolver($filter)->resolve($event->getPath(), $event->getFilter());
+        $url = $this->getResolver($filter)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
-        $event = $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, new CacheResolveEvent(
-            $event->getPath(),
-            $event->getFilter(),
-            $url
-        ));
+        $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
+        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
 
-        return $event->getUrl();
+        return $postEvent->getUrl();
     }
 
     /**

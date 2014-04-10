@@ -3,6 +3,11 @@ namespace Liip\ImagineBundle\Events;
 
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Default event class for PreResolve and PostResolve events
+ *
+ * @package Liip\ImagineBundle\Events
+ */
 class CacheResolveEvent extends Event
 {
     /**
