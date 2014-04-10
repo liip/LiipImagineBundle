@@ -35,6 +35,9 @@ class CacheManager
      */
     protected $uriSigner;
 
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
     protected $dispatcher;
 
     /**

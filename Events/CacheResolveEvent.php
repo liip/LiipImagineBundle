@@ -3,11 +3,6 @@ namespace Liip\ImagineBundle\Events;
 
 use Symfony\Component\EventDispatcher\Event;
 
-/**
- * Default event class for PreResolve and PostResolve events
- *
- * @package Liip\ImagineBundle\Events
- */
 class CacheResolveEvent extends Event
 {
     /**
@@ -28,6 +23,13 @@ class CacheResolveEvent extends Event
      */
     protected $url;
 
+    /**
+     * Init default event state
+     *
+     * @param string $path
+     * @param string $filter
+     * @param null|string $url
+     */
     public function __construct($path, $filter, $url = null)
     {
         $this->path = $path;
