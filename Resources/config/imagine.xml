@@ -56,6 +56,7 @@
         <parameter key="liip_imagine.cache.resolver.no_cache_web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.aws_s3.class">Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver</parameter>
         <parameter key="liip_imagine.cache.resolver.cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.proxy.class">Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver</parameter>
 
         <!-- Form types -->
 
@@ -210,6 +211,11 @@
         <service id="liip_imagine.cache.resolver.prototype.cache" class="%liip_imagine.cache.resolver.cache.class%" public="true" abstract="true">
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument><!-- will be injected by a ResolverFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.cache.resolver.prototype.proxy" class="%liip_imagine.cache.resolver.proxy.class%" public="true" abstract="true">
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
         </service>
 
         <service id="liip_imagine.cache.resolver.no_cache_web_path" class="%liip_imagine.cache.resolver.no_cache_web_path.class%" public="true">
