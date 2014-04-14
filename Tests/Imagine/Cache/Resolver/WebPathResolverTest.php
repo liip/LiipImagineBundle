@@ -192,6 +192,26 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testComposeSchemaHostAndBasePathWithBackSplashOnResolve()
+    {
+        $requestContext = new RequestContext;
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('theHost');
+        $requestContext->setBaseUrl('\\');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $this->assertEquals(
+            'theschema://theHost/aCachePrefix/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
     public function testComposeSchemaHttpAndCustomPortAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext;

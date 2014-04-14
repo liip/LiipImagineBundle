@@ -138,7 +138,7 @@ class WebPathResolver implements ResolverInterface
         if ('.php' == substr($this->requestContext->getBaseUrl(), -4)) {
             $baseUrl = pathinfo($this->requestContext->getBaseurl(), PATHINFO_DIRNAME);
         }
-        $baseUrl = rtrim($baseUrl, '/');
+        $baseUrl = rtrim($baseUrl, '/\\');
 
         return sprintf('%s://%s%s%s',
             $this->requestContext->getScheme(),
