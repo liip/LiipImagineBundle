@@ -15,7 +15,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
-        $awsS3ClientDefinition =  new Definition('Aws\S3\S3Client');
+        $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
         $awsS3ClientDefinition->setFactoryClass('Aws\S3\S3Client');
         $awsS3ClientDefinition->setFactoryMethod('factory');
         $awsS3ClientDefinition->addArgument($config['client_config']);
@@ -34,14 +34,26 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
             $resolverDefinition->addMethodCall('setCachePrefix', array($config['cache_prefix']));
         }
 
-        if ($config['cache']) {
-            $internalResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.internal';
+        if ($config['proxies']) {
+            $proxiedResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.proxied';
 
-            $container->setDefinition($internalResolverId, $resolverDefinition);
+            $container->setDefinition($proxiedResolverId, $resolverDefinition);
+
+            $proxyResolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.proxy');
+            $proxyResolverDefinition->replaceArgument(0, new Reference($proxiedResolverId));
+            $proxyResolverDefinition->replaceArgument(1, $config['proxies']);
+
+            $container->setDefinition($resolverId, $proxyResolverDefinition);
+        }
+
+        if ($config['cache']) {
+            $cachedResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.cached';
+
+            $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
             $cacheResolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.cache');
             $cacheResolverDefinition->replaceArgument(0, new Reference($config['cache']));
-            $cacheResolverDefinition->replaceArgument(1, new Reference($internalResolverId));
+            $cacheResolverDefinition->replaceArgument(1, new Reference($cachedResolverId));
 
             $container->setDefinition($resolverId, $cacheResolverDefinition);
         }
@@ -79,6 +91,10 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                 ->end()
                 ->arrayNode('url_options')
                     ->useAttributeAsKey('key')
+                    ->prototype('scalar')->end()
+                ->end()
+                ->arrayNode('proxies')
+                    ->defaultValue(array())
                     ->prototype('scalar')->end()
                 ->end()
             ->end()

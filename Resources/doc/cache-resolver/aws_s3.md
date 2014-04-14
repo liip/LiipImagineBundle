@@ -69,6 +69,22 @@ liip_imagine:
 
 If you want to use other buckets for other images, simply alter the parameter names and create additional services!
 
+### Additional options
+
+You can use [Cache](./cache.md) and [Proxy](./proxy.md) resolvers in chain with current. You just need to configure them with defined options.
+
+```yaml
+liip_imagine:
+    resolvers:
+       profile_photos:
+          aws_s3:
+              ...
+              proxies: ['http://one.domain.com', 'http://two.domain.com']
+              cache: true
+```
+
+If enabled both first one will be [Cache](./cache.md), then [Proxy](./proxy.md) and after all process delegates to AwsS3 resolver.
+
 ## Object URL Options
 
 In order to make use of the object URL options, you can simply add a call to the service, to alter those options you need.
