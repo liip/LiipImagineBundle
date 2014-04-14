@@ -49,7 +49,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         if ($config['cache']) {
             $cachedResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.cached';
 
-            $container->setDefinition($cachedResolverId, (isset($proxyResolverDefinition) ? $proxyResolverDefinition : $resolverDefinition));
+            $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
             $cacheResolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.cache');
             $cacheResolverDefinition->replaceArgument(0, new Reference($config['cache']));
