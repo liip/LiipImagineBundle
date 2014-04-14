@@ -112,6 +112,45 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
+    public function testSetFilesystemLoaderAsDefaultLoaderIfNull()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array(
+                'loaders' => null,
+            ))
+        );
+
+        $this->assertArrayHasKey('loaders', $config);
+        $this->assertArrayHasKey('default', $config['loaders']);
+        $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
+    }
+
+    public function testThrowIfLoadersNotArray()
+    {
+        $this->setExpectedException('LogicException', 'Loaders has to be array');
+        $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array(
+                'loaders' => 'not_array',
+            ))
+        );
+    }
+
     public function testSetFilesystemLoaderAsDefaultIfLoadersSectionNotDefined()
     {
         $config = $this->processConfiguration(
@@ -256,6 +295,47 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
             array(array(
                 'resolvers' => array(
                 )
+            ))
+        );
+
+        $this->assertArrayHasKey('resolvers', $config);
+        $this->assertArrayHasKey('default', $config['resolvers']);
+        $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
+    }
+
+    public function testSetWebPathAsDefaultResolverIfNull()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ), array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array(
+                'resolvers' => null,
+            ))
+        );
+
+        $this->assertArrayHasKey('resolvers', $config);
+        $this->assertArrayHasKey('default', $config['resolvers']);
+        $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
+    }
+
+    public function testThrowsIfResolversNotArray()
+    {
+        $this->setExpectedException('LogicException', 'Resolvers has to be array');
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new WebPathResolverFactory
+                ), array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array(
+                'resolvers' => 'not_array',
             ))
         );
 

@@ -59,22 +59,30 @@ class Configuration implements ConfigurationInterface
                 ->ifTrue(function ($v) {
                     return
                         empty($v['loaders']) ||
-                        !array_key_exists('default', $v['loaders']) ||
+                        empty($v['loaders']['default']) ||
                         empty($v['resolvers']) ||
-                        !array_key_exists('default', $v['resolvers'])
+                        empty($v['resolvers']['default'])
                     ;
                 })
                 ->then(function ($v) {
-                    if (false == array_key_exists('loaders', $v)) {
+                    if (empty($v['loaders'])) {
                         $v['loaders'] = array();
+                    }
+
+                    if (false == is_array($v['loaders'])) {
+                        throw new \LogicException('Loaders has to be array');
                     }
 
                     if (false == array_key_exists('default', $v['loaders'])) {
                         $v['loaders']['default'] = array('filesystem' => null);
                     }
 
-                    if (false == array_key_exists('resolvers', $v)) {
+                    if (empty($v['resolvers'])) {
                         $v['resolvers'] = array();
+                    }
+
+                    if (false == is_array($v['resolvers'])) {
+                        throw new \LogicException('Resolvers has to be array');
                     }
 
                     if (false == array_key_exists('default', $v['resolvers'])) {
