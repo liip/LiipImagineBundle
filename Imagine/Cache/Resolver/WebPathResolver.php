@@ -117,7 +117,7 @@ class WebPathResolver implements ResolverInterface
      */
     protected function getFileUrl($path, $filter)
     {
-        return $this->cachePrefix.'/'.$filter.'/'.$path;
+        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
 
     /**
