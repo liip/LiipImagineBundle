@@ -44,7 +44,7 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.filter.manager'),
                 new Reference('liip_imagine.cache.manager'),
-                new Reference('liip_imagine.uri_signer'),
+                new Reference('liip_imagine.util.signer'),
             )
         );
     }

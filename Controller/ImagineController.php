@@ -7,10 +7,10 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
+use Liip\ImagineBundle\Util\SignerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\UriSigner;
 
 class ImagineController
 {
@@ -30,26 +30,26 @@ class ImagineController
     protected $cacheManager;
 
     /**
-     * @var UriSigner
+     * @var SignerInterface
      */
-    protected $uriSigner;
+    protected $signer;
 
     /**
-     * @param DataManager   $dataManager
-     * @param FilterManager $filterManager
-     * @param CacheManager  $cacheManager
-     * @param UriSigner     $uriSigner
+     * @param DataManager     $dataManager
+     * @param FilterManager   $filterManager
+     * @param CacheManager    $cacheManager
+     * @param SignerInterface $signer
      */
     public function __construct(
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
-        UriSigner $uriSigner
+        SignerInterface $signer
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
-        $this->uriSigner = $uriSigner;
+        $this->signer = $signer;
     }
 
     /**
@@ -70,7 +70,7 @@ class ImagineController
             $runtimeConfig = array();
             $pathPrefix = '';
             if ($runtimeFilters = $request->query->get('filters', array())) {
-                if (false == $this->uriSigner->check($request->getSchemeAndHttpHost().$request->getRequestUri())) {
+                if (false == $this->signer->checkHash($runtimeFilters, $request->query->get('_hash'))) {
                     throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
                 }
 

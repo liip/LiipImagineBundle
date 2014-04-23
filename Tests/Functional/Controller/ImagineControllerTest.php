@@ -5,7 +5,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\UriSigner;
+use Liip\ImagineBundle\Util\Signer;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
@@ -96,15 +96,18 @@ class ImagineControllerTest extends WebTestCase
 
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
     {
-        /** @var UriSigner $uriSigner */
-        $uriSigner = self::$kernel->getContainer()->get('liip_imagine.uri_signer');
+        /** @var Signer $signer */
+        $signer = self::$kernel->getContainer()->get('liip_imagine.util.signer');
 
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $params = array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
-        ));
-        $url = $uriSigner->sign($url);
+        );
+
+        $params['_hash'] = $signer->getHash($params['filters']);
+
+        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query($params);
 
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -129,15 +132,18 @@ class ImagineControllerTest extends WebTestCase
             'anImageContent'
         );
 
-        /** @var UriSigner $uriSigner */
-        $uriSigner = self::$kernel->getContainer()->get('liip_imagine.uri_signer');
+        /** @var Signer $signer */
+        $signer = self::$kernel->getContainer()->get('liip_imagine.util.signer');
 
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $params = array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
-        ));
-        $url = $uriSigner->sign($url);
+        );
+
+        $params['_hash'] = $signer->getHash($params['filters']);
+
+        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query($params);
 
         $this->client->request('GET', $url);
 

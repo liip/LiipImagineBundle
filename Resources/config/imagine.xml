@@ -12,6 +12,7 @@
         <parameter key="liip_imagine.data.manager.class">Liip\ImagineBundle\Imagine\Data\DataManager</parameter>
         <parameter key="liip_imagine.cache.manager.class">Liip\ImagineBundle\Imagine\Cache\CacheManager</parameter>
         <parameter key="liip_imagine.binary.mime_type_guesser.class">Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser</parameter>
+        <parameter key="liip_imagine.util.signer.class">Liip\ImagineBundle\Util\Signer</parameter>
 
         <!-- Controller class -->
 
@@ -83,7 +84,7 @@
         <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
-            <argument type="service" id="liip_imagine.uri_signer" />
+            <argument type="service" id="liip_imagine.util.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
         </service>
@@ -98,7 +99,7 @@
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
-            <argument type="service" id="liip_imagine.uri_signer" />
+            <argument type="service" id="liip_imagine.util.signer" />
         </service>
 
         <!-- Route Loader -->
@@ -249,6 +250,8 @@
             <argument type="service" id="liip_imagine.mime_type_guesser" />
         </service>
 
-        <service id="liip_imagine.uri_signer" alias="uri_signer" />
+        <service id="liip_imagine.util.signer" class="%liip_imagine.util.signer.class%">
+            <argument>%kernel.secret%</argument>
+        </service>
     </services>
 </container>
