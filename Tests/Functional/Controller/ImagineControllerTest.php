@@ -126,13 +126,6 @@ class ImagineControllerTest extends WebTestCase
 
     public function testShouldResolveWithCustomFiltersFromCache()
     {
-        $expectedCachePath = 'thumbnail_web_path/S8rrlhhQ/images/cats.jpeg';
-
-        $this->filesystem->dumpFile(
-            $this->cacheRoot.$expectedCachePath,
-            'anImageContent'
-        );
-
         /** @var Signer $signer */
         $signer = self::$kernel->getContainer()->get('liip_imagine.util.signer');
 
@@ -144,6 +137,12 @@ class ImagineControllerTest extends WebTestCase
 
         $path = 'thumbnail_web_path/images/cats.jpeg';
         $params['_hash'] = $signer->getHash($path, $params['filters']);
+        $expectedCachePath = 'thumbnail_web_path/'.substr($params['_has'], 0, 8).'/images/cats.jpeg';
+
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.$expectedCachePath,
+            'anImageContent'
+        );
 
         $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
 
