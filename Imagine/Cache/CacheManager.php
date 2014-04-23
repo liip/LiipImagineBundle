@@ -151,7 +151,7 @@ class CacheManager
 
         if (!empty($runtimeConfig)) {
             $params['filters'] = $runtimeConfig;
-            $params['_hash'] = $this->signer->getHash($runtimeConfig);
+            $params['_hash'] = $this->signer->getHash($path, $runtimeConfig);
         }
 
         $filterUrl = $this->router->generate('_imagine_'.$filter, $params, true);

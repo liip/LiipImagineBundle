@@ -105,9 +105,10 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $params['_hash'] = $signer->getHash($params['filters']);
+        $path = 'thumbnail_web_path/images/cats.jpeg';
+        $params['_hash'] = $signer->getHash($path, $params['filters']);
 
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query($params);
+        $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
 
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -141,9 +142,10 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $params['_hash'] = $signer->getHash($params['filters']);
+        $path = 'thumbnail_web_path/images/cats.jpeg';
+        $params['_hash'] = $signer->getHash($path, $params['filters']);
 
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query($params);
+        $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
 
         $this->client->request('GET', $url);
 

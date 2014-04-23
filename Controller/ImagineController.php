@@ -70,7 +70,7 @@ class ImagineController
             $runtimeConfig = array();
             $pathPrefix = '';
             if ($runtimeFilters = $request->query->get('filters', array())) {
-                if (false == $this->signer->checkHash($runtimeFilters, $request->query->get('_hash'))) {
+                if (false == $this->signer->checkHash($path, $runtimeFilters, $request->query->get('_hash'))) {
                     throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
                 }
 
