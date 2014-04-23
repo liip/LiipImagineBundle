@@ -135,6 +135,8 @@ liip_image:
                     # Position: One of topleft,top,topright,left,center,right,bottomleft,bottom,bottomright
                     position: center
 ```
+> Please note that position of watermark filter is important. If you have some filters like `crop` after it is possible
+> that watermark image will be cropped.
 
 ### The `auto_rotate` filter
 
