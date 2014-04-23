@@ -7,8 +7,6 @@ php:
 
 env:
   - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.4.*
-  - SYMFONY_VERSION=dev-master
 
 before_script:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
