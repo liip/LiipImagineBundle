@@ -2,11 +2,12 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
+
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 class FileSystemLoader implements LoaderInterface
 {
@@ -47,13 +48,13 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         if (false !== strpos($path, '../')) {
-            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+            throw new NotLoadableException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
         }
 
         $absolutePath = $this->rootPath.'/'.ltrim($path, '/');
 
         if (false == file_exists($absolutePath)) {
-            throw new NotFoundHttpException(sprintf('Source image not found in "%s"', $absolutePath));
+            throw new NotLoadableException(sprintf('Source image not found in "%s"', $absolutePath));
         }
 
         $mimeType = $this->mimeTypeGuesser->guess($absolutePath);

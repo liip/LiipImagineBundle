@@ -3,7 +3,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 class GridFSLoader implements LoaderInterface
 {
@@ -37,7 +37,7 @@ class GridFSLoader implements LoaderInterface
             ->find(new \MongoId($id));
 
         if (!$image) {
-            throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $id));
+            throw new NotLoadableException(sprintf('Source image not found with id "%s"', $id));
         }
 
         return $image['file']->getBytes();

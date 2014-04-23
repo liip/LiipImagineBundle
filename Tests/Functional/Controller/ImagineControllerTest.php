@@ -94,6 +94,15 @@ class ImagineControllerTest extends WebTestCase
         )));
     }
 
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Source image could not be found
+     */
+    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
+    {
+        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
+    }
+
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
     {
         /** @var UriSigner $uriSigner */
