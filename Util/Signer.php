@@ -27,7 +27,8 @@ class Signer implements SignerInterface
         $hash = urlencode(base64_encode(hash_hmac('sha256', ltrim($path, '/') . serialize($data), $this->secret, true)));
 
         if (true === (bool) $trim) {
-            return substr($hash, 0, 8);
+            // Strip out characters which may cause issues for some filesystems
+            return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $hash), 0, 8);
         }
 
         return $hash;
