@@ -64,7 +64,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
         }
 
         if (!$image) {
-            throw new NotLoadableException(sprintf('Source image not found with id "%s"', $path));
+            throw new NotLoadableException(sprintf('Source image was not found with id "%s"', $path));
         }
 
         return stream_get_contents($this->getStreamFromImage($image));

@@ -37,7 +37,7 @@ class GridFSLoader implements LoaderInterface
             ->find(new \MongoId($id));
 
         if (!$image) {
-            throw new NotLoadableException(sprintf('Source image not found with id "%s"', $id));
+            throw new NotLoadableException(sprintf('Source image was not found with id "%s"', $id));
         }
 
         return $image['file']->getBytes();
