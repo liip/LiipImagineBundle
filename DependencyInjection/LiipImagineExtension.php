@@ -56,6 +56,11 @@ class LiipImagineExtension extends Extension
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
+        if (!class_exists('Imagine\Image\Metadata\MetadataReaderInterface')) {
+            $container->getDefinition('liip_imagine.'.$config['driver'])->removeMethodCall('setMetadataReader');
+            $container->removeDefinition('liip_imagine.meta_data.reader');
+        }
+
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);

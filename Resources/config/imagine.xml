@@ -59,6 +59,7 @@
 
         <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
 
+        <parameter key="liip_imagine.meta_data.reader.class">Imagine\Image\Metadata\ExifMetadataReader</parameter>
     </parameters>
 
     <services>
@@ -98,9 +99,13 @@
             <argument type="service" id="liip_imagine.cache.signer" />
         </service>
 
+        <service id="liip_imagine.meta_data.reader" class="%liip_imagine.meta_data.reader.class%" />
+
         <!-- ImagineInterface instances -->
 
-        <service id="liip_imagine" alias="liip_imagine.gd" />
+        <service id="liip_imagine" alias="liip_imagine.gd">
+            <call method="setMetadataReader"><argument type="service" id="liip_imagine.meta_data.reader" /></call>
+        </service>
 
         <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" public="false" />
 

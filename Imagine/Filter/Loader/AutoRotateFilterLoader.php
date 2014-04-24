@@ -16,11 +16,8 @@ class AutoRotateFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        $exifData = exif_read_data("data://image/jpeg;base64," . base64_encode($image->get('jpg')));
-
-        if (isset($exifData['Orientation'])) {
-            $orientation = (int) $exifData['Orientation'];
-            $degree = $this->calculateRotation($orientation);
+        if ($orientation = $this->getOrientation($image)) {
+            $degree = $this->calculateRotation((int)$orientation);
 
             if ($degree !== 0) {
                 $image->rotate($degree);
@@ -54,5 +51,20 @@ class AutoRotateFilterLoader implements LoaderInterface
         }
 
         return $degree;
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return int
+     */
+    private function getOrientation(ImageInterface $image)
+    {
+        //>0.6 imagine meta data interface
+        if (method_exists($image, 'metadata')) {
+            return $image->metadata()->offsetGet('exif.Orientation');
+        } else {
+            $data = exif_read_data("data://image/jpeg;base64," . base64_encode($image->get('jpg')));
+            return isset($data['Orientation']) ? $data['Orientation'] : null;
+        }
     }
 }
