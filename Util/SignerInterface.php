@@ -9,9 +9,10 @@ interface SignerInterface
      *
      * @param  string $path
      * @param  array  $data
+     * @param  bool   $trim
      * @return array
      */
-    public function getHash($path, array $data);
+    public function getHash($path, array $data, $trim = false);
 
     /**
      * Check a hash is correct for a string

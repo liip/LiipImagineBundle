@@ -75,7 +75,7 @@ class ImagineController
                 }
 
                 $runtimeConfig['filters'] = $runtimeFilters;
-                $pathPrefix = substr($request->query->get('_hash'), 0, 8).'/';
+                $pathPrefix = $this->signer->getHash($path, $runtimeFilters, true).'/';
             }
 
             if (!$this->cacheManager->isStored($path, $filter)) {
