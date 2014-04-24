@@ -414,6 +414,24 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver->remove(array(), array('aFilterOne', 'aFilterTwo'));
     }
 
+    public function testShouldRemoveDoubleSlashInUrl()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $rc = new \ReflectionClass($resolver);
+        $method = $rc->getMethod('getFileUrl');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($resolver, array('/cats.jpg', 'some_filter'));
+
+        $this->assertNotContains('//', $result);
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|Filesystem
      */
