@@ -6,7 +6,7 @@ use Liip\ImagineBundle\Binary\Loader\StreamLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader
+ * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader<extended>
  */
 class StreamLoaderTest extends AbstractTest
 {

@@ -1,22 +1,16 @@
 <?php
 namespace Liip\ImagineBundle\Tests;
 
-use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @covers Liip\ImagineBundle\LiipImagineBundle
+ */
 class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 {
     public function testSubClassOfBundle()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\LiipImagineBundle');
-
-        $this->assertTrue($rc->isSubclassOf('Symfony\Component\HttpKernel\Bundle\Bundle'));
-    }
-
-    public function testCouldBeConstructedWithoutAnyArguments()
-    {
-        new LiipImagineBundle;
+        $this->assertInstanceOf('Symfony\Component\HttpKernel\Bundle\Bundle', new LiipImagineBundle());
     }
 
     public function testAddLoadersCompilerPassOnBuild()

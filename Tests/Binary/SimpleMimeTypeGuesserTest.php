@@ -4,6 +4,9 @@ namespace Liip\ImagineBundle\Tests\Binary;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
+/**
+ * @covers Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
+ */
 class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
 {
     public function provideImages()

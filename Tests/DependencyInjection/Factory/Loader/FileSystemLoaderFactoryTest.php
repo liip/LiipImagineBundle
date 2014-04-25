@@ -6,6 +6,9 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @covers Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory<extended>
+ */
 class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsLoaderFactoryInterface()

@@ -5,11 +5,8 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 
-
 /**
- * ProxyResolverTest
- *
- * @author Robert Schönthal <robert.schoenthal@gmail.com>
+ * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
  */
 class ProxyResolverTest extends \Phpunit_Framework_TestCase
 {
