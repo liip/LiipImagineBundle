@@ -3,6 +3,9 @@ namespace Liip\ImagineBundle\Tests\Model;
 
 use Liip\ImagineBundle\Model\Binary;
 
+/**
+ * @covers Liip\ImagineBundle\Model\Binary
+ */
 class BinaryTest extends \PHPUnit_Framework_TestCase
 {
     public function testImplementsBinaryInterface()

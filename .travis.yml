@@ -11,6 +11,8 @@ env:
   - SYMFONY_VERSION=2.5.*
 
 before_script:
+  - yes '' | pecl -q install -f mongo
+  - composer self-update
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
   - composer install --dev --prefer-source
 

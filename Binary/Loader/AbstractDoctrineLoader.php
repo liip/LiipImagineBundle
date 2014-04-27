@@ -57,10 +57,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
             $info = pathinfo($path);
             $name = $info['dirname'].'/'.$info['filename'];
 
-            // maybe the image has an id without extension
-            if (!$image) {
-                $image = $this->manager->find($this->class, $this->mapPathToId($name));
-            }
+            $image = $this->manager->find($this->class, $this->mapPathToId($name));
         }
 
         if (!$image) {

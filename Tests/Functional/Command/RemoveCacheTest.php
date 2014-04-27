@@ -10,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @covers Liip\ImagineBundle\Command\RemoveCacheCommand
+ */
 class RemoveCacheTest extends WebTestCase
 {
     protected $client;

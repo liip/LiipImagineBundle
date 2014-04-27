@@ -2,19 +2,24 @@
 
 namespace Liip\ImagineBundle\Tests\Exception\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
+
+/**
+ * @covers Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
+ */
 class NotResolvableExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testSubClassOfRuntimeException()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException');
+        $e = new NotResolvableException();
 
-        $this->assertTrue($rc->isSubclassOf('RuntimeException'));
+        $this->assertInstanceOf('\RuntimeException', $e);
     }
 
     public function testImplementsExceptionInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException');
+        $e = new NotResolvableException();
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Exception\ExceptionInterface'));
+        $this->assertInstanceOf('Liip\ImagineBundle\Exception\ExceptionInterface', $e);
     }
 }
