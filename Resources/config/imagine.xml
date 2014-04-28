@@ -107,7 +107,8 @@
         <service id="liip_imagine.routing.loader" class="%liip_imagine.routing.loader.class%">
             <tag name="routing.loader" />
             <argument type="service" id="liip_imagine.filter.configuration" />
-            <argument>%liip_imagine.controller_action%</argument>
+            <argument>%liip_imagine.controller.filter_action%</argument>
+            <argument>%liip_imagine.controller.runtime_config_action%</argument>
             <argument>%liip_imagine.cache_prefix%</argument>
         </service>
 

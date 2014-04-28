@@ -12,7 +12,12 @@ class ImagineLoader extends Loader
     /**
      * @var string
      */
-    private $controllerAction;
+    private $filterControllerAction;
+
+    /**
+     * @var string
+     */
+    private $runtimeConfigControllerAction;
 
     /**
      * @var string
@@ -26,13 +31,14 @@ class ImagineLoader extends Loader
 
     /**
      * @param FilterConfiguration $filterConfig
-     * @param string $controllerAction
+     * @param string $filterControllerAction
      * @param string $cachePrefi
      */
-    public function __construct(FilterConfiguration $filterConfig, $controllerAction, $cachePrefix)
+    public function __construct(FilterConfiguration $filterConfig, $filterControllerAction, $runtimeConfigControllerAction, $cachePrefix)
     {
         $this->filterConfig = $filterConfig;
-        $this->controllerAction = $controllerAction;
+        $this->filterControllerAction = $filterControllerAction;
+        $this->runtimeConfigControllerAction = $runtimeConfigControllerAction;
         $this->cachePrefix = $cachePrefix;
     }
 
@@ -49,49 +55,69 @@ class ImagineLoader extends Loader
      */
     public function load($resource, $type = null)
     {
-        $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
-        $routes       = new RouteCollection();
-        $filters      = $this->filterConfig->all();
+        $routes  = new RouteCollection();
+        $filters = $this->filterConfig->all();
 
         if (count($filters) > 0) {
             foreach ($filters as $filter => $config) {
-                $pattern = $this->cachePrefix;
-                if (isset($config['path'])) {
-                    if ('/' !== $config['path']) {
-                        $pattern .= '/'.trim($config['path'], '/');
-                    }
-                } elseif ('' !== $filter) {
-                    $pattern .= '/'.$filter;
-                }
-
-                $defaults = array(
-                    '_controller' => empty($config['controller_action']) ? $this->controllerAction : $config['controller_action'],
+                $routes->add('_imagine_rc_'.$filter, $this->getRoute($filter, $config, array(
+                    '_controller' => empty($config['controller']['runtime_config_action']) ? $this->runtimeConfigControllerAction : $config['controller']['runtime_config_action'],
                     'filter' => $filter,
-                );
+                ), 'rc/'));
 
-                $routeRequirements = $requirements;
-                $routeDefaults = $defaults;
-                $routeOptions = array();
-
-                if (isset($config['route']['requirements'])) {
-                    $routeRequirements = array_merge($routeRequirements, $config['route']['requirements']);
-                }
-                if (isset($config['route']['defaults'])) {
-                    $routeDefaults = array_merge($routeDefaults, $config['route']['defaults']);
-                }
-                if (isset($config['route']['options'])) {
-                    $routeOptions = array_merge($routeOptions, $config['route']['options']);
-                }
-
-                $routes->add('_imagine_'.$filter, new Route(
-                    $pattern.'/{path}',
-                    $routeDefaults,
-                    $routeRequirements,
-                    $routeOptions
-                ));
+                $routes->add('_imagine_'.$filter, $this->getRoute($filter, $config, array(
+                    '_controller' => empty($config['controller']['filter_action']) ? $this->filterControllerAction : $config['controller']['filter_action'],
+                    'filter' => $filter,
+                )));
             }
         }
 
         return $routes;
+    }
+
+    /**
+     * @param string $filter
+     * @param array $config
+     * @param array $defaults
+     * @param $cacheSuffix
+     * @return Route
+     */
+    protected function getRoute($filter, array $config, array $defaults, $cacheSuffix = null)
+    {
+        $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
+        $routeOptions = array();
+
+        $pattern = trim($this->cachePrefix, '/');
+
+        if (isset($config['path'])) {
+            if ('/' !== $config['path']) {
+                $pattern .= '/'.trim($config['path'], '/');
+            }
+        } elseif ('' !== $filter) {
+            $pattern .= '/'.trim($filter, '/');
+
+            if (null !== $cacheSuffix) {
+                $pattern .= '/'.trim($cacheSuffix, '/');
+            }
+        }
+
+        if (isset($config['route']['requirements'])) {
+            $requirements = array_merge($requirements, $config['route']['requirements']);
+        }
+
+        if (isset($config['route']['defaults'])) {
+            $defaults = array_merge($defaults, $config['route']['defaults']);
+        }
+
+        if (isset($config['route']['options'])) {
+            $routeOptions = array_merge($routeOptions, $config['route']['options']);
+        }
+
+        return new Route(
+            $pattern.'/{path}',
+            $defaults,
+            $requirements,
+            $routeOptions
+        );
     }
 }

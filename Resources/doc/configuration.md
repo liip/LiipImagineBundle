@@ -17,7 +17,9 @@ liip_imagine:
     driver:               gd
     cache:                default
     data_loader:          default
-    controller_action:    liip_imagine.controller:filterAction
+    controller:
+        filter_action:         liip_imagine.controller:filterAction
+        runtime_config_action: liip_imagine.controller:runtimeConfigAction
     filter_sets:
 
         # Prototype
@@ -27,7 +29,7 @@ liip_imagine:
             format:               ~
             cache:                ~
             data_loader:          ~
-            controller_action:    ~
+            controller:           ~
             route:                []
             filters:
 
@@ -45,9 +47,14 @@ There are several configuration options available:
 
     default: filesystem (which means the standard filesystem loader is used)
 
- - `controller_action` - name of the controller action to use in the route loader
+ - `controller`
+         - `filter_action` - name of the controller action to use in the route loader
 
-    default: liip_imagine.controller:filterAction
+            default: liip_imagine.controller:filterAction
+
+        - `runtime_config_action` - name of the controller action to use in the route loader for runtimeconfig images
+
+            default: liip_imagine.controller:runtimeConfigAction
 
  - `driver` - one of the three drivers: `gd`, `imagick`, `gmagick`
 
@@ -65,7 +72,9 @@ Each filter set that you specify has the following options:
  - `quality` - override the default quality of 100 for the generated images
  - `cache` - override the default cache setting
  - `data_loader` - override the default data loader
- - `controller_action` - override the default controller action
+ - `controller`
+    - `filter_action` - override the default controller action
+    - `runtime_config_action` - override the default controller action for runtime config
  - `route` - optional list of route requirements, defaults and options using in the route loader. Add array with keys 'requirements', 'defaults' or 'options'.
 
     default: empty array
