@@ -1,0 +1,28 @@
+# .scrutinizer.yml
+imports:
+    - php
+
+before_commands:
+#    - "composer install --prefer-source --dev"
+
+filter:
+    excluded_paths: [vendor/*, tests/*, bin/*]
+
+tools:
+    php_sim: true
+    php_mess_detector: true
+    php_cs_fixer: true
+    php_analyzer: true
+    php_code_sniffer: true
+    sensiolabs_security_checker: true
+#    php_code_coverage: true
+#    php_cpd:
+#        enabled: true
+#        excluded_dirs:        [vendor, tests, bin]
+    php_loc:
+        enabled: true
+        excluded_dirs:        [vendor]
+    php_pdepend:
+        enabled: true
+        excluded_dirs:        [vendor, tests, bin]
+#    php_hhvm: true
