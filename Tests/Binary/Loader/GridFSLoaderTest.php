@@ -43,7 +43,7 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      */
     public function testFindWithInValidDocument()
     {
