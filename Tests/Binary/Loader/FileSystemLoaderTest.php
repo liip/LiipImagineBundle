@@ -50,7 +50,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image was searched with'
         );
 
@@ -66,7 +66,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image was searched with'
         );
 
@@ -82,7 +82,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image not found'
         );
 

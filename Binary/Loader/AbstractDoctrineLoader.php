@@ -3,7 +3,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 abstract class AbstractDoctrineLoader implements LoaderInterface
 {
@@ -61,7 +61,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
         }
 
         if (!$image) {
-            throw new NotFoundHttpException(sprintf('Source image not found with id "%s"', $path));
+            throw new NotLoadableException(sprintf('Source image was not found with id "%s"', $path));
         }
 
         return stream_get_contents($this->getStreamFromImage($image));

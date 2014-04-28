@@ -14,7 +14,9 @@ class StreamLoaderTest extends AbstractTest
     {
         $loader = new StreamLoader('file://');
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException'
+        );
         $loader->find($this->tempDir.'/invalid.jpeg');
     }
 
