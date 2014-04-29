@@ -429,7 +429,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $result = $method->invokeArgs($resolver, array('/cats.jpg', 'some_filter'));
 
-        $this->assertNotContains('//', $result);
+        $this->assertEquals('aCachePrefix/some_filter/cats.jpg', $result);
     }
 
     /**
