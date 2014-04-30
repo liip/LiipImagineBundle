@@ -62,12 +62,12 @@ class ImagineLoader extends Loader
             foreach ($filters as $filter => $config) {
                 $routes->add('_imagine_rc_'.$filter, $this->getRoute($filter, $config, array(
                     '_controller' => empty($config['controller']['runtime_config_action']) ? $this->runtimeConfigControllerAction : $config['controller']['runtime_config_action'],
-                    'filter' => $filter,
-                ), 'rc/'));
+                    'filter'      => $filter,
+                ), 'rc/{hash}/'));
 
                 $routes->add('_imagine_'.$filter, $this->getRoute($filter, $config, array(
                     '_controller' => empty($config['controller']['filter_action']) ? $this->filterControllerAction : $config['controller']['filter_action'],
-                    'filter' => $filter,
+                    'filter'      => $filter,
                 )));
             }
         }

@@ -5,22 +5,19 @@ namespace Liip\ImagineBundle\Util;
 interface SignerInterface
 {
     /**
-     * Return the hash for a string
+     * Return the hash for path and data
      *
      * @param  string $path
      * @param  array  $data
-     * @param  bool   $trim
-     * @return array
+     * @return string
      */
-    public function getHash($path, array $data, $trim = false);
+    public function getHash($path, array $data);
 
     /**
-     * Check a hash is correct for a string
+     * Trim the hash
      *
-     * @param  string  $path
-     * @param  array   $data
-     * @param  string  $hash
-     * @return boolean
+     * @param  string $hash
+     * @return string
      */
-    public function checkHash($path, array $data, $hash);
+    public function trimHash($hash);
 }

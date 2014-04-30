@@ -87,30 +87,27 @@ class ImagineController
      * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
      * @param Request $request
-     * @param string $path
-     * @param string $filter
+     * @param string  $hash
+     * @param string  $path
+     * @param string  $filter
      *
      * @throws \RuntimeException
      * @throws BadRequestHttpException
      *
      * @return RedirectResponse
      */
-    public function runtimeConfigAction(Request $request, $path, $filter)
+    public function runtimeConfigAction(Request $request, $hash, $path, $filter)
     {
         $runtimeConfig = array();
-        $pathPrefix = '';
 
         try {
             $runtimeConfig['filters'] = $request->query->get('filters', array());
             // Runtime config images have the trimmed hash prepended
-            list($requestedPrefix, $path) = explode("/", $path, 2);
-
-            if (false == $this->signer->checkHash($path, $runtimeConfig['filters'], $request->query->get('_hash'))) {
+            if ($request->query->get('_hash') !== $this->signer->getHash($path, $runtimeConfig['filters'])) {
                 throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
             }
 
-            $pathPrefix = $this->signer->getHash($path, $runtimeConfig['filters'], true).'/';
-            if ($pathPrefix !== $requestedPrefix.'/') {
+            if ($hash !== $this->signer->trimHash($request->query->get('_hash'))) {
                 throw new BadRequestHttpException('Path prefix does not match.');
             }
 
@@ -119,14 +116,14 @@ class ImagineController
 
                 $this->cacheManager->store(
                     $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),
-                    'rc/'.$pathPrefix.$path,
+                    'rc/'.$hash.'/'.$path,
                     $filter
                 );
             }
 
-            return new RedirectResponse($this->cacheManager->resolve('rc/'.$pathPrefix.$path, $filter).$this->getQueryString($request), 301);
+            return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter).$this->getQueryString($request), 301);
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $pathPrefix.$path, $filter, $e->getMessage()), 0, $e);
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
     }
 

@@ -22,23 +22,16 @@ class Signer implements SignerInterface
     /**
      * {@inheritdoc}
      */
-    public function getHash($path, array $data, $trim = false)
+    public function getHash($path, array $data)
     {
-        $hash = urlencode(base64_encode(hash_hmac('sha256', ltrim($path, '/') . serialize($data), $this->secret, true)));
-
-        if (true === (bool) $trim) {
-            // Strip out characters which may cause issues for some filesystems
-            return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $hash), 0, 8);
-        }
-
-        return $hash;
+        return urlencode(base64_encode(hash_hmac('sha256', ltrim($path, '/') . serialize($data), $this->secret, true)));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function checkHash($path, array $data, $hash)
+    public function trimHash($hash)
     {
-        return $this->getHash($path, $data) === $hash;
+        return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $hash), 0, 8);
     }
 }
