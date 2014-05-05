@@ -147,13 +147,14 @@ class CacheManager
     {
         $params = array(
             'path' => ltrim($path, '/'),
+            'filter' => $filter
         );
 
         if (!empty($runtimeConfig)) {
             $params['filters'] = $runtimeConfig;
         }
 
-        $filterUrl = $this->router->generate('_imagine_'.$filter, $params, true);
+        $filterUrl = $this->router->generate('liip_imagine_filter', $params, true);
 
         if (!empty($runtimeConfig)) {
             $filterUrl = $this->uriSigner->sign($filterUrl);

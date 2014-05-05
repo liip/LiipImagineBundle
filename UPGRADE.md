@@ -1,7 +1,22 @@
 Upgrade
 =======
 
-0.19.x to 1.0.0
+1.0.0-alpha5 to 1.0.0-alpha6
+
+ * [Route] `ImagineLoader` was removed. Please adjust your `app/config/routing.yml` file.
+
+    ```diff
+    -_imagine:
+    -    resource: .
+    -    type:     imagine
+    +_liip_imagine:
+    +    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+    ```
+
+ * [Configuration] `liip_imagine.filter_sets.route` option and sub options were removed.
+ * [Configuration] `liip_imagine.cache_prefix` option was removed.
+
+0.19.x to 1.0.0-alpha5
 ---------------
 
 * [Symfony] Required minimum symfony version was updated to 2.3.
@@ -40,7 +55,6 @@ Upgrade
 * [Configuration] `liip_imagine.filter_sets.path` option was removed.
 * [Configuration] `liip_imagine.filter_sets.format` option was removed.
 * [Configuration] `liip_imagine.cache_mkdir_mode` option was removed.
-* [Configuration] `liip_imagine.cache_prefix` option was removed.
 * [Configuration] `liip_imagine.web_root` option was removed.
 * [Configuration] `liip_imagine.cache` default value was changed from `web_path`to `default`.
 * [Configuration] `liip_imagine.formats` option was removed.
