@@ -36,9 +36,8 @@ After installing the bundle, make sure you add this route to your routing:
 ``` yaml
 # app/config/routing.yml
 
-_imagine:
-    resource: .
-    type:     imagine
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
 ```
 
 For a complete configuration drill-down see [the respective chapter in the documentation](Resources/doc/configuration.md).

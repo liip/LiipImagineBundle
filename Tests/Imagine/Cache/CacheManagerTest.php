@@ -225,9 +225,10 @@ class CacheManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('generate')
             ->with(
-                '_imagine_thumbnail',
+                'liip_imagine_filter',
                 array(
-                    'path' => $path
+                    'path' => $path,
+                    'filter' => 'thumbnail',
                 ),
                 true
             )

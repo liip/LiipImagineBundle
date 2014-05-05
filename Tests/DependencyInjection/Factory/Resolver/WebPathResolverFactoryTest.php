@@ -6,6 +6,9 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @covers Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory<extended>
+ */
 class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsResolverFactoryInterface()

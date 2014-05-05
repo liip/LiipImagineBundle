@@ -2,15 +2,15 @@
 
 namespace Liip\ImagineBundle\Controller;
 
-use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Util\SignerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ImagineController
 {
@@ -112,7 +112,12 @@ class ImagineController
             }
 
             if (!$this->cacheManager->isStored($path, $filter)) {
-                $binary = $this->dataManager->find($filter, $path);
+                try {
+                    $binary = $this->dataManager->find($filter, $path);
+                } catch (NotLoadableException $e) {
+
+                    throw new NotFoundHttpException('Source image could not be found', $e);
+                }
 
                 $this->cacheManager->store(
                     $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),

@@ -2,7 +2,7 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 class StreamLoader implements LoaderInterface
 {
@@ -52,7 +52,7 @@ class StreamLoader implements LoaderInterface
          * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
          */
         if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
-            throw new NotFoundHttpException('Source image not found.');
+            throw new NotLoadableException('Source image not found.');
         }
 
         // Closing the opened stream to avoid locking of the resource to find.

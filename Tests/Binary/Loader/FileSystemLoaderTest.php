@@ -3,12 +3,12 @@
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 
+/**
+ * @covers Liip\ImagineBundle\Binary\Loader\FileSystemLoader
+ */
 class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public static function provideLoadCases()
@@ -50,7 +50,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image was searched with'
         );
 
@@ -66,7 +66,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image was searched with'
         );
 
@@ -82,7 +82,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            'Symfony\Component\HttpKernel\Exception\NotFoundHttpException',
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
             'Source image not found'
         );
 

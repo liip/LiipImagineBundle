@@ -8,9 +8,11 @@ php:
 env:
   - SYMFONY_VERSION=2.3.*
   - SYMFONY_VERSION=2.4.*
-  - SYMFONY_VERSION=dev-master
+  - SYMFONY_VERSION=2.5.*
 
 before_script:
+  - yes '' | pecl -q install -f mongo
+  - composer self-update
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
   - composer install --dev --prefer-source
 
@@ -19,3 +21,7 @@ script: ./bin/phpunit --coverage-text
 notifications:
   email:
     - travis-ci@liip.ch
+
+matrix:
+  allow_failures:
+      - env: SYMFONY_VERSION=2.5.*

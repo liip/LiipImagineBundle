@@ -10,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @covers Liip\ImagineBundle\Command\RemoveCacheCommand
+ */
 class RemoveCacheTest extends WebTestCase
 {
     protected $client;
@@ -27,7 +30,7 @@ class RemoveCacheTest extends WebTestCase
         $this->client = $this->createClient();
 
         $this->webRoot = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/web';
-        $this->cacheRoot = $this->webRoot.'/'.self::$kernel->getContainer()->getParameter('liip_imagine.cache_prefix');
+        $this->cacheRoot = $this->webRoot.'/media/cache';
 
         $this->filesystem = new Filesystem;
         $this->filesystem->remove($this->cacheRoot);

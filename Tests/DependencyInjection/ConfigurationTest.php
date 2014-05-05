@@ -11,6 +11,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @covers Liip\ImagineBundle\DependencyInjection\Configuration
+ */
 class ConfigurationTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsConfigurationInterface()

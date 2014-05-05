@@ -6,6 +6,9 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @covers Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
+ */
 class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsResolverFactoryInterface()

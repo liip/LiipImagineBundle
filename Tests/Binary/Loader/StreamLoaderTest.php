@@ -6,7 +6,7 @@ use Liip\ImagineBundle\Binary\Loader\StreamLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader
+ * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader<extended>
  */
 class StreamLoaderTest extends AbstractTest
 {
@@ -14,7 +14,9 @@ class StreamLoaderTest extends AbstractTest
     {
         $loader = new StreamLoader('file://');
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException'
+        );
         $loader->find($this->tempDir.'/invalid.jpeg');
     }
 
