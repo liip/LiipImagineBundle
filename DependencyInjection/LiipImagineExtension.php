@@ -56,7 +56,6 @@ class LiipImagineExtension extends Extension
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
-        $container->setParameter('liip_imagine.cache_prefix', 'media/cache');
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);

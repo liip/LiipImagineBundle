@@ -39,9 +39,8 @@ Finally, add the following to your routing file:
 ``` yaml
 # app/config/routing.yml
 
-_imagine:
-    resource: .
-    type:     imagine
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
 ```
 
 Congratulations! You're ready to rock your images!

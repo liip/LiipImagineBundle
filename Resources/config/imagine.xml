@@ -17,10 +17,6 @@
 
         <parameter key="liip_imagine.controller.class">Liip\ImagineBundle\Controller\ImagineController</parameter>
 
-        <!-- Route loader class -->
-
-        <parameter key="liip_imagine.routing.loader.class">Liip\ImagineBundle\Routing\ImagineLoader</parameter>
-
         <!-- Templating classes -->
 
         <parameter key="liip_imagine.twig.extension.class">Liip\ImagineBundle\Templating\ImagineExtension</parameter>
@@ -99,15 +95,6 @@
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument type="service" id="liip_imagine.uri_signer" />
-        </service>
-
-        <!-- Route Loader -->
-
-        <service id="liip_imagine.routing.loader" class="%liip_imagine.routing.loader.class%">
-            <tag name="routing.loader" />
-            <argument type="service" id="liip_imagine.filter.configuration" />
-            <argument>%liip_imagine.controller_action%</argument>
-            <argument>%liip_imagine.cache_prefix%</argument>
         </service>
 
         <!-- ImagineInterface instances -->
