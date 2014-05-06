@@ -111,20 +111,18 @@ class ImagineController
                 throw new BadRequestHttpException('Path prefix does not match.');
             }
 
-            if (!$this->cacheManager->isStored($path, $filter)) {
-                try {
-                    $binary = $this->dataManager->find($filter, $path);
-                } catch (NotLoadableException $e) {
+            try {
+                $binary = $this->dataManager->find($filter, $path);
+            } catch (NotLoadableException $e) {
 
-                    throw new NotFoundHttpException('Source image could not be found', $e);
-                }
-
-                $this->cacheManager->store(
-                    $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),
-                    'rc/'.$hash.'/'.$path,
-                    $filter
-                );
+                throw new NotFoundHttpException('Source image could not be found', $e);
             }
+
+            $this->cacheManager->store(
+                $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),
+                'rc/'.$hash.'/'.$path,
+                $filter
+            );
 
             return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter).$this->getQueryString($request), 301);
         } catch (\RuntimeException $e) {
