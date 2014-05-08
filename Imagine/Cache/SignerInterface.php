@@ -1,6 +1,6 @@
 <?php
 
-namespace Liip\ImagineBundle\Util;
+namespace Liip\ImagineBundle\Imagine\Cache;
 
 interface SignerInterface
 {

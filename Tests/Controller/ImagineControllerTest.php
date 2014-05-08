@@ -47,10 +47,10 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Util\SignerInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\SignerInterface
      */
     protected function createSignerMock()
     {
-        return $this->getMock('Liip\ImagineBundle\Util\Signer', array(), array(), '', false);
+        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Signer', array(), array(), '', false);
     }
 }

@@ -6,7 +6,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\Request;
-use Liip\ImagineBundle\Util\Signer;
+use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
 

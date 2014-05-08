@@ -5,7 +5,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;
-use Liip\ImagineBundle\Util\Signer;
+use Liip\ImagineBundle\Imagine\Cache\Signer;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
@@ -106,7 +106,7 @@ class ImagineControllerTest extends WebTestCase
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
     {
         /** @var Signer $signer */
-        $signer = self::$kernel->getContainer()->get('liip_imagine.util.signer');
+        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
 
         $params = array(
             'filters' => array(
@@ -137,7 +137,7 @@ class ImagineControllerTest extends WebTestCase
     public function testShouldResolveWithCustomFiltersFromCache()
     {
         /** @var Signer $signer */
-        $signer = self::$kernel->getContainer()->get('liip_imagine.util.signer');
+        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
 
         $params = array(
             'filters' => array(
