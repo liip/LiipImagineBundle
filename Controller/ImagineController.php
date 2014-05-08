@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Controller;
 
+use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -78,7 +79,7 @@ class ImagineController
             }
 
             return new RedirectResponse($this->cacheManager->resolve($path, $filter).$this->getQueryString($request), 301);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
     }
@@ -125,7 +126,7 @@ class ImagineController
             );
 
             return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter).$this->getQueryString($request), 301);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
     }
