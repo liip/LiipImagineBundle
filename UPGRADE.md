@@ -59,3 +59,4 @@ Upgrade
 * [Configuration] `liip_imagine.cache` default value was changed from `web_path`to `default`.
 * [Configuration] `liip_imagine.formats` option was removed.
 * [Configuration] `liip_imagine.data_root` option was removed.
+* [Configuration] `liip_imagine.controller_action` option was removed in favour of an array of actions. See `liip_imagine.controller` config
