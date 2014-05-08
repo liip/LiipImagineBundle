@@ -154,7 +154,7 @@ class CacheManager
             $filterUrl = $this->router->generate('liip_imagine_filter', $params, true);
         } else {
             $params['filters'] = $runtimeConfig;
-            $params['_hash']   = $this->signer->getHash($path, $runtimeConfig);
+            $params['_hash']   = $this->signer->sign($path, $runtimeConfig);
             $params['hash']    = $this->signer->trimHash($params['_hash']);
 
             $filterUrl = $this->router->generate('liip_imagine_rc_filter', $params, true);

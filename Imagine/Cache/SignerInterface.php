@@ -5,19 +5,21 @@ namespace Liip\ImagineBundle\Imagine\Cache;
 interface SignerInterface
 {
     /**
-     * Return the hash for path and data
+     * Return the hash for path and runtime config
      *
      * @param  string $path
-     * @param  array  $data
+     * @param  array  $runtimeConfig
      * @return string
      */
-    public function getHash($path, array $data);
+    public function sign($path, array $runtimeConfig = null);
 
     /**
-     * Trim the hash
+     * Check hash is correct
      *
      * @param  string $hash
-     * @return string
+     * @param  string $path
+     * @param  array  $runtimeConfig
+     * @return bool
      */
-    public function trimHash($hash);
+    public function check($hash, $path, array $runtimeConfig = null);
 }

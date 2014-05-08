@@ -115,7 +115,7 @@ class ImagineControllerTest extends WebTestCase
         );
 
         $path = 'thumbnail_web_path/images/cats.jpeg';
-        $params['_hash'] = $signer->getHash($path, $params['filters']);
+        $params['_hash'] = $signer->sign($path, $params['filters']);
         $expectedCachePath = 'thumbnail_web_path/'.$signer->trimHash($params['_hash']).'/images/cats.jpeg';
 
         $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
@@ -146,7 +146,7 @@ class ImagineControllerTest extends WebTestCase
         );
 
         $path = 'thumbnail_web_path/images/cats.jpeg';
-        $params['_hash'] = $signer->getHash($path, $params['filters']);
+        $params['_hash'] = $signer->sign($path, $params['filters']);
         $expectedCachePath = 'thumbnail_web_path/'.$signer->trimHash($params['_hash']).'/images/cats.jpeg';
 
         $this->filesystem->dumpFile(

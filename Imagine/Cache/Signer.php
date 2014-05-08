@@ -22,9 +22,17 @@ class Signer implements SignerInterface
     /**
      * {@inheritdoc}
      */
-    public function getHash($path, array $data)
+    public function sign($path, array $runtimeConfig = null)
     {
-        return urlencode(base64_encode(hash_hmac('sha256', ltrim($path, '/') . serialize($data), $this->secret, true)));
+        return urlencode(base64_encode(hash_hmac('sha256', ltrim($path, '/') . (null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function check($hash, $path, array $runtimeConfig = null)
+    {
+        return $hash === $this->sign($path, $runtimeConfig);
     }
 
     /**
