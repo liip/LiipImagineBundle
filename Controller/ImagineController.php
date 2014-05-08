@@ -78,7 +78,7 @@ class ImagineController
                 );
             }
 
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter).$this->getQueryString($request), 301);
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
@@ -97,7 +97,7 @@ class ImagineController
      *
      * @return RedirectResponse
      */
-    public function runtimeConfigAction(Request $request, $hash, $path, $filter)
+    public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
         $runtimeConfig = array();
 
@@ -125,23 +125,9 @@ class ImagineController
                 $filter
             );
 
-            return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter).$this->getQueryString($request), 301);
+            return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter), 301);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
-    }
-
-    /**
-     * @param Request $request
-     * @return string
-     *
-     * Query params should always stay on the image - Could be used for tracking/caching
-     * It is especially important for runtime config images
-     * If the cache is deleted and you refresh a runtime config request it
-     * means that the image can be re-resolved used the query params hash etc
-     */
-    protected function getQueryString(Request $request)
-    {
-        return strlen($request->server->get('QUERY_STRING')) > 0 ? '?'.$request->server->get('QUERY_STRING') : '';
     }
 }

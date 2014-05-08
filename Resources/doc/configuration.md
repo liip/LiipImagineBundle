@@ -22,7 +22,7 @@ liip_imagine:
     data_loader:          default
     controller:
         filter_action:         liip_imagine.controller:filterAction
-        runtime_config_action: liip_imagine.controller:runtimeConfigAction
+        filter_runtime_action: liip_imagine.controller:filterRuntimeAction
     filter_sets:
 
         # Prototype
@@ -55,9 +55,9 @@ There are several configuration options available:
 
             default: liip_imagine.controller:filterAction
 
-        - `runtime_config_action` - name of the controller action to use in the route loader for runtimeconfig images
+        - `filter_runtime_action` - name of the controller action to use in the route loader for runtimeconfig images
 
-            default: liip_imagine.controller:runtimeConfigAction
+            default: liip_imagine.controller:filterRuntimeAction
 
  - `driver` - one of the three drivers: `gd`, `imagick`, `gmagick`
 
@@ -77,7 +77,7 @@ Each filter set that you specify has the following options:
  - `data_loader` - override the default data loader
  - `controller`
     - `filter_action` - override the default controller action
-    - `runtime_config_action` - override the default controller action for runtime config
+    - `filter_runtime_action` - override the default controller action for runtime config
  - `route` - optional list of route requirements, defaults and options using in the route loader. Add array with keys 'requirements', 'defaults' or 'options'.
 
     default: empty array
