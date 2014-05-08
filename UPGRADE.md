@@ -5,6 +5,14 @@ Upgrade
 
 * [Configuration] `liip_imagine.controller_action` option was removed in favour of an array of actions. See `liip_imagine.controller` config
 
+```diff
+-liip_imagine:
+-    controller_action: AcmeDemoBundle:Default:filterAction
++liip_imagine:
++    controller:
++        filter_action: AcmeDemoBundle:Default:filterAction
+```
+
 1.0.0-alpha5 to 1.0.0-alpha6
 
  * [Route] `ImagineLoader` was removed. Please adjust your `app/config/routing.yml` file.
