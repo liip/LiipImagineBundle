@@ -34,12 +34,4 @@ class Signer implements SignerInterface
     {
         return $hash === $this->sign($path, $runtimeConfig);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function trimHash($hash)
-    {
-        return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $hash), 0, 8);
-    }
 }

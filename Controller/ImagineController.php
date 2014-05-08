@@ -99,16 +99,17 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
-        $runtimeConfig = array();
-
         try {
-            $runtimeConfig['filters'] = $request->query->get('filters', array());
+            $filters = $request->query->get('filters', array());
+            $fullHash = $request->query->get('_hash');
+            $trimmedHash = substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $fullHash), 0, 8);
+
             // Runtime config images have the trimmed hash prepended
-            if (true !== $this->signer->check($request->query->get('_hash'), $path, $runtimeConfig['filters'])) {
+            if (true !== $this->signer->check($fullHash, $path, $filters)) {
                 throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
             }
 
-            if ($hash !== $this->signer->trimHash($request->query->get('_hash'))) {
+            if ($hash !== $trimmedHash) {
                 throw new BadRequestHttpException('Path prefix does not match.');
             }
 
@@ -120,7 +121,9 @@ class ImagineController
             }
 
             $this->cacheManager->store(
-                $this->filterManager->applyFilter($binary, $filter, $runtimeConfig),
+                $this->filterManager->applyFilter($binary, $filter, array(
+                    'filters' => $filters,
+                )),
                 'rc/'.$hash.'/'.$path,
                 $filter
             );
