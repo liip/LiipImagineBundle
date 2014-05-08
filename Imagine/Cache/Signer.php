@@ -10,8 +10,6 @@ class Signer implements SignerInterface
     private $secret;
 
     /**
-     * Constructor
-     *
      * @param string $secret
      */
     public function __construct($secret)
