@@ -101,16 +101,9 @@ class ImagineController
     {
         try {
             $filters = $request->query->get('filters', array());
-            $fullHash = $request->query->get('_hash');
-            $trimmedHash = substr(preg_replace('/[^a-zA-Z0-9-_]/', '', $fullHash), 0, 8);
-
             // Runtime config images have the trimmed hash prepended
-            if (true !== $this->signer->check($fullHash, $path, $filters)) {
+            if (true !== $this->signer->check($hash, $path, $filters)) {
                 throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
-            }
-
-            if ($hash !== $trimmedHash) {
-                throw new BadRequestHttpException('Path prefix does not match.');
             }
 
             try {
