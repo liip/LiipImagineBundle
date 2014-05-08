@@ -104,7 +104,7 @@ class ImagineController
         try {
             $runtimeConfig['filters'] = $request->query->get('filters', array());
             // Runtime config images have the trimmed hash prepended
-            if (true === $this->signer->check($request->query->get('_hash'), $path, $runtimeConfig['filters'])) {
+            if (true !== $this->signer->check($request->query->get('_hash'), $path, $runtimeConfig['filters'])) {
                 throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
             }
 
