@@ -69,7 +69,12 @@ class ImagineController
     {
         try {
             if (!$this->cacheManager->isStored($path, $filter)) {
-                $binary = $this->dataManager->find($filter, $path);
+                try {
+                    $binary = $this->dataManager->find($filter, $path);
+                } catch (NotLoadableException $e) {
+
+                    throw new NotFoundHttpException('Source image could not be found', $e);
+                }
 
                 $this->cacheManager->store(
                     $this->filterManager->applyFilter($binary, $filter),
