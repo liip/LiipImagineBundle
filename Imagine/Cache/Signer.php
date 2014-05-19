@@ -22,7 +22,7 @@ class Signer implements SignerInterface
      */
     public function sign($path, array $runtimeConfig = null)
     {
-        return preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/') . (null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true)));
+        return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/') . (null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
     }
 
     /**
