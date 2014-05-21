@@ -106,27 +106,33 @@ class ImagineController
     {
         try {
             $filters = $request->query->get('filters', array());
-            // Runtime config images have the trimmed hash prepended
+
             if (true !== $this->signer->check($hash, $path, $filters)) {
-                throw new BadRequestHttpException('Signed url does not pass the sign check. Maybe it was modified by someone.');
+                throw new BadRequestHttpException(sprintf(
+                    'Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s',
+                    $path,
+                    $filter,
+                    json_encode($filters)
+                ));
             }
 
             try {
                 $binary = $this->dataManager->find($filter, $path);
             } catch (NotLoadableException $e) {
-
-                throw new NotFoundHttpException('Source image could not be found', $e);
+                throw new NotFoundHttpException(sprintf('Source image could not be found for path "%s" and filter "%s"', $path, $filter), $e);
             }
+
+            $cachePrefix = 'rc/'.$hash;
 
             $this->cacheManager->store(
                 $this->filterManager->applyFilter($binary, $filter, array(
                     'filters' => $filters,
                 )),
-                'rc/'.$hash.'/'.$path,
+                $cachePrefix.'/'.$path,
                 $filter
             );
 
-            return new RedirectResponse($this->cacheManager->resolve('rc/'.$hash.'/'.$path, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($cachePrefix.'/'.$path, $filter), 301);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
