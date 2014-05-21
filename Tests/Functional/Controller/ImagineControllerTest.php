@@ -82,11 +82,11 @@ class ImagineControllerTest extends WebTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @expectedExceptionMessage Signed url does not pass the sign check. Maybe it was modified by someone.
+     * @expectedExceptionMessage Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}
      */
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $this->client->request('GET', '/media/cache/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
@@ -114,13 +114,16 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $path = 'thumbnail_web_path/images/cats.jpeg';
-        $expectedCachePath = 'thumbnail_web_path/'.$signer->sign($path, $params['filters']).'/images/cats.jpeg';
+        $path = 'images/cats.jpeg';
 
-        $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
 
         //guard
-        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
 
         $this->client->request('GET', $url);
 
@@ -144,15 +147,18 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $path = 'thumbnail_web_path/images/cats.jpeg';
-        $expectedCachePath = 'thumbnail_web_path/'.$signer->sign($path, $params['filters']).'/images/cats.jpeg';
+        $path = 'images/cats.jpeg';
+
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
 
         $this->filesystem->dumpFile(
-            $this->cacheRoot.$expectedCachePath,
+            $this->cacheRoot.'/'.$expectedCachePath,
             'anImageContent'
         );
-
-        $url = 'http://localhost/media/cache/'.$path.'?'.http_build_query($params);
 
         $this->client->request('GET', $url);
 
