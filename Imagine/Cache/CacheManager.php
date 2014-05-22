@@ -5,8 +5,8 @@ namespace Liip\ImagineBundle\Imagine\Cache;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\Event;
@@ -31,9 +31,9 @@ class CacheManager
     protected $resolvers = array();
 
     /**
-     * @var UriSigner
+     * @var SignerInterface
      */
-    protected $uriSigner;
+    protected $signer;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -50,19 +50,19 @@ class CacheManager
      *
      * @param FilterConfiguration $filterConfig
      * @param RouterInterface $router
-     * @param UriSigner $uriSigner
+     * @param SignerInterface $signer
      * @param string $defaultResolver
      */
     public function __construct(
         FilterConfiguration $filterConfig,
         RouterInterface $router,
-        UriSigner $uriSigner,
+        SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
         $defaultResolver = null
     ) {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
-        $this->uriSigner = $uriSigner;
+        $this->signer = $signer;
         $this->dispatcher = $dispatcher;
         $this->defaultResolver = $defaultResolver ?: 'default';
     }
@@ -150,14 +150,13 @@ class CacheManager
             'filter' => $filter
         );
 
-        if (!empty($runtimeConfig)) {
+        if (empty($runtimeConfig)) {
+            $filterUrl = $this->router->generate('liip_imagine_filter', $params, true);
+        } else {
             $params['filters'] = $runtimeConfig;
-        }
+            $params['hash'] = $this->signer->sign($path, $runtimeConfig);
 
-        $filterUrl = $this->router->generate('liip_imagine_filter', $params, true);
-
-        if (!empty($runtimeConfig)) {
-            $filterUrl = $this->uriSigner->sign($filterUrl);
+            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, true);
         }
 
         return $filterUrl;

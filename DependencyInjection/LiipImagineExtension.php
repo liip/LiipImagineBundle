@@ -62,7 +62,8 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
 
-        $container->setParameter('liip_imagine.controller_action', $config['controller_action']);
+        $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
+        $container->setParameter('liip_imagine.controller.filter_runtime_action', $config['controller']['filter_runtime_action']);
 
         $resources = $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : array();
         $resources[] = 'LiipImagineBundle:Form:form_div_layout.html.twig';

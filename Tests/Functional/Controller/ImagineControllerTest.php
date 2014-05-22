@@ -5,7 +5,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\UriSigner;
+use Liip\ImagineBundle\Imagine\Cache\Signer;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
@@ -82,11 +82,11 @@ class ImagineControllerTest extends WebTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @expectedExceptionMessage Signed url does not pass the sign check. Maybe it was modified by someone.
+     * @expectedExceptionMessage Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}
      */
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $this->client->request('GET', '/media/cache/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
@@ -105,18 +105,25 @@ class ImagineControllerTest extends WebTestCase
 
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
     {
-        /** @var UriSigner $uriSigner */
-        $uriSigner = self::$kernel->getContainer()->get('liip_imagine.uri_signer');
+        /** @var Signer $signer */
+        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
 
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $params = array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
-        ));
-        $url = $uriSigner->sign($url);
+        );
+
+        $path = 'images/cats.jpeg';
+
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
 
         //guard
-        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
 
         $this->client->request('GET', $url);
 
@@ -124,29 +131,34 @@ class ImagineControllerTest extends WebTestCase
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
-        $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/S8rrlhhQ/images/cats.jpeg', $response->getTargetUrl());
+        $this->assertEquals('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/S8rrlhhQ/images/cats.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
     }
 
     public function testShouldResolveWithCustomFiltersFromCache()
     {
-        $expectedCachePath = 'thumbnail_web_path/S8rrlhhQ/images/cats.jpeg';
+        /** @var Signer $signer */
+        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
 
-        $this->filesystem->dumpFile(
-            $this->cacheRoot.$expectedCachePath,
-            'anImageContent'
-        );
-
-        /** @var UriSigner $uriSigner */
-        $uriSigner = self::$kernel->getContainer()->get('liip_imagine.uri_signer');
-
-        $url = 'http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg?'.http_build_query(array(
+        $params = array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
-        ));
-        $url = $uriSigner->sign($url);
+        );
+
+        $path = 'images/cats.jpeg';
+
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
+
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/'.$expectedCachePath,
+            'anImageContent'
+        );
 
         $this->client->request('GET', $url);
 

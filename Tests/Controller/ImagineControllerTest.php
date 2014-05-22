@@ -6,7 +6,6 @@ use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Symfony\Component\HttpKernel\UriSigner;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
@@ -19,7 +18,7 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
             $this->createDataManagerMock(),
             $this->createFilterManagerMock(),
             $this->createCacheManagerMock(),
-            $this->createUriSignerMock()
+            $this->createSignerMock()
         );
     }
 
@@ -48,10 +47,10 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|UriSigner
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\SignerInterface
      */
-    protected function createUriSignerMock()
+    protected function createSignerMock()
     {
-        return $this->getMock('Symfony\Component\HttpKernel\UriSigner', array(), array(), '', false);
+        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Signer', array(), array(), '', false);
     }
 }
