@@ -99,7 +99,7 @@
             <argument type="service" id="liip_imagine.cache.signer" />
         </service>
 
-        <service id="liip_imagine.meta_data.reader" class="%liip_imagine.meta_data.reader.class%" />
+        <service id="liip_imagine.meta_data.reader" class="%liip_imagine.meta_data.reader.class%" public="false" />
 
         <!-- ImagineInterface instances -->
 
