@@ -103,6 +103,7 @@ class Configuration implements ConfigurationInterface
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
                 ->end()
+                ->scalarNode('redirect')->defaultValue(false)->end()
                 ->scalarNode('cache')->defaultValue('default')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
                 ->scalarNode('data_loader')->defaultValue('default')->end()

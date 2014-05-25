@@ -10,6 +10,7 @@ use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -36,21 +37,29 @@ class ImagineController
     protected $signer;
 
     /**
+     * @var bool
+     */
+    protected $redirect;
+
+    /**
      * @param DataManager     $dataManager
      * @param FilterManager   $filterManager
      * @param CacheManager    $cacheManager
      * @param SignerInterface $signer
+     * @param bool            $redirect
      */
     public function __construct(
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
-        SignerInterface $signer
+        SignerInterface $signer,
+        $redirect
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
         $this->signer = $signer;
+        $this->redirect = $redirect;
     }
 
     /**
@@ -76,14 +85,20 @@ class ImagineController
                     throw new NotFoundHttpException('Source image could not be found', $e);
                 }
 
+                $resultingImage = $this->filterManager->applyFilter($binary, $filter);
                 $this->cacheManager->store(
-                    $this->filterManager->applyFilter($binary, $filter),
+                    $resultingImage,
                     $path,
                     $filter
                 );
+                if(false === $this->redirect) {
+
+                return new Response($resultingImage, 200, array('Content-type'=>$binary->getMimeType()));
+                }
             }
 
             return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
