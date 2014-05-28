@@ -83,7 +83,7 @@ class ImagineController
                 );
             }
 
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 302);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
@@ -132,7 +132,7 @@ class ImagineController
                 $filter
             );
 
-            return new RedirectResponse($this->cacheManager->resolve($cachePrefix.'/'.$path, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($cachePrefix.'/'.$path, $filter), 302);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
