@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
-use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;

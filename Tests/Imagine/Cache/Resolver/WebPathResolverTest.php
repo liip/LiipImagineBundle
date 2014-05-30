@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
-use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
