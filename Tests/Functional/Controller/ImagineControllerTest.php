@@ -1,7 +1,6 @@
 <?php
 namespace Liip\ImagineBundle\Tests\Functional\Controller;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;

@@ -5,7 +5,6 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 use Imagine\Filter\Basic\Resize;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
-use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 /**
  * Upscale filter
