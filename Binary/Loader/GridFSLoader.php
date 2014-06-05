@@ -40,6 +40,6 @@ class GridFSLoader implements LoaderInterface
             throw new NotLoadableException(sprintf('Source image was not found with id "%s"', $id));
         }
 
-        return $image['file']->getBytes();
+        return $image->getFile()->getBytes();
     }
 }
