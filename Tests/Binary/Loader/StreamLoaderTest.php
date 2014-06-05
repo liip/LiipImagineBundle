@@ -14,10 +14,14 @@ class StreamLoaderTest extends AbstractTest
     {
         $loader = new StreamLoader('file://');
 
+        $path = $this->tempDir.'/invalid.jpeg';
+
         $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException'
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
+            'Source image file://'.$path.' not found.'
         );
-        $loader->find($this->tempDir.'/invalid.jpeg');
+
+        $loader->find($path);
     }
 
     public function testReturnImageContentOnFind()
