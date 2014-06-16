@@ -8,14 +8,14 @@ liip_imagine:
     resolvers:
         default:
             web_path:
-              web_root: ~ # %kernel.root_dir%../web
+              web_root: ~ # %kernel.root_dir%/../web
               cache_prefix: ~ # media/cache
 
 
     loaders:
         default:
             filesystem:
-                data_root: ~  # %kernel.root_dir%../web/
+                data_root: ~  # %kernel.root_dir%/../web/
 
     driver:               gd
     cache:                default
