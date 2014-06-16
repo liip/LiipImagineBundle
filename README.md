@@ -91,7 +91,7 @@ You can also pass some options at runtime:
 
 ``` jinja
 {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}
-<img src="{{ '/images/dream.jpg' | imagine_filter('thumbnail_web_path', runtimeConfig) }}" />
+<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb', runtimeConfig) }}" />
 ```
 
 Or if you're using PHP templates:
@@ -109,7 +109,7 @@ $runtimeConfig = array(
 ```
 Also you can resolve image url from console:
 ```jinja
-app/console liip:imagine:cache:resolve images/dream.jpg images/dream2.jpg --filters=thumbnail_web_path --filters=thumbnail_default
+app/console liip:imagine:cache:resolve relative/path/to/image.jpg relative/path/to/image2.jpg --filters=my_thumb --filters=thumbnail_default
 ```
 Where only paths required parameter. They are separated by space. If you omit filters option will be applied all available filters.
 
