@@ -39,12 +39,20 @@ class LiipImagineExtension extends Extension
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration($this->resolversFactories, $this->loadersFactories);
+    }
+
+    /**
      * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $config = $this->processConfiguration(
-            new Configuration($this->resolversFactories, $this->loadersFactories),
+            $this->getConfiguration($configs, $container),
             $configs
         );
 
