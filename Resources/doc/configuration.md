@@ -63,8 +63,6 @@ There are several configuration options available:
 
     default: `gd`
 
- - `formats` - optional list of image formats to which images may be converted to.
-
  - `filter_sets` - specify the filter sets that you want to define and use
 
 Each filter set that you specify has the following options:
