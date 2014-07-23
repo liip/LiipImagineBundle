@@ -63,6 +63,8 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
+        $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
+
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
 
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
