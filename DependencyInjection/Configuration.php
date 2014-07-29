@@ -119,6 +119,7 @@ class Configuration implements ConfigurationInterface
                         ->fixXmlConfig('filter', 'filters')
                         ->children()
                             ->scalarNode('quality')->defaultValue(100)->end()
+                            ->booleanNode('animated')->defaultFalse()->end()
                             ->scalarNode('cache')->defaultNull()->end()
                             ->scalarNode('data_loader')->defaultNull()->end()
                             ->arrayNode('filters')

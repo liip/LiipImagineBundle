@@ -29,6 +29,7 @@ liip_imagine:
         name:
             path:                 ~
             quality:              100
+            animated:             false
             format:               ~
             cache:                ~
             data_loader:          ~
@@ -81,5 +82,6 @@ Each filter set that you specify has the following options:
     default: empty array
 
  - `format` - hardcodes the output format (aka the requested format is ignored)
+ - `animated` - support for resizing animated gif (currently not supported by Imagine (PR pending))
 
 [Back to the index](index.md)
