@@ -50,7 +50,7 @@ class ImagineControllerTest extends WebTestCase
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/cats.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
 
         $response = $this->client->getResponse();
 
@@ -68,7 +68,7 @@ class ImagineControllerTest extends WebTestCase
             'anImageContent'
         );
 
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/cats.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
 
         $response = $this->client->getResponse();
 
@@ -85,7 +85,7 @@ class ImagineControllerTest extends WebTestCase
      */
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50))
             ),
@@ -99,7 +99,7 @@ class ImagineControllerTest extends WebTestCase
      */
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
     {
-        $this->client->request('GET', '/media/cache/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
@@ -119,7 +119,7 @@ class ImagineControllerTest extends WebTestCase
 
         $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
 
-        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
+        $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
@@ -152,7 +152,7 @@ class ImagineControllerTest extends WebTestCase
 
         $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
 
-        $url = 'http://localhost/media/cache/'.$expectedCachePath.'?'.http_build_query($params);
+        $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
         $this->filesystem->dumpFile(
             $this->cacheRoot.'/'.$expectedCachePath,

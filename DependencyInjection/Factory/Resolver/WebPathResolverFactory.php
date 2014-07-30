@@ -42,7 +42,7 @@ class WebPathResolverFactory implements ResolverFactoryInterface
         $builder
             ->children()
                 ->scalarNode('web_root')->defaultValue('%kernel.root_dir%/../web')->cannotBeEmpty()->end()
-                ->scalarNode('cache_prefix')->defaultValue('media/cache/resolve')->cannotBeEmpty()->end()
+                ->scalarNode('cache_prefix')->defaultValue('media/cache')->cannotBeEmpty()->end()
             ->end()
         ;
     }
