@@ -52,4 +52,3 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader->find('0123456789abcdef01234567');
     }
 }
- 
