@@ -120,6 +120,16 @@ class FilterManager
             'quality' => $config['quality']
         );
 
+        if (isset($config['jpeg_quality'])) {
+            $options['jpeg_quality'] = $config['jpeg_quality'];
+        }
+        if (isset($config['png_compression_level'])) {
+            $options['png_compression_level'] = $config['png_compression_level'];
+        }
+        if (isset($config['png_compression_filter'])) {
+            $options['png_compression_filter'] = $config['png_compression_filter'];
+        }
+
         if ($binary->getFormat() === 'gif' && $config['animated']) {
             $options['animated'] = $config['animated'];
         }
