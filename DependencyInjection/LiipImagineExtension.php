@@ -8,6 +8,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class LiipImagineExtension extends Extension
@@ -62,12 +63,13 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
-        $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
-
-        if (!class_exists('Imagine\Image\Metadata\MetadataReaderInterface')) {
-            $container->getDefinition('liip_imagine.'.$config['driver'])->removeMethodCall('setMetadataReader');
+        if (interface_exists('Imagine\Image\Metadata\MetadataReaderInterface')) {
+            $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', array(new Reference('liip_imagine.meta_data.reader')));
+        } else {
             $container->removeDefinition('liip_imagine.meta_data.reader');
         }
+
+        $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 

@@ -11,6 +11,12 @@ use Imagine\Image\ImageInterface;
  */
 class AutoRotateFilterLoader implements LoaderInterface
 {
+
+    protected $orientationKeys = array(
+        'exif.Orientation',
+        'ifd0.Orientation'
+    );
+
     /**
      * {@inheritDoc}
      */
@@ -61,7 +67,15 @@ class AutoRotateFilterLoader implements LoaderInterface
     {
         //>0.6 imagine meta data interface
         if (method_exists($image, 'metadata')) {
-            return $image->metadata()->offsetGet('exif.Orientation');
+            foreach ($this->orientationKeys as $orientationKey) {
+                $orientation = $image->metadata()->offsetGet($orientationKey);
+
+                if ($orientation) {
+                    return $orientation;
+                }
+            }
+
+            return null;
         } else {
             $data = exif_read_data("data://image/jpeg;base64," . base64_encode($image->get('jpg')));
             return isset($data['Orientation']) ? $data['Orientation'] : null;
