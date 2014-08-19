@@ -71,7 +71,8 @@ class FilterManager
         $config = array_replace(
             array(
                 'filters' => array(),
-                'quality' => 100
+                'quality' => 100,
+                'animated' => false
             ),
             $config
         );
@@ -88,9 +89,15 @@ class FilterManager
             $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
         }
 
-        $filteredContent = $image->get($binary->getFormat(), array(
+        $options = array(
             'quality' => $config['quality']
-        ));
+        );
+
+        if ($binary->getFormat() === 'gif' && $config['animated']) {
+            $options['animated'] = $config['animated'];
+        }
+
+        $filteredContent = $image->get($binary->getFormat(), $options);
 
         return new Binary($filteredContent, $binary->getMimeType(), $binary->getFormat());
     }
