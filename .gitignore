@@ -1,4 +1,4 @@
-/bin/phpunit
+/bin/
 /phpunit.xml
 composer.lock
 composer.phar

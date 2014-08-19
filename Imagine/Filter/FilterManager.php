@@ -2,13 +2,11 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
+use Dflydev\ApacheMimeTypes\RepositoryInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
-
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class FilterManager
 {
@@ -23,6 +21,11 @@ class FilterManager
     protected $imagine;
 
     /**
+     * @var RepositoryInterface
+     */
+    protected $mimeTypeRepository;
+
+    /**
      * @var LoaderInterface[]
      */
     protected $loaders = array();
@@ -30,11 +33,16 @@ class FilterManager
     /**
      * @param FilterConfiguration $filterConfig
      * @param ImagineInterface    $imagine
+     * @param RepositoryInterface $mimeTypeRepository
      */
-    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine)
-    {
+    public function __construct(
+        FilterConfiguration $filterConfig,
+        ImagineInterface $imagine,
+        RepositoryInterface $mimeTypeRepository
+    ) {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
+        $this->mimeTypeRepository = $mimeTypeRepository;
     }
 
     /**
@@ -97,9 +105,16 @@ class FilterManager
             $options['animated'] = $config['animated'];
         }
 
-        $filteredContent = $image->get($binary->getFormat(), $options);
+        $filteredFormat = isset($config['format']) ? $config['format'] : $binary->getFormat();
+        $filteredMimeType = $this->mimeTypeRepository->findType($filteredFormat);
+        if (!isset($filteredMimeType)) {
+            throw new \RuntimeException(sprintf(
+                'Could not determine MIME type for "%s" format', $filteredFormat
+            ));
+        }
+        $filteredContent = $image->get($filteredFormat, $options);
 
-        return new Binary($filteredContent, $binary->getMimeType(), $binary->getFormat());
+        return new Binary($filteredContent, $filteredMimeType, $filteredFormat);
     }
 
     /**
