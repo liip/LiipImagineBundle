@@ -103,9 +103,7 @@
 
         <!-- ImagineInterface instances -->
 
-        <service id="liip_imagine" alias="liip_imagine.gd">
-            <call method="setMetadataReader"><argument type="service" id="liip_imagine.meta_data.reader" /></call>
-        </service>
+        <service id="liip_imagine" alias="liip_imagine.gd" />
 
         <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" public="false" />
 
