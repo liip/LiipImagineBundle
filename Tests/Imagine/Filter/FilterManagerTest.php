@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
-use Dflydev\ApacheMimeTypes;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
@@ -35,7 +34,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $this->createImagineMock(),
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
 
         $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
@@ -92,7 +91,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -151,7 +150,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -212,7 +211,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -260,6 +259,12 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
         $loader = $this->getMockLoader();
         $loader
             ->expects($this->once())
@@ -271,7 +276,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $mimeTypeGuesser
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -285,6 +290,7 @@ class FilterManagerTest extends AbstractTest
     {
         $originalContent = 'aOriginalContent';
         $originalMimeType = 'image/png';
+        $expectedContent = 'aFilteredContent';
         $expectedMimeType = 'image/jpeg';
 
         $binary = new Binary($originalContent, $originalMimeType, 'png');
@@ -311,7 +317,7 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
+            ->will($this->returnValue($expectedContent))
         ;
 
         $imagine = $this->createImagineMock();
@@ -319,6 +325,14 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('load')
             ->will($this->returnValue($image))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->once())
+            ->method('guess')
+            ->with($expectedContent)
+            ->will($this->returnValue($expectedMimeType))
         ;
 
         $loader = $this->getMockLoader();
@@ -332,7 +346,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $mimeTypeGuesser
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -393,7 +407,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -450,7 +464,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -516,7 +530,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -533,7 +547,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $this->createImagineMock(),
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
 
         $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
@@ -585,7 +599,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -636,7 +650,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -688,7 +702,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -729,6 +743,12 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
         $loader = $this->getMockLoader();
         $loader
             ->expects($this->once())
@@ -740,7 +760,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $mimeTypeGuesser
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -758,6 +778,7 @@ class FilterManagerTest extends AbstractTest
     {
         $originalContent = 'aOriginalContent';
         $originalMimeType = 'image/png';
+        $expectedContent = 'aFilteredContent';
         $expectedMimeType = 'image/jpeg';
 
         $binary = new Binary($originalContent, $originalMimeType, 'png');
@@ -771,7 +792,7 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
+            ->will($this->returnValue($expectedContent))
         ;
 
         $imagineMock = $this->createImagineMock();
@@ -779,6 +800,14 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('load')
             ->will($this->returnValue($image))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->once())
+            ->method('guess')
+            ->with($expectedContent)
+            ->will($this->returnValue($expectedMimeType))
         ;
 
         $loader = $this->getMockLoader();
@@ -792,7 +821,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $mimeTypeGuesser
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -845,7 +874,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -897,7 +926,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            new ApacheMimeTypes\PhpRepository()
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -916,5 +945,13 @@ class FilterManagerTest extends AbstractTest
     protected function getMockLoader()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface
+     */
+    protected function getMockMimeTypeGuesser()
+    {
+        return $this->getMock('Liip\ImagineBundle\Binary\MimeTypeGuesserInterface');
     }
 }

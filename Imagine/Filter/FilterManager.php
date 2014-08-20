@@ -2,9 +2,9 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
-use Dflydev\ApacheMimeTypes\RepositoryInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 
@@ -21,9 +21,9 @@ class FilterManager
     protected $imagine;
 
     /**
-     * @var RepositoryInterface
+     * @var MimeTypeGuesserInterface
      */
-    protected $mimeTypeRepository;
+    protected $mimeTypeGuesser;
 
     /**
      * @var LoaderInterface[]
@@ -31,18 +31,18 @@ class FilterManager
     protected $loaders = array();
 
     /**
-     * @param FilterConfiguration $filterConfig
-     * @param ImagineInterface    $imagine
-     * @param RepositoryInterface $mimeTypeRepository
+     * @param FilterConfiguration      $filterConfig
+     * @param ImagineInterface         $imagine
+     * @param MimeTypeGuesserInterface $mimeTypeGuesser
      */
     public function __construct(
         FilterConfiguration $filterConfig,
         ImagineInterface $imagine,
-        RepositoryInterface $mimeTypeRepository
+        MimeTypeGuesserInterface $mimeTypeGuesser
     ) {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
-        $this->mimeTypeRepository = $mimeTypeRepository;
+        $this->mimeTypeGuesser = $mimeTypeGuesser;
     }
 
     /**
@@ -106,13 +106,8 @@ class FilterManager
         }
 
         $filteredFormat = isset($config['format']) ? $config['format'] : $binary->getFormat();
-        $filteredMimeType = $this->mimeTypeRepository->findType($filteredFormat);
-        if (!isset($filteredMimeType)) {
-            throw new \RuntimeException(sprintf(
-                'Could not determine MIME type for "%s" format', $filteredFormat
-            ));
-        }
         $filteredContent = $image->get($filteredFormat, $options);
+        $filteredMimeType = $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredContent);
 
         return new Binary($filteredContent, $filteredMimeType, $filteredFormat);
     }
