@@ -117,6 +117,9 @@ class WebPathResolver implements ResolverInterface
      */
     protected function getFileUrl($path, $filter)
     {
+        // crude way of sanitizing URL scheme ("protocol") part
+        $path = str_replace('://', '---', $path);
+
         return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
 
