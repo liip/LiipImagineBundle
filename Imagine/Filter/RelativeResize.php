@@ -15,14 +15,16 @@ class RelativeResize implements FilterInterface
 {
     private $method;
     private $parameter;
+    private $filter;
 
     /**
      * Constructs a RelativeResize filter with the given method and argument.
      *
      * @param string $method    BoxInterface method
      * @param mixed  $parameter Parameter for BoxInterface method
+     * @param string $filter    The filter to use for resizing, one of ImageInterface::FILTER_*
      */
-    public function __construct($method, $parameter)
+    public function __construct($method, $parameter, $filter = ImageInterface::FILTER_UNDEFINED)
     {
         if (!in_array($method, array('heighten', 'increase', 'scale', 'widen'))) {
             throw new InvalidArgumentException(sprintf('Unsupported method: ', $method));
@@ -30,6 +32,7 @@ class RelativeResize implements FilterInterface
 
         $this->method = $method;
         $this->parameter = $parameter;
+        $this->filter = $filter;
     }
 
     /**
@@ -37,6 +40,6 @@ class RelativeResize implements FilterInterface
      */
     public function apply(ImageInterface $image)
     {
-        return $image->resize(call_user_func(array($image->getSize(), $this->method), $this->parameter));
+        return $image->resize(call_user_func(array($image->getSize(), $this->method), $this->parameter), $this->filter);
     }
 }

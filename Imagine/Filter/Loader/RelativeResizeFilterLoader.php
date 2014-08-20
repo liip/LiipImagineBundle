@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Image\ImageInterface;
-
 use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
 
 /**
@@ -19,8 +18,16 @@ class RelativeResizeFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
+        if (!empty($options['filter'])) {
+            $filter = constant('Imagine\Image\ImageInterface::FILTER_' . strtoupper($options['filter']));
+        }
+        if (empty($filter)) {
+            $filter = ImageInterface::FILTER_UNDEFINED;
+        }
+        unset($options['filter']);
+
         if (list($method, $parameter) = each($options)) {
-            $filter = new RelativeResize($method, $parameter);
+            $filter = new RelativeResize($method, $parameter, $filter);
 
             return $filter->apply($image);
         }
