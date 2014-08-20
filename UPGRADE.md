@@ -2,6 +2,7 @@ Upgrade
 =======
 
 1.0.0-alpha6 to 1.0.0-alpha7
+---------------
 
 * [Configuration] `liip_imagine.controller_action` option was removed in favour of an array of actions. See `liip_imagine.controller` config
 
@@ -14,6 +15,7 @@ Upgrade
 ```
 
 1.0.0-alpha5 to 1.0.0-alpha6
+---------------
 
  * [Route] `ImagineLoader` was removed. Please adjust your `app/config/routing.yml` file.
 
