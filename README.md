@@ -171,7 +171,7 @@ If you want to use the service in another service, you have to simulate a new re
 ``` php
 $imagemanagerResponse = $this->container
     ->get('liip_imagine.controller')
-        ->filterAction(New Request(), 'uploads/foo.jpg', 'my_thumb');
+        ->filterAction($this->container->get('request'), 'uploads/foo.jpg', 'my_thumb');
 ```
 
 ## Outside the web root
