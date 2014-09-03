@@ -150,6 +150,7 @@ class MyController extends Controller
         $imagemanagerResponse = $this->container
             ->get('liip_imagine.controller')
                 ->filterAction(
+                    $this->request          // http request
                     'uploads/foo.jpg',      // original image you want to apply a filter to
                     'my_thumb'              // filter defined in config.yml
         );
@@ -164,6 +165,14 @@ class MyController extends Controller
 ```
 
 In case you need to add more logic the recommended solution is to either extend `ImagineController.php` controller or take the code from that controller as a basis for your own controller.
+
+If you want to use the service in another service, you have to simulate a new request:
+
+``` php
+$imagemanagerResponse = $this->container
+    ->get('liip_imagine.controller')
+        ->filterAction(New Request(), 'uploads/foo.jpg', 'my_thumb');
+```
 
 ## Outside the web root
 
