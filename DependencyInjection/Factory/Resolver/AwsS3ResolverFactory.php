@@ -23,10 +23,10 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
 
         $resolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.aws_s3');
-        $resolverDefinition->replaceArgument(1, new Reference($awsS3ClientId));
-        $resolverDefinition->replaceArgument(2, $config['bucket']);
-        $resolverDefinition->replaceArgument(3, $config['acl']);
-        $resolverDefinition->replaceArgument(4, $config['url_options']);
+        $resolverDefinition->replaceArgument(0, new Reference($awsS3ClientId));
+        $resolverDefinition->replaceArgument(1, $config['bucket']);
+        $resolverDefinition->replaceArgument(2, $config['acl']);
+        $resolverDefinition->replaceArgument(3, $config['url_options']);
         $resolverId = 'liip_imagine.cache.resolver.'.$resolverName;
         $container->setDefinition($resolverId, $resolverDefinition);
 

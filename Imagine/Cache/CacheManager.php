@@ -169,7 +169,7 @@ class CacheManager
      */
     public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return $this->getResolver($filter)->isStored($path, $filter, $runtimeConfig);
+        return $this->getResolver($filter)->isStored($path, $filter, $this->getRuntimeConfigHash($path, $runtimeConfig));
     }
 
     /**
@@ -192,7 +192,7 @@ class CacheManager
         $preEvent = new CacheResolveEvent($path, $filter, $runtimeConfig);
         $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
 
-        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter(), $preEvent->getRuntimeConfig());
+        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter(), $this->getRuntimeConfigHash($preEvent->getPath(), $preEvent->getRuntimeConfig()));
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $preEvent->getRuntimeConfig(), $url);
         $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
@@ -206,17 +206,17 @@ class CacheManager
      * @param BinaryInterface $binary
      * @param string          $path
      * @param string          $filter
-     * @param array $runtimeConfig
+     * @param array           $runtimeConfig
      */
     public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
-        $this->getResolver($filter)->store($binary, $path, $filter, $runtimeConfig);
+        $this->getResolver($filter)->store($binary, $path, $filter, $this->getRuntimeConfigHash($path, $runtimeConfig));
     }
 
     /**
      * @param string|string[]|null $paths
      * @param string|string[]|null $filters
-     * @param array $runtimeConfig
+     * @param array                $runtimeConfig
      *
      * @return void
      */
@@ -247,7 +247,18 @@ class CacheManager
         }
 
         foreach ($mapping as $resolver) {
-            $resolver->remove($paths, $mapping[$resolver], $runtimeConfig);
+            if (empty($runtimeConfig)) {
+                $resolver->remove($paths, $mapping[$resolver]);
+            } else {
+                foreach ($paths as $path) {
+                    $resolver->remove($paths, $mapping[$resolver], $this->getRuntimeConfigHash($path, $runtimeConfig));
+                }
+            }
         }
+    }
+
+    protected function getRuntimeConfigHash($path, array $runtimeConfig = array())
+    {
+        return empty($runtimeConfig) ? null : $this->signer->sign($path, $runtimeConfig);
     }
 }

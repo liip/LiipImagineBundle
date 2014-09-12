@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
-use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -28,7 +27,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
@@ -41,7 +40,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, array('torrent' => true))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setObjectUrlOption('torrent', true);
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
@@ -63,7 +62,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
         $this->setExpectedException(
@@ -84,7 +83,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->getS3ResponseMock()))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $this->assertNull($resolver->store($binary, 'thumb/foobar.jpg', 'thumb'));
     }
@@ -98,7 +97,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue(false))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
@@ -113,7 +112,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue('http://images.example.com/some-folder/path.jpg'))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $this->assertEquals(
             'http://images.example.com/some-folder/path.jpg',
@@ -137,7 +136,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('deleteMatchingObjects')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array(), array());
     }
@@ -161,7 +160,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->getS3ResponseMock(true)))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
     }
@@ -200,7 +199,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->getS3ResponseMock(true)))
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(
             array('pathOne.jpg', 'pathTwo.jpg'),
@@ -273,7 +272,7 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(
             array('pathOne.jpg', 'pathTwo.jpg'),
@@ -295,7 +294,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('deleteObject')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
     }
 
@@ -320,7 +319,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
         $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
     }
@@ -337,7 +336,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->with($expectedBucket, null, "/$expectedFilter/i")
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, $expectedBucket);
+        $resolver = new AwsS3Resolver($s3, $expectedBucket);
 
         $resolver->remove(array(), array($expectedFilter));
     }
@@ -355,7 +354,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->with($expectedBucket, null, "/{$expectedFilterOne}|{$expectedFilterTwo}/i")
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, $expectedBucket);
+        $resolver = new AwsS3Resolver($s3, $expectedBucket);
 
         $resolver->remove(array(), array($expectedFilterOne, $expectedFilterTwo));
     }
@@ -378,7 +377,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AwsS3Resolver(new Signer('test'), $s3, $expectedBucket);
+        $resolver = new AwsS3Resolver($s3, $expectedBucket);
         $resolver->setLogger($logger);
 
         $resolver->remove(array(), array($expectedFilter));

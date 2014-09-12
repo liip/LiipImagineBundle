@@ -3,29 +3,22 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\Routing\RequestContext;
 
 class NoCacheWebPathResolver implements ResolverInterface
 {
     /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\SignerInterface
-     */
-    protected $signer;
-
-    /**
      * @param RequestContext $requestContext
      */
-    public function __construct(RequestContext $requestContext, SignerInterface $signer)
+    public function __construct(RequestContext $requestContext)
     {
         $this->requestContext = $requestContext;
-        $this->signer = $signer;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter, array $runtimeConfig = array())
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
         return true;
     }
@@ -33,9 +26,9 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter, array $runtimeConfig = array())
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        if (empty($runtimeConfig)) {
+        if (null === $runtimeConfigHash) {
             return sprintf('%s://%s/%s',
                 $this->requestContext->getScheme(),
                 $this->requestContext->getHost(),
@@ -46,7 +39,7 @@ class NoCacheWebPathResolver implements ResolverInterface
                 $this->requestContext->getScheme(),
                 $this->requestContext->getHost(),
                 'rc',
-                $this->signer->sign($path, $runtimeConfig),
+                $runtimeConfigHash,
                 ltrim($path, '/')
             );
         }
@@ -55,14 +48,14 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters, array $runtimeConfig = array())
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
     }
 }

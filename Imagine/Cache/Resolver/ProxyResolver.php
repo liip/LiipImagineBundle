@@ -36,33 +36,33 @@ class ProxyResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter, array $runtimeConfig = array())
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->rewriteUrl($this->resolver->resolve($path, $filter, $runtimeConfig));
+        return $this->rewriteUrl($this->resolver->resolve($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $targetPath, $filter, array $runtimeConfig = array())
+    public function store(BinaryInterface $binary, $targetPath, $filter, $runtimeConfigHash = null)
     {
-        return $this->resolver->store($binary, $targetPath, $filter, $runtimeConfig);
+        return $this->resolver->store($binary, $targetPath, $filter, $runtimeConfigHash);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter, array $runtimeConfig = array())
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->resolver->isStored($path, $filter, $runtimeConfig);
+        return $this->resolver->isStored($path, $filter, $runtimeConfigHash);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters, array $runtimeConfig = array())
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
-        return $this->resolver->remove($paths, $filters, $runtimeConfig);
+        return $this->resolver->remove($paths, $filters, $runtimeConfigHash);
     }
 
     /**

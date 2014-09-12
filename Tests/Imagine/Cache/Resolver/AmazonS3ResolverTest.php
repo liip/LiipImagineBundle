@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
-use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -28,7 +27,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
@@ -41,7 +40,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, array('torrent' => true))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setObjectUrlOption('torrent', true);
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
@@ -63,7 +62,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
         $this->setExpectedException(
@@ -84,7 +83,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->createCFResponseMock(true)))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
@@ -98,7 +97,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue(false))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
@@ -113,7 +112,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue('http://images.example.com/some-folder/path.jpg'))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $this->assertEquals(
             'http://images.example.com/some-folder/path.jpg',
@@ -137,7 +136,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('delete_all_objects')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array(), array());
     }
@@ -158,7 +157,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->createCFResponseMock(true)))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
     }
@@ -191,7 +190,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->createCFResponseMock(true)))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array('pathOne.jpg', 'pathTwo.jpg'), array('filter'));
     }
@@ -248,7 +247,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->createCFResponseMock(true)))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(
             array('pathOne.jpg', 'pathTwo.jpg'),
@@ -270,7 +269,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('delete_object')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array('path.jpg'), array('filter'));
     }
@@ -296,7 +295,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
         $resolver->remove(array('path.jpg'), array('filter'));
@@ -312,7 +311,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue(true))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array(), array('filter'));
     }
@@ -327,7 +326,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->will($this->returnValue(true))
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(array(), array('filterOne', 'filterTwo'));
     }
@@ -348,7 +347,7 @@ class AmazonS3ResolverTest extends AbstractTest
             ->method('error')
         ;
 
-        $resolver = new AmazonS3Resolver(new Signer('test'), $s3, 'images.example.com');
+        $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setLogger($logger);
 
         $resolver->remove(array(), array('filter'));

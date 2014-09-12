@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
-use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -27,7 +26,7 @@ class CacheResolverTest extends AbstractTest
             ->will($this->returnValue($this->webPath))
         ;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), new ArrayCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
@@ -50,7 +49,7 @@ class CacheResolverTest extends AbstractTest
             ->method('isStored')
         ;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), new ArrayCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $cacheResolver->resolve($this->path, $this->filter);
 
@@ -68,7 +67,7 @@ class CacheResolverTest extends AbstractTest
             ->will($this->returnValue(true))
         ;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), new ArrayCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
@@ -85,7 +84,7 @@ class CacheResolverTest extends AbstractTest
             ->with($this->identicalTo($binary), $this->webPath, $this->filter)
         ;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), new ArrayCache(), $resolver);
+        $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
         // Call twice, as this method should not be cached.
         $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
@@ -108,7 +107,7 @@ class CacheResolverTest extends AbstractTest
             ->method('save')
         ;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), $cache, $resolver);
+        $cacheResolver = new CacheResolver($cache, $resolver);
 
         $cacheResolver->resolve($this->path, $this->filter);
     }
@@ -129,7 +128,7 @@ class CacheResolverTest extends AbstractTest
 
         $cache = new ArrayCache;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), $cache, $resolver);
+        $cacheResolver = new CacheResolver($cache, $resolver);
         $cacheResolver->resolve($this->path, $this->filter);
 
         /**
@@ -161,7 +160,7 @@ class CacheResolverTest extends AbstractTest
 
         $cache = new ArrayCache;
 
-        $cacheResolver = new CacheResolver(new Signer('test'), $cache, $resolver);
+        $cacheResolver = new CacheResolver($cache, $resolver);
         $cacheResolver->resolve('aPathFoo', 'thumbnail_233x233');
         $cacheResolver->resolve('aPathBar', 'thumbnail_233x233');
         $cacheResolver->resolve('aPathFoo', 'thumbnail_100x100');

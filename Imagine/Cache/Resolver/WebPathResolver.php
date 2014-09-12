@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
@@ -20,11 +19,6 @@ class WebPathResolver implements ResolverInterface
     protected $requestContext;
 
     /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\SignerInterface
-     */
-    protected $signer;
-
-    /**
      * @var string
      */
     protected $webRoot;
@@ -36,20 +30,17 @@ class WebPathResolver implements ResolverInterface
     /**
      * @param Filesystem $filesystem
      * @param RequestContext $requestContext
-     * @param SignerInterface $signer
      * @param string $webRootDir
      * @param string $cachePrefix
      */
     public function __construct(
         Filesystem $filesystem,
         RequestContext $requestContext,
-        SignerInterface $signer,
         $webRootDir,
         $cachePrefix = 'media/cache'
     ) {
         $this->filesystem = $filesystem;
         $this->requestContext = $requestContext;
-        $this->signer = $signer;
 
         $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
         $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
@@ -59,29 +50,29 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter, array $runtimeConfig = array())
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
         return sprintf('%s/%s',
             $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter, $runtimeConfig)
+            $this->getFileUrl($path, $filter, $runtimeConfigHash)
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter, array $runtimeConfig = array())
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->filesystem->exists($this->getFilePath($path, $filter, $runtimeConfig));
+        return $this->filesystem->exists($this->getFilePath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter, $runtimeConfig),
+            $this->getFilePath($path, $filter, $runtimeConfigHash),
             $binary->getContent()
         );
     }
@@ -89,7 +80,7 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters, array $runtimeConfig = array())
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -108,7 +99,7 @@ class WebPathResolver implements ResolverInterface
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfig));
+                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfigHash));
             }
         }
     }
@@ -116,20 +107,20 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    protected function getFilePath($path, $filter, array $runtimeConfig = array())
+    protected function getFilePath($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter, $runtimeConfig);
+        return $this->webRoot.'/'.$this->getFileUrl($path, $filter, $runtimeConfigHash);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function getFileUrl($path, $filter, array $runtimeConfig = array())
+    protected function getFileUrl($path, $filter, $runtimeConfigHash = null)
     {
-        if (empty($runtimeConfig)) {
+        if (null === $runtimeConfigHash) {
             return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
         } else {
-            return $this->cachePrefix.'/'.$filter.'/rc/'.$this->signer->sign($path, $runtimeConfig).'/'.ltrim($path, '/');
+            return $this->cachePrefix.'/'.$filter.'/rc/'.$runtimeConfigHash.'/'.ltrim($path, '/');
         }
     }
 

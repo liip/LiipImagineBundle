@@ -83,17 +83,17 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter, array $runtimeConfig = array())
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return file_exists($this->getFilePath($path, $filter, $runtimeConfig));
+        return file_exists($this->getFilePath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
-        $filePath = $this->getFilePath($path, $filter, $runtimeConfig);
+        $filePath = $this->getFilePath($path, $filter, $runtimeConfigHash);
 
         $dir = pathinfo($filePath, PATHINFO_DIRNAME);
 
@@ -105,7 +105,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters, array $runtimeConfig = array())
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -130,7 +130,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfig));
+                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfigHash));
             }
         }
     }
@@ -174,9 +174,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @param string $path The resource path to convert.
      * @param string $filter The name of the imagine filter.
-     * @param array  $runtimeConfig
+     * @param string $runtimeConfigHash
      *
      * @return string
      */
-    abstract protected function getFilePath($path, $filter, array $runtimeConfig = array());
+    abstract protected function getFilePath($path, $filter, $runtimeConfigHash = null);
 }

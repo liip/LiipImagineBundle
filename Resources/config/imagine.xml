@@ -188,13 +188,11 @@
         <service id="liip_imagine.cache.resolver.prototype.web_path" class="%liip_imagine.cache.resolver.web_path.class%" public="true" abstract="true">
             <argument type="service" id="filesystem" />
             <argument type="service" id="router.request_context" />
-            <argument type="service" id="liip_imagine.cache.signer" />
             <argument><!-- will be injected by WebPathResolverFactory --></argument>
             <argument><!-- will be injected by WebPathResolverFactory --></argument>
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.aws_s3" class="%liip_imagine.cache.resolver.aws_s3.class%" public="true" abstract="true">
-            <argument type="service" id="liip_imagine.cache.signer" />
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
@@ -202,7 +200,6 @@
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.cache" class="%liip_imagine.cache.resolver.cache.class%" public="true" abstract="true">
-            <argument type="service" id="liip_imagine.cache.signer" />
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument><!-- will be injected by a ResolverFactory --></argument>
         </service>
@@ -214,7 +211,6 @@
 
         <service id="liip_imagine.cache.resolver.no_cache_web_path" class="%liip_imagine.cache.resolver.no_cache_web_path.class%" public="true">
             <argument type="service" id="router.request_context" />
-            <argument type="service" id="liip_imagine.cache.signer" />
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
         </service>
 
