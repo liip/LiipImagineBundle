@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
-use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
@@ -26,7 +25,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $requestContext = new RequestContext;
         $webRoot = 'theWebRoot';
 
-        $resolver = new WebPathResolver($filesystemMock, $requestContext, new Signer('secret'), $webRoot);
+        $resolver = new WebPathResolver($filesystemMock, $requestContext, $webRoot);
 
         $this->assertAttributeSame($filesystemMock, 'filesystem', $resolver);
         $this->assertAttributeSame($requestContext, 'requestContext', $resolver);
@@ -38,7 +37,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             'aWebRoot',
             'theCachePrefix'
         );
@@ -51,7 +49,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             'aWebRoot/',
             'theCachePrefix'
         );
@@ -64,7 +61,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             'aWeb//Root',
             '/aCachePrefix'
         );
@@ -77,7 +73,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             'aWebRoot',
             '/aCachePrefix'
         );
@@ -90,7 +85,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             'aWebRoot',
             'aCache//Prefix'
         );
@@ -111,7 +105,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -132,7 +125,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -149,7 +141,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -170,7 +161,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -191,7 +181,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -212,7 +201,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -233,7 +221,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -254,7 +241,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             $requestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -279,7 +265,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -298,7 +283,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -318,7 +302,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -343,7 +326,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -378,7 +360,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -403,7 +384,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -426,7 +406,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $filesystemMock,
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -439,7 +418,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
             new RequestContext,
-            new Signer('secret'),
             '/aWebRoot',
             'aCachePrefix'
         );
