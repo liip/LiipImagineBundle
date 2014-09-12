@@ -118,7 +118,7 @@ class CacheManager
      *
      * @param string $path The path where the resolved file is expected.
      * @param string $filter
-     * @param array $runtimeConfig
+     * @param array  $runtimeConfig
      *
      * @return string
      */
@@ -163,7 +163,7 @@ class CacheManager
      *
      * @param string $path
      * @param string $filter
-     * @param array
+     * @param array  $runtimeConfig
      *
      * @return bool
      */
