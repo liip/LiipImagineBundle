@@ -18,7 +18,6 @@ services:
     acme.imagine.cache.resolver.amazon_s3:
         class: Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
         arguments:
-            - "@liip_imagine.cache.signer"
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
 

@@ -51,12 +51,12 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $resolverDefinition->getParent());
 
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(1));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.client', $resolverDefinition->getArgument(1));
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.client', $resolverDefinition->getArgument(0));
 
-        $this->assertEquals('theBucket', $resolverDefinition->getArgument(2));
-        $this->assertEquals('theAcl', $resolverDefinition->getArgument(3));
-        $this->assertEquals(array('fooKey' => 'fooVal'), $resolverDefinition->getArgument(4));
+        $this->assertEquals('theBucket', $resolverDefinition->getArgument(1));
+        $this->assertEquals('theAcl', $resolverDefinition->getArgument(2));
+        $this->assertEquals(array('fooKey' => 'fooVal'), $resolverDefinition->getArgument(3));
     }
 
     public function testCreateS3ClientDefinitionOnCreate()
