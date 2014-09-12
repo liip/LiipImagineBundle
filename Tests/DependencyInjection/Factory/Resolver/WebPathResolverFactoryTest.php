@@ -47,8 +47,8 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.web_path', $resolverDefinition->getParent());
 
-        $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(2));
-        $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(3));
+        $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(3));
+        $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(4));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()

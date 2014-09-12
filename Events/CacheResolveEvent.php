@@ -18,6 +18,13 @@ class CacheResolveEvent extends Event
     protected $filter;
 
     /**
+     * RuntimeConfig
+     *
+     * @var
+     */
+    protected $runtimeConfig;
+
+    /**
      * Resource url
      * @var null
      */
@@ -28,12 +35,14 @@ class CacheResolveEvent extends Event
      *
      * @param string $path
      * @param string $filter
+     * @param array  $runtimeConfig
      * @param null|string $url
      */
-    public function __construct($path, $filter, $url = null)
+    public function __construct($path, $filter, array $runtimeConfig = array(), $url = null)
     {
         $this->path = $path;
         $this->filter = $filter;
+        $this->runtimeConfig = $runtimeConfig;
         $this->url = $url;
     }
 
@@ -75,6 +84,26 @@ class CacheResolveEvent extends Event
     public function getFilter()
     {
         return $this->filter;
+    }
+
+    /**
+     * Sets runtimeConfig
+     *
+     * @param array $runtimeConfig
+     */
+    public function setRuntimeConfig(array $runtimeConfig)
+    {
+        $this->runtimeConfig = $runtimeConfig;
+    }
+
+    /**
+     * Returns runtimeConfig
+     *
+     * @return array
+     */
+    public function getRuntimeConfig()
+    {
+        return $this->runtimeConfig;
     }
 
     /**

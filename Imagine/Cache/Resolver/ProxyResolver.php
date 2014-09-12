@@ -36,33 +36,33 @@ class ProxyResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, array $runtimeConfig = array())
     {
-        return $this->rewriteUrl($this->resolver->resolve($path, $filter));
+        return $this->rewriteUrl($this->resolver->resolve($path, $filter, $runtimeConfig));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $targetPath, $filter)
+    public function store(BinaryInterface $binary, $targetPath, $filter, array $runtimeConfig = array())
     {
-        return $this->resolver->store($binary, $targetPath, $filter);
+        return $this->resolver->store($binary, $targetPath, $filter, $runtimeConfig);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return $this->resolver->isStored($path, $filter);
+        return $this->resolver->isStored($path, $filter, $runtimeConfig);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, array $runtimeConfig = array())
     {
-        return $this->resolver->remove($paths, $filters);
+        return $this->resolver->remove($paths, $filters, $runtimeConfig);
     }
 
     /**

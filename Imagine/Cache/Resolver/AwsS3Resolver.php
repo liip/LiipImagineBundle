@@ -6,10 +6,16 @@ use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Psr\Log\LoggerInterface;
 
 class AwsS3Resolver implements ResolverInterface
 {
+    /**
+     * @var \Liip\ImagineBundle\Imagine\Cache\SignerInterface
+     */
+    protected $signer;
+
     /**
      * @var S3Client
      */
@@ -43,13 +49,15 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
+     * @param SignerInterface $signer
      * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
+    public function __construct(SignerInterface $signer, S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
     {
+        $this->signer = $signer;
         $this->storage = $storage;
         $this->bucket = $bucket;
         $this->acl = $acl;
@@ -75,25 +83,25 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return $this->objectExists($this->getObjectPath($path, $filter));
+        return $this->objectExists($this->getObjectPath($path, $filter, $runtimeConfig));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, array $runtimeConfig = array())
     {
-        return $this->getObjectUrl($this->getObjectPath($path, $filter));
+        return $this->getObjectUrl($this->getObjectPath($path, $filter, $runtimeConfig));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
-        $objectPath = $this->getObjectPath($path, $filter);
+        $objectPath = $this->getObjectPath($path, $filter, $runtimeConfig);
 
         try {
             $this->storage->putObject(array(
@@ -118,7 +126,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, array $runtimeConfig = array())
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -143,7 +151,7 @@ class AwsS3Resolver implements ResolverInterface
 
         foreach ($filters as $filter) {
             foreach ($paths as $path) {
-                $objectPath = $this->getObjectPath($path, $filter);
+                $objectPath = $this->getObjectPath($path, $filter, $runtimeConfig);
                 if (!$this->objectExists($objectPath)) {
                     continue;
                 }
@@ -189,14 +197,22 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @param string $path The base path of the resource.
      * @param string $filter The name of the imagine filter in effect.
+     * @param array $runtimeConfig
      *
      * @return string The path of the object on S3.
      */
-    protected function getObjectPath($path, $filter)
+    protected function getObjectPath($path, $filter, array $runtimeConfig = array())
     {
-        $path = $this->cachePrefix
-            ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
-            : sprintf('%s/%s', $filter, $path);
+        if (empty($runtimeConfig)) {
+            $path = $this->cachePrefix
+                ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
+                : sprintf('%s/%s', $filter, $path);
+        } else {
+            $path = $this->cachePrefix
+                ? sprintf('%s/%s/%s/%s/%s', $this->cachePrefix, $filter, 'rc', $this->signer->sign($path, $filter), $path)
+                : sprintf('%s/%s/%s/%s', $filter, 'rc', $this->signer->sign($path, $filter), $path);
+
+        }
 
         return str_replace('//', '/', $path);
     }

@@ -124,13 +124,9 @@ class CacheManager
      */
     public function getBrowserPath($path, $filter, array $runtimeConfig = array())
     {
-        if (!empty($runtimeConfig)) {
-            return $this->generateUrl($path, $filter, $runtimeConfig);
-        }
-
-        return $this->isStored($path, $filter) ?
-            $this->resolve($path, $filter) :
-            $this->generateUrl($path, $filter)
+        return $this->isStored($path, $filter, $runtimeConfig) ?
+            $this->resolve($path, $filter, $runtimeConfig) :
+            $this->generateUrl($path, $filter, $runtimeConfig)
         ;
     }
 
@@ -167,12 +163,13 @@ class CacheManager
      *
      * @param string $path
      * @param string $filter
+     * @param array
      *
      * @return bool
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return $this->getResolver($filter)->isStored($path, $filter);
+        return $this->getResolver($filter)->isStored($path, $filter, $runtimeConfig);
     }
 
     /**
@@ -180,23 +177,24 @@ class CacheManager
      *
      * @param string $path
      * @param string $filter
+     * @param array $runtimeConfig
      *
      * @return string The url of resolved image.
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, array $runtimeConfig = array())
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
-        $preEvent = new CacheResolveEvent($path, $filter);
+        $preEvent = new CacheResolveEvent($path, $filter, $runtimeConfig);
         $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
 
-        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter());
+        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter(), $preEvent->getRuntimeConfig());
 
-        $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
+        $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $preEvent->getRuntimeConfig(), $url);
         $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
 
         return $postEvent->getUrl();
@@ -208,19 +206,21 @@ class CacheManager
      * @param BinaryInterface $binary
      * @param string          $path
      * @param string          $filter
+     * @param array $runtimeConfig
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
-        $this->getResolver($filter)->store($binary, $path, $filter);
+        $this->getResolver($filter)->store($binary, $path, $filter, $runtimeConfig);
     }
 
     /**
      * @param string|string[]|null $paths
      * @param string|string[]|null $filters
+     * @param array $runtimeConfig
      *
      * @return void
      */
-    public function remove($paths = null, $filters = null)
+    public function remove($paths = null, $filters = null, array $runtimeConfig = array())
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());
@@ -247,7 +247,7 @@ class CacheManager
         }
 
         foreach ($mapping as $resolver) {
-            $resolver->remove($paths, $mapping[$resolver]);
+            $resolver->remove($paths, $mapping[$resolver], $runtimeConfig);
         }
     }
 }

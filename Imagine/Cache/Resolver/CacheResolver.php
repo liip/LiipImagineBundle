@@ -4,11 +4,17 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\Cache;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CacheResolver implements ResolverInterface
 {
+    /**
+     * @var \Liip\ImagineBundle\Imagine\Cache\SignerInterface
+     */
+    protected $signer;
+
     /**
      * @var Cache
      */
@@ -32,13 +38,15 @@ class CacheResolver implements ResolverInterface
      * * index_key
      *   The name of the index key being used to save a list of created cache keys regarding one image and filter pairing.
      *
+     * @param SignerInterface $signer
      * @param Cache $cache
      * @param ResolverInterface $cacheResolver
      * @param array $options
      * @param OptionsResolverInterface $optionsResolver
      */
-    public function __construct(Cache $cache, ResolverInterface $cacheResolver, array $options = array(), OptionsResolverInterface $optionsResolver = null)
+    public function __construct(SignerInterface $signer, Cache $cache, ResolverInterface $cacheResolver, array $options = array(), OptionsResolverInterface $optionsResolver = null)
     {
+        $this->signer = $signer;
         $this->cache = $cache;
         $this->resolver = $cacheResolver;
 
@@ -53,27 +61,27 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        $cacheKey = $this->generateCacheKey($path, $filter);
+        $cacheKey = $this->generateCacheKey($path, $filter, $runtimeConfig);
 
         return
             $this->cache->contains($cacheKey) ||
-            $this->resolver->isStored($path, $filter)
+            $this->resolver->isStored($path, $filter, $runtimeConfig)
         ;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, array $runtimeConfig = array())
     {
-        $key = $this->generateCacheKey($path, $filter);
+        $key = $this->generateCacheKey($path, $filter, $runtimeConfig);
         if ($this->cache->contains($key)) {
             return $this->cache->fetch($key);
         }
 
-        $resolved = $this->resolver->resolve($path, $filter);
+        $resolved = $this->resolver->resolve($path, $filter, $runtimeConfig);
 
         $this->saveToCache($key, $resolved);
 
@@ -83,32 +91,32 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
-        $this->resolver->store($binary, $path, $filter);
+        $this->resolver->store($binary, $path, $filter, $runtimeConfig);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, array $runtimeConfig = array())
     {
-        $this->resolver->remove($paths, $filters);
+        $this->resolver->remove($paths, $filters, $runtimeConfig);
 
         foreach ($filters as $filter) {
             if (empty($paths)) {
                 $this->removePathAndFilter(null, $filter);
             } else {
                 foreach ($paths as $path) {
-                    $this->removePathAndFilter($path, $filter);
+                    $this->removePathAndFilter($path, $filter, $runtimeConfig);
                 }
             }
         }
     }
 
-    protected function removePathAndFilter($path, $filter)
+    protected function removePathAndFilter($path, $filter, array $runtimeConfig = array())
     {
-        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
+        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter, $runtimeConfig));
         if (!$this->cache->contains($indexKey)) {
             return;
         }
@@ -122,7 +130,7 @@ class CacheResolver implements ResolverInterface
 
             $index = array();
         } else {
-            $cacheKey = $this->generateCacheKey($path, $filter);
+            $cacheKey = $this->generateCacheKey($path, $filter, $runtimeConfig);
             if (false !== $indexIndex = array_search($cacheKey, $index)) {
                 unset($index[$indexIndex]);
                 $this->cache->delete($cacheKey);
@@ -143,17 +151,29 @@ class CacheResolver implements ResolverInterface
      *
      * @param string $path The image path in use.
      * @param string $filter The filter in use.
+     * @param array $runtimeConfig
      *
      * @return string
      */
-    public function generateCacheKey($path, $filter)
+    public function generateCacheKey($path, $filter, array $runtimeConfig = array())
     {
-        return implode('.', array(
-            $this->sanitizeCacheKeyPart($this->options['global_prefix']),
-            $this->sanitizeCacheKeyPart($this->options['prefix']),
-            $this->sanitizeCacheKeyPart($filter),
-            $this->sanitizeCacheKeyPart($path),
-        ));
+        if (empty($runtimeConfig)) {
+            return implode('.', array(
+                $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+                $this->sanitizeCacheKeyPart($this->options['prefix']),
+                $this->sanitizeCacheKeyPart($filter),
+                $this->sanitizeCacheKeyPart($path),
+            ));
+        } else {
+            return implode('.', array(
+                $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+                $this->sanitizeCacheKeyPart($this->options['prefix']),
+                $this->sanitizeCacheKeyPart($filter),
+                $this->sanitizeCacheKeyPart('rc'),
+                $this->sanitizeCacheKeyPart($this->signer->sign($path, $runtimeConfig)),
+                $this->sanitizeCacheKeyPart($path),
+            ));
+        }
     }
 
     /**

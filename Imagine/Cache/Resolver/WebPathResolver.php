@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
@@ -19,6 +20,11 @@ class WebPathResolver implements ResolverInterface
     protected $requestContext;
 
     /**
+     * @var \Liip\ImagineBundle\Imagine\Cache\SignerInterface
+     */
+    protected $signer;
+
+    /**
      * @var string
      */
     protected $webRoot;
@@ -30,17 +36,20 @@ class WebPathResolver implements ResolverInterface
     /**
      * @param Filesystem $filesystem
      * @param RequestContext $requestContext
+     * @param SignerInterface $signer
      * @param string $webRootDir
      * @param string $cachePrefix
      */
     public function __construct(
         Filesystem $filesystem,
         RequestContext $requestContext,
+        SignerInterface $signer,
         $webRootDir,
         $cachePrefix = 'media/cache'
     ) {
         $this->filesystem = $filesystem;
         $this->requestContext = $requestContext;
+        $this->signer = $signer;
 
         $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
         $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
@@ -50,29 +59,29 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, array $runtimeConfig = array())
     {
         return sprintf('%s/%s',
             $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter)
+            $this->getFileUrl($path, $filter, $runtimeConfig)
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return $this->filesystem->exists($this->getFilePath($path, $filter));
+        return $this->filesystem->exists($this->getFilePath($path, $filter, $runtimeConfig));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->getFilePath($path, $filter, $runtimeConfig),
             $binary->getContent()
         );
     }
@@ -80,7 +89,7 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, array $runtimeConfig = array())
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -99,7 +108,7 @@ class WebPathResolver implements ResolverInterface
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter));
+                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfig));
             }
         }
     }
@@ -107,17 +116,21 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    protected function getFilePath($path, $filter)
+    protected function getFilePath($path, $filter, array $runtimeConfig = array())
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+        return $this->webRoot.'/'.$this->getFileUrl($path, $filter, $runtimeConfig);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function getFileUrl($path, $filter)
+    protected function getFileUrl($path, $filter, array $runtimeConfig = array())
     {
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        if (empty($runtimeConfig)) {
+            return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        } else {
+            return $this->cachePrefix.'/'.$filter.'/rc/'.$this->signer->sign($path, $runtimeConfig).'/'.ltrim($path, '/');
+        }
     }
 
     /**

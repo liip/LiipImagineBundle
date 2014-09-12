@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
+use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,21 +17,21 @@ class NoCacheWebPathResolverTest extends AbstractTest
 {
     public function testCouldBeConstructedWithRequestContextAsArgument()
     {
-        new NoCacheWebPathResolver(new RequestContext);
+        new NoCacheWebPathResolver(new RequestContext, new Signer('secret'));
     }
 
     public function testComposeSchemaHostAndPathOnResolve()
     {
         $context = new RequestContext('', 'GET', 'theHost', 'theSchema');
 
-        $resolver = new NoCacheWebPathResolver($context);
+        $resolver = new NoCacheWebPathResolver($context, new Signer('secret'));
 
         $this->assertEquals('theschema://theHost/aPath', $resolver->resolve('aPath', 'aFilter'));
     }
 
     public function testDoNothingOnStore()
     {
-        $resolver = new NoCacheWebPathResolver(new RequestContext);
+        $resolver = new NoCacheWebPathResolver(new RequestContext, new Signer('secret'));
 
         $this->assertNull($resolver->store(
             new Binary('aContent', 'image/jpeg', 'jpg'),
@@ -41,21 +42,21 @@ class NoCacheWebPathResolverTest extends AbstractTest
 
     public function testDoNothingForPathAndFilterOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new RequestContext);
+        $resolver = new NoCacheWebPathResolver(new RequestContext, new Signer('secret'));
 
         $resolver->remove(array('a/path'), array('aFilter'));
     }
 
     public function testDoNothingForSomePathsAndSomeFiltersOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new RequestContext);
+        $resolver = new NoCacheWebPathResolver(new RequestContext, new Signer('secret'));
 
         $resolver->remove(array('foo', 'bar'), array('foo', 'bar'));
     }
 
     public function testDoNothingForEmptyPathAndEmptyFilterOnRemove()
     {
-        $resolver = new NoCacheWebPathResolver(new RequestContext);
+        $resolver = new NoCacheWebPathResolver(new RequestContext, new Signer('secret'));
 
         $resolver->remove(array(), array());
     }

@@ -50,12 +50,27 @@ class CacheResolveEventTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals('default_filter', 'filter', $event);
     }
 
+    public function testShouldAllowSetRuntimeConfigInConstruct()
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter', array('custom' => 'custom_value'));
+
+        $this->assertAttributeEquals(array('custom' => 'custom_value'), 'runtimeConfig', $event);
+    }
+
     public function testShouldAllowSetFilterByMethod()
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setFilter('new_filter');
 
         $this->assertAttributeEquals('new_filter', 'filter', $event);
+    }
+
+    public function testShouldAllowSetRuntimeConfigByMethod()
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter');
+        $event->setRuntimeConfig(array('custom' => 'custom_value'));
+
+        $this->assertAttributeEquals(array('custom' => 'custom_value'), 'runtimeConfig', $event);
     }
 
     public function testShouldAllowGetFilterWhichWasSetInConstruct()
@@ -73,9 +88,17 @@ class CacheResolveEventTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('new_filter', $event->getFilter());
     }
 
+    public function testShouldAllowGetRuntimeConfigWhichWasSetByMethod()
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter');
+        $event->setRuntimeConfig(array('custom' => 'custom_value'));
+
+        $this->assertEquals(array('custom' => 'custom_value'), $event->getRuntimeConfig());
+    }
+
     public function testShouldAllowSetUrlInConstruct()
     {
-        $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
+        $event = new CacheResolveEvent('default_path', 'default_filter', array(), 'default_url');
 
         $this->assertAttributeEquals('default_url', 'url', $event);
     }
@@ -90,7 +113,7 @@ class CacheResolveEventTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldAllowGetUrlWhichWasSetInConstruct()
     {
-        $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
+        $event = new CacheResolveEvent('default_path', 'default_filter', array(), 'default_url');
 
         $this->assertEquals('default_url', $event->getUrl());
     }

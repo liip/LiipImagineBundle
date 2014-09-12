@@ -83,17 +83,17 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, array $runtimeConfig = array())
     {
-        return file_exists($this->getFilePath($path, $filter));
+        return file_exists($this->getFilePath($path, $filter, $runtimeConfig));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, array $runtimeConfig = array())
     {
-        $filePath = $this->getFilePath($path, $filter);
+        $filePath = $this->getFilePath($path, $filter, $runtimeConfig);
 
         $dir = pathinfo($filePath, PATHINFO_DIRNAME);
 
@@ -105,7 +105,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, array $runtimeConfig = array())
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -130,7 +130,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter));
+                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfig));
             }
         }
     }
@@ -174,8 +174,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @param string $path The resource path to convert.
      * @param string $filter The name of the imagine filter.
+     * @param array  $runtimeConfig
      *
      * @return string
      */
-    abstract protected function getFilePath($path, $filter);
+    abstract protected function getFilePath($path, $filter, array $runtimeConfig = array());
 }
