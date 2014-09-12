@@ -18,7 +18,7 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
         return true;
     }
@@ -26,26 +26,36 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        return sprintf('%s://%s/%s',
-            $this->requestContext->getScheme(),
-            $this->requestContext->getHost(),
-            ltrim($path, '/')
-        );
+        if (null === $runtimeConfigHash) {
+            return sprintf('%s://%s/%s',
+                $this->requestContext->getScheme(),
+                $this->requestContext->getHost(),
+                ltrim($path, '/')
+            );
+        } else {
+            return sprintf('%s://%s/%s/%s/%s',
+                $this->requestContext->getScheme(),
+                $this->requestContext->getHost(),
+                'rc',
+                $runtimeConfigHash,
+                ltrim($path, '/')
+            );
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
     }
 }

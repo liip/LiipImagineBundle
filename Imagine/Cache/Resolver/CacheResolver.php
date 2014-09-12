@@ -53,27 +53,27 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        $cacheKey = $this->generateCacheKey($path, $filter);
+        $cacheKey = $this->generateCacheKey($path, $filter, $runtimeConfigHash);
 
         return
             $this->cache->contains($cacheKey) ||
-            $this->resolver->isStored($path, $filter)
+            $this->resolver->isStored($path, $filter, $runtimeConfigHash)
         ;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        $key = $this->generateCacheKey($path, $filter);
+        $key = $this->generateCacheKey($path, $filter, $runtimeConfigHash);
         if ($this->cache->contains($key)) {
             return $this->cache->fetch($key);
         }
 
-        $resolved = $this->resolver->resolve($path, $filter);
+        $resolved = $this->resolver->resolve($path, $filter, $runtimeConfigHash);
 
         $this->saveToCache($key, $resolved);
 
@@ -83,32 +83,32 @@ class CacheResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
-        $this->resolver->store($binary, $path, $filter);
+        $this->resolver->store($binary, $path, $filter, $runtimeConfigHash);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
-        $this->resolver->remove($paths, $filters);
+        $this->resolver->remove($paths, $filters, $runtimeConfigHash);
 
         foreach ($filters as $filter) {
             if (empty($paths)) {
                 $this->removePathAndFilter(null, $filter);
             } else {
                 foreach ($paths as $path) {
-                    $this->removePathAndFilter($path, $filter);
+                    $this->removePathAndFilter($path, $filter, $runtimeConfigHash);
                 }
             }
         }
     }
 
-    protected function removePathAndFilter($path, $filter)
+    protected function removePathAndFilter($path, $filter, $runtimeConfigHash = null)
     {
-        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
+        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter, $runtimeConfigHash));
         if (!$this->cache->contains($indexKey)) {
             return;
         }
@@ -122,7 +122,7 @@ class CacheResolver implements ResolverInterface
 
             $index = array();
         } else {
-            $cacheKey = $this->generateCacheKey($path, $filter);
+            $cacheKey = $this->generateCacheKey($path, $filter, $runtimeConfigHash);
             if (false !== $indexIndex = array_search($cacheKey, $index)) {
                 unset($index[$indexIndex]);
                 $this->cache->delete($cacheKey);
@@ -143,17 +143,29 @@ class CacheResolver implements ResolverInterface
      *
      * @param string $path The image path in use.
      * @param string $filter The filter in use.
+     * @param string $runtimeConfigHash
      *
      * @return string
      */
-    public function generateCacheKey($path, $filter)
+    public function generateCacheKey($path, $filter, $runtimeConfigHash = null)
     {
-        return implode('.', array(
-            $this->sanitizeCacheKeyPart($this->options['global_prefix']),
-            $this->sanitizeCacheKeyPart($this->options['prefix']),
-            $this->sanitizeCacheKeyPart($filter),
-            $this->sanitizeCacheKeyPart($path),
-        ));
+        if (null === $runtimeConfigHash) {
+            return implode('.', array(
+                $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+                $this->sanitizeCacheKeyPart($this->options['prefix']),
+                $this->sanitizeCacheKeyPart($filter),
+                $this->sanitizeCacheKeyPart($path),
+            ));
+        } else {
+            return implode('.', array(
+                $this->sanitizeCacheKeyPart($this->options['global_prefix']),
+                $this->sanitizeCacheKeyPart($this->options['prefix']),
+                $this->sanitizeCacheKeyPart($filter),
+                $this->sanitizeCacheKeyPart('rc'),
+                $this->sanitizeCacheKeyPart($runtimeConfigHash),
+                $this->sanitizeCacheKeyPart($path),
+            ));
+        }
     }
 
     /**

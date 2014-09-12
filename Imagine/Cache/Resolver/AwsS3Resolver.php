@@ -75,25 +75,25 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->objectExists($this->getObjectPath($path, $filter));
+        return $this->objectExists($this->getObjectPath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->getObjectUrl($this->getObjectPath($path, $filter));
+        return $this->getObjectUrl($this->getObjectPath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
+        $objectPath = $this->getObjectPath($path, $filter, $runtimeConfigHash);
 
         try {
             $this->storage->putObject(array(
@@ -118,7 +118,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -143,7 +143,7 @@ class AwsS3Resolver implements ResolverInterface
 
         foreach ($filters as $filter) {
             foreach ($paths as $path) {
-                $objectPath = $this->getObjectPath($path, $filter);
+                $objectPath = $this->getObjectPath($path, $filter, $runtimeConfigHash);
                 if (!$this->objectExists($objectPath)) {
                     continue;
                 }
@@ -189,14 +189,22 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @param string $path The base path of the resource.
      * @param string $filter The name of the imagine filter in effect.
+     * @param string $runtimeConfigHash
      *
      * @return string The path of the object on S3.
      */
-    protected function getObjectPath($path, $filter)
+    protected function getObjectPath($path, $filter, $runtimeConfigHash = null)
     {
-        $path = $this->cachePrefix
-            ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
-            : sprintf('%s/%s', $filter, $path);
+        if (null === $runtimeConfigHash) {
+            $path = $this->cachePrefix
+                ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
+                : sprintf('%s/%s', $filter, $path);
+        } else {
+            $path = $this->cachePrefix
+                ? sprintf('%s/%s/%s/%s/%s', $this->cachePrefix, $filter, 'rc', $runtimeConfigHash, $path)
+                : sprintf('%s/%s/%s/%s', $filter, 'rc', $runtimeConfigHash, $path);
+
+        }
 
         return str_replace('//', '/', $path);
     }

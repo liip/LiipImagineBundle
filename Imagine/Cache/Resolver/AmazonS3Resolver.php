@@ -60,25 +60,25 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->objectExists($this->getObjectPath($path, $filter));
+        return $this->objectExists($this->getObjectPath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->getObjectUrl($this->getObjectPath($path, $filter));
+        return $this->getObjectUrl($this->getObjectPath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
-        $objectPath = $this->getObjectPath($path, $filter);
+        $objectPath = $this->getObjectPath($path, $filter, $runtimeConfigHash);
 
         $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
             'body' => $binary->getContent(),
@@ -101,7 +101,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -120,7 +120,7 @@ class AmazonS3Resolver implements ResolverInterface
 
         foreach ($filters as $filter) {
             foreach ($paths as $path) {
-                $objectPath = $this->getObjectPath($path, $filter);
+                $objectPath = $this->getObjectPath($path, $filter, $runtimeConfigHash);
                 if (!$this->objectExists($objectPath)) {
                     continue;
                 }
@@ -160,12 +160,17 @@ class AmazonS3Resolver implements ResolverInterface
      *
      * @param string $path The base path of the resource.
      * @param string $filter The name of the imagine filter in effect.
+     * @param string $runtimeConfigHash
      *
      * @return string The path of the object on S3.
      */
-    protected function getObjectPath($path, $filter)
+    protected function getObjectPath($path, $filter, $runtimeConfigHash = null)
     {
-        return str_replace('//', '/', $filter.'/'.$path);
+        if (null === $runtimeConfigHash) {
+            return str_replace('//', '/', $filter.'/'.$path);
+        } else {
+            return str_replace('//', '/', $filter.'/rc/'.$runtimeConfigHash.'/'.$path);
+        }
     }
 
     /**

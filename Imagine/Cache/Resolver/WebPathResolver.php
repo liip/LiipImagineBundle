@@ -50,29 +50,29 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $runtimeConfigHash = null)
     {
         return sprintf('%s/%s',
             $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter)
+            $this->getFileUrl($path, $filter, $runtimeConfigHash)
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->filesystem->exists($this->getFilePath($path, $filter));
+        return $this->filesystem->exists($this->getFilePath($path, $filter, $runtimeConfigHash));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $runtimeConfigHash = null)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->getFilePath($path, $filter, $runtimeConfigHash),
             $binary->getContent()
         );
     }
@@ -80,7 +80,7 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters, $runtimeConfigHash = null)
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -99,7 +99,7 @@ class WebPathResolver implements ResolverInterface
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter));
+                $this->filesystem->remove($this->getFilePath($path, $filter, $runtimeConfigHash));
             }
         }
     }
@@ -107,17 +107,21 @@ class WebPathResolver implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    protected function getFilePath($path, $filter)
+    protected function getFilePath($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+        return $this->webRoot.'/'.$this->getFileUrl($path, $filter, $runtimeConfigHash);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function getFileUrl($path, $filter)
+    protected function getFileUrl($path, $filter, $runtimeConfigHash = null)
     {
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        if (null === $runtimeConfigHash) {
+            return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        } else {
+            return $this->cachePrefix.'/'.$filter.'/rc/'.$runtimeConfigHash.'/'.ltrim($path, '/');
+        }
     }
 
     /**
