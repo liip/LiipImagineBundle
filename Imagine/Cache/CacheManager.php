@@ -125,7 +125,12 @@ class CacheManager
     public function getBrowserPath($path, $filter, array $runtimeConfig = array())
     {
         if (!empty($runtimeConfig)) {
-            return $this->generateUrl($path, $filter, $runtimeConfig);
+            $rcPath = 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
+
+            return $this->isStored($rcPath, $filter) ?
+                $this->resolve($rcPath, $filter) :
+                $this->generateUrl($path, $filter, $runtimeConfig)
+            ;
         }
 
         return $this->isStored($path, $filter) ?
