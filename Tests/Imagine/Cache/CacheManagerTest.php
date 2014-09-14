@@ -51,6 +51,20 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail');
     }
 
+    public function testGetRuntimeConfigPath()
+    {
+        $config = $this->createFilterConfigurationMock();
+        $cacheManager = new CacheManager($config, $this->createRouterMock(), new Signer('secret'), $this->createEventDispatcherMock());
+
+        $rcPath = $cacheManager->getRuntimeConfigPath('image.jpg', array(
+            'thumbnail' => array(
+                'size' => array(180, 180)
+            )
+        ));
+
+        $this->assertEquals('rc/ILfTutxX/image.jpg', $rcPath);
+    }
+
     public function testDefaultResolverUsedIfNoneSetOnGetBrowserPath()
     {
         $resolver = $this->createResolverMock();

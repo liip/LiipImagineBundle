@@ -125,7 +125,7 @@ class CacheManager
     public function getBrowserPath($path, $filter, array $runtimeConfig = array())
     {
         if (!empty($runtimeConfig)) {
-            $rcPath = 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
+            $rcPath = $this->getRuntimeConfigPath($path, $runtimeConfig);
 
             return $this->isStored($rcPath, $filter) ?
                 $this->resolve($rcPath, $filter) :
@@ -137,6 +137,17 @@ class CacheManager
             $this->resolve($path, $filter) :
             $this->generateUrl($path, $filter)
         ;
+    }
+
+    /**
+     * Get path to runtimeconfig image
+     *
+     * @param string $path
+     * @param array  $runtimeConfig
+     */
+    public function getRuntimeConfigPath($path, array $runtimeConfig)
+    {
+        return 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
     }
 
     /**
