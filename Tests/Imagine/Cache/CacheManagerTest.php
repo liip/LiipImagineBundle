@@ -51,12 +51,12 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail');
     }
 
-    public function testGetRuntimeConfigPath()
+    public function testGetRuntimePath()
     {
         $config = $this->createFilterConfigurationMock();
         $cacheManager = new CacheManager($config, $this->createRouterMock(), new Signer('secret'), $this->createEventDispatcherMock());
 
-        $rcPath = $cacheManager->getRuntimeConfigPath('image.jpg', array(
+        $rcPath = $cacheManager->getRuntimePath('image.jpg', array(
             'thumbnail' => array(
                 'size' => array(180, 180)
             )

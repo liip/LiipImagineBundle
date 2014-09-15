@@ -122,7 +122,7 @@ class ImagineController
                 throw new NotFoundHttpException(sprintf('Source image could not be found for path "%s" and filter "%s"', $path, $filter), $e);
             }
 
-            $rcPath = $this->cacheManager->getRuntimeConfigPath($path, $filters);
+            $rcPath = $this->cacheManager->getRuntimePath($path, $filters);
 
             $this->cacheManager->store(
                 $this->filterManager->applyFilter($binary, $filter, array(
