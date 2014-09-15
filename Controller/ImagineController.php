@@ -122,17 +122,17 @@ class ImagineController
                 throw new NotFoundHttpException(sprintf('Source image could not be found for path "%s" and filter "%s"', $path, $filter), $e);
             }
 
-            $cachePrefix = 'rc/'.$hash;
+            $rcPath = $this->cacheManager->getRuntimePath($path, $filters);
 
             $this->cacheManager->store(
                 $this->filterManager->applyFilter($binary, $filter, array(
                     'filters' => $filters,
                 )),
-                $cachePrefix.'/'.$path,
+                $rcPath,
                 $filter
             );
 
-            return new RedirectResponse($this->cacheManager->resolve($cachePrefix.'/'.$path, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter), 301);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }
