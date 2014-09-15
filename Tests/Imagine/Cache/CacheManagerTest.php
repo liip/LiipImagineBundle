@@ -148,6 +148,53 @@ class CacheManagerTest extends AbstractTest
         $this->assertEquals('/media/cache/thumbnail/cats.jpeg', $actualBrowserPath);
     }
 
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPathWithRuntimeConfig()
+    {
+        $runtimeConfig = array(
+            'thumbnail' => array(
+                'size' => array(100, 100),
+            )
+        );
+
+        $resolver = $this->createResolverMock();
+        $resolver
+            ->expects($this->once())
+            ->method('isStored')
+            ->with('rc/VhOzTGRB/cats.jpeg', 'thumbnail')
+            ->will($this->returnValue(false))
+        ;
+        $resolver
+            ->expects($this->never())
+            ->method('resolve')
+        ;
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'size' => array(180, 180),
+                'mode' => 'outbound',
+                'cache' => null,
+            )))
+        ;
+
+        $router = $this->createRouterMock();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->will($this->returnValue('/media/cache/thumbnail/rc/VhOzTGRB/cats.jpeg'))
+        ;
+
+        $cacheManager = new CacheManager($config, $router, new Signer('secret'), $this->createEventDispatcherMock());
+        $cacheManager->addResolver('default', $resolver);
+
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', $runtimeConfig);
+
+        $this->assertEquals('/media/cache/thumbnail/rc/VhOzTGRB/cats.jpeg', $actualBrowserPath);
+    }
+
     /**
      * @dataProvider invalidPathProvider
      */
