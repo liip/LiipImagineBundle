@@ -37,7 +37,15 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
         $image = new GridFSFile();
         $image->setBytes('01010101');
 
-        $this->repo->expects($this->atLeastOnce())->method('find')->with($this->isInstanceOf('\MongoId'))->will($this->returnValue(array('file'=>$image)));
+        $imageDocument = $this->getMock('ImageDocument', array('getFile'));
+        $imageDocument
+            ->expects($this->any())
+            ->method('getFile')
+            ->with()
+            ->will($this->returnValue($image))
+        ;
+
+        $this->repo->expects($this->atLeastOnce())->method('find')->with($this->isInstanceOf('\MongoId'))->will($this->returnValue($imageDocument));
 
         $this->assertEquals('01010101', $this->loader->find('0123456789abcdef01234567'));
     }
