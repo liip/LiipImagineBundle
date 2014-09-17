@@ -16,7 +16,6 @@ Add loader to your services:
 ``` xml
 <service id="liip_imagine.binary.loader.grid_fs" class="Liip\ImagineBundle\Binary\Loader\GridFSLoader">
     <tag name="liip_imagine.binary.loader" loader="grid_fs" />
-    <argument type="service" id="liip_imagine" />
     <argument type="service" id="doctrine.odm.mongodb.document_manager" />
     <argument>Application\ImageBundle\Document\Image</argument>
 </service>
