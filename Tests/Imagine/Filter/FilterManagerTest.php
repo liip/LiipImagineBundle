@@ -31,7 +31,11 @@ class FilterManagerTest extends AbstractTest
 
         $binary = new Binary('aContent', 'image/png', 'png');
 
-        $filterManager = new FilterManager($config, $this->createImagineMock());
+        $filterManager = new FilterManager(
+            $config,
+            $this->createImagineMock(),
+            $this->getMockMimeTypeGuesser()
+        );
 
         $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
         $filterManager->applyFilter($binary, 'thumbnail');
@@ -84,7 +88,11 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
@@ -96,7 +104,7 @@ class FilterManagerTest extends AbstractTest
     public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApplyFilter()
     {
         $originalContent = 'aOriginalContent';
-        $expectedFormat = 'theFormat';
+        $expectedFormat = 'png';
 
         $binary = new Binary($originalContent, 'image/png', $expectedFormat);
 
@@ -139,7 +147,72 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
+    }
+
+    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApplyFilter()
+    {
+        $originalContent = 'aOriginalContent';
+        $originalFormat = 'png';
+        $expectedFormat = 'jpg';
+
+        $binary = new Binary($originalContent, 'image/png', $originalFormat);
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'format' => $expectedFormat,
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+            )))
+        ;
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('aFilteredContent'))
+        ;
+
+        $imagine = $this->createImagineMock();
+        $imagine
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
@@ -151,7 +224,7 @@ class FilterManagerTest extends AbstractTest
     public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApplyFilter()
     {
         $originalContent = 'aOriginalContent';
-        $expectedMimeType = 'theFormat';
+        $expectedMimeType = 'image/png';
 
         $binary = new Binary($originalContent, $expectedMimeType, 'png');
 
@@ -186,6 +259,12 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnValue($image))
         ;
 
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
         $loader = $this->getMockLoader();
         $loader
             ->expects($this->once())
@@ -194,7 +273,81 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $mimeTypeGuesser
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
+    }
+
+    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApplyFilter()
+    {
+        $originalContent = 'aOriginalContent';
+        $originalMimeType = 'image/png';
+        $expectedContent = 'aFilteredContent';
+        $expectedMimeType = 'image/jpeg';
+
+        $binary = new Binary($originalContent, $originalMimeType, 'png');
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'format' => 'jpg',
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+            )))
+        ;
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($expectedContent))
+        ;
+
+        $imagine = $this->createImagineMock();
+        $imagine
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($image))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->once())
+            ->method('guess')
+            ->with($expectedContent)
+            ->will($this->returnValue($expectedMimeType))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $mimeTypeGuesser
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
@@ -251,7 +404,11 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
@@ -304,7 +461,11 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
@@ -366,7 +527,11 @@ class FilterManagerTest extends AbstractTest
             ->will($this->returnArgument(0))
         ;
 
-        $filterManager = new FilterManager($config, $imagine);
+        $filterManager = new FilterManager(
+            $config,
+            $imagine,
+            $this->getMockMimeTypeGuesser()
+        );
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf(
@@ -381,7 +546,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $this->createImagineMock()
+            $this->createImagineMock(),
+            $this->getMockMimeTypeGuesser()
         );
 
         $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
@@ -432,7 +598,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $imagineMock
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -449,7 +616,7 @@ class FilterManagerTest extends AbstractTest
     public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApply()
     {
         $originalContent = 'aOriginalContent';
-        $expectedFormat = 'theFormat';
+        $expectedFormat = 'png';
 
         $binary = new Binary($originalContent, 'image/png', $expectedFormat);
 
@@ -482,7 +649,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $imagineMock
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -496,12 +664,13 @@ class FilterManagerTest extends AbstractTest
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
-    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApply()
+    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApply()
     {
         $originalContent = 'aOriginalContent';
-        $expectedMimeType = 'theFormat';
+        $originalFormat = 'png';
+        $expectedFormat = 'jpg';
 
-        $binary = new Binary($originalContent, $expectedMimeType, 'png');
+        $binary = new Binary($originalContent, 'image/png', $originalFormat);
 
         $thumbConfig = array(
             'size' => array(180, 180),
@@ -532,11 +701,132 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $imagineMock
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->apply($binary, array(
+            'format' => $expectedFormat,
+            'filters' => array(
+                'thumbnail' => $thumbConfig
+            )
+        ));
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
+    }
+
+    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApply()
+    {
+        $originalContent = 'aOriginalContent';
+        $expectedMimeType = 'image/png';
+
+        $binary = new Binary($originalContent, $expectedMimeType, 'png');
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('aFilteredContent'))
+        ;
+
+        $imagineMock = $this->createImagineMock();
+        $imagineMock
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($image))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager(
+            $this->createFilterConfigurationMock(),
+            $imagineMock,
+            $mimeTypeGuesser
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $filteredBinary = $filterManager->apply($binary, array(
+            'filters' => array(
+                'thumbnail' => $thumbConfig
+            )
+        ));
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
+    }
+
+    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApply()
+    {
+        $originalContent = 'aOriginalContent';
+        $originalMimeType = 'image/png';
+        $expectedContent = 'aFilteredContent';
+        $expectedMimeType = 'image/jpeg';
+
+        $binary = new Binary($originalContent, $originalMimeType, 'png');
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($expectedContent))
+        ;
+
+        $imagineMock = $this->createImagineMock();
+        $imagineMock
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($image))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->once())
+            ->method('guess')
+            ->with($expectedContent)
+            ->will($this->returnValue($expectedMimeType))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager(
+            $this->createFilterConfigurationMock(),
+            $imagineMock,
+            $mimeTypeGuesser
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $filteredBinary = $filterManager->apply($binary, array(
+            'format' => 'jpg',
             'filters' => array(
                 'thumbnail' => $thumbConfig
             )
@@ -583,7 +873,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $imagineMock
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -634,7 +925,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $imagineMock
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -653,5 +945,13 @@ class FilterManagerTest extends AbstractTest
     protected function getMockLoader()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface
+     */
+    protected function getMockMimeTypeGuesser()
+    {
+        return $this->getMock('Liip\ImagineBundle\Binary\MimeTypeGuesserInterface');
     }
 }

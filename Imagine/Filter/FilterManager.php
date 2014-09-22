@@ -4,11 +4,9 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
-
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class FilterManager
 {
@@ -23,18 +21,28 @@ class FilterManager
     protected $imagine;
 
     /**
+     * @var MimeTypeGuesserInterface
+     */
+    protected $mimeTypeGuesser;
+
+    /**
      * @var LoaderInterface[]
      */
     protected $loaders = array();
 
     /**
-     * @param FilterConfiguration $filterConfig
-     * @param ImagineInterface    $imagine
+     * @param FilterConfiguration      $filterConfig
+     * @param ImagineInterface         $imagine
+     * @param MimeTypeGuesserInterface $mimeTypeGuesser
      */
-    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine)
-    {
+    public function __construct(
+        FilterConfiguration $filterConfig,
+        ImagineInterface $imagine,
+        MimeTypeGuesserInterface $mimeTypeGuesser
+    ) {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
+        $this->mimeTypeGuesser = $mimeTypeGuesser;
     }
 
     /**
@@ -97,9 +105,11 @@ class FilterManager
             $options['animated'] = $config['animated'];
         }
 
-        $filteredContent = $image->get($binary->getFormat(), $options);
+        $filteredFormat = isset($config['format']) ? $config['format'] : $binary->getFormat();
+        $filteredContent = $image->get($filteredFormat, $options);
+        $filteredMimeType = $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredContent);
 
-        return new Binary($filteredContent, $binary->getMimeType(), $binary->getFormat());
+        return new Binary($filteredContent, $filteredMimeType, $filteredFormat);
     }
 
     /**
