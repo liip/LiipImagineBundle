@@ -6,6 +6,22 @@
 * [CacheResolver](cache-resolver/cache.md)
 * [ProxyResolver](cache-resolver/proxy.md)
 
+# Changing the default cache resolver
+
+The default cache is a web path cache that caches images under `{web}/media/cache/`.
+You can specify the cache to use per individual filter_sets. To change the defaults,
+you can either change the top level `cache` option to the name of the cache resolver
+you want to use by default, or redefine the default cache resolver by explicitly
+defining a resolver called `default`:
+
+ ```yaml
+liip_imagine:
+    resolvers:
+        default:
+            web_path:
+                cache_prefix: custom_path
+ ```
+
 # Custom cache resolver
 
 The ImagineBundle allows you to add your custom cache resolver classes. The only
