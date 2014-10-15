@@ -20,6 +20,7 @@ liip_imagine:
     driver:               gd
     cache:                default
     data_loader:          default
+    image_default:        null
     controller:
         filter_action:         liip_imagine.controller:filterAction
         filter_runtime_action: liip_imagine.controller:filterRuntimeAction

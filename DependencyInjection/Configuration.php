@@ -106,6 +106,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache')->defaultValue('default')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
                 ->scalarNode('data_loader')->defaultValue('default')->end()
+                ->scalarNode('default_image')->defaultNull()->end()
                 ->arrayNode('controller')
                     ->addDefaultsIfNotSet()
                     ->children()

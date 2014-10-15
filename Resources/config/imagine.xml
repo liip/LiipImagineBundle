@@ -60,9 +60,23 @@
         <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
 
         <parameter key="liip_imagine.meta_data.reader.class">Imagine\Image\Metadata\ExifMetadataReader</parameter>
+
+        <!-- Form types -->
+
+        <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
+
+        <!-- Event listener classes -->
+
+        <parameter key="liip_imagine.listener.not_loadable_exception.class">Liip\ImagineBundle\EventListener\NotLoadableExceptionListener</parameter>
     </parameters>
 
     <services>
+
+        <service id="liip_imagine.listener.not_loadable_exception" class="%liip_imagine.listener.not_loadable_exception.class%">
+            <argument type="service" id="router" />
+            <argument>%liip_imagine.default_image%</argument>
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" priority="100" />
+        </service>
 
         <!-- Utility services -->
 
