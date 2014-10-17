@@ -32,6 +32,11 @@ class DataManager
     protected $defaultLoader;
 
     /**
+     * @var string|null
+     */
+    protected $globalDefaultImage;
+
+    /**
      * @var LoaderInterface[]
      */
     protected $loaders = array();
@@ -41,17 +46,20 @@ class DataManager
      * @param ExtensionGuesserInterface $extensionGuesser
      * @param FilterConfiguration       $filterConfig
      * @param string                    $defaultLoader
+     * @param string                    $globalDefaultImage
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
         FilterConfiguration $filterConfig,
-        $defaultLoader = null
+        $defaultLoader = null,
+        $globalDefaultImage = null
     ) {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
         $this->extensionGuesser = $extensionGuesser;
+        $this->globalDefaultImage = $globalDefaultImage;
     }
 
     /**
@@ -127,5 +135,26 @@ class DataManager
         }
 
         return $binary;
+    }
+
+    /**
+     * Get default image url with the given filter applied.
+     *
+     * @param string $filter
+     *
+     * @return string
+     */
+    public function getDefaultImageUrl($filter)
+    {
+        $config = $this->filterConfig->get($filter);
+
+        $defaultImage = null;
+        if (false == empty($config['default_image'])) {
+            $defaultImage = $config['default_image'];
+        } else if (!empty($this->globalDefaultImage)) {
+            $defaultImage = $this->globalDefaultImage;
+        }
+
+        return $defaultImage;
     }
 }

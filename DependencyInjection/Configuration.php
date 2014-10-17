@@ -124,6 +124,7 @@ class Configuration implements ConfigurationInterface
                             ->booleanNode('animated')->defaultFalse()->end()
                             ->scalarNode('cache')->defaultNull()->end()
                             ->scalarNode('data_loader')->defaultNull()->end()
+                            ->scalarNode('default_image')->defaultNull()->end()
                             ->arrayNode('filters')
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
