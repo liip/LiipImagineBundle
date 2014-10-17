@@ -25,7 +25,7 @@ class NoCacheWebPathResolverTest extends AbstractTest
 
         $resolver = new NoCacheWebPathResolver($context);
 
-        $this->assertEquals('theschema://theHost/aPath', $resolver->resolve('aPath', 'aFilter'));
+        $this->assertEquals('theschema://thehost/aPath', $resolver->resolve('aPath', 'aFilter'));
     }
 
     public function testDoNothingOnStore()

@@ -4,6 +4,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
@@ -13,21 +14,25 @@ class FiltersCompilerPassTest extends \PHPUnit_Framework_TestCase
 {
     public function testProcess()
     {
-        $d = new Definition();
-        $cb = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $managerDefinition = new Definition();
+        $loaderDefinition = new Definition();
+        $loaderDefinition->addTag('liip_imagine.filter.loader', array(
+            'loader' => 'foo'
+        ));
 
-        $cb->expects($this->atLeastOnce())->method('hasDefinition')->with('liip_imagine.filter.manager')->will($this->returnValue(true));
-        $cb->expects($this->atLeastOnce())->method('getDefinition')->with('liip_imagine.filter.manager')->will($this->returnValue($d));
 
-        $cb->expects($this->atLeastOnce())->method('findTaggedServiceIds')->with('liip_imagine.filter.loader')->will($this->returnValue(array(
-            'a' => array(array('loader'=>'foo'))
-        )));
+        $container = new ContainerBuilder;
+        $container->setDefinition('liip_imagine.filter.manager', $managerDefinition);
+        $container->setDefinition('a.loader', $loaderDefinition);
 
         $pass = new FiltersCompilerPass();
 
-        $pass->process($cb);
+        //guard
+        $this->assertCount(0, $managerDefinition->getMethodCalls());
 
-        $this->assertCount(1,$d->getMethodCalls());
+        $pass->process($container);
+
+        $this->assertCount(1, $managerDefinition->getMethodCalls());
     }
 }
  
