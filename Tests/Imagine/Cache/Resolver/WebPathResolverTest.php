@@ -136,7 +136,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('theSchema');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
 
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
@@ -146,7 +146,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://theHost/aCachePrefix/aFilter/aPath',
+            'theschema://thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
@@ -155,7 +155,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('theSchema');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/app.php');
 
         $resolver = new WebPathResolver(
@@ -166,7 +166,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://theHost/theBasePath/aCachePrefix/aFilter/aPath',
+            'theschema://thehost/theBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
@@ -175,7 +175,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('theSchema');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/theSubBasePath');
 
         $resolver = new WebPathResolver(
@@ -186,7 +186,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://theHost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
+            'theschema://thehost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
@@ -195,7 +195,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('theSchema');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('\\');
 
         $resolver = new WebPathResolver(
@@ -206,7 +206,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://theHost/aCachePrefix/aFilter/aPath',
+            'theschema://thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
@@ -215,7 +215,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('http');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
         $requestContext->setHttpPort(88);
 
         $resolver = new WebPathResolver(
@@ -226,7 +226,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'http://theHost:88/aCachePrefix/aFilter/aPath',
+            'http://thehost:88/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
@@ -235,7 +235,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $requestContext = new RequestContext;
         $requestContext->setScheme('https');
-        $requestContext->setHost('theHost');
+        $requestContext->setHost('thehost');
         $requestContext->setHttpsPort(444);
 
         $resolver = new WebPathResolver(
@@ -246,7 +246,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'https://theHost:444/aCachePrefix/aFilter/aPath',
+            'https://thehost:444/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }

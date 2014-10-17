@@ -2,6 +2,7 @@
 namespace Liip\ImagineBundle\Tests;
 
 use Liip\ImagineBundle\LiipImagineBundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers Liip\ImagineBundle\LiipImagineBundle
@@ -27,6 +28,8 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->method('addCompilerPass')
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass'))
         ;
+
+        $container = new ContainerBuilder();
 
         $bundle = new LiipImagineBundle;
 
@@ -174,5 +177,4 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
         return $this->getMock('Liip\ImagineBundle\DependencyInjection\LiipImagineExtension', $methods, array(), '', false);
     }
-
-} 
+}
