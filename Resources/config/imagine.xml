@@ -60,10 +60,13 @@
         <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
 
         <parameter key="liip_imagine.meta_data.reader.class">Imagine\Image\Metadata\ExifMetadataReader</parameter>
+
+        <!-- Form types -->
+
+        <parameter key="liip_imagine.form.type.image.class">Liip\ImagineBundle\Form\Type\ImageType</parameter>
     </parameters>
 
     <services>
-
         <!-- Utility services -->
 
         <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
@@ -77,6 +80,7 @@
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument>%liip_imagine.binary.loader.default%</argument>
+            <argument>%liip_imagine.default_image%</argument>
         </service>
 
         <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">

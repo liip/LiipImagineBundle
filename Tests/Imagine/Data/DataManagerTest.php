@@ -334,6 +334,63 @@ class DataManagerTest extends AbstractTest
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
         $this->assertEquals($expectedFormat, $binary->getFormat());
     }
+    
+    public function testUseDefaultGlobalImageUsedIfImageNotFound()
+    {
+        $loader = $this->getMockLoader();
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->once())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'default_image' => null,
+            )))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
+        $defaultGlobalImage = 'cats.jpeg';
+        $dataManager = new DataManager($mimeTypeGuesser, $this->getMockExtensionGuesser(), $config, 'default', 'cats.jpeg');
+        $dataManager->addLoader('default', $loader);
+
+        $defaultImage = $dataManager->getDefaultImageUrl('thumbnail');
+        $this->assertEquals($defaultImage, $defaultGlobalImage);
+    }
+    
+    public function testUseDefaultFilterImageUsedIfImageNotFound()
+    {
+        $loader = $this->getMockLoader();
+
+        $defaultFilterImage = 'cats.jpeg';
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->once())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'default_image' => $defaultFilterImage,
+            )))
+        ;
+
+        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser
+            ->expects($this->never())
+            ->method('guess')
+        ;
+
+        $dataManager = new DataManager($mimeTypeGuesser, $this->getMockExtensionGuesser(), $config, 'default', null);
+        $dataManager->addLoader('default', $loader);
+
+        $defaultImage = $dataManager->getDefaultImageUrl('thumbnail');
+        $this->assertEquals($defaultImage, $defaultFilterImage);
+    }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
