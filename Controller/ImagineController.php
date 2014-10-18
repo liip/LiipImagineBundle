@@ -122,6 +122,10 @@ class ImagineController
             try {
                 $binary = $this->dataManager->find($filter, $path);
             } catch (NotLoadableException $e) {
+                if ($defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter)) {
+                    return new RedirectResponse($defaultImageUrl);
+                }
+
                 throw new NotFoundHttpException(sprintf('Source image could not be found for path "%s" and filter "%s"', $path, $filter), $e);
             }
 
