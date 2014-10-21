@@ -36,7 +36,6 @@ liip_imagine:
             data_loader:          ~
             default_image:        null
             controller:           ~
-            route:                []
             filters:
 
                 # Prototype
