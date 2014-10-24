@@ -88,6 +88,29 @@ class AwsS3ResolverTest extends AbstractTest
         $this->assertNull($resolver->store($binary, 'thumb/foobar.jpg', 'thumb'));
     }
 
+    public function testObjectOptionsPassedToS3ClintOnCreate()
+    {
+        $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
+
+        $s3 = $this->getS3ClientMock();
+        $s3
+            ->expects($this->once())
+            ->method('putObject')
+            ->with(array(
+                'CacheControl' => 'max-age=86400',
+                'ACL'           => 'public-read',
+                'Bucket'        => 'images.example.com',
+                'Key'           => 'thumb/foobar.jpg',
+                'Body'          => 'aContent',
+                'ContentType'   => 'image/jpeg',
+            ))
+        ;
+
+        $resolver = new AwsS3Resolver($s3, 'images.example.com');
+        $resolver->setObjectOption('CacheControl', 'max-age=86400');
+        $resolver->store($binary, 'thumb/foobar.jpg', 'thumb');
+    }
+
     public function testIsStoredChecksObjectExistence()
     {
         $s3 = $this->getS3ClientMock();
