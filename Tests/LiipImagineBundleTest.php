@@ -56,7 +56,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
         $bundle->build($containerMock);
     }
 
-    public function testAddResolversCompilerPassOnBuild()
+    public function testAddPostProcessorsCompilerPassOnBuild()
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -67,6 +67,26 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
         ;
         $containerMock
             ->expects($this->at(2))
+            ->method('addCompilerPass')
+            ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass'))
+        ;
+
+        $bundle = new LiipImagineBundle;
+
+        $bundle->build($containerMock);
+    }
+
+    public function testAddResolversCompilerPassOnBuild()
+    {
+        $containerMock = $this->createContainerBuilderMock();
+        $containerMock
+            ->expects($this->atLeastOnce())
+            ->method('getExtension')
+            ->with('liip_imagine')
+            ->will($this->returnValue($this->createExtensionMock()))
+        ;
+        $containerMock
+            ->expects($this->at(3))
             ->method('addCompilerPass')
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass'))
         ;

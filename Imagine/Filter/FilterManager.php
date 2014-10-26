@@ -5,6 +5,7 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 
@@ -29,6 +30,11 @@ class FilterManager
      * @var LoaderInterface[]
      */
     protected $loaders = array();
+
+    /**
+     * @var PostProcessorInterface[]
+     */
+    protected $postProcessors = array();
 
     /**
      * @param FilterConfiguration      $filterConfig
@@ -56,6 +62,19 @@ class FilterManager
     public function addLoader($filter, LoaderInterface $loader)
     {
         $this->loaders[$filter] = $loader;
+    }
+
+    /**
+     * Adds a post-processor to handle binaries
+     *
+     * @param string $name
+     * @param PostProcessorInterface $postProcessor
+     *
+     * @return void
+     */
+    public function addPostProcessor($name, PostProcessorInterface $postProcessor)
+    {
+        $this->postProcessors[$name] = $postProcessor;
     }
 
     /**
@@ -109,7 +128,29 @@ class FilterManager
         $filteredContent = $image->get($filteredFormat, $options);
         $filteredMimeType = $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredContent);
 
-        return new Binary($filteredContent, $filteredMimeType, $filteredFormat);
+        return $this->applyPostProcessors(new Binary($filteredContent, $filteredMimeType, $filteredFormat), $config);
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param array           $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return BinaryInterface
+     */
+    public function applyPostProcessors(BinaryInterface $binary, $config)
+    {
+        foreach ($config['post_processors'] as $postProcessorName => $postProcessorOptions) {
+            if (!isset($this->postProcessors[$postProcessorName])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Could not find post processor "%s"', $postProcessorName
+                ));
+            }
+            $binary = $this->postProcessors[$postProcessorName]->process($binary);
+        }
+
+        return $binary;
     }
 
     /**

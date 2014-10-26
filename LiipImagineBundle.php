@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
@@ -24,6 +25,7 @@ class LiipImagineBundle extends Bundle
 
         $container->addCompilerPass(new LoadersCompilerPass);
         $container->addCompilerPass(new FiltersCompilerPass);
+        $container->addCompilerPass(new PostProcessorsCompilerPass);
         $container->addCompilerPass(new ResolversCompilerPass);
 
         /** @var $extension LiipImagineExtension */
