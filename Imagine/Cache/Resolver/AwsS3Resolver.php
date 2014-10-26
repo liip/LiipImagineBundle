@@ -31,6 +31,13 @@ class AwsS3Resolver implements ResolverInterface
     protected $objUrlOptions;
 
     /**
+     * Object options added to PUT requests
+     *
+     * @var array
+     */
+    protected $objectOptions;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -47,13 +54,15 @@ class AwsS3Resolver implements ResolverInterface
      * @param string $bucket The bucket name to operate on.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
+     * @param array $objectOptions A list of options to be passed when saving the object to Amazon S3.
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array(), $objectOptions = array())
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
         $this->acl = $acl;
         $this->objUrlOptions = $objUrlOptions;
+        $this->objectOptions = $objectOptions;
     }
 
     /**
@@ -96,13 +105,18 @@ class AwsS3Resolver implements ResolverInterface
         $objectPath = $this->getObjectPath($path, $filter);
 
         try {
-            $this->storage->putObject(array(
-                'ACL'           => $this->acl,
-                'Bucket'        => $this->bucket,
-                'Key'           => $objectPath,
-                'Body'          => $binary->getContent(),
-                'ContentType'   => $binary->getMimeType()
-            ));
+            $this->storage->putObject(
+                array_merge(
+                    $this->objectOptions,
+                    array(
+                        'ACL'           => $this->acl,
+                        'Bucket'        => $this->bucket,
+                        'Key'           => $objectPath,
+                        'Body'          => $binary->getContent(),
+                        'ContentType'   => $binary->getMimeType(),
+                    )
+                )
+            );
         } catch (\Exception $e) {
             $this->logError('The object could not be created on Amazon S3.', array(
                 'objectPath'  => $objectPath,
@@ -180,6 +194,25 @@ class AwsS3Resolver implements ResolverInterface
     public function setObjectUrlOption($key, $value)
     {
         $this->objUrlOptions[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Sets a single option to be passed when saving an object.
+     *
+     * If the option is already set, it will be overwritten.
+     *
+     * @see Aws\S3\S3Client::putObject() for available options.
+     *
+     * @param string $key The name of the option.
+     * @param mixed $value The value to be set.
+     *
+     * @return AmazonS3Resolver $this
+     */
+    public function setObjectOption($key, $value)
+    {
+        $this->objectOptions[$key] = $value;
 
         return $this;
     }
