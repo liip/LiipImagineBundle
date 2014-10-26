@@ -13,6 +13,7 @@
         <parameter key="liip_imagine.cache.manager.class">Liip\ImagineBundle\Imagine\Cache\CacheManager</parameter>
         <parameter key="liip_imagine.cache.signer.class">Liip\ImagineBundle\Imagine\Cache\Signer</parameter>
         <parameter key="liip_imagine.binary.mime_type_guesser.class">Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser</parameter>
+        <parameter key="liip_imagine.cache.warmer.class">Liip\ImagineBundle\Imagine\Cache\CacheWarmer</parameter>
 
         <!-- Controller class -->
 
@@ -89,6 +90,9 @@
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
+            <call method="setCacheWarmer">
+                <argument type="service" id="liip_imagine.cache.warmer"/>
+            </call>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="%liip_imagine.filter.configuration.class%">
@@ -247,6 +251,16 @@
 
         <service id="liip_imagine.cache.signer" class="%liip_imagine.cache.signer.class%">
             <argument>%kernel.secret%</argument>
+        </service>
+
+        <!-- Cache warmer -->
+
+        <service id="liip_imagine.cache.warmer" class="%liip_imagine.cache.warmer.class%">
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <call method="setCacheManager">
+                <argument type="service" id="liip_imagine.cache.manager"/>
+            </call>
         </service>
     </services>
 </container>
