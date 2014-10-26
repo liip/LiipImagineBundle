@@ -97,10 +97,10 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('putObject')
             ->with(array(
-                'CacheControl' => 'max-age=86400',
+                'CacheControl'  => 'max-age=86400',
                 'ACL'           => 'public-read',
                 'Bucket'        => 'images.example.com',
-                'Key'           => 'thumb/foobar.jpg',
+                'Key'           => 'filter/images/foobar.jpg',
                 'Body'          => 'aContent',
                 'ContentType'   => 'image/jpeg',
             ))
@@ -108,7 +108,7 @@ class AwsS3ResolverTest extends AbstractTest
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setObjectOption('CacheControl', 'max-age=86400');
-        $resolver->store($binary, 'thumb/foobar.jpg', 'thumb');
+        $resolver->store($binary, 'images/foobar.jpg', 'filter');
     }
 
     public function testIsStoredChecksObjectExistence()

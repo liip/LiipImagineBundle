@@ -123,12 +123,14 @@ services:
 Similar to Object URL Options you can configure additional options to be passed to S3 when storing objects.
 This is useful, for example, to configure Cache-control headers returned when serving object from S3.
 See [S3 SDK documentation](http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject) for the list of available options.
+
 Note, that the following options are configured automatically and will be ignored, even if you configure it via ObjectOptions:
 * `ACL`
 * `Bucket`
 * `Key`
 * `Body`
 * `ContentType`
+
 In order to make use of the object options, you can simply add a call to the service, to alter those options you need.
 
 ``` yaml
