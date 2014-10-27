@@ -326,7 +326,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals($expectedUrlOptions, $config['url_options']);
 
-        $this->assertArrayHasKey('url_options', $config);
+        $this->assertArrayHasKey('object_options', $config);
         $this->assertEquals($expectedObjectOptions, $config['object_options']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
