@@ -213,4 +213,61 @@ public function filterAction($path, $filter)
 }
 ```
 
+## Post-Processors
+
+Filters allow modifying the image, but in order to modify the resulting binary file created by filters, you can use post-processors
+Post-processors should implement `Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface`
+
+`PostProcessorInterface::process` method receives `BinaryInterface` - basically, the file containing an image after all filters have been applied.
+It should return the `BinaryInterface` as well.
+
+To tell the bundle about your post-processor, register it in the service
+container and apply the `liip_imagine.filter.post_processor` tag to it (example here in XML):
+
+``` xml
+<service id="liip_imagine.filter.post_processor.my_custom_post_processor" class="Acme\ImagineBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor">
+    <tag name="liip_imagine.filter.post_processor" loader="my_custom_post_processor" />
+</service>
+```
+
+For more information on the service container, see the Symfony2
+[Service Container](http://symfony.com/doc/current/book/service_container.html) documentation.
+
+You can now reference and use your custom filter when defining filter sets you'd
+like to apply in your configuration:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_special_style:
+            post_processors:
+                my_custom_post_processor: { }
+```
+
+For an example of a post processor implementation, refer to
+`Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor`.
+
+The `JpegOptimPostProcessor` can be used to provide lossless jpeg optimization, which is good for you website loading speed.
+In order to add lossless jpeg optimization to your filters, use the following configuration:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                thumbnail: { size: [150, 150], mode: outbound }
+            post_processors:
+                jpegoptim: {}
+```
+
+Make sure that jpegoptim binary is installed on the system. If path to jpegoptim binary is different from `/usr/bin/jpegoptim`,
+adjust the path by overriding parameters, for example:
+
+``` yaml
+parameters:
+    liip_imagine.jpegoptim.binary: /usr/local/bin/jpegoptim
+```
+
+
+
 [Back to the index](index.md)

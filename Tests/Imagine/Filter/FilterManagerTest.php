@@ -26,6 +26,7 @@ class FilterManagerTest extends AbstractTest
                         'mode' => 'outbound',
                     ),
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -62,6 +63,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -122,6 +124,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -183,6 +186,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -242,6 +246,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -310,6 +315,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -378,6 +384,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -435,6 +442,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -480,7 +488,8 @@ class FilterManagerTest extends AbstractTest
                 'thumbnail' => array(
                     'size' => array(100, 100)
                 )
-            )
+            ),
+            'post_processors' => array()
         );
 
         $thumbConfig = array(
@@ -502,6 +511,7 @@ class FilterManagerTest extends AbstractTest
                 'filters' => array(
                     'thumbnail' => $thumbConfig,
                 ),
+                'post_processors' => array()
             )))
         ;
 
@@ -606,7 +616,8 @@ class FilterManagerTest extends AbstractTest
         $filteredBinary = $filterManager->apply($binary, array(
             'filters' => array(
                 'thumbnail' => $thumbConfig
-            )
+            ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -657,7 +668,8 @@ class FilterManagerTest extends AbstractTest
         $filteredBinary = $filterManager->apply($binary, array(
             'filters' => array(
                 'thumbnail' => $thumbConfig
-            )
+            ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -710,7 +722,8 @@ class FilterManagerTest extends AbstractTest
             'format' => $expectedFormat,
             'filters' => array(
                 'thumbnail' => $thumbConfig
-            )
+            ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -767,7 +780,8 @@ class FilterManagerTest extends AbstractTest
         $filteredBinary = $filterManager->apply($binary, array(
             'filters' => array(
                 'thumbnail' => $thumbConfig
-            )
+            ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -829,7 +843,8 @@ class FilterManagerTest extends AbstractTest
             'format' => 'jpg',
             'filters' => array(
                 'thumbnail' => $thumbConfig
-            )
+            ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -883,6 +898,7 @@ class FilterManagerTest extends AbstractTest
             'filters' => array(
                 'thumbnail' => $thumbConfig,
             ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
@@ -934,9 +950,152 @@ class FilterManagerTest extends AbstractTest
             'filters' => array(
                 'thumbnail' => $thumbConfig,
             ),
+            'post_processors' => array()
         ));
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+    }
+
+    public function testApplyPostProcessor()
+    {
+        $originalContent = 'aContent';
+        $expectedPostProcessedContent = 'postProcessedContent';
+        $binary = new Binary($originalContent, 'image/png', 'png');
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+                'post_processors' => array(
+                    'foo' => array()
+                )
+            )))
+        ;
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($originalContent))
+        ;
+
+        $imagineMock = $this->createImagineMock();
+        $imagineMock
+            ->expects($this->once())
+            ->method('load')
+            ->with($originalContent)
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $processedBinary = new Binary($expectedPostProcessedContent, 'image/png', 'png');
+
+        $postProcessor = $this->getPostProcessorMock();
+        $postProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with($binary)
+            ->will($this->returnValue($processedBinary));
+
+        $filterManager = new FilterManager(
+            $config,
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+        $filterManager->addPostProcessor('foo', $postProcessor);
+
+        $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertEquals($expectedPostProcessedContent, $filteredBinary->getContent());
+
+    }
+
+    public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter()
+    {
+        $originalContent = 'aContent';
+        $binary = new Binary($originalContent, 'image/png', 'png');
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('thumbnail')
+            ->will($this->returnValue(array(
+                'filters' => array(
+                    'thumbnail' => $thumbConfig,
+                ),
+                'post_processors' => array(
+                    'foo' => array()
+                )
+            )))
+        ;
+
+        $thumbConfig = array(
+            'size' => array(180, 180),
+            'mode' => 'outbound',
+        );
+
+        $image = $this->getMockImage();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($originalContent))
+        ;
+
+        $imagineMock = $this->createImagineMock();
+        $imagineMock
+            ->expects($this->once())
+            ->method('load')
+            ->with($originalContent)
+            ->will($this->returnValue($image))
+        ;
+
+        $loader = $this->getMockLoader();
+        $loader
+            ->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($image), $thumbConfig)
+            ->will($this->returnArgument(0))
+        ;
+
+        $filterManager = new FilterManager(
+            $config,
+            $imagineMock,
+            $this->getMockMimeTypeGuesser()
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+
+        $this->setExpectedException('InvalidArgumentException', 'Could not find post processor "foo"');
+
+        $filterManager->applyFilter($binary, 'thumbnail');
     }
 
     /**
@@ -953,5 +1112,10 @@ class FilterManagerTest extends AbstractTest
     protected function getMockMimeTypeGuesser()
     {
         return $this->getMock('Liip\ImagineBundle\Binary\MimeTypeGuesserInterface');
+    }
+
+    protected function getPostProcessorMock()
+    {
+        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface');
     }
 }

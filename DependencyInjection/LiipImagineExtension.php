@@ -76,7 +76,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.default_image', $config['default_image']);
 
         $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
-
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
