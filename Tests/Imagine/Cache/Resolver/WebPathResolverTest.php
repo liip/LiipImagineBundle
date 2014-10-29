@@ -92,7 +92,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame('aCache/Prefix', 'cachePrefix', $resolver);
     }
 
-    public function testReturnTrueIfFileExistsOnIsStore()
+    public function testReturnTrueIfFileExistsOnIsStored()
     {
         $filesystemMock = $this->createFilesystemMock();
         $filesystemMock
@@ -112,7 +112,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isStored('aPath', 'aFilter'));
     }
 
-    public function testReturnFalseIfFileNotExistsOnIsStore()
+    public function testReturnFalseIfFileNotExistsOnIsStored()
     {
         $filesystemMock = $this->createFilesystemMock();
         $filesystemMock
@@ -429,6 +429,24 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $result = $method->invokeArgs($resolver, array('/cats.jpg', 'some_filter'));
 
         $this->assertEquals('aCachePrefix/some_filter/cats.jpg', $result);
+    }
+
+    public function testShouldSanitizeSeparatorBetweenSchemeAndAuthorityInUrl()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext,
+            '/aWebRoot',
+            'aCachePrefix'
+        );
+
+        $rc = new \ReflectionClass($resolver);
+        $method = $rc->getMethod('getFileUrl');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($resolver, array('https://some.meme.com/cute/cats.jpg', 'some_filter'));
+
+        $this->assertEquals('aCachePrefix/some_filter/https---some.meme.com/cute/cats.jpg', $result);
     }
 
     /**
