@@ -1098,6 +1098,18 @@ class FilterManagerTest extends AbstractTest
         $filterManager->applyFilter($binary, 'thumbnail');
     }
 
+    public function testApplyPostProcessorsWhenNotDefined()
+    {
+        $binary = $this->getMock('Liip\ImagineBundle\Binary\BinaryInterface');
+        $filterManager = new FilterManager(
+            $this->createFilterConfigurationMock(),
+            $this->createImagineMock(),
+            $this->getMockMimeTypeGuesser()
+        );
+
+        $this->assertSame($binary, $filterManager->applyPostProcessors($binary, array()));
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
      */

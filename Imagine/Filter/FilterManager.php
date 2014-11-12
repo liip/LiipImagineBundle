@@ -141,6 +141,7 @@ class FilterManager
      */
     public function applyPostProcessors(BinaryInterface $binary, $config)
     {
+        $config += array('post_processors' => array());
         foreach ($config['post_processors'] as $postProcessorName => $postProcessorOptions) {
             if (!isset($this->postProcessors[$postProcessorName])) {
                 throw new \InvalidArgumentException(sprintf(
