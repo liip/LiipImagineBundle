@@ -21,6 +21,8 @@ class RelativeResize implements FilterInterface
      *
      * @param string $method    BoxInterface method
      * @param mixed  $parameter Parameter for BoxInterface method
+     *
+     * @throws \Imagine\Exception\InvalidArgumentException
      */
     public function __construct($method, $parameter)
     {
