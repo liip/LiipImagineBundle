@@ -44,21 +44,21 @@ class StreamLoader implements LoaderInterface
     {
         $name = $this->wrapperPrefix.$path;
 
-        /*
-         * This looks strange, but at least in PHP 5.3.8 it will raise an E_WARNING if the 4th parameter is null.
-         * fopen() will be called only once with the correct arguments.
-         *
-         * The error suppression is solely to determine whether the file exists.
-         * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
-         */
-        if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
-            throw new NotLoadableException(sprintf('Source image %s not found.', $name));
-        }
-
-        // Closing the opened stream to avoid locking of the resource to find.
-        fclose($resource);
-
         try {
+            /*
+             * This looks strange, but at least in PHP 5.3.8 it will raise an E_WARNING if the 4th parameter is null.
+             * fopen() will be called only once with the correct arguments.
+             *
+             * The error suppression is solely to determine whether the file exists.
+             * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
+             */
+            if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
+                throw new NotLoadableException(sprintf('Source image %s not found.', $name));
+            }
+
+            // Closing the opened stream to avoid locking of the resource to find.
+            fclose($resource);
+
             $content = file_get_contents($name, null, $this->context);
         } catch (\Exception $e) {
             throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name, $e));
