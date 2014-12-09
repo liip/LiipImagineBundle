@@ -42,7 +42,8 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'acl' => 'theAcl',
             'url_options' => array('fooKey' => 'fooVal'),
             'cache' => false,
-            'proxies' => array()
+            'proxies' => array(),
+            'cache_ttl' => 800
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
@@ -57,6 +58,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertEquals('theBucket', $resolverDefinition->getArgument(1));
         $this->assertEquals('theAcl', $resolverDefinition->getArgument(2));
         $this->assertEquals(array('fooKey' => 'fooVal'), $resolverDefinition->getArgument(3));
+        $this->assertEquals(800, $resolverDefinition->getArgument(4));
     }
 
     public function testCreateS3ClientDefinitionOnCreate()

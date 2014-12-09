@@ -27,6 +27,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         $resolverDefinition->replaceArgument(1, $config['bucket']);
         $resolverDefinition->replaceArgument(2, $config['acl']);
         $resolverDefinition->replaceArgument(3, $config['url_options']);
+        $resolverDefinition->replaceArgument(4, $config['cache_ttl']);
         $resolverId = 'liip_imagine.cache.resolver.'.$resolverName;
         $container->setDefinition($resolverId, $resolverDefinition);
 
@@ -84,6 +85,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                 ->scalarNode('cache')->defaultValue(false)->end()
                 ->scalarNode('acl')->defaultValue('public-read')->cannotBeEmpty()->end()
                 ->scalarNode('cache_prefix')->defaultValue(null)->end()
+                ->scalarNode('cache_ttl')->defaultValue(0)->end()
                 ->arrayNode('client_config')
                     ->isRequired()
                     ->useAttributeAsKey('key')
