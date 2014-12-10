@@ -41,19 +41,26 @@ class AwsS3Resolver implements ResolverInterface
     protected $cachePrefix;
 
     /**
+     * @var int
+     */
+    protected $cacheTtl;
+
+    /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
      * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
+     * @param int $cacheTtl Cache time to live
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array(), $cacheTtl = 0)
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
         $this->acl = $acl;
         $this->objUrlOptions = $objUrlOptions;
+        $this->cacheTtl = $cacheTtl;
     }
 
     /**
@@ -101,7 +108,8 @@ class AwsS3Resolver implements ResolverInterface
                 'Bucket'        => $this->bucket,
                 'Key'           => $objectPath,
                 'Body'          => $binary->getContent(),
-                'ContentType'   => $binary->getMimeType()
+                'ContentType'   => $binary->getMimeType(),
+                'CacheControl'  => sprintf('max-age=%d, public', $this->cacheTtl)
             ));
         } catch (\Exception $e) {
             $this->logError('The object could not be created on Amazon S3.', array(
