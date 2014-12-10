@@ -21,7 +21,7 @@ class NoCacheWebPathResolverTest extends AbstractTest
 
     public function testComposeSchemaHostAndPathOnResolve()
     {
-        $context = new RequestContext('', 'GET', 'theHost', 'theSchema');
+        $context = new RequestContext('', 'GET', 'thehost', 'theSchema');
 
         $resolver = new NoCacheWebPathResolver($context);
 
