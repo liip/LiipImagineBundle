@@ -41,6 +41,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'theBucket',
             'acl' => 'theAcl',
             'url_options' => array('fooKey' => 'fooVal'),
+            'get_options' => array(),
             'put_options' => array('barKey' => 'barVal'),
             'cache' => false,
             'proxies' => array()
@@ -95,6 +96,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
+            'get_options' => array(),
             'put_options' => array(),
             'cache' => false,
             'proxies' => array()
@@ -120,6 +122,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
+            'get_options' => array(),
             'put_options' => array(),
             'cache' => false,
             'proxies' => array('foo')
@@ -154,6 +157,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
+            'get_options' => array(),
             'put_options' => array(),
             'cache' => 'theCacheServiceId',
             'proxies' => array()
@@ -189,6 +193,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
+            'get_options' => array(),
             'put_options' => array(),
             'cache' => 'theCacheServiceId',
             'proxies' => array('foo')
@@ -232,6 +237,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
+            'get_options' => array(),
             'put_options' => array(),
             'cache_prefix' => 'theCachePrefix',
             'cache' => null,
@@ -312,6 +318,10 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'theKey' => 'theUrlOptionsVal',
             'theOtherKey' => 'theOtherUrlOptionsValue'
         );
+        $expectedGetOptions = array(
+            'theKey' => 'theGetOptionsVal',
+            'theOtherKey' => 'theOtherGetOptionsValue'
+        );
         $expectedObjectOptions = array(
             'theKey' => 'theObjectOptionsVal',
             'theOtherKey' => 'theOtherObjectOptionsValue'
@@ -332,6 +342,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
                 'acl' => $expectedAcl,
                 'client_config' => $expectedClientConfig,
                 'url_options' => $expectedUrlOptions,
+                'get_options' => $expectedGetOptions,
                 'put_options' => $expectedObjectOptions,
                 'cache_prefix' => $expectedCachePrefix,
             )
@@ -348,6 +359,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals($expectedUrlOptions, $config['url_options']);
+
+        $this->assertArrayHasKey('get_options', $config);
+        $this->assertEquals($expectedGetOptions, $config['get_options']);
 
         $this->assertArrayHasKey('put_options', $config);
         $this->assertEquals($expectedObjectOptions, $config['put_options']);
@@ -378,6 +392,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals(array(), $config['url_options']);
+
+        $this->assertArrayHasKey('get_options', $config);
+        $this->assertEquals(array(), $config['get_options']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
         $this->assertNull($config['cache_prefix']);
