@@ -30,6 +30,10 @@ liip_imagine:
                   secret: %amazon.s3.secret%
                   region: %amazon.s3.region%
               bucket:     %amazon.s3.cache_bucket%
+              get_options:
+                  Scheme: 'https'
+              put_options:
+                  CacheControl: 'max-age=86400'
 ```
 
 ## Create resolver as a service
