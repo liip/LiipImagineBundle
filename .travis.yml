@@ -13,7 +13,7 @@ env:
 before_script:
   - yes '' | pecl -q install -f mongo
   - composer self-update
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --prefer-source
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
   - composer install --dev --prefer-source
 
 script: ./bin/phpunit --coverage-text
