@@ -208,6 +208,7 @@
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
+            <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.cache" class="%liip_imagine.cache.resolver.cache.class%" public="true" abstract="true">
