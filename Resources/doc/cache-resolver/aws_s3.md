@@ -30,6 +30,10 @@ liip_imagine:
                   secret: %amazon.s3.secret%
                   region: %amazon.s3.region%
               bucket:     %amazon.s3.cache_bucket%
+              get_options:
+                  Scheme: 'https'
+              put_options:
+                  CacheControl: 'max-age=86400'
 ```
 
 ## Create resolver as a service
@@ -85,9 +89,9 @@ liip_imagine:
 
 If enabled both first one will be [Cache](./cache.md), then [Proxy](./proxy.md) and after all process delegates to AwsS3 resolver.
 
-## Object URL Options
+## Object GET Options
 
-In order to make use of the object URL options, you can simply add a call to the service, to alter those options you need.
+In order to make use of the object GET options, you can simply add a call to the service, to alter those options you need.
 
 ``` yaml
 services:
@@ -97,8 +101,8 @@ services:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
         calls:
-             # This calls $service->setObjectUrlOption('Scheme', 'https');
-             - [ setObjectUrlOption, [ 'Scheme', 'https' ] ]
+             # This calls $service->setGetOption('Scheme', 'https');
+             - [ setGetOption, [ 'Scheme', 'https' ] ]
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```
@@ -114,6 +118,51 @@ services:
             - "%amazon_s3.bucket%"
             - "public-read" # Aws\S3\Enum\CannedAcl::PUBLIC_READ (default)
             - { Scheme: https }
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
+## Object PUT Options
+
+Similar to Object GET Options you can configure additional options to be passed to S3 when storing objects.
+This is useful, for example, to configure Cache-control headers returned when serving object from S3.
+See [S3 SDK documentation](http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject) for the list of available options.
+
+Note, that the following options are configured automatically and will be ignored, even if you configure it via ObjectOptions:
+* `ACL`
+* `Bucket`
+* `Key`
+* `Body`
+* `ContentType`
+
+In order to make use of the object PUT options, you can simply add a call to the service, to alter those options you need.
+
+``` yaml
+services:
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+        calls:
+             # This calls $service->setPutOption('CacheControl', 'max-age=86400');
+             - [ setPutOption, [ 'CacheControl', 'max-age=86400' ] ]
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
+```
+
+You can also use the constructor of the resolver to directly inject multiple options.
+
+``` yaml
+services:
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
+        arguments:
+            - "@acme.amazon_s3"
+            - "%amazon_s3.bucket%"
+            - "public-read" # Aws\S3\Enum\CannedAcl::PUBLIC_READ (default)
+            - { Scheme: https }
+            - { CacheControl: 'max-age=86400' }
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```
