@@ -107,7 +107,7 @@ class AwsS3ResolverTest extends AbstractTest
         ;
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
-        $resolver->setObjectOption('CacheControl', 'max-age=86400');
+        $resolver->setPutOption('CacheControl', 'max-age=86400');
         $resolver->store($binary, 'images/foobar.jpg', 'filter');
     }
 

@@ -41,7 +41,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'theBucket',
             'acl' => 'theAcl',
             'url_options' => array('fooKey' => 'fooVal'),
-            'object_options' => array('barKey' => 'barVal'),
+            'put_options' => array('barKey' => 'barVal'),
             'cache' => false,
             'proxies' => array()
         ));
@@ -61,6 +61,29 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertEquals(array('barKey' => 'barVal'), $resolverDefinition->getArgument(4));
     }
 
+    public function testOverrideDeprecatedUrlOptionsWithNewGetOptions()
+    {
+        $container = new ContainerBuilder;
+
+        $resolver = new AwsS3ResolverFactory;
+
+        $resolver->create($container, 'theResolverName', array(
+            'client_config' => array(),
+            'bucket' => 'theBucket',
+            'acl' => 'theAcl',
+            'url_options' => array('fooKey' => 'fooVal', 'barKey' => 'barVal'),
+            'get_options' => array('fooKey' => 'fooVal_overridden'),
+            'put_options' => array(),
+            'cache' => false,
+            'proxies' => array()
+        ));
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $this->assertEquals(array('fooKey' => 'fooVal_overridden', 'barKey' => 'barVal'), $resolverDefinition->getArgument(3));
+    }
+
     public function testCreateS3ClientDefinitionOnCreate()
     {
         $container = new ContainerBuilder;
@@ -72,7 +95,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
-            'object_options' => array(),
+            'put_options' => array(),
             'cache' => false,
             'proxies' => array()
         ));
@@ -97,7 +120,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
-            'object_options' => array(),
+            'put_options' => array(),
             'cache' => false,
             'proxies' => array('foo')
         ));
@@ -131,7 +154,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
-            'object_options' => array(),
+            'put_options' => array(),
             'cache' => 'theCacheServiceId',
             'proxies' => array()
         ));
@@ -166,7 +189,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
-            'object_options' => array(),
+            'put_options' => array(),
             'cache' => 'theCacheServiceId',
             'proxies' => array('foo')
         ));
@@ -209,7 +232,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
-            'object_options' => array(),
+            'put_options' => array(),
             'cache_prefix' => 'theCachePrefix',
             'cache' => null,
             'proxies' => array()
@@ -309,7 +332,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
                 'acl' => $expectedAcl,
                 'client_config' => $expectedClientConfig,
                 'url_options' => $expectedUrlOptions,
-                'object_options' => $expectedObjectOptions,
+                'put_options' => $expectedObjectOptions,
                 'cache_prefix' => $expectedCachePrefix,
             )
         ));
@@ -326,8 +349,8 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('url_options', $config);
         $this->assertEquals($expectedUrlOptions, $config['url_options']);
 
-        $this->assertArrayHasKey('object_options', $config);
-        $this->assertEquals($expectedObjectOptions, $config['object_options']);
+        $this->assertArrayHasKey('put_options', $config);
+        $this->assertEquals($expectedObjectOptions, $config['put_options']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
         $this->assertEquals($expectedCachePrefix, $config['cache_prefix']);

@@ -85,9 +85,9 @@ liip_imagine:
 
 If enabled both first one will be [Cache](./cache.md), then [Proxy](./proxy.md) and after all process delegates to AwsS3 resolver.
 
-## Object URL Options
+## Object GET Options
 
-In order to make use of the object URL options, you can simply add a call to the service, to alter those options you need.
+In order to make use of the object GET options, you can simply add a call to the service, to alter those options you need.
 
 ``` yaml
 services:
@@ -97,8 +97,8 @@ services:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
         calls:
-             # This calls $service->setObjectUrlOption('Scheme', 'https');
-             - [ setObjectUrlOption, [ 'Scheme', 'https' ] ]
+             # This calls $service->setGetOption('Scheme', 'https');
+             - [ setGetOption, [ 'Scheme', 'https' ] ]
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```
@@ -120,7 +120,7 @@ services:
 
 ## Object PUT Options
 
-Similar to Object URL Options you can configure additional options to be passed to S3 when storing objects.
+Similar to Object GET Options you can configure additional options to be passed to S3 when storing objects.
 This is useful, for example, to configure Cache-control headers returned when serving object from S3.
 See [S3 SDK documentation](http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject) for the list of available options.
 
@@ -131,7 +131,7 @@ Note, that the following options are configured automatically and will be ignore
 * `Body`
 * `ContentType`
 
-In order to make use of the object options, you can simply add a call to the service, to alter those options you need.
+In order to make use of the object PUT options, you can simply add a call to the service, to alter those options you need.
 
 ``` yaml
 services:
@@ -141,8 +141,8 @@ services:
             - "@acme.amazon_s3"
             - "%amazon_s3.bucket%"
         calls:
-             # This calls $service->setObjectOption('CacheControl', 'max-age=86400');
-             - [ setObjectOption, [ 'CacheControl', 'max-age=86400' ] ]
+             # This calls $service->setPutOption('CacheControl', 'max-age=86400');
+             - [ setPutOption, [ 'CacheControl', 'max-age=86400' ] ]
         tags:
             - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 ```

@@ -28,14 +28,14 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * @var array
      */
-    protected $objUrlOptions;
+    protected $getOptions;
 
     /**
      * Object options added to PUT requests
      *
      * @var array
      */
-    protected $objectOptions;
+    protected $putOptions;
 
     /**
      * @var LoggerInterface
@@ -53,16 +53,16 @@ class AwsS3Resolver implements ResolverInterface
      * @param S3Client $storage The Amazon S3 storage API. It's required to know authentication information.
      * @param string $bucket The bucket name to operate on.
      * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
-     * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
-     * @param array $objectOptions A list of options to be passed when saving the object to Amazon S3.
+     * @param array $getOptions A list of options to be passed when retrieving the object url from Amazon S3.
+     * @param array $putOptions A list of options to be passed when saving the object to Amazon S3.
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $objUrlOptions = array(), $objectOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $getOptions = array(), $putOptions = array())
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
         $this->acl = $acl;
-        $this->objUrlOptions = $objUrlOptions;
-        $this->objectOptions = $objectOptions;
+        $this->getOptions = $getOptions;
+        $this->putOptions = $putOptions;
     }
 
     /**
@@ -107,7 +107,7 @@ class AwsS3Resolver implements ResolverInterface
         try {
             $this->storage->putObject(
                 array_merge(
-                    $this->objectOptions,
+                    $this->putOptions,
                     array(
                         'ACL'           => $this->acl,
                         'Bucket'        => $this->bucket,
@@ -190,10 +190,29 @@ class AwsS3Resolver implements ResolverInterface
      * @param mixed $value The value to be set.
      *
      * @return AmazonS3Resolver $this
+     *
+     * @deprecated Use `setGetOption` instead
      */
     public function setObjectUrlOption($key, $value)
     {
-        $this->objUrlOptions[$key] = $value;
+        return $this->setGetOption($key, $value);
+    }
+
+    /**
+     * Sets a single option to be passed when retrieving an objects URL.
+     *
+     * If the option is already set, it will be overwritten.
+     *
+     * @see Aws\S3\S3Client::getObjectUrl() for available options.
+     *
+     * @param string $key The name of the option.
+     * @param mixed $value The value to be set.
+     *
+     * @return AmazonS3Resolver $this
+     */
+    public function setGetOption($key, $value)
+    {
+        $this->getOptions[$key] = $value;
 
         return $this;
     }
@@ -210,9 +229,9 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @return AmazonS3Resolver $this
      */
-    public function setObjectOption($key, $value)
+    public function setPutOption($key, $value)
     {
-        $this->objectOptions[$key] = $value;
+        $this->putOptions[$key] = $value;
 
         return $this;
     }
@@ -243,7 +262,7 @@ class AwsS3Resolver implements ResolverInterface
      */
     protected function getObjectUrl($path)
     {
-        return $this->storage->getObjectUrl($this->bucket, $path, 0, $this->objUrlOptions);
+        return $this->storage->getObjectUrl($this->bucket, $path, 0, $this->getOptions);
     }
 
     /**
