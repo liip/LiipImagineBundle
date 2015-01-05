@@ -67,6 +67,8 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
+        $path = '/'.ltrim($path, '/');
+
         try {
             if (!$this->cacheManager->isStored($path, $filter)) {
                 try {
@@ -107,6 +109,8 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
+        $path = '/'.ltrim($path, '/');
+
         try {
             $filters = $request->query->get('filters', array());
 
