@@ -81,7 +81,7 @@ class ImagineControllerTest extends WebTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @expectedExceptionMessage Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}
+     * @expectedExceptionMessage Signed url does not pass the sign check for path "/images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}
      */
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
@@ -113,11 +113,11 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $path = 'images/cats.jpeg';
+        $path = '/images/cats.jpeg';
 
         $hash = $signer->sign($path, $params['filters']);
 
-        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.$path;
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
@@ -146,11 +146,11 @@ class ImagineControllerTest extends WebTestCase
             ),
         );
 
-        $path = 'images/cats.jpeg';
+        $path = '/images/cats.jpeg';
 
         $hash = $signer->sign($path, $params['filters']);
 
-        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.$path;
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
