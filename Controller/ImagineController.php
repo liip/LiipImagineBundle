@@ -145,7 +145,7 @@ class ImagineController
 
             return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter), 301);
         } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.$path, $filter, $e->getMessage()), 0, $e);
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.ltrim($path, '/'), $filter, $e->getMessage()), 0, $e);
         }
     }
 }

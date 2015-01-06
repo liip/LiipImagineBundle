@@ -147,7 +147,7 @@ class CacheManager
      */
     public function getRuntimePath($path, array $runtimeConfig)
     {
-        return 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
+        return 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.ltrim($path, '/');
     }
 
     /**
