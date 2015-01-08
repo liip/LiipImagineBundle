@@ -149,7 +149,7 @@ liip_imagine:
         my_thumb:
             filters:
                 auto_rotate: ~
-
+```
 ### The `interlace` filter
 
 Set progressive loading on the image
