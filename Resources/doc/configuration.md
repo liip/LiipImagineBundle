@@ -28,14 +28,12 @@ liip_imagine:
 
         # Prototype
         name:
-            path:                 ~
             quality:              100
             animated:             false
             format:               ~
             cache:                ~
             data_loader:          ~
             default_image:        null
-            controller:           ~
             filters:
 
                 # Prototype
@@ -77,13 +75,9 @@ Each filter set that you specify has the following options:
  - `filters` - determine the type of filter to be used (refer to *Filters* section for more information)
     and options that should be passed to the specific filter type
  - `post_processors` - sets post-processors to be applied on filtered image (see [Post-Processors](filters.md#post-processors) for details)
- - `path` - used in place of the filter name to determine the path in combination with the global `cache_prefix`
  - `quality` - override the default quality of 100 for the generated images
  - `cache` - override the default cache setting
  - `data_loader` - override the default data loader
- - `controller`
-    - `filter_action` - override the default controller action
-    - `filter_runtime_action` - override the default controller action for runtime config
  - `route` - optional list of route requirements, defaults and options using in the route loader. Add array with keys 'requirements', 'defaults' or 'options'.
 
     default: empty array
