@@ -1,5 +1,5 @@
 <?php
-namespace Liip\ImagineBundle\Tests\Functional\Imagine;
+namespace Liip\ImagineBundle\Tests\Functional\Imagine\Data;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 

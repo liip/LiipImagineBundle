@@ -149,6 +149,20 @@ liip_imagine:
         my_thumb:
             filters:
                 auto_rotate: ~
+
+### The `interlace` filter
+
+Set progressive loading on the image
+Configuration looks like this:
+
+``` yaml
+liip_imagine:
+    filter_sets:
+        my_thumb:
+            filters:
+                interlace:
+                    # mode can be one of none,line,plane,partition
+                    mode: line
 ```
 ## Load your Custom Filters
 
