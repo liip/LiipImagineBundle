@@ -187,5 +187,5 @@ You can also use the constructor of the resolver to directly inject multiple opt
                 - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
-.. _``installation chapter``: https://getcomposer.org/doc/00-intro.md
+.. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject

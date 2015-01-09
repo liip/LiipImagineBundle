@@ -55,4 +55,4 @@ Finally, add the following to your routing file:
 
 Congratulations! You're ready to rock your images!
 
-.. _``installation chapter``: https://getcomposer.org/doc/00-intro.md
+.. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
