@@ -40,7 +40,7 @@ _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
 ```
 
-For a complete configuration drill-down see [the respective chapter in the documentation](Resources/doc/configuration.md).
+For a complete configuration drill-down see [the respective chapter in the documentation](Resources/doc/configuration.rst).
 
 ## Basic Usage
 
@@ -135,7 +135,7 @@ web_profiler:
 ## Filters
 
 The LiipImagineBundle provides a set of built-in filters.
-You may easily roll your own filter, see [the filters chapter in the documentation](Resources/doc/filters.md).
+You may easily roll your own filter, see [the filters chapter in the documentation](Resources/doc/filters.rst).
 
 ## Using the controller as a service
 
@@ -222,4 +222,4 @@ absolute path `/path/to/source/images/dir/logo.png` must be `/FavouriteAlias/log
 
 ## Documentation
 
-For more detailed information about the features of this bundle, please refer to [the documentation](Resources/doc/index.md).
+For more detailed information about the features of this bundle, please refer to [the documentation](Resources/doc/index.rst).
