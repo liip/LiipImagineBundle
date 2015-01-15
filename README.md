@@ -27,7 +27,7 @@ This bundle integrates the standalone PHP "[Imagine library](https://github.com/
 
 ## Installation
 
-In case you are not sure how to install this bundle, see the [installation instructions](Resources/doc/installation.md).
+In case you are not sure how to install this bundle, see the [installation instructions](Resources/doc/installation.rst).
 
 ### Configuration
 
