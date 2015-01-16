@@ -1,11 +1,11 @@
 Built-In CacheResolver
 ======================
 
-* `Web path <cache-resolver/web_path>`_
-* `AmazonS3 <cache-resolver/amazons3>`_
-* `AwsS3 <cache-resolver/aws_s3>`_ - for SDK version
-* `CacheResolver <cache-resolver/cache>`_
-* `ProxyResolver <cache-resolver/proxy>`_
+* :doc:`Web path <cache-resolver/web_path>`
+* :doc:`AmazonS3 <cache-resolver/amazons3>`
+* :doc:`AwsS3 <cache-resolver/aws_s3>` - for SDK version
+* :doc:`CacheResolver <cache-resolver/cache>`
+* :doc:`ProxyResolver <cache-resolver/proxy>`
 
 Changing the default cache resolver
 -----------------------------------

@@ -85,7 +85,7 @@ names and create additional services!
 Additional options
 ------------------
 
-You can use `Cache <cache>`_ and `Proxy <proxy>`_ resolvers in chain with
+You can use :doc:`Cache <cache>` and :doc:`Proxy <proxy>` resolvers in chain with
 current. You just need to configure them with defined options.
 
 .. code-block:: yaml
@@ -98,8 +98,8 @@ current. You just need to configure them with defined options.
                   proxies: ['http://one.domain.com', 'http://two.domain.com']
                   cache: true
 
-If enabled both first one will be `Cache <cache>`_, then `Proxy <proxy>`_ and
-after all process delegates to AwsS3 resolver.
+If enabled both first one will be :doc:`Cache <cache>`, then :doc:`Proxy <proxy>`
+and after all process delegates to AwsS3 resolver.
 
 Object GET Options
 ------------------

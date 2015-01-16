@@ -1,10 +1,10 @@
 LiipImagineBundle
 =================
 
-* :doc:`Installation <installation>`_
-* :doc:`Introduction <introduction>`_
-* :doc:`Configuration <configuration>`_
-* :doc:`Filters <filters>`_
-* :doc:`DataLoaders <data-loaders>`_
-* :doc:`CacheResolvers <cache-resolvers>`_
-* :doc:`CacheManager <cache-manager>`_
+* :doc:`Installation <installation>`
+* :doc:`Introduction <introduction>`
+* :doc:`Configuration <configuration>`
+* :doc:`Filters <filters>`
+* :doc:`DataLoaders <data-loaders>`
+* :doc:`CacheResolvers <cache-resolvers>`
+* :doc:`CacheManager <cache-manager>`
