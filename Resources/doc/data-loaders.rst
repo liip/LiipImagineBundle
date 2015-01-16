@@ -1,9 +1,9 @@
 Built-In DataLoader
 ===================
 
-* :doc:`FileSystem <data-loader/filesystem>`_
-* :doc:`MongoDB GridFS <data-loader/gridfs>`_
-* :doc:`Stream <data-loader/stream>`_
+* :doc:`FileSystem <data-loader/filesystem>`
+* :doc:`MongoDB GridFS <data-loader/gridfs>`
+* :doc:`Stream <data-loader/stream>`
 
 Other data loaders
 ------------------

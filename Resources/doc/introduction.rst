@@ -29,7 +29,7 @@ The most important parts about those ``DataLoader``:
 1. They ``find`` a single image based on a given identifier.
 2. They return a ready-to-use ``Imagine\Image\ImageInterface``.
 
-Check out the `chapter about data loaders <data-loaders>`_ to learn more about them.
+Check out the :doc:`chapter about data loaders <data-loaders>` to learn more about them.
 
 Apply filters on the original image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,7 +49,7 @@ The filter has one objective: Apply itself on the provided image (loaded by the
 ``DataLoader``). It receives options to configure the actual result of it, to
 customize the outcome.
 
-Check out the `chapter about filters <filters>`_ to learn more about them.
+Check out the :doc:`chapter about filters <filters>` to learn more about them.
 
 Cache the filtered image
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -81,4 +81,4 @@ The responsibilities of the ``CacheResolver`` are:
 3. generate an URI to address the cached image directly,
 4. remove a cached image.
 
-Check out the `chapter about cache resolvers <cache-resolvers>`_ to learn more about them.
+Check out the :doc:`chapter about cache resolvers <cache-resolvers>` to learn more about them.
