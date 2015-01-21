@@ -270,7 +270,7 @@ container and apply the ``liip_imagine.filter.post_processor`` tag to it
 .. code-block:: xml
 
     <service id="liip_imagine.filter.post_processor.my_custom_post_processor" class="Acme\ImagineBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor">
-        <tag name="liip_imagine.filter.post_processor" loader="my_custom_post_processor" />
+        <tag name="liip_imagine.filter.post_processor" post_processor="my_custom_post_processor" />
     </service>
 
 For more information on the service container, see the `Symfony Service Container`_
