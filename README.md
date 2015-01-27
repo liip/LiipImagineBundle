@@ -27,7 +27,7 @@ This bundle integrates the standalone PHP "[Imagine library](https://github.com/
 
 ## Installation
 
-In case you are not sure how to install this bundle, see the [installation instructions](Resources/doc/installation.rst).
+In case you are not sure how to install this bundle, see the [installation instructions]http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html).
 
 ### Configuration
 
@@ -40,7 +40,7 @@ _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
 ```
 
-For a complete configuration drill-down see [the respective chapter in the documentation](Resources/doc/configuration.rst).
+For a complete configuration drill-down see [the respective chapter in the documentation](http://symfony.com/doc/master/bundles/LiipImagineBundle/configuration.html).
 
 ## Basic Usage
 
@@ -135,7 +135,7 @@ web_profiler:
 ## Filters
 
 The LiipImagineBundle provides a set of built-in filters.
-You may easily roll your own filter, see [the filters chapter in the documentation](Resources/doc/filters.rst).
+You may easily roll your own filter, see [the filters chapter in the documentation](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html).
 
 ## Using the controller as a service
 
@@ -222,4 +222,4 @@ absolute path `/path/to/source/images/dir/logo.png` must be `/FavouriteAlias/log
 
 ## Documentation
 
-For more detailed information about the features of this bundle, please refer to [the documentation](Resources/doc/index.rst).
+For more detailed information about the features of this bundle, please refer to [the documentation](http://symfony.com/doc/master/bundles/LiipImagineBundle/index.html).
