@@ -27,7 +27,7 @@ This bundle integrates the standalone PHP "[Imagine library](https://github.com/
 
 ## Installation
 
-In case you are not sure how to install this bundle, see the [installation instructions]http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html).
+In case you are not sure how to install this bundle, see the [installation instructions](http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html).
 
 ### Configuration
 
