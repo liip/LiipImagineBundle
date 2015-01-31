@@ -376,6 +376,39 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('bar', $config['resolvers']['default']);
     }
 
+    public function testNewFilterQualitySettings()
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                array(
+                    new BarResolverFactory,
+                    new WebPathResolverFactory
+                ),
+                array(
+                    new FileSystemLoaderFactory
+                )
+            ),
+            array(array(
+                'filter_sets' => array(
+                    'test' => array(
+                        'jpeg_quality' => 70,
+                        'png_compression_level' => 9,
+                        'png_compression_filter' => PNG_ALL_FILTERS,
+                    ),
+                )
+            ))
+        );
+
+        $this->assertArrayHasKey('filter_sets', $config);
+        $this->assertArrayHasKey('test', $config['filter_sets']);
+        $this->assertArrayHasKey('jpeg_quality', $config['filter_sets']['test']);
+        $this->assertEquals(70, $config['filter_sets']['test']['jpeg_quality']);
+        $this->assertArrayHasKey('png_compression_level', $config['filter_sets']['test']);
+        $this->assertEquals(9, $config['filter_sets']['test']['png_compression_level']);
+        $this->assertArrayHasKey('png_compression_filter', $config['filter_sets']['test']);
+        $this->assertEquals(PNG_ALL_FILTERS, $config['filter_sets']['test']['png_compression_filter']);
+    }
+
     /**
      * @param ConfigurationInterface $configuration
      * @param array $configs
