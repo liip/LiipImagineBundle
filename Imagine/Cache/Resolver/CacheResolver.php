@@ -202,7 +202,9 @@ class CacheResolver implements ResolverInterface
         if ($this->cache->contains($indexKey)) {
             $index = $this->cache->fetch($indexKey);
 
-            if (!in_array($cacheKey, $index)) {
+            if (!is_array($index)) {
+                $index = array($cacheKey);
+            } elseif (!in_array($cacheKey, $index)) {
                 $index[] = $cacheKey;
             }
         } else {
