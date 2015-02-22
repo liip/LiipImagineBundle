@@ -200,11 +200,9 @@ class CacheResolver implements ResolverInterface
         // Create or update the index list containing all cache keys for a given image and filter pairing.
         $indexKey = $this->generateIndexKey($cacheKey);
         if ($this->cache->contains($indexKey)) {
-            $index = $this->cache->fetch($indexKey);
+            $index = (array)$this->cache->fetch($indexKey);
 
-            if (!is_array($index)) {
-                $index = array($cacheKey);
-            } elseif (!in_array($cacheKey, $index)) {
+            if (!in_array($cacheKey, $index)) {
                 $index[] = $cacheKey;
             }
         } else {
