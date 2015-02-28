@@ -15,11 +15,15 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
-        $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
-        $awsS3ClientDefinition->setFactoryClass('Aws\S3\S3Client');
-        $awsS3ClientDefinition->setFactoryMethod('factory');
-        $awsS3ClientDefinition->addArgument($config['client_config']);
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
+        $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
+        if (method_exists($awsS3ClientDefinition, 'setFactory')) {
+            $awsS3ClientDefinition->setFactory(array('Aws\S3\S3Client', 'factory'));
+        } else {
+            $awsS3ClientDefinition->setFactoryService('Aws\S3\S3Client');
+            $awsS3ClientDefinition->setFactoryMethod('factory');
+        }
+        $awsS3ClientDefinition->addArgument($config['client_config']);
         $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
 
         $resolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.aws_s3');

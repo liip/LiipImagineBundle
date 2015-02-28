@@ -62,6 +62,26 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertEquals('value1', $variable1, sprintf('%s parameter is correct', $variable1));
     }
 
+    public function testFactoriesConfiguration()
+    {
+        $this->createEmptyConfiguration();
+
+        $factories = array(
+            'liip_imagine.mime_type_guesser' => array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
+            'liip_imagine.extension_guesser' => array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
+        );
+
+        foreach ($factories as $service => $factory) {
+            $definition = $this->containerBuilder->getDefinition($service);
+            if (method_exists($definition, 'getFactory')) {
+                $this->assertEquals($factory, $definition->getFactory());
+            } else {
+                $this->assertEquals($factory[0], $definition->getFactoryClass());
+                $this->assertEquals($factory[1], $definition->getFactoryMethod());
+            }
+        }
+    }
+
     /**
      * @return ContainerBuilder
      */

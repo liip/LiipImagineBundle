@@ -244,15 +244,11 @@
         <service
             id="liip_imagine.mime_type_guesser"
             class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface"
-            factory-class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser"
-            factory-method="getInstance"
         />
 
         <service
             id="liip_imagine.extension_guesser"
             class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface"
-            factory-class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser"
-            factory-method="getInstance"
         />
 
         <service id="liip_imagine.binary.mime_type_guesser" class="%liip_imagine.binary.mime_type_guesser.class%">
