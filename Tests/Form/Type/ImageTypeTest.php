@@ -36,10 +36,11 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isRequired('image_path'));
         $this->assertTrue($resolver->isRequired('image_filter'));
 
-        $this->assertTrue($resolver->isKnown('image_attr'));
-        $this->assertTrue($resolver->isKnown('link_url'));
-        $this->assertTrue($resolver->isKnown('link_filter'));
-        $this->assertTrue($resolver->isKnown('link_attr'));
+        $isDefinedMethod = method_exists($resolver, 'isDefined') ? 'isDefined' : 'isKnown';
+        $this->assertTrue($resolver->$isDefinedMethod('image_attr'));
+        $this->assertTrue($resolver->$isDefinedMethod('link_url'));
+        $this->assertTrue($resolver->$isDefinedMethod('link_filter'));
+        $this->assertTrue($resolver->$isDefinedMethod('link_attr'));
     }
 
     public function testBuildView()
