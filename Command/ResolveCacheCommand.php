@@ -66,9 +66,12 @@ EOF
         }
 
         foreach ($paths as $path) {
+            $binary = null;
             foreach ($filters as $filter) {
                 if (!$cacheManager->isStored($path, $filter)) {
-                    $binary = $dataManager->find($filter, $path);
+                    if (is_null($binary)){
+                        $binary = $dataManager->find($filter, $path);
+                    }
 
                     $cacheManager->store(
                         $filterManager->applyFilter($binary, $filter),
