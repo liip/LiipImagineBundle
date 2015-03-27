@@ -294,7 +294,6 @@ class AwsS3ResolverTest extends AbstractTest
             ->will($this->returnValue($this->getS3ResponseMock(true)))
         ;
 
-
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $resolver->remove(
@@ -333,7 +332,7 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('deleteObject')
-            ->will($this->throwException(new \Exception))
+            ->will($this->throwException(new \Exception()))
         ;
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
@@ -391,7 +390,7 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('deleteMatchingObjects')
-            ->will($this->throwException(new \Exception))
+            ->will($this->throwException(new \Exception()))
         ;
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
@@ -429,5 +428,4 @@ class AwsS3ResolverTest extends AbstractTest
 
         return $this->getMock('Aws\S3\S3Client', $mockedMethods, array(), '', false);
     }
-
 }

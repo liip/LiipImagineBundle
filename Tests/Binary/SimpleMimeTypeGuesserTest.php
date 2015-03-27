@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Binary;
 
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;

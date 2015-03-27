@@ -334,7 +334,7 @@ class DataManagerTest extends AbstractTest
         $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
         $this->assertEquals($expectedFormat, $binary->getFormat());
     }
-    
+
     public function testUseDefaultGlobalImageUsedIfImageNotFound()
     {
         $loader = $this->getMockLoader();
@@ -362,7 +362,7 @@ class DataManagerTest extends AbstractTest
         $defaultImage = $dataManager->getDefaultImageUrl('thumbnail');
         $this->assertEquals($defaultImage, $defaultGlobalImage);
     }
-    
+
     public function testUseDefaultFilterImageUsedIfImageNotFound()
     {
         $loader = $this->getMockLoader();

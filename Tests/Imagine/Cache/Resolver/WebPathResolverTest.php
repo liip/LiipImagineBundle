@@ -22,7 +22,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     public function testCouldBeConstructedWithRequiredArguments()
     {
         $filesystemMock = $this->createFilesystemMock();
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $webRoot = 'theWebRoot';
 
         $resolver = new WebPathResolver($filesystemMock, $requestContext, $webRoot);
@@ -36,7 +36,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             'aWebRoot',
             'theCachePrefix'
         );
@@ -48,7 +48,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             'aWebRoot/',
             'theCachePrefix'
         );
@@ -60,7 +60,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             'aWeb//Root',
             '/aCachePrefix'
         );
@@ -72,7 +72,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             'aWebRoot',
             '/aCachePrefix'
         );
@@ -84,7 +84,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             'aWebRoot',
             'aCache//Prefix'
         );
@@ -104,7 +104,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -124,7 +124,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -134,7 +134,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHostAndFileUrlOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
 
@@ -153,7 +153,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHostAndBasePathWithPhpFileAndFileUrlOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/app.php');
@@ -173,7 +173,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHostAndBasePathWithDirsOnlyAndFileUrlOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/theSubBasePath');
@@ -193,7 +193,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHostAndBasePathWithBackSplashOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('\\');
@@ -213,7 +213,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHttpAndCustomPortAndFileUrlOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('http');
         $requestContext->setHost('thehost');
         $requestContext->setHttpPort(88);
@@ -233,7 +233,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testComposeSchemaHttpsAndCustomPortAndFileUrlOnResolve()
     {
-        $requestContext = new RequestContext;
+        $requestContext = new RequestContext();
         $requestContext->setScheme('https');
         $requestContext->setHost('thehost');
         $requestContext->setHttpsPort(444);
@@ -264,7 +264,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -282,7 +282,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -301,7 +301,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -325,7 +325,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -359,7 +359,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -383,7 +383,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -399,13 +399,13 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
             ->method('remove')
             ->with(array(
                 '/aWebRoot/aCachePrefix/aFilterOne',
-                '/aWebRoot/aCachePrefix/aFilterTwo'
+                '/aWebRoot/aCachePrefix/aFilterTwo',
             ))
         ;
 
         $resolver = new WebPathResolver(
             $filesystemMock,
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -417,7 +417,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );
@@ -435,7 +435,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            new RequestContext,
+            new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
         );

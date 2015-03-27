@@ -7,5 +7,4 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 
 abstract class CacheManagerAwareResolver implements ResolverInterface, CacheManagerAwareInterface
 {
-
 }

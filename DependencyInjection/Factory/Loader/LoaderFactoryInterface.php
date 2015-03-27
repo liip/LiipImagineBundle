@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,7 +18,7 @@ interface LoaderFactoryInterface
 
     /**
      * The resolver factory name,
-     * For example filesystem, stream
+     * For example filesystem, stream.
      *
      * @return string
      */
@@ -25,8 +26,6 @@ interface LoaderFactoryInterface
 
     /**
      * @param ArrayNodeDefinition $builder
-     *
-     * @return void
      */
     public function addConfiguration(ArrayNodeDefinition $builder);
 }

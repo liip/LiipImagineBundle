@@ -6,5 +6,4 @@ use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class NotStorableException extends \RuntimeException implements ExceptionInterface
 {
-
 }

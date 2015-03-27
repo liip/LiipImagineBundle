@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
- * Interface for PostProcessors - handlers which can operate on binaries prepared in FilterManager
+ * Interface for PostProcessors - handlers which can operate on binaries prepared in FilterManager.
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
@@ -16,5 +16,5 @@ interface PostProcessorInterface
      *
      * @return BinaryInterface
      */
-    function process(BinaryInterface $binary);
+    public function process(BinaryInterface $binary);
 }

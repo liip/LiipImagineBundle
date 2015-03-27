@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
 
     /**
      * @param ResolverFactoryInterface[] $resolversFactories
-     * @param LoaderFactoryInterface[] $loadersFactories
+     * @param LoaderFactoryInterface[]   $loadersFactories
      */
     public function __construct(array $resolversFactories, array $loadersFactories)
     {
@@ -99,7 +99,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
-                        ->ifTrue(function($v) { return !in_array($v, array('gd', 'imagick', 'gmagick')); })
+                        ->ifTrue(function ($v) { return !in_array($v, array('gd', 'imagick', 'gmagick')); })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
                 ->end()

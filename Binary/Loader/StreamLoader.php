@@ -21,7 +21,7 @@ class StreamLoader implements LoaderInterface
     protected $context;
 
     /**
-     * @param string $wrapperPrefix
+     * @param string        $wrapperPrefix
      * @param resource|null $context
      *
      * @throws \InvalidArgumentException

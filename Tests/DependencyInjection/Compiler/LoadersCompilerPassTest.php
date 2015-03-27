@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
@@ -17,11 +16,10 @@ class LoadersCompilerPassTest extends \PHPUnit_Framework_TestCase
         $managerDefinition = new Definition();
         $loaderDefinition = new Definition();
         $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => 'foo'
+            'loader' => 'foo',
         ));
 
-
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
         $container->setDefinition('liip_imagine.data.manager', $managerDefinition);
         $container->setDefinition('a.binary.loader', $loaderDefinition);
 
@@ -35,4 +33,3 @@ class LoadersCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $managerDefinition->getMethodCalls());
     }
 }
- 

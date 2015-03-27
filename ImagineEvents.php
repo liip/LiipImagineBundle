@@ -1,6 +1,6 @@
 <?php
-namespace Liip\ImagineBundle;
 
+namespace Liip\ImagineBundle;
 
 interface ImagineEvents
 {

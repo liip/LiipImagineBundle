@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Model;
 
 use Liip\ImagineBundle\Model\Binary;

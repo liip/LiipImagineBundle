@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\Box;

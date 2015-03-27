@@ -60,7 +60,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         }
 
         $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', array(
-            'resolver' => $resolverName
+            'resolver' => $resolverName,
         ));
 
         return $resolverId;
@@ -90,7 +90,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                     ->useAttributeAsKey('key')
                     ->prototype('scalar')->end()
                 ->end()
-                /** @deprecated Use `get_options` instead */
+                /* @deprecated Use `get_options` instead */
                 ->arrayNode('url_options')
                     ->useAttributeAsKey('key')
                     ->prototype('scalar')->end()

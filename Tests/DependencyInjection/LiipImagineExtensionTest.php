@@ -67,8 +67,8 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
-        $loader->addLoaderFactory(new FileSystemLoaderFactory);
-        $loader->addResolverFactory(new WebPathResolverFactory);
+        $loader->addLoaderFactory(new FileSystemLoaderFactory());
+        $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load(array(array()), $this->containerBuilder);
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
@@ -80,8 +80,8 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
-        $loader->addLoaderFactory(new FileSystemLoaderFactory);
-        $loader->addResolverFactory(new WebPathResolverFactory);
+        $loader->addLoaderFactory(new FileSystemLoaderFactory());
+        $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load(array($this->getFullConfig()), $this->containerBuilder);
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }

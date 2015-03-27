@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
@@ -34,7 +33,7 @@ class FileSystemLoader implements LoaderInterface
         MimeTypeGuesserInterface $mimeTypeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
         $rootPath
-    ){
+    ) {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->extensionGuesser = $extensionGuesser;
 

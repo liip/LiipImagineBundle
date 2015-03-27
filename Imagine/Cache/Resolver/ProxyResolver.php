@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
- * ProxyResolver
+ * ProxyResolver.
  *
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
  */
@@ -17,7 +17,7 @@ class ProxyResolver implements ResolverInterface
     protected $resolver;
 
     /**
-     * a list of proxy hosts (picks a random one for each generation to seed browser requests among multiple hosts)
+     * a list of proxy hosts (picks a random one for each generation to seed browser requests among multiple hosts).
      *
      * @var array
      */

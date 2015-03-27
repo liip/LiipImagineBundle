@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Compiler pass to register post_processors tagged with liip_imagine.filter.post_processor
+ * Compiler pass to register post_processors tagged with liip_imagine.filter.post_processor.
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */

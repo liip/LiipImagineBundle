@@ -13,13 +13,13 @@ class NotStorableExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $e = new NotStorableException();
 
-        $this->assertInstanceOf('\RuntimeException',$e);
+        $this->assertInstanceOf('\RuntimeException', $e);
     }
 
     public function testImplementsExceptionInterface()
     {
         $e = new NotStorableException();
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Exception\ExceptionInterface',$e);
+        $this->assertInstanceOf('Liip\ImagineBundle\Exception\ExceptionInterface', $e);
     }
 }

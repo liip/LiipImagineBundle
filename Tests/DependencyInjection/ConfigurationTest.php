@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Liip\ImagineBundle\DependencyInjection\Configuration;
@@ -33,21 +34,21 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FooLoaderFactory,
-                    new FileSystemLoaderFactory
+                    new FooLoaderFactory(),
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
                         'foo' => array(
-                            'foo_option' => 'theValue'
-                        )
-                    )
-                )
+                            'foo_option' => 'theValue',
+                        ),
+                    ),
+                ),
 
             ))
         );
@@ -64,26 +65,26 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FooLoaderFactory,
-                    new FileSystemLoaderFactory
+                    new FooLoaderFactory(),
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'loaders' => array(
                     'aLoader' => array(
                         'foo' => array(
-                            'foo_option' => 'theValue'
-                        )
+                            'foo_option' => 'theValue',
+                        ),
                     ),
                     'anotherLoader' => array(
                         'foo' => array(
-                            'foo_option' => 'theValue'
-                        )
-                    )
-                )
+                            'foo_option' => 'theValue',
+                        ),
+                    ),
+                ),
 
             ))
         );
@@ -98,15 +99,15 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'loaders' => array(
-                )
+                ),
             ))
         );
 
@@ -120,10 +121,10 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
@@ -142,10 +143,10 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
@@ -159,10 +160,10 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array())
@@ -178,10 +179,10 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array())
@@ -197,21 +198,21 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FooLoaderFactory,
-                    new FileSystemLoaderFactory
+                    new FooLoaderFactory(),
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'loaders' => array(
                     'default' => array(
                         'foo' => array(
-                            'foo_option' => 'theValue'
-                        )
+                            'foo_option' => 'theValue',
+                        ),
                     ),
-                )
+                ),
 
             ))
         );
@@ -226,20 +227,20 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new BarResolverFactory,
-                    new WebPathResolverFactory
+                    new BarResolverFactory(),
+                    new WebPathResolverFactory(),
                 ), array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
                         'bar' => array(
-                            'bar_option' => 'theValue'
-                        )
-                    )
-                )
+                            'bar_option' => 'theValue',
+                        ),
+                    ),
+                ),
 
             ))
         );
@@ -256,26 +257,26 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new BarResolverFactory,
-                    new WebPathResolverFactory
+                    new BarResolverFactory(),
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'resolvers' => array(
                     'aResolver' => array(
                         'bar' => array(
-                            'bar_option' => 'theValue'
-                        )
+                            'bar_option' => 'theValue',
+                        ),
                     ),
                     'anotherResolver' => array(
                         'bar' => array(
-                            'bar_option' => 'theValue'
-                        )
+                            'bar_option' => 'theValue',
+                        ),
                     ),
-                )
+                ),
 
             ))
         );
@@ -290,14 +291,14 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ), array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'resolvers' => array(
-                )
+                ),
             ))
         );
 
@@ -311,9 +312,9 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ), array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
@@ -332,9 +333,9 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory
+                    new WebPathResolverFactory(),
                 ), array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
@@ -352,21 +353,21 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new BarResolverFactory,
-                    new WebPathResolverFactory
+                    new BarResolverFactory(),
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
                 'resolvers' => array(
                     'default' => array(
                         'bar' => array(
-                            'bar_option' => 'theValue'
-                        )
+                            'bar_option' => 'theValue',
+                        ),
                     ),
-                )
+                ),
 
             ))
         );
@@ -381,11 +382,11 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new BarResolverFactory,
-                    new WebPathResolverFactory
+                    new BarResolverFactory(),
+                    new WebPathResolverFactory(),
                 ),
                 array(
-                    new FileSystemLoaderFactory
+                    new FileSystemLoaderFactory(),
                 )
             ),
             array(array(
@@ -395,7 +396,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
                         'png_compression_level' => 9,
                         'png_compression_filter' => PNG_ALL_FILTERS,
                     ),
-                )
+                ),
             ))
         );
 
@@ -411,7 +412,7 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
 
     /**
      * @param ConfigurationInterface $configuration
-     * @param array $configs
+     * @param array                  $configs
      *
      * @return array
      */

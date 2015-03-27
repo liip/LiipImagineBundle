@@ -5,16 +5,15 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 use Imagine\Image\ImageInterface;
 
 /**
- * AutoRotateFilterLoader - rotates an Image based on its EXIF Data
+ * AutoRotateFilterLoader - rotates an Image based on its EXIF Data.
  *
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
  */
 class AutoRotateFilterLoader implements LoaderInterface
 {
-
     protected $orientationKeys = array(
         'exif.Orientation',
-        'ifd0.Orientation'
+        'ifd0.Orientation',
     );
 
     /**
@@ -23,7 +22,7 @@ class AutoRotateFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = array())
     {
         if ($orientation = $this->getOrientation($image)) {
-            $degree = $this->calculateRotation((int)$orientation);
+            $degree = $this->calculateRotation((int) $orientation);
 
             if ($degree !== 0) {
                 $image->rotate($degree);
@@ -34,9 +33,10 @@ class AutoRotateFilterLoader implements LoaderInterface
     }
 
     /**
-     * calculates to rotation degree from the EXIF Orientation
+     * calculates to rotation degree from the EXIF Orientation.
      *
-     * @param  int $orientation
+     * @param int $orientation
+     *
      * @return int
      */
     private function calculateRotation($orientation)
@@ -61,6 +61,7 @@ class AutoRotateFilterLoader implements LoaderInterface
 
     /**
      * @param ImageInterface $image
+     *
      * @return int
      */
     private function getOrientation(ImageInterface $image)
@@ -75,9 +76,10 @@ class AutoRotateFilterLoader implements LoaderInterface
                 }
             }
 
-            return null;
+            return;
         } else {
-            $data = exif_read_data("data://image/jpeg;base64," . base64_encode($image->get('jpg')));
+            $data = exif_read_data('data://image/jpeg;base64,'.base64_encode($image->get('jpg')));
+
             return isset($data['Orientation']) ? $data['Orientation'] : null;
         }
     }

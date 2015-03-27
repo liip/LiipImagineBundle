@@ -65,10 +65,8 @@ class DataManager
     /**
      * Adds a loader to retrieve images for the given filter.
      *
-     * @param string $filter
+     * @param string          $filter
      * @param LoaderInterface $loader
-     *
-     * @return void
      */
     public function addLoader($filter, LoaderInterface $loader)
     {
@@ -151,7 +149,7 @@ class DataManager
         $defaultImage = null;
         if (false == empty($config['default_image'])) {
             $defaultImage = $config['default_image'];
-        } else if (!empty($this->globalDefaultImage)) {
+        } elseif (!empty($this->globalDefaultImage)) {
             $defaultImage = $this->globalDefaultImage;
         }
 

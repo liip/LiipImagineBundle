@@ -32,7 +32,7 @@ class ResolveCacheTest extends WebTestCase
         $this->webRoot = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/web';
         $this->cacheRoot = $this->webRoot.'/media/cache';
 
-        $this->filesystem = new Filesystem;
+        $this->filesystem = new Filesystem();
         $this->filesystem->remove($this->cacheRoot);
     }
 
@@ -44,7 +44,7 @@ class ResolveCacheTest extends WebTestCase
             new ResolveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'))
+                '--filters' => array('thumbnail_web_path'), )
         );
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -63,7 +63,7 @@ class ResolveCacheTest extends WebTestCase
             new ResolveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'))
+                '--filters' => array('thumbnail_web_path'), )
         );
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -77,7 +77,7 @@ class ResolveCacheTest extends WebTestCase
             new ResolveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'))
+                '--filters' => array('thumbnail_web_path'), )
         );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
@@ -97,7 +97,7 @@ class ResolveCacheTest extends WebTestCase
             new ResolveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'))
+                '--filters' => array('thumbnail_web_path'), )
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
@@ -113,7 +113,7 @@ class ResolveCacheTest extends WebTestCase
             new ResolveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path', 'thumbnail_default'))
+                '--filters' => array('thumbnail_web_path', 'thumbnail_default'), )
         );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
@@ -139,8 +139,9 @@ class ResolveCacheTest extends WebTestCase
      * Helper function return the result of command execution.
      *
      * @param Command $command
-     * @param array $arguments
-     * @param array $options
+     * @param array   $arguments
+     * @param array   $options
+     *
      * @return string
      */
     protected function executeConsole(Command $command, array $arguments = array(), array $options = array())

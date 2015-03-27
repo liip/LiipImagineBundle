@@ -5,7 +5,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\Request;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
@@ -58,8 +57,8 @@ class CacheManagerTest extends AbstractTest
 
         $rcPath = $cacheManager->getRuntimePath('image.jpg', array(
             'thumbnail' => array(
-                'size' => array(180, 180)
-            )
+                'size' => array(180, 180),
+            ),
         ));
 
         $this->assertEquals('rc/ILfTutxX/image.jpg', $rcPath);
@@ -153,7 +152,7 @@ class CacheManagerTest extends AbstractTest
         $runtimeConfig = array(
             'thumbnail' => array(
                 'size' => array(100, 100),
-            )
+            ),
         );
 
         $resolver = $this->createResolverMock();
@@ -325,7 +324,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -362,7 +361,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -396,7 +395,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -434,7 +433,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -474,7 +473,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -520,7 +519,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -558,7 +557,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnCallback(function($filter) {
+            ->will($this->returnCallback(function ($filter) {
                 return array(
                     'cache' => $filter,
                 );
@@ -658,7 +657,7 @@ class CacheManagerTest extends AbstractTest
             $this->createFilterConfigurationMock(),
             $this->createRouterMock(),
             new Signer('secret'),
-            $dispatcher
+            $dispatcher,
         ));
 
         $cacheManager

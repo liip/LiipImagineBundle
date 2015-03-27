@@ -4,14 +4,13 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Image\ImageInterface;
-
 use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
 
 /**
-* Loader for this bundle's relative resize filter.
-*
-* @author Jeremy Mikola <jmikola@gmail.com>
-*/
+ * Loader for this bundle's relative resize filter.
+ *
+ * @author Jeremy Mikola <jmikola@gmail.com>
+ */
 class RelativeResizeFilterLoader implements LoaderInterface
 {
     /**

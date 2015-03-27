@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -16,7 +17,7 @@ class StreamLoaderFactory implements LoaderFactoryInterface
         $loaderDefinition->replaceArgument(0, $config['wrapper']);
         $loaderDefinition->replaceArgument(1, $config['context']);
         $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => $loaderName
+            'loader' => $loaderName,
         ));
         $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
 

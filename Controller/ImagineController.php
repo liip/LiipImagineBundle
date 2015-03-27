@@ -57,8 +57,8 @@ class ImagineController
      * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
      *
      * @param Request $request
-     * @param string $path
-     * @param string $filter
+     * @param string  $path
+     * @param string  $filter
      *
      * @throws \RuntimeException
      * @throws BadRequestHttpException

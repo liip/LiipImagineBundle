@@ -19,7 +19,7 @@ class ThumbnailFilterLoader implements LoaderInterface
         }
 
         if (!empty($options['filter'])) {
-            $filter = constant('Imagine\Image\ImageInterface::FILTER_' . strtoupper($options['filter']));
+            $filter = constant('Imagine\Image\ImageInterface::FILTER_'.strtoupper($options['filter']));
         }
         if (empty($filter)) {
             $filter = ImageInterface::FILTER_UNDEFINED;
@@ -31,12 +31,11 @@ class ThumbnailFilterLoader implements LoaderInterface
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
 
-
         if (null === $width || null === $height) {
             if (null === $height) {
-                $height = (int)(($width / $origWidth) * $origHeight);
-            } else if (null === $width) {
-                $width = (int)(($height / $origHeight) * $origWidth);
+                $height = (int) (($width / $origWidth) * $origHeight);
+            } elseif (null === $width) {
+                $width = (int) (($height / $origHeight) * $origWidth);
             }
         }
 

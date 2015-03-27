@@ -6,5 +6,4 @@ use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class NotResolvableException extends \RuntimeException implements ExceptionInterface
 {
-
 }

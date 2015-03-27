@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;

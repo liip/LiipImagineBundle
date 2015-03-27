@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Events;
 
 use Symfony\Component\EventDispatcher\Event;
@@ -6,28 +7,31 @@ use Symfony\Component\EventDispatcher\Event;
 class CacheResolveEvent extends Event
 {
     /**
-     * Resource path
+     * Resource path.
+     *
      * @var string
      */
     protected $path;
 
     /**
-     * Filter name
+     * Filter name.
+     *
      * @var string
      */
     protected $filter;
 
     /**
-     * Resource url
+     * Resource url.
+     *
      * @var null
      */
     protected $url;
 
     /**
-     * Init default event state
+     * Init default event state.
      *
-     * @param string $path
-     * @param string $filter
+     * @param string      $path
+     * @param string      $filter
      * @param null|string $url
      */
     public function __construct($path, $filter, $url = null)
@@ -38,7 +42,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Sets resource path
+     * Sets resource path.
      *
      * @param $path
      */
@@ -48,7 +52,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Returns resource path
+     * Returns resource path.
      *
      * @return string
      */
@@ -58,7 +62,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Sets filter name
+     * Sets filter name.
      *
      * @param $filter
      */
@@ -68,7 +72,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Returns filter name
+     * Returns filter name.
      *
      * @return string
      */
@@ -78,7 +82,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Sets resource url
+     * Sets resource url.
      *
      * @param $url
      */
@@ -88,9 +92,7 @@ class CacheResolveEvent extends Event
     }
 
     /**
-     * Returns resource url
-     *
-     * @return null
+     * Returns resource url.
      */
     public function getUrl()
     {

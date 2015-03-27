@@ -13,21 +13,21 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     protected $jpegoptimBin;
 
     /**
-     * If set --strip-all will be passed to jpegoptim
+     * If set --strip-all will be passed to jpegoptim.
      *
      * @var bool
      */
     protected $stripAll = true;
 
     /**
-     * If set, --max=$value will be passed to jpegoptim
+     * If set, --max=$value will be passed to jpegoptim.
      *
      * @var int
      */
     protected $max;
 
     /**
-     * If set to true --all-progressive will be passed to jpegoptim, otherwise --all-normal will be passed
+     * If set to true --all-progressive will be passed to jpegoptim, otherwise --all-normal will be passed.
      *
      * @var bool
      */
@@ -56,7 +56,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     }
 
     /**
-     * @param boolean $progressive
+     * @param bool $progressive
      *
      * @return JpegOptimPostProcessor
      */
@@ -68,7 +68,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     }
 
     /**
-     * @param boolean $stripAll
+     * @param bool $stripAll
      *
      * @return JpegOptimPostProcessor
      */

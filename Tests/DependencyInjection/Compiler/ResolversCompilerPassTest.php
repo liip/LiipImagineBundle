@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
@@ -17,10 +16,10 @@ class ResolversCompilerPassTest extends \PHPUnit_Framework_TestCase
         $managerDefinition = new Definition();
         $resolverDefinition = new Definition();
         $resolverDefinition->addTag('liip_imagine.cache.resolver', array(
-            'resolver' => 'foo'
+            'resolver' => 'foo',
         ));
 
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
         $container->setDefinition('liip_imagine.cache.manager', $managerDefinition);
         $container->setDefinition('a.resolver', $resolverDefinition);
 
@@ -34,4 +33,3 @@ class ResolversCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $managerDefinition->getMethodCalls());
     }
 }
- 
