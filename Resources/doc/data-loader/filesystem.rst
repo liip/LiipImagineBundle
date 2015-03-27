@@ -11,7 +11,8 @@ Using factory
             profile_photos:
                 filesystem: ~
 
-If you dont configure anything this loader is set by default. You can also configure a root dir where to look for the origin images:
+If you don't configure anything, this loader is set by default. You can 
+also configure a root dir where to look for the origin images:
 
 .. code-block:: yaml
 
