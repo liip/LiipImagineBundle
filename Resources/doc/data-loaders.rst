@@ -15,7 +15,7 @@ Custom image loaders
 --------------------
 
 The ImagineBundle allows you to add your custom image loader classes. The only
-requirement is that each data loader implement the following interface:
+requirement is that each data loader implements the following interface:
 ``Liip\ImagineBundle\Binary\Loader\LoaderInterface``.
 
 To tell the bundle about your new data loader, register it in the service
@@ -32,8 +32,8 @@ in XML):
 For more information on the service container, see the `Symfony Service Container`_
 documentation.
 
-You can set your custom data loader by adding it to the your configuration as
-the new default loader as follows:
+You can set your custom data loader by adding it to the configuration as the new default
+loader as follows:
 
 .. code-block:: yaml
 
@@ -58,7 +58,7 @@ Extending the image loader with data transformers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can extend a custom data loader to support virtually any file type using
-transformers. A data tranformer is intended to transform a file before actually
+transformers. A data transformer is intended to transform a file before actually
 rendering it. You can refer to ``Liip\ImagineBundle\Binary\Loader\ExtendedFileSystemLoader``
 and to ``Liip\ImagineBundle\Imagine\Data\Transformer\PdfTransformer`` as an example.
 
