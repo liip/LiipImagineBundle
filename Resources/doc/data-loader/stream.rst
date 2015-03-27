@@ -41,7 +41,7 @@ Usage
 -----
 
 Now you are ready to use the ``AwsS3Resolver`` by configuring the bundle.
-The following example will configure the resolver is default.
+The following example will configure the resolver as default.
 
 .. code-block:: yaml
 
