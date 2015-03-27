@@ -3,11 +3,13 @@
 namespace Liip\ImagineBundle\Controller;
 
 use Imagine\Exception\RuntimeException;
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -36,6 +38,11 @@ class ImagineController
     protected $signer;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param DataManager     $dataManager
      * @param FilterManager   $filterManager
      * @param CacheManager    $cacheManager
@@ -45,12 +52,14 @@ class ImagineController
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
-        SignerInterface $signer
+        SignerInterface $signer,
+        LoggerInterface $logger = null
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
         $this->signer = $signer;
+        $this->logger = $logger;
     }
 
     /**
@@ -87,6 +96,14 @@ class ImagineController
             }
 
             return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        } catch (NonExistingFilterException $e) {
+            $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
+
+            if (null !== $this->logger) {
+                $this->logger->debug($message);
+            }
+
+            throw new NotFoundHttpException($message, $e);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }
@@ -140,6 +157,14 @@ class ImagineController
             );
 
             return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter), 301);
+        } catch (NonExistingFilterException $e) {
+            $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $hash.'/'.$path, $e->getMessage());
+
+            if (null !== $this->logger) {
+                $this->logger->debug($message);
+            }
+
+            throw new NotFoundHttpException($message, $e);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
         }

@@ -18,7 +18,8 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
             $this->createDataManagerMock(),
             $this->createFilterManagerMock(),
             $this->createCacheManagerMock(),
-            $this->createSignerMock()
+            $this->createSignerMock(),
+            $this->createLoggerMock()
         );
     }
 
@@ -52,5 +53,13 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
     protected function createSignerMock()
     {
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Signer', array(), array(), '', false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
+     */
+    protected function createLoggerMock()
+    {
+        return $this->getMock('Psr\Log\LoggerInterface');
     }
 }
