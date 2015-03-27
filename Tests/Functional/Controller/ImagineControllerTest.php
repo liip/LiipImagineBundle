@@ -102,6 +102,14 @@ class ImagineControllerTest extends WebTestCase
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testInvalidFilterShouldThrowNotFoundHttpException()
+    {
+        $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
+    }
+
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
     {
         /** @var Signer $signer */

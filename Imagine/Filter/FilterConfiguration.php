@@ -2,6 +2,8 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+
 class FilterConfiguration
 {
     /**
@@ -24,12 +26,12 @@ class FilterConfiguration
      *
      * @return array
      *
-     * @throws \RuntimeException
+     * @throws NonExistingFilterException
      */
     public function get($filter)
     {
         if (false == array_key_exists($filter, $this->filters)) {
-            throw new \RuntimeException(sprintf('Could not find configuration for a filter: %s', $filter));
+            throw new NonExistingFilterException(sprintf('Could not find configuration for a filter: %s', $filter));
         }
 
         return $this->filters[$filter];
