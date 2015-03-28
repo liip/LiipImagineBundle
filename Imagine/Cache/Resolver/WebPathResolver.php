@@ -28,10 +28,10 @@ class WebPathResolver implements ResolverInterface
     protected $cachePrefix;
 
     /**
-     * @param Filesystem $filesystem
+     * @param Filesystem     $filesystem
      * @param RequestContext $requestContext
-     * @param string $webRootDir
-     * @param string $cachePrefix
+     * @param string         $webRootDir
+     * @param string         $cachePrefix
      */
     public function __construct(
         Filesystem $filesystem,

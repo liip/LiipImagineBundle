@@ -7,5 +7,5 @@ interface CacheManagerAwareInterface
     /**
      * @param CacheManager $cacheManager
      */
-    function setCacheManager(CacheManager $cacheManager);
+    public function setCacheManager(CacheManager $cacheManager);
 }

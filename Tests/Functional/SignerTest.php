@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional;
 
 class SignerTest extends WebTestCase
@@ -10,4 +11,4 @@ class SignerTest extends WebTestCase
 
         $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\SignerInterface', $service);
     }
-} 
+}

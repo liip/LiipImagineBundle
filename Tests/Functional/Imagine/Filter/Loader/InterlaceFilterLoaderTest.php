@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
@@ -13,4 +14,3 @@ class InterlaceFilterLoaderTest extends WebTestCase
         $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader', $service);
     }
 }
-

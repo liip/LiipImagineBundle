@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -15,7 +16,7 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
         $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.filesystem');
         $loaderDefinition->replaceArgument(2, $config['data_root']);
         $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => $loaderName
+            'loader' => $loaderName,
         ));
         $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
 

@@ -7,7 +7,7 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 
 /**
- * Upscale filter
+ * Upscale filter.
  *
  * @author Maxime Colin <contact@maximecolin.fr>
  */
@@ -29,8 +29,7 @@ class UpscaleFilterLoader implements LoaderInterface
         $origHeight = $size->getHeight();
 
         if ($origWidth < $width || $origHeight < $height) {
-
-            $widthRatio = $width / $origWidth ;
+            $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
 
             $ratio = $widthRatio > $heightRatio ? $widthRatio : $heightRatio;

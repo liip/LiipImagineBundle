@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Binary;
 
 interface BinaryInterface

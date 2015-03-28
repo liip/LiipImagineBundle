@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
-
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
@@ -34,7 +32,7 @@ class AbstractDoctrineLoaderTest extends \PHPUnit_Framework_TestCase
         $image = new \stdClass();
 
         $this->loader->expects($this->atLeastOnce())->method('mapPathToId')->with('/foo/bar')->will($this->returnValue(1337));
-        $this->loader->expects($this->atLeastOnce())->method('getStreamFromImage')->with($image)->will($this->returnValue(fopen('data://text/plain,foo','r')));
+        $this->loader->expects($this->atLeastOnce())->method('getStreamFromImage')->with($image)->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
 
         $this->om->expects($this->atLeastOnce())->method('find')->with(null, 1337)->will($this->returnValue($image));
 
@@ -50,7 +48,7 @@ class AbstractDoctrineLoaderTest extends \PHPUnit_Framework_TestCase
             array('/foo/bar', 4711),
         )));
 
-        $this->loader->expects($this->atLeastOnce())->method('getStreamFromImage')->with($image)->will($this->returnValue(fopen('data://text/plain,foo','r')));
+        $this->loader->expects($this->atLeastOnce())->method('getStreamFromImage')->with($image)->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
 
         $this->om->expects($this->atLeastOnce())->method('find')->will($this->returnValueMap(array(
             array(null, 1337, null),
@@ -73,4 +71,3 @@ class AbstractDoctrineLoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader->find('/foo/bar');
     }
 }
- 

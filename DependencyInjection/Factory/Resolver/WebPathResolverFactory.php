@@ -17,7 +17,7 @@ class WebPathResolverFactory implements ResolverFactoryInterface
         $resolverDefinition->replaceArgument(2, $config['web_root']);
         $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
         $resolverDefinition->addTag('liip_imagine.cache.resolver', array(
-            'resolver' => $resolverName
+            'resolver' => $resolverName,
         ));
         $resolverId = 'liip_imagine.cache.resolver.'.$resolverName;
 

@@ -54,10 +54,8 @@ class FilterManager
     /**
      * Adds a loader to handle the given filter.
      *
-     * @param string $filter
+     * @param string          $filter
      * @param LoaderInterface $loader
-     *
-     * @return void
      */
     public function addLoader($filter, LoaderInterface $loader)
     {
@@ -65,12 +63,10 @@ class FilterManager
     }
 
     /**
-     * Adds a post-processor to handle binaries
+     * Adds a post-processor to handle binaries.
      *
-     * @param string $name
+     * @param string                 $name
      * @param PostProcessorInterface $postProcessor
-     *
-     * @return void
      */
     public function addPostProcessor($name, PostProcessorInterface $postProcessor)
     {
@@ -87,7 +83,7 @@ class FilterManager
 
     /**
      * @param BinaryInterface $binary
-     * @param array $config
+     * @param array           $config
      *
      * @throws \InvalidArgumentException
      *
@@ -99,7 +95,7 @@ class FilterManager
             array(
                 'filters' => array(),
                 'quality' => 100,
-                'animated' => false
+                'animated' => false,
             ),
             $config
         );
@@ -117,7 +113,7 @@ class FilterManager
         }
 
         $options = array(
-            'quality' => $config['quality']
+            'quality' => $config['quality'],
         );
 
         if (isset($config['jpeg_quality'])) {

@@ -126,12 +126,12 @@ class CacheResolverTest extends AbstractTest
             ->method('remove')
         ;
 
-        $cache = new ArrayCache;
+        $cache = new ArrayCache();
 
         $cacheResolver = new CacheResolver($cache, $resolver);
         $cacheResolver->resolve($this->path, $this->filter);
 
-        /**
+        /*
          * Three items:
          * * The result of one resolve execution.
          * * The index of entity.
@@ -158,7 +158,7 @@ class CacheResolverTest extends AbstractTest
             ->method('remove')
         ;
 
-        $cache = new ArrayCache;
+        $cache = new ArrayCache();
 
         $cacheResolver = new CacheResolver($cache, $resolver);
         $cacheResolver->resolve('aPathFoo', 'thumbnail_233x233');
@@ -166,7 +166,7 @@ class CacheResolverTest extends AbstractTest
         $cacheResolver->resolve('aPathFoo', 'thumbnail_100x100');
         $cacheResolver->resolve('aPathBar', 'thumbnail_100x100');
 
-        /**
+        /*
          * Seven items:
          * * The result of four resolve execution.
          * * The index of two entities.

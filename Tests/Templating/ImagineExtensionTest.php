@@ -66,4 +66,3 @@ class ImagineExtensionTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
     }
 }
-

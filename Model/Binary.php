@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Model;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;

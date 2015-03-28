@@ -1,6 +1,7 @@
 <?php
+
 namespace {
-    if (!$loader = @include __DIR__ . '/../vendor/autoload.php') {
+    if (!$loader = @include __DIR__.'/../vendor/autoload.php') {
         echo <<<EOM
 You must set up the project dependencies by running the following commands:
 
@@ -17,5 +18,7 @@ namespace Symfony\Component\ExpressionLanguage {
         return;
     }
 
-    interface ExpressionFunctionProviderInterface {};
+    interface ExpressionFunctionProviderInterface
+    {
+    };
 }

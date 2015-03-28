@@ -1,8 +1,7 @@
 <?php
+
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class AppKernel extends Kernel
 {
@@ -24,7 +23,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return sys_get_temp_dir() . '/liip_imagine_test/cache';
+        return sys_get_temp_dir().'/liip_imagine_test/cache';
     }
 
     /**
@@ -32,7 +31,7 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return sys_get_temp_dir() . '/liip_imagine_test/cache/logs';
+        return sys_get_temp_dir().'/liip_imagine_test/cache/logs';
     }
 
     /**
@@ -40,6 +39,6 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/config/config.yml');
+        $loader->load(__DIR__.'/config/config.yml');
     }
 }

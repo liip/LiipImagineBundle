@@ -10,9 +10,9 @@ interface LoaderInterface
      * Loads and applies a filter on the given image.
      *
      * @param ImageInterface $image
-     * @param array $options
+     * @param array          $options
      *
      * @return ImageInterface
      */
-    function load(ImageInterface $image, array $options = array());
+    public function load(ImageInterface $image, array $options = array());
 }

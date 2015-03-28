@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
@@ -10,7 +11,7 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     public static function getKernelClass()
     {
-        require_once __DIR__ . '/app/AppKernel.php';
+        require_once __DIR__.'/app/AppKernel.php';
 
         return 'AppKernel';
     }

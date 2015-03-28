@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional\Binary;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;

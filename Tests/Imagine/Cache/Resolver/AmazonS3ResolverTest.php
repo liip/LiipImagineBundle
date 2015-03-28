@@ -355,6 +355,7 @@ class AmazonS3ResolverTest extends AbstractTest
 
     /**
      * @param bool $ok
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|\CFResponse
      */
     protected function createCFResponseMock($ok = true)

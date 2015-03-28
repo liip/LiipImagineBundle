@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
@@ -20,21 +21,21 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new StreamLoaderFactory;
+        new StreamLoaderFactory();
     }
 
     public function testReturnExpectedName()
     {
-        $loader = new StreamLoaderFactory;
+        $loader = new StreamLoaderFactory();
 
         $this->assertEquals('stream', $loader->getName());
     }
 
     public function testCreateLoaderDefinitionOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $loader = new StreamLoaderFactory;
+        $loader = new StreamLoaderFactory();
 
         $loader->create($container, 'theLoaderName', array(
             'wrapper' => 'theWrapper',
@@ -60,7 +61,7 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('stream', 'array');
 
-        $resolver = new StreamLoaderFactory;
+        $resolver = new StreamLoaderFactory();
         $resolver->addConfiguration($rootNode);
 
         $this->processConfigTree($treeBuilder, array());
@@ -74,14 +75,14 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('stream', 'array');
 
-        $loader = new StreamLoaderFactory;
+        $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
             'stream' => array(
                 'wrapper' => $expectedWrapper,
                 'context' => $expectedContext,
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('wrapper', $config);
@@ -96,13 +97,13 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('stream', 'array');
 
-        $loader = new StreamLoaderFactory;
+        $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
             'stream' => array(
                 'wrapper' => 'aWrapper',
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('context', $config);
@@ -111,7 +112,7 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     /**
      * @param TreeBuilder $treeBuilder
-     * @param array $configs
+     * @param array       $configs
      *
      * @return array
      */

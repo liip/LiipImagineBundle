@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests;
 
 use Liip\ImagineBundle\LiipImagineBundle;
@@ -31,7 +32,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
         $container = new ContainerBuilder();
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -51,7 +52,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass'))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -71,7 +72,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass'))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -91,7 +92,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass'))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -113,7 +114,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->will($this->returnValue($extensionMock))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -135,7 +136,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->will($this->returnValue($extensionMock))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -157,7 +158,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->will($this->returnValue($extensionMock))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -179,7 +180,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->will($this->returnValue($extensionMock))
         ;
 
-        $bundle = new LiipImagineBundle;
+        $bundle = new LiipImagineBundle();
 
         $bundle->build($containerMock);
     }
@@ -192,7 +193,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
     protected function createExtensionMock()
     {
         $methods = array(
-            'getNamespace', 'addResolverFactory', 'addLoaderFactory'
+            'getNamespace', 'addResolverFactory', 'addLoaderFactory',
         );
 
         return $this->getMock('Liip\ImagineBundle\DependencyInjection\LiipImagineExtension', $methods, array(), '', false);

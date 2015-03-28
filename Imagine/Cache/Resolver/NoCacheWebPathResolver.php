@@ -49,4 +49,3 @@ class NoCacheWebPathResolver implements ResolverInterface
     {
     }
 }
-

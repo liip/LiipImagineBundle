@@ -24,11 +24,11 @@ class Signer implements SignerInterface
     {
         if ($runtimeConfig) {
             array_walk_recursive($runtimeConfig, function (&$value) {
-                $value = (string)$value;
+                $value = (string) $value;
             });
         }
 
-        return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/') . (null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
+        return substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/').(null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
     }
 
     /**

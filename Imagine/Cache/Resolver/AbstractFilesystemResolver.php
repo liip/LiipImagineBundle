@@ -63,7 +63,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * Set the base path to
+     * Set the base path to.
      *
      * @param $basePath
      */
@@ -151,6 +151,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     /**
      * @param string $dir
+     *
      * @throws \RuntimeException
      */
     protected function makeFolder($dir)
@@ -172,7 +173,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
-     * @param string $path The resource path to convert.
+     * @param string $path   The resource path to convert.
      * @param string $filter The name of the imagine filter.
      *
      * @return string

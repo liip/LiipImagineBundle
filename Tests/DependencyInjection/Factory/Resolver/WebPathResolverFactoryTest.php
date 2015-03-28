@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
@@ -20,21 +21,21 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new WebPathResolverFactory;
+        new WebPathResolverFactory();
     }
 
     public function testReturnExpectedName()
     {
-        $resolver = new WebPathResolverFactory;
+        $resolver = new WebPathResolverFactory();
 
         $this->assertEquals('web_path', $resolver->getName());
     }
 
     public function testCreateResolverDefinitionOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new WebPathResolverFactory;
+        $resolver = new WebPathResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'web_root' => 'theWebRoot',
@@ -59,14 +60,14 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('web_path', 'array');
 
-        $resolver = new WebPathResolverFactory;
+        $resolver = new WebPathResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
             'web_path' => array(
                 'web_root' => $expectedWebPath,
                 'cache_prefix' => $expectedCachePrefix,
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('web_root', $config);
@@ -81,11 +82,11 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('web_path', 'array');
 
-        $resolver = new WebPathResolverFactory;
+        $resolver = new WebPathResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
-            'web_path' => array()
+            'web_path' => array(),
         ));
 
         $this->assertArrayHasKey('web_root', $config);
@@ -97,7 +98,7 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     /**
      * @param TreeBuilder $treeBuilder
-     * @param array $configs
+     * @param array       $configs
      *
      * @return array
      */

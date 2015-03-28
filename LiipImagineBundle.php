@@ -23,18 +23,18 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new LoadersCompilerPass);
-        $container->addCompilerPass(new FiltersCompilerPass);
-        $container->addCompilerPass(new PostProcessorsCompilerPass);
-        $container->addCompilerPass(new ResolversCompilerPass);
+        $container->addCompilerPass(new LoadersCompilerPass());
+        $container->addCompilerPass(new FiltersCompilerPass());
+        $container->addCompilerPass(new PostProcessorsCompilerPass());
+        $container->addCompilerPass(new ResolversCompilerPass());
 
         /** @var $extension LiipImagineExtension */
         $extension = $container->getExtension('liip_imagine');
 
-        $extension->addResolverFactory(new WebPathResolverFactory);
-        $extension->addResolverFactory(new AwsS3ResolverFactory);
+        $extension->addResolverFactory(new WebPathResolverFactory());
+        $extension->addResolverFactory(new AwsS3ResolverFactory());
 
-        $extension->addLoaderFactory(new StreamLoaderFactory);
-        $extension->addLoaderFactory(new FileSystemLoaderFactory);
+        $extension->addLoaderFactory(new StreamLoaderFactory());
+        $extension->addLoaderFactory(new FileSystemLoaderFactory());
     }
 }

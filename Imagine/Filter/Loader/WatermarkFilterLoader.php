@@ -22,14 +22,14 @@ class WatermarkFilterLoader implements LoaderInterface
     {
         $options += array(
             'size' => null,
-            'position' => 'center'
+            'position' => 'center',
         );
 
         if (substr($options['size'], -1) == '%') {
             $options['size'] = substr($options['size'], 0, -1) / 100;
         }
 
-        $watermark = $this->imagine->open($this->rootPath . '/' . $options['image']);
+        $watermark = $this->imagine->open($this->rootPath.'/'.$options['image']);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();

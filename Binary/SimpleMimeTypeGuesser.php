@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Binary;
 
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface as SymfonyMimeTypeGuesserInterface;

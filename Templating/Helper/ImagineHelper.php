@@ -25,7 +25,7 @@ class ImagineHelper extends Helper
      *
      * @param string $path
      * @param string $filter
-     * @param array $runtimeConfig
+     * @param array  $runtimeConfig
      *
      * @return string
      */

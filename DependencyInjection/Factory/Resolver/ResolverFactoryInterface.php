@@ -18,7 +18,7 @@ interface ResolverFactoryInterface
 
     /**
      * The resolver factory name,
-     * For example web_path, aws_s3 o amazon_s3
+     * For example web_path, aws_s3 o amazon_s3.
      *
      * @return string
      */
@@ -26,8 +26,6 @@ interface ResolverFactoryInterface
 
     /**
      * @param ArrayNodeDefinition $builder
-     *
-     * @return void
      */
     public function addConfiguration(ArrayNodeDefinition $builder);
 }

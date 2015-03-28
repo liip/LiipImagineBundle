@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Doctrine\MongoDB\GridFSFile;

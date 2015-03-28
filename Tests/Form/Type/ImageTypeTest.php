@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\Form\Type;
 
 use Liip\ImagineBundle\Form\Type\ImageType;
@@ -51,7 +50,7 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
             'image_attr'   => 'bazz',
             'link_url'     => 'http://liip.com',
             'link_filter'  => 'foo',
-            'link_attr'    => 'bazz'
+            'link_attr'    => 'bazz',
         );
 
         $view = new FormView();
@@ -66,4 +65,3 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         }
     }
 }
- 

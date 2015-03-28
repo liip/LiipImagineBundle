@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
@@ -17,11 +16,10 @@ class FiltersCompilerPassTest extends \PHPUnit_Framework_TestCase
         $managerDefinition = new Definition();
         $loaderDefinition = new Definition();
         $loaderDefinition->addTag('liip_imagine.filter.loader', array(
-            'loader' => 'foo'
+            'loader' => 'foo',
         ));
 
-
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
         $container->setDefinition('liip_imagine.filter.manager', $managerDefinition);
         $container->setDefinition('a.loader', $loaderDefinition);
 
@@ -35,4 +33,3 @@ class FiltersCompilerPassTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $managerDefinition->getMethodCalls());
     }
 }
- 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
@@ -20,21 +21,21 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new FileSystemLoaderFactory;
+        new FileSystemLoaderFactory();
     }
 
     public function testReturnExpectedName()
     {
-        $loader = new FileSystemLoaderFactory;
+        $loader = new FileSystemLoaderFactory();
 
         $this->assertEquals('filesystem', $loader->getName());
     }
 
     public function testCreateLoaderDefinitionOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $loader = new FileSystemLoaderFactory;
+        $loader = new FileSystemLoaderFactory();
 
         $loader->create($container, 'theLoaderName', array(
             'data_root' => 'theDataRoot',
@@ -56,13 +57,13 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
 
-        $loader = new FileSystemLoaderFactory;
+        $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
             'filesystem' => array(
                 'data_root' => $expectedDataRoot,
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('data_root', $config);
@@ -76,11 +77,11 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
 
-        $loader = new FileSystemLoaderFactory;
+        $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
-            'filesystem' => array()
+            'filesystem' => array(),
         ));
 
         $this->assertArrayHasKey('data_root', $config);
@@ -89,7 +90,7 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     /**
      * @param TreeBuilder $treeBuilder
-     * @param array $configs
+     * @param array       $configs
      *
      * @return array
      */

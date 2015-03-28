@@ -13,5 +13,5 @@ interface LoaderInterface
      *
      * @return \Liip\ImagineBundle\Binary\BinaryInterface|string An image binary content
      */
-    function find($path);
+    public function find($path);
 }

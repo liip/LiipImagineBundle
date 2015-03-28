@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
@@ -20,21 +21,21 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new AwsS3ResolverFactory;
+        new AwsS3ResolverFactory();
     }
 
     public function testReturnExpectedName()
     {
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $this->assertEquals('aws_s3', $resolver->getName());
     }
 
     public function testCreateResolverDefinitionOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -44,7 +45,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array(),
             'put_options' => array('barKey' => 'barVal'),
             'cache' => false,
-            'proxies' => array()
+            'proxies' => array(),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
@@ -64,9 +65,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testOverrideDeprecatedUrlOptionsWithNewGetOptions()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -76,7 +77,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array('fooKey' => 'fooVal_overridden'),
             'put_options' => array(),
             'cache' => false,
-            'proxies' => array()
+            'proxies' => array(),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
@@ -87,9 +88,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCreateS3ClientDefinitionOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
@@ -99,7 +100,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array(),
             'put_options' => array(),
             'cache' => false,
-            'proxies' => array()
+            'proxies' => array(),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.client'));
@@ -113,9 +114,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testWrapResolverWithProxyOnCreateWithoutCache()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -125,7 +126,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array(),
             'put_options' => array(),
             'cache' => false,
-            'proxies' => array('foo')
+            'proxies' => array('foo'),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
@@ -148,9 +149,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testWrapResolverWithCacheOnCreateWithoutProxy()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -160,7 +161,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array(),
             'put_options' => array(),
             'cache' => 'theCacheServiceId',
-            'proxies' => array()
+            'proxies' => array(),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
@@ -184,9 +185,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testWrapResolverWithProxyAndCacheOnCreate()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -196,7 +197,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'get_options' => array(),
             'put_options' => array(),
             'cache' => 'theCacheServiceId',
-            'proxies' => array('foo')
+            'proxies' => array('foo'),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
@@ -228,9 +229,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testSetCachePrefixIfDefined()
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'theResolverName', array(
             'client_config' => array(),
@@ -241,7 +242,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'put_options' => array(),
             'cache_prefix' => 'theCachePrefix',
             'cache' => null,
-            'proxies' => array()
+            'proxies' => array(),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
@@ -263,7 +264,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $this->processConfigTree($treeBuilder, array());
@@ -278,13 +279,13 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $this->processConfigTree($treeBuilder, array(
             'aws_s3' => array(
                 'bucket' => 'aBucket',
-            )
+            ),
         ));
     }
 
@@ -297,14 +298,14 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $this->processConfigTree($treeBuilder, array(
             'aws_s3' => array(
                 'bucket' => 'aBucket',
                 'client_config' => 'not_array',
-            )
+            ),
         ));
     }
 
@@ -312,19 +313,19 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
     {
         $expectedClientConfig = array(
             'theKey' => 'theClientConfigVal',
-            'theOtherKey' => 'theOtherClientConfigValue'
+            'theOtherKey' => 'theOtherClientConfigValue',
         );
         $expectedUrlOptions = array(
             'theKey' => 'theUrlOptionsVal',
-            'theOtherKey' => 'theOtherUrlOptionsValue'
+            'theOtherKey' => 'theOtherUrlOptionsValue',
         );
         $expectedGetOptions = array(
             'theKey' => 'theGetOptionsVal',
-            'theOtherKey' => 'theOtherGetOptionsValue'
+            'theOtherKey' => 'theOtherGetOptionsValue',
         );
         $expectedObjectOptions = array(
             'theKey' => 'theObjectOptionsVal',
-            'theOtherKey' => 'theOtherObjectOptionsValue'
+            'theOtherKey' => 'theOtherObjectOptionsValue',
         );
         $expectedBucket = 'theBucket';
         $expectedAcl = 'theAcl';
@@ -333,7 +334,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
@@ -345,7 +346,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
                 'get_options' => $expectedGetOptions,
                 'put_options' => $expectedObjectOptions,
                 'cache_prefix' => $expectedCachePrefix,
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('bucket', $config);
@@ -377,14 +378,14 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aws_s3', 'array');
 
-        $resolver = new AwsS3ResolverFactory;
+        $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
         $config = $this->processConfigTree($treeBuilder, array(
             'aws_s3' => array(
                 'bucket' => 'aBucket',
                 'client_config' => array(),
-            )
+            ),
         ));
 
         $this->assertArrayHasKey('acl', $config);
@@ -402,7 +403,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     /**
      * @param TreeBuilder $treeBuilder
-     * @param array $configs
+     * @param array       $configs
      *
      * @return array
      */

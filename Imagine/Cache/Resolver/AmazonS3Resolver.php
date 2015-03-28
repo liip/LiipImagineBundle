@@ -36,10 +36,10 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
-     * @param \AmazonS3 $storage The Amazon S3 storage API. It's required to know authentication information.
-     * @param string $bucket The bucket name to operate on.
-     * @param string $acl The ACL to use when storing new objects. Default: owner read/write, public read
-     * @param array $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
+     * @param \AmazonS3 $storage       The Amazon S3 storage API. It's required to know authentication information.
+     * @param string    $bucket        The bucket name to operate on.
+     * @param string    $acl           The ACL to use when storing new objects. Default: owner read/write, public read
+     * @param array     $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3.
      */
     public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
     {
@@ -143,8 +143,8 @@ class AmazonS3Resolver implements ResolverInterface
      *
      * @see \AmazonS3::get_object_url() for available options.
      *
-     * @param string $key The name of the option.
-     * @param mixed $value The value to be set.
+     * @param string $key   The name of the option.
+     * @param mixed  $value The value to be set.
      *
      * @return AmazonS3Resolver $this
      */
@@ -158,7 +158,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * Returns the object path within the bucket.
      *
-     * @param string $path The base path of the resource.
+     * @param string $path   The base path of the resource.
      * @param string $filter The name of the imagine filter in effect.
      *
      * @return string The path of the object on S3.

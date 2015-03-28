@@ -41,7 +41,7 @@ class FilterConfiguration
      * Sets a configuration on the given filter.
      *
      * @param string $filter
-     * @param array $config
+     * @param array  $config
      *
      * @return array
      */
@@ -51,7 +51,7 @@ class FilterConfiguration
     }
 
     /**
-     * Get all filters
+     * Get all filters.
      *
      * @return array
      */

@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
-use Symfony\Component\HttpFoundation\Request;
 
 class SignerTest extends AbstractTest
 {
@@ -49,14 +48,14 @@ class SignerTest extends AbstractTest
             'foo' => 14,
             'bar' => array(
                 'bar' => 15,
-            )
+            ),
         );
 
         $runtimeConfigStrings = array(
-            'foo' => "14",
+            'foo' => '14',
             'bar' => array(
-                'bar' => "15",
-            )
+                'bar' => '15',
+            ),
         );
 
         $this->assertTrue($singer->check($singer->sign('aPath', $runtimeConfigInts), 'aPath', $runtimeConfigStrings));

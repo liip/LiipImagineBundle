@@ -15,7 +15,7 @@ interface ResolverInterface
      *
      * @return bool
      */
-    function isStored($path, $filter);
+    public function isStored($path, $filter);
 
     /**
      * Resolves filtered path for rendering in the browser.
@@ -27,24 +27,20 @@ interface ResolverInterface
      *
      * @throws NotResolvableException
      */
-    function resolve($path, $filter);
+    public function resolve($path, $filter);
 
     /**
      * Stores the content of the given binary.
      *
      * @param BinaryInterface $binary The image binary to store.
-     * @param string          $path     The path where the original file is expected to be.
-     * @param string          $filter   The name of the imagine filter in effect.
-     *
-     * @return void
+     * @param string          $path   The path where the original file is expected to be.
+     * @param string          $filter The name of the imagine filter in effect.
      */
-    function store(BinaryInterface $binary, $path, $filter);
+    public function store(BinaryInterface $binary, $path, $filter);
 
     /**
      * @param string[] $paths   The paths where the original files are expected to be.
      * @param string[] $filters The imagine filters in effect.
-     *
-     * @return void
      */
-    function remove(array $paths, array $filters);
+    public function remove(array $paths, array $filters);
 }

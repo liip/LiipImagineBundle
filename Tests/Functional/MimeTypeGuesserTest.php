@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional;
 
 class MimeTypeGuesserTest extends WebTestCase
@@ -10,4 +11,4 @@ class MimeTypeGuesserTest extends WebTestCase
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', $guesser);
     }
-} 
+}

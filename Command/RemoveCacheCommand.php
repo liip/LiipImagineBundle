@@ -52,7 +52,7 @@ EOF
             $filters = null;
         }
 
-        /** @var CacheManager cacheManager */
+        /* @var CacheManager cacheManager */
         $cacheManager  = $this->getContainer()->get('liip_imagine.cache.manager');
 
         $cacheManager->remove($paths, $filters);

@@ -19,7 +19,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
 
     /**
      * @param ObjectManager $manager
-     * @param string $class
+     * @param string        $class
      */
     public function __construct(ObjectManager $manager, $class = null)
     {
@@ -37,7 +37,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     abstract protected function mapPathToId($path);
 
     /**
-     * Return a stream resource from the Doctrine entity/document with the image content
+     * Return a stream resource from the Doctrine entity/document with the image content.
      *
      * @param object $image
      *

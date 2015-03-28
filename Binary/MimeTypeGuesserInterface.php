@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Binary;
 
 interface MimeTypeGuesserInterface
@@ -8,5 +9,5 @@ interface MimeTypeGuesserInterface
      *
      * @return string|null mime type or null if it could be not be guessed.
      */
-    function guess($binary);
+    public function guess($binary);
 }

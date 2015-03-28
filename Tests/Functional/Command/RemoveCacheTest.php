@@ -32,7 +32,7 @@ class RemoveCacheTest extends WebTestCase
         $this->webRoot = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/web';
         $this->cacheRoot = $this->webRoot.'/media/cache';
 
-        $this->filesystem = new Filesystem;
+        $this->filesystem = new Filesystem();
         $this->filesystem->remove($this->cacheRoot);
     }
 
@@ -51,7 +51,7 @@ class RemoveCacheTest extends WebTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path')
+                '--filters' => array('thumbnail_web_path'),
         ));
     }
 
@@ -236,7 +236,7 @@ class RemoveCacheTest extends WebTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_default', 'thumbnail_web_path'))
+                '--filters' => array('thumbnail_default', 'thumbnail_web_path'), )
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -263,7 +263,7 @@ class RemoveCacheTest extends WebTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'))
+                '--filters' => array('thumbnail_web_path'), )
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -275,8 +275,9 @@ class RemoveCacheTest extends WebTestCase
      * Helper function return the result of command execution.
      *
      * @param Command $command
-     * @param array $arguments
-     * @param array $options
+     * @param array   $arguments
+     * @param array   $options
+     *
      * @return string
      */
     protected function executeConsole(Command $command, array $arguments = array(), array $options = array())
@@ -295,5 +296,3 @@ class RemoveCacheTest extends WebTestCase
         return $commandTester->getDisplay();
     }
 }
-
-

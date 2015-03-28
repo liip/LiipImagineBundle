@@ -15,7 +15,7 @@ class InterlaceFilterLoader implements LoaderInterface
         if (!empty($options['mode'])) {
             $mode = $options['mode'];
         }
-        
+
         $image->interlace($mode);
 
         return $image;

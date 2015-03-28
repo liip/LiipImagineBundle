@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;

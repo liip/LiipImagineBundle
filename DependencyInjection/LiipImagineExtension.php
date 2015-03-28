@@ -87,7 +87,7 @@ class LiipImagineExtension extends Extension
     }
 
     /**
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
      */
     protected function loadResolvers(array $config, ContainerBuilder $container)
@@ -101,7 +101,7 @@ class LiipImagineExtension extends Extension
     }
 
     /**
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
      */
     protected function loadLoaders(array $config, ContainerBuilder $container)

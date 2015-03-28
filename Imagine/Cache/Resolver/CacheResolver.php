@@ -32,9 +32,9 @@ class CacheResolver implements ResolverInterface
      * * index_key
      *   The name of the index key being used to save a list of created cache keys regarding one image and filter pairing.
      *
-     * @param Cache $cache
-     * @param ResolverInterface $cacheResolver
-     * @param array $options
+     * @param Cache                    $cache
+     * @param ResolverInterface        $cacheResolver
+     * @param array                    $options
      * @param OptionsResolverInterface $optionsResolver
      */
     public function __construct(Cache $cache, ResolverInterface $cacheResolver, array $options = array(), OptionsResolverInterface $optionsResolver = null)
@@ -141,7 +141,7 @@ class CacheResolver implements ResolverInterface
      *
      * When overriding this method, ensure generateIndexKey is adjusted accordingly.
      *
-     * @param string $path The image path in use.
+     * @param string $path   The image path in use.
      * @param string $filter The filter in use.
      *
      * @return string
@@ -191,7 +191,7 @@ class CacheResolver implements ResolverInterface
      * Save the given content to the cache and update the cache index.
      *
      * @param string $cacheKey
-     * @param mixed $content
+     * @param mixed  $content
      *
      * @return bool
      */
@@ -200,7 +200,7 @@ class CacheResolver implements ResolverInterface
         // Create or update the index list containing all cache keys for a given image and filter pairing.
         $indexKey = $this->generateIndexKey($cacheKey);
         if ($this->cache->contains($indexKey)) {
-            $index = (array)$this->cache->fetch($indexKey);
+            $index = (array) $this->cache->fetch($indexKey);
 
             if (!in_array($cacheKey, $index)) {
                 $index[] = $cacheKey;
