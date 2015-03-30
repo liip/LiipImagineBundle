@@ -8,6 +8,9 @@ use Symfony\Component\Routing\RequestContext;
 
 class WebPathResolver implements ResolverInterface
 {
+
+    protected $formats = ["jpg", "png", "gif"];
+
     /**
      * @var Filesystem
      */
@@ -63,7 +66,12 @@ class WebPathResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return $this->filesystem->exists($this->getFilePath($path, $filter));
+        foreach ($this->formats as $format) {
+            if ($this->filesystem->exists($this->getFilePath($this->getPathForFormat($path, $format, $filter), $filter))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -72,7 +80,7 @@ class WebPathResolver implements ResolverInterface
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->getFilePath($this->getPathForFormat($path, $binary->getMimeType()), $filter),
             $binary->getContent()
         );
     }
@@ -149,5 +157,13 @@ class WebPathResolver implements ResolverInterface
             $port,
             $baseUrl
         );
+    }
+
+    protected function getPathForFormat($path, $format){
+        $info = pathinfo($path);
+        $ext_arr = array_reverse(explode("/", $format));
+        $ext = $ext_arr[0];
+        $path = $info['dirname'] . DIRECTORY_SEPARATOR . $info["filename"].".".$ext;
+        return $path;
     }
 }

@@ -158,8 +158,11 @@ class CacheManager
      */
     public function generateUrl($path, $filter, array $runtimeConfig = array())
     {
+        $filterConf = $this->filterConfig->get($filter);
+
+
         $params = array(
-            'path' => ltrim($path, '/'),
+            'path' => $this->getPathForFormat(ltrim($path, '/'), $filterConf["format"]),
             'filter' => $filter,
         );
 
@@ -173,6 +176,14 @@ class CacheManager
         }
 
         return $filterUrl;
+    }
+
+    protected function getPathForFormat($path, $format){
+        $info = pathinfo($path);
+        $ext_arr = array_reverse(explode("/", $format));
+        $ext = $ext_arr[0];
+        $path = $info['dirname'] . DIRECTORY_SEPARATOR . $info["filename"].".".$ext;
+        return $path;
     }
 
     /**
