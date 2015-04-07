@@ -171,6 +171,20 @@ should be called as early as possible)** Configuration looks like this:
                 filters:
                     auto_rotate: ~
 
+The ``rotate`` filter
+~~~~~~~~~~~~~~~~~~~~~
+
+The rotate filter rotates the image based on specified angle (in degrees).
+Configuration looks like this:
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    rotate: { angle: 90 }
+
 The ``interlace`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
