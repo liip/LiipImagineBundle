@@ -96,6 +96,18 @@ class ImagineControllerTest extends WebTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Filters must be an array. Value was "some-string"
+     */
+    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray()
+    {
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
+            'filters' => 'some-string',
+            '_hash'   => 'hash',
+        )));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @expectedExceptionMessage Source image could not be found
      */
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()

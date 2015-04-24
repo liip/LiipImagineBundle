@@ -127,6 +127,10 @@ class ImagineController
         try {
             $filters = $request->query->get('filters', array());
 
+            if (!is_array($filters)) {
+                throw new NotFoundHttpException(sprintf('Filters must be an array. Value was "%s"', $filters));
+            }
+
             if (true !== $this->signer->check($hash, $path, $filters)) {
                 throw new BadRequestHttpException(sprintf(
                     'Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s',
