@@ -12,6 +12,16 @@ class OptiPngPostProcessor implements PostProcessorInterface
     const MIN_LEVEL = 0;
     const MAX_LEVEL = 7;
 
+    private static $allowedTypes = array(
+        'image/png',
+        'image/bmp',
+        'image/gif',
+        'image/x-windows-bmp',
+        'image/x-portable-anymap',
+        'image/tiff',
+        'image/x-tiff',
+    );
+
     /** @var string Path to optipng binary */
     protected $optipngBin;
 
@@ -69,7 +79,7 @@ class OptiPngPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/png', 'image/bmp', 'image/gif', 'image/pnm', 'image/tiff'))) {
+        if (!in_array($type, self::$allowedTypes)) {
             return $binary;
         }
 
