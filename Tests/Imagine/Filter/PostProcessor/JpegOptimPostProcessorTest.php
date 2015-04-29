@@ -16,6 +16,8 @@ class JpegOptimPostProcessorTest extends FilterTest
 
     protected function setUp()
     {
+        parent::setUp();
+
         if (!$jpegoptimBin = $this->findExecutable('jpegoptim', 'JPEGOPTIM_BIN')) {
             $this->markTestSkipped('Unable to find `jpegoptim` executable.');
         }
@@ -30,12 +32,13 @@ class JpegOptimPostProcessorTest extends FilterTest
 
     public function testProcess()
     {
-        $binary = new Binary(file_get_contents(__DIR__.'/fixtures/home.jpg'), 'image/jpeg', 'jpeg');
+        $binary = new Binary(file_get_contents($this->fixturesDir.'/assets/cats.jpeg'), 'image/jpeg', 'jpeg');
 
         $before = $binary->getContent();
         $binaryProcessed = $this->postProcessor->process($binary);
 
         $this->assertNotEmpty($binaryProcessed->getContent(), '->process() sets content');
+        $this->assertNotEquals($before, $binaryProcessed->getContent(), '->process() changes the content');
         $this->assertEquals($binary->getMimeType(), $binaryProcessed->getMimeType(), '->process() doest not change mime type');
     }
 }
