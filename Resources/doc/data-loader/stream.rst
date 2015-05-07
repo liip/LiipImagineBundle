@@ -16,7 +16,7 @@ Custom
 ------
 
 The ``Liip\ImagineBundle\Binary\Loader\StreamLoader`` allows to read images
-from any stream registered thus allowing you to serve your images from
+from any stream (http, ftp, and others…)  registered thus allowing you to serve your images from
 literally anywhere.
 
 The example service definition shows how to use a stream wrapped by the
