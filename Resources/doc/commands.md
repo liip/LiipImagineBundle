@@ -3,7 +3,7 @@
 ## Remove cache
 
 
-All cache for a given paths will be lost:
+All cache for a given paths will be removed:
 
 ``` bash
 $ php app/console liip:imagine:cache:remove path1 path
@@ -35,7 +35,7 @@ $ php app/console liip:imagine:cache:remove
 $ php app/console liip:imagine:cache:resolve path1 path2 --filters=thumb1
 ```
 
-Cache for this two paths will be resolved with passed filter.
+Cache for the two paths will be resolved using the passed filter.
 As a result you will get:
 ``` bash
     http://localhost/media/cache/thumb1/path1
