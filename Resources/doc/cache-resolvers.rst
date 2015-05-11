@@ -47,7 +47,7 @@ in XML):
 For more information on the service container, see the `Symfony Service Container`_
 documentation.
 
-You can set your custom cache reslover by adding it to the your configuration as
+You can set your custom cache resolver by adding it to the your configuration as
 the new default resolver as follows:
 
 .. code-block:: yaml
