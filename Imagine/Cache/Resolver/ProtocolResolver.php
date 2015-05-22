@@ -87,7 +87,7 @@ class ProtocolResolver implements ResolverInterface
     {
         $request = $this->requestStack->getCurrentRequest();
         if (null == $request) {
-            throw new \LogicException('The request was not defined.');
+            return false;
         }
 
         return $request->isSecure();
