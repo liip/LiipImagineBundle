@@ -149,11 +149,11 @@ class MyController extends Controller
         // RedirectResponse object
         $imagemanagerResponse = $this->container
             ->get('liip_imagine.controller')
-                ->filterAction(
-                    $this->request          // http request
-                    'uploads/foo.jpg',      // original image you want to apply a filter to
-                    'my_thumb'              // filter defined in config.yml
-        );
+            ->filterAction(
+                $this->request,         // http request
+                'uploads/foo.jpg',      // original image you want to apply a filter to
+                'my_thumb'              // filter defined in config.yml
+            );
 
         // string to put directly in the "src" of the tag <img>
         $cacheManager = $this->container->get('liip_imagine.cache.manager');
