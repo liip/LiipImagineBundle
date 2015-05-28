@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Aws\S3\Enum\CannedAcl;
 use Aws\S3\S3Client;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
@@ -56,7 +55,7 @@ class AwsS3Resolver implements ResolverInterface
      * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3.
      * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3.
      */
-    public function __construct(S3Client $storage, $bucket, $acl = CannedAcl::PUBLIC_READ, array $getOptions = array(), $putOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = array(), $putOptions = array())
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
