@@ -2,6 +2,9 @@
 
 namespace Liip\ImagineBundle\Imagine\Data\Transformer;
 
+/**
+ * @deprecated Will be removed in 2.0
+ */
 interface TransformerInterface
 {
     /**
