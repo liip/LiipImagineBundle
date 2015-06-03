@@ -6,6 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class CacheResolver implements ResolverInterface
 {
@@ -230,11 +231,21 @@ class CacheResolver implements ResolverInterface
             'index_key' => 'index',
         ));
 
-        $resolver->setAllowedTypes(array(
-            'global_prefix' => 'string',
-            'prefix' => 'string',
-            'index_key' => 'string',
-        ));
+        $allowedTypesList = array(
+          'global_prefix' => 'string',
+          'prefix' => 'string',
+          'index_key' => 'string',
+        );
+
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+          foreach ($allowedTypesList as $option => $allowedTypes) {
+            $resolver->setAllowedTypes($option, $allowedTypes);
+          }
+        } else {
+          $resolver->setAllowedTypes($allowedTypesList);
+        }
+
+    }
 
     protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
