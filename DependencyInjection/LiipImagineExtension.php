@@ -119,7 +119,7 @@ class LiipImagineExtension extends Extension
     /**
      * @param ContainerBuilder $container
      */
-    private function setFactories($container)
+    private function setFactories(ContainerBuilder $container)
     {
         $factories = array(
             'liip_imagine.mime_type_guesser' => array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
