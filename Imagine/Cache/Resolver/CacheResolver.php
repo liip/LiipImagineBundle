@@ -46,7 +46,7 @@ class CacheResolver implements ResolverInterface
             $optionsResolver = new OptionsResolver();
         }
 
-        $this->setDefaultOptions($optionsResolver);
+        $this->configureOptions($optionsResolver);
         $this->options = $optionsResolver->resolve($options);
     }
 
@@ -222,7 +222,7 @@ class CacheResolver implements ResolverInterface
         return false;
     }
 
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'global_prefix' => 'liip_imagine.resolver_cache',
@@ -235,5 +235,9 @@ class CacheResolver implements ResolverInterface
             'prefix' => 'string',
             'index_key' => 'string',
         ));
+
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $this->configureOptions($resolver);
     }
 }
