@@ -129,8 +129,10 @@ class LiipImagineExtension extends Extension
         foreach ($factories as $service => $factory) {
             $definition = $container->getDefinition($service);
             if (method_exists($definition, 'setFactory')) {
+                // to be inlined in imagine.xml when dependency on Symfony DependencyInjection is bumped to 2.6
                 $definition->setFactory($factory);
             } else {
+                // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
                 $definition->setFactoryClass($factory[0]);
                 $definition->setFactoryMethod($factory[1]);
             }

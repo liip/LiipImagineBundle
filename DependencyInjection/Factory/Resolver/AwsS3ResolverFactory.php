@@ -20,6 +20,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         if (method_exists($awsS3ClientDefinition, 'setFactory')) {
             $awsS3ClientDefinition->setFactory(array('Aws\S3\S3Client', 'factory'));
         } else {
+            // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
             $awsS3ClientDefinition->setFactoryClass('Aws\S3\S3Client');
             $awsS3ClientDefinition->setFactoryMethod('factory');
         }
