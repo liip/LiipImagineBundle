@@ -6,6 +6,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
@@ -107,9 +108,59 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
         $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getClass());
+        $this->assertEquals(array('theClientConfigKey' => 'theClientConfigVal'), $clientDefinition->getArgument(0));
+    }
+
+    public function testCreateS3ClientDefinitionWithFactoryOnCreate()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $container = new ContainerBuilder();
+
+        $resolver = new AwsS3ResolverFactory();
+
+        $resolver->create($container, 'theResolverName', array(
+            'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'url_options' => array(),
+            'get_options' => array(),
+            'put_options' => array(),
+            'cache' => false,
+            'proxies' => array(),
+        ));
+
+        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
+        $this->assertEquals(array('Aws\S3\S3Client', 'factory'), $clientDefinition->getFactory());
+
+    }
+
+    public function testLegacyCreateS3ClientDefinitionWithFactoryOnCreate()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
+        $container = new ContainerBuilder();
+
+        $resolver = new AwsS3ResolverFactory();
+
+        $resolver->create($container, 'theResolverName', array(
+            'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'url_options' => array(),
+            'get_options' => array(),
+            'put_options' => array(),
+            'cache' => false,
+            'proxies' => array(),
+        ));
+
+        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
         $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getFactoryClass());
         $this->assertEquals('factory', $clientDefinition->getFactoryMethod());
-        $this->assertEquals(array('theClientConfigKey' => 'theClientConfigVal'), $clientDefinition->getArgument(0));
     }
 
     public function testWrapResolverWithProxyOnCreateWithoutCache()

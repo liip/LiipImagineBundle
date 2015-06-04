@@ -63,6 +63,8 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
+        $this->setFactories($container);
+
         if (interface_exists('Imagine\Image\Metadata\MetadataReaderInterface')) {
             $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', array(new Reference('liip_imagine.meta_data.reader')));
         } else {
@@ -111,6 +113,29 @@ class LiipImagineExtension extends Extension
             $factory = $this->loadersFactories[$factoryName];
 
             $factory->create($container, $loaderName, $loaderConfig[$factoryName]);
+        }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function setFactories(ContainerBuilder $container)
+    {
+        $factories = array(
+            'liip_imagine.mime_type_guesser' => array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
+            'liip_imagine.extension_guesser' => array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
+        );
+
+        foreach ($factories as $service => $factory) {
+            $definition = $container->getDefinition($service);
+            if (method_exists($definition, 'setFactory')) {
+                // to be inlined in imagine.xml when dependency on Symfony DependencyInjection is bumped to 2.6
+                $definition->setFactory($factory);
+            } else {
+                // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
+                $definition->setFactoryClass($factory[0]);
+                $definition->setFactoryMethod($factory[1]);
+            }
         }
     }
 }

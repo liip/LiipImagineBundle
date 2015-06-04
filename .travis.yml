@@ -6,13 +6,14 @@ php:
   - 5.5
   - 5.6
   - hhvm
- 
+
 env:
-  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION="~2.3||~3.0" SYMFONY_DEPRECATIONS_HELPER=weak
 
 before_script:
   - yes '' | pecl -q install -f mongo
   - composer self-update
+  - sh -c 'if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ]; then echo "memory_limit = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;'
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
   - composer install --dev --prefer-source
 
@@ -28,8 +29,18 @@ matrix:
     - php: hhvm
   include:
     - php: 5.5
+      env: SYMFONY_VERSION=2.3.*
+    - php: 5.5
       env: SYMFONY_VERSION=2.4.*
     - php: 5.5
       env: SYMFONY_VERSION=2.5.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.6.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.7.* SYMFONY_DEPRECATIONS_HELPER=weak
+    - php: 5.5
+      env: SYMFONY_VERSION=2.8.* SYMFONY_DEPRECATIONS_HELPER=weak
+    - php: 5.5
+      env: SYMFONY_VERSION=3.0.* SYMFONY_DEPRECATIONS_HELPER=weak
     - php: 5.5
       env: SYMFONY_VERSION=dev-master

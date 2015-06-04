@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers Liip\ImagineBundle\DependencyInjection\Configuration
@@ -60,6 +61,51 @@ class LiipImagineExtensionTest extends AbstractTest
 
         $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
         $this->assertEquals('value1', $variable1, sprintf('%s parameter is correct', $variable1));
+    }
+
+    /**
+     * @dataProvider factoriesProvider
+     */
+    public function testFactoriesConfiguration($service, $factory)
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $this->createEmptyConfiguration();
+        $definition = $this->containerBuilder->getDefinition($service);
+
+        $this->assertEquals($factory, $definition->getFactory());
+    }
+
+    /**
+     * @dataProvider factoriesProvider
+     */
+    public function testLegacyFactoriesConfiguration($service, $factory)
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
+        $this->createEmptyConfiguration();
+        $definition = $this->containerBuilder->getDefinition($service);
+
+        $this->assertEquals($factory[0], $definition->getFactoryClass());
+        $this->assertEquals($factory[1], $definition->getFactoryMethod());
+    }
+
+    public function factoriesProvider()
+    {
+        return array(
+            array(
+              'liip_imagine.mime_type_guesser',
+              array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
+            ),
+            array(
+              'liip_imagine.extension_guesser',
+              array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
+            ),
+        );
     }
 
     /**

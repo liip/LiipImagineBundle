@@ -5,6 +5,7 @@ namespace Liip\ImagineBundle\Tests\Form\Type;
 use Liip\ImagineBundle\Form\Type\ImageType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers Liip\ImagineBundle\Form\Type\ImageType
@@ -25,8 +26,32 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('file', $type->getParent());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
+        $resolver = new OptionsResolver();
+        $type = new ImageType();
+
+        $type->configureOptions($resolver);
+
+        $this->assertTrue($resolver->isRequired('image_path'));
+        $this->assertTrue($resolver->isRequired('image_filter'));
+
+        $this->assertTrue($resolver->isDefined('image_attr'));
+        $this->assertTrue($resolver->isDefined('link_url'));
+        $this->assertTrue($resolver->isDefined('link_filter'));
+        $this->assertTrue($resolver->isDefined('link_attr'));
+    }
+
+    public function testLegacySetDefaultOptions()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
         $resolver = new OptionsResolver();
         $type = new ImageType();
 
@@ -35,11 +60,10 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isRequired('image_path'));
         $this->assertTrue($resolver->isRequired('image_filter'));
 
-        $isDefinedMethod = method_exists($resolver, 'isDefined') ? 'isDefined' : 'isKnown';
-        $this->assertTrue($resolver->$isDefinedMethod('image_attr'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_url'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_filter'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_attr'));
+        $this->assertTrue($resolver->isKnown('image_attr'));
+        $this->assertTrue($resolver->isKnown('link_url'));
+        $this->assertTrue($resolver->isKnown('link_filter'));
+        $this->assertTrue($resolver->isKnown('link_attr'));
     }
 
     public function testBuildView()
