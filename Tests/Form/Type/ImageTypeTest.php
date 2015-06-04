@@ -26,28 +26,44 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('file', $type->getParent());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
+        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+            $this->markTestSkipped('No need to test on symfony < 2.6');
+        }
+
         $resolver = new OptionsResolver();
         $type = new ImageType();
 
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
-          $setOptionsMethod = 'configureOptions';
-          $isDefinedMethod = 'isDefined';
-        } else {
-          $setOptionsMethod = 'setDefaultOptions';
-          $isDefinedMethod = 'isKnown';
-        }
-
-        $type->$setOptionsMethod($resolver);
+        $type->configureOptions($resolver);
 
         $this->assertTrue($resolver->isRequired('image_path'));
         $this->assertTrue($resolver->isRequired('image_filter'));
 
-        $this->assertTrue($resolver->$isDefinedMethod('image_attr'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_url'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_filter'));
-        $this->assertTrue($resolver->$isDefinedMethod('link_attr'));
+        $this->assertTrue($resolver->isDefined('image_attr'));
+        $this->assertTrue($resolver->isDefined('link_url'));
+        $this->assertTrue($resolver->isDefined('link_filter'));
+        $this->assertTrue($resolver->isDefined('link_attr'));
+    }
+
+    public function testLegacySetDefaultOptions()
+    {
+        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+            $this->markTestSkipped('No need to test on symfony >= 2.6');
+        }
+
+        $resolver = new OptionsResolver();
+        $type = new ImageType();
+
+        $type->setDefaultOptions($resolver);
+
+        $this->assertTrue($resolver->isRequired('image_path'));
+        $this->assertTrue($resolver->isRequired('image_filter'));
+
+        $this->assertTrue($resolver->isKnown('image_attr'));
+        $this->assertTrue($resolver->isKnown('link_url'));
+        $this->assertTrue($resolver->isKnown('link_filter'));
+        $this->assertTrue($resolver->isKnown('link_attr'));
     }
 
     public function testBuildView()
