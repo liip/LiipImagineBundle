@@ -12,7 +12,7 @@ For example with this bundle the following is possible:
 
 ``` jinja
 <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('thumbnail') }}" />
-````
+```
 
 This will perform the transformation called `thumbnail`, which you can define
 to do a number of different things, such as resizing, cropping, drawing,
