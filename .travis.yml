@@ -19,10 +19,6 @@ before_script:
 
 script: ./bin/phpunit --coverage-text
 
-notifications:
-  email:
-    - travis-ci@liip.ch
-
 matrix:
   allow_failures:
     - env: SYMFONY_VERSION=dev-master
