@@ -4,7 +4,7 @@ namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Gd\Image;
 use Imagine\Gd\Imagine;
-use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
+use Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
@@ -18,7 +18,7 @@ class FloatToIntCastByRoundDownscaleFilterLoaderTest extends AbstractTest
 {
     public function testLoad()
     {
-        $loader = new UpscaleFilterLoader();
+        $loader = new DownscaleFilterLoader();
         $imagine = new Imagine();
         $image = $imagine->open(__DIR__.'/../../../Fixtures/assets/square-300x300.png');
 
