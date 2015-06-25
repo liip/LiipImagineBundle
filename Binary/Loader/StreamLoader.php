@@ -52,7 +52,11 @@ class StreamLoader implements LoaderInterface
          * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
          */
         if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
-            throw new NotLoadableException(sprintf('Source image %s not found.', $name));
+            if ($resource = @fopen($this->wrapperPrefix.urlencode($path), 'r')) {
+                $name = $this->wrapperPrefix.urlencode($path);
+            } else {
+                throw new NotLoadableException(sprintf('Source image %s not found.', $name));
+            }
         }
 
         // Closing the opened stream to avoid locking of the resource to find.
