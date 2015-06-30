@@ -63,7 +63,7 @@ class WebPathResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return $this->filesystem->exists($this->getFilePath($path, $filter));
+        return is_file($this->getFilePath($path, $filter));
     }
 
     /**
