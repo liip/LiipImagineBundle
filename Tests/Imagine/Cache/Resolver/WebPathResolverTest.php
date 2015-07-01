@@ -12,6 +12,29 @@ use Symfony\Component\Routing\RequestContext;
  */
 class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var Filesystem */
+    private $filesystem;
+
+    /** @var string */
+    private $basePath;
+
+    /** @var string */
+    private $existingFile;
+
+    public function setUp()
+    {
+        $this->filesystem = new Filesystem();
+        $this->basePath = sys_get_temp_dir() . '/aWebRoot';
+        $this->existingFile = $this->basePath . '/aCachePrefix/aFilter/existingPath';
+        $this->filesystem->mkdir(dirname($this->existingFile));
+        $this->filesystem->touch($this->existingFile);
+    }
+
+    public function tearDown()
+    {
+        $this->filesystem->remove($this->basePath);
+    }
+
     public function testImplementsResolverInterface()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver');
@@ -94,42 +117,38 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnTrueIfFileExistsOnIsStored()
     {
-        $filesystemMock = $this->createFilesystemMock();
-        $filesystemMock
-            ->expects($this->once())
-            ->method('exists')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
-            ->will($this->returnValue(true))
-        ;
-
         $resolver = new WebPathResolver(
-            $filesystemMock,
+            $this->createFilesystemMock(),
             new RequestContext(),
-            '/aWebRoot',
+            $this->basePath,
             'aCachePrefix'
         );
 
-        $this->assertTrue($resolver->isStored('aPath', 'aFilter'));
+        $this->assertTrue($resolver->isStored('existingPath', 'aFilter'));
     }
 
     public function testReturnFalseIfFileNotExistsOnIsStored()
     {
-        $filesystemMock = $this->createFilesystemMock();
-        $filesystemMock
-            ->expects($this->once())
-            ->method('exists')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
-            ->will($this->returnValue(false))
-        ;
-
         $resolver = new WebPathResolver(
-            $filesystemMock,
+            $this->createFilesystemMock(),
             new RequestContext(),
-            '/aWebRoot',
+            $this->basePath,
             'aCachePrefix'
         );
 
-        $this->assertFalse($resolver->isStored('aPath', 'aFilter'));
+        $this->assertFalse($resolver->isStored('nonExistingPath', 'aFilter'));
+    }
+
+    public function testReturnFalseIfIsNotFile()
+    {
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            new RequestContext(),
+            $this->basePath,
+            'aCachePrefix'
+        );
+
+        $this->assertFalse($resolver->isStored('', 'aFilter'));
     }
 
     public function testComposeSchemaHostAndFileUrlOnResolve()
