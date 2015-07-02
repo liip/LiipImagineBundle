@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Filter\Basic\Thumbnail;
+use Imagine\Filter\Basic\Resize;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 
@@ -42,6 +43,12 @@ class ThumbnailFilterLoader implements LoaderInterface
         if (($origWidth > $width || $origHeight > $height)
             || (!empty($options['allow_upscale']) && ($origWidth !== $width || $origHeight !== $height))
         ) {
+            if(($origWidth < $width || $origHeight < $height)){
+                // resize first
+                $ratio = max($width / $origWidth, $height / $origHeight);
+                $resizeFilter = new Resize(new Box(round($origWidth * $ratio), round($origHeight * $ratio)));
+                $image = $resizeFilter->apply($image);
+            }
             $filter = new Thumbnail(new Box($width, $height), $mode, $filter);
             $image = $filter->apply($image);
         }
