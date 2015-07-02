@@ -42,10 +42,7 @@ class ImagineExtension extends \Twig_Extension
      */
     public function filter($path, $filter, array $runtimeConfig = array())
     {
-        return new \Twig_Markup(
-            $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig),
-            'utf8'
-        );
+        return $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig);
     }
 
     /**
