@@ -34,7 +34,7 @@ class StreamLoader implements LoaderInterface
             throw new \InvalidArgumentException('The given context is no valid resource.');
         }
 
-        $this->context = $context;
+        $this->context = empty($context) ? null : $context;
     }
 
     /**
