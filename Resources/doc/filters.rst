@@ -263,7 +263,7 @@ A simple example showing how to change the filter configuration dynamically.
             $this->cacheManager->store($filteredBinary, $path, $filter);
         }
 
-        return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        return new RedirectResponse($this->cacheManager->resolve($path, $filter), Response::HTTP_MOVED_PERMANENTLY);
     }
 
 Post-Processors
