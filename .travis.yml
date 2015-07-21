@@ -10,6 +10,8 @@ php:
 env:
   - SYMFONY_VERSION="~2.3||~3.0" SYMFONY_DEPRECATIONS_HELPER=weak
 
+sudo: false
+
 before_script:
   - yes '' | pecl -q install -f mongo
   - composer self-update
