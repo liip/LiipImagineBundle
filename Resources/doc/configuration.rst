@@ -11,8 +11,8 @@ The default configuration for the bundle looks like this:
         resolvers:
             default:
                 web_path:
-                  web_root: ~ # %kernel.root_dir%/../web
-                  cache_prefix: ~ # media/cache
+                    web_root: ~ # %kernel.root_dir%/../web
+                    cache_prefix: ~ # media/cache
 
         loaders:
             default:
