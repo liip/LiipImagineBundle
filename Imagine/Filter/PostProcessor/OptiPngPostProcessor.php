@@ -12,15 +12,7 @@ class OptiPngPostProcessor implements PostProcessorInterface
     const MIN_LEVEL = 0;
     const MAX_LEVEL = 7;
 
-    private static $allowedTypes = array(
-        'image/png',
-        'image/bmp',
-        'image/gif',
-        'image/x-windows-bmp',
-        'image/x-portable-anymap',
-        'image/tiff',
-        'image/x-tiff',
-    );
+    private $allowedTypes;
 
     /** @var string Path to optipng binary */
     protected $optipngBin;
@@ -30,16 +22,30 @@ class OptiPngPostProcessor implements PostProcessorInterface
      *
      * @var int
      */
-    protected $level;
+    protected $level = null;
 
     /**
      * Constructor.
      *
      * @param string $optipngBin Path to the optipng binary
      */
-    public function __construct($optipngBin = '/usr/bin/optipng')
+    public function __construct($optipngBin = '/usr/bin/optipng', $allowedTypes = array())
     {
         $this->optipngBin = $optipngBin;
+
+        if (empty($allowedTypes)) {
+            $allowedTypes = array(
+                'image/png',
+                'image/bmp',
+                'image/gif',
+                'image/x-windows-bmp',
+                'image/x-portable-anymap',
+                'image/tiff',
+                'image/x-tiff',
+            );
+        }
+
+        $this->allowedTypes = $allowedTypes;
     }
 
     /**
@@ -49,22 +55,17 @@ class OptiPngPostProcessor implements PostProcessorInterface
      */
     public function setLevel($level)
     {
-        $this->level = $this->sanitizeLevel($level);
-
-        return $this;
-    }
-
-    private function sanitizeLevel($level)
-    {
         if ($level > self::MAX_LEVEL) {
-            return self::MAX_LEVEL;
+            $level = self::MAX_LEVEL;
         }
 
         if ($level < self::MIN_LEVEL) {
-            return self::MIN_LEVEL;
+            $level = self::MIN_LEVEL;
         }
 
-        return $level;
+        $this->level = $level;
+
+        return $this;
     }
 
     /**
@@ -79,13 +80,13 @@ class OptiPngPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, self::$allowedTypes)) {
+        if (!in_array($type, $this->allowedTypes)) {
             return $binary;
         }
 
         $pb = new ProcessBuilder(array($this->optipngBin));
 
-        if ($this->level) {
+        if (null !== $this->level) {
             $pb->add('-o')->add($this->level);
         }
 
