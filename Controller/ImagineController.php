@@ -76,6 +76,8 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
+        $path = urldecode($path);
+        
         try {
             if (!$this->cacheManager->isStored($path, $filter)) {
                 try {
