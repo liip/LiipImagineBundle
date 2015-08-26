@@ -34,7 +34,7 @@
         "doctrine/orm":             "~2.3",
         "doctrine/mongodb-odm":     "1.0.*",
         "doctrine/cache":           "~1.1",
-        "twig/twig":                "~1.0",
+        "twig/twig":                "~1.12",
         "aws/aws-sdk-php":          "~2.4",
         "amazonwebservices/aws-sdk-for-php": "~1.0",
         "psr/log":                  "~1.0",

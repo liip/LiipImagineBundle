@@ -27,7 +27,7 @@ class ImagineExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFunction('imagine_filter', array($this, 'filter')),
+            new \Twig_SimpleFilter('imagine_filter', array($this, 'filter'))
         );
     }
 
