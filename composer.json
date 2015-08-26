@@ -42,7 +42,7 @@
     },
 
     "suggest": {
-        "twig/twig":                "If you'd want to use some handy twig filters",
+        "twig/twig":                "If you'd want to use some handy twig filters, version 1.12 or greater required",
         "aws/aws-sdk-php":          "Add it if you'd like to use aws v2 or v3 resolver",
         "amazonwebservices/aws-sdk-for-php": "Add it if you'd like to use aws v1 resolver",
         "monolog/monolog":          "If you'd want to write logs"
