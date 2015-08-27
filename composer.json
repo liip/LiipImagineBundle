@@ -34,7 +34,7 @@
         "doctrine/orm":             "~2.3",
         "doctrine/mongodb-odm":     "1.0.*",
         "doctrine/cache":           "~1.1",
-        "twig/twig":                "~1.0",
+        "twig/twig":                "~1.12",
         "aws/aws-sdk-php":          "~2.4",
         "amazonwebservices/aws-sdk-for-php": "~1.0",
         "psr/log":                  "~1.0",
@@ -42,7 +42,7 @@
     },
 
     "suggest": {
-        "twig/twig":                "If you'd want to use some handy twig filters",
+        "twig/twig":                "If you'd want to use some handy twig filters, version 1.12 or greater required",
         "aws/aws-sdk-php":          "Add it if you'd like to use aws v2 or v3 resolver",
         "amazonwebservices/aws-sdk-for-php": "Add it if you'd like to use aws v1 resolver",
         "monolog/monolog":          "If you'd want to write logs"
