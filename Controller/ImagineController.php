@@ -76,6 +76,7 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
+        // decoding special characters and whitespaces from path obtained from url
         $path = urldecode($path);
         
         try {
