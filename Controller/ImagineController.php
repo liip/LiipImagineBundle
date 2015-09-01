@@ -76,6 +76,8 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
+        $path = '/'.ltrim($path, '/');
+
         try {
             if (!$this->cacheManager->isStored($path, $filter)) {
                 try {
@@ -124,6 +126,8 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
+        $path = '/'.ltrim($path, '/');
+
         try {
             $filters = $request->query->get('filters', array());
 
@@ -170,7 +174,7 @@ class ImagineController
 
             throw new NotFoundHttpException($message, $e);
         } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.ltrim($path, '/'), $filter, $e->getMessage()), 0, $e);
         }
     }
 }
