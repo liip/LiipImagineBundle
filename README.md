@@ -116,7 +116,7 @@ Where only paths required parameter. They are separated by space. If you omit fi
 If you need to access filtered image URL in your controller:
 
 ``` php
-$this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb', true),
+$this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb'),
 ```
 
 In this case, the final rendered path would contain some random data in the path
