@@ -22,10 +22,15 @@ class AutoRotateFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = array())
     {
         if ($orientation = $this->getOrientation($image)) {
-            $degree = $this->calculateRotation((int) $orientation);
-
+            // Rotates if necessary.
+            $degree = $this->calculateRotation($orientation);
             if ($degree !== 0) {
                 $image->rotate($degree);
+            }
+
+            // Flips if necessary.
+            if ($this->isFlipped($orientation)) {
+                $image->flipHorizontally();
             }
         }
 
@@ -42,21 +47,21 @@ class AutoRotateFilterLoader implements LoaderInterface
     private function calculateRotation($orientation)
     {
         switch ($orientation) {
-            case 8:
-                $degree = -90;
-                break;
+            case 1:
+            case 2:
+                return 0;
             case 3:
-                $degree = 180;
-                break;
+            case 4:
+                return 180;
+            case 5:
             case 6:
-                $degree = 90;
-                break;
+                return 90;
+            case 7:
+            case 8:
+                return -90;
             default:
-                $degree = 0;
-                break;
+                throw new Exception('Unhandled orientation');
         }
-
-        return $degree;
     }
 
     /**
@@ -72,15 +77,40 @@ class AutoRotateFilterLoader implements LoaderInterface
                 $orientation = $image->metadata()->offsetGet($orientationKey);
 
                 if ($orientation) {
-                    return $orientation;
+                    return intval($orientation);
                 }
             }
-
-            return;
         } else {
             $data = exif_read_data('data://image/jpeg;base64,'.base64_encode($image->get('jpg')));
 
             return isset($data['Orientation']) ? $data['Orientation'] : null;
+        }
+    }
+
+    /**
+     * Returns true if the image is flipped, false otherwise.
+     *
+     * @param int $orientation
+     *
+     * @return boolean
+     */
+    private function isFlipped($orientation)
+    {
+        switch ($orientation) {
+            case 1:
+            case 3:
+            case 6:
+            case 8:
+                return false;
+
+            case 2:
+            case 4:
+            case 5:
+            case 7:
+                return true;
+
+            default:
+                throw new Exception('Unhandled orientation');
         }
     }
 }
