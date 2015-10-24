@@ -14,7 +14,7 @@ use Imagine\Image\ImageInterface;
 class ResizeFilterLoader implements LoaderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {

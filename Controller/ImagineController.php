@@ -78,7 +78,7 @@ class ImagineController
     {
         // decoding special characters and whitespaces from path obtained from url
         $path = urldecode($path);
-        
+
         try {
             if (!$this->cacheManager->isStored($path, $filter)) {
                 try {

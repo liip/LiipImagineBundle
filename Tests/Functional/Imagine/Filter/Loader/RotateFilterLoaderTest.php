@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 
 /**
- * Functional test cases for RotateFilterLoader class
+ * Functional test cases for RotateFilterLoader class.
  *
  * @author Bocharsky Victor <bocharsky.bw@gmail.com>
  */

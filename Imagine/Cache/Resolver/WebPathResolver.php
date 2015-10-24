@@ -48,7 +48,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve($path, $filter)
     {
@@ -59,7 +59,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isStored($path, $filter)
     {
@@ -67,7 +67,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
@@ -78,7 +78,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(array $paths, array $filters)
     {
@@ -105,7 +105,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getFilePath($path, $filter)
     {
@@ -113,7 +113,7 @@ class WebPathResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getFileUrl($path, $filter)
     {
@@ -130,11 +130,11 @@ class WebPathResolver implements ResolverInterface
     {
         $port = '';
         if ('https' == $this->requestContext->getScheme() && $this->requestContext->getHttpsPort() != 443) {
-            $port =  ":{$this->requestContext->getHttpsPort()}";
+            $port = ":{$this->requestContext->getHttpsPort()}";
         }
 
         if ('http' == $this->requestContext->getScheme() && $this->requestContext->getHttpPort() != 80) {
-            $port =  ":{$this->requestContext->getHttpPort()}";
+            $port = ":{$this->requestContext->getHttpPort()}";
         }
 
         $baseUrl = $this->requestContext->getBaseUrl();

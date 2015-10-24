@@ -69,12 +69,12 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildView()
     {
         $options = array(
-            'image_path'   => 'foo',
+            'image_path' => 'foo',
             'image_filter' => 'bar',
-            'image_attr'   => 'bazz',
-            'link_url'     => 'http://liip.com',
-            'link_filter'  => 'foo',
-            'link_attr'    => 'bazz',
+            'image_attr' => 'bazz',
+            'link_url' => 'http://liip.com',
+            'link_filter' => 'foo',
+            'link_attr' => 'bazz',
         );
 
         $view = new FormView();

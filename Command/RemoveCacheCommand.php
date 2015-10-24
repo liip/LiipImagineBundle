@@ -16,11 +16,11 @@ class RemoveCacheCommand extends ContainerAwareCommand
         $this
             ->setName('liip:imagine:cache:remove')
             ->setDescription('Remove cache for given paths and set of filters.')
-            ->addArgument('paths', InputArgument::OPTIONAL|InputArgument::IS_ARRAY, 'Image paths')
+            ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Image paths')
             ->addOption(
                 'filters',
                 'f',
-                InputOption::VALUE_OPTIONAL|InputOption::VALUE_IS_ARRAY,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Filters list'
             )
             ->setHelp(<<<EOF
@@ -46,14 +46,14 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $paths = $input->getArgument('paths');
-        $filters =  $input->getOption('filters');
+        $filters = $input->getOption('filters');
 
         if (empty($filters)) {
             $filters = null;
         }
 
         /* @var CacheManager cacheManager */
-        $cacheManager  = $this->getContainer()->get('liip_imagine.cache.manager');
+        $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
 
         $cacheManager->remove($paths, $filters);
     }

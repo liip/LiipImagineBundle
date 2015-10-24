@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 class WebPathResolverFactory implements ResolverFactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
@@ -27,7 +27,7 @@ class WebPathResolverFactory implements ResolverFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -35,7 +35,7 @@ class WebPathResolverFactory implements ResolverFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {

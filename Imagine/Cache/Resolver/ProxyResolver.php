@@ -34,7 +34,7 @@ class ProxyResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve($path, $filter)
     {
@@ -42,7 +42,7 @@ class ProxyResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $targetPath, $filter)
     {
@@ -50,7 +50,7 @@ class ProxyResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isStored($path, $filter)
     {
@@ -58,7 +58,7 @@ class ProxyResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(array $paths, array $filters)
     {

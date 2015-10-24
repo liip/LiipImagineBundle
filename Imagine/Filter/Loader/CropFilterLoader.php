@@ -10,7 +10,7 @@ use Imagine\Image\ImageInterface;
 class CropFilterLoader implements LoaderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {

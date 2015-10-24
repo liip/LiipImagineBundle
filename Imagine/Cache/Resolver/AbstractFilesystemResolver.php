@@ -43,7 +43,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      */
     public function __construct(Filesystem $filesystem)
     {
-        $this->filesystem   = $filesystem;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isStored($path, $filter)
     {
@@ -89,7 +89,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
@@ -103,7 +103,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(array $paths, array $filters)
     {
