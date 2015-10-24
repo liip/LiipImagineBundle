@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 class FileSystemLoaderFactory implements LoaderFactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
@@ -26,7 +26,7 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -34,7 +34,7 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {

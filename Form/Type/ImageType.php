@@ -20,12 +20,12 @@ class ImageType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['image_path']   = $options['image_path'];
+        $view->vars['image_path'] = $options['image_path'];
         $view->vars['image_filter'] = $options['image_filter'];
-        $view->vars['image_attr']   = $options['image_attr'];
-        $view->vars['link_url']     = $options['link_url'];
-        $view->vars['link_filter']  = $options['link_filter'];
-        $view->vars['link_attr']    = $options['link_attr'];
+        $view->vars['image_attr'] = $options['image_attr'];
+        $view->vars['link_url'] = $options['link_url'];
+        $view->vars['link_filter'] = $options['link_filter'];
+        $view->vars['link_attr'] = $options['link_attr'];
     }
 
     /**

@@ -14,7 +14,7 @@ use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
 class RelativeResizeFilterLoader implements LoaderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {

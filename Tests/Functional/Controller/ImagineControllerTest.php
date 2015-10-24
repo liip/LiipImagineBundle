@@ -102,7 +102,7 @@ class ImagineControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => 'some-string',
-            '_hash'   => 'hash',
+            '_hash' => 'hash',
         )));
     }
 
@@ -199,8 +199,8 @@ class ImagineControllerTest extends WebTestCase
         );
 
         // we are calling url with encoded file name as it will be called by browser
-        $urlEncodedFileName = "ma%C4%8Dac%C3%AD+obr%C3%A1zok";
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/' . $urlEncodedFileName . '.jpeg');
+        $urlEncodedFileName = 'ma%C4%8Dac%C3%AD+obr%C3%A1zok';
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
 
         $response = $this->client->getResponse();
 

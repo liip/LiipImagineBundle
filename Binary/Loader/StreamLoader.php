@@ -38,7 +38,7 @@ class StreamLoader implements LoaderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($path)
     {

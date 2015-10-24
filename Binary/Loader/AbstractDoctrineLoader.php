@@ -46,7 +46,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     abstract protected function getStreamFromImage($image);
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($path)
     {

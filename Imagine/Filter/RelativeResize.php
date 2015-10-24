@@ -35,7 +35,7 @@ class RelativeResize implements FilterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function apply(ImageInterface $image)
     {
