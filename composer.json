@@ -48,11 +48,10 @@
         "monolog/monolog":          "If you'd want to write logs"
     },
 
-    "autoload": {
-        "psr-0": { "Liip\\ImagineBundle": "" }
-    },
 
-    "target-dir": "Liip/ImagineBundle",
+    "autoload": {
+        "psr-4": { "Liip\\ImagineBundle\\": "" }
+    },
 
     "config": {
         "bin-dir": "bin"
@@ -60,8 +59,7 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev",
-            "dev-0.x": "0.x-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
