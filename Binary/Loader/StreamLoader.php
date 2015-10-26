@@ -61,7 +61,7 @@ class StreamLoader implements LoaderInterface
         try {
             $content = file_get_contents($name, null, $this->context);
         } catch (\Exception $e) {
-            throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name, $e));
+            throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name), $e);
         }
 
         if (false === $content) {
