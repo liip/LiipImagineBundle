@@ -9,7 +9,7 @@ use Imagine\Image\ImageInterface;
 class ThumbnailFilterLoader implements LoaderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {

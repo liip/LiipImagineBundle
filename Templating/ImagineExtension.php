@@ -22,12 +22,12 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('imagine_filter', array($this, 'filter'))
+            new \Twig_SimpleFilter('imagine_filter', array($this, 'filter')),
         );
     }
 
@@ -46,7 +46,7 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {

@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
-use Imagine\Gd\Image;
 use Imagine\Gd\Imagine;
 use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;

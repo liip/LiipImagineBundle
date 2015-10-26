@@ -6,5 +6,4 @@ use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class NonExistingFilterException extends \RuntimeException implements ExceptionInterface
 {
-
 }

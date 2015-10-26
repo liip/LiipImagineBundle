@@ -81,7 +81,7 @@ class AwsS3Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isStored($path, $filter)
     {
@@ -89,7 +89,7 @@ class AwsS3Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve($path, $filter)
     {
@@ -97,7 +97,7 @@ class AwsS3Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
@@ -108,20 +108,20 @@ class AwsS3Resolver implements ResolverInterface
                 array_merge(
                     $this->putOptions,
                     array(
-                        'ACL'           => $this->acl,
-                        'Bucket'        => $this->bucket,
-                        'Key'           => $objectPath,
-                        'Body'          => $binary->getContent(),
-                        'ContentType'   => $binary->getMimeType(),
+                        'ACL' => $this->acl,
+                        'Bucket' => $this->bucket,
+                        'Key' => $objectPath,
+                        'Body' => $binary->getContent(),
+                        'ContentType' => $binary->getMimeType(),
                     )
                 )
             );
         } catch (\Exception $e) {
             $this->logError('The object could not be created on Amazon S3.', array(
-                'objectPath'  => $objectPath,
-                'filter'      => $filter,
-                'bucket'      => $this->bucket,
-                'exception'   => $e,
+                'objectPath' => $objectPath,
+                'filter' => $filter,
+                'bucket' => $this->bucket,
+                'exception' => $e,
             ));
 
             throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
@@ -129,7 +129,7 @@ class AwsS3Resolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(array $paths, array $filters)
     {
@@ -145,9 +145,9 @@ class AwsS3Resolver implements ResolverInterface
                 ));
             } catch (\Exception $e) {
                 $this->logError('The objects could not be deleted from Amazon S3.', array(
-                    'filter'      => implode(', ', $filters),
-                    'bucket'      => $this->bucket,
-                    'exception'   => $e,
+                    'filter' => implode(', ', $filters),
+                    'bucket' => $this->bucket,
+                    'exception' => $e,
                 ));
             }
 
@@ -164,14 +164,14 @@ class AwsS3Resolver implements ResolverInterface
                 try {
                     $this->storage->deleteObject(array(
                         'Bucket' => $this->bucket,
-                        'Key'    => $objectPath,
+                        'Key' => $objectPath,
                     ));
                 } catch (\Exception $e) {
                     $this->logError('The object could not be deleted from Amazon S3.', array(
-                        'objectPath'  => $objectPath,
-                        'filter'      => $filter,
-                        'bucket'      => $this->bucket,
-                        'exception'   => $e,
+                        'objectPath' => $objectPath,
+                        'filter' => $filter,
+                        'bucket' => $this->bucket,
+                        'exception' => $e,
                     ));
                 }
             }

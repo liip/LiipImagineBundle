@@ -134,7 +134,6 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
         $this->assertEquals(array('Aws\S3\S3Client', 'factory'), $clientDefinition->getFactory());
-
     }
 
     public function testLegacyCreateS3ClientDefinitionWithFactoryOnCreate()

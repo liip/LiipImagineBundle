@@ -24,8 +24,8 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->filesystem = new Filesystem();
-        $this->basePath = sys_get_temp_dir() . '/aWebRoot';
-        $this->existingFile = $this->basePath . '/aCachePrefix/aFilter/existingPath';
+        $this->basePath = sys_get_temp_dir().'/aWebRoot';
+        $this->existingFile = $this->basePath.'/aCachePrefix/aFilter/existingPath';
         $this->filesystem->mkdir(dirname($this->existingFile));
         $this->filesystem->touch($this->existingFile);
     }
