@@ -7,6 +7,7 @@ performance, altered images can be cached locally and in Amazon S3 service.
 
 * :doc:`Installation <installation>`
 * :doc:`Introduction <introduction>`
+* :doc:`Basic usage <basic-usage>`
 * :doc:`Configuration <configuration>`
 * :doc:`Filters <filters>`
 * :doc:`DataLoaders <data-loaders>`
