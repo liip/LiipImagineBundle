@@ -6,15 +6,13 @@ use Imagine\Filter\Basic\Resize;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 
-
 /**
- * downscale filter
- *
+ * downscale filter.
  */
 class DownscaleFilterLoader implements LoaderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {
@@ -29,8 +27,7 @@ class DownscaleFilterLoader implements LoaderInterface
         $origHeight = $size->getHeight();
 
         if ($origWidth > $width || $origHeight > $height) {
-
-            $widthRatio = $width / $origWidth ;
+            $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
 
             $ratio = $widthRatio > $heightRatio ? $widthRatio : $heightRatio;
