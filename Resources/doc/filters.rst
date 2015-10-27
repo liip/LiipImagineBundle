@@ -78,6 +78,20 @@ on your image. Configuration looks like this:
                 filters:
                     upscale: { min: [800, 600] }
 
+The ``downscale`` filter
+~~~~~~~~~~~~~~~~~~~~~~
+
+The downscale filter, as the name implies, performs a downscale transformation
+on your image. Configuration looks like this:
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    downscale: { max: [1980, 1280] }
+
 The ``crop`` filter
 ~~~~~~~~~~~~~~~~~~~
 
