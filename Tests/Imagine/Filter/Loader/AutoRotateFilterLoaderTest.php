@@ -22,7 +22,8 @@ class AutoRotateFilterLoaderTest extends AbstractTest
      * @param $expectCallRotateValue {null|number} The expected rotation value, null if no rotation is expected.
      * @param $expectCallFlip {Boolean} True if a horizontal flip is expected, false otherwise.
      */
-    private function loadExif($exifValue, $expectCallRotateValue, $expectCallFlip) {
+    private function loadExif($exifValue, $expectCallRotateValue, $expectCallFlip)
+    {
         $loader = new AutoRotateFilterLoader();
 
         // Mocks the metadata and makes it return the expected exif value for the rotation.
@@ -56,7 +57,8 @@ class AutoRotateFilterLoaderTest extends AbstractTest
         $loader->load($image);
     }
 
-    public function testLoadAllExifs() {
+    public function testLoadAllExifs()
+    {
         /*
          * Possible rotation values
          * 1: 0°
@@ -78,7 +80,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
             ["5", 90, true],
             ["6", 90, false],
             ["7", -90, true],
-            ["8", -90, false]
+            ["8", -90, false],
         ];
 
         foreach ($testCases as $testCase) {
