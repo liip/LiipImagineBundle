@@ -91,6 +91,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $this->getMock('Imagine\Image\ImageInterface');
     }
 
+    protected function getMockMetaData()
+    {
+        return $this->getMock('Imagine\Image\Metadata\MetadataBag');
+    }
+
     protected function createImagineMock()
     {
         return $this->getMock('Imagine\Image\ImagineInterface');
