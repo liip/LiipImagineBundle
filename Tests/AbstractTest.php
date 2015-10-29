@@ -2,7 +2,6 @@
 
 namespace Liip\ImagineBundle\Tests;
 
-use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Filesystem\Filesystem;

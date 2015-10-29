@@ -78,15 +78,15 @@ class AutoRotateFilterLoaderTest extends AbstractTest
      */
 
     /**
-     * 1: no rotation
+     * 1: no rotation.
      */
     public function testLoadExif1()
     {
-		$this->loadExif('1', null, false);
+        $this->loadExif('1', null, false);
     }
 
     /**
-     * 2: no rotation flipped horizontally
+     * 2: no rotation flipped horizontally.
      */
     public function testLoadExif2()
     {
@@ -94,7 +94,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 3: 180°
+     * 3: 180°.
      */
     public function testLoadExif3()
     {
@@ -102,7 +102,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 4: 180° flipped horizontally
+     * 4: 180° flipped horizontally.
      */
     public function testLoadExif4()
     {
@@ -110,7 +110,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 5: 90° flipped horizontally
+     * 5: 90° flipped horizontally.
      */
     public function testLoadExif5()
     {
@@ -118,7 +118,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 6: 90°
+     * 6: 90°.
      */
     public function testLoadExif6()
     {
@@ -126,7 +126,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 7: -90° flipped horizontally
+     * 7: -90° flipped horizontally.
      */
     public function testLoadExif7()
     {
@@ -134,7 +134,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * 8: -90°
+     * 8: -90°.
      */
     public function testLoadExif8()
     {
@@ -142,7 +142,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * No rotation info: no rotation nor flip
+     * No rotation info: no rotation nor flip.
      */
     public function testLoadExifNull()
     {
