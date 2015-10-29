@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Tests;
 
+use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Filesystem\Filesystem;
@@ -90,6 +91,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function getMockImage()
     {
         return $this->getMock('Imagine\Image\ImageInterface');
+    }
+
+    protected function getMockMetaData()
+    {
+        return $this->getMock('Imagine\Image\Metadata\MetadataBag');
     }
 
     protected function createImagineMock()
