@@ -11,15 +11,15 @@ use Imagine\Image\ImageInterface;
  */
 class AutoRotateFilterLoader implements LoaderInterface
 {
-    protected $orientationKeys = [
+    protected $orientationKeys = array(
         'exif.Orientation',
         'ifd0.Orientation',
-    ];
+    );
 
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = array())
     {
         if ($orientation = $this->getOrientation($image)) {
             // Rotates if necessary.
