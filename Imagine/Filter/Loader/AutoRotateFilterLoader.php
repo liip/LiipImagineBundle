@@ -85,6 +85,8 @@ class AutoRotateFilterLoader implements LoaderInterface
 
             return isset($data['Orientation']) ? $data['Orientation'] : null;
         }
+
+        return null;
     }
 
     /**

@@ -13,8 +13,6 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class AutoRotateFilterLoaderTest extends AbstractTest
 {
-    private $orientationKey = 'exif.Orientation';
-
     /**
      * Starts a test with expected results.
      *
@@ -27,19 +25,19 @@ class AutoRotateFilterLoaderTest extends AbstractTest
         $loader = new AutoRotateFilterLoader();
 
         // Mocks the metadata and makes it return the expected exif value for the rotation.
+        // If $exifValue is null, it means the image doesn't contain any metadata.
         $metaData = $this->getMockMetaData();
 
         $metaData
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('offsetGet')
-            ->with($this->orientationKey)
             ->willReturn($exifValue);
 
         // Mocks the image and makes it use the fake meta data.
         $image = $this->getMockImage();
 
         $image
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('metadata')
             ->willReturn($metaData);
 
@@ -69,6 +67,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
          * 6: 90°
          * 7: -90° flipped horizontally
          * 8: -90°
+         * No metadata means no rotation nor flip.
          */
 
         // Test cases: rotation value from EXIF, expected rotation, expected horizontal flip.
@@ -81,6 +80,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
             ['6', 90, false],
             ['7', -90, true],
             ['8', -90, false],
+            [null, null, false],
         ];
 
         foreach ($testCases as $testCase) {
