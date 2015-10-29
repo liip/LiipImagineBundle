@@ -73,14 +73,14 @@ class AutoRotateFilterLoaderTest extends AbstractTest
 
         // Test cases: rotation value from EXIF, expected rotation, expected horizontal flip.
         $testCases = [
-            ["1", null, false],
-            ["2", null, true],
-            ["3", 180, false],
-            ["4", 180, true],
-            ["5", 90, true],
-            ["6", 90, false],
-            ["7", -90, true],
-            ["8", -90, false],
+            ['1', null, false],
+            ['2', null, true],
+            ['3', 180, false],
+            ['4', 180, true],
+            ['5', 90, true],
+            ['6', 90, false],
+            ['7', -90, true],
+            ['8', -90, false],
         ];
 
         foreach ($testCases as $testCase) {
