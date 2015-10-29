@@ -77,6 +77,7 @@ class AutoRotateFilterLoader implements LoaderInterface
                 $orientation = $image->metadata()->offsetGet($orientationKey);
 
                 if ($orientation) {
+                    $image->metadata()->offsetSet($orientationKey, '1');
                     return intval($orientation);
                 }
             }
