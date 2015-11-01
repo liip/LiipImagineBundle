@@ -132,17 +132,16 @@ class CacheResolverTest extends AbstractTest
         $cacheResolver->resolve($this->path, $this->filter);
 
         /*
-         * Three items:
+         * Checking 2 items:
          * * The result of one resolve execution.
          * * The index of entity.
-         * * The array cache meta info
          */
-        $this->assertCount(3, $this->readAttribute($cache, 'data'));
+        $this->assertCount(2, $this->getCacheEntries($cache));
 
         $cacheResolver->remove(array($this->path), array($this->filter));
 
         // Cache including index has been removed.
-        $this->assertCount(1, $this->readAttribute($cache, 'data'));
+        $this->assertCount(0, $this->getCacheEntries($cache));
     }
 
     public function testRemoveAllFilterCacheOnRemove()
@@ -167,16 +166,33 @@ class CacheResolverTest extends AbstractTest
         $cacheResolver->resolve('aPathBar', 'thumbnail_100x100');
 
         /*
-         * Seven items:
+         * Checking 6 items:
          * * The result of four resolve execution.
          * * The index of two entities.
-         * * The array cache meta info
          */
-        $this->assertCount(7, $this->readAttribute($cache, 'data'));
+        $this->assertCount(6, $this->getCacheEntries($cache));
 
         $cacheResolver->remove(array(), array('thumbnail_233x233'));
 
         // Cache including index has been removed.
-        $this->assertCount(4, $this->readAttribute($cache, 'data'));
+        $this->assertCount(3, $this->getCacheEntries($cache));
+    }
+
+    /**
+     * There's an intermittent cache entry which is a cache namespace
+     * version, it may or may not be there depending on doctrine-cache
+     * version. There's no point in checking it anyway since it's a detail
+     * of doctrine cache implementation.
+     *
+     * @param ArrayCache $cache
+     *
+     * @return array
+     */
+    private function getCacheEntries(ArrayCache $cache)
+    {
+        $cacheEntries = $this->readAttribute($cache, 'data');
+        unset($cacheEntries['DoctrineNamespaceCacheKey[]']);
+
+        return $cacheEntries;
     }
 }
