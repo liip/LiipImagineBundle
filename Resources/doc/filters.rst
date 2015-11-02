@@ -277,8 +277,12 @@ A simple example showing how to change the filter configuration dynamically.
             $this->cacheManager->store($filteredBinary, $path, $filter);
         }
 
-        return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        return new RedirectResponse($this->cacheManager->resolve($path, $filter), Response::HTTP_MOVED_PERMANENTLY);
     }
+
+.. note::
+
+    The constant ``Response::HTTP_MOVED_PERMANENTLY`` was introduced in version 2.4. Developers using older versions of Symfony, please replace the constant by ``301``.
 
 Post-Processors
 ---------------
