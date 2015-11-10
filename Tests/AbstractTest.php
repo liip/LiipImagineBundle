@@ -6,7 +6,6 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,6 +89,11 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function getMockImage()
     {
         return $this->getMock('Imagine\Image\ImageInterface');
+    }
+
+    protected function getMockMetaData()
+    {
+        return $this->getMock('Imagine\Image\Metadata\MetadataBag');
     }
 
     protected function createImagineMock()

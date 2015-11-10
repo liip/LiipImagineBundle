@@ -6,7 +6,7 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ManipulatorInterface;
 
 /**
- * Loader for Imagine's basic rotate method
+ * Loader for Imagine's basic rotate method.
  *
  * @author Bocharsky Victor <bocharsky.bw@gmail.com>
  */

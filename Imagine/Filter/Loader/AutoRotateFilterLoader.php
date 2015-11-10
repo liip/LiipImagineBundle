@@ -3,6 +3,7 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\ImageInterface;
+use Imagine\Exception\InvalidArgumentException;
 
 /**
  * AutoRotateFilterLoader - rotates an Image based on its EXIF Data.
@@ -17,15 +18,26 @@ class AutoRotateFilterLoader implements LoaderInterface
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {
         if ($orientation = $this->getOrientation($image)) {
-            $degree = $this->calculateRotation((int) $orientation);
+            if ($orientation < 1 || $orientation > 8) {
+                throw new InvalidArgumentException(
+                    sprintf('The image has wrong EXIF orientation tag (%d)', $orientation)
+                );
+            }
 
+            // Rotates if necessary.
+            $degree = $this->calculateRotation($orientation);
             if ($degree !== 0) {
                 $image->rotate($degree);
+            }
+
+            // Flips if necessary.
+            if ($this->isFlipped($orientation)) {
+                $image->flipHorizontally();
             }
         }
 
@@ -42,21 +54,19 @@ class AutoRotateFilterLoader implements LoaderInterface
     private function calculateRotation($orientation)
     {
         switch ($orientation) {
-            case 8:
-                $degree = -90;
-                break;
+            case 1:
+            case 2:
+                return 0;
             case 3:
-                $degree = 180;
-                break;
+            case 4:
+                return 180;
+            case 5:
             case 6:
-                $degree = 90;
-                break;
-            default:
-                $degree = 0;
-                break;
+                return 90;
+            case 7:
+            case 8:
+                return -90;
         }
-
-        return $degree;
     }
 
     /**
@@ -72,15 +82,41 @@ class AutoRotateFilterLoader implements LoaderInterface
                 $orientation = $image->metadata()->offsetGet($orientationKey);
 
                 if ($orientation) {
-                    return $orientation;
+                    $image->metadata()->offsetSet($orientationKey, '1');
+
+                    return intval($orientation);
                 }
             }
-
-            return;
         } else {
             $data = exif_read_data('data://image/jpeg;base64,'.base64_encode($image->get('jpg')));
 
             return isset($data['Orientation']) ? $data['Orientation'] : null;
+        }
+
+        return;
+    }
+
+    /**
+     * Returns true if the image is flipped, false otherwise.
+     *
+     * @param int $orientation
+     *
+     * @return bool
+     */
+    private function isFlipped($orientation)
+    {
+        switch ($orientation) {
+            case 1:
+            case 3:
+            case 6:
+            case 8:
+                return false;
+
+            case 2:
+            case 4:
+            case 5:
+            case 7:
+                return true;
         }
     }
 }

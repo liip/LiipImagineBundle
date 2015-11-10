@@ -41,7 +41,7 @@ class FileSystemLoader implements LoaderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($path)
     {

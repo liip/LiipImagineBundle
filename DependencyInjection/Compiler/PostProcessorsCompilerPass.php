@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class PostProcessorsCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

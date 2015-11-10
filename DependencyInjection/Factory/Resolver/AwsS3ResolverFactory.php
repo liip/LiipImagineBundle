@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class AwsS3ResolverFactory implements ResolverFactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
@@ -73,7 +73,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -81,7 +81,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {

@@ -20,7 +20,7 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function guess($binary)
     {

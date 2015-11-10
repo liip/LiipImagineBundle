@@ -52,7 +52,7 @@ class CacheResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isStored($path, $filter)
     {
@@ -65,7 +65,7 @@ class CacheResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolve($path, $filter)
     {
@@ -82,7 +82,7 @@ class CacheResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
@@ -90,7 +90,7 @@ class CacheResolver implements ResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(array $paths, array $filters)
     {
@@ -238,13 +238,12 @@ class CacheResolver implements ResolverInterface
         );
 
         if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
-          foreach ($allowedTypesList as $option => $allowedTypes) {
-            $resolver->setAllowedTypes($option, $allowedTypes);
-          }
+            foreach ($allowedTypesList as $option => $allowedTypes) {
+                $resolver->setAllowedTypes($option, $allowedTypes);
+            }
         } else {
-          $resolver->setAllowedTypes($allowedTypesList);
+            $resolver->setAllowedTypes($allowedTypesList);
         }
-
     }
 
     protected function setDefaultOptions(OptionsResolverInterface $resolver)

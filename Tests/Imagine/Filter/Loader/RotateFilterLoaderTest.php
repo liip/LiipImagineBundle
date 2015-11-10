@@ -6,9 +6,10 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for RotateFilterLoader class
+ * Test cases for RotateFilterLoader class.
  *
  * @covers Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader
+ *
  * @author Bocharsky Victor <bocharsky.bw@gmail.com>
  */
 class RotateFilterLoaderTest extends AbstractTest

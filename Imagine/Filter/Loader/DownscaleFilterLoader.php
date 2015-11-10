@@ -7,34 +7,32 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 
 /**
- * Upscale filter.
- *
- * @author Maxime Colin <contact@maximecolin.fr>
+ * downscale filter.
  */
-class UpscaleFilterLoader implements LoaderInterface
+class DownscaleFilterLoader implements LoaderInterface
 {
     /**
      * {@inheritdoc}
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        if (!isset($options['min'])) {
-            throw new \InvalidArgumentException('Missing min option.');
+        if (!isset($options['max'])) {
+            throw new \InvalidArgumentException('Missing max option.');
         }
 
-        list($width, $height) = $options['min'];
+        list($width, $height) = $options['max'];
 
         $size = $image->getSize();
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
 
-        if ($origWidth < $width || $origHeight < $height) {
+        if ($origWidth > $width || $origHeight > $height) {
             $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
 
             $ratio = $widthRatio > $heightRatio ? $widthRatio : $heightRatio;
 
-            $filter = new Resize(new Box(round($origWidth * $ratio), round($origHeight * $ratio)));
+            $filter = new Resize(new Box($origWidth * $ratio, $origHeight * $ratio));
 
             return $filter->apply($image);
         }

@@ -18,11 +18,11 @@ class ResolveCacheCommand extends ContainerAwareCommand
         $this
             ->setName('liip:imagine:cache:resolve')
             ->setDescription('Resolve cache for given path and set of filters.')
-            ->addArgument('paths', InputArgument::REQUIRED|InputArgument::IS_ARRAY, 'Image paths')
+            ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Image paths')
             ->addOption(
                 'filters',
                 'f',
-                InputOption::VALUE_OPTIONAL|InputOption::VALUE_IS_ARRAY,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Filters list'
             )->setHelp(<<<EOF
 The <info>%command.name%</info> command resolves cache by specified parameters.
@@ -57,9 +57,9 @@ EOF
         /* @var FilterManager filterManager */
         $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
         /* @var CacheManager cacheManager */
-        $cacheManager  = $this->getContainer()->get('liip_imagine.cache.manager');
+        $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
         /* @var DataManager dataManager */
-        $dataManager   = $this->getContainer()->get('liip_imagine.data.manager');
+        $dataManager = $this->getContainer()->get('liip_imagine.data.manager');
 
         if (empty($filters)) {
             $filters = array_keys($filterManager->getFilterConfiguration()->all());

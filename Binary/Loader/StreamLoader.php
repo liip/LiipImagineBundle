@@ -34,11 +34,11 @@ class StreamLoader implements LoaderInterface
             throw new \InvalidArgumentException('The given context is no valid resource.');
         }
 
-        $this->context = $context;
+        $this->context = empty($context) ? null : $context;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($path)
     {
@@ -61,7 +61,7 @@ class StreamLoader implements LoaderInterface
         try {
             $content = file_get_contents($name, null, $this->context);
         } catch (\Exception $e) {
-            throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name, $e));
+            throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name), $e);
         }
 
         if (false === $content) {

@@ -102,7 +102,7 @@ class ImagineControllerTest extends WebTestCase
     {
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => 'some-string',
-            '_hash'   => 'hash',
+            '_hash' => 'hash',
         )));
     }
 
@@ -189,5 +189,25 @@ class ImagineControllerTest extends WebTestCase
         $this->assertEquals('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
+    }
+
+    public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces()
+    {
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/mačací obrázok.jpeg',
+            'anImageContent'
+        );
+
+        // we are calling url with encoded file name as it will be called by browser
+        $urlEncodedFileName = 'ma%C4%8Dac%C3%AD+obr%C3%A1zok';
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals(301, $response->getStatusCode());
+        $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/mačací obrázok.jpeg', $response->getTargetUrl());
+
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/mačací obrázok.jpeg');
     }
 }

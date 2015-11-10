@@ -116,7 +116,7 @@ Where only paths required parameter. They are separated by space. If you omit fi
 If you need to access filtered image URL in your controller:
 
 ``` php
-$this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb', true),
+$this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb'),
 ```
 
 In this case, the final rendered path would contain some random data in the path
@@ -171,7 +171,7 @@ If you want to use the service in another service, you have to simulate a new re
 ``` php
 $imagemanagerResponse = $this->container
     ->get('liip_imagine.controller')
-        ->filterAction($this->container->get('request'), 'uploads/foo.jpg', 'my_thumb');
+        ->filterAction(new Symfony\Component\HttpFoundation\Request(), 'uploads/foo.jpg', 'my_thumb');
 ```
 
 ## Outside the web root
