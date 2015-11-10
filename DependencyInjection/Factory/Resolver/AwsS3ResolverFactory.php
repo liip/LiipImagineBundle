@@ -85,13 +85,11 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
-		if (class_exists('\Aws\Sdk')) {
-			if (substr(\Aws\Sdk::VERSION, 0, 1) == '3') {
-				$appendClientConfig = $this->addClientConfigAwsV3();
-			}
-		} else {
-			$appendClientConfig = $this->addClientConfigAwsV2();
-		}
+		if (defined('\Aws\Sdk::VERSION') && version_compare(\Aws\Sdk::VERSION, '3.0.0', '>=')) {
+            $appendClientConfig = $this->addClientConfigAwsV3();
+        } else {
+            $appendClientConfig = $this->addClientConfigAwsV2();
+        }
 		
         $builder
             ->children()
