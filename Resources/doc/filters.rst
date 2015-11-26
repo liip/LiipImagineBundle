@@ -5,7 +5,7 @@ Built-in Filters
 ----------------
 
 The ``thumbnail`` filter
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The thumbnail filter, as the name implies, performs a thumbnail transformation
 on your image.
@@ -24,10 +24,12 @@ annotated configuration examples:
         filter_sets:
             my_thumb_out:
                 filters:
-                    thumbnail: { size: [32, 32], mode: outbound } # Transforms 50x40 to 32x32, while cropping the width
+                    # Transforms 50x40 to 32x32, while cropping the width
+                    thumbnail: { size: [32, 32], mode: outbound }
             my_thumb_in:
                 filters:
-                    thumbnail: { size: [32, 32], mode: inset } # Transforms 50x40 to 32x26, no cropping
+                    # Transforms 50x40 to 32x26, no cropping
+                    thumbnail: { size: [32, 32], mode: inset }
 
 
 There is also an option ``allow_upscale`` (default: ``false``). By setting
@@ -67,8 +69,8 @@ annotated configuration examples:
 The ``upscale`` filter
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The upscale filter, as the name implies, performs a upscale transformation
-on your image. Configuration looks like this:
+It performs an upscale transformation on your image to increase its size to the
+given dimensions:
 
 .. code-block:: yaml
 
@@ -79,10 +81,10 @@ on your image. Configuration looks like this:
                     upscale: { min: [800, 600] }
 
 The ``downscale`` filter
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-The downscale filter, as the name implies, performs a downscale transformation
-on your image. Configuration looks like this:
+It performs a downscale transformation on your image to reduce its size to the
+given dimensions:
 
 .. code-block:: yaml
 
@@ -95,8 +97,11 @@ on your image. Configuration looks like this:
 The ``crop`` filter
 ~~~~~~~~~~~~~~~~~~~
 
-The crop filter, as the name implies, performs a crop transformation on your
-image. Configuration looks like this:
+It performs a crop transformation on your image. The ``start`` option defines
+the coordinates of the left-top pixel where the crop begins (the ``[0, 0]``
+coordinates correspond to the top leftmost pixel of the original image). The
+``size`` option defines in pixels the width and height (in this order) of the
+area cropped:
 
 .. code-block:: yaml
 
@@ -109,8 +114,9 @@ image. Configuration looks like this:
 The ``strip`` filter
 ~~~~~~~~~~~~~~~~~~~~
 
-The strip filter removes all profiles and comments from your image.
-Configuration looks like this:
+It removes all profiles and comments from your image to reduce its file size
+without degrading its quality. This filter provides no configuration options,
+so you just need to enable it as follows:
 
 .. code-block:: yaml
 
@@ -123,8 +129,7 @@ Configuration looks like this:
 The ``background`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The background filter sets a background color for your image, default is white
-(#FFF). Configuration looks like this:
+It sets a background color for the image. The default color is white (``#FFF``):
 
 .. code-block:: yaml
 
@@ -134,8 +139,9 @@ The background filter sets a background color for your image, default is white
                 filters:
                     background: { color: '#00FFFF' }
 
-If you provide a ``size`` it will create a new image (this size and given
-color), and apply the original image on top:
+By default, the background color is only visible through the transparent sections
+of the image (if any). However, if you provide a ``size`` option, a new image is
+created (with the given size and color) and the original image is placed on top:
 
 .. code-block:: yaml
 
@@ -174,8 +180,10 @@ ratio. Configuration looks like this:
 The ``auto_rotate`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The auto_rotate filter rotates the image based on its EXIF data. **(this filter
-should be called as early as possible)** Configuration looks like this:
+It rotates the image automatically to display it as correctly as possible. The
+rotation to apply is obtained through the metadata stored in the EXIF data of
+the original image. This filter provides no configuration options, so you just
+need to enable it as follows:
 
 .. code-block:: yaml
 
@@ -185,11 +193,15 @@ should be called as early as possible)** Configuration looks like this:
                 filters:
                     auto_rotate: ~
 
+.. note::
+
+    This filter should be called as early as possible to get better results.
+
 The ``rotate`` filter
 ~~~~~~~~~~~~~~~~~~~~~
 
-The rotate filter rotates the image based on specified angle (in degrees).
-Configuration looks like this:
+It rotates the image based on specified angle (in degrees). The value of the
+``angle`` configuration option must be a positive integer or float number:
 
 .. code-block:: yaml
 
@@ -202,7 +214,7 @@ Configuration looks like this:
 The ``interlace`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Set progressive loading on the image. Configuration looks like this:
+It modifies the way the image is loaded progressively:
 
 .. code-block:: yaml
 
@@ -211,25 +223,36 @@ Set progressive loading on the image. Configuration looks like this:
             my_thumb:
                 filters:
                     interlace:
-                        # mode can be one of none,line,plane,partition
+                        # mode can be one of: 'none', 'line', 'plane' and 'partition'
                         mode: line
 
 Load your Custom Filters
 ------------------------
 
 The ImagineBundle allows you to load your own custom filter classes. The only
-requirement is that each filter loader implement the following interface:
+requirement is that each filter loader implements the following interface:
 ``Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface``.
 
 To tell the bundle about your new filter loader, register it in the service
 container and apply the ``liip_imagine.filter.loader`` tag to it (example here
 in XML):
 
-.. code-block:: xml
+.. contiguration-block::
 
-    <service id="liip_imagine.filter.loader.my_custom_filter" class="Acme\ImagineBundle\Imagine\Filter\Loader\MyCustomFilterLoader">
-        <tag name="liip_imagine.filter.loader" loader="my_custom_filter" />
-    </service>
+    .. code-block:: yaml
+
+        # app/config/services.yml
+        app.filter.my_custom_filter:
+            class: AppBundle\Imagine\Filter\Loader\MyCustomFilterLoader
+            tags:
+                - { name: 'liip_imagine.filter.loader', loader: 'my_custom_filter' }
+
+    .. code-block:: xml
+
+        <!-- app/config/services.xml -->
+        <service id="app.filter.my_custom_filter" class="AppBundle\Imagine\Filter\Loader\MyCustomFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="my_custom_filter" />
+        </service>
 
 For more information on the service container, see the `Symfony Service Container`_
 documentation.
@@ -282,13 +305,14 @@ A simple example showing how to change the filter configuration dynamically.
 
 .. note::
 
-    The constant ``Response::HTTP_MOVED_PERMANENTLY`` was introduced in version 2.4. Developers using older versions of Symfony, please replace the constant by ``301``.
+    The constant ``Response::HTTP_MOVED_PERMANENTLY`` was introduced in Symfony 2.4.
+    Developers using older versions of Symfony, please replace the constant by ``301``.
 
 Post-Processors
 ---------------
 
 Filters allow modifying the image, but in order to modify the resulting binary
-file created by filters, you can use post-processors Post-processors should
+file created by filters, you can use post-processors. Post-processors must
 implement ``Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface``.
 
 ``PostProcessorInterface::process`` method receives ``BinaryInterface`` -
@@ -296,14 +320,24 @@ basically, the file containing an image after all filters have been applied. It
 should return the ``BinaryInterface`` as well.
 
 To tell the bundle about your post-processor, register it in the service
-container and apply the ``liip_imagine.filter.post_processor`` tag to it
-(example here in XML):
+container and apply the ``liip_imagine.filter.post_processor`` tag to it:
 
-.. code-block:: xml
+.. contiguration-block::
 
-    <service id="liip_imagine.filter.post_processor.my_custom_post_processor" class="Acme\ImagineBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor">
-        <tag name="liip_imagine.filter.post_processor" post_processor="my_custom_post_processor" />
-    </service>
+    .. code-block:: yaml
+
+        # app/config/services.yml
+        app.post_processor.my_custom_post_processor:
+            class: AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor
+            tags:
+                - { name: 'liip_imagine.filter.post_processor', post_processor: 'my_custom_post_processor' }
+
+    .. code-block:: xml
+
+        <!-- app/config/services.xml -->
+        <service id="app.post_processor.my_custom_post_processor" class="AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor">
+            <tag name="liip_imagine.filter.post_processor" post_processor="my_custom_post_processor" />
+        </service>
 
 For more information on the service container, see the `Symfony Service Container`_
 documentation.
@@ -322,9 +356,9 @@ like to apply in your configuration:
 For an example of a post processor implementation, refer to
 ``Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor``.
 
-The ``JpegOptimPostProcessor`` can be used to provide lossless jpeg
+The ``JpegOptimPostProcessor`` can be used to provide lossless JPEG
 optimization, which is good for you website loading speed. In order to add
-lossless jpeg optimization to your filters, use the following configuration:
+lossless JPEG optimization to your filters, use the following configuration:
 
 .. code-block:: yaml
 
