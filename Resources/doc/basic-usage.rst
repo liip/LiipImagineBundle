@@ -77,7 +77,7 @@ If you need to access filtered image URL in your controller:
 
 .. code-block:: php
 
-    $this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb', true),
+    $this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb'),
 
 In this case, the final rendered path would contain some random data in the
 path ``/media/cache/my_thumb/S8rrlhhQ/relative/path/to/image.jpg``. This is where
