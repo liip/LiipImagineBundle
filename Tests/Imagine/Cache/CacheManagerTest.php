@@ -8,6 +8,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @covers Liip\ImagineBundle\Imagine\Cache\CacheManager
@@ -290,7 +291,7 @@ class CacheManagerTest extends AbstractTest
                     'path' => $path,
                     'filter' => 'thumbnail',
                 ),
-                true
+                UrlGeneratorInterface::ABSOLUTE_URL
             )
             ->will($this->returnValue($expectedUrl))
         ;
