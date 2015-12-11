@@ -49,6 +49,7 @@
 
         <parameter key="liip_imagine.binary.loader.filesystem.class">Liip\ImagineBundle\Binary\Loader\FileSystemLoader</parameter>
         <parameter key="liip_imagine.binary.loader.stream.class">Liip\ImagineBundle\Binary\Loader\StreamLoader</parameter>
+        <parameter key="liip_imagine.binary.loader.flysystem.class">Liip\ImagineBundle\Binary\Loader\FlysystemLoader</parameter>
 
         <!-- Cache resolvers' classes -->
 
@@ -204,6 +205,12 @@
         <service id="liip_imagine.binary.loader.prototype.stream" class="%liip_imagine.binary.loader.stream.class%">
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
+        </service>
+        
+        <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="liip_imagine.extension_guesser" />
+            <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
 
         <!-- Cache resolver -->
