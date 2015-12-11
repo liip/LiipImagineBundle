@@ -4,6 +4,7 @@ Built-In DataLoader
 * :doc:`FileSystem <data-loader/filesystem>`
 * :doc:`MongoDB GridFS <data-loader/gridfs>`
 * :doc:`Stream <data-loader/stream>`
+* :doc:`Flysystem <data-loader/flysystem>`
 
 Other data loaders
 ------------------
