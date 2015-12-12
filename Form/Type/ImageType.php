@@ -59,7 +59,7 @@ class ImageType extends AbstractType
 
         if (method_exists($resolver, 'setDefined')) {
             $resolver->setDefined(array('image_path'));
-        } else {
+        } else { // BC layer for Symfony < 2.6
             $resolver->setOptional(array('image_path'));
         }
 
@@ -81,7 +81,12 @@ class ImageType extends AbstractType
             }
         };
 
-        $resolver->setNormalizer('image_path_property_path', $normalizer);
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver->setNormalizer('image_path_property_path', $normalizer);
+        } else { // BC layer for Symfony < 2.6
+            $resolver->setNormalizers(array('image_path_property_path', $normalizer));
+        }
+
     }
 
     /**
