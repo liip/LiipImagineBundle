@@ -241,6 +241,7 @@
         <!-- Form types -->
 
         <service id="liip_imagine.form.type.image" class="%liip_imagine.form.type.image.class%">
+            <argument type="service" id="property_accessor" />
             <tag name="form.type" alias="liip_imagine_image" />
         </service>
 

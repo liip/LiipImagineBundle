@@ -86,6 +86,11 @@ class LiipImagineExtension extends Extension
         $resources = $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : array();
         $resources[] = 'LiipImagineBundle:Form:form_div_layout.html.twig';
         $container->setParameter('twig.form.resources', $resources);
+
+        if ($container->has('form.property_accessor')) {
+            $container->getDefinition('liip_imagine.form.type.image')
+                ->replaceArgument(0, new Reference('form.property_accessor'));
+        }
     }
 
     /**
