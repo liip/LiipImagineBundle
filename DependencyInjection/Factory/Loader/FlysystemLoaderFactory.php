@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class FlysystemLoaderFactory implements LoaderFactoryInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
@@ -27,7 +27,7 @@ class FlysystemLoaderFactory implements LoaderFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -35,7 +35,7 @@ class FlysystemLoaderFactory implements LoaderFactoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
