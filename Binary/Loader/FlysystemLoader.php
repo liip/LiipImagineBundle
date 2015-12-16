@@ -2,16 +2,15 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use League\Flysystem\Filesystem;
 
 class FlysystemLoader implements LoaderInterface
 {
     /**
-     * @var \League\Flysystem\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
     
@@ -22,18 +21,11 @@ class FlysystemLoader implements LoaderInterface
     
 
     public function __construct(
-        ContainerInterface $container,
         ExtensionGuesserInterface $extensionGuesser,
-        $sFileSystem)
+        Filesystem $filesystem)
     {
         $this->extensionGuesser = $extensionGuesser;
-        
-        try {
-            $sFileSystemService = sprintf('oneup_flysystem.%s_filesystem', $sFileSystem);
-            $this->filesystem = $container->get($sFileSystemService);
-        } catch (ServiceNotFoundException $ex) {
-            throw new NotLoadableException(sprintf("Flysystem '%s' was not found. Tried to load '%s' service.", $sFileSystem, $sFileSystemService));
-        }
+        $this->filesystem = $filesystem;
     }
 
     /**

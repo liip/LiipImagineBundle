@@ -5,6 +5,7 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Reference;
 
 class FlysystemLoaderFactory implements LoaderFactoryInterface
 {
@@ -14,7 +15,7 @@ class FlysystemLoaderFactory implements LoaderFactoryInterface
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
         $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.flysystem');
-        $loaderDefinition->replaceArgument(2, $config['file_system']);
+        $loaderDefinition->replaceArgument(1, new Reference($config['filesystem_service']));
         $loaderDefinition->addTag('liip_imagine.binary.loader', array(
             'loader' => $loaderName,
         ));
@@ -40,7 +41,7 @@ class FlysystemLoaderFactory implements LoaderFactoryInterface
     {
         $builder
             ->children()
-                ->scalarNode('file_system')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('filesystem_service')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
     }

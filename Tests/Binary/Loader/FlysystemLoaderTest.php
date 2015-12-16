@@ -12,19 +12,14 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class FlysystemLoaderTest extends AbstractTest
 {
-    private $container;
-    private $sFlysystemFileSystem = 'someLocalFileSystem';
+    private $flyFilesystem;
     
     public function setUp()
     {
         parent::setUp();
         
         $adapter = new \League\Flysystem\Adapter\Local($this->fixturesDir);
-        $fileSystem = new \League\Flysystem\Filesystem($adapter);
-        
-        $this->container = new ContainerBuilder();
-        $id = sprintf('oneup_flysystem.%s_filesystem', $this->sFlysystemFileSystem);
-        $this->container->set($id, $fileSystem);
+        $this->flyFilesystem = new \League\Flysystem\Filesystem($adapter);
     }
     
     public function testShouldImplementLoaderInterface()
@@ -37,9 +32,8 @@ class FlysystemLoaderTest extends AbstractTest
     public function testCouldBeConstructedWithExpectedArguments()
     {
         return new FlysystemLoader(
-            $this->container,
             ExtensionGuesser::getInstance(),
-            $this->sFlysystemFileSystem
+            $this->flyFilesystem
         );
     }
     

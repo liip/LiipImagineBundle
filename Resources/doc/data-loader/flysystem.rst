@@ -2,8 +2,12 @@ FlysystemLoader
 ============
 
 This loader lets you load images from `Flysystem`_ filesystem abstraction layer,
-which can be used in Symfony projects by installing `OneupFlysystemBundle`_.
-This loader is dependent on OneupFlysystemBundle.
+which can be used in Symfony projects by installing, for example, `OneupFlysystemBundle`_.
+
+Value of 'filesystem_service' property must be a service,
+which returns an instance of League\\Flysystem\\Filesystem.
+
+For implementation using `OneupFlysystemBundle`_ look below.
 
 Using factory
 -------------
@@ -14,7 +18,7 @@ Using factory
         loaders:
             profile_photos:
                 flysystem:
-                    file_system: profile_photos_filesystem
+                    filesystem_service: oneup_flysystem.profile_photos_filesystem
 
     oneup_flysystem:
         adapters:
@@ -23,7 +27,7 @@ Using factory
                     directory:  "path/to/profile/photos"
 
         filesystems:
-            profile_photos_filesystem:
+            profile_photos:
                 adapter: profile_photos
 
 

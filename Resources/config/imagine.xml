@@ -208,7 +208,6 @@
         </service>
         
         <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%">
-            <argument type="service" id="service_container" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
