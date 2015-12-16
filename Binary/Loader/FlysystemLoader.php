@@ -13,12 +13,11 @@ class FlysystemLoader implements LoaderInterface
      * @var Filesystem
      */
     protected $filesystem;
-    
+
     /**
      * @var ExtensionGuesserInterface
      */
     protected $extensionGuesser;
-    
 
     public function __construct(
         ExtensionGuesserInterface $extensionGuesser,
@@ -29,7 +28,7 @@ class FlysystemLoader implements LoaderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($path)
     {

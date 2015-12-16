@@ -184,7 +184,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
         $bundle->build($containerMock);
     }
-    
+
     public function testAddFlysystemLoaderFactoryOnBuild()
     {
         $extensionMock = $this->createExtensionMock();
