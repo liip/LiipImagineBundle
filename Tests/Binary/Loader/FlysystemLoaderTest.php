@@ -17,7 +17,7 @@ class FlysystemLoaderTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        
+
         if (!class_exists('\League\Flysystem\Filesystem')) {
             $this->markTestSkipped(
               'The league/flysystem PHP library is not available.'
