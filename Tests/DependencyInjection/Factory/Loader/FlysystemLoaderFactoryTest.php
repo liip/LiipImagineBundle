@@ -16,14 +16,14 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        
+
         if (!class_exists('\League\Flysystem\Filesystem')) {
             $this->markTestSkipped(
               'The league/flysystem PHP library is not available.'
             );
         }
     }
-    
+
     public function testImplementsLoaderFactoryInterface()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory');
