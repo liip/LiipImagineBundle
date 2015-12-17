@@ -207,7 +207,7 @@
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
         </service>
         
-        <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%">
+        <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>

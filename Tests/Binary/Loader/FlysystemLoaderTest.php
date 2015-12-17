@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
+ * @requires PHP 5.4
  * @covers Liip\ImagineBundle\Binary\Loader\FlysystemLoader
  */
 class FlysystemLoaderTest extends AbstractTest
@@ -16,6 +17,12 @@ class FlysystemLoaderTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
+        
+        if (!class_exists('\League\Flysystem\Filesystem')) {
+            $this->markTestSkipped(
+              'The league/flysystem PHP library is not available.'
+            );
+        }
 
         $adapter = new \League\Flysystem\Adapter\Local($this->fixturesDir);
         $this->flyFilesystem = new \League\Flysystem\Filesystem($adapter);

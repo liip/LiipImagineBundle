@@ -8,10 +8,22 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
+ * @requires PHP 5.4
  * @covers Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
 class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        
+        if (!class_exists('\League\Flysystem\Filesystem')) {
+            $this->markTestSkipped(
+              'The league/flysystem PHP library is not available.'
+            );
+        }
+    }
+    
     public function testImplementsLoaderFactoryInterface()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory');
