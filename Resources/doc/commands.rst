@@ -1,68 +1,74 @@
-# Commands
+Commands
+========
 
-## Remove cache
-
+Remove cache
+------------
 
 All cache for a given paths will be removed:
 
-``` bash
-$ php app/console liip:imagine:cache:remove path1 path
-```
+.. code-block:: bash
 
+    $ php app/console liip:imagine:cache:remove path1 path
 
-If you use --filters parameter, all cache for a given filters will be lost:
+If you use ``--filters`` parameter, all cache for a given filters will be lost:
 
-``` bash
-$ php app/console liip:imagine:cache:remove --filters=thumb1 --filters=thumb2
-```
+.. code-block:: bash
+
+    $ php app/console liip:imagine:cache:remove --filters=thumb1 --filters=thumb2
 
 You can combine these parameters:
 
-``` bash
-$ php app/console liip:imagine:cache:remove path1 path2 --filters=thumb1 --filters=thumb2
-```
+.. code-block:: bash
 
-Cache for all paths and filters will be lost when executing this command without parameters :
-
-``` bash
-$ php app/console liip:imagine:cache:remove
-```
-
-## Resolve cache
+    $ php app/console liip:imagine:cache:remove path1 path2 --filters=thumb1 --filters=thumb2
 
 
-``` bash
-$ php app/console liip:imagine:cache:resolve path1 path2 --filters=thumb1
-```
+Cache for all paths and filters will be lost when executing this command without parameters:
+
+.. code-block:: bash
+    $ php app/console liip:imagine:cache:remove
+
+
+Resolve cache
+-------------
+
+.. code-block:: bash
+
+    $ php app/console liip:imagine:cache:resolve path1 path2 --filters=thumb1
+
 
 Cache for the two paths will be resolved using the passed filter.
 As a result you will get:
-``` bash
+
+.. code-block:: bash
+
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb1/path2
-```
+
 
 You can pass few filters:
 
-``` bash
-$ php app/console liip:imagine:cache:resolve path1 --filters=thumb1 --filters=thumb2
-```
+.. code-block:: bash
+
+    $ php app/console liip:imagine:cache:resolve path1 --filters=thumb1 --filters=thumb2
+
 
 As a result you will get:
-``` bash
+
+.. code-block:: bash
+
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb2/path1
-```
 
-If you omit --filters parameter then to resolve given paths will be used all configured and available filters in application:
-``` bash
-$ php app/console liip:imagine:cache:resolve path1
-```
+
+If you omit ``--filters`` parameter then to resolve given paths will be used all configured and available filters in application:
+
+.. code-block:: bash
+    $ php app/console liip:imagine:cache:resolve path1
 
 As a result you will get:
-``` bash
+
+.. code-block:: bash
+
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb2/path1
-```
-
-[Back to the index](index.md)
