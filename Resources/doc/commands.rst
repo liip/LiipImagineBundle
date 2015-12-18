@@ -23,7 +23,8 @@ You can combine these parameters:
     $ php app/console liip:imagine:cache:remove path1 path2 --filters=thumb1 --filters=thumb2
 
 
-Cache for all paths and filters will be lost when executing this command without parameters:
+Cache for all paths and filters will be lost when executing this command
+without parameters:
 
 .. code-block:: bash
     $ php app/console liip:imagine:cache:remove
@@ -61,7 +62,8 @@ As a result you will get:
     http://localhost/media/cache/thumb2/path1
 
 
-If you omit ``--filters`` parameter then to resolve given paths will be used all configured and available filters in application:
+If you omit ``--filters`` parameter then to resolve given paths will be used
+all configured and available filters in application:
 
 .. code-block:: bash
     $ php app/console liip:imagine:cache:resolve path1
