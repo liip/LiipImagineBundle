@@ -138,7 +138,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
             ->useAttributeAsKey('key')
             ->prototype('scalar')->end()
             ->end();
-        
+
         return $node;
     }
 
