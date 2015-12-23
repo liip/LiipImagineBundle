@@ -126,6 +126,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
 
     /**
      * Add client config legacy AWS API v2 style.
+     *
      * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
      */
     protected function addClientConfigAwsV2()
@@ -137,11 +138,13 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
             ->useAttributeAsKey('key')
             ->prototype('scalar')->end()
             ->end();
+        
         return $node;
     }
 
     /**
      * Add client config appropriate for AWS API v3.
+     *
      * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
      */
     protected function addClientConfigAwsV3()
@@ -175,6 +178,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                 ->scalarNode('validate')->end()
                 ->scalarNode('version')->isRequired()->end()
             ->end();
+
         return $node;
     }
 }
