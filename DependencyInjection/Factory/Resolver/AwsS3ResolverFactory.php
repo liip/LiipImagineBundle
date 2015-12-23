@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -84,6 +85,12 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        if (defined('\Aws\Sdk::VERSION') && version_compare(\Aws\Sdk::VERSION, '3.0.0', '>=')) {
+            $appendClientConfig = $this->addClientConfigAwsV3();
+        } else {
+            $appendClientConfig = $this->addClientConfigAwsV2();
+        }
+
         $builder
             ->children()
                 ->scalarNode('bucket')->isRequired()->cannotBeEmpty()->end()
@@ -112,7 +119,62 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                     ->defaultValue(array())
                     ->prototype('scalar')->end()
                 ->end()
+                ->append($appendClientConfig)
             ->end()
         ;
+    }
+
+    /**
+     * Add client config legacy AWS API v2 style.
+     * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    protected function addClientConfigAwsV2()
+    {
+        $builder = new TreeBuilder();
+        $node = $builder->root('client_config');
+        $node
+            ->isRequired()
+            ->useAttributeAsKey('key')
+            ->prototype('scalar')->end()
+            ->end();
+        return $node;
+    }
+
+    /**
+     * Add client config appropriate for AWS API v3.
+     * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    protected function addClientConfigAwsV3()
+    {
+        $builder = new TreeBuilder();
+        $node = $builder->root('client_config');
+        $node
+            ->isRequired()
+            ->children()
+                ->arrayNode('credentials')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('key')->end()
+                        ->scalarNode('secret')->end()
+                        ->scalarNode('token')->end()
+                    ->end()
+                ->end()
+                ->scalarNode('api_provider')->end()
+                ->scalarNode('debug')->end()
+                ->scalarNode('endpoint')->end()
+                ->scalarNode('endpoint_provider')->end()
+                ->scalarNode('handler')->end()
+                ->scalarNode('http')->end()
+                ->scalarNode('http_handler')->end()
+                ->scalarNode('profile')->end()
+                ->scalarNode('region')->isRequired()->end()
+                ->scalarNode('retries')->end()
+                ->scalarNode('scheme')->end()
+                ->scalarNode('signature_provider')->end()
+                ->scalarNode('signature_version')->end()
+                ->scalarNode('validate')->end()
+                ->scalarNode('version')->isRequired()->end()
+            ->end();
+        return $node;
     }
 }
