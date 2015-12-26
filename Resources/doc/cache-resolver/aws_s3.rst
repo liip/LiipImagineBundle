@@ -83,6 +83,8 @@ You have to set up the services required:
 If you use `aws-sdk-php`_ library version >= 3.0.0 client config credentials
 must be an associative array containing key and secret.
 
+.. code-block:: yaml
+
     acme.amazon_s3:
         class: Aws\S3\S3Client
         factory_class: Aws\S3\S3Client
