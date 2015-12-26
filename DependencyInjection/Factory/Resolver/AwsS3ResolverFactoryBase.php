@@ -122,5 +122,5 @@ abstract class AwsS3ResolverFactoryBase implements ResolverFactoryInterface
      *
      * @return ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\NodeDefinition
      */
-    protected abstract function addAwsClientConfig();
+    abstract protected function addAwsClientConfig();
 }
