@@ -9,6 +9,7 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3SdkV3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,7 +33,11 @@ class LiipImagineBundle extends Bundle
         $extension = $container->getExtension('liip_imagine');
 
         $extension->addResolverFactory(new WebPathResolverFactory());
-        $extension->addResolverFactory(new AwsS3ResolverFactory());
+        if (defined('\Aws\Sdk::VERSION') && version_compare(\Aws\Sdk::VERSION, '3.0.0', '>=')) {
+            $extension->addResolverFactory(new AwsS3SdkV3ResolverFactory());
+        } else {
+            $extension->addResolverFactory(new AwsS3ResolverFactory());
+        }
 
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
