@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
-
 class AwsS3SdkV3ResolverFactory implements ResolverFactoryInterface
 {
     /**
