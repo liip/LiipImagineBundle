@@ -56,9 +56,11 @@ You have to set up the services required:
             factory_method:  factory
             arguments:
                 -
-                    key: %amazon.s3.key%
-                    secret: %amazon.s3.secret%
+                    credentials:
+                        key: %amazon.s3.key%
+                        secret: %amazon.s3.secret%            
                     region: %amazon.s3.region%
+                    version: %amazon.s3.version%
 
         acme.imagine.cache.resolver.amazon_s3:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
@@ -67,6 +69,17 @@ You have to set up the services required:
                 - "%amazon.s3.bucket%"
             tags:
                 - { name: 'liip_imagine.cache.resolver', resolver: 'profile_photos' }
+
+With the following changes for the `aws-sdk-php-deprecated`_ library:
+
+.. code-block:: yaml
+
+            arguments:
+                -
+                    key: %amazon.s3.key%
+                    secret: %amazon.s3.secret%            
+                    region: %amazon.s3.region%
+                    version: %amazon.s3.version%
 
 Usage
 -----
@@ -186,6 +199,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
             tags:
                 - { name: 'liip_imagine.cache.resolver', resolver: 'amazon_s3' }
 
-.. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
+.. _`aws-sdk-php-deprecated`: https://github.com/amazonwebservices/aws-sdk-for-php
+.. _`aws-sdk-php`: https://github.com/aws/aws-sdk-php
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
