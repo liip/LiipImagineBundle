@@ -141,11 +141,33 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
         $bundle->build($containerMock);
     }
 
-    public function testAddStreamLoaderFactoryOnBuild()
+    public function testAddAwsS3SdkV3ResolverFactoryOnBuild()
     {
         $extensionMock = $this->createExtensionMock();
         $extensionMock
             ->expects($this->at(2))
+            ->method('addResolverFactory')
+            ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3SdkV3ResolverFactory'))
+        ;
+
+        $containerMock = $this->createContainerBuilderMock();
+        $containerMock
+            ->expects($this->atLeastOnce())
+            ->method('getExtension')
+            ->with('liip_imagine')
+            ->will($this->returnValue($extensionMock))
+        ;
+
+        $bundle = new LiipImagineBundle();
+
+        $bundle->build($containerMock);
+    }
+
+    public function testAddStreamLoaderFactoryOnBuild()
+    {
+        $extensionMock = $this->createExtensionMock();
+        $extensionMock
+            ->expects($this->at(3))
             ->method('addLoaderFactory')
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory'))
         ;
@@ -167,7 +189,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
     {
         $extensionMock = $this->createExtensionMock();
         $extensionMock
-            ->expects($this->at(3))
+            ->expects($this->at(4))
             ->method('addLoaderFactory')
             ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Factory\Loader\FilesystemLoaderFactory'))
         ;
