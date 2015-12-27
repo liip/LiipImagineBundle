@@ -47,7 +47,7 @@ must be an associative array containing key and secret.
 
 .. code-block:: yaml
 
-    aws_s3:
+    aws_s3_sdk_v3:
         client_config:
             credentials:
                 key:    %amazon.s3.key%

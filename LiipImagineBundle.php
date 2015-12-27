@@ -33,11 +33,8 @@ class LiipImagineBundle extends Bundle
         $extension = $container->getExtension('liip_imagine');
 
         $extension->addResolverFactory(new WebPathResolverFactory());
-        if (defined('\Aws\Sdk::VERSION') && version_compare(\Aws\Sdk::VERSION, '3.0.0', '>=')) {
-            $extension->addResolverFactory(new AwsS3SdkV3ResolverFactory());
-        } else {
-            $extension->addResolverFactory(new AwsS3ResolverFactory());
-        }
+        $extension->addResolverFactory(new AwsS3ResolverFactory());
+        $extension->addResolverFactory(new AwsS3SdkV3ResolverFactory());
 
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
