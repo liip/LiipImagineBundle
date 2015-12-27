@@ -2,8 +2,9 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -18,7 +19,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
         $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
         if (method_exists($awsS3ClientDefinition, 'setFactory')) {
-            $awsS3ClientDefinition->setFactory(array('Aws\S3\S3Client', 'factory'));
+            $awsS3ClientDefinition->setFactory(['Aws\S3\S3Client', 'factory']);
         } else {
             // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
             $awsS3ClientDefinition->setFactoryClass('Aws\S3\S3Client');
@@ -37,7 +38,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
         $container->setDefinition($resolverId, $resolverDefinition);
 
         if (isset($config['cache_prefix'])) {
-            $resolverDefinition->addMethodCall('setCachePrefix', array($config['cache_prefix']));
+            $resolverDefinition->addMethodCall('setCachePrefix', [$config['cache_prefix']]);
         }
 
         if ($config['proxies']) {
@@ -64,9 +65,9 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
             $container->setDefinition($resolverId, $cacheResolverDefinition);
         }
 
-        $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', array(
+        $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', [
             'resolver' => $resolverName,
-        ));
+        ]);
 
         return $resolverId;
     }
@@ -84,17 +85,18 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
+        if (defined('\Aws\Sdk::VERSION') && version_compare(\Aws\Sdk::VERSION, '3.0.0', '>=')) {
+            $appendClientConfig = $this->addClientConfigAwsV3();
+        } else {
+            $appendClientConfig = $this->addClientConfigAwsV2();
+        }
+
         $builder
             ->children()
                 ->scalarNode('bucket')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('cache')->defaultValue(false)->end()
                 ->scalarNode('acl')->defaultValue('public-read')->cannotBeEmpty()->end()
                 ->scalarNode('cache_prefix')->defaultValue(null)->end()
-                ->arrayNode('client_config')
-                    ->isRequired()
-                    ->useAttributeAsKey('key')
-                    ->prototype('scalar')->end()
-                ->end()
                 /* @deprecated Use `get_options` instead */
                 ->arrayNode('url_options')
                     ->useAttributeAsKey('key')
@@ -109,10 +111,64 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('proxies')
-                    ->defaultValue(array())
+                    ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
-            ->end()
-        ;
+                ->append($appendClientConfig)
+            ->end();
+    }
+
+    public function addClientConfigAwsV2()
+    {
+        $builder = new TreeBuilder();
+        $node = $builder->root('client_config');
+
+        $node
+            ->isRequired()
+            ->useAttributeAsKey('key')
+            ->prototype('scalar')->end()
+            ->end();
+
+        return $node;
+    }
+
+    public function addClientConfigAwsV3()
+    {
+        $builder = new TreeBuilder();
+        $node = $builder->root('client_config');
+
+        $node
+            ->isRequired()
+            ->children()
+                ->arrayNode('credentials')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('key')->end()
+                        ->scalarNode('secret')->end()
+                        ->scalarNode('token')->end()
+                    ->end()
+                ->end()
+                ->scalarNode('api_provider')->end()
+                ->scalarNode('debug')->end()
+                ->scalarNode('endpoint')->end()
+                ->scalarNode('endpoint_provider')->end()
+                ->scalarNode('handler')->end()
+                ->scalarNode('http')->end()
+                ->scalarNode('http_handler')->end()
+                ->scalarNode('profile')->end()
+                ->scalarNode('region')
+                    ->isRequired()
+                ->end()
+                ->scalarNode('retries')->end()
+                ->scalarNode('scheme')->end()
+                ->scalarNode('signature_provider')->end()
+                ->scalarNode('signature_version')->end()
+                ->scalarNode('validate')->end()
+                ->scalarNode('version')
+                    ->isRequired()
+                ->end()
+            ->end();
+
+        return $node;
     }
 }
