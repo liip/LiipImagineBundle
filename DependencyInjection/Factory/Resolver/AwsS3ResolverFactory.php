@@ -92,8 +92,9 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                 ->scalarNode('cache_prefix')->defaultValue(null)->end()
                 ->arrayNode('client_config')
                     ->isRequired()
-                    ->useAttributeAsKey('key')
-                    ->prototype('scalar')->end()
+                    ->prototype('variable')
+                        ->treatNullLike(array())
+                    ->end()
                 ->end()
                 /* @deprecated Use `get_options` instead */
                 ->arrayNode('url_options')

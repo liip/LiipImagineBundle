@@ -42,6 +42,18 @@ Create resolver using factory
                   put_options:
                       CacheControl: 'max-age=86400'
 
+If you use `aws-sdk-php`_ library version >= 3.0.0 client config credentials
+must be an associative array containing key and secret.
+
+.. code-block:: yaml
+
+    aws_s3:
+        client_config:
+            credentials:
+                key:    %amazon.s3.key%
+                secret: %amazon.s3.secret%
+            region: %amazon.s3.region%
+
 Create resolver as a service
 ----------------------------
 
@@ -67,6 +79,20 @@ You have to set up the services required:
                 - "%amazon.s3.bucket%"
             tags:
                 - { name: 'liip_imagine.cache.resolver', resolver: 'profile_photos' }
+
+If you use `aws-sdk-php`_ library version >= 3.0.0 client config credentials
+must be an associative array containing key and secret.
+
+.. code-block:: yaml
+
+    acme.amazon_s3:
+        class: Aws\S3\S3Client
+        factory_class: Aws\S3\S3Client
+        factory_method:  factory
+        arguments:
+            -
+                credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
+                region: %amazon.s3.region%
 
 Usage
 -----

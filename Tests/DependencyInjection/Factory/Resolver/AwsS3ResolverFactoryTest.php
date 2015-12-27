@@ -451,6 +451,73 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertNull($config['cache_prefix']);
     }
 
+    public function testSupportAwsV3ClientConfig()
+    {
+        $expectedClientConfig = array(
+            'credentials' => array(
+                'key' => 'theKey',
+                'secret' => 'theSecret',
+                'token' => 'theToken',
+            ),
+            'region' => 'theRegion',
+            'version' => 'theVersion',
+        );
+        $expectedUrlOptions = array(
+            'theKey' => 'theUrlOptionsVal',
+            'theOtherKey' => 'theOtherUrlOptionsValue',
+        );
+        $expectedGetOptions = array(
+            'theKey' => 'theGetOptionsVal',
+            'theOtherKey' => 'theOtherGetOptionsValue',
+        );
+        $expectedObjectOptions = array(
+            'theKey' => 'theObjectOptionsVal',
+            'theOtherKey' => 'theOtherObjectOptionsValue',
+        );
+        $expectedBucket = 'theBucket';
+        $expectedAcl = 'theAcl';
+        $expectedCachePrefix = 'theCachePrefix';
+
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('aws_s3', 'array');
+
+        $resolver = new AwsS3ResolverFactory();
+        $resolver->addConfiguration($rootNode);
+
+        $config = $this->processConfigTree($treeBuilder, array(
+            'aws_s3' => array(
+                'bucket' => $expectedBucket,
+                'acl' => $expectedAcl,
+                'client_config' => $expectedClientConfig,
+                'url_options' => $expectedUrlOptions,
+                'get_options' => $expectedGetOptions,
+                'put_options' => $expectedObjectOptions,
+                'cache_prefix' => $expectedCachePrefix,
+            ),
+        ));
+
+        $this->assertArrayHasKey('bucket', $config);
+        $this->assertEquals($expectedBucket, $config['bucket']);
+
+        $this->assertArrayHasKey('acl', $config);
+        $this->assertEquals($expectedAcl, $config['acl']);
+
+        $this->assertArrayHasKey('client_config', $config);
+        $this->assertEquals($expectedClientConfig, $config['client_config']);
+
+        $this->assertArrayHasKey('url_options', $config);
+        $this->assertEquals($expectedUrlOptions, $config['url_options']);
+
+        $this->assertArrayHasKey('get_options', $config);
+        $this->assertEquals($expectedGetOptions, $config['get_options']);
+
+        $this->assertArrayHasKey('put_options', $config);
+        $this->assertEquals($expectedObjectOptions, $config['put_options']);
+
+        $this->assertArrayHasKey('cache_prefix', $config);
+        $this->assertEquals($expectedCachePrefix, $config['cache_prefix']);
+    }
+
     /**
      * @param TreeBuilder $treeBuilder
      * @param array       $configs
