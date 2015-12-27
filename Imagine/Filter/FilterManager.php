@@ -109,7 +109,14 @@ class FilterManager
                 ));
             }
 
+            $prevImage = $image;
             $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
+
+            // If the filter returns a different image object destruct the old one because imagick keeps consuming memory if we don't
+            // See https://github.com/liip/LiipImagineBundle/pull/682
+            if ($prevImage !== $image && method_exists($prevImage, '__destruct')) {
+                $prevImage->__destruct();
+            }
         }
 
         $options = array(
@@ -133,6 +140,12 @@ class FilterManager
         $filteredFormat = isset($config['format']) ? $config['format'] : $binary->getFormat();
         $filteredContent = $image->get($filteredFormat, $options);
         $filteredMimeType = $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredContent);
+
+        // We are done with the image object so we can destruct the this because imagick keeps consuming memory if we don't
+        // See https://github.com/liip/LiipImagineBundle/pull/682
+        if (method_exists($image, '__destruct')) {
+            $image->__destruct();
+        }
 
         return $this->applyPostProcessors(new Binary($filteredContent, $filteredMimeType, $filteredFormat), $config);
     }
