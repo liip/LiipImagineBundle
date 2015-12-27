@@ -78,9 +78,10 @@ class ImagineController
     {
         // decoding special characters and whitespaces from path obtained from url
         $path = urldecode($path);
+        $resolver = $request->get('resolver');
 
         try {
-            if (!$this->cacheManager->isStored($path, $filter)) {
+            if (!$this->cacheManager->isStored($path, $filter, $resolver)) {
                 try {
                     $binary = $this->dataManager->find($filter, $path);
                 } catch (NotLoadableException $e) {
@@ -94,11 +95,12 @@ class ImagineController
                 $this->cacheManager->store(
                     $this->filterManager->applyFilter($binary, $filter),
                     $path,
-                    $filter
+                    $filter,
+                    $resolver
                 );
             }
 
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter, $resolver), 301);
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
 
@@ -127,6 +129,8 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
+        $resolver = $request->get('resolver');
+
         try {
             $filters = $request->query->get('filters', array());
 
@@ -160,10 +164,11 @@ class ImagineController
                     'filters' => $filters,
                 )),
                 $rcPath,
-                $filter
+                $filter,
+                $resolver
             );
 
-            return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter), 301);
+            return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter, $resolver), 301);
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $hash.'/'.$path, $e->getMessage());
 
