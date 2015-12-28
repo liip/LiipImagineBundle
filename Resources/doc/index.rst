@@ -13,3 +13,4 @@ performance, altered images can be cached locally and in Amazon S3 service.
 * :doc:`DataLoaders <data-loaders>`
 * :doc:`CacheResolvers <cache-resolvers>`
 * :doc:`CacheManager <cache-manager>`
+* :doc:`Commands <commands>`
