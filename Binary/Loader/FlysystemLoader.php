@@ -5,12 +5,12 @@ namespace Liip\ImagineBundle\Binary\Loader;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 
 class FlysystemLoader implements LoaderInterface
 {
     /**
-     * @var Filesystem
+     * @var FilesystemInterface
      */
     protected $filesystem;
 
@@ -21,7 +21,7 @@ class FlysystemLoader implements LoaderInterface
 
     public function __construct(
         ExtensionGuesserInterface $extensionGuesser,
-        Filesystem $filesystem)
+        FilesystemInterface $filesystem)
     {
         $this->extensionGuesser = $extensionGuesser;
         $this->filesystem = $filesystem;

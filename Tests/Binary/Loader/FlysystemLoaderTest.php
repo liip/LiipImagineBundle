@@ -61,13 +61,13 @@ class FlysystemLoaderTest extends AbstractTest
      */
     public function testThrowsIfInvalidPathGivenOnFind($loader)
     {
-        $sPath = 'invalid.jpeg';
+        $path = 'invalid.jpeg';
 
         $this->setExpectedException(
             'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            sprintf('Source image "%s" not found.', $sPath)
+            sprintf('Source image "%s" not found.', $path)
         );
 
-        $loader->find($sPath);
+        $loader->find($path);
     }
 }
