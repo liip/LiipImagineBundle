@@ -6,7 +6,7 @@ improved documentation, a fixed bug or a whole new feature.
 
 ## Feature request
 
-If you think a feature is missing, please report it or implement it. If you report it, describe the more
+If you think a feature is missing, please report it or implement it. If you report it, describe
 precisely what you would like to see implemented. It would be nice if you can do
 some search before submitting it and link the resources to your description.
 
@@ -20,7 +20,7 @@ please be the more precise possible. Here a little list of required information:
  * Symfony version used.
  * Bundle version used.
 
- ## Bug fix
+## Bug fix
 
 Fork the repository, clone it and create a new branch with the following commands:
 
@@ -37,7 +37,7 @@ Fork the repository, clone it and create a new branch with the following command
 
  When you're on the new branch with the dependencies, code as much as you want and when the fix is ready,
  you will need to add tests and update the documentation. Everything is tested with
- [PHPUnit][php-unit], documentation formatted with markdown under the `Resources/doc` directory.
+ [PHPUnit][php-unit], documentation formatted with [reStructuredText][rst] under the `Resources/doc` directory.
 
  To run tests, use the following command:
 
@@ -87,6 +87,7 @@ Please format your commit messages as follows:
  * [General GitHub documentation][gh-help]
  * [GitHub pull request documentation][gh-pr]
 
+ [rst]:      http://symfony.com/doc/current/contributing/documentation/format.html#restructuredtext
  [php-unit]: http://phpunit.de/
  [composer]: https://getcomposer.org/
  [gh-help]:  https://help.github.com
