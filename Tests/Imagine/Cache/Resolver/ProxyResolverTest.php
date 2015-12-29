@@ -62,6 +62,48 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
         $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
+    public function testProxyCallAndRewriteReturnedUrlWithMatchReplaceOnResolve()
+    {
+        $expectedPath = '/foo/bar/bazz.png';
+        $expectedFilter = 'test';
+
+        $this->primaryResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png'))
+        ;
+
+        $this->resolver = new ProxyResolver($this->primaryResolver, array(
+            'https://s3-eu-west-1.amazonaws.com/s3-cache.example.com' => 'http://images.example.com',
+        ));
+
+        $result = $this->resolver->resolve($expectedPath, $expectedFilter);
+
+        $this->assertEquals('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
+    }
+
+    public function testProxyCallAndRewriteReturnedUrlWithRegExpOnResolve()
+    {
+        $expectedPath = '/foo/bar/bazz.png';
+        $expectedFilter = 'test';
+
+        $this->primaryResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expectedPath, $expectedFilter)
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
+        ;
+
+        $this->resolver = new ProxyResolver($this->primaryResolver, array(
+            'regexp/http:\/\/.*?\//' => 'http://bar.com/',
+        ));
+
+        $result = $this->resolver->resolve($expectedPath, $expectedFilter);
+
+        $this->assertEquals('http://bar.com/thumbs/foo/bar/bazz.png', $result);
+    }
+
     public function testProxyCallAndReturnedValueOnIsStored()
     {
         $expectedPath = 'thePath';

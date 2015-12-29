@@ -277,6 +277,39 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertEquals('liip_imagine.cache.resolver.theresolvername.cached', $resolverDefinition->getArgument(1));
     }
 
+    public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate()
+    {
+        $container = new ContainerBuilder();
+
+        $resolver = new AwsS3ResolverFactory();
+
+        $resolver->create($container, 'theResolverName', array(
+            'client_config' => array(),
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'url_options' => array(),
+            'get_options' => array(),
+            'put_options' => array(),
+            'cache' => 'theCacheServiceId',
+            'proxies' => array('foo' => 'bar'),
+        ));
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
+        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.proxied');
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $proxiedResolverDefinition);
+        $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
+        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.cached');
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $cachedResolverDefinition);
+        $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
+
+        $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $cachedResolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.proxied', $cachedResolverDefinition->getArgument(0));
+
+        $this->assertEquals(array('foo' => 'bar'), $cachedResolverDefinition->getArgument(1));
+    }
+
     public function testSetCachePrefixIfDefined()
     {
         $container = new ContainerBuilder();

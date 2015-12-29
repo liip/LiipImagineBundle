@@ -1,5 +1,7 @@
 <?php
 
+namespace Liip\ImagineBundle\Tests\Functional\app;
+
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -11,8 +13,8 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Liip\ImagineBundle\LiipImagineBundle(),
+            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Liip\ImagineBundle\LiipImagineBundle(),
         );
 
         return $bundles;
