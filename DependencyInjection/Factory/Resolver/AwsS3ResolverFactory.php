@@ -111,7 +111,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
                 ->end()
                 ->arrayNode('proxies')
                     ->defaultValue(array())
-                    ->prototype('scalar')->end()
+                    ->prototype('array')->end()
                 ->end()
             ->end()
         ;

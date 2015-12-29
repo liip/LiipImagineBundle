@@ -76,9 +76,22 @@ class ProxyResolver implements ResolverInterface
             return $url;
         }
 
-        $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
-        $proxyHost = $this->hosts[rand(0, count($this->hosts) - 1)];
+        $randKey = array_rand($this->hosts, 1);
 
-        return str_replace($host, $proxyHost, $url);
+        // BC
+        if (is_numeric($randKey)) {
+            $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
+            $proxyHost = $this->hosts[$randKey];
+
+            return str_replace($host, $proxyHost, $url);
+        }
+
+        if (0 === strpos($randKey, 'regexp/')) {
+            $regExp = substr($randKey, 6);
+
+            return preg_replace($regExp, $this->hosts[$randKey], $url);
+        }
+
+        return str_replace($randKey, $this->hosts[$randKey], $url);
     }
 }
