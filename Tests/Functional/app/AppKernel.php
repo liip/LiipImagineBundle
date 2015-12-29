@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Functional\app;
 
 use Symfony\Component\HttpKernel\Kernel;
