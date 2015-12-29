@@ -42,7 +42,7 @@ Fork the repository, clone it and create a new branch with the following command
  To run tests, use the following command:
 
  ``` bash
- $ phpunit
+ $ ./bin/phpunit
  ```
 
 ## Making your changes
