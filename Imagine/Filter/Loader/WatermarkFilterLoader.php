@@ -9,6 +9,16 @@ use Imagine\Image\ImagineInterface;
 
 class WatermarkFilterLoader implements LoaderInterface
 {
+    /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+    /**
+     * @var string
+     */
+    protected $rootPath;
+
     public function __construct(ImagineInterface $imagine, $rootPath)
     {
         $this->imagine = $imagine;

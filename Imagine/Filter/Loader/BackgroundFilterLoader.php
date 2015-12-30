@@ -9,6 +9,11 @@ use Imagine\Image\Point;
 
 class BackgroundFilterLoader implements LoaderInterface
 {
+    /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
