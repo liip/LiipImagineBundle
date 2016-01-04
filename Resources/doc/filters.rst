@@ -226,6 +226,19 @@ It modifies the way the image is loaded progressively:
                         # mode can be one of: 'none', 'line', 'plane' and 'partition'
                         mode: line
 
+The ``grayscale`` filter
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+It modifies the image colors by calculating the gray-value based on RGB:
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    grayscale: ~
+
 Load your Custom Filters
 ------------------------
 
