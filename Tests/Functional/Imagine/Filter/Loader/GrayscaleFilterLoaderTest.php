@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 
 /**
- * Functional test cases for GrayscaleFilterLoader class
+ * Functional test cases for GrayscaleFilterLoader class.
  *
  * @author Gregoire Humeau <gregoire.humeau@gmail.com>
  */

@@ -10,9 +10,10 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for GrayscaleFilterLoader class
+ * Test cases for GrayscaleFilterLoader class.
  *
  * @covers Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
+ *
  * @author Gregoire Humeau <gregoire.humeau@gmail.com>
  */
 class GrayscaleFilterLoaderTest extends AbstractTest
@@ -31,6 +32,6 @@ class GrayscaleFilterLoaderTest extends AbstractTest
 
         //Test result
         $pixel = $result->getColorAt(new Point(10, 10));
-        $this->assertEquals('#565656', (string)$pixel);
+        $this->assertEquals('#565656', (string) $pixel);
     }
 }

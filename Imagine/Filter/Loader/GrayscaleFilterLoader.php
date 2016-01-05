@@ -6,7 +6,7 @@ use Imagine\Filter\Advanced\Grayscale;
 use Imagine\Image\ImageInterface;
 
 /**
- * GrayscaleFilterLoader - apply grayscale filter
+ * GrayscaleFilterLoader - apply grayscale filter.
  *
  * @author Gregoire Humeau <gregoire.humeau@gmail.com>
  */
