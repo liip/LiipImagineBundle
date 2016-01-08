@@ -5,12 +5,14 @@ This bundle allows to alter images in certain ways, such as scaling or rotating
 them, creating thumbnails, adding watermarks, etc. In order to not hurt application
 performance, altered images can be cached locally and in Amazon S3 service.
 
-* :doc:`Installation <installation>`
-* :doc:`Introduction <introduction>`
-* :doc:`Basic usage <basic-usage>`
-* :doc:`Configuration <configuration>`
-* :doc:`Filters <filters>`
-* :doc:`DataLoaders <data-loaders>`
-* :doc:`CacheResolvers <cache-resolvers>`
-* :doc:`CacheManager <cache-manager>`
-* :doc:`Commands <commands>`
+.. toctree::
+    :maxdepth: 1
+
+    installation
+    introduction
+    basic-usage
+    configuration
+    data-loaders
+    cache-resolvers
+    cache-manager
+    commands
