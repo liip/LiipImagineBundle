@@ -237,7 +237,7 @@ To tell the bundle about your new filter loader, register it in the service
 container and apply the ``liip_imagine.filter.loader`` tag to it (example here
 in XML):
 
-.. contiguration-block::
+.. configuration-block::
 
     .. code-block:: yaml
 
@@ -322,7 +322,7 @@ should return the ``BinaryInterface`` as well.
 To tell the bundle about your post-processor, register it in the service
 container and apply the ``liip_imagine.filter.post_processor`` tag to it:
 
-.. contiguration-block::
+.. configuration-block::
 
     .. code-block:: yaml
 
