@@ -55,13 +55,11 @@ There are several configuration options available:
   the standard web_path resolver is used)
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
   (which means the standard filesystem loader is used).
-* ``controller``:
-
+* ``controller``
   * ``filter_action`` - name of the controller action to use in the route loader.
     Default value: ``liip_imagine.controller:filterAction``
   * ``filter_runtime_action`` - name of the controller action to use in the route
     loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
-
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``filter_sets`` - specify the filter sets that you want to define and use.
