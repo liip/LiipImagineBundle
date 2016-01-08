@@ -66,8 +66,10 @@
 
         <!-- Post processors' classes -->
         <parameter key="liip_imagine.filter.post_processor.jpegoptim.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor</parameter>
-
         <parameter key="liip_imagine.jpegoptim.binary">/usr/bin/jpegoptim</parameter>
+
+        <parameter key="liip_imagine.filter.post_processor.optipng.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor</parameter>
+        <parameter key="liip_imagine.optipng.binary">/usr/bin/optipng</parameter>
 
     </parameters>
 
@@ -268,6 +270,10 @@
         <service id="liip_imagine.filter.post_processor.jpegoptim" class="%liip_imagine.filter.post_processor.jpegoptim.class%">
             <argument>%liip_imagine.jpegoptim.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="jpegoptim" />
+        </service>
+        <service id="liip_imagine.filter.post_processor.optipng" class="%liip_imagine.filter.post_processor.optipng.class%">
+            <argument>%liip_imagine.optipng.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="optipng" />
         </service>
     </services>
 </container>
