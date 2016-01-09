@@ -1,9 +1,12 @@
 Built-In DataLoader
 ===================
 
-* :doc:`FileSystem <data-loader/filesystem>`
-* :doc:`MongoDB GridFS <data-loader/gridfs>`
-* :doc:`Stream <data-loader/stream>`
+.. toctree::
+    :maxdepth: 1
+
+    data-loader/filesystem
+    data-loader/gridfs
+    data-loader/stream
 
 Other data loaders
 ------------------
