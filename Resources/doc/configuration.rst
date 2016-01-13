@@ -56,10 +56,10 @@ There are several configuration options available:
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
   (which means the standard filesystem loader is used).
 * ``controller``
-  * ``filter_action`` - name of the controller action to use in the route loader.
-    Default value: ``liip_imagine.controller:filterAction``
-  * ``filter_runtime_action`` - name of the controller action to use in the route
-    loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
+    * ``filter_action`` - name of the controller action to use in the route loader.
+      Default value: ``liip_imagine.controller:filterAction``
+    * ``filter_runtime_action`` - name of the controller action to use in the route
+      loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``filter_sets`` - specify the filter sets that you want to define and use.
@@ -71,9 +71,12 @@ Each filter set that you specify has the following options:
 * ``post_processors`` - sets post-processors to be applied on filtered image
   (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
 * ``quality`` - override the default quality of 100 for the generated images. **(deprecated)**
-* ``jpeg_quality`` - override the quality for jpeg images (this overrides the ``quality`` option above)
-* ``png_compression_level`` - set the compression level for png images (0-9) (this overrides the ``quality`` option above)
-* ``png_compression_filter`` - set the compression filter for png images (see the ``filters`` parameter for ``imagepng`` function in `PHP manual`_ for more details)
+* ``jpeg_quality`` - override the quality for jpeg images (this overrides the
+  ``quality`` option above)
+* ``png_compression_level`` - set the compression level for png images (0-9)
+  (this overrides the ``quality`` option above)
+* ``png_compression_filter`` - set the compression filter for png images (see the
+  ``filters`` parameter for ``imagepng`` function in `PHP manual`_ for more details)
 * ``cache`` - override the default cache setting.
 * ``data_loader`` - override the default data loader.
 * ``route`` - optional list of route requirements, defaults and options using in

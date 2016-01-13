@@ -13,6 +13,6 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         require_once __DIR__.'/app/AppKernel.php';
 
-        return 'AppKernel';
+        return 'Liip\ImagineBundle\Tests\Functional\app\AppKernel';
     }
 }

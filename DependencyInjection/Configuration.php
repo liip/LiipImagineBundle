@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('resolvers')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->performNoDeepMerging()
         ;
         $this->addResolversSections($resolversPrototypeNode);
 

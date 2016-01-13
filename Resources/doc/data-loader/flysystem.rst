@@ -1,10 +1,10 @@
 FlysystemLoader
-============
+===============
 
 This loader lets you load images from `Flysystem`_ filesystem abstraction layer,
 which can be used in Symfony projects by installing, for example, `OneupFlysystemBundle`_.
 
-Value of 'filesystem_service' property must be a service,
+Value of ``filesystem_service`` property must be a service,
 which returns an instance of League\\Flysystem\\Filesystem.
 
 For implementation using `OneupFlysystemBundle`_ look below.

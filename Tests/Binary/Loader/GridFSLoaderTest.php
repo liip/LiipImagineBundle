@@ -24,7 +24,10 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!extension_loaded('mongodb')) {
-            $this->markTestSkipped('ext/mongodb not installed');
+            $this->markTestSkipped('ext/mongodb is not installed');
+        }
+        if (!class_exists('Doctrine\MongoDB\GridFSFile')) {
+            $this->markTestSkipped('doctrine mongo odm is not installed');
         }
         $this->repo = $this->getMockBuilder('Doctrine\ODM\MongoDB\DocumentRepository')->disableOriginalConstructor()->getMock();
 

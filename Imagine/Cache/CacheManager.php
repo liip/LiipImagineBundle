@@ -88,16 +88,22 @@ class CacheManager
      * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
      *
      * @param string $filter
+     * @param string $resolver
      *
      * @return ResolverInterface
      *
      * @throws \OutOfBoundsException If neither a specific nor a default resolver is available.
      */
-    protected function getResolver($filter)
+    protected function getResolver($filter, $resolver)
     {
-        $config = $this->filterConfig->get($filter);
+        // BC
+        if (false == $resolver) {
+            $config = $this->filterConfig->get($filter);
 
-        $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
+            $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
+        } else {
+            $resolverName = $resolver;
+        }
 
         if (!isset($this->resolvers[$resolverName])) {
             throw new \OutOfBoundsException(sprintf(
@@ -117,23 +123,24 @@ class CacheManager
      * @param string $path          The path where the resolved file is expected.
      * @param string $filter
      * @param array  $runtimeConfig
+     * @param string $resolver
      *
      * @return string
      */
-    public function getBrowserPath($path, $filter, array $runtimeConfig = array())
+    public function getBrowserPath($path, $filter, array $runtimeConfig = array(), $resolver = null)
     {
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
-            return $this->isStored($rcPath, $filter) ?
-                $this->resolve($rcPath, $filter) :
-                $this->generateUrl($path, $filter, $runtimeConfig)
+            return $this->isStored($rcPath, $filter, $resolver) ?
+                $this->resolve($rcPath, $filter, $resolver) :
+                $this->generateUrl($path, $filter, $runtimeConfig, $resolver)
             ;
         }
 
-        return $this->isStored($path, $filter) ?
-            $this->resolve($path, $filter) :
-            $this->generateUrl($path, $filter)
+        return $this->isStored($path, $filter, $resolver) ?
+            $this->resolve($path, $filter, $resolver) :
+            $this->generateUrl($path, $filter, array(), $resolver)
         ;
     }
 
@@ -142,6 +149,8 @@ class CacheManager
      *
      * @param string $path
      * @param array  $runtimeConfig
+     *
+     * @return string
      */
     public function getRuntimePath($path, array $runtimeConfig)
     {
@@ -154,15 +163,20 @@ class CacheManager
      * @param string $path          The path where the resolved file is expected.
      * @param string $filter        The name of the imagine filter in effect.
      * @param array  $runtimeConfig
+     * @param string $resolver
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = array())
+    public function generateUrl($path, $filter, array $runtimeConfig = array(), $resolver = null)
     {
         $params = array(
             'path' => ltrim($path, '/'),
             'filter' => $filter,
         );
+
+        if ($resolver) {
+            $params['resolver'] = $resolver;
+        }
 
         if (empty($runtimeConfig)) {
             $filterUrl = $this->router->generate('liip_imagine_filter', $params, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -181,12 +195,13 @@ class CacheManager
      *
      * @param string $path
      * @param string $filter
+     * @param string $resolver
      *
      * @return bool
      */
-    public function isStored($path, $filter)
+    public function isStored($path, $filter, $resolver = null)
     {
-        return $this->getResolver($filter)->isStored($path, $filter);
+        return $this->getResolver($filter, $resolver)->isStored($path, $filter);
     }
 
     /**
@@ -194,12 +209,13 @@ class CacheManager
      *
      * @param string $path
      * @param string $filter
+     * @param string $resolver
      *
      * @return string The url of resolved image.
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */
-    public function resolve($path, $filter)
+    public function resolve($path, $filter, $resolver = null)
     {
         if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
@@ -208,7 +224,7 @@ class CacheManager
         $preEvent = new CacheResolveEvent($path, $filter);
         $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
 
-        $url = $this->getResolver($preEvent->getFilter())->resolve($preEvent->getPath(), $preEvent->getFilter());
+        $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
         $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
@@ -222,10 +238,11 @@ class CacheManager
      * @param BinaryInterface $binary
      * @param string          $path
      * @param string          $filter
+     * @param string          $resolver
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
     {
-        $this->getResolver($filter)->store($binary, $path, $filter);
+        $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
     }
 
     /**
@@ -249,7 +266,7 @@ class CacheManager
 
         $mapping = new \SplObjectStorage();
         foreach ($filters as $filter) {
-            $resolver = $this->getResolver($filter);
+            $resolver = $this->getResolver($filter, null);
 
             $list = isset($mapping[$resolver]) ? $mapping[$resolver] : array();
 
