@@ -7,6 +7,7 @@ Built-In DataLoader
     data-loader/filesystem
     data-loader/gridfs
     data-loader/stream
+    data-loader/flysystem
 
 Other data loaders
 ------------------
