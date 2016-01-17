@@ -11,6 +11,7 @@ performance, altered images can be cached locally and in Amazon S3 service.
     installation
     introduction
     basic-usage
+    filters
     configuration
     data-loaders
     cache-resolvers
