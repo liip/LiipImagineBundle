@@ -22,6 +22,7 @@ class WebPathResolver implements ResolverInterface
      * @var string
      */
     protected $webRoot;
+
     /**
      * @var string
      */
