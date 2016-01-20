@@ -29,6 +29,11 @@ class WebPathResolver implements ResolverInterface
     protected $cachePrefix;
 
     /**
+     * @var string
+     */
+    protected $cacheRoot;
+
+    /**
      * @param Filesystem     $filesystem
      * @param RequestContext $requestContext
      * @param string         $webRootDir
