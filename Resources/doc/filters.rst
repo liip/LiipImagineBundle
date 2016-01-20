@@ -380,3 +380,15 @@ parameters, for example:
         liip_imagine.jpegoptim.binary: /usr/local/bin/jpegoptim
 
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+
+
+The ``OptiPngPostProcessor`` is also available by default and can be used just as jpegoptim. 
+Make sure that optipng binary is installed on the system and change the 
+``liip_imagine.optipng.binary`` in parameters if needed.
+
+.. code-block:: yaml
+
+    parameters:
+        liip_imagine.optipng.binary: /usr/local/bin/optipng
+
+.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
