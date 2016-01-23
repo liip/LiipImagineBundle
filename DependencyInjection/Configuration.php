@@ -122,7 +122,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('quality')->defaultValue(100)->end()
                             ->scalarNode('jpeg_quality')->defaultNull()->end()
-                            ->scalarNode('png_compression_level')->defaultNull()->end()
+                            ->scalarNode('png_compression_level')->defaultValue(9)->end()
                             ->scalarNode('png_compression_filter')->defaultNull()->end()
                             ->scalarNode('format')->defaultNull()->end()
                             ->booleanNode('animated')->defaultFalse()->end()
