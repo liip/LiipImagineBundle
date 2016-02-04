@@ -3,7 +3,8 @@
 namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Model\Binary;
+use Liip\ImagineBundle\Binary\FileBinaryInterface;
+use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -42,7 +43,11 @@ class OptiPngPostProcessor implements PostProcessorInterface
 
         $pb->add('--o7');
         $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_optipng'));
-        file_put_contents($input, $binary->getContent());
+        if ($binary instanceof FileBinaryInterface) {
+            copy($binary->getPath(), $input);
+        } else {
+            file_put_contents($input, $binary->getContent());
+        }
 
         $proc = $pb->getProcess();
         $proc->run();
@@ -52,7 +57,7 @@ class OptiPngPostProcessor implements PostProcessorInterface
             throw new ProcessFailedException($proc);
         }
 
-        $result = new Binary(file_get_contents($input), $binary->getMimeType(), $binary->getFormat());
+        $result = new FileBinary($input, $binary->getMimeType(), $binary->getFormat());
 
         unlink($input);
 
