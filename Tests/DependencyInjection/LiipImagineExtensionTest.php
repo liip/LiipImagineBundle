@@ -136,7 +136,7 @@ class LiipImagineExtensionTest extends AbstractTest
 
     protected function getFullConfig()
     {
-        $yaml = <<<EOF
+        $yaml = <<<'EOF'
 driver: imagick
 cache: false
 filter_sets:

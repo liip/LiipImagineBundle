@@ -24,7 +24,7 @@ class ResolveCacheCommand extends ContainerAwareCommand
                 'f',
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Filters list'
-            )->setHelp(<<<EOF
+            )->setHelp(<<<'EOF'
 The <info>%command.name%</info> command resolves cache by specified parameters.
 It returns list of urls.
 
