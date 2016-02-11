@@ -23,7 +23,7 @@ class RemoveCacheCommand extends ContainerAwareCommand
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Filters list'
             )
-            ->setHelp(<<<EOF
+            ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command removes cache by specified parameters.
 
 Paths should be separated by spaces:
