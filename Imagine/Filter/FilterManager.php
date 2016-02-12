@@ -4,6 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
@@ -100,7 +101,11 @@ class FilterManager
             $config
         );
 
-        $image = $this->imagine->load($binary->getContent());
+        if ($binary instanceof FileBinaryInterface) {
+            $image = $this->imagine->open($binary->getPath());
+        } else {
+            $image = $this->imagine->load($binary->getContent());
+        }
 
         foreach ($config['filters'] as $eachFilter => $eachOptions) {
             if (!isset($this->loaders[$eachFilter])) {

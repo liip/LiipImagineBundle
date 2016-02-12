@@ -2,7 +2,7 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-use Liip\ImagineBundle\Model\Binary;
+use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
@@ -57,8 +57,8 @@ class FileSystemLoader implements LoaderInterface
 
         $mimeType = $this->mimeTypeGuesser->guess($absolutePath);
 
-        return new Binary(
-            file_get_contents($absolutePath),
+        return new FileBinary(
+            $absolutePath,
             $mimeType,
             $this->extensionGuesser->guess($mimeType)
         );

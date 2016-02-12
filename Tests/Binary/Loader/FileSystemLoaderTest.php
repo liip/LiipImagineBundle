@@ -102,7 +102,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $binary = $loader->find($path);
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
         $this->assertStringStartsWith('text/', $binary->getMimeType());
     }
 }
