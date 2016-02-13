@@ -4,7 +4,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
-use Liip\ImagineBundle\Model\FileBinary;
+use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -127,7 +127,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
             throw new ProcessFailedException($proc);
         }
 
-        $result = new FileBinary($input, $binary->getMimeType(), $binary->getFormat());
+        $result = new Binary(file_get_contents($input), $binary->getMimeType(), $binary->getFormat());
 
         unlink($input);
 
