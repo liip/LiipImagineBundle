@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\Box;
-use Imagine\Image\Color;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
@@ -25,9 +24,9 @@ class BackgroundFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        $background = new Color(
+        $background = $image->palette()->color(
             isset($options['color']) ? $options['color'] : '#fff',
-            isset($options['transparency']) ? $options['transparency'] : 0
+            isset($options['transparency']) ? $options['transparency'] : null
         );
         $topLeft = new Point(0, 0);
         $size = $image->getSize();
