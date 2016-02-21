@@ -8,6 +8,7 @@ use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -87,6 +88,48 @@ class ImagineController
             }
 
             return new RedirectResponse($this->cacheManager->resolve($path, $filter), 301);
+        } catch (RuntimeException $e) {
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
+        }
+    }
+
+    /**
+     * This action applies a given filter to a given image, optionally saves the image and outputs it to the browser at the same time.
+     *
+     * @param Request $request
+     * @param string $path
+     * @param string $filter
+     *
+     * @throws \RuntimeException
+     * @throws BadRequestHttpException
+     *
+     * @return RedirectResponse
+     */
+    public function readAction(Request $request, $path, $filter)
+    {
+        try {
+            try {
+                $binary = $this->dataManager->find($filter, $path);
+            } catch (NotLoadableException $e) {
+                if ($defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter)) {
+                    return new RedirectResponse($defaultImageUrl);
+                }
+
+                throw new NotFoundHttpException('Source image could not be found', $e);
+            }
+
+            $processed = $this->filterManager->applyFilter($binary, $filter);
+
+            $this->cacheManager->store(
+                $processed,
+                $path,
+                $filter
+            );
+
+            $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-serve');
+            file_put_contents($tmpFile, $processed->getContent());
+
+            return new BinaryFileResponse($tmpFile, 201);
         } catch (RuntimeException $e) {
             throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
         }

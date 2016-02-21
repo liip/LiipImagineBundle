@@ -28,6 +28,7 @@ class ImagineExtension extends \Twig_Extension
     {
         return array(
             'imagine_filter' => new \Twig_Filter_Method($this, 'filter'),
+            'imagine_resolve' => new \Twig_Filter_Method($this, 'resolve'),
         );
     }
 
@@ -44,6 +45,14 @@ class ImagineExtension extends \Twig_Extension
     {
         return new \Twig_Markup(
             $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig),
+            'utf8'
+        );
+    }
+
+    public function resolve($path, $filter)
+    {
+        return new \Twig_Markup(
+            $this->cacheManager->resolve($path, $filter),
             'utf8'
         );
     }
