@@ -108,26 +108,32 @@ class ImagineController
     public function readAction(Request $request, $path, $filter)
     {
         try {
-            try {
-                $binary = $this->dataManager->find($filter, $path);
-            } catch (NotLoadableException $e) {
-                if ($defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter)) {
-                    return new RedirectResponse($defaultImageUrl);
+            if (!$this->cacheManager->isStored($path, $filter)) {
+                try {
+                    $binary = $this->dataManager->find($filter, $path);
+                } catch (NotLoadableException $e) {
+                    if ($defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter)) {
+                        return new RedirectResponse($defaultImageUrl);
+                    }
+
+                    throw new NotFoundHttpException('Source image could not be found', $e);
                 }
 
-                throw new NotFoundHttpException('Source image could not be found', $e);
+                $processed = $this->filterManager->applyFilter($binary, $filter);
+
+                $this->cacheManager->store(
+                    $processed,
+                    $path,
+                    $filter
+                );
+
+                $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-serve');
+                file_put_contents($tmpFile, $processed->getContent());
+            } else {
+                $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-serve');
+                $binary = file_get_contents($this->cacheManager->resolve($path, $filter));
+                file_put_contents($tmpFile, $binary);
             }
-
-            $processed = $this->filterManager->applyFilter($binary, $filter);
-
-            $this->cacheManager->store(
-                $processed,
-                $path,
-                $filter
-            );
-
-            $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-serve');
-            file_put_contents($tmpFile, $processed->getContent());
 
             return new BinaryFileResponse($tmpFile, 201);
         } catch (RuntimeException $e) {
