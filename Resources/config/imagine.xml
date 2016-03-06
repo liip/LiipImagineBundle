@@ -57,6 +57,7 @@
         <parameter key="liip_imagine.cache.resolver.no_cache_web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.aws_s3.class">Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver</parameter>
         <parameter key="liip_imagine.cache.resolver.cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.flysystem.class">Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.proxy.class">Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver</parameter>
 
         <!-- Form types -->
@@ -208,7 +209,7 @@
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
         </service>
-        
+
         <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
@@ -232,6 +233,13 @@
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.cache" class="%liip_imagine.cache.resolver.cache.class%" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.cache.resolver.prototype.flysystem" class="%liip_imagine.cache.resolver.flysystem.class%" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument type="service" id="router.request_context" />
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument><!-- will be injected by a ResolverFactory --></argument>
         </service>
