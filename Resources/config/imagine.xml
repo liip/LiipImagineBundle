@@ -72,6 +72,12 @@
         <parameter key="liip_imagine.filter.post_processor.optipng.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor</parameter>
         <parameter key="liip_imagine.optipng.binary">/usr/bin/optipng</parameter>
 
+        <parameter key="liip_imagine.filter.post_processor.pngquant.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor</parameter>
+        <parameter key="liip_imagine.pngquant.binary">/usr/bin/pngquant</parameter>
+
+        <parameter key="liip_imagine.filter.post_processor.mozjpeg.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor</parameter>
+        <parameter key="liip_imagine.mozjpeg.binary">/opt/mozjpeg/bin/cjpeg</parameter>
+
     </parameters>
 
     <services>
@@ -280,6 +286,14 @@
         <service id="liip_imagine.filter.post_processor.optipng" class="%liip_imagine.filter.post_processor.optipng.class%">
             <argument>%liip_imagine.optipng.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="optipng" />
+        </service>
+        <service id="liip_imagine.filter.post_processor.pngquant" class="%liip_imagine.filter.post_processor.pngquant.class%">
+            <argument>%liip_imagine.pngquant.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="pngquant" />
+        </service>
+        <service id="liip_imagine.filter.post_processor.mozjpeg" class="%liip_imagine.filter.post_processor.mozjpeg.class%">
+            <argument>%liip_imagine.mozjpeg.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
     </services>
 </container>

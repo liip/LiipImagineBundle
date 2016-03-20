@@ -172,7 +172,7 @@ class FilterManager
                     'Could not find post processor "%s"', $postProcessorName
                 ));
             }
-            $binary = $this->postProcessors[$postProcessorName]->process($binary);
+            $binary = $this->postProcessors[$postProcessorName]->process($binary, $postProcessorOptions);
         }
 
         return $binary;

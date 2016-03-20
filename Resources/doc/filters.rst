@@ -319,6 +319,11 @@ implement ``Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterfa
 basically, the file containing an image after all filters have been applied. It
 should return the ``BinaryInterface`` as well.
 
+Post-Processors, for this reason, may be safely chained. This is true even if they
+operate on different mime-types, meaning that they are perfect for image-specific
+optimisation techniques. A number of optimisers, lossy and loss-less, are provided
+by default.
+
 To tell the bundle about your post-processor, register it in the service
 container and apply the ``liip_imagine.filter.post_processor`` tag to it:
 
@@ -382,7 +387,7 @@ parameters, for example:
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
 
 
-The ``OptiPngPostProcessor`` is also available by default and can be used just as jpegoptim. 
+The ``OptiPngPostProcessor`` is also available and can be used just as jpegoptim. 
 Make sure that optipng binary is installed on the system and change the 
 ``liip_imagine.optipng.binary`` in parameters if needed.
 
@@ -390,5 +395,65 @@ Make sure that optipng binary is installed on the system and change the
 
     parameters:
         liip_imagine.optipng.binary: /usr/local/bin/optipng
+
+.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+
+
+The ``MozJpegPostProcessor`` can be used to provide safe lossy JPEG optimization.
+Optionally, a quality parameter may be passed down to each instance.
+More parameters may surface in the future.
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    thumbnail: { size: [150, 150], mode: outbound }
+                post_processors:
+                    mozjpeg: {}
+            my_other_thumb:
+                filters:
+                    thumbnail: { size: [150, 150], mode: outbound }
+                post_processors:
+                    mozjpeg: { quality: 90 }
+
+Make sure that you have installed the mozjpeg tools on your system, and please adjust the
+``liip_imagine.mozjpeg.binary`` in parameters if needed.
+
+.. code-block:: yaml
+
+    parameters:
+        liip_imagine.mozjpeg.binary: /opt/mozjpeg/bin/cjpeg
+
+.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+
+
+The ``PngquantPostProcessor`` can be used to provide safe lossy PNG optimization.
+Optionally, a quality parameter may be passed down to each instance. 
+More parameters may surface in the future.
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    thumbnail: { size: [150, 150], mode: outbound }
+                post_processors:
+                    pngquant: {}
+            my_other_thumb:
+                filters:
+                    thumbnail: { size: [150, 150], mode: outbound }
+                post_processors:
+                    pngquant: { quality: "80-100" }
+
+Make sure that you have installed a recent version (at least 2.3) of pngquant on your system, and please adjust the
+``liip_imagine.pngquant.binary`` in parameters if needed.
+
+.. code-block:: yaml
+
+    parameters:
+        liip_imagine.pngquant.binary: /usr/bin/pngquant
 
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html

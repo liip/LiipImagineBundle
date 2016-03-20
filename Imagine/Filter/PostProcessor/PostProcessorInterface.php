@@ -13,8 +13,10 @@ interface PostProcessorInterface
 {
     /**
      * @param BinaryInterface $binary
+     * 
+     * @param array           $options  Operation-specific options
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary);
+    public function process(BinaryInterface $binary, array $options);
 }

@@ -83,13 +83,15 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     /**
      * @param BinaryInterface $binary
      *
+     * @param array           $options
+     *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      *
      * @see      Implementation taken from Assetic\Filter\JpegoptimFilter
      */
-    public function process(BinaryInterface $binary)
+    public function process(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/jpeg', 'image/jpg'))) {
