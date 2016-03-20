@@ -3,14 +3,13 @@
 namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
 /**
- * mozjpeg post-processor, for noticably better jpeg compression
- * 
+ * mozjpeg post-processor, for noticably better jpeg compression.
+ *
  * @see http://calendar.perfplanet.com/2014/mozjpeg-3-0/
  * @see https://mozjpeg.codelove.de/binaries.html
  *
@@ -18,10 +17,10 @@ use Symfony\Component\Process\ProcessBuilder;
  */
 class MozJpegPostProcessor implements PostProcessorInterface
 {
-    /** @var string    Path to the mozjpeg cjpeg binary */
+    /** @var string Path to the mozjpeg cjpeg binary */
     protected $mozjpegBin;
 
-    /** @var null|int  Quality factor */
+    /** @var null|int Quality factor */
     protected $quality;
 
     /**
@@ -52,7 +51,6 @@ class MozJpegPostProcessor implements PostProcessorInterface
 
     /**
      * @param BinaryInterface $binary
-     *
      * @param array           $options
      *
      * @throws ProcessFailedException

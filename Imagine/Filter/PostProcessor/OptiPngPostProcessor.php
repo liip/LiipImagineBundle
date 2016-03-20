@@ -25,7 +25,6 @@ class OptiPngPostProcessor implements PostProcessorInterface
 
     /**
      * @param BinaryInterface $binary
-     *
      * @param array           $options
      *
      * @throws ProcessFailedException

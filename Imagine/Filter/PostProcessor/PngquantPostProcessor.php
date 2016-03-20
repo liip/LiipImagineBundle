@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
@@ -12,7 +11,7 @@ use Symfony\Component\Process\ProcessBuilder;
  * pngquant post-processor, for optimal, web-safe, lossy png compression
  * This requires a recent version of pngquant (so 2.3 or higher?)
  * See pngqaunt.org if you are unable to find a binary package for your distribution.
- * 
+ *
  * @see https://pngquant.org/
  *
  * @author Alex Wilson <a@ax.gy>
@@ -44,12 +43,12 @@ class PngquantPostProcessor implements PostProcessorInterface
     public function setQuality($quality)
     {
         $this->quality = $quality;
+
         return $this;
     }
 
     /**
      * @param BinaryInterface $binary
-     *
      * @param array           $options
      *
      * @throws ProcessFailedException
