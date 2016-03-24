@@ -18,7 +18,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $stripAll = true;
+    protected $stripAll;
 
     /**
      * If set, --max=$value will be passed to jpegoptim.
@@ -32,16 +32,22 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $progressive = true;
+    protected $progressive;
 
     /**
      * Constructor.
      *
      * @param string $jpegoptimBin Path to the jpegoptim binary
+     * @param bool   $stripAll     Strip all markers from output
+     * @param int    $max          Set maximum image quality factor
+     * @param bool   $progressive  Force output to be progressive
      */
-    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim')
+    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = null, $progressive = true)
     {
         $this->jpegoptimBin = $jpegoptimBin;
+        $this->stripAll = $stripAll;
+        $this->max = $max;
+        $this->progressive = $progressive;
     }
 
     /**
