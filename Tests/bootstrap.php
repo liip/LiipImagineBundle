@@ -20,5 +20,5 @@ namespace Symfony\Component\ExpressionLanguage {
 
     interface ExpressionFunctionProviderInterface
     {
-    };
+    }
 }

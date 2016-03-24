@@ -18,7 +18,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $stripAll = true;
+    protected $stripAll;
 
     /**
      * If set, --max=$value will be passed to jpegoptim.
@@ -32,16 +32,22 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $progressive = true;
+    protected $progressive;
 
     /**
      * Constructor.
      *
      * @param string $jpegoptimBin Path to the jpegoptim binary
+     * @param bool   $stripAll     Strip all markers from output
+     * @param int    $max          Set maximum image quality factor
+     * @param bool   $progressive  Force output to be progressive
      */
-    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim')
+    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = null, $progressive = true)
     {
         $this->jpegoptimBin = $jpegoptimBin;
+        $this->stripAll = $stripAll;
+        $this->max = $max;
+        $this->progressive = $progressive;
     }
 
     /**
@@ -96,6 +102,10 @@ class JpegOptimPostProcessor implements PostProcessorInterface
             return $binary;
         }
 
+        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_jpegoptim')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        }
+
         $pb = new ProcessBuilder(array($this->jpegoptimBin));
 
         if ($this->stripAll) {
@@ -112,7 +122,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
             $pb->add('--all-normal');
         }
 
-        $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_jpegoptim'));
+        $pb->add($input);
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
         } else {

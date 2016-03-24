@@ -10,17 +10,37 @@ use Symfony\Component\Process\ProcessBuilder;
 
 class OptiPngPostProcessor implements PostProcessorInterface
 {
-    /** @var string Path to optipng binary */
-    protected $optipng;
+    /**
+     * @var string Path to optipng binary
+     */
+    protected $optipngBin;
+
+    /**
+     * If set --oN will be passed to optipng.
+     *
+     * @var int
+     */
+    protected $level;
+
+    /**
+     * If set --strip=all will be passed to optipng.
+     *
+     * @var bool
+     */
+    protected $stripAll;
 
     /**
      * Constructor.
      *
      * @param string $optipngBin Path to the optipng binary
+     * @param int    $level      Optimization level
+     * @param bool   $stripAll   Strip metadata objects
      */
-    public function __construct($optipngBin = '/usr/bin/optipng')
+    public function __construct($optipngBin = '/usr/bin/optipng', $level = 7, $stripAll = true)
     {
         $this->optipngBin = $optipngBin;
+        $this->level = $level;
+        $this->stripAll = $stripAll;
     }
 
     /**
@@ -39,10 +59,19 @@ class OptiPngPostProcessor implements PostProcessorInterface
             return $binary;
         }
 
-        $pb = new ProcessBuilder(array($this->optipngBin));
+        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_optipng')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        }
 
-        $pb->add('--o7');
-        $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_optipng'));
+        $pb = new ProcessBuilder(array($this->optipngBin));
+        if ($this->level !== null) {
+            $pb->add(sprintf('--o%d', $this->level));
+        }
+        if ($this->stripAll) {
+            $pb->add('--strip=all');
+        }
+        $pb->add($input);
+
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
         } else {
