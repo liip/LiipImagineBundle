@@ -149,7 +149,7 @@ created (with the given size and color) and the original image is placed on top:
         filter_sets:
             my_thumb:
                 filters:
-                    background: { size: [1026, 684], color: '#fff' }
+                    background: { size: [1026, 684], position: center, color: '#fff' }
 
 The ``watermark`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~
