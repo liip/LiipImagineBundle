@@ -15,7 +15,7 @@ use Symfony\Component\Process\ProcessBuilder;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class MozJpegPostProcessor implements PostProcessorInterface
+class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
     /** @var string Path to the mozjpeg cjpeg binary */
     protected $mozjpegBin;
@@ -51,13 +51,27 @@ class MozJpegPostProcessor implements PostProcessorInterface
 
     /**
      * @param BinaryInterface $binary
+     *
+     * @uses MozJpegPostProcessor::processWithConfiguration
+     *
+     * @throws ProcessFailedException
+     *
+     * @return BinaryInterface
+     */
+    public function process(BinaryInterface $binary)
+    {
+        return $this->processWithConfiguration($binary, array());
+    }
+
+    /**
+     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary, array $options)
+    public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/jpeg', 'image/jpg'))) {

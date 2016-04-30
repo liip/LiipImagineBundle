@@ -7,6 +7,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\ConfigurablePostProcessorInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 
@@ -172,7 +173,11 @@ class FilterManager
                     'Could not find post processor "%s"', $postProcessorName
                 ));
             }
-            $binary = $this->postProcessors[$postProcessorName]->process($binary, $postProcessorOptions);
+            if ($this->postProcessors[$postProcessorName] instanceof ConfigurablePostProcessorInterface) {
+                $binary = $this->postProcessors[$postProcessorName]->processWithConfiguration($binary, $postProcessorOptions);
+            } else {
+                $binary = $this->postProcessors[$postProcessorName]->process($binary);
+            }
         }
 
         return $binary;

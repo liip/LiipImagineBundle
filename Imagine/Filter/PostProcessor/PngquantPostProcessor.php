@@ -16,7 +16,7 @@ use Symfony\Component\Process\ProcessBuilder;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class PngquantPostProcessor implements PostProcessorInterface
+class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
     /** @var string Path to pngquant binary */
     protected $pngquantBin;
@@ -49,13 +49,27 @@ class PngquantPostProcessor implements PostProcessorInterface
 
     /**
      * @param BinaryInterface $binary
+     *
+     * @uses PngquantPostProcessor::processWithConfiguration
+     *
+     * @throws ProcessFailedException
+     *
+     * @return BinaryInterface
+     */
+    public function process(BinaryInterface $binary)
+    {
+        return $this->processWithConfiguration($binary, array());
+    }
+
+    /**
+     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary, array $options)
+    public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/png'))) {

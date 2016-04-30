@@ -25,7 +25,6 @@ class OptiPngPostProcessor implements PostProcessorInterface
 
     /**
      * @param BinaryInterface $binary
-     * @param array           $options
      *
      * @throws ProcessFailedException
      *
@@ -33,7 +32,7 @@ class OptiPngPostProcessor implements PostProcessorInterface
      *
      * @see      Implementation taken from Assetic\Filter\optipngFilter
      */
-    public function process(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/png'))) {
