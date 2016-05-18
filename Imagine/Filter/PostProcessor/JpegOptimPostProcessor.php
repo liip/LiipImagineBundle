@@ -96,6 +96,10 @@ class JpegOptimPostProcessor implements PostProcessorInterface
             return $binary;
         }
 
+        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_jpegoptim')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        }
+
         $pb = new ProcessBuilder(array($this->jpegoptimBin));
 
         if ($this->stripAll) {
@@ -112,7 +116,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
             $pb->add('--all-normal');
         }
 
-        $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_jpegoptim'));
+        $pb->add($input);
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
         } else {
