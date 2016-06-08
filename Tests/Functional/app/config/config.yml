@@ -4,24 +4,24 @@ parameters:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    #translator:      { fallback: "%locale%" }
     test: ~
     templating:      { engines: ['php'] }
     session:
         storage_id: session.storage.mock_file
-    secret:          %secret%
+    secret:          "%secret%"
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
-    default_locale:  %locale%
+    default_locale:  "%locale%"
 
 liip_imagine:
     loaders:
         default:
             filesystem:
-                data_root: %kernel.root_dir%/web
+                data_root: "%kernel.root_dir%/web"
     resolvers:
         default:
             web_path:
-                web_root: %kernel.root_dir%/web
+                web_root: "%kernel.root_dir%/web"
                 cache_prefix: media/cache
 
     filter_sets:
