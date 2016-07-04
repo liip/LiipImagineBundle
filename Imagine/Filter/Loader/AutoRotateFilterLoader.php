@@ -24,9 +24,7 @@ class AutoRotateFilterLoader implements LoaderInterface
     {
         if ($orientation = $this->getOrientation($image)) {
             if ($orientation < 1 || $orientation > 8) {
-                throw new InvalidArgumentException(
-                    sprintf('The image has wrong EXIF orientation tag (%d)', $orientation)
-                );
+                return $image;
             }
 
             // Rotates if necessary.
