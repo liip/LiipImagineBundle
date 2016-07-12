@@ -35,6 +35,7 @@
         <parameter key="liip_imagine.filter.loader.resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.crop.class">Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.grayscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.paste.class">Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.watermark.class">Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.strip.class">Liip\ImagineBundle\Imagine\Filter\Loader\StripFilterLoader</parameter>
@@ -160,6 +161,10 @@
 
         <service id="liip_imagine.filter.loader.crop" class="%liip_imagine.filter.loader.crop.class%">
             <tag name="liip_imagine.filter.loader" loader="crop" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.grayscale" class="%liip_imagine.filter.loader.grayscale.class%">
+            <tag name="liip_imagine.filter.loader" loader="grayscale" />
         </service>
 
         <service id="liip_imagine.filter.loader.paste" class="%liip_imagine.filter.loader.paste.class%">
