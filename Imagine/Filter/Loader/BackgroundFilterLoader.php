@@ -34,8 +34,51 @@ class BackgroundFilterLoader implements LoaderInterface
         if (isset($options['size'])) {
             list($width, $height) = $options['size'];
 
+            $position = isset($options['position']) ? $options['position'] : 'center';
+            switch ($position) {
+                case 'topleft':
+                    $x = 0;
+                    $y = 0;
+                    break;
+                case 'top':
+                    $x = ($width - $image->getSize()->getWidth()) / 2;
+                    $y = 0;
+                    break;
+                case 'topright':
+                    $x = $width - $image->getSize()->getWidth();
+                    $y = 0;
+                    break;
+                case 'left':
+                    $x = 0;
+                    $y = ($height - $image->getSize()->getHeight()) / 2;
+                    break;
+                case 'center':
+                    $x = ($width - $image->getSize()->getWidth()) / 2;
+                    $y = ($height - $image->getSize()->getHeight()) / 2;
+                    break;
+                case 'right':
+                    $x = $width - $image->getSize()->getWidth();
+                    $y = ($height - $image->getSize()->getHeight()) / 2;
+                    break;
+                case 'bottomleft':
+                    $x = 0;
+                    $y = $height - $image->getSize()->getHeight();
+                    break;
+                case 'bottom':
+                    $x = ($width - $image->getSize()->getWidth()) / 2;
+                    $y = $height - $image->getSize()->getHeight();
+                    break;
+                case 'bottomright':
+                    $x = $width - $image->getSize()->getWidth();
+                    $y = $height - $image->getSize()->getHeight();
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Unexpected position '{$position}'");
+                    break;
+            }
+
             $size = new Box($width, $height);
-            $topLeft = new Point(($width - $image->getSize()->getWidth()) / 2, ($height - $image->getSize()->getHeight()) / 2);
+            $topLeft = new Point($x, $y);
         }
 
         $canvas = $this->imagine->create($size, $background);
