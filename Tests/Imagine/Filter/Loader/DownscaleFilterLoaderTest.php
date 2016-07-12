@@ -34,9 +34,9 @@ class DownscaleFilterLoaderTest extends AbstractTest
             })
         ;
 
-        $loader->load($image, ['max' => [100, 100]]);
+        $loader->load($image, array('max' => array(100, 100)));
 
-        return [$initialSize, $resultSize];
+        return array($initialSize, $resultSize);
     }
 
     /**
