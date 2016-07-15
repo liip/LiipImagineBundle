@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\ImageInterface;
-use Imagine\Exception\InvalidArgumentException;
 
 /**
  * AutoRotateFilterLoader - rotates an Image based on its EXIF Data.
