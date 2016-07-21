@@ -401,15 +401,46 @@ parameters, for example:
 
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
 
+It is also possible to configure other defaults for the conversion process via parameters,
+for example:
 
-The ``OptiPngPostProcessor`` is also available and can be used just as jpegoptim. 
-Make sure that optipng binary is installed on the system and change the 
+.. code-block:: yaml
+
+    parameters:
+        # When true, this passes down --strip-all to jpegoptim, which strips all markers from the output jpeg.
+        liip_imagine.jpegoptim.stripAll: true
+
+        # Sets the maxiumum image quality factor.
+        liip_imagine.jpegoptim.max: null
+
+        # When true, --all-progressive is passed to jpegoptim, which results in the output being a progressive jpeg.
+        liip_imagine.jpegoptim.progressive: true
+
+.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+
+
+The ``OptiPngPostProcessor`` is also available by default and can be used just as jpegoptim.
+Make sure that optipng binary is installed on the system and change the
 ``liip_imagine.optipng.binary`` in parameters if needed.
 
 .. code-block:: yaml
 
     parameters:
         liip_imagine.optipng.binary: /usr/local/bin/optipng
+
+.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+
+It is also possible to configure other defaults for the conversion process via parameters,
+for example:
+
+.. code-block:: yaml
+
+    parameters:
+      # When true, this passes down --strip=all to optipng, which removes all metadata from the output image.
+      liip_imagine.optipng.stripAll: true
+
+      # The optimisation level to be used by optipng. Defaults to 7.
+      liip_imagine.optipng.level: 7
 
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
 
@@ -445,7 +476,7 @@ Make sure that you have installed the mozjpeg tools on your system, and please a
 
 
 The ``PngquantPostProcessor`` can be used to provide safe lossy PNG optimization.
-Optionally, a quality parameter may be passed down to each instance. 
+Optionally, a quality parameter may be passed down to each instance.
 More parameters may surface in the future.
 
 .. code-block:: yaml
