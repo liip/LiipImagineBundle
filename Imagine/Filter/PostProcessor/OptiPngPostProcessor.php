@@ -59,16 +59,19 @@ class OptiPngPostProcessor implements PostProcessorInterface
             return $binary;
         }
 
-        $pb = new ProcessBuilder(array($this->optipngBin));
+        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_optipng')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        }
 
+        $pb = new ProcessBuilder(array($this->optipngBin));
         if ($this->level !== null) {
             $pb->add(sprintf('--o%d', $this->level));
         }
         if ($this->stripAll) {
             $pb->add('--strip=all');
         }
+        $pb->add($input);
 
-        $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_optipng'));
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
         } else {

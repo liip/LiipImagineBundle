@@ -35,6 +35,7 @@
         <parameter key="liip_imagine.filter.loader.resize.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.thumbnail.class">Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.crop.class">Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.grayscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.paste.class">Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.watermark.class">Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.strip.class">Liip\ImagineBundle\Imagine\Filter\Loader\StripFilterLoader</parameter>
@@ -57,6 +58,7 @@
         <parameter key="liip_imagine.cache.resolver.no_cache_web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.aws_s3.class">Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver</parameter>
         <parameter key="liip_imagine.cache.resolver.cache.class">Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver</parameter>
+        <parameter key="liip_imagine.cache.resolver.flysystem.class">Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver</parameter>
         <parameter key="liip_imagine.cache.resolver.proxy.class">Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver</parameter>
 
         <!-- Form types -->
@@ -76,6 +78,12 @@
         <parameter key="liip_imagine.optipng.binary">/usr/bin/optipng</parameter>
         <parameter key="liip_imagine.optipng.level">7</parameter>
         <parameter key="liip_imagine.optipng.stripAll">true</parameter>
+
+        <parameter key="liip_imagine.filter.post_processor.pngquant.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor</parameter>
+        <parameter key="liip_imagine.pngquant.binary">/usr/bin/pngquant</parameter>
+
+        <parameter key="liip_imagine.filter.post_processor.mozjpeg.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor</parameter>
+        <parameter key="liip_imagine.mozjpeg.binary">/opt/mozjpeg/bin/cjpeg</parameter>
 
     </parameters>
 
@@ -160,6 +168,10 @@
             <tag name="liip_imagine.filter.loader" loader="crop" />
         </service>
 
+        <service id="liip_imagine.filter.loader.grayscale" class="%liip_imagine.filter.loader.grayscale.class%">
+            <tag name="liip_imagine.filter.loader" loader="grayscale" />
+        </service>
+
         <service id="liip_imagine.filter.loader.paste" class="%liip_imagine.filter.loader.paste.class%">
             <tag name="liip_imagine.filter.loader" loader="paste" />
             <argument type="service" id="liip_imagine" />
@@ -241,6 +253,13 @@
             <argument><!-- will be injected by a ResolverFactory --></argument>
         </service>
 
+        <service id="liip_imagine.cache.resolver.prototype.flysystem" class="%liip_imagine.cache.resolver.flysystem.class%" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument type="service" id="router.request_context" />
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+        </service>
+
         <service id="liip_imagine.cache.resolver.prototype.proxy" class="%liip_imagine.cache.resolver.proxy.class%" public="true" abstract="true">
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
@@ -290,6 +309,14 @@
             <argument>%liip_imagine.optipng.level%</argument>
             <argument>%liip_imagine.optipng.stripAll%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="optipng" />
+        </service>
+        <service id="liip_imagine.filter.post_processor.pngquant" class="%liip_imagine.filter.post_processor.pngquant.class%">
+            <argument>%liip_imagine.pngquant.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="pngquant" />
+        </service>
+        <service id="liip_imagine.filter.post_processor.mozjpeg" class="%liip_imagine.filter.post_processor.mozjpeg.class%">
+            <argument>%liip_imagine.mozjpeg.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
     </services>
 </container>

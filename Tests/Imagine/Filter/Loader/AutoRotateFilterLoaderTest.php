@@ -156,12 +156,16 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     /**
      * Theoretically Orientation is `short` (uint16), so it could be anything
      * from [0; 65535].
-     *
-     * @expectedException \Imagine\Exception\InvalidArgumentException
      */
-    public function testLoadExifInvalid()
+    public static function getInvalidOrientations()
     {
-        $this->loadExif('10', null, false);
+        return array(array(0, 9, 255, 65535));
+    }
+
+    /** @dataProvider getInvalidOrientations */
+    public function testLoadExifInvalid($orientation)
+    {
+        $this->loadExif($orientation, null, false);
     }
 
     /**
