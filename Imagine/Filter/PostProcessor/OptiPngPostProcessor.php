@@ -73,7 +73,6 @@ class OptiPngPostProcessor implements PostProcessorInterface
             $pb->add('--strip=all');
         }
 
-        $pb->add($input = tempnam(sys_get_temp_dir(), 'imagine_optipng'));
         $pb->add($input);
 
         if ($binary instanceof FileBinaryInterface) {
