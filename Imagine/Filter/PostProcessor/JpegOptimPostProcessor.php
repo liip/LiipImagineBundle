@@ -38,8 +38,11 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
      * Constructor.
      *
      * @param string $jpegoptimBin Path to the jpegoptim binary
+     * @param bool   $stripAll     Strip all markers from output
+     * @param int    $max          Set maximum image quality factor
+     * @param bool   $progressive  Force output to be progressive
      */
-    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = 100, $progressive = true)
+    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = null, $progressive = true)
     {
         $this->jpegoptimBin = $jpegoptimBin;
         $this->stripAll = $stripAll;

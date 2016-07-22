@@ -70,9 +70,14 @@
         <!-- Post processors' classes -->
         <parameter key="liip_imagine.filter.post_processor.jpegoptim.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor</parameter>
         <parameter key="liip_imagine.jpegoptim.binary">/usr/bin/jpegoptim</parameter>
+        <parameter key="liip_imagine.jpegoptim.stripAll">true</parameter>
+        <parameter key="liip_imagine.jpegoptim.max">null</parameter>
+        <parameter key="liip_imagine.jpegoptim.progressive">true</parameter>
 
         <parameter key="liip_imagine.filter.post_processor.optipng.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor</parameter>
         <parameter key="liip_imagine.optipng.binary">/usr/bin/optipng</parameter>
+        <parameter key="liip_imagine.optipng.level">7</parameter>
+        <parameter key="liip_imagine.optipng.stripAll">true</parameter>
 
         <parameter key="liip_imagine.filter.post_processor.pngquant.class">Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor</parameter>
         <parameter key="liip_imagine.pngquant.binary">/usr/bin/pngquant</parameter>
@@ -294,10 +299,15 @@
         <!-- Post processors -->
         <service id="liip_imagine.filter.post_processor.jpegoptim" class="%liip_imagine.filter.post_processor.jpegoptim.class%">
             <argument>%liip_imagine.jpegoptim.binary%</argument>
+            <argument>%liip_imagine.jpegoptim.stripAll%</argument>
+            <argument>%liip_imagine.jpegoptim.max%</argument>
+            <argument>%liip_imagine.jpegoptim.progressive%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="jpegoptim" />
         </service>
         <service id="liip_imagine.filter.post_processor.optipng" class="%liip_imagine.filter.post_processor.optipng.class%">
             <argument>%liip_imagine.optipng.binary%</argument>
+            <argument>%liip_imagine.optipng.level%</argument>
+            <argument>%liip_imagine.optipng.stripAll%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="optipng" />
         </service>
         <service id="liip_imagine.filter.post_processor.pngquant" class="%liip_imagine.filter.post_processor.pngquant.class%">
