@@ -375,8 +375,10 @@ For an example of a post processor implementation, refer to
 ``Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor``.
 
 The ``JpegOptimPostProcessor`` can be used to provide lossless JPEG
-optimization, which is good for you website loading speed. In order to add
-lossless JPEG optimization to your filters, use the following configuration:
+optimization, which is good for you website loading speed. Parameters to configure
+stripping of comment and exif data, max quality and progressive rendering may be
+passed in optionally. In order to add lossless JPEG optimization to your filters,
+use the following configuration:
 
 .. code-block:: yaml
 
@@ -386,7 +388,7 @@ lossless JPEG optimization to your filters, use the following configuration:
                 filters:
                     thumbnail: { size: [150, 150], mode: outbound }
                 post_processors:
-                    jpegoptim: {}
+                    jpegoptim: { strip_all: true, max: 70, progressive: true }
 
 Make sure that jpegoptim binary is installed on the system. If path to jpegoptim
 binary is different from ``/usr/bin/jpegoptim``, adjust the path by overriding

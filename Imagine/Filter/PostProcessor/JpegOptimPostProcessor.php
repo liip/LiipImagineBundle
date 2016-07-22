@@ -8,7 +8,7 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
-class JpegOptimPostProcessor implements PostProcessorInterface
+class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
     /** @var string Path to jpegoptim binary */
     protected $jpegoptimBin;
@@ -18,7 +18,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $stripAll = true;
+    protected $stripAll;
 
     /**
      * If set, --max=$value will be passed to jpegoptim.
@@ -32,16 +32,19 @@ class JpegOptimPostProcessor implements PostProcessorInterface
      *
      * @var bool
      */
-    protected $progressive = true;
+    protected $progressive;
 
     /**
      * Constructor.
      *
      * @param string $jpegoptimBin Path to the jpegoptim binary
      */
-    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim')
+    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = 100, $progressive = true)
     {
         $this->jpegoptimBin = $jpegoptimBin;
+        $this->stripAll = $stripAll;
+        $this->max = $max;
+        $this->progressive = $progressive;
     }
 
     /**
@@ -83,13 +86,30 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     /**
      * @param BinaryInterface $binary
      *
+     * @uses JpegOptimPostProcessor::processWithConfiguration
+     *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      *
-     * @see      Implementation taken from Assetic\Filter\JpegoptimFilter
+     * @see Implementation taken from Assetic\Filter\JpegoptimFilter
      */
     public function process(BinaryInterface $binary)
+    {
+        return $this->processWithConfiguration($binary, array());
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param array           $options
+     *
+     * @throws ProcessFailedException
+     *
+     * @return BinaryInterface
+     *
+     * @see Implementation taken from Assetic\Filter\JpegoptimFilter
+     */
+    public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/jpeg', 'image/jpg'))) {
@@ -102,15 +122,18 @@ class JpegOptimPostProcessor implements PostProcessorInterface
 
         $pb = new ProcessBuilder(array($this->jpegoptimBin));
 
-        if ($this->stripAll) {
+        $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
+        if ($stripAll) {
             $pb->add('--strip-all');
         }
 
-        if ($this->max) {
-            $pb->add('--max='.$this->max);
+        $max = array_key_exists('max', $options) ? $options['max'] : $this->max;
+        if ($max) {
+            $pb->add('--max='.$max);
         }
 
-        if ($this->progressive) {
+        $progressive = array_key_exists('progressive', $options) ? $options['progressive'] : $this->progressive;
+        if ($progressive) {
             $pb->add('--all-progressive');
         } else {
             $pb->add('--all-normal');
