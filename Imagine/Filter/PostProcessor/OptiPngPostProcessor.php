@@ -8,7 +8,7 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ProcessBuilder;
 
-class OptiPngPostProcessor implements PostProcessorInterface
+class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
     /**
      * @var string Path to optipng binary
@@ -49,10 +49,23 @@ class OptiPngPostProcessor implements PostProcessorInterface
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
-     *
-     * @see      Implementation taken from Assetic\Filter\optipngFilter
      */
     public function process(BinaryInterface $binary)
+    {
+        $this->processWithConfiguration($binary, array());
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param array           $options
+     *
+     * @throws ProcessFailedException
+     *
+     * @return BinaryInterface|Binary
+     *
+     * @see    Implementation taken from Assetic\Filter\optipngFilter
+     */
+    public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
         if (!in_array($type, array('image/png'))) {
@@ -65,11 +78,13 @@ class OptiPngPostProcessor implements PostProcessorInterface
 
         $pb = new ProcessBuilder(array($this->optipngBin));
 
-        if ($this->level !== null) {
-            $pb->add(sprintf('--o%d', $this->level));
+        $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
+        if ($level !== null) {
+            $pb->add(sprintf('--o%d', $level));
         }
 
-        if ($this->stripAll) {
+        $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
+        if ($stripAll) {
             $pb->add('--strip=all');
         }
 
