@@ -2,7 +2,7 @@ Basic Usage
 ===========
 
 This bundle works by configuring a set of filters and then applying those
-filters to images inside a template So, start by creating some sort of filter
+filters to images inside a template. So, start by creating some sort of filter
 that you need to apply somewhere in your application. For example, suppose
 you want to thumbnail an image to a size of 120x90 pixels:
 
@@ -11,8 +11,8 @@ you want to thumbnail an image to a size of 120x90 pixels:
     # app/config/config.yml
     liip_imagine:
         resolvers:
-           default:
-              web_path: ~
+            default:
+                web_path: ~
 
         filter_sets:
             cache: ~
@@ -77,7 +77,7 @@ If you need to access filtered image URL in your controller:
 
 .. code-block:: php
 
-    $this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb'),
+    $this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb')
 
 In this case, the final rendered path would contain some random data in the
 path ``/media/cache/my_thumb/S8rrlhhQ/relative/path/to/image.jpg``. This is where
