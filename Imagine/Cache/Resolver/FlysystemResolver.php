@@ -91,10 +91,10 @@ class FlysystemResolver implements ResolverInterface
     /**
      * Resolves filtered path for rendering in the browser.
      *
-     * @param string $path   The path where the original file is expected to be.
-     * @param string $filter The name of the imagine filter in effect.
+     * @param string $path   The path where the original file is expected to be
+     * @param string $filter The name of the imagine filter in effect
      *
-     * @return string The absolute URL of the cached image.
+     * @return string The absolute URL of the cached image
      *
      * @throws NotResolvableException
      */
@@ -110,9 +110,9 @@ class FlysystemResolver implements ResolverInterface
     /**
      * Stores the content of the given binary.
      *
-     * @param BinaryInterface $binary The image binary to store.
-     * @param string          $path   The path where the original file is expected to be.
-     * @param string          $filter The name of the imagine filter in effect.
+     * @param BinaryInterface $binary The image binary to store
+     * @param string          $path   The path where the original file is expected to be
+     * @param string          $filter The name of the imagine filter in effect
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
@@ -123,8 +123,8 @@ class FlysystemResolver implements ResolverInterface
     }
 
     /**
-     * @param string[] $paths   The paths where the original files are expected to be.
-     * @param string[] $filters The imagine filters in effect.
+     * @param string[] $paths   The paths where the original files are expected to be
+     * @param string[] $filters The imagine filters in effect
      */
     public function remove(array $paths, array $filters)
     {

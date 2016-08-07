@@ -18,9 +18,9 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     /**
      * Starts a test with expected results.
      *
-     * @param $exifValue {String} The exif value to be returned by the metadata mock.
-     * @param $expectCallRotateValue {null|number} The expected rotation value, null if no rotation is expected.
-     * @param $expectCallFlip {Boolean} True if a horizontal flip is expected, false otherwise.
+     * @param $exifValue {String} The exif value to be returned by the metadata mock
+     * @param $expectCallRotateValue {null|number} The expected rotation value, null if no rotation is expected
+     * @param $expectCallFlip {Boolean} True if a horizontal flip is expected, false otherwise
      */
     private function loadExif($exifValue, $expectCallRotateValue, $expectCallFlip)
     {

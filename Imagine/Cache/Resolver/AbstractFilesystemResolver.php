@@ -173,8 +173,8 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
-     * @param string $path   The resource path to convert.
-     * @param string $filter The name of the imagine filter.
+     * @param string $path   The resource path to convert
+     * @param string $filter The name of the imagine filter
      *
      * @return string
      */
