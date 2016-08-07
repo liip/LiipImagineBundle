@@ -7,7 +7,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 /**
  * Interface to make PostProcessors configurable without breaking BC.
  *
- * @see PostProcessorInterface for the original interface.
+ * @see PostProcessorInterface for the original interface
  *
  * @author Alex Wilson <a@ax.gy>
  */

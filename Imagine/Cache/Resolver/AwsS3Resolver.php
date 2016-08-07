@@ -49,11 +49,11 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
-     * @param S3Client $storage    The Amazon S3 storage API. It's required to know authentication information.
-     * @param string   $bucket     The bucket name to operate on.
+     * @param S3Client $storage    The Amazon S3 storage API. It's required to know authentication information
+     * @param string   $bucket     The bucket name to operate on
      * @param string   $acl        The ACL to use when storing new objects. Default: owner read/write, public read
-     * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3.
-     * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3.
+     * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
+     * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
      */
     public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = array(), $putOptions = array())
     {
@@ -183,10 +183,10 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see Aws\S3\S3Client::getObjectUrl() for available options.
+     * @see Aws\S3\S3Client::getObjectUrl() for available options
      *
-     * @param string $key   The name of the option.
-     * @param mixed  $value The value to be set.
+     * @param string $key   The name of the option
+     * @param mixed  $value The value to be set
      *
      * @return AmazonS3Resolver $this
      *
@@ -202,10 +202,10 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see Aws\S3\S3Client::getObjectUrl() for available options.
+     * @see Aws\S3\S3Client::getObjectUrl() for available options
      *
-     * @param string $key   The name of the option.
-     * @param mixed  $value The value to be set.
+     * @param string $key   The name of the option
+     * @param mixed  $value The value to be set
      *
      * @return AmazonS3Resolver $this
      */
@@ -221,10 +221,10 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see Aws\S3\S3Client::putObject() for available options.
+     * @see Aws\S3\S3Client::putObject() for available options
      *
-     * @param string $key   The name of the option.
-     * @param mixed  $value The value to be set.
+     * @param string $key   The name of the option
+     * @param mixed  $value The value to be set
      *
      * @return AmazonS3Resolver $this
      */
@@ -238,10 +238,10 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * Returns the object path within the bucket.
      *
-     * @param string $path   The base path of the resource.
-     * @param string $filter The name of the imagine filter in effect.
+     * @param string $path   The base path of the resource
+     * @param string $filter The name of the imagine filter in effect
      *
-     * @return string The path of the object on S3.
+     * @return string The path of the object on S3
      */
     protected function getObjectPath($path, $filter)
     {

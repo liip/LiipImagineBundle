@@ -92,7 +92,7 @@ class CacheManager
      *
      * @return ResolverInterface
      *
-     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available.
+     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
      */
     protected function getResolver($filter, $resolver)
     {
@@ -120,7 +120,7 @@ class CacheManager
      * Gets filtered path for rendering in the browser.
      * It could be the cached one or an url of filter action.
      *
-     * @param string $path          The path where the resolved file is expected.
+     * @param string $path          The path where the resolved file is expected
      * @param string $filter
      * @param array  $runtimeConfig
      * @param string $resolver
@@ -160,8 +160,8 @@ class CacheManager
     /**
      * Returns a web accessible URL.
      *
-     * @param string $path          The path where the resolved file is expected.
-     * @param string $filter        The name of the imagine filter in effect.
+     * @param string $path          The path where the resolved file is expected
+     * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
      *
@@ -211,7 +211,7 @@ class CacheManager
      * @param string $filter
      * @param string $resolver
      *
-     * @return string The url of resolved image.
+     * @return string The url of resolved image
      *
      * @throws NotFoundHttpException if the path can not be resolved
      */

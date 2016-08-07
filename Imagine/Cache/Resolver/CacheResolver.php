@@ -142,8 +142,8 @@ class CacheResolver implements ResolverInterface
      *
      * When overriding this method, ensure generateIndexKey is adjusted accordingly.
      *
-     * @param string $path   The image path in use.
-     * @param string $filter The filter in use.
+     * @param string $path   The image path in use
+     * @param string $filter The filter in use
      *
      * @return string
      */
