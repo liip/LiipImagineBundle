@@ -29,8 +29,13 @@ class DownscaleFilterLoader implements LoaderInterface
         if ($origWidth > $width || $origHeight > $height) {
             $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
-
-            $ratio = min($widthRatio, $heightRatio);
+            
+            // faster check than is_null
+            if($width === null || $height === null) { 
+                $ratio = max($widthRatio, $heightRatio);
+            } else {
+                $ratio = min($widthRatio, $heightRatio);
+            }
 
             $filter = new Resize(new Box($origWidth * $ratio, $origHeight * $ratio));
 
