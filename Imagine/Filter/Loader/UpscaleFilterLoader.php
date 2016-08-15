@@ -32,7 +32,12 @@ class UpscaleFilterLoader implements LoaderInterface
             $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
 
-            $ratio = $widthRatio > $heightRatio ? $widthRatio : $heightRatio;
+            // faster check than is_null
+            if ($width === null || $height === null) {
+                $ratio = max($widthRatio, $heightRatio);
+            } else {
+                $ratio = min($widthRatio, $heightRatio);
+            }
 
             $filter = new Resize(new Box(round($origWidth * $ratio), round($origHeight * $ratio)));
 
