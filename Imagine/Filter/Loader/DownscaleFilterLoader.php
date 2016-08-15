@@ -37,6 +37,10 @@ class DownscaleFilterLoader implements LoaderInterface
                 $ratio = min($widthRatio, $heightRatio);
             }
 
+            if ($ratio > 1) {
+                return $image;
+            }
+
             $filter = new Resize(new Box($origWidth * $ratio, $origHeight * $ratio));
 
             return $filter->apply($image);
