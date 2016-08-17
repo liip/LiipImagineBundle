@@ -13,7 +13,8 @@ use Imagine\Image\Box;
  */
 class ScaleFilterLoader implements LoaderInterface
 {
-    public function __construct ($dimentionKey = 'dim', $ratioKey = 'to', $absoluteRatio = true) {
+    public function __construct($dimentionKey = 'dim', $ratioKey = 'to', $absoluteRatio = true)
+    {
         $this->dimentionKey = $dimentionKey;
         $this->ratioKey = $ratioKey;
         $this->absoluteRatio = $absoluteRatio;
@@ -34,7 +35,7 @@ class ScaleFilterLoader implements LoaderInterface
 
         if (isset($options[$this->ratioKey])) {
             $ratio = $this->absoluteRatio ? $options[$this->ratioKey] : $this->calcAbsoluteRatio($options[$this->ratioKey]);
-        } else if (isset($options[$this->dimentionKey])) {
+        } elseif (isset($options[$this->dimentionKey])) {
             list($width, $height) = $options[$this->dimentionKey];
 
             $widthRatio = $width / $origWidth;
@@ -45,7 +46,7 @@ class ScaleFilterLoader implements LoaderInterface
             } else {
                 $ratio = min($widthRatio, $heightRatio);
             }
-        }        
+        }
 
         if ($this->isImageProcessable($ratio)) {
             $filter = new Resize(new Box(round($origWidth * $ratio), round($origHeight * $ratio)));
@@ -56,11 +57,13 @@ class ScaleFilterLoader implements LoaderInterface
         return $image;
     }
 
-    protected function calcAbsoluteRatio ($ratio) {
+    protected function calcAbsoluteRatio($ratio)
+    {
         return $ratio;
     }
 
-    protected function isImageProcessable ($ratio) {
+    protected function isImageProcessable($ratio)
+    {
         return true;
     }
 }

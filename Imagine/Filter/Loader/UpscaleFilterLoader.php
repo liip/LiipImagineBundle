@@ -10,15 +10,18 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
  */
 class UpscaleFilterLoader extends ScaleFilterLoader
 {
-    public function __construct () {
+    public function __construct()
+    {
         parent::__construct('min', 'by', false);
     }
-    
-    protected function calcAbsoluteRatio ($ratio) {
+
+    protected function calcAbsoluteRatio($ratio)
+    {
         return 1 + $ratio;
     }
 
-    protected function isImageProcessable ($ratio) {
+    protected function isImageProcessable($ratio)
+    {
         return $ratio > 1;
     }
 }
