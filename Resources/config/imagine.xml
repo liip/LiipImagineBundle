@@ -40,6 +40,7 @@
         <parameter key="liip_imagine.filter.loader.watermark.class">Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.strip.class">Liip\ImagineBundle\Imagine\Filter\Loader\StripFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.background.class">Liip\ImagineBundle\Imagine\Filter\Loader\BackgroundFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.scale.class">Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.upscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.downscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.auto_rotate.class">Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader</parameter>
@@ -191,6 +192,10 @@
 
         <service id="liip_imagine.filter.loader.strip" class="%liip_imagine.filter.loader.strip.class%">
             <tag name="liip_imagine.filter.loader" loader="strip" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.scale" class="%liip_imagine.filter.loader.scale.class%">
+            <tag name="liip_imagine.filter.loader" loader="scale" />
         </service>
 
         <service id="liip_imagine.filter.loader.upscale" class="%liip_imagine.filter.loader.upscale.class%">
