@@ -65,12 +65,26 @@ annotated configuration examples:
                 filters:
                     relative_resize: { scale: 2.5 }   # Transforms 50x40 to 125x100
 
+The ``scale`` filter
+~~~~~~~~~~~~~~~~~~~~~~
+
+It performs an upscale or downscale transformation on your image to increase its size to the
+given dimensions or ratio:
+
+.. code-block:: yaml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb:
+                filters:
+                    scale: { dim: [600, 750] } #or { to: 1.56 } -> Upscales to [936, 1170] | { to: 0.66 } -> Downscales to [396, 495]
+
 
 The ``upscale`` filter
 ~~~~~~~~~~~~~~~~~~~~~~
 
 It performs an upscale transformation on your image to increase its size to the
-given dimensions:
+given dimensions or ratio:
 
 .. code-block:: yaml
 
@@ -78,13 +92,13 @@ given dimensions:
         filter_sets:
             my_thumb:
                 filters:
-                    upscale: { min: [800, 600] }
+                    upscale: { min: [800, 600] } #or { by: 0.7 } -> Upscales to [1360, 1020]
 
 The ``downscale`` filter
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 It performs a downscale transformation on your image to reduce its size to the
-given dimensions:
+given dimensions or ratio:
 
 .. code-block:: yaml
 
@@ -92,7 +106,7 @@ given dimensions:
         filter_sets:
             my_thumb:
                 filters:
-                    downscale: { max: [1980, 1280] }
+                    downscale: { max: [1980, 1280] } #or { by: 0.6 } -> Downscales to [792, 512]
 
 The ``crop`` filter
 ~~~~~~~~~~~~~~~~~~~
