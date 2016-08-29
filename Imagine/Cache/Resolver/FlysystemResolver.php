@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
@@ -35,18 +36,29 @@ class FlysystemResolver implements ResolverInterface
     protected $cacheRoot;
 
     /**
+     * Flysystem specific visibility.
+     *
+     * @see AdapterInterface
+     *
+     * @var string
+     */
+    protected $visibility;
+
+    /**
      * FlysystemResolver constructor.
      *
      * @param Filesystem     $flysystem
      * @param RequestContext $requestContext
-     * @param $rootUrl
-     * @param string $cachePrefix
+     * @param string         $rootUrl
+     * @param string         $cachePrefix
+     * @param string         $visibility
      */
     public function __construct(
         Filesystem $flysystem,
         RequestContext $requestContext,
         $rootUrl,
-        $cachePrefix = 'media/cache'
+        $cachePrefix = 'media/cache',
+        $visibility = AdapterInterface::VISIBILITY_PUBLIC
     ) {
         $this->flysystem = $flysystem;
         $this->requestContext = $requestContext;
@@ -54,6 +66,7 @@ class FlysystemResolver implements ResolverInterface
         $this->webRoot = rtrim($rootUrl, '/');
         $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
         $this->cacheRoot = $this->cachePrefix;
+        $this->visibility = $visibility;
     }
 
     /**
@@ -118,7 +131,8 @@ class FlysystemResolver implements ResolverInterface
     {
         $this->flysystem->put(
             $this->getFilePath($path, $filter),
-            $binary->getContent()
+            $binary->getContent(),
+            ['visibility' => $this->visibility]
         );
     }
 

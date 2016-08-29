@@ -21,6 +21,7 @@ Create resolver
                     filesystem_service: oneup_flysystem.profile_photos_filesystem
                     root_url: http://images.example.com
                     cache_prefix: media/cache
+                    visibility: public
     oneup_flysystem:
         adapters:
             profile_photos:
@@ -39,6 +40,11 @@ There are several configuration options available:
 * ``cache_prefix`` - this is used for the image path generation. This will be the
   prefix inside the given Flysystem.
   Default value: ``media/cache``
+* ``visibility`` - one of the two predefined flysystem visibility constants
+  (``AdapterInterface::VISIBILITY_PUBLIC`` [``public``] / ``AdapterInterface::VISIBILITY_PRIVATE`` [``private``])
+  The visibility is applied, when the objects are stored on a flysystem filesystem.
+  You will most probably want to leave the default or explicitly set ``public``.
+  Default value: ``public``
 
 Usage
 -----
