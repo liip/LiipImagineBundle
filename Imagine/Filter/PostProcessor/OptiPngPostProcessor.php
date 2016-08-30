@@ -61,7 +61,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      */
     public function process(BinaryInterface $binary)
     {
-        $this->processWithConfiguration($binary, array());
+        return $this->processWithConfiguration($binary, array());
     }
 
     /**
