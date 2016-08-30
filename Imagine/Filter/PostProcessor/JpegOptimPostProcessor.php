@@ -35,19 +35,33 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
     protected $progressive;
 
     /**
+     * Directory where temporary file will be written.
+     *
+     * @var string
+     */
+    protected $tempDir;
+
+    /**
      * Constructor.
      *
      * @param string $jpegoptimBin Path to the jpegoptim binary
      * @param bool   $stripAll     Strip all markers from output
      * @param int    $max          Set maximum image quality factor
      * @param bool   $progressive  Force output to be progressive
+     * @param string $tempDir      Directory where temporary file will be written
      */
-    public function __construct($jpegoptimBin = '/usr/bin/jpegoptim', $stripAll = true, $max = null, $progressive = true)
-    {
+    public function __construct(
+        $jpegoptimBin = '/usr/bin/jpegoptim',
+        $stripAll = true,
+        $max = null,
+        $progressive = true,
+        $tempDir = '/run/shm/'
+    ) {
         $this->jpegoptimBin = $jpegoptimBin;
         $this->stripAll = $stripAll;
         $this->max = $max;
         $this->progressive = $progressive;
+        $this->tempDir = $tempDir;
     }
 
     /**
@@ -119,8 +133,9 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
             return $binary;
         }
 
-        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_jpegoptim')) {
-            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        $tempDir = array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
+        if (false === $input = tempnam($tempDir, 'imagine_jpegoptim')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
         $pb = new ProcessBuilder(array($this->jpegoptimBin));
