@@ -30,17 +30,26 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     protected $stripAll;
 
     /**
+     * Directory where temporary file will be written.
+     *
+     * @var string
+     */
+    protected $tempDir;
+
+    /**
      * Constructor.
      *
      * @param string $optipngBin Path to the optipng binary
      * @param int    $level      Optimization level
      * @param bool   $stripAll   Strip metadata objects
+     * @param string $tempDir    Directory where temporary file will be written
      */
-    public function __construct($optipngBin = '/usr/bin/optipng', $level = 7, $stripAll = true)
+    public function __construct($optipngBin = '/usr/bin/optipng', $level = 7, $stripAll = true, $tempDir = '')
     {
         $this->optipngBin = $optipngBin;
         $this->level = $level;
         $this->stripAll = $stripAll;
+        $this->tempDir = $tempDir ?: sys_get_temp_dir();
     }
 
     /**
@@ -72,8 +81,9 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
             return $binary;
         }
 
-        if (false === $input = tempnam(sys_get_temp_dir(), 'imagine_optipng')) {
-            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));
+        $tempDir = array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
+        if (false === $input = tempnam($tempDir, 'imagine_optipng')) {
+            throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
         $pb = new ProcessBuilder(array($this->optipngBin));
