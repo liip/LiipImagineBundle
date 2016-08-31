@@ -19,9 +19,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             array(__DIR__, $fileName),
             array(__DIR__.'/', $fileName),
             array(__DIR__, '/'.$fileName),
-            array(__DIR__.'/', '/'.$fileName),
+            array(__DIR__.'/../../Binary/Loader', '/'.$fileName),
             array(realpath(__DIR__.'/..'), 'Loader/'.$fileName),
-            array(realpath(__DIR__.'/../'), '/Loader/'.$fileName),
+            array(__DIR__.'/../', '/Loader/../../Binary/Loader/'.$fileName),
         );
     }
 
@@ -41,7 +41,21 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testThrowExceptionIfPathHasDoublePointSlashAtBegging()
+    public function testThrowExceptionIfRootPathDoesNotExist()
+    {
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\InvalidArgumentException',
+            'Root image path not resolvable'
+        );
+
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            '/a/bad/root/path'
+        );
+    }
+
+    public function testThrowExceptionIfRealPathIsOutsideRootPath1()
     {
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
@@ -51,10 +65,26 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image was searched with'
+            'Source image invalid'
         );
 
-        $loader->find('../foo/bar');
+        $loader->find('../Loader/../../Binary/Loader/../../../Resources/config/routing.xml');
+    }
+
+    public function testThrowExceptionIfRealPathIsOutsideRootPath2()
+    {
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__
+        );
+
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
+            'Source image invalid'
+        );
+
+        $loader->find('../../Binary/');
     }
 
     public function testThrowExceptionIfPathHasDoublePointSlashInTheMiddle()
@@ -65,12 +95,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             __DIR__
         );
 
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image was searched with'
-        );
-
-        $loader->find('foo/../bar');
+        $loader->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME));
     }
 
     public function testThrowExceptionIfFileNotExist()
@@ -83,7 +108,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image not found'
+            'Source image not resolvable'
         );
 
         $loader->find('fileNotExist');

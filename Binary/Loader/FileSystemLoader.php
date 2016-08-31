@@ -2,6 +2,7 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
@@ -37,7 +38,11 @@ class FileSystemLoader implements LoaderInterface
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->extensionGuesser = $extensionGuesser;
 
-        $this->rootPath = rtrim($rootPath, '/');
+        if (!($realRootPath = realpath($rootPath))) {
+            throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $rootPath));
+        }
+
+        $this->rootPath = $realRootPath;
     }
 
     /**
@@ -45,11 +50,13 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        if (false !== strpos($path, '../')) {
-            throw new NotLoadableException(sprintf("Source image was searched with '%s' out side of the defined root path", $path));
+        if (!($absolutePath = realpath($this->rootPath.DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR)))) {
+            throw new NotLoadableException(sprintf('Source image not resolvable "%s"', $path));
         }
 
-        $absolutePath = $this->rootPath.'/'.ltrim($path, '/');
+        if (0 !== strpos($absolutePath, $this->rootPath)) {
+            throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path', $absolutePath));
+        }
 
         if (false == file_exists($absolutePath)) {
             throw new NotLoadableException(sprintf('Source image not found in "%s"', $absolutePath));
