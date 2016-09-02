@@ -18,6 +18,7 @@ class FlysystemResolverFactory implements ResolverFactoryInterface
         $resolverDefinition->replaceArgument(0, new Reference($config['filesystem_service']));
         $resolverDefinition->replaceArgument(2, $config['root_url']);
         $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
+        $resolverDefinition->addArgument($config['visibility']);
         $resolverDefinition->addTag('liip_imagine.cache.resolver', array(
             'resolver' => $resolverName,
         ));
@@ -46,6 +47,7 @@ class FlysystemResolverFactory implements ResolverFactoryInterface
                 ->scalarNode('filesystem_service')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('cache_prefix')->defaultValue(null)->end()
                 ->scalarNode('root_url')->isRequired()->cannotBeEmpty()->end()
+                ->enumNode('visibility')->values(array('public', 'private'))->defaultValue('public')->end()
             ->end()
         ;
     }
