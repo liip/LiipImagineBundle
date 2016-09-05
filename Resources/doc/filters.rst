@@ -430,6 +430,10 @@ for example:
         # When true, --all-progressive is passed to jpegoptim, which results in the output being a progressive jpeg.
         liip_imagine.jpegoptim.progressive: true
 
+      # The directory where temporary file will be written. By default it's empty, and computed using `sys_get_temp_dir()`
+      # You can set it to `/run/shm` or something similar for writing temporary files in-memory, for decrease of disk load
+      liip_imagine.jpegoptim.tempDir: ""
+
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
 
 
@@ -455,6 +459,10 @@ for example:
 
       # The optimisation level to be used by optipng. Defaults to 7.
       liip_imagine.optipng.level: 7
+
+      # The directory where temporary file will be written. By default is empty, and computed using `sys_get_temp_dir()`
+      # You can set it to `/run/shm` or something similar for writing temporary files in-memory, for decrease of disk load
+      liip_imagine.optipng.tempDir: ""
 
 .. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
 
