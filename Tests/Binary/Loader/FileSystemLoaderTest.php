@@ -41,6 +41,20 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testThrowExceptionIfRootPathIsEmpty()
+    {
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\InvalidArgumentException',
+            'Root image path not resolvable'
+        );
+
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            ''
+        );
+    }
+
     public function testThrowExceptionIfRootPathDoesNotExist()
     {
         $this->setExpectedException(
