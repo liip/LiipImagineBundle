@@ -54,7 +54,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function getMockCacheManager()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
+        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Cache\CacheManager')->getMock();
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFilterConfigurationMock()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration');
+        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration')->getMock();
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function createRouterMock()
     {
-        return $this->getMock('Symfony\Component\Routing\RouterInterface');
+        return $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
     }
 
     /**
@@ -78,27 +78,27 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function createResolverMock()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface')->getMock();
     }
 
     protected function createEventDispatcherMock()
     {
-        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 
     protected function getMockImage()
     {
-        return $this->getMock('Imagine\Image\ImageInterface');
+        return $this->getMockBuilder('Imagine\Image\ImageInterface')->getMock();
     }
 
     protected function getMockMetaData()
     {
-        return $this->getMock('Imagine\Image\Metadata\MetadataBag');
+        return $this->getMockBuilder('Imagine\Image\Metadata\MetadataBag')->getMock();
     }
 
     protected function createImagineMock()
     {
-        return $this->getMock('Imagine\Image\ImagineInterface');
+        return $this->getMockBuilder('Imagine\Image\ImagineInterface')->getMock();
     }
 
     protected function tearDown()
