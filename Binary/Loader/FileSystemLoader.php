@@ -38,7 +38,7 @@ class FileSystemLoader implements LoaderInterface
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->extensionGuesser = $extensionGuesser;
 
-        if (!($realRootPath = realpath($rootPath))) {
+        if (empty($rootPath) || !($realRootPath = realpath($rootPath))) {
             throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $rootPath));
         }
 
@@ -50,16 +50,12 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        if (!($absolutePath = realpath($this->rootPath.DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR)))) {
+        if (!($absolutePath = realpath($this->rootPath.DIRECTORY_SEPARATOR.$path))) {
             throw new NotLoadableException(sprintf('Source image not resolvable "%s"', $path));
         }
 
         if (0 !== strpos($absolutePath, $this->rootPath)) {
             throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path', $absolutePath));
-        }
-
-        if (false == file_exists($absolutePath)) {
-            throw new NotLoadableException(sprintf('Source image not found in "%s"', $absolutePath));
         }
 
         $mimeType = $this->mimeTypeGuesser->guess($absolutePath);
