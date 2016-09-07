@@ -1,7 +1,8 @@
-CacheManager
-============
 
-Cache removal
+Cache Manager
+=============
+
+Cache Removal
 -------------
 
 CacheManager allows to remove cache in various ways.

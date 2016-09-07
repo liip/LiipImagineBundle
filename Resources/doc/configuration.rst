@@ -1,3 +1,4 @@
+
 Configuration
 =============
 
@@ -86,5 +87,6 @@ Each filter set that you specify has the following options:
   is ignored).
 * ``animated`` - support for resizing animated gif (currently not supported by
   Imagine (PR pending))
+
 
 .. _`PHP Manual`: http://php.net/imagepng
