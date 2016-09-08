@@ -25,7 +25,7 @@ class ThumbnailFilterLoader implements LoaderInterface
             $filter = ImageInterface::FILTER_UNDEFINED;
         }
 
-        $width  = isset($options['size'][0]) ? $options['size'][0] : null;
+        $width = isset($options['size'][0]) ? $options['size'][0] : null;
         $height = isset($options['size'][1]) ? $options['size'][1] : null;
 
         $size = $image->getSize();
