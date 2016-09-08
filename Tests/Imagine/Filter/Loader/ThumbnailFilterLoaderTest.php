@@ -10,6 +10,8 @@ use Imagine\Image\Box;
  * Test cases for ThumbnailFilterLoader class.
  *
  * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader
+ *
+ * @author Alex Wilson <a@ax.gy>
  */
 class ThumbnailFilterLoaderTest extends AbstractTest
 {
@@ -27,6 +29,8 @@ class ThumbnailFilterLoaderTest extends AbstractTest
      * @param int $width
      * @param int $height
      * @param Box $expected
+     *
+     * @covers ThumbnailFilterLoader::load
      *
      * @dataProvider heightWidthProvider
      */
