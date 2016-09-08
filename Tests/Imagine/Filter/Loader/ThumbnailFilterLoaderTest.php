@@ -47,8 +47,8 @@ class ThumbnailFilterLoaderTest extends AbstractTest
             ->with($expected)
             ->willReturn($image);
 
-        $options = [];
-        $options['size'] = [$width, $height];
+        $options = array();
+        $options['size'] = array($width, $height);
         $options['allow_upscale'] = true;
 
         $result = $loader->load($image, $options);
@@ -59,13 +59,13 @@ class ThumbnailFilterLoaderTest extends AbstractTest
      */
     public function heightWidthProvider()
     {
-        return [
-            [200, 129, new Box(200, 129)],
-            [50, 50, new Box(50, 50)],
-            [1, 30, new Box(1, 30)],
-            [null, 60, new Box(50, 60)],
-            [50, null, new Box(50, 60)],
-            [1000, 1000, new Box(1000, 1000)]
-        ];
+        return array(
+            array(200, 129, new Box(200, 129)),
+            array(50, 50, new Box(50, 50)),
+            array(1, 30, new Box(1, 30)),
+            array(null, 60, new Box(50, 60)),
+            array(50, null, new Box(50, 60)),
+            array(1000, 1000, new Box(1000, 1000))
+        );
     }
 }
