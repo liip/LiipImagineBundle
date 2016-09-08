@@ -11,22 +11,16 @@ use Imagine\Image\Point;
  * Test cases for CropFilterLoader class.
  *
  * @covers Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader
+ *
+ * @author Alex Wilson <a@ax.gy>
  */
 class CropFilterLoaderTest extends AbstractTest
 {
     /**
-     * @var int
-     */
-    const DUMMY_IMAGE_WIDTH = 500;
-
-    /**
-     * @var int
-     */
-    const DUMMY_IMAGE_HEIGHT = 600;
-
-    /**
-     * @param int $width
-     * @param int $height
+     * @param int[] $coordinates
+     * @param int[] $area
+     *
+     * @covers CropFilterLoader::load
      *
      * @dataProvider cropDataProvider
      */
@@ -40,10 +34,6 @@ class CropFilterLoaderTest extends AbstractTest
 
         $loader = new CropFilterLoader();
 
-        $mockImageSize = new Box(
-            self::DUMMY_IMAGE_WIDTH,
-            self::DUMMY_IMAGE_HEIGHT
-        );
         $image = $this->getMockImage();
         $image->expects($this->once())
             ->method('crop')
