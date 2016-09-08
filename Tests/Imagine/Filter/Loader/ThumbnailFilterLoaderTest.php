@@ -4,7 +4,6 @@ namespace Liip\ImagineBundle\Tests\Filter;
 
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Imagine\Image\Palette\Grayscale;
 use Imagine\Image\Box;
 
 /**
@@ -54,7 +53,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
         $result = $loader->load($image, $options);
     }
 
-   /**
+    /**
      * @returns array Array containing width/height pairs and an expected size.
      */
     public function heightWidthProvider()
@@ -65,7 +64,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
             array(1, 30, new Box(1, 30)),
             array(null, 60, new Box(50, 60)),
             array(50, null, new Box(50, 60)),
-            array(1000, 1000, new Box(1000, 1000))
+            array(1000, 1000, new Box(1000, 1000)),
         );
     }
 }
