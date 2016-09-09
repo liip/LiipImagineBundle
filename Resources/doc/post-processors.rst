@@ -1,5 +1,4 @@
 
-.. default-role:: code
 
 Post-Processors
 ===============
@@ -47,7 +46,7 @@ Custom processors
 
 Just like filters, you can easily define your own, custom post-processors to
 perform any image binary operations required. Creating a custom post-processor
-begins by creating a class that implements the `PostProcessorInterface`
+begins by creating a class that implements the ``PostProcessorInterface``
 interface, as shown below.
 
 .. code-block:: php
@@ -57,18 +56,18 @@ interface, as shown below.
         public function process(BinaryInterface $binary);
     }
 
-As defined in `PostProcessorInterface`, the only required method is one named `process`,
-which is provided an instance of `BinaryInterface` as its singular parameter, and
-subsequently provides an instance of `BinaryInterface` in return.
+As defined in ``PostProcessorInterface``, the only required method is one named ``process``,
+which is provided an instance of ``BinaryInterface`` as its singular parameter, and
+subsequently provides an instance of ``BinaryInterface`` in return.
 
 .. tip::
 
-    You may optionally implement `ConfigurablePostProcessorInterface` in your
+    You may optionally implement ``ConfigurablePostProcessorInterface`` in your
     post-processor to allow it to be configurable.
 
 The following is a template for creating your own post-processor that calls an executable.
-You must set the `EXECUTABLE_PATH` class constant to the absolute path of the desired
-executable. You may also want to change `array('image/png')` to the supported mime types
+You must set the ``EXECUTABLE_PATH`` class constant to the absolute path of the desired
+executable. You may also want to change ``array('image/png')`` to the supported mime types
 for your custom post-processor.
 
 .. code-block:: php
@@ -135,15 +134,15 @@ for your custom post-processor.
     }
 
 Once you have defined your custom post-processor, you must define it as a service and tag it
-with `liip_imagine.filter.post_processor`.
+with ``liip_imagine.filter.post_processor``.
 
 .. note::
 
     For more information on the Service Container, reference the official
     `Symfony Service Container documentation`_.
 
-To register `AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor` with the name
-`my_custom_post_processor`, you would use the following configuration.
+To register ``AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor`` with the name
+``my_custom_post_processor``, you would use the following configuration.
 
 .. configuration-block::
 
@@ -165,8 +164,8 @@ To register `AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor` with 
         </service>
 
 Now your custom post-processor can be referenced in a filter set using the name
-assigned via the `post_processor` tag attribute above (in this example,
-`my_custom_post_processor`).
+assigned via the ``post_processor`` tag attribute above (in this example,
+``my_custom_post_processor``).
 
 .. code-block:: yaml
 

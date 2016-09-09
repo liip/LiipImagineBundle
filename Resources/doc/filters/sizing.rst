@@ -1,5 +1,4 @@
 
-.. default-role:: code
 
 Size Filters
 ============
@@ -10,7 +9,7 @@ Size Filters
 Thumbnails
 ----------
 
-The built-in `thumbnail` filter performs thumbnail transformations
+The built-in ``thumbnail`` filter performs thumbnail transformations
 (which includes scaling and potentially cropping operations). This
 filter exposed a number of `thumbnail options`_ which may be used
 to configure its behavior.
@@ -46,15 +45,15 @@ Example configuration:
 Thumbnail Options
 ~~~~~~~~~~~~~~~~~
 
-:strong:`mode:` `string`
-    Sets the desired resize method: `'outbound'` crops the image as required, while
-    `'inset'` performs a non-cropping relative resize.
+:strong:`mode:` ``string``
+    Sets the desired resize method: ``'outbound'`` crops the image as required, while
+    ``'inset'`` performs a non-cropping relative resize.
 
-:strong:`size:` `int[]`
+:strong:`size:` ``int[]``
     Sets the generated thumbnail size as an integer array containing the dimensions
     as width and height values.
 
-:strong:`allow_upscale:` `bool`
+:strong:`allow_upscale:` ``bool``
     Toggles allowing image up-scaling when the image is smaller than the desired
     thumbnail size.
 
@@ -64,7 +63,7 @@ Thumbnail Options
 Cropping Images
 ---------------
 
-The built-in `crop` filter performs sizing transformations (which
+The built-in ``crop`` filter performs sizing transformations (which
 includes cropping operations). This filter exposed a number of
 `crop options`_ which may be used to configure its behavior.
 
@@ -94,11 +93,11 @@ Example configuration:
 Crop Options
 ~~~~~~~~~~~~
 
-:strong:`size:` `int[]`
+:strong:`size:` ``int[]``
     Sets the crop size as an integer array containing the dimensions as width and
     height values.
 
-:strong:`start:` `int[]`
+:strong:`start:` ``int[]``
     Sets the top, left-post anchor coordinates where the crop operation starts.
 
 
@@ -107,7 +106,7 @@ Crop Options
 Relative Resize
 ---------------
 
-The built-in `relative_resize` filter performs sizing transformations (specifically
+The built-in ``relative_resize`` filter performs sizing transformations (specifically
 relative resizing). This filter exposed a number of `relative resize options`_ which
 may be used to configure its behavior.
 
@@ -167,19 +166,19 @@ Example configuration:
 Relative Resize Options
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-:strong:`heighten:` `float`
+:strong:`heighten:` ``float``
     Sets the "desired height" which initiates a proportional scale operation that up- or
     down-scales until the image height matches this value.
 
-:strong:`widen:` `float`
+:strong:`widen:` ``float``
     Sets the "desired width" which initiates a proportional scale operation that up- or
     down-scales until the image width matches this value.
 
-:strong:`increase:` `float`
+:strong:`increase:` ``float``
     Sets the "desired additional size" which initiates a scale operation computed by
     adding this value to all image sides.
 
-:strong:`scale:` `float`
+:strong:`scale:` ``float``
     Sets the "ratio multiple" which initiates a proportional scale operation computed
     by multiplying all image sides by this value.
 
@@ -189,7 +188,7 @@ Relative Resize Options
 Scale
 -----
 
-The built-in `scale` filter performs sizing transformations (specifically
+The built-in ``scale`` filter performs sizing transformations (specifically
 image scaling). This filter exposed a number of `scale options`_ which
 may be used to configure its behavior.
 
@@ -246,11 +245,11 @@ Example configuration:
 Scale Options
 ~~~~~~~~~~~~~
 
-:strong:`dim:` `int[]`
+:strong:`dim:` ``int[]``
     Sets the "desired dimensions" as an array containing a width and height integer, from
     which a relative resize is performed within these constraints.
 
-:strong:`to:` `float`
+:strong:`to:` ``float``
     Sets the "ratio multiple" which initiates a proportional scale operation computed
     by multiplying all image sides by this value.
 
@@ -260,7 +259,7 @@ Scale Options
 Down Scale
 ----------
 
-The built-in `downscale` filter performs sizing transformations (specifically
+The built-in ``downscale`` filter performs sizing transformations (specifically
 image down-scaling). This filter exposed a number of `down scale options`_ which
 may be used to configure its behavior.
 
@@ -297,11 +296,11 @@ Example configuration:
 Down Scale Options
 ~~~~~~~~~~~~~~~~~~
 
-:strong:`max:` `int[]`
+:strong:`max:` ``int[]``
     Sets the "desired max dimensions" as an array containing a width and height integer, from
     which a down-scale is performed to meet the passed constraints.
 
-:strong:`by:` `float`
+:strong:`by:` ``float``
     Sets the "ratio multiple" which initiates a proportional scale operation computed
     by multiplying all image sides by this value.
 
@@ -311,7 +310,7 @@ Down Scale Options
 Up Scale
 --------
 
-The built-in `upscale` filter performs sizing transformations (specifically
+The built-in ``upscale`` filter performs sizing transformations (specifically
 image up-scaling). This filter exposed a number of `up scale options`_ which
 may be used to configure its behavior.
 
@@ -348,11 +347,11 @@ Example configuration:
 Up Scale Options
 ~~~~~~~~~~~~~~~~
 
-:strong:`min:` `int[]`
+:strong:`min:` ``int[]``
     Sets the "desired min dimensions" as an array containing a width and height integer, from
     which an up-scale is performed to meet the passed constraints.
 
-:strong:`by:` `float`
+:strong:`by:` ``float``
     Sets the "ratio multiple" which initiates a proportional scale operation computed
     by multiplying all image sides by this value.
 

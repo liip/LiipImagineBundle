@@ -1,5 +1,4 @@
 
-.. default-role:: code
 
 Filters
 =======
@@ -49,12 +48,12 @@ by creating a class that implements the following interface:
         public function load(ImageInterface $image, array $options = array());
     }
 
-As defined in `LoaderInterface`, the only required method is one named `load`,
-which is provided an instance of `ImageInterface` and an array of options, and
-subsequently provides an instance of `ImageInterface` in return.
+As defined in ``LoaderInterface``, the only required method is one named ``load``,
+which is provided an instance of ``ImageInterface`` and an array of options, and
+subsequently provides an instance of ``ImageInterface`` in return.
 
 The following is a template for creating your own filter. You must provide
-the implementation for the `load` method to create a valid filter.
+the implementation for the ``load`` method to create a valid filter.
 
 .. code-block:: php
 
@@ -78,9 +77,9 @@ the implementation for the `load` method to create a valid filter.
     }
 
 After you have finished implementing your custom filter class, it must be defined
-as a service in the Symfony Service Container and tagged with `liip_imagine.filter.loader`.
-To register a our filter, `AppBundle\Imagine\Filter\Loader\MyCustomFilter`, as
-`my_custom_filter`, use the following configuration.
+as a service in the Symfony Service Container and tagged with ``liip_imagine.filter.loader``.
+To register a our filter, ``AppBundle\Imagine\Filter\Loader\MyCustomFilter``, as
+``my_custom_filter``, use the following configuration.
 
 .. configuration-block::
 
@@ -127,8 +126,8 @@ Dynamic filters
 
 With a custom controller action it is possible to dynamically modify the
 configuration that will be applied to the image. Inside the controller you can
-access `FilterManager` instance, pass configuration as third parameter of
-`applyFilter` method (for example based on information associated with the
+access ``FilterManager`` instance, pass configuration as third parameter of
+``applyFilter`` method (for example based on information associated with the
 image or whatever other logic you might want).
 
 A simple example showing how to change the filter configuration dynamically.
@@ -156,8 +155,8 @@ A simple example showing how to change the filter configuration dynamically.
 
 .. tip::
 
-    The constant `Response::HTTP_MOVED_PERMANENTLY` was introduced in Symfony 2.4.
-    Developers using older versions of Symfony, please replace the constant by `301`.
+    The constant ``Response::HTTP_MOVED_PERMANENTLY`` was introduced in Symfony 2.4.
+    Developers using older versions of Symfony, please replace the constant by ``301``.
 
 
 .. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html

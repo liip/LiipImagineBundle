@@ -1,5 +1,4 @@
 
-.. default-role:: code
 
 Orientation Filters
 ===================
@@ -9,7 +8,7 @@ Orientation Filters
 Auto Rotate
 -----------
 
-The built-in `auto_rotate` filter performs orientation transformations
+The built-in ``auto_rotate`` filter performs orientation transformations
 (which includes rotating the image). This filter does not expose any
 options to configure its behavior.
 
@@ -39,7 +38,7 @@ Example configuration:
 Rotate
 ------
 
-The built-in `rotate` filter performs orientation transformations (specifically
+The built-in ``rotate`` filter performs orientation transformations (specifically
 image rotation). This filter exposes `rotate options`_ which may be used to
 configure its behavior.
 
@@ -66,7 +65,7 @@ Example configuration:
 Rotate Options
 ~~~~~~~~~~~~~~
 
-:strong:`degree:` `float`
+:strong:`degree:` ``float``
     Sets the "rotation angle" that defines the degree to rotate the image. Must be a
     positive number.
 

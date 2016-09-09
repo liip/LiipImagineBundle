@@ -1,11 +1,10 @@
 
-.. default-role:: code
 .. _post-processor-pngquant:
 
 PNG Quant
 =========
 
-The `PngquantPostProcessor` is a built-in post-processor that performs a number of
+The ``PngquantPostProcessor`` is a built-in post-processor that performs a number of
 *safe, lossy* optimizations on *PNG* encoded images.
 
 To add this post-processor to the filter set created in the
@@ -28,8 +27,8 @@ This configuration sets a quality factor range of 75 to 80 for the resulting ima
 
 .. note::
 
-    The default executable path is `/usr/bin/pngquant`. If installed elsewhere
-    on your system, you must set the `liip_imagine.pngquant.binary` parameter accordingly.
+    The default executable path is ``/usr/bin/pngquant``. If installed elsewhere
+    on your system, you must set the ``liip_imagine.pngquant.binary`` parameter accordingly.
 
     .. code-block:: yaml
 
@@ -42,12 +41,12 @@ This configuration sets a quality factor range of 75 to 80 for the resulting ima
 Options
 -------
 
-:strong:`quality:` `int`
+:strong:`quality:` ``int``
     Sets the image optimization factor.
 
 
 Parameters
 ----------
 
-:strong:`liip_imagine.pngquant.binary:` `string`
-    Sets the location of the `pnquant` executable. Default is `/usr/bin/pnquant`.
+:strong:`liip_imagine.pngquant.binary:` ``string``
+    Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pnquant``.

@@ -1,11 +1,10 @@
 
-.. default-role:: code
 .. _cache-resolver-cache:
 
 Cache Resolver
 ==============
 
-The `CacheResolver` cannot be used by itself. Instead, it is a "wrapper" for
+The ``CacheResolver`` cannot be used by itself. Instead, it is a "wrapper" for
 another resolver.
 
 
@@ -28,7 +27,7 @@ Configuration
 -------------
 
 First, you need to setup the required services. In this example we're wrapping an
-instance of `AmazonS3Resolver` inside this resolver.
+instance of ``AmazonS3Resolver`` inside this resolver.
 
 .. code-block:: yaml
 
@@ -69,19 +68,19 @@ instance of `AmazonS3Resolver` inside this resolver.
 
 There are three options available:
 
-* `global_prefix`: A prefix for all keys within the cache. This is useful to
+* ``global_prefix``: A prefix for all keys within the cache. This is useful to
   avoid colliding keys when using the same cache for different systems.
-* `prefix`: A "local" prefix for this wrapper. This is useful when re-using the
+* ``prefix``: A "local" prefix for this wrapper. This is useful when re-using the
   same resolver for multiple filters. This mainly affects the clear method.
-* `index_key`: The name of the index key being used to save a list of created
+* ``index_key``: The name of the index key being used to save a list of created
   cache keys regarding one image and filter pairing.
 
 
 Usage
 -----
 
-After configuring `CacheResolver`, you can set it as the default cache resolver
-for `LiipImagineBundle` using the following configuration.
+After configuring ``CacheResolver``, you can set it as the default cache resolver
+for ``LiipImagineBundle`` using the following configuration.
 
 .. code-block:: yaml
 
@@ -94,7 +93,7 @@ for `LiipImagineBundle` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set `CacheResolver` as the cache resolver for a specific
+Alternatively, you can set ``CacheResolver`` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml
