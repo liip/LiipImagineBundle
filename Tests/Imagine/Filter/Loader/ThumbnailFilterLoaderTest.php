@@ -30,7 +30,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
      * @param int $height
      * @param Box $expected
      *
-     * @covers ThumbnailFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader::load
      *
      * @dataProvider heightWidthProvider
      */

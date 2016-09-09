@@ -20,7 +20,7 @@ class CropFilterLoaderTest extends AbstractTest
      * @param int[] $coordinates
      * @param int[] $area
      *
-     * @covers CropFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader::load
      *
      * @dataProvider cropDataProvider
      */

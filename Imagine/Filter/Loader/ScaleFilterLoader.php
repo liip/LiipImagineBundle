@@ -24,7 +24,7 @@ class ScaleFilterLoader implements LoaderInterface
     protected $ratioKey;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $absoluteRatio;
 
@@ -51,8 +51,8 @@ class ScaleFilterLoader implements LoaderInterface
         if (isset($options[$this->ratioKey])) {
             $ratio = $this->absoluteRatio ? $options[$this->ratioKey] : $this->calcAbsoluteRatio($options[$this->ratioKey]);
         } elseif (isset($options[$this->dimensionKey])) {
-            $size   = $options[$this->dimensionKey];
-            $width  = isset($size[0]) ? $size[0] : null;
+            $size = $options[$this->dimensionKey];
+            $width = isset($size[0]) ? $size[0] : null;
             $height = isset($size[1]) ? $size[1] : null;
 
             $widthRatio = $width / $origWidth;
