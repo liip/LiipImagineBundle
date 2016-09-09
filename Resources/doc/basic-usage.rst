@@ -162,7 +162,7 @@ passing the template helper an options array.
 Path Resolution
 ---------------
 
-Sometime you need to resolve the image path returned by this bundle for a
+Sometimes you need to resolve the image path returned by this bundle for a
 filtered image. This can easily be achieved using Symfony's console binary
 or pragmatically from within a controller or other piece of code.
 
