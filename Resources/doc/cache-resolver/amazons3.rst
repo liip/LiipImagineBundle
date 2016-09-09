@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _cache-resolver-amazon-s3:
+
 Amazon S3 Resolver
 ==================
 
-.. _cache-resolver-amazon-s3:
-
-The ``AmazonS3Resolver`` resolver enables cache resolution using Amazon S3.
+The `AmazonS3Resolver` resolver enables cache resolution using Amazon S3.
 
 Dependencies
 ------------
@@ -31,7 +32,7 @@ To begin, you must assign your Amazon key, secret, and bucket to their respectiv
     # app/config/config.yml or app/config/parameters.yml
 
     parameters:
-        amazon_s3.key   : "your-aws-key"
+        amazon_s3.key:    "your-aws-key"
         amazon_s3.secret: "your-aws-secret"
         amazon_s3.bucket: "your-bucket.example.com"
 
@@ -58,14 +59,14 @@ Next, you must define the required services.
             class: AmazonS3
             arguments:
                 -
-                    key   : "%amazon_s3.key%"
+                    key:    "%amazon_s3.key%"
                     secret: "%amazon_s3.secret%"
 
 Usage
 -----
 
-After configuring ``AmazonS3Resolver``, you can set it as the default cache resolver
-for ``LiipImagineBundle`` using the following configuration.
+After configuring `AmazonS3Resolver`, you can set it as the default cache resolver
+for `LiipImagineBundle` using the following configuration.
 
 .. code-block:: yaml
 
@@ -78,7 +79,7 @@ for ``LiipImagineBundle`` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set ``AmazonS3Resolver`` as the cache resolver for a specific
+Alternatively, you can set `AmazonS3Resolver` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml

@@ -1,10 +1,9 @@
 
 .. default-role:: code
+.. _post-processor-mozjpeg:
 
 Moz JPEG
 ========
-
-.. _post-processor-mozjpeg:
 
 The `MozJpegPostProcessor` is a built-in post-processor that performs a number of
 *safe, lossy* optimizations on *JPEG* encoded images.
@@ -36,7 +35,7 @@ This configuration sets a maximum quality factor of 70 for the resulting image b
         # app/config/config.yml
 
         parameters:
-            liip_imagine.mozjpeg.binary : /your/custom/path/to/cjpeg
+            liip_imagine.mozjpeg.binary: /your/custom/path/to/cjpeg
 
 
 Options

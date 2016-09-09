@@ -1,10 +1,9 @@
 
 .. default-role:: code
+.. _post-processor-jpegoptim:
 
 JPEG Optim
 ==========
-
-.. _post-processor-jpegoptim:
 
 The `JpegOptimPostProcessor` is a built-in post-processor that performs a number of
 *lossless* optimizations on *JPEG* encoded images.
@@ -38,7 +37,7 @@ a maximum quality factor of 70 for the resulting image binary.
         # app/config/config.yml
 
         parameters:
-            liip_imagine.jpegoptim.binary : /your/custom/path/to/jpegoptim
+            liip_imagine.jpegoptim.binary: /your/custom/path/to/jpegoptim
 
 
 Options

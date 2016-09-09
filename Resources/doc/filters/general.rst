@@ -4,17 +4,19 @@
 General Filters
 ===============
 
+.. _filter-background:
+
 Background
 ----------
-
-.. _filter-background:
 
 The built-in `background` filter performs layer transformations
 (which includes creating and mergin layer operations). This
 filter exposes a number of `background options`_ which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -60,18 +62,19 @@ Background Options
     values: `topleft`, `top`, `topright`, `left`, `center`, `right`, `bottomleft`,
     `bottom`, and `bottomright`.
 
+.. _filter-grayscale:
 
 Grayscale
 ---------
-
-.. _filter-grayscale:
 
 The built-in `grayscale` filter performs color transformations
 (which includes gray value calculations). This
 filter does not exposes any options which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -86,17 +89,19 @@ Example configuration::
                     grayscale: ~
 
 
+.. _filter-interlace:
+
 Interlace
 ---------
-
-.. _filter-interlace:
 
 The built-in `interlace` filter performs file transformations
 (which includes modifying the encoding method). This
 filter exposes a number of `interlace options`_ which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -122,17 +127,20 @@ Interlace Options
     `plane`, and `partition`.
 
 
+.. _filter-strip:
+
 Strip
 -----
 
-.. _filter-strip:
 
 The built-in `strip` filter performs file transformations
 (which includes metadata removal). This
 filter does not exposes any options which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -147,17 +155,19 @@ Example configuration::
                     strip: ~
 
 
+.. _filter-watermark:
+
 Watermark
 ---------
-
-.. _filter-watermark:
 
 The built-in `watermark` filter merge transformations
 (which includes creating and merging image operations). This
 filter exposes a number of `watermark options`_ which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 

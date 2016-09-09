@@ -4,16 +4,18 @@
 Orientation Filters
 ===================
 
+.. _filter-auto-rotate:
+
 Auto Rotate
 -----------
-
-.. _filter-auto-rotate:
 
 The built-in `auto_rotate` filter performs orientation transformations
 (which includes rotating the image). This filter does not expose any
 options to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -32,16 +34,18 @@ Example configuration::
     This filter should be called as early as possible to get the best results.
 
 
+.. _filter-rotate:
+
 Rotate
 ------
-
-.. _filter-rotate:
 
 The built-in `rotate` filter performs orientation transformations (specifically
 image rotation). This filter exposes `rotate options`_ which may be used to
 configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 

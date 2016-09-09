@@ -1,4 +1,6 @@
 
+.. default-role:: code
+
 Cache Resolvers
 ===============
 
@@ -15,7 +17,7 @@ Set the Default Cache Resolver
 ------------------------------
 
 The default cache is the :ref:`web path cache resolver <cache-resolver-web-path>`,
-which caches images under ``/media/cache/`` within your application web root path.
+which caches images under `/media/cache/` within your application web root path.
 
 You can specify the cache resolver to use per individual `filter_sets` or globally.
 To set the default cache resolver globally, use:
@@ -29,7 +31,7 @@ To set the default cache resolver globally, use:
 
 
 To change the default configuration, you can redefine the default cache resolver
-by explicitly defining a resolver called ``default``:
+by explicitly defining a resolver called `default`:
 
 .. code-block:: yaml
 
@@ -41,7 +43,7 @@ by explicitly defining a resolver called ``default``:
                 web_path:
                     cache_prefix: custom_path
 
-To change the cache resolver for a specific ``filter_set``, use the following configuration.
+To change the cache resolver for a specific `filter_set`, use the following configuration.
 
 .. code-block:: yaml
 
@@ -60,7 +62,7 @@ Custom Cache Resolver
 
 You can easily define your own, custom cache resolvers to handle cache resolution
 using any imaginable backend. Creating a custom cache resolver begins by creating
-a class that implements the ``ResolverInterface``, as shown below.
+a class that implements the `ResolverInterface`, as shown below.
 
 .. code-block:: php
 
@@ -130,7 +132,7 @@ implementations for all methods to create a valid cache resolver.
     }
 
 Once you have defined your custom cache resolver, you must define it as a service and tag it
-with ``liip_imagine.cache.resolver``.
+with `liip_imagine.cache.resolver`.
 
 .. configuration-block::
 
@@ -163,7 +165,7 @@ with ``liip_imagine.cache.resolver``.
     `Symfony Service Container documentation`_.
 
 Now your custom cache resolver can be set as the global default
-using the name defined in the ``resolver`` attribute of the ``tags`` key.
+using the name defined in the `resolver` attribute of the `tags` key.
 
 .. code-block:: yaml
 

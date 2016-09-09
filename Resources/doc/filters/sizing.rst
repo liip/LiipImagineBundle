@@ -4,17 +4,20 @@
 Size Filters
 ============
 
-Thumbnails
-----------
 
 .. _filter-thumbnail:
+
+Thumbnails
+----------
 
 The built-in `thumbnail` filter performs thumbnail transformations
 (which includes scaling and potentially cropping operations). This
 filter exposed a number of `thumbnail options`_ which may be used
 to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -56,16 +59,18 @@ Thumbnail Options
     thumbnail size.
 
 
+.. _filter-crop:
+
 Cropping Images
 ---------------
-
-.. _filter-crop:
 
 The built-in `crop` filter performs sizing transformations (which
 includes cropping operations). This filter exposed a number of
 `crop options`_ which may be used to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -80,7 +85,7 @@ Example configuration::
                     crop:
 
                         # set the size of the cropping area
-                        - size : [ 300, 600 ]
+                        - size: [ 300, 600 ]
 
                         # set the starting coordinates of the crop
                         - start: [ 040, 160 ]
@@ -97,16 +102,18 @@ Crop Options
     Sets the top, left-post anchor coordinates where the crop operation starts.
 
 
+.. _filter-relative-resize:
+
 Relative Resize
 ---------------
-
-.. _filter-relative-resize:
 
 The built-in `relative_resize` filter performs sizing transformations (specifically
 relative resizing). This filter exposed a number of `relative resize options`_ which
 may be used to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -177,16 +184,18 @@ Relative Resize Options
     by multiplying all image sides by this value.
 
 
+.. _filter-scale:
+
 Scale
 -----
-
-.. _filter-scale:
 
 The built-in `scale` filter performs sizing transformations (specifically
 image scaling). This filter exposed a number of `scale options`_ which
 may be used to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -246,16 +255,18 @@ Scale Options
     by multiplying all image sides by this value.
 
 
+.. _filter-down-scale:
+
 Down Scale
 ----------
-
-.. _filter-down-scale:
 
 The built-in `downscale` filter performs sizing transformations (specifically
 image down-scaling). This filter exposed a number of `down scale options`_ which
 may be used to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 
@@ -295,16 +306,18 @@ Down Scale Options
     by multiplying all image sides by this value.
 
 
+.. _filter-up-scale:
+
 Up Scale
 --------
-
-.. _filter-up-scale:
 
 The built-in `upscale` filter performs sizing transformations (specifically
 image up-scaling). This filter exposed a number of `up scale options`_ which
 may be used to configure its behavior.
 
-Example configuration::
+Example configuration:
+
+.. code-block:: yaml
 
     # app/config/config.yml
 

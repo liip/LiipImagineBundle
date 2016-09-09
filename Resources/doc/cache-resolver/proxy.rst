@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _cache-resolver-proxy:
+
 ProxyResolver
 =============
 
-.. _cache-resolver-proxy:
-
-The ``ProxyResolver`` cannot be used by itself. Instead, it is a "decorator" for
+The `ProxyResolver` cannot be used by itself. Instead, it is a "decorator" for
 another resolver. It add the ability to use "Proxy Hosts" for your assets. If no
 "Proxy Domains" are set, it behaves like the  underlying cache resolver.
 
@@ -34,16 +35,16 @@ and the cache resolver service to decorate.
                 - { name: "liip_imagine.cache.resolver", resolver: "proxy" }
 
 With this configuration, the cache resolver will generate paths such as
-``//images0.domain.com/.../image.jpg``, ``//images1.domain.com/.../image.jpg``, and
-``//images2.domain.com/.../image.jpg`` (instead of the original path
+`//images0.domain.com/.../image.jpg`, `//images1.domain.com/.../image.jpg`, and
+`//images2.domain.com/.../image.jpg` (instead of the original path
 returned from the decorated cache resolver, in this example using AWS,
-``//bucket.s3.awsamazoncloud.com/.../image.jpg``).
+`//bucket.s3.awsamazoncloud.com/.../image.jpg`).
 
 Usage
 -----
 
-After configuring ``ProxyResolver``, you can set it as the default cache resolver
-for ``LiipImagineBundle`` using the following configuration.
+After configuring `ProxyResolver`, you can set it as the default cache resolver
+for `LiipImagineBundle` using the following configuration.
 
 .. code-block:: yaml
 
@@ -56,7 +57,7 @@ for ``LiipImagineBundle`` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set ``ProxyResolver`` as the cache resolver for a specific
+Alternatively, you can set `ProxyResolver` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml

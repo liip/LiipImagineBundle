@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _cache-resolver-flysystem:
+
 Flysystem Resolver
 ==================
 
-.. _cache-resolver-flysystem:
-
-The ``FlysystemResolver`` resolver enabled cache resolution using the `Flysystem`_
+The `FlysystemResolver` resolver enabled cache resolution using the `Flysystem`_
 filesystem abstraction layer.
 
 Dependencies
@@ -25,8 +26,8 @@ can be installed by executing the following command in your project directory:
 Configuration
 -------------
 
-The value of the ``filesystem_service`` property must be a service that returns an
-instance of ``League\\Flysystem\\Filesystem``.
+The value of the `filesystem_service` property must be a service that returns an
+instance of `League\\Flysystem\\Filesystem`.
 
 The following implementation uses `OneupFlysystemBundle`_.
 
@@ -39,9 +40,9 @@ The following implementation uses `OneupFlysystemBundle`_.
             profile_photos:
                 flysystem:
                     filesystem_service: oneup_flysystem.profile_photos_filesystem
-                    root_url          : http://images.example.com
-                    cache_prefix      : media/cache
-                    visibility        : public
+                    root_url:           "http://images.example.com"
+                    cache_prefix:       media/cache
+                    visibility:         public
 
     oneup_flysystem:
         adapters:
@@ -55,24 +56,24 @@ The following implementation uses `OneupFlysystemBundle`_.
 
 There are several configuration options available:
 
-* ``root_url``: must be a valid url to the target system the flysystem adapter
+* `root_url`: must be a valid url to the target system the flysystem adapter
   points to. This is used to determine how the url should be generated upon request.
-  Default value: ``null``
-* ``cache_prefix``: this is used for the image path generation. This will be the
+  Default value: `null`
+* `cache_prefix`: this is used for the image path generation. This will be the
   prefix inside the given Flysystem.
-  Default value: ``media/cache``
-* ``visibility``: one of the two predefined flysystem visibility constants
-  (``AdapterInterface::VISIBILITY_PUBLIC`` [``public``] / ``AdapterInterface::VISIBILITY_PRIVATE`` [``private``])
+  Default value: `media/cache`
+* `visibility`: one of the two predefined flysystem visibility constants
+  (`AdapterInterface::VISIBILITY_PUBLIC` [`public`] / `AdapterInterface::VISIBILITY_PRIVATE` [`private`])
   The visibility is applied, when the objects are stored on a flysystem filesystem.
-  You will most probably want to leave the default or explicitly set ``public``.
-  Default value: ``public``
+  You will most probably want to leave the default or explicitly set `public`.
+  Default value: `public`
 
 
 Usage
 -----
 
-After configuring ``FlysystemResolver``, you can set it as the default cache resolver
-for ``LiipImagineBundle`` using the following configuration.
+After configuring `FlysystemResolver`, you can set it as the default cache resolver
+for `LiipImagineBundle` using the following configuration.
 
 .. code-block:: yaml
 
