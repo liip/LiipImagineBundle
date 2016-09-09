@@ -1,11 +1,10 @@
 
-.. default-role:: code
 .. _cache-resolver-aws-s3:
 
 AWS S3 Resolver
 ===============
 
-The `AwsS3Resolver` resolver enables cache resolution using Amazon S3.
+The ``AwsS3Resolver`` resolver enables cache resolution using Amazon S3.
 
 
 Dependencies
@@ -69,8 +68,8 @@ Create Resolver from a Factory
 
 .. tip::
 
-    If using `aws-sdk-php`_ < `3.0.0`, you must omit the `credentials` key and instead
-    place the `key` and `secret` keys at the same level as `region` and `bucket`.
+    If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
+    place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
 
     .. code-block:: yaml
 
@@ -117,8 +116,8 @@ You have to set up the services required:
 
 .. tip::
 
-    If using `aws-sdk-php`_ < `3.0.0`, you must omit the `credentials` key and instead
-    place the `key` and `secret` keys at the same level as `region` and `bucket`.
+    If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
+    place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
 
     .. code-block:: yaml
 
@@ -137,8 +136,8 @@ You have to set up the services required:
 Usage
 -----
 
-After configuring `AwsS3Resolver`, you can set it as the default cache resolver
-for `LiipImagineBundle` using the following configuration.
+After configuring ``AwsS3Resolver``, you can set it as the default cache resolver
+for ``LiipImagineBundle`` using the following configuration.
 
 .. code-block:: yaml
 
@@ -151,7 +150,7 @@ for `LiipImagineBundle` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set `AmazonS3Resolver` as the cache resolver for a specific
+Alternatively, you can set ``AmazonS3Resolver`` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml
@@ -247,11 +246,11 @@ for the list of available options.
 Note, that the following options are configured automatically and will be
 ignored, even if you configure it via ObjectOptions:
 
-* `ACL`
-* `Bucket`
-* `Key`
-* `Body`
-* `ContentType`
+* ``ACL``
+* ``Bucket``
+* ``Key``
+* ``Body``
+* ``ContentType``
 
 
 In order to make use of the object PUT options, you can simply add a call to the

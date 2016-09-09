@@ -1,11 +1,10 @@
 
-.. default-role:: code
 .. _cache-resolver-amazon-s3:
 
 Amazon S3 Resolver
 ==================
 
-The `AmazonS3Resolver` resolver enables cache resolution using Amazon S3.
+The ``AmazonS3Resolver`` resolver enables cache resolution using Amazon S3.
 
 Dependencies
 ------------
@@ -65,8 +64,8 @@ Next, you must define the required services.
 Usage
 -----
 
-After configuring `AmazonS3Resolver`, you can set it as the default cache resolver
-for `LiipImagineBundle` using the following configuration.
+After configuring ``AmazonS3Resolver``, you can set it as the default cache resolver
+for ``LiipImagineBundle`` using the following configuration.
 
 .. code-block:: yaml
 
@@ -79,7 +78,7 @@ for `LiipImagineBundle` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set `AmazonS3Resolver` as the cache resolver for a specific
+Alternatively, you can set ``AmazonS3Resolver`` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml
