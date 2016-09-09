@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _data-loaders-stream:
+
 Stream Loader
 =============
 
-.. _data-loaders-stream:
-
-The ``StreamLoader`` allows you to load images using PHP Streams.
+The `StreamLoader` allows you to load images using PHP Streams.
 
 
 Configuration
@@ -22,7 +23,7 @@ Configuration
 Custom
 ~~~~~~
 
-The ``Liip\ImagineBundle\Binary\Loader\StreamLoader`` allows to read images
+The `Liip\ImagineBundle\Binary\Loader\StreamLoader` allows to read images
 from any stream (http, ftp, and others…)  registered thus allowing you to serve your images from
 literally anywhere.
 
@@ -50,7 +51,7 @@ If you are using the `KnpGaufretteBundle`_ you can make use of the
 Usage
 -----
 
-Now you are ready to use the ``AwsS3Resolver`` by configuring the bundle.
+Now you are ready to use the `AwsS3Resolver` by configuring the bundle.
 The following example will configure the resolver as default.
 
 .. code-block:: yaml

@@ -1,6 +1,5 @@
+
 .. default-role:: code
-.. role:: php(code)
-    :language: php
 
 LiipImagineBundle
 =================

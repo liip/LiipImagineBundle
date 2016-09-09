@@ -1,4 +1,6 @@
 
+.. default-role:: code
+
 Installation
 ============
 
@@ -20,9 +22,9 @@ the `installation documentation`_ for Composer.
 Step 2: Enable the Bundle
 -------------------------
 
-Then, enable the bundle by adding ``new Liip\ImagineBundle\LiipImagineBundle()``
-to the bundles array of the ``registerBundles`` method in your project's
-``app/AppKernel.php`` file:
+Then, enable the bundle by adding `new Liip\ImagineBundle\LiipImagineBundle()`
+to the bundles array of the `registerBundles` method in your project's
+`app/AppKernel.php` file:
 
 .. code-block:: php
 

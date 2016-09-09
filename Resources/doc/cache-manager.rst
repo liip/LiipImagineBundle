@@ -1,4 +1,6 @@
 
+.. default-role:: code
+
 Cache Manager
 =============
 

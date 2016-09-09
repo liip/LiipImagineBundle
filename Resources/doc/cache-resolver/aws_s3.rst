@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _cache-resolver-aws-s3:
+
 AWS S3 Resolver
 ===============
 
-.. _cache-resolver-aws-s3:
-
-The ``AwsS3Resolver`` resolver enables cache resolution using Amazon S3.
+The `AwsS3Resolver` resolver enables cache resolution using Amazon S3.
 
 
 Dependencies
@@ -34,7 +35,7 @@ To begin, you must assign your AWS key, secret, bucket, and region to their resp
     # app/config/config.yml or app/config/parameters.yml
 
     parameters:
-        amazon.s3.key   : "your-aws-key"
+        amazon.s3.key:    "your-aws-key"
         amazon.s3.secret: "your-aws-secret"
         amazon.s3.bucket: "your-bucket.example.com"
         amazon.s3.region: "your-bucket-region"
@@ -56,7 +57,7 @@ Create Resolver from a Factory
                 aws_s3:
                     client_config:
                         credentials:
-                            key   : "%amazon.s3.key%"
+                            ke:     "%amazon.s3.key%"
                             secret: "%amazon.s3.secret%"
                         region: "%amazon.s3.region%"
                         bucket: "%amazon.s3.cache_bucket%"
@@ -68,8 +69,8 @@ Create Resolver from a Factory
 
 .. tip::
 
-    If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
-    place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
+    If using `aws-sdk-php`_ < `3.0.0`, you must omit the `credentials` key and instead
+    place the `key` and `secret` keys at the same level as `region` and `bucket`.
 
     .. code-block:: yaml
 
@@ -78,7 +79,7 @@ Create Resolver from a Factory
         services:
             aws_s3:
                 client_config:
-                    key   : "%amazon.s3.key%"
+                    key:    "%amazon.s3.key%"
                     secret: "%amazon.s3.secret%"
                     region: "%amazon.s3.region%"
                     bucket: "%amazon.s3.cache_bucket%"
@@ -116,8 +117,8 @@ You have to set up the services required:
 
 .. tip::
 
-    If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
-    place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
+    If using `aws-sdk-php`_ < `3.0.0`, you must omit the `credentials` key and instead
+    place the `key` and `secret` keys at the same level as `region` and `bucket`.
 
     .. code-block:: yaml
 
@@ -136,8 +137,8 @@ You have to set up the services required:
 Usage
 -----
 
-After configuring ``AwsS3Resolver``, you can set it as the default cache resolver
-for ``LiipImagineBundle`` using the following configuration.
+After configuring `AwsS3Resolver`, you can set it as the default cache resolver
+for `LiipImagineBundle` using the following configuration.
 
 .. code-block:: yaml
 
@@ -150,7 +151,7 @@ for ``LiipImagineBundle`` using the following configuration.
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set ``AmazonS3Resolver`` as the cache resolver for a specific
+Alternatively, you can set `AmazonS3Resolver` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml
@@ -246,11 +247,11 @@ for the list of available options.
 Note, that the following options are configured automatically and will be
 ignored, even if you configure it via ObjectOptions:
 
-* ``ACL``
-* ``Bucket``
-* ``Key``
-* ``Body``
-* ``ContentType``
+* `ACL`
+* `Bucket`
+* `Key`
+* `Body`
+* `ContentType`
 
 
 In order to make use of the object PUT options, you can simply add a call to the

@@ -1,4 +1,6 @@
 
+.. default-role:: code
+
 Console Commands
 ================
 
@@ -11,7 +13,7 @@ All cache for a given paths will be removed:
 
     $ php app/console liip:imagine:cache:remove path1 path
 
-If you use ``--filters`` parameter, all cache for a given filters will be lost:
+If you use `--filters` parameter, all cache for a given filters will be lost:
 
 .. code-block:: bash
 
@@ -59,7 +61,7 @@ As a result you will get:
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb2/path1
 
-If you omit ``--filters`` parameter then to resolve given paths will be used
+If you omit `--filters` parameter then to resolve given paths will be used
 all configured and available filters in application:
 
 .. code-block:: bash

@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _data-loaders-filesystem:
+
 File System Loader
 ==================
 
-.. _data-loaders-filesystem:
-
-The ``FileSystem`` data loader allows for loading images from local file system paths.
+The `FileSystem` data loader allows for loading images from local file system paths.
 
 .. tip::
 
@@ -14,7 +15,7 @@ The ``FileSystem`` data loader allows for loading images from local file system 
 Configuration
 -------------
 
-To set this loader for a specific context called ``profile_photos``, use:
+To set this loader for a specific context called `profile_photos`, use:
 
 .. code-block:: yaml
 
@@ -25,7 +26,7 @@ To set this loader for a specific context called ``profile_photos``, use:
             profile_photos:
                 filesystem: ~
 
-You can configure the ``data_root``, used as the root path to search for images:
+You can configure the `data_root`, used as the root path to search for images:
 
 .. code-block:: yaml
 

@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _data-loaders-flysystem:
+
 FlySystem Loader
 ================
 
-.. _data-loaders-flysystem:
-
-The ``FlysystemLoader`` lets you load images using the `Flysystem`_ filesystem abstraction
+The `FlysystemLoader` lets you load images using the `Flysystem`_ filesystem abstraction
 layer.
 
 Dependencies
@@ -50,8 +51,8 @@ Using `OneupFlysystemBundle`_, a basic configuration might look like the followi
 
 .. note::
 
-    The value of ``filesystem_service`` must be a service id that returns an instance
-    of ``League\\Flysystem\\Filesystem``.
+    The value of `filesystem_service` must be a service id that returns an instance
+    of `League\\Flysystem\\Filesystem`.
 
 
 .. _`Flysystem`: https://github.com/thephpleague/flysystem

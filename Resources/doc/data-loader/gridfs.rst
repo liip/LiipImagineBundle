@@ -1,10 +1,11 @@
 
+.. default-role:: code
+.. _data-loaders-grid-fs:
+
 GridFS Loader
 =============
 
-.. _data-loaders-grid-fs:
-
-The ``GridFSLoader`` allows you to load your images from `MongoDB GridFS`_.
+The `GridFSLoader` allows you to load your images from `MongoDB GridFS`_.
 
 Configuration
 -------------
@@ -51,7 +52,7 @@ Define a service for the loader:
 Usage
 -----
 
-Reference the image by its ``id`` when piping to the template helper:
+Reference the image by its `id` when piping to the template helper:
 
 .. configuration-block::
 

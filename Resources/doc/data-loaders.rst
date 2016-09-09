@@ -1,4 +1,6 @@
 
+.. default-role:: code
+
 Data Loaders
 ============
 
@@ -14,18 +16,18 @@ A number of built-in data loaders are available:
 Other Data Loaders
 ------------------
 
-* `Doctrine PHPCR-ODM`_: You can include the ``CmfMediaBundle`` alone if you just
+* `Doctrine PHPCR-ODM`_: You can include the `CmfMediaBundle` alone if you just
   want to use the images but no other Symfony CMF features.
 
+
+.. _data-loaders-custom:
 
 Custom Data Loader
 ------------------
 
-.. _data-loaders-custom:
-
 You can easily define your own, custom data loaders to allow you to retrieve you
 image data from any imaginable backend. Creating a custom data loader begins by creating
-a class that implements the ``LoaderInterface``, as shown below.
+a class that implements the `LoaderInterface`, as shown below.
 
 .. code-block:: php
 
@@ -34,12 +36,12 @@ a class that implements the ``LoaderInterface``, as shown below.
         public function find($path);
     }
 
-As defined in ``LoaderInterface``, the only required method is one named ``find``,
+As defined in `LoaderInterface`, the only required method is one named `find`,
 which is provided a relative image path as its singular parameter, and
-subsequently provides an instance of ``BinaryInterface`` in return.
+subsequently provides an instance of `BinaryInterface` in return.
 
 The following is a template for creating your own data loader. You must provide
-the implementation for the ``find`` method to create a valid data loader.
+the implementation for the `find` method to create a valid data loader.
 
 .. code-block:: php
 
@@ -67,15 +69,15 @@ the implementation for the ``find`` method to create a valid data loader.
     }
 
 Once you have defined your custom data loader, you must define it as a service and tag it
-with ``liip_imagine.binary.loader``.
+with `liip_imagine.binary.loader`.
 
 .. note::
 
     For more information on the Service Container, reference the official
     `Symfony Service Container documentation`_.
 
-To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
-``my_custom_data_loader``, you would use the following configuration.
+To register `AppBundle\Imagine\Binary\Loader\MyCustomDataLoader` with the name
+`my_custom_data_loader`, you would use the following configuration.
 
 .. configuration-block::
 

@@ -1,10 +1,9 @@
 
 .. default-role:: code
+.. _post-processor-optipng:
 
 Opti PNG
 ========
-
-.. _post-processor-optipng:
 
 The `OptiPngPostProcessor` is a built-in post-processor that performs a number of
 *lossless* optimizations on *PNG* encoded images.
@@ -38,7 +37,7 @@ for the resulting image binary.
         # app/config/config.yml
 
         parameters:
-            liip_imagine.optipng.binary : /your/custom/path/to/optipng
+            liip_imagine.optipng.binary: /your/custom/path/to/optipng
 
 
 Options
@@ -69,6 +68,6 @@ Parameters
 
 .. tip::
 
-    The value of ``liip_imagine.optipng.tempDir`` can be set to an in-memory mount point
-    on supported operating systems, such as ``/run/shm`` on Linux. This will decrease disk
+    The value of `liip_imagine.optipng.tempDir` can be set to an in-memory mount point
+    on supported operating systems, such as `/run/shm` on Linux. This will decrease disk
     load and may increase performance.

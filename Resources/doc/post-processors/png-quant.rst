@@ -1,10 +1,9 @@
 
 .. default-role:: code
+.. _post-processor-pngquant:
 
 PNG Quant
 =========
-
-.. _post-processor-pngquant:
 
 The `PngquantPostProcessor` is a built-in post-processor that performs a number of
 *safe, lossy* optimizations on *PNG* encoded images.
@@ -37,7 +36,7 @@ This configuration sets a quality factor range of 75 to 80 for the resulting ima
         # app/config/config.yml
 
         parameters:
-            liip_imagine.pngquant.binary  : /your/custom/path/to/pngquant
+            liip_imagine.pngquant.binary: /your/custom/path/to/pngquant
 
 
 Options
