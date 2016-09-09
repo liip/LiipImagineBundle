@@ -18,46 +18,44 @@
     "require": {
         "php": "^5.3.9|^7.0",
         "imagine/Imagine": "^0.6.3,<0.7",
-        "symfony/finder": "~2.3|~3.0",
         "symfony/filesystem": "~2.3|~3.0",
-        "symfony/options-resolver": "~2.3|~3.0",
+        "symfony/finder": "~2.3|~3.0",
         "symfony/framework-bundle": "~2.3|~3.0",
+        "symfony/options-resolver": "~2.3|~3.0",
         "symfony/process": "~2.3|~3.0"
     },
-
     "require-dev": {
-        "phpunit/phpunit": "~4.3",
-        "symfony/browser-kit": "~2.3|~3.0",
-        "symfony/yaml": "~2.3|~3.0",
-        "symfony/form": "~2.3|~3.0",
-        "symfony/console": "~2.3|~3.0",
-        "symfony/phpunit-bridge": "~2.3|~3.0",
-        "symfony/dependency-injection": "~2.3|~3.0",
-        "doctrine/orm": "~2.3",
-        "doctrine/cache": "~1.1",
-        "twig/twig": "~1.12",
-        "aws/aws-sdk-php": "~2.4",
+        "ext-gd": "*",
         "amazonwebservices/aws-sdk-for-php": "~1.0",
+        "aws/aws-sdk-php": "~2.4",
+        "doctrine/cache": "~1.1",
+        "doctrine/orm": "~2.3",
+        "friendsofphp/php-cs-fixer": "~2.0",
+        "phpunit/phpunit": "~4.3",
         "psr/log": "~1.0",
-        "ext-gd": "*"
+        "sllh/php-cs-fixer-styleci-bridge": "~2.1",
+        "symfony/browser-kit": "~2.3|~3.0",
+        "symfony/console": "~2.3|~3.0",
+        "symfony/dependency-injection": "~2.3|~3.0",
+        "symfony/form": "~2.3|~3.0",
+        "symfony/phpunit-bridge": "~2.3|~3.0",
+        "symfony/yaml": "~2.3|~3.0",
+        "twig/twig": "~1.12"
     },
-
     "suggest": {
-        "twig/twig":                "If you'd want to use some handy twig filters, version 1.12 or greater required",
-        "aws/aws-sdk-php":          "Add it if you'd like to use aws v2 or v3 resolver",
-        "amazonwebservices/aws-sdk-for-php": "Add it if you'd like to use aws v1 resolver",
-        "monolog/monolog":          "If you'd want to write logs",
-        "league/flysystem":         "If you'd want to use Flysystem binary loader"
+        "amazonwebservices/aws-sdk-for-php": "Required to use AWS version 1 cache resolver.",
+        "aws/aws-sdk-php": "Required to use AWS version 2/3 cache resolver.",
+        "league/flysystem": "Required to use FlySystem data loader or cache resolver.",
+        "monolog/monolog": "A psr/log compatible logger is required to enable logging.",
+        "twig/twig": "Required to use the provided Twig extension. Version 1.12 or greater needed."
     },
-
     "autoload": {
         "psr-4": { "Liip\\ImagineBundle\\": "" }
     },
-
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "sort-packages" : true
     },
-
     "extra": {
         "branch-alias": {
             "dev-master": "1.6.x-dev"
