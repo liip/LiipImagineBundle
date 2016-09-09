@@ -52,6 +52,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
             'filesystem_service' => 'flyfilesystemservice',
             'root_url' => 'http://images.example.com',
             'cache_prefix' => 'theCachePrefix',
+            'visibility' => 'public',
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
@@ -62,6 +63,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertEquals('http://images.example.com', $resolverDefinition->getArgument(2));
         $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(3));
+        $this->assertEquals('public', $resolverDefinition->getArgument(4));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()
@@ -69,6 +71,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
         $expectedRootUrl = 'http://images.example.com';
         $expectedCachePrefix = 'theCachePrefix';
         $expectedFlysystemService = 'flyfilesystemservice';
+        $expectedVisibility = 'public';
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('flysystem', 'array');
@@ -81,6 +84,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
                 'root_url' => $expectedRootUrl,
                 'cache_prefix' => $expectedCachePrefix,
                 'filesystem_service' => $expectedFlysystemService,
+                'visibility' => 'public',
             ),
         ));
 
@@ -92,6 +96,9 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertArrayHasKey('cache_prefix', $config);
         $this->assertEquals($expectedCachePrefix, $config['cache_prefix']);
+
+        $this->assertArrayHasKey('visibility', $config);
+        $this->assertEquals($expectedVisibility, $config['visibility']);
     }
 
     /**
