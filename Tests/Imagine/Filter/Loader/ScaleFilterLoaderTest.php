@@ -36,11 +36,12 @@ class ScaleFilterLoaderTest extends AbstractTest
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
         ));
+
         return $mockImage;
     }
 
     /**
-     * @covers ScaleFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      */
     public function testItShouldPreserveRatio()
     {
@@ -55,15 +56,15 @@ class ScaleFilterLoaderTest extends AbstractTest
             ->willReturn($image);
 
         $result = $loader->load($image, array(
-          'to' => 1.0
+          'to' => 1.0,
         ));
     }
 
     /**
      * @param int[] $dimension
-     * @param Box $expected
+     * @param Box   $expected
      *
-     * @covers ScaleFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      *
      * @dataProvider dimensionsDataProvider
      */
@@ -78,23 +79,22 @@ class ScaleFilterLoaderTest extends AbstractTest
             ->willReturn($image);
 
         $options = array(
-            'dim' => $dimensions
+            'dim' => $dimensions,
         );
 
         $result = $loader->load($image, $options);
     }
 
     /**
-     * @covers ScaleFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      *
      * @expectedException \InvalidArgumentException
      */
     public function itShouldThrowInvalidArgumentException()
     {
-        (new ScaleFilterLoader('foo', 'bar'))
-          ->load($this->getMockImage(), array());
+        $scale = new ScaleFilterLoader('foo', 'bar');
+        $scale->load($this->getMockImage(), array());
     }
-
 
     /**
      * @returns array Array containing coordinate and width/height pairs.

@@ -19,7 +19,7 @@ class ResizeFilterLoaderTest extends AbstractTest
      * @param int $width
      * @param int $height
      *
-     * @covers ResizeFilterLoader::load
+     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader::load
      *
      * @dataProvider resizeDataProvider
      */

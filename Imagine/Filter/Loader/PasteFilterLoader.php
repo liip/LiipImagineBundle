@@ -29,7 +29,9 @@ class PasteFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        list($x, $y) = $options['start'];
+        $x = isset($options['start'][0]) ? $options['start'][0] : null;
+        $y = isset($options['start'][1]) ? $options['start'][1] : null;
+
         $destImage = $this->imagine->open($this->rootPath.'/'.$options['image']);
 
         return $image->paste($destImage, new Point($x, $y));
