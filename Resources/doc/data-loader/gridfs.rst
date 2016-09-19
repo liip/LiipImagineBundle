@@ -1,9 +1,17 @@
-GridFSLoader
-============
 
-Load your images from `MongoDB GridFS`_.
+.. _data-loaders-grid-fs:
+
+GridFS Loader
+=============
+
+The ``GridFSLoader`` allows you to load your images from `MongoDB GridFS`_.
+
+Configuration
+-------------
 
 .. code-block:: yaml
+
+    # app/config/config.yml
 
     liip_imagine:
         filter_sets:
@@ -12,20 +20,48 @@ Load your images from `MongoDB GridFS`_.
                 filters:
                     my_custom_filter: { }
 
-Add loader to your services:
+Define a service for the loader:
 
-.. code-block:: xml
+.. configuration-block::
 
-    <service id="liip_imagine.binary.loader.grid_fs" class="Liip\ImagineBundle\Binary\Loader\GridFSLoader">
-        <tag name="liip_imagine.binary.loader" loader="grid_fs" />
-        <argument type="service" id="doctrine.odm.mongodb.document_manager" />
-        <argument>Application\ImageBundle\Document\Image</argument>
-    </service>
+    .. code-block:: yaml
 
-Reference the image by its id:
+        # app/config/services.yml
 
-.. code-block:: jinja
+        services:
+            liip_imagine.binary.loader.grid_fs:
+                class: Liip\ImagineBundle\Binary\Loader\GridFSLoader
+                arguments:
+                    - "@doctrine.odm.mongodb.document_manager"
+                    - Application\ImageBundle\Document\Image
+                tags:
+                    - { name: "liip_imagine.binary.loader", loader: grid_fs }
 
-    <img src="{{ image.id | imagine_filter('my_thumb') }}" />
+    .. code-block:: xml
+
+        <!-- app/config/services.xml -->
+
+        <service id="liip_imagine.binary.loader.grid_fs" class="Liip\ImagineBundle\Binary\Loader\GridFSLoader">
+            <tag name="liip_imagine.binary.loader" loader="grid_fs" />
+            <argument type="service" id="doctrine.odm.mongodb.document_manager" />
+            <argument>Application\ImageBundle\Document\Image</argument>
+        </service>
+
+
+Usage
+-----
+
+Reference the image by its ``id`` when piping to the template helper:
+
+.. configuration-block::
+
+    .. code-block:: html+twig
+
+        <img src="{{ image.id | imagine_filter('my_thumb') }}" />
+
+    .. code-block:: html+php
+
+        <img src="<?php echo $this['imagine']->filter($image->getId(), 'my_thumb') ?>" />
+
 
 .. _`MongoDB GridFS`: http://docs.mongodb.org/manual/applications/gridfs/

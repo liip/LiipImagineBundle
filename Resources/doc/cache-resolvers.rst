@@ -1,26 +1,40 @@
-Built-In CacheResolver
-======================
+
+
+Cache Resolvers
+===============
+
+A number of built-in cache resolvers are available:
 
 .. toctree::
     :maxdepth: 1
+    :glob:
 
-    cache-resolver/web_path
-    cache-resolver/amazons3
-    cache-resolver/aws_s3
-    cache-resolver/cache
-    cache-resolver/proxy
+    cache-resolver/*
 
-Changing the default cache resolver
------------------------------------
 
-The default cache is a web path cache that caches images under
-``{web}/media/cache/``. You can specify the cache to use per individual
-filter_sets. To change the defaults, you can either change the top level
-``cache`` option to the name of the cache resolver you want to use by default,
-or redefine the default cache resolver by explicitly defining a resolver called
-``default``:
+Set the Default Cache Resolver
+------------------------------
+
+The default cache is the :ref:`web path cache resolver <cache-resolver-web-path>`,
+which caches images under ``/media/cache/`` within your application web root path.
+
+You can specify the cache resolver to use per individual ``filter_sets`` or globally.
+To set the default cache resolver globally, use:
 
 .. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        cache: your_resolver
+
+
+To change the default configuration, you can redefine the default cache resolver
+by explicitly defining a resolver called ``default``:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
 
     liip_imagine:
         resolvers:
@@ -28,30 +42,129 @@ or redefine the default cache resolver by explicitly defining a resolver called
                 web_path:
                     cache_prefix: custom_path
 
-Custom cache resolver
+To change the cache resolver for a specific ``filter_set``, use the following configuration.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        filter_sets:
+            cache: ~
+            my_thumb:
+                cache: your_resolver
+                filters:
+                    # the filter list
+
+Custom Cache Resolver
 ---------------------
 
-The ImagineBundle allows you to add your custom cache resolver classes. The only
-requirement is that each cache resolver loader implement the following interface:
-``Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface``.
+You can easily define your own, custom cache resolvers to handle cache resolution
+using any imaginable backend. Creating a custom cache resolver begins by creating
+a class that implements the ``ResolverInterface``, as shown below.
 
-To tell the bundle about your new cache resolver, register it in the service
-container and apply the ``liip_imagine.cache.resolver`` tag to it (example here
-in XML):
+.. code-block:: php
 
-.. code-block:: xml
+    interface ResolverInterface
+    {
+        public function isStored($path, $filter);
+        public function resolve($path, $filter);
+        public function store(BinaryInterface $binary, $path, $filter);
+        public function remove(array $paths, array $filters);
+    }
 
-    <service id="acme_imagine.cache.resolver.my_custom" class="Acme\ImagineBundle\Imagine\Cache\Resolver\MyCustomCacheResolver">
-        <tag name="liip_imagine.cache.resolver" resolver="my_custom_cache" />
-        <argument type="service" id="filesystem" />
-        <argument type="service" id="router" />
-    </service>
+The following is a template for creating your own cache resolver. You must provide
+implementations for all methods to create a valid cache resolver.
 
-For more information on the service container, see the `Symfony Service Container`_
-documentation.
+.. code-block:: php
 
-You can set your custom cache resolver by adding it to the your configuration as
-the new default resolver as follows:
+    <?php
+
+    namespace AppBundle\Imagine\Cache\Resolver;
+
+    use Liip\ImagineBundle\Binary\BinaryInterface;
+    use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
+    use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+
+    class MyCustomResolver implements ResolverInterface
+    {
+        /**
+         * @param string $path
+         * @param string $filter
+         *
+         * @return bool
+         */
+        public function isStored($path, $filter)
+        {
+            /** @todo: implement */
+        }
+
+        /**
+         * @param string $path
+         * @param string $filter
+         *
+         * @return string
+         */
+        public function resolve($path, $filter)
+        {
+            /** @todo: implement */
+        }
+
+        /**
+         * @param BinaryInterface $binary
+         * @param string          $path
+         * @param string          $filter
+         */
+        public function store(BinaryInterface $binary, $path, $filter)
+        {
+            /** @todo: implement */
+        }
+
+        /**
+         * @param string[] $paths
+         * @param string[] $filters
+         */
+        public function remove(array $paths, array $filters)
+        {
+            /** @todo: implement */
+        }
+    }
+
+Once you have defined your custom cache resolver, you must define it as a service and tag it
+with ``liip_imagine.cache.resolver``.
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        # app/config/services.yml
+
+        services:
+            imagine.cache.resolver.my_custom:
+                class: AppBundle\Imagine\Cache\Resolver\MyCustomResolver
+                arguments:
+                    - "@filesystem"
+                    - "@router"
+                tags:
+                    - { name: "liip_imagine.cache.resolver", resolver: my_custom_cache }
+
+    .. code-block:: xml
+
+        <!-- app/config/services.xml -->
+
+        <service id="imagine.cache.resolver.my_custom" class="AppBundle\Imagine\Cache\Resolver\MyCustomResolver">
+            <tag name="liip_imagine.cache.resolver" resolver="my_custom_cache" />
+            <argument type="service" id="filesystem" />
+            <argument type="service" id="router" />
+        </service>
+
+.. note::
+
+    For more information on the Service Container, reference the official
+    `Symfony Service Container documentation`_.
+
+Now your custom cache resolver can be set as the global default
+using the name defined in the ``resolver`` attribute of the ``tags`` key.
 
 .. code-block:: yaml
 
@@ -67,10 +180,6 @@ filter set:
         filter_sets:
             my_special_style:
                 cache: my_custom_cache
-                filters:
-                    my_custom_filter: { }
 
-For an example of a cache resolver implementation, refer to
-``Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver``.
 
-.. _`Symfony Service Container`: http://symfony.com/doc/current/book/service_container.html
+.. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html

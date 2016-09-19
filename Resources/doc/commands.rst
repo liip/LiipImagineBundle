@@ -1,7 +1,9 @@
-Commands
-========
 
-Remove cache
+
+Console Commands
+================
+
+Remove Cache
 ------------
 
 All cache for a given paths will be removed:
@@ -29,7 +31,8 @@ without parameters:
 
     $ php app/console liip:imagine:cache:remove
 
-Resolve cache
+
+Resolve Cache
 -------------
 
 .. code-block:: bash

@@ -1,14 +1,63 @@
+
+
 Basic Usage
 ===========
 
-This bundle works by configuring a set of filters and then applying those
-filters to images inside a template. So, start by creating some sort of filter
-that you need to apply somewhere in your application. For example, suppose
-you want to thumbnail an image to a size of 120x90 pixels:
+Generally, this bundle works by applying filter sets to images from inside
+a template. Your filter sets are defined within the application's configuration
+file (often ``app/config/config.yml``) and are comprised of a collection of
+filters, post-processors, and other optional parameters.
+
+We'll learn more about post-processors and other available parameters later,
+but for now lets focus on how to define a simple filter set comprised of a
+few filters.
+
+.. _usage-create-thumbnails:
+
+Create Thumbnails
+-----------------
+
+Before we get started, there is a small amount of configuration needed to ensure
+our :doc:`data loaders <data-loaders>` and :doc:`cache-resolvers <cache-resolvers>`
+operate correctly. Use the following configuration boilerplate.
 
 .. code-block:: yaml
 
     # app/config/config.yml
+
+    liip_imagine:
+
+        # configure resolvers
+        resolvers:
+
+            # setup the default resolver
+            default:
+
+                # use the default web path
+                web_path: ~
+
+        # your filter sets are defined here
+        filter_sets:
+
+            # use the default cache configuration
+            cache: ~
+
+With the basic configuration in place, we'll start with an example that fulfills a
+common use-case: creating thumbnails. Lets assume we want the resulting thumbnails
+to have the following transformations applied to them:
+
+* Scale and crop the image to 120x90px.
+* Add a 2px black border to the scaled image.
+* Adjust the image quality to 75.
+
+Adding onto our boilerplate from above, we need to define a filter set (which we'll
+name ``my_thumb``) with two filters configured: the ``thumbnail`` and ``background``
+filters.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
     liip_imagine:
         resolvers:
             default:
@@ -16,40 +65,84 @@ you want to thumbnail an image to a size of 120x90 pixels:
 
         filter_sets:
             cache: ~
+
+            # the name of the "filter set"
             my_thumb:
+
+                # adjust the image quality to 75%
                 quality: 75
+
+                # list of transformations to apply (the "filters")
                 filters:
+
+                    # create a thumbnail: set size to 120x90 and use the "outbound" mode
+                    # to crop the image when the size ratio of the input differs
                     thumbnail: { size: [120, 90], mode: outbound }
 
-You've now defined a filter set called ``my_thumb`` that performs a thumbnail
-transformation. We'll learn more about available transformations later, but
-for now, this new filter can be used immediately in a template:
+                    # create a 2px black border: center the thumbnail on a black background
+                    # 4px larger to create a 2px border around the final image
+                    background: { size: [124, 94], position: center, color: '#000000' }
+
+You've now created a filter set called ``my_thumb`` that performs a thumbnail
+transformation. The ``thumbnail`` filter sizes the image to the desired width
+and height (120x90px), and its ``mode: outbound`` option causes
+the resulting image to be cropped if the input ratio differs. The ``background``
+filter results in a 2px black border by creating a black canvas 124x94px in size,
+and positioning the thumbnail at its center.
+
+.. note::
+
+    A filter set can have any number of filters defined for it. Simple
+    transformations may only require a single filter, while more complex
+    transformations can have any number of filters defined for them.
+
+There are a number of additional :doc:`filters <filters>`, but for now you can use
+your newly defined ``my_thumb`` filter set immediately within a template.
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
-        <img src="{{ '/relative/path/to/image.jpg'|imagine_filter('my_thumb') }}" />
+        <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb') }}" />
 
     .. code-block:: html+php
 
         <img src="<?php echo $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb') ?>" />
 
-Behind the scenes, the bundles applies the filter(s) to the image on the
-first request and then caches the image to a similar path. On the next request,
-the cached image would be served directly from the file system.
+Behind the scenes, the bundle applies the filter(s) to the image on-the-fly
+when the first page request is served. The transformed image is then cached
+for subsequent requests. The final cached image path would be similar to
+``/media/cache/my_thumb/relative/path/to/image.jpg``.
 
-In this example, the final rendered path would be something like
-``/media/cache/my_thumb/relative/path/to/image.jpg``. This is where Imagine
-would save the filtered image file.
+.. note::
 
-You can also pass some options at runtime:
+    Using the ``dev`` environment you might find that images are not properly
+    rendered via the template helper. This is often caused by having
+    ``intercept_redirect`` enabled in your application configuration. To ensure
+    images are rendered, it is strongly suggested to disable this option:
+
+    .. code-block:: yaml
+
+        # app/config/config_dev.yml
+
+        web_profiler:
+            intercept_redirects: false
+
+
+Runtime Options
+---------------
+
+Sometimes, you may have a filter defined that fulfills 99% of your usage
+scenarios. Instead of defining a new filter for the erroneous 1% of cases,
+you may instead choose to alter the behavior of a filter at runtime by
+passing the template helper an options array.
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}
+
         <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb', runtimeConfig) }}" />
 
     .. code-block:: html+php
@@ -62,35 +155,59 @@ You can also pass some options at runtime:
         );
         ?>
 
-        <img src="<?php echo $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', $runtimeConfig) ?>" />
+        <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', $runtimeConfig) ?>" />
 
-Also you can resolve image url from console:
+
+Path Resolution
+---------------
+
+Sometimes you need to resolve the image path returned by this bundle for a
+filtered image. This can easily be achieved using Symfony's console binary
+or pragmatically from within a controller or other piece of code.
+
+
+Resolve with the Console
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can resolve an image URL using the console command
+``liip:imagine:cache:resolve``. The only required argument is one or more
+relative image paths (which must be separated by a space).
 
 .. code-block:: bash
 
-    $ php app/console liip:imagine:cache:resolve relative/path/to/image.jpg relative/path/to/image2.jpg --filters=my_thumb --filters=thumbnail_default
+    $ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
 
-Where only paths required parameter. They are separated by space. If you
-omit filters option will be applied all available filters.
+Additionally, you can use the ``--filters`` option to specify which filter
+you want to resolve for (if the ``--filters`` option is omitted, all
+available filters will be resolved).
 
-If you need to access filtered image URL in your controller:
+.. code-block:: bash
+
+    $ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filters=my_thumb
+
+
+Resolve Pragmatically
+~~~~~~~~~~~~~~~~~~~~~
+
+You can resolve the image URL in your code using the ``getBrowserPath``
+method of the ``liip_imagine.cache.manager`` service. Assuming you already
+have the service assigned to a variable called ``$imagineCacheManager``,
+you would run:
 
 .. code-block:: php
 
-    $this->get('liip_imagine.cache.manager')->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb')
+    $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
 
-In this case, the final rendered path would contain some random data in the
-path ``/media/cache/my_thumb/S8rrlhhQ/relative/path/to/image.jpg``. This is where
-Imagine would save the filtered image file.
+Often, you need to perform this operation in a controller. Assuming your
+controller inherits from the base Symfony controller, you can take advantage
+of the inherited ``get`` method to request the ``liip_imagine.cache.manager``
+service, from which you can call ``getBrowserPath`` on a relative image
+path to get its resolved location.
 
-.. note::
+.. code-block:: php
 
-    Using the ``dev`` environment you might find that the images are not properly
-    rendered when using the template helper. This is likely caused by having
-    ``intercept_redirect`` enabled in your application configuration. To ensure
-    that the images are rendered disable this option:
+    /** @var CacheManager */
+    $imagineCacheManager = $this->get('liip_imagine.cache.manager');
 
-    .. code-block:: yaml
-
-        web_profiler:
-            intercept_redirects: false
+    /** @var string */
+    $resolvedPath = $this->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');

@@ -1,5 +1,7 @@
-LiipImagineBundle
-=================
+
+
+Introduction
+============
 
 Basic Data Flow
 ---------------
@@ -7,6 +9,7 @@ Basic Data Flow
 The core feature of this bundle is to provide a way to alter images in certain
 ways and cache the altered versions. There are several components involved to
 get this done.
+
 
 Retrieving the original image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,6 +34,7 @@ The most important parts about those ``DataLoader``:
 
 Check out the :doc:`chapter about data loaders <data-loaders>` to learn more about them.
 
+
 Apply filters on the original image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -51,6 +55,7 @@ customize the outcome.
 
 Check out the :doc:`chapter about filters <filters>` to learn more about them.
 
+
 Cache the filtered image
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,8 +72,7 @@ image in the web directory as a static file, so the web server won't call the
 application stack anymore on those images. The images will be created upon first
 request and will remain in their static cached version until removed.
 
-A ``CacheResolver`` implements the
-``Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface``.
+A ``CacheResolver`` implements the ``Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface``.
 
 It handles the so-called ``path``, which is the identifier you use, when
 addressing the original image, e.g. in your template. This path relates to the

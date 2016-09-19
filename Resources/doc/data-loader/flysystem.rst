@@ -1,18 +1,36 @@
-FlysystemLoader
-===============
 
-This loader lets you load images from `Flysystem`_ filesystem abstraction layer,
-which can be used in Symfony projects by installing, for example, `OneupFlysystemBundle`_.
+.. _data-loaders-flysystem:
 
-Value of ``filesystem_service`` property must be a service,
-which returns an instance of League\\Flysystem\\Filesystem.
+FlySystem Loader
+================
 
-For implementation using `OneupFlysystemBundle`_ look below.
+The ``FlysystemLoader`` lets you load images using the `Flysystem`_ filesystem abstraction
+layer.
 
-Using factory
+Dependencies
+------------
+
+This cache resolver has a soft dependency on `OneupFlysystemBundle`_, which
+can be installed by executing the following command in your project directory:
+
+.. code-block:: bash
+
+    $ composer require oneup/flysystem-bundle
+
+.. note::
+
+    This command requires that `Composer`_ is installed globally, as explained in
+    their `installation documentation`_.
+
+
+Configuration
 -------------
 
+Using `OneupFlysystemBundle`_, a basic configuration might look like the following.
+
 .. code-block:: yaml
+
+    # app/config/config.yml
 
     liip_imagine:
         loaders:
@@ -30,6 +48,13 @@ Using factory
             profile_photos:
                 adapter: profile_photos
 
+.. note::
+
+    The value of ``filesystem_service`` must be a service id that returns an instance
+    of ``League\\Flysystem\\Filesystem``.
+
 
 .. _`Flysystem`: https://github.com/thephpleague/flysystem
 .. _`OneupFlysystemBundle`: https://github.com/1up-lab/OneupFlysystemBundle
+.. _`Composer`: https://getcomposer.org/
+.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
