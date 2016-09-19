@@ -1,12 +1,21 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Data;
 
-use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
-use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 class DataManager
