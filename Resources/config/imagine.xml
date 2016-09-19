@@ -265,6 +265,7 @@
             <argument type="service" id="router.request_context" />
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.proxy" class="%liip_imagine.cache.resolver.proxy.class%" public="true" abstract="true">
