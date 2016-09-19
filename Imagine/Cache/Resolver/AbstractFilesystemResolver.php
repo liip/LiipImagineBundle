@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
@@ -136,9 +145,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @return Request
-     *
      * @throws \LogicException
+     *
+     * @return Request
      */
     protected function getRequest()
     {
@@ -171,10 +180,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * Return the local filepath.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
      * @param string $path   The resource path to convert
      * @param string $filter The name of the imagine filter
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      *
      * @return string
      */

@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Filter;
 
-use Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader;
-use Liip\ImagineBundle\Tests\AbstractTest;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
+use Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
  * Test cases for CropFilterLoader class.

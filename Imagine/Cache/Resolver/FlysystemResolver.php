@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use League\Flysystem\AdapterInterface;
@@ -107,9 +116,9 @@ class FlysystemResolver implements ResolverInterface
      * @param string $path   The path where the original file is expected to be
      * @param string $filter The name of the imagine filter in effect
      *
-     * @return string The absolute URL of the cached image
-     *
      * @throws NotResolvableException
+     *
+     * @return string The absolute URL of the cached image
      */
     public function resolve($path, $filter)
     {
@@ -132,7 +141,7 @@ class FlysystemResolver implements ResolverInterface
         $this->flysystem->put(
             $this->getFilePath($path, $filter),
             $binary->getContent(),
-            ['visibility' => $this->visibility]
+            array('visibility' => $this->visibility)
         );
     }
 
