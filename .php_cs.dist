@@ -22,7 +22,7 @@ For the full copyright and license information, please view the LICENSE.md
 file that was distributed with this source code.
 EOF;
 
-$headerConfig = [ 'header_comment' => [ 'header' => $headerString ] ];
+$headerConfig = array( 'header_comment' => array( 'header' => $headerString ) );
 
 $config = ConfigBridge::create();
 $config->setRules(array_merge($config->getRules(), $headerConfig));
