@@ -18,7 +18,8 @@ class ResizeFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        list($width, $height) = $options['size'];
+        $width = isset($options['size'][0]) ? $options['size'][0] : null;
+        $height = isset($options['size'][1]) ? $options['size'][1] : null;
 
         $filter = new Resize(new Box($width, $height));
 

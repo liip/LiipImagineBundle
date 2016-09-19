@@ -34,7 +34,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
             })
         ;
 
-        $loader->load($image, array('max' => array(100, 100)));
+        $loader->load($image, array('max' => array(100, 90)));
 
         return array($initialSize, $resultSize);
     }
@@ -56,6 +56,6 @@ class DownscaleFilterLoaderTest extends AbstractTest
     {
         list($initialSize, $resultSize) = $sizes;
         $this->assertLessThanOrEqual(100, $resultSize->getHeight());
-        $this->assertLessThanOrEqual(100, $resultSize->getWidth());
+        $this->assertLessThanOrEqual(90, $resultSize->getWidth());
     }
 }

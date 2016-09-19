@@ -13,9 +13,24 @@ use Imagine\Image\Box;
  */
 class ScaleFilterLoader implements LoaderInterface
 {
-    public function __construct($dimentionKey = 'dim', $ratioKey = 'to', $absoluteRatio = true)
+    /**
+     * @var string
+     */
+    protected $dimensionKey;
+
+    /**
+     * @var string
+     */
+    protected $ratioKey;
+
+    /**
+     * @var bool
+     */
+    protected $absoluteRatio;
+
+    public function __construct($dimensionKey = 'dim', $ratioKey = 'to', $absoluteRatio = true)
     {
-        $this->dimentionKey = $dimentionKey;
+        $this->dimensionKey = $dimensionKey;
         $this->ratioKey = $ratioKey;
         $this->absoluteRatio = $absoluteRatio;
     }
@@ -25,8 +40,8 @@ class ScaleFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = array())
     {
-        if (!isset($options[$this->dimentionKey]) && !isset($options[$this->ratioKey])) {
-            throw new \InvalidArgumentException("Missing $this->dimentionKey or $this->ratioKey option.");
+        if (!isset($options[$this->dimensionKey]) && !isset($options[$this->ratioKey])) {
+            throw new \InvalidArgumentException("Missing $this->dimensionKey or $this->ratioKey option.");
         }
 
         $size = $image->getSize();
@@ -35,8 +50,10 @@ class ScaleFilterLoader implements LoaderInterface
 
         if (isset($options[$this->ratioKey])) {
             $ratio = $this->absoluteRatio ? $options[$this->ratioKey] : $this->calcAbsoluteRatio($options[$this->ratioKey]);
-        } elseif (isset($options[$this->dimentionKey])) {
-            list($width, $height) = $options[$this->dimentionKey];
+        } elseif (isset($options[$this->dimensionKey])) {
+            $size = $options[$this->dimensionKey];
+            $width = isset($size[0]) ? $size[0] : null;
+            $height = isset($size[1]) ? $size[1] : null;
 
             $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;

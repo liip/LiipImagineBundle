@@ -32,7 +32,8 @@ class BackgroundFilterLoader implements LoaderInterface
         $size = $image->getSize();
 
         if (isset($options['size'])) {
-            list($width, $height) = $options['size'];
+            $width = isset($options['size'][0]) ? $options['size'][0] : null;
+            $height = isset($options['size'][1]) ? $options['size'][1] : null;
 
             $position = isset($options['position']) ? $options['position'] : 'center';
             switch ($position) {
