@@ -1,14 +1,23 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Liip\ImagineBundle\Command\RemoveCacheCommand;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Command\Command;
+use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @covers Liip\ImagineBundle\Command\RemoveCacheCommand

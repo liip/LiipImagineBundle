@@ -1,14 +1,23 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
-use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
-use Liip\ImagineBundle\Imagine\Filter\PostProcessor\ConfigurablePostProcessorInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\ConfigurablePostProcessorInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
 
 class FilterManager

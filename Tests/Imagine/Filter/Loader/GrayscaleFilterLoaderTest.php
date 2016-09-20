@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
-use Imagine\Gd\Imagine;
 use Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 

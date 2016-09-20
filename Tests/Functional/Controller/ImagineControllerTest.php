@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Functional\Controller;
 
+use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Tests\Functional\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;
-use Liip\ImagineBundle\Imagine\Cache\Signer;
 
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
