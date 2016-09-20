@@ -159,7 +159,7 @@ Example configuration:
 Watermark
 ---------
 
-The built-in ``watermark`` filter merge transformations
+The built-in ``watermark`` filter adds a watermark to an existing image
 (which includes creating and merging image operations). This
 filter exposes a number of `watermark options`_ which may be used
 to configure its behavior.
@@ -208,6 +208,6 @@ Watermark Options
 
 .. caution::
 
-    The chosen watermark position and order this filter is called is important.
-    For example, calling a ``crop`` afterwards could unintentionally remove the
-    watermark entirely.
+    The **position** option and **ordering** for this filter is significant.
+    For example, calling a ``crop`` after this filter could unintentionally
+    remove the watermark entirely from the final image.
