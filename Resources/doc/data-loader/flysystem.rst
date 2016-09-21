@@ -37,6 +37,7 @@ Using `OneupFlysystemBundle`_, a basic configuration might look like the followi
             profile_photos:
                 flysystem:
                     filesystem_service: oneup_flysystem.profile_photos_filesystem
+        data_loader: profile_photos
 
     oneup_flysystem:
         adapters:
@@ -52,7 +53,6 @@ Using `OneupFlysystemBundle`_, a basic configuration might look like the followi
 
     The value of ``filesystem_service`` must be a service id that returns an instance
     of ``League\\Flysystem\\Filesystem``.
-
 
 .. _`Flysystem`: https://github.com/thephpleague/flysystem
 .. _`OneupFlysystemBundle`: https://github.com/1up-lab/OneupFlysystemBundle
