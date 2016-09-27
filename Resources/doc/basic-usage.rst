@@ -210,4 +210,4 @@ path to get its resolved location.
     $imagineCacheManager = $this->get('liip_imagine.cache.manager');
 
     /** @var string */
-    $resolvedPath = $this->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
