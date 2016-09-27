@@ -15,4 +15,22 @@ use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class NotLoadableException extends \RuntimeException implements ExceptionInterface
 {
+
+    protected $defaultImageUrl = null;
+
+    public function setDefaultImageUrl($defaultImageUrl)
+    {
+        $this->defaultImageUrl = $defaultImageUrl;
+    }
+
+    public function getDefaultImageUrl()
+    {
+        return $this->defaultImageUrl;
+    }
+
+    public function hasDefaultImageUrl()
+    {
+        return null !== $this->defaultImageUrl;
+    }
+
 }

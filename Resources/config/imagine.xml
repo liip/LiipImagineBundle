@@ -18,6 +18,9 @@
 
         <parameter key="liip_imagine.controller.class">Liip\ImagineBundle\Controller\ImagineController</parameter>
 
+        <!-- Service class -->
+        <parameter key="liip_imagine.service.class">Liip\ImagineBundle\Service\ImagineService</parameter>
+
         <!-- Templating classes -->
 
         <parameter key="liip_imagine.twig.extension.class">Liip\ImagineBundle\Templating\ImagineExtension</parameter>
@@ -119,13 +122,17 @@
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
-        <!-- Controller -->
-
-        <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
+        <service id="liip_imagine.service.imagine_service" class="%liip_imagine.service.class%">
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <!-- Controller -->
+        <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
+            <argument type="service" id="liip_imagine.service.imagine_service" />
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 

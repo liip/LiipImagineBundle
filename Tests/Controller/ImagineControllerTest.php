@@ -16,6 +16,8 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
+use Liip\ImagineBundle\Service\ImagineService;
+
 /**
  * @covers Liip\ImagineBundle\Controller\ImagineController
  */
@@ -24,44 +26,16 @@ class ImagineControllerTest extends \PHPUnit_Framework_TestCase
     public function testCouldBeConstructedWithExpectedServices()
     {
         new ImagineController(
-            $this->createDataManagerMock(),
-            $this->createFilterManagerMock(),
-            $this->createCacheManagerMock(),
-            $this->createSignerMock(),
-            $this->createLoggerMock()
+            $this->createImagineServiceMock()
         );
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DataManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|ImagineService
      */
-    protected function createDataManagerMock()
+    protected function createImagineServiceMock()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array(), '', false);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterManager
-     */
-    protected function createFilterManagerMock()
-    {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array(), '', false);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
-     */
-    protected function createCacheManagerMock()
-    {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\SignerInterface
-     */
-    protected function createSignerMock()
-    {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\Signer', array(), array(), '', false);
+        return $this->getMock(ImagineService::class, [], [], '', false);
     }
 
     /**
