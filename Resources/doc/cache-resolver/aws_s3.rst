@@ -71,20 +71,17 @@ Create Resolver from a Factory
     If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
     place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
 
-    .. code-block:: yaml
+.. code-block:: yaml
 
-    # app/config/services.yml
+        # app/config/services.yml
 
         services:
             aws_s3:
                 client_config:
-                    key:    "%amazon.s3.key%"
-                    secret: "%amazon.s3.secret%"
-                    region: "%amazon.s3.region%"
-                    bucket: "%amazon.s3.cache_bucket%"
-
-                # ...
-
+                        key:    "%amazon.s3.key%"
+                        secret: "%amazon.s3.secret%"
+                        region: "%amazon.s3.region%"
+                        bucket: "%amazon.s3.cache_bucket%"
 
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
