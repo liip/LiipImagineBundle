@@ -73,18 +73,15 @@ Create Resolver from a Factory
 
     .. code-block:: yaml
 
-    # app/config/services.yml
+        # app/config/services.yml
 
         services:
             aws_s3:
                 client_config:
-                    key:    "%amazon.s3.key%"
-                    secret: "%amazon.s3.secret%"
-                    region: "%amazon.s3.region%"
-                    bucket: "%amazon.s3.cache_bucket%"
-
-                # ...
-
+                        key:    "%amazon.s3.key%"
+                        secret: "%amazon.s3.secret%"
+                        region: "%amazon.s3.region%"
+                        bucket: "%amazon.s3.cache_bucket%"
 
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
