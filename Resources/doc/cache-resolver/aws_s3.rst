@@ -71,7 +71,7 @@ Create Resolver from a Factory
     If using `aws-sdk-php`_ < ``3.0.0``, you must omit the ``credentials`` key and instead
     place the ``key`` and ``secret`` keys at the same level as ``region`` and ``bucket``.
 
-.. code-block:: yaml
+    .. code-block:: yaml
 
         # app/config/services.yml
 
