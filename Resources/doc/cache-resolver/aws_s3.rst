@@ -78,10 +78,10 @@ Create Resolver from a Factory
         services:
             aws_s3:
                 client_config:
-                        key:    "%amazon.s3.key%"
-                        secret: "%amazon.s3.secret%"
-                        region: "%amazon.s3.region%"
-                        bucket: "%amazon.s3.cache_bucket%"
+                    key:    "%amazon.s3.key%"
+                    secret: "%amazon.s3.secret%"
+                    region: "%amazon.s3.region%"
+                    bucket: "%amazon.s3.cache_bucket%"
 
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
