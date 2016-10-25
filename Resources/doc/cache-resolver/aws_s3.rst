@@ -95,8 +95,7 @@ You have to set up the services required:
     services:
         acme.amazon_s3:
             class: Aws\S3\S3Client
-            factory_class: Aws\S3\S3Client
-            factory_method: factory
+            factory: [Aws\S3\S3Client, factory]
             arguments:
                 -
                     credentials: { key: "%amazon.s3.key%", secret: "%amazon.s3.secret%" }
