@@ -209,7 +209,7 @@ Example configuration:
                 filters:
 
                     # use and setup the "scale" filter
-                    resize:
+                    scale:
 
                         # given 1920x1600px -> output 960x800px (relative down-scale)
                         to: 0.5
@@ -219,7 +219,7 @@ Example configuration:
                 filters:
 
                     # use and setup the "scale" filter
-                    resize:
+                    scale:
 
                         # given 1920x1600px -> output 5760x3200px (relative up-scale)
                         to: 2
@@ -229,7 +229,7 @@ Example configuration:
                 filters:
 
                     # use and setup the "scale" filter
-                    resize:
+                    scale:
 
                         # input 1200x1600px -> output 750x1000px (relative down-scale)
                         dim: [ 800, 1000 ]
@@ -239,7 +239,7 @@ Example configuration:
                 filters:
 
                     # use and setup the "scale" filter
-                    resize:
+                    scale:
 
                         # input 300x900px -> output 900x2700px (relative up-scale)
                         dim: [ 1200, 2700 ]
