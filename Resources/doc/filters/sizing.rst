@@ -31,10 +31,10 @@ Example configuration:
                     thumbnail:
 
                         # set the thumbnail size to "32x32" pixels
-                        - size: [32, 32]
+                        size: [32, 32]
 
                         # crop the input image, if required
-                        - mode: outbound
+                        mode: outbound
 
 .. seealso::
 
@@ -84,10 +84,10 @@ Example configuration:
                     crop:
 
                         # set the size of the cropping area
-                        - size: [ 300, 600 ]
+                        size: [ 300, 600 ]
 
                         # set the starting coordinates of the crop
-                        - start: [ 040, 160 ]
+                        start: [ 040, 160 ]
 
 
 Crop Options
@@ -127,34 +127,37 @@ Example configuration:
                     relative_resize:
 
                         # given 50x40px, output 75x60px using "heighten" option
-                        - heighten: 60
+                        heighten: 60
 
             # name our second filter set "my_widen_filter"
             my_widen_filter:
+                filters:
 
                     # use and setup the "relative_resize" filter
                     relative_resize:
 
                         # given 50x40px, output 32x26px using "widen" option
-                        - widen: 32
+                        widen: 32
 
             # name our second filter set "my_increase_filter"
             my_increase_filter:
+                filters:
 
                     # use and setup the "relative_resize" filter
                     relative_resize:
 
                         # given 50x40px, output 60x50px, using "increase" option
-                        - increase: 10
+                        increase: 10
 
             # name our second filter set "my_scale_filter"
             my_scale_filter:
+                filters:
 
                     # use and setup the "relative_resize" filter
                     relative_resize:
 
                         # given 50x40px, output 125x100px using "scale" option
-                        - scale: 2.5
+                        scale: 2.5
 
 
 .. tip::
@@ -206,40 +209,40 @@ Example configuration:
                 filters:
 
                     # use and setup the "scale" filter
-                    scale:
+                    resize:
 
                         # given 1920x1600px -> output 960x800px (relative down-scale)
-                        - to: 0.5
+                        to: 0.5
 
             # name our first filter set "my_ratio_up_scale_filter"
             my_ratio_up_scale_filter:
                 filters:
 
                     # use and setup the "scale" filter
-                    scale:
+                    resize:
 
                         # given 1920x1600px -> output 5760x3200px (relative up-scale)
-                        - to: 2
+                        to: 2
 
             # name our third filter set "my_dim_down_scale_filter"
             my_dim_down_scale_filter:
                 filters:
 
                     # use and setup the "scale" filter
-                    scale:
+                    resize:
 
                         # input 1200x1600px -> output 750x1000px (relative down-scale)
-                        - dim: [ 800, 1000 ]
+                        dim: [ 800, 1000 ]
 
             # name our fourth filter set "my_dim_up_scale_filter"
             my_dim_up_scale_filter:
                 filters:
 
                     # use and setup the "scale" filter
-                    scale:
+                    resize:
 
                         # input 300x900px -> output 900x2700px (relative up-scale)
-                        - dim: [ 1200, 2700 ]
+                        dim: [ 1200, 2700 ]
 
 
 Scale Options
@@ -358,4 +361,3 @@ Up Scale Options
 
 .. _`BoxInterface`: http://imagine.readthedocs.io/en/latest/usage/coordinates.html#boxinterface
 .. _`Imagine Library`: http://imagine.readthedocs.io/en/latest/
-
