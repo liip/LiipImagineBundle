@@ -91,7 +91,7 @@ To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
                     - "@liip_imagine"
                     - "%liip_imagine.formats%"
                 tags:
-                    - { name: "liip_imagine.data.loader", loader: my_custom_data_loader }
+                    - { name: "liip_imagine.binary.loader", loader: my_custom_data_loader }
 
     .. code-block:: xml
 
