@@ -1,7 +1,8 @@
 /bin/
 /phpunit.xml
-composer.lock
-composer.phar
-vendor/
-Tests/Functional/app/web/media/cache
-.idea/
+/composer.lock
+/composer.phar
+/vendor/
+/Tests/Functional/app/web/media/cache
+/.idea/
+/var/

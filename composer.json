@@ -33,6 +33,7 @@
         "friendsofphp/php-cs-fixer": "~2.0",
         "phpunit/phpunit": "~4.3",
         "psr/log": "~1.0",
+        "satooshi/php-coveralls": "~1.0",
         "sllh/php-cs-fixer-styleci-bridge": "~2.1",
         "symfony/browser-kit": "~2.3|~3.0",
         "symfony/console": "~2.3|~3.0",
