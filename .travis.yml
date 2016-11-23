@@ -40,14 +40,20 @@ matrix:
 
 before_install:
   - composer self-update
+  - if [ "${TRAVIS_PHP_VERSION}" == "5.3" ]; then composer remove --no-update --dev satooshi/php-coveralls; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ]; then echo "memory_limit = -1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;
   - if [ "${SYMFONY_VERSION:0:3}" == "2.3" ]; then composer remove --dev friendsofphp/php-cs-fixer --no-update; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then composer require --dev league/flysystem:~1.0 --no-update; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION:0:1}" != "7" ]; then composer require --dev doctrine/mongodb-odm:~1.0 --no-update; yes "" | pecl -q install -f mongo; fi;
   - if [ "${SYMFONY_VERSION:-x}" != "x" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
 
-install: composer update --prefer-source $COMPOSER_FLAGS
+install:
+  - composer update --prefer-source $COMPOSER_FLAGS
 
-script: ./bin/phpunit --coverage-text
+script:
+  - ./bin/phpunit -vvv
+
+after_script:
+  - if [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then bin/coveralls -vvv; fi;
 
 ...
