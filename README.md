@@ -2,11 +2,11 @@
 
 |       Travis-CI        |        Style-CI         |         Coverage        |        Downloads        |         Release         |
 |:----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
-| [![Travis](https://src.run/shield/liip/LiipImagineBundle/1.0/travis.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/travis) | [![Style CI](https://src.run/shield/liip/LiipImagineBundle/1.0/styleci.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/styleci) | [![Coverage](https://src.run/shield/liip/LiipImagineBundle/1.0/coveralls.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/coveralls) | [![Downloads](https://src.run/shield/liip/LiipImagineBundle/packagist_dt.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | [![Latest Stable Version](https://src.run/shield/liip/LiipImagineBundle/packagist_v.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | 
+| [![Travis](https://src.run/shield/liip/LiipImagineBundle/2.0/travis.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/travis) | [![Style CI](https://src.run/shield/liip/LiipImagineBundle/2.0/styleci.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/styleci) | [![Coverage](https://src.run/shield/liip/LiipImagineBundle/2.0/coveralls.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/coveralls) | [![Downloads](https://src.run/shield/liip/LiipImagineBundle/packagist_dt.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | [![Latest Stable Version](https://src.run/shield/liip/LiipImagineBundle/packagist_v.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | 
 
 *This bundle provides an image manipulation abstraction toolkit for
 [Symfony](http://symfony.com/)-based projects.*
-
+ 
 ## Overview
 
 - [Filter Sets](http://symfony.com/doc/master/bundles/LiipImagineBundle/basic-usage.html):
