@@ -69,7 +69,10 @@ class WebPathResolver implements ResolverInterface
     {
         return sprintf('%s/%s',
             $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter)
+            $this->getFileUrl(
+                $this->cleanPath($path),
+                $filter
+            )
         );
     }
 
@@ -78,7 +81,11 @@ class WebPathResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return is_file($this->getFilePath($path, $filter));
+        return is_file(
+            $this->cleanPath(
+                $this->getFilePath($path, $filter)
+            )
+        );
     }
 
     /**
@@ -87,9 +94,26 @@ class WebPathResolver implements ResolverInterface
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->cleanPath(
+                $this->getFilePath($path, $filter)
+            ),
             $binary->getContent()
         );
+    }
+
+    /**
+     * Transform url to hashed filname.
+     *
+     * @param $path
+     *
+     * @return string
+     */
+    public function cleanPath($path)
+    {
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
+        $filename = pathinfo($path, PATHINFO_FILENAME);
+
+        return $dir.DIRECTORY_SEPARATOR.sha1($filename);
     }
 
     /**
