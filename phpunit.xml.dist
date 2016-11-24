@@ -29,7 +29,6 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="var/build/coverage/"/>
         <log type="coverage-clover" target="var/build/clover.xml"/>
     </logging>
 
