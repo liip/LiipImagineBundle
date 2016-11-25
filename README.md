@@ -34,7 +34,7 @@ be to pipe the path of your image to the provided `imagine_filter` Twig
 filter.
 
 ```twig
-<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb') }}" />
+<img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
 ```
 
 
@@ -178,7 +178,7 @@ within a template.
 *For Twig-based template, use:*
 
 ```twig
-<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb') }}" />
+<img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
 ```
 
 *Or, for PHP-based template, use:*
@@ -218,7 +218,7 @@ passing the template helper an options array.
 ```twig
 {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}
 
-<img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb', runtimeConfig) }}" />
+<img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb', runtimeConfig) }}" />
 ```
 
 *Or, for PHP-based template, use:*
