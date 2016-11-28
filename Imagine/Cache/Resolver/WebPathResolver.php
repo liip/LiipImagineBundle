@@ -78,7 +78,11 @@ class WebPathResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return is_file($this->getFilePath($path, $filter));
+        return is_file(
+            $this->cleanPath(
+                $this->getFilePath($path, $filter)
+            )
+        );
     }
 
     /**
@@ -87,9 +91,27 @@ class WebPathResolver implements ResolverInterface
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->cleanPath(
+                $this->getFilePath($path, $filter)
+            ),
             $binary->getContent()
         );
+    }
+
+    /**
+     * remove url part with parameters
+     * from filename
+     *
+     * @param $path
+     * @return string
+     */
+    public function cleanPath($path)
+    {
+        if (false !== ($pos = strpos($path, '?'))) {
+            $path = substr($path, 0, $pos);
+        }
+
+        return $path;
     }
 
     /**
