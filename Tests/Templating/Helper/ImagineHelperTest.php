@@ -19,6 +19,13 @@ use Liip\ImagineBundle\Templating\Helper\ImagineHelper;
  */
 class ImagineHelperTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (!class_exists('Symfony\Component\Templating\Helper\Helper')) {
+            $this->markTestSkipped('The symfony/templating PHP library is not available.');
+        }
+    }
+
     public function testSubClassOfHelper()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\Templating\Helper\ImagineHelper');
