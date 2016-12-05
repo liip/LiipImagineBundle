@@ -4,8 +4,26 @@
 Web Path Resolver
 =================
 
-The ``WebPathResolver`` resolver enabled cache resolution using the
-web path of your application.
+This cache resolver (``WebPathResolver``) enables cache resolution for
+local, web-path-based setups. This means images will be cached on your
+local filesystem, within the web path of your Symfony application.
+
+The resulting web path is computed by taking a number of factors into
+account, including the `request context`_, as provided by the Symfony
+HTTP kernel.
+
+.. tip::
+
+    The `request context`_ is most notably used to determine the HTTP
+    scheme used for the final URL. If you use a proxy to offload TLS
+    traffic decryption and need the resolver to generate secure URLs,
+    you will need to appropriately configure Symfony's `trusted proxies`_.
+    If you utilize `embedded controllers`_ in your templates, you must
+    add ``localhost`` to your trusted proxies configuration.
+
+    Also, the `request context`_ is used to determine the port of the
+    resulting URL, should it differ from the standard HTTP/HTTPS (80/443)
+    ports.
 
 
 Configuration
@@ -64,3 +82,8 @@ filter set using the following configuration.
                 cache: profile_photos
                 filters:
                     # the filter list
+
+
+.. _`request context`: http://symfony.com/doc/current/components/http_foundation.html#request
+.. _`trusted proxies`: https://symfony.com/doc/current/request/load_balancer_reverse_proxy.html#solution-trusted-proxies
+.. _`embedded controllers`: https://symfony.com/doc/current/templating/embedding_controllers.html
