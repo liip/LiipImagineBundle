@@ -103,7 +103,7 @@ your newly defined ``my_thumb`` filter set immediately within a template.
 
     .. code-block:: html+twig
 
-        <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb') }}" />
+        <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
 
     .. code-block:: html+php
 
@@ -143,7 +143,7 @@ passing the template helper an options array.
 
         {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}
 
-        <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb', runtimeConfig) }}" />
+        <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb', runtimeConfig) }}" />
 
     .. code-block:: html+php
 
