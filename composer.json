@@ -54,7 +54,8 @@
         "twig/twig": "Required to use the provided Twig extension. Version 1.12 or greater needed."
     },
     "autoload": {
-        "psr-4": { "Liip\\ImagineBundle\\": "" }
+        "psr-4": { "Liip\\ImagineBundle\\": "" },
+        "exclude-from-classmap": ["/Tests/"]
     },
     "config": {
         "bin-dir": "bin",
