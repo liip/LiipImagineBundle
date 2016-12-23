@@ -44,6 +44,7 @@
         <parameter key="liip_imagine.filter.loader.upscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.downscale.class">Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.auto_rotate.class">Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.mobile_auto_rotate.class">Liip\ImagineBundle\Imagine\Filter\Loader\MobileAutoRotateFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.rotate.class">Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.interlace.class">Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader</parameter>
 
@@ -210,6 +211,10 @@
 
         <service id="liip_imagine.filter.loader.auto_rotate" class="%liip_imagine.filter.loader.auto_rotate.class%">
             <tag name="liip_imagine.filter.loader" loader="auto_rotate" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.mobile_auto_rotate" class="%liip_imagine.filter.loader.mobile_auto_rotate.class%">
+            <tag name="liip_imagine.filter.loader" loader="mobile_auto_rotate" />
         </service>
 
         <service id="liip_imagine.filter.loader.rotate" class="%liip_imagine.filter.loader.rotate.class%">
