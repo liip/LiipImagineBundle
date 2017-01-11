@@ -59,7 +59,7 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        if (!($absolutePath = realpath($this->rootPath.DIRECTORY_SEPARATOR.$path))) {
+        if (!($absolutePath = realpath($this->rootPath).DIRECTORY_SEPARATOR.$path)) {
             throw new NotLoadableException(sprintf('Source image not resolvable "%s"', $path));
         }
 
