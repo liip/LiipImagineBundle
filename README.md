@@ -240,7 +240,7 @@ $runtimeConfig = array(
 
 Sometime you need to resolve the image path returned by this bundle for a
 filtered image. This can easily be achieved using Symfony's console binary
-or pragmatically from within a controller or other piece of code.
+or programmatically from within a controller or other piece of code.
 
 
 #### Resolve with the Console
@@ -262,7 +262,7 @@ $ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filte
 ```
 
 
-#### Resolve Pragmatically
+#### Resolve Programmatically
 
 You can resolve the image URL in your code using the `getBrowserPath`
 method of the `liip_imagine.cache.manager` service. Assuming you already
