@@ -17,7 +17,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory<extended>
  */
 class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
@@ -61,7 +61,7 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()
     {
-        $expectedDataRoot = 'theDataRoot';
+        $expectedDataRoot = array('theDataRoot');
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -81,7 +81,7 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $expectedDataRoot = '%kernel.root_dir%/../web';
+        $expectedDataRoot = array('%kernel.root_dir%/../web');
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -91,6 +91,26 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
         $config = $this->processConfigTree($treeBuilder, array(
             'filesystem' => array(),
+        ));
+
+        $this->assertArrayHasKey('data_root', $config);
+        $this->assertEquals($expectedDataRoot, $config['data_root']);
+    }
+
+    public function testAddAsScalarExpectingArrayNormalizationOfConfiguration()
+    {
+        $expectedDataRoot = array('%kernel.root_dir%/../web');
+
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('filesystem', 'array');
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->addConfiguration($rootNode);
+
+        $config = $this->processConfigTree($treeBuilder, array(
+            'filesystem' => array(
+                'data_root' => $expectedDataRoot[0],
+            ),
         ));
 
         $this->assertArrayHasKey('data_root', $config);
