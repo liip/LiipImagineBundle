@@ -3,7 +3,8 @@
 ## [1.7.1](https://github.com/liip/LiipImagineBundle/tree/1.7.1) (2017-01-19)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.0...1.7.1)
 
-- Set DefaultMetadataReader when ext-exif is not present [\#841](https://github.com/liip/LiipImagineBundle/pull/851) ([robfrawley](https://github.com/robfrawley))
+- Allow multiple root paths for FileSystemLoader [\#851](https://github.com/liip/LiipImagineBundle/pull/851) ([robfrawley](https://github.com/robfrawley))
+- Fix strange wording in readme [\#847](https://github.com/liip/LiipImagineBundle/pull/847) ([svenluijten](https://github.com/svenluijten))
 
 ## [1.7.0](https://github.com/liip/LiipImagineBundle/tree/1.7.0) (2017-01-08)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.6.0...1.7.0)
