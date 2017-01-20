@@ -32,26 +32,32 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @var string
      */
-    protected $rootPath;
+    protected $dataRoots;
 
     /**
      * @param MimeTypeGuesserInterface  $mimeTypeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
-     * @param string                    $rootPath
+     * @param string[]                  $dataRoots
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
-        $rootPath
+        $dataRoots
     ) {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->extensionGuesser = $extensionGuesser;
 
-        if (empty($rootPath) || !($realRootPath = realpath($rootPath))) {
-            throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $rootPath));
-        }
+        $this->dataRoots = array_map(function ($root) {
+            if (!empty($root) && false !== $realRoot = realpath($root)) {
+                return $realRoot;
+            }
 
-        $this->rootPath = $realRootPath;
+            throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $root));
+        }, (array) $dataRoots);
+
+        if (count($this->dataRoots) === 0) {
+            throw new InvalidArgumentException('One or more data root paths must be specified.');
+        }
     }
 
     /**
@@ -59,20 +65,43 @@ class FileSystemLoader implements LoaderInterface
      */
     public function find($path)
     {
-        if (!($absolutePath = realpath($this->rootPath.DIRECTORY_SEPARATOR.$path))) {
-            throw new NotLoadableException(sprintf('Source image not resolvable "%s"', $path));
+        $path = $this->absolutePathRestrict($this->absolutePathLocate($path));
+        $mime = $this->mimeTypeGuesser->guess($path);
+
+        return new FileBinary($path, $mime, $this->extensionGuesser->guess($mime));
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return string
+     */
+    private function absolutePathLocate($path)
+    {
+        foreach ($this->dataRoots as $root) {
+            if (false !== $realPath = realpath($root.DIRECTORY_SEPARATOR.$path)) {
+                return $realPath;
+            }
         }
 
-        if (0 !== strpos($absolutePath, $this->rootPath)) {
-            throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path', $absolutePath));
+        throw new NotLoadableException(sprintf('Source image not resolvable "%s" in root path(s) "%s"',
+            $path, implode(':', $this->dataRoots)));
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return mixed
+     */
+    private function absolutePathRestrict($path)
+    {
+        foreach ($this->dataRoots as $root) {
+            if (0 === strpos($path, $root)) {
+                return $path;
+            }
         }
 
-        $mimeType = $this->mimeTypeGuesser->guess($absolutePath);
-
-        return new FileBinary(
-            $absolutePath,
-            $mimeType,
-            $this->extensionGuesser->guess($mimeType)
-        );
+        throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"',
+            $path, implode(':', $this->dataRoots)));
     }
 }

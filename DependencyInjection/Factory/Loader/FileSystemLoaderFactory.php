@@ -49,8 +49,16 @@ class FileSystemLoaderFactory implements LoaderFactoryInterface
     {
         $builder
             ->children()
-                ->scalarNode('data_root')->defaultValue('%kernel.root_dir%/../web')->cannotBeEmpty()->end()
-            ->end()
-        ;
+                ->arrayNode('data_root')
+                    ->beforeNormalization()
+                    ->ifString()
+                        ->then(function ($value) { return array($value); })
+                    ->end()
+                    ->defaultValue(array('%kernel.root_dir%/../web'))
+                    ->prototype('scalar')
+                        ->cannotBeEmpty()
+                    ->end()
+                ->end()
+            ->end();
     }
 }
