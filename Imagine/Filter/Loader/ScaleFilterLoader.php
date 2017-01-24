@@ -70,7 +70,11 @@ class ScaleFilterLoader implements LoaderInterface
             if (null == $width || null == $height) {
                 $ratio = max($widthRatio, $heightRatio);
             } else {
-                $ratio = min($widthRatio, $heightRatio);
+                if('min' === $this->dimensionKey){
+                    $ratio = max($widthRatio, $heightRatio);
+                }else {
+                    $ratio = min($widthRatio, $heightRatio);
+                }
             }
         }
 
