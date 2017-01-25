@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader;
+use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
@@ -33,6 +34,31 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @var int
      */
     const DUMMY_IMAGE_HEIGHT = 600;
+
+    /**
+     * @var int
+     */
+    const UPSCALE_DUMMY_IMAGE_WIDTH = 600;
+
+    /**
+     * @var int
+     */
+    const UPSCALE_DUMMY_IMAGE_HEIGHT = 400;
+
+    protected function getUpscaleMockImage()
+    {
+        $mockImageSize = new Box(
+            self::UPSCALE_DUMMY_IMAGE_WIDTH,
+            self::UPSCALE_DUMMY_IMAGE_HEIGHT
+        );
+        $mockImage = parent::getMockImage();
+        $mockImage->method('getSize')->willReturn(new Box(
+            self::UPSCALE_DUMMY_IMAGE_WIDTH,
+            self::UPSCALE_DUMMY_IMAGE_HEIGHT
+        ));
+
+        return $mockImage;
+    }
 
     protected function getMockImage()
     {
@@ -116,4 +142,65 @@ class ScaleFilterLoaderTest extends AbstractTest
             array(array(1000, 1200), new Box(1000, 1200)),
         );
     }
+
+    /**
+     * @dataProvider minScaleDataProvider
+     */
+    public function testShouldScale($dimensions, $expected)
+    {
+        $loader = new UpscaleFilterLoader();
+        $image = $this->getUpscaleMockImage();
+        $image->expects($this->once())
+            ->method('resize')
+            ->with($expected)
+            ->willReturn($image);
+
+        $options = array(
+            'min' => $dimensions,
+        );
+
+        $result = $loader->load($image, $options);
+    }
+
+    /**
+     * @returns array Array containing coordinate and width/height pairs.
+     */
+    public function minScaleDataProvider()
+    {
+        return array(
+            array(array(1000, 600), new Box(1000, 667)),
+            array(array(1200, 300), new Box(1200, 800)),
+        );
+    }
+
+    /**
+     * @dataProvider minNotScaleDataProvider
+     */
+    public function testShouldNotScale($dimensions, $expected)
+    {
+        $loader = new UpscaleFilterLoader();
+        $image = $this->getUpscaleMockImage();
+        $image->expects($this->never())
+            ->method('resize')
+            ->with($expected)
+            ->willReturn($image);
+
+        $options = array(
+            'min' => $dimensions,
+        );
+
+        $result = $loader->load($image, $options);
+    }
+
+    /**
+     * @returns array Array containing coordinate and width/height pairs.
+     */
+    public function minNotScaleDataProvider()
+    {
+        return array(
+            array(array(300, 200), new Box(600, 400)),
+            array(array(600, 400), new Box(600, 400)),
+        );
+    }
+
 }
