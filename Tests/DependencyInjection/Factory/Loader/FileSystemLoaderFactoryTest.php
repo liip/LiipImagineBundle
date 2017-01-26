@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
+use Liip\ImagineBundle\Tests\DependencyInjection\Factory\FactoryTestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory<extended>
  */
-class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
+class FileSystemLoaderFactoryTest extends FactoryTestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
@@ -46,14 +47,15 @@ class FileSystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
         $loader = new FileSystemLoaderFactory();
 
-        $loader->create($container, 'theLoaderName', array(
+        $loader->create($container, 'the_loader_name', array(
             'data_root' => 'theDataRoot',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.theloadername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
-        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.theloadername');
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
+
+        $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
         $this->assertEquals('theDataRoot', $loaderDefinition->getArgument(2));

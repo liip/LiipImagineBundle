@@ -13,26 +13,19 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
-class StreamLoaderFactory implements LoaderFactoryInterface
+class StreamLoaderFactory extends AbstractLoaderFactory
 {
     /**
      * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.stream');
-        $loaderDefinition->replaceArgument(0, $config['wrapper']);
-        $loaderDefinition->replaceArgument(1, $config['context']);
-        $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => $loaderName,
-        ));
-        $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
+        $definition = $this->getChildLoaderDefinition();
+        $definition->replaceArgument(0, $config['wrapper']);
+        $definition->replaceArgument(1, $config['context']);
 
-        $container->setDefinition($loaderId, $loaderDefinition);
-
-        return $loaderId;
+        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
 
     /**

@@ -46,14 +46,14 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new WebPathResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'web_root' => 'theWebRoot',
             'cache_prefix' => 'theCachePrefix',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.web_path', $resolverDefinition->getParent());
 
