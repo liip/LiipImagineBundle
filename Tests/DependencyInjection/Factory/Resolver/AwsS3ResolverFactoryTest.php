@@ -47,7 +47,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'theBucket',
             'acl' => 'theAcl',
@@ -58,14 +58,14 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $resolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(0));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.client', $resolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.client', $resolverDefinition->getArgument(0));
 
         $this->assertEquals('theBucket', $resolverDefinition->getArgument(1));
         $this->assertEquals('theAcl', $resolverDefinition->getArgument(2));
@@ -79,7 +79,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'theBucket',
             'acl' => 'theAcl',
@@ -90,9 +90,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertEquals(array('fooKey' => 'fooVal_overridden', 'barKey' => 'barVal'), $resolverDefinition->getArgument(3));
     }
 
@@ -102,7 +102,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -113,9 +113,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.client'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.client'));
 
-        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
+        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
         $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getClass());
         $this->assertEquals(array('theClientConfigKey' => 'theClientConfigVal'), $clientDefinition->getArgument(0));
     }
@@ -130,7 +130,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -141,7 +141,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
+        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
         $this->assertEquals(array('Aws\S3\S3Client', 'factory'), $clientDefinition->getFactory());
     }
 
@@ -155,7 +155,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array('theClientConfigKey' => 'theClientConfigVal'),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -166,7 +166,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.client');
+        $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
         $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getFactoryClass());
         $this->assertEquals('factory', $clientDefinition->getFactoryMethod());
     }
@@ -177,7 +177,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -188,20 +188,20 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array('foo'),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
-        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.proxied');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
+        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
-        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
+        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $resolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(0));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.proxied', $resolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.proxied', $resolverDefinition->getArgument(0));
 
         $this->assertEquals(array('foo'), $resolverDefinition->getArgument(1));
     }
@@ -212,34 +212,34 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
             'get_options' => array(),
             'put_options' => array(),
-            'cache' => 'theCacheServiceId',
+            'cache' => 'the_cache_service_id',
             'proxies' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.cached');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
+        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $cachedResolverDefinition->getParent());
 
-        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
+        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(0));
-        $this->assertEquals('thecacheserviceid', $resolverDefinition->getArgument(0));
+        $this->assertEquals('the_cache_service_id', $resolverDefinition->getArgument(0));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(1));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.cached', $resolverDefinition->getArgument(1));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.cached', $resolverDefinition->getArgument(1));
     }
 
     public function testWrapResolverWithProxyAndCacheOnCreate()
@@ -248,42 +248,42 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
             'get_options' => array(),
             'put_options' => array(),
-            'cache' => 'theCacheServiceId',
+            'cache' => 'the_cache_service_id',
             'proxies' => array('foo'),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
-        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.proxied');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
+        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.cached');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
+        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $cachedResolverDefinition->getArgument(0));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.proxied', $cachedResolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.proxied', $cachedResolverDefinition->getArgument(0));
 
         $this->assertEquals(array('foo'), $cachedResolverDefinition->getArgument(1));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(0));
-        $this->assertEquals('thecacheserviceid', $resolverDefinition->getArgument(0));
+        $this->assertEquals('the_cache_service_id', $resolverDefinition->getArgument(0));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $resolverDefinition->getArgument(1));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.cached', $resolverDefinition->getArgument(1));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.cached', $resolverDefinition->getArgument(1));
     }
 
     public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate()
@@ -292,29 +292,29 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
             'url_options' => array(),
             'get_options' => array(),
             'put_options' => array(),
-            'cache' => 'theCacheServiceId',
+            'cache' => 'the_cache_service_id',
             'proxies' => array('foo' => 'bar'),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.proxied'));
-        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.proxied');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
+        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername.cached');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
+        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $cachedResolverDefinition->getArgument(0));
-        $this->assertEquals('liip_imagine.cache.resolver.theresolvername.proxied', $cachedResolverDefinition->getArgument(0));
+        $this->assertEquals('liip_imagine.cache.resolver.the_resolver_name.proxied', $cachedResolverDefinition->getArgument(0));
 
         $this->assertEquals(array('foo' => 'bar'), $cachedResolverDefinition->getArgument(1));
     }
@@ -325,7 +325,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new AwsS3ResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'client_config' => array(),
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -337,8 +337,8 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
             'proxies' => array(),
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
 
         $methodCalls = $resolverDefinition->getMethodCalls();
 

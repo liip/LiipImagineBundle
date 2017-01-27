@@ -12,6 +12,7 @@ framework:
     secret:          "%secret%"
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     default_locale:  "%locale%"
+    translator:      ~
 
 liip_imagine:
     loaders:
