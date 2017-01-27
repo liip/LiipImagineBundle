@@ -1,2 +1,4 @@
 .github/issue_template.md export-ignore
 .github/pull_request_template.md export-ignore
+.composer/config.json export-ignore
+
