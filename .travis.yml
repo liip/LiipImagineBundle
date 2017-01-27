@@ -52,9 +52,10 @@ before_install:
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then composer require --dev league/flysystem:~1.0 --no-update; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION:0:1}" != "7" ]; then composer require --dev doctrine/mongodb-odm:~1.0 --no-update; yes "" | pecl -q install -f mongo; fi;
   - if [ "${SYMFONY_VERSION:-x}" != "x" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+  - cp ./.composer/config.json ~/.composer; composer global require "hirak/prestissimo:^0.3"
 
 install:
-  - composer update --prefer-source $COMPOSER_FLAGS
+  - composer update $COMPOSER_FLAGS
 
 script:
   - ./bin/phpunit -vvv
