@@ -6,7 +6,7 @@
 
 *This bundle provides an image manipulation abstraction toolkit for
 [Symfony](http://symfony.com/)-based projects.*
- 
+
 ## Overview
 
 - [Filter Sets](http://symfony.com/doc/master/bundles/LiipImagineBundle/basic-usage.html):
