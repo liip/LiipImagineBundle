@@ -3,6 +3,11 @@
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/2.0)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.1...2.0)
 
+- Use Prestissimo package for Travis build [\#864](https://github.com/liip/LiipImagineBundle/pull/864) ([robfrawley](https://github.com/robfrawley))
+- Add github issue and pr templates [\#863](https://github.com/liip/LiipImagineBundle/pull/863) ([robfrawley](https://github.com/robfrawley))
+- Bug fixes/deprecation cleanup for Symfony 3.3 [\#860](https://github.com/liip/LiipImagineBundle/pull/860) ([robfrawley](https://github.com/robfrawley))
+- Upscale filter should use the highest dimension [\#856](https://github.com/liip/LiipImagineBundle/pull/856) ([Rattler3](https://github.com/Rattler3))
+
 ## [1.7.1](https://github.com/liip/LiipImagineBundle/tree/1.7.1) (2017-01-19)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.0...1.7.1)
 

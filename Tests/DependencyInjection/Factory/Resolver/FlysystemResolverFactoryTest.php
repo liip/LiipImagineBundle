@@ -57,16 +57,16 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $resolver = new FlysystemResolverFactory();
 
-        $resolver->create($container, 'theResolverName', array(
+        $resolver->create($container, 'the_resolver_name', array(
             'filesystem_service' => 'flyfilesystemservice',
             'root_url' => 'http://images.example.com',
             'cache_prefix' => 'theCachePrefix',
             'visibility' => 'public',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.theresolvername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.theresolvername');
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.flysystem', $resolverDefinition->getParent());
 

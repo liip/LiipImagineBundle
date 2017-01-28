@@ -13,26 +13,19 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
-class FlysystemLoaderFactory implements LoaderFactoryInterface
+class FlysystemLoaderFactory extends AbstractLoaderFactory
 {
     /**
      * {@inheritdoc}
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $loaderDefinition = new DefinitionDecorator('liip_imagine.binary.loader.prototype.flysystem');
-        $loaderDefinition->replaceArgument(1, new Reference($config['filesystem_service']));
-        $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => $loaderName,
-        ));
-        $loaderId = 'liip_imagine.binary.loader.'.$loaderName;
+        $definition = $this->getChildLoaderDefinition();
+        $definition->replaceArgument(1, new Reference($config['filesystem_service']));
 
-        $container->setDefinition($loaderId, $loaderDefinition);
-
-        return $loaderId;
+        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
 
     /**

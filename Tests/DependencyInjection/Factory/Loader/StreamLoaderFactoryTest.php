@@ -46,14 +46,14 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
         $loader = new StreamLoaderFactory();
 
-        $loader->create($container, 'theLoaderName', array(
+        $loader->create($container, 'the_loader_name', array(
             'wrapper' => 'theWrapper',
             'context' => 'theContext',
         ));
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.theloadername'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
-        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.theloadername');
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.stream', $loaderDefinition->getParent());
 
