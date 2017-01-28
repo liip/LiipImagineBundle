@@ -1,4 +1,12 @@
-.github/issue_template.md export-ignore
-.github/pull_request_template.md export-ignore
-.composer/config.json export-ignore
-
+* text=auto
+/.composer/ export-ignore
+/.github/ export-ignore
+/Tests/ export-ignore
+/.coveralls.yml export-ignore
+/.gitattributes export-ignore
+/.github_changelog_generator export-ignore
+/.php_cs.dist export-ignore
+/.scrutinizer.yml export-ignore
+/.styleci.yml export-ignore
+/.travis.yml export-ignore
+/.phpunit.xml.dist export-ignore
