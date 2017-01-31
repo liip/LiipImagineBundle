@@ -53,6 +53,11 @@
         <parameter key="liip_imagine.binary.loader.stream.class">Liip\ImagineBundle\Binary\Loader\StreamLoader</parameter>
         <parameter key="liip_imagine.binary.loader.flysystem.class">Liip\ImagineBundle\Binary\Loader\FlysystemLoader</parameter>
 
+        <!-- Data loader loaders' classes -->
+
+        <parameter key="liip_imagine.binary.locator.filesystem.class">Liip\ImagineBundle\Binary\Locator\FileSystemLocator</parameter>
+        <parameter key="liip_imagine.binary.locator.filesystem_insecure.class">Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator</parameter>
+
         <!-- Cache resolvers' classes -->
 
         <parameter key="liip_imagine.cache.resolver.web_path.class">Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver</parameter>
@@ -226,6 +231,7 @@
             <argument type="service" id="liip_imagine.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
+            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
         <service id="liip_imagine.binary.loader.prototype.stream" class="%liip_imagine.binary.loader.stream.class%">
@@ -236,6 +242,14 @@
         <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
+        </service>
+
+        <!-- Data loader locators -->
+
+        <service id="liip_imagine.binary.locator.filesystem" class="%liip_imagine.binary.locator.filesystem.class%" public="false">
+        </service>
+
+        <service id="liip_imagine.binary.locator.filesystem_insecure" class="%liip_imagine.binary.locator.filesystem_insecure.class%" public="false">
         </service>
 
         <!-- Cache resolver -->

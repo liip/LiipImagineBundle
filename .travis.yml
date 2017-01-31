@@ -58,7 +58,7 @@ install:
   - composer update $COMPOSER_FLAGS
 
 script:
-  - ./bin/phpunit -vvv
+  - SYMFONY_DEPRECATIONS_HELPER=weak ./bin/phpunit -vvv
 
 after_script:
   - if [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then bin/coveralls -vvv; fi;

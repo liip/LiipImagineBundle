@@ -44,6 +44,7 @@
         "symfony/form": "~2.3|~3.0",
         "symfony/phpunit-bridge": "~2.3|~3.0",
         "symfony/yaml": "~2.3|~3.0",
+        "symfony/validator": "~2.3|~3.0",
         "twig/twig": "~1.12"
     },
     "suggest": {

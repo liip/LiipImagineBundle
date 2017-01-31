@@ -49,6 +49,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
         $loader->create($container, 'the_loader_name', array(
             'data_root' => 'theDataRoot',
+            'locator' => 'filesystem',
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
