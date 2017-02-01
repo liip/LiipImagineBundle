@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -20,7 +19,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
-class PostProcessorsCompilerPass implements CompilerPassInterface
+class PostProcessorsCompilerPass extends AbstractCompilerPass
 {
     /**
      * {@inheritdoc}
@@ -34,6 +33,7 @@ class PostProcessorsCompilerPass implements CompilerPassInterface
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addPostProcessor', array($tag[0]['post_processor'], new Reference($id)));
+                $this->log($container, 'Registered imagine-bimdle filter post-processor: %s', array($id));
             }
         }
     }

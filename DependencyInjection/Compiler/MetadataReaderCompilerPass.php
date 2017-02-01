@@ -11,30 +11,44 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * By default, a metadata reader based on the exif php extension is used.
- * This compiler pass checks if the extension is loaded an switches to a simpler
- * implementation if not.
+ * Be default, a metadata reader that requires the "exif" PHP extension is used. This compiler pass checks if the
+ * extension is loaded or not, and switches to a metadata reader (that does not rely on "exif") if not.
  */
-class MetadataReaderCompilerPass implements CompilerPassInterface
+class MetadataReaderCompilerPass extends AbstractCompilerPass
 {
-    const METADATA_READER_PARAM = 'liip_imagine.meta_data.reader.class';
+    /**
+     * @var string
+     */
+    private static $metadataReaderParameter = 'liip_imagine.meta_data.reader.class';
 
-    const DEFAULT_METADATA_READER_CLASS = 'Imagine\Image\Metadata\DefaultMetadataReader';
+    /**
+     * @var string
+     */
+    private static $metadataReaderDefaultClass = 'Imagine\Image\Metadata\DefaultMetadataReader';
 
-    const EXIF_METADATA_READER_CLASS = 'Imagine\Image\Metadata\ExifMetadataReader';
+    /**
+     * @var string
+     */
+    private static $metadataReaderExifClass = 'Imagine\Image\Metadata\ExifMetadataReader';
 
     /**
      * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$this->extExifIsAvailable() && $this->isDefaultMetadataReader($container)) {
-            $container->setParameter(self::METADATA_READER_PARAM, self::DEFAULT_METADATA_READER_CLASS);
-            $this->logMetadataReaderReplaced($container);
+        if (!$this->isExifExtensionLoaded() && $this->isExifMetadataReaderSet($container)) {
+            $container->setParameter(self::$metadataReaderParameter, self::$metadataReaderDefaultClass);
+            $message = 'Overwrote "%s" parameter value from "%s" to "%s" due to missing "exif" extension '
+                .'(installing the "exif" extension is highly recommended; you may experience degraded '
+                .'metadata handling without it)';
+            $this->log($container, $message, array(
+                self::$metadataReaderParameter,
+                self::$metadataReaderExifClass,
+                self::$metadataReaderDefaultClass,
+            ));
         }
     }
 
@@ -43,32 +57,15 @@ class MetadataReaderCompilerPass implements CompilerPassInterface
      *
      * @return bool
      */
-    protected function isDefaultMetadataReader(ContainerBuilder $container)
+    private function isExifMetadataReaderSet(ContainerBuilder $container)
     {
-        $currentMetadataReaderParameter = $container->getParameter(self::METADATA_READER_PARAM);
-
-        return $currentMetadataReaderParameter === self::EXIF_METADATA_READER_CLASS;
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    protected function logMetadataReaderReplaced(ContainerBuilder $container)
-    {
-        $compiler = $container->getCompiler();
-        $formatter = $compiler->getLoggingFormatter();
-        $message = 'Automatically replaced Imagine ExifMetadataReader with DefaultMetadataReader; '.
-            'you might experience issues with LiipImagineBundle; reason: PHP extension "exif" is missing; solution: '.
-            'for advanced metadata extraction install the PHP extension "exif" or set a custom MetadataReader '.
-            'through the "liip_imagine.meta_data.reader.class" parameter';
-
-        $compiler->addLogMessage($formatter->format($this, $message));
+        return $container->getParameter(self::$metadataReaderParameter) === self::$metadataReaderExifClass;
     }
 
     /**
      * @return bool
      */
-    protected function extExifIsAvailable()
+    protected function isExifExtensionLoaded()
     {
         return extension_loaded('exif');
     }

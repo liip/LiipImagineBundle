@@ -11,11 +11,10 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class LoadersCompilerPass implements CompilerPassInterface
+class LoadersCompilerPass extends AbstractCompilerPass
 {
     /**
      * {@inheritdoc}
@@ -29,6 +28,7 @@ class LoadersCompilerPass implements CompilerPassInterface
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addLoader', array($tag[0]['loader'], new Reference($id)));
+                $this->log($container, 'Registered imagine-bimdle binary loader: %s', array($id));
             }
         }
     }
