@@ -16,7 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass
+ * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
+ * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass
  */
 class LoadersCompilerPassTest extends \PHPUnit_Framework_TestCase
 {

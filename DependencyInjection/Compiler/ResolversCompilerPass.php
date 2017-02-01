@@ -11,11 +11,10 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class ResolversCompilerPass implements CompilerPassInterface
+class ResolversCompilerPass extends AbstractCompilerPass
 {
     /**
      * {@inheritdoc}
@@ -29,6 +28,7 @@ class ResolversCompilerPass implements CompilerPassInterface
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addResolver', array($tag[0]['resolver'], new Reference($id)));
+                $this->log($container, 'Registered imagine-bimdle cache resolver: %s', array($id));
             }
         }
     }
