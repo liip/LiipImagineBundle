@@ -30,7 +30,7 @@ class FileSystemLoader implements LoaderInterface
     protected $extensionGuesser;
 
     /**
-     * @var string
+     * @var string[]
      */
     protected $dataRoots;
 
