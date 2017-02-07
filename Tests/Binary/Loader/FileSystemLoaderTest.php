@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
+use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
@@ -20,6 +21,14 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
  */
 class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FileSystemLocator
+     */
+    private function getLocator()
+    {
+        return new FileSystemLocator();
+    }
+
     public function testShouldImplementLoaderInterface()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FileSystemLoader');
@@ -32,7 +41,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            __DIR__
+            __DIR__,
+            $this->getLocator()
         );
     }
 
@@ -46,7 +56,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            array()
+            array(),
+            $this->getLocator()
         );
     }
 
@@ -60,7 +71,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            ''
+            '',
+            $this->getLocator()
         );
     }
 
@@ -74,7 +86,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            '/a/bad/root/path'
+            '/a/bad/root/path',
+            $this->getLocator()
         );
     }
 
@@ -83,7 +96,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            __DIR__
+            __DIR__,
+            $this->getLocator()
         );
 
         $this->setExpectedException(
@@ -99,7 +113,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            __DIR__
+            __DIR__,
+            $this->getLocator()
         );
 
         $this->setExpectedException(
@@ -115,7 +130,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            __DIR__
+            __DIR__,
+            $this->getLocator()
         );
 
         $loader->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME));
@@ -126,7 +142,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            __DIR__
+            __DIR__,
+            $this->getLocator()
         );
 
         $this->setExpectedException(
@@ -159,6 +176,24 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
+            $rootDir,
+            $this->getLocator()
+        );
+
+        $binary = $loader->find($path);
+
+        $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
+        $this->assertStringStartsWith('text/', $binary->getMimeType());
+    }
+
+    /**
+     * @dataProvider provideLoadCases
+     */
+    public function testLoadUsingDeprecatedConstruction($rootDir, $path)
+    {
+        $loader = new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
             $rootDir
         );
 
@@ -166,6 +201,18 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
         $this->assertStringStartsWith('text/', $binary->getMimeType());
+    }
+
+    public function testThrowsExceptionWhenFourthConstructorArgumentNotLoaderInterface()
+    {
+        $this->setExpectedExceptionRegExp('\InvalidArgumentException', '{Method .+ expects a LocatorInterface for the forth argument}');
+
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            __DIR__,
+            null
+        );
     }
 
     public static function provideMultipleRootLoadCases()
@@ -189,7 +236,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            $rootDirs
+            $rootDirs,
+            $this->getLocator()
         );
 
         $binary = $loader->find($path);
