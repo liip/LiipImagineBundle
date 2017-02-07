@@ -1,12 +1,18 @@
 # Change Log
 
-## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/1.7.1) (2017-xx-xx)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.1...1.0)
+## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-xx-xx)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...HEAD)
 
-- Use Prestissimo package for Travis build [\#864](https://github.com/liip/LiipImagineBundle/pull/864) ([robfrawley](https://github.com/robfrawley))
-- Add github issue and pr templates [\#863](https://github.com/liip/LiipImagineBundle/pull/863) ([robfrawley](https://github.com/robfrawley))
-- Bug fixes/deprecation cleanup for Symfony 3.3 [\#860](https://github.com/liip/LiipImagineBundle/pull/860) ([robfrawley](https://github.com/robfrawley))
-- Upscale filter should use the highest dimension [\#856](https://github.com/liip/LiipImagineBundle/pull/856) ([Rattler3](https://github.com/Rattler3))
+## [1.7.2](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-02-07)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...1.7.1)
+
+- \[Loader\] Abstract filesystem resource locator and legacy insecure locator implementation [\#866](https://github.com/liip/LiipImagineBundle/pull/866) ([robfrawley](https://github.com/robfrawley))
+- \[Minor\] \[Loader\] Fix for FileSystemLoader annotation [\#868](https://github.com/liip/LiipImagineBundle/pull/868) ([tgabi333](https://github.com/tgabi333))
+- \[DependencyInjection\] Container logging for compiler passes [\#867](https://github.com/liip/LiipImagineBundle/pull/867) ([robfrawley](https://github.com/robfrawley))
+- \[CI\] Use Prestissimo package for Travis build [\#864](https://github.com/liip/LiipImagineBundle/pull/864) ([robfrawley](https://github.com/robfrawley))
+- \[GitHub\] Add Hithub templates for issues and PRs [\#863](https://github.com/liip/LiipImagineBundle/pull/863) ([robfrawley](https://github.com/robfrawley))
+- \[Symfony\] Bug fixes and deprecation cleanup for Symfony 3.3 [\#860](https://github.com/liip/LiipImagineBundle/pull/860) ([robfrawley](https://github.com/robfrawley))
+- \[Filter\] Upscale filter should use the highest dimension to calculate ratio [\#856](https://github.com/liip/LiipImagineBundle/pull/856) ([Rattler3](https://github.com/Rattler3))
 
 ## [1.7.1](https://github.com/liip/LiipImagineBundle/tree/1.7.1) (2017-01-19)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.0...1.7.1)

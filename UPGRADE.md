@@ -1,6 +1,77 @@
 # Upgrade
 
-## 1.7.x
+## 1.7.2
+
+  - __[Data Loader]__ The `FileSystemLoader`'s resource locator has been abstracted out into `FileSystemLocator`
+  (provides the same `realpath`-based locator algorithm introduced in the `1.7.0` release) and `FileSystemInsecureLocator`
+  (provides the old locator algorithm from version `1.6.x` and prior).
+
+    The latter implementation can present security concerns, as it will blindly following symbolic links, including those
+  that point outside your configured `data_root` directory(ies). It is *not recommended* unless your deployment process
+  relies heavily on multi-level symbolic links that renders the new locator difficult (and sometime impossible) to
+setup.
+
+  - __[Deprecation]__ __[Data Loader]__ Instantiating `FileSystemLoader` without providing a forth constructor argument
+  of signature `\Liip\ImagineBundle\Binary\Locator\LocatorInterface $locator` is deprecated and the ability to do so
+  will be removed in the next major release, `2.0`.
+
+  - __[Configuration]__ The `liip_imagine.loaders.default.filesystem.locator` bundle configuration option has been
+  introduced and allows the following `enum` values: `filesystem` and `filesystem_insecure`. These correspond to the
+  aforementioned `FileSystemLocator` and `FileSystemInsecureLocator` resource locator implementations that affect the
+  behavior of `FileSystemLoader`. This option defaults to `filesystem`.
+
+    ```yml
+
+      # use the current, default locator algorithm
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              locator: filesystem
+
+      # use the old (pre 0.7.x) locator algorithm
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              locator: filesystem_insecure
+
+    ```
+
+  - __[Dependency Injection]__ All compiler passes (filters, post-processors, data loaders, cache resolvers, etc) have
+  been updated to log their behavior, allowing you to easily debug tagged services, including both core-provided and
+  custom services defined by your application). In Symfony `>= 3.2` this output is located in the 
+  `var/cache/[dev|prod|env]/app*ProjectContainerCompiler.log` file. Output will be similar to the following example on
+  a fresh install.
+
+    ```
+
+      LoadersCompilerPass: Registered imagine-bimdle binary loader: liip_imagine.binary.loader.default
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.relative_resize
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.resize
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.thumbnail
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.crop
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.grayscale
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.paste
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.watermark
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.background
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.strip
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.scale
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.upscale
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.downscale
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.auto_rotate
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.rotate
+      FiltersCompilerPass: Registered imagine-bimdle filter loader: liip_imagine.filter.loader.interlace
+      PostProcessorsCompilerPass: Registered imagine-bimdle filter post-processor: liip_imagine.filter.post_processor.jpegoptim
+      PostProcessorsCompilerPass: Registered imagine-bimdle filter post-processor: liip_imagine.filter.post_processor.optipng
+      PostProcessorsCompilerPass: Registered imagine-bimdle filter post-processor: liip_imagine.filter.post_processor.pngquant
+      PostProcessorsCompilerPass: Registered imagine-bimdle filter post-processor: liip_imagine.filter.post_processor.mozjpeg
+      ResolversCompilerPass: Registered imagine-bimdle cache resolver: liip_imagine.cache.resolver.default
+      ResolversCompilerPass: Registered imagine-bimdle cache resolver: liip_imagine.cache.resolver.no_cache_web_path
+
+    ```
+
+## 1.7.1
 
   - __[Data Loader]__ The `FileSystemLoader` data loader performs a more robust security check against image resource
     paths to ensure they reside within the defined data root path(s). If utilizing symbolic links, you should reference
