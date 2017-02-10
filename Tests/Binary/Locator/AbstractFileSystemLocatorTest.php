@@ -74,4 +74,15 @@ abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotNull($this->getLocator($rootDirs)->locate($path));
     }
+
+    public function testThrowsExceptionOnInvalidOptions()
+    {
+        $this->setExpectedException(
+            'Liip\ImagineBundle\Exception\InvalidArgumentException',
+            'Invalid options provided to'
+        );
+
+        $locator = $this->getLocator(__DIR__);
+        $locator->setOptions(array('foo' => 'bar'));
+    }
 }
