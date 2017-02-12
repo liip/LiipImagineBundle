@@ -16,9 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for ResizeFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader
  *
  * @author Alex Wilson <a@ax.gy>
  */
@@ -28,7 +26,7 @@ class ResizeFilterLoaderTest extends AbstractTest
      * @param int $width
      * @param int $height
      *
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader::load
      *
      * @dataProvider resizeDataProvider
      */
@@ -36,7 +34,7 @@ class ResizeFilterLoaderTest extends AbstractTest
     {
         $loader = new ResizeFilterLoader();
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
             ->method('resize')
             ->with(new Box($width, $height))

@@ -15,11 +15,32 @@ use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
- * @covers Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
+ * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
  */
 class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
 {
-    public function provideImages()
+    /**
+     * @return SimpleMimeTypeGuesser
+     */
+    private function getSimpleMimeTypeGuesser()
+    {
+        return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
+    }
+
+    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
+    {
+        $this->getSimpleMimeTypeGuesser();
+    }
+
+    public function testImplementsMimeTypeGuesserInterface()
+    {
+        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface', $this->getSimpleMimeTypeGuesser());
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function provideImageData()
     {
         return array(
             'gif' => array(__DIR__.'/../Fixtures/assets/cats.gif', 'image/gif'),
@@ -30,25 +51,14 @@ class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testImplementsMimeTypeGuesserInterface()
-    {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser');
-
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Binary\MimeTypeGuesserInterface'));
-    }
-
-    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
-    {
-        new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
-    }
-
     /**
-     * @dataProvider provideImages
+     * @dataProvider provideImageData
+     *
+     * @param string $fileName
+     * @param string $mimeType
      */
-    public function testGuessMimeType($imageFile, $expectedMimeType)
+    public function testGuessMimeType($fileName, $mimeType)
     {
-        $guesser = new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
-
-        $this->assertEquals($expectedMimeType, $guesser->guess(file_get_contents($imageFile)));
+        $this->assertEquals($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
     }
 }

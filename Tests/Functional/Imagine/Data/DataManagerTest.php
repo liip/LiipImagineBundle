@@ -11,15 +11,20 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Data;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
-class DataManagerTest extends WebTestCase
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Data\DataManager
+ */
+class DataManagerTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.data.manager');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Data\DataManager', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Data\DataManager',
+            self::$kernel->getContainer()->get('liip_imagine.data.manager')
+        );
     }
 }

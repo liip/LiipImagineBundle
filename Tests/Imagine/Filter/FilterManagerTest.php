@@ -12,15 +12,18 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Filter\FilterManager
+ * @covers \Liip\ImagineBundle\Imagine\Filter\FilterManager
  */
 class FilterManagerTest extends AbstractTest
 {
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Could not find filter loader for "thumbnail" filter type
+     */
     public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter()
     {
         $config = $this->createFilterConfigurationMock();
@@ -36,18 +39,16 @@ class FilterManagerTest extends AbstractTest
                     ),
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
         $binary = new Binary('aContent', 'image/png', 'png');
 
         $filterManager = new FilterManager(
             $config,
-            $this->createImagineMock(),
-            $this->getMockMimeTypeGuesser()
+            $this->createImagineInterfaceMock(),
+            $this->createMimeTypeGuesserInterfaceMock()
         );
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
         $filterManager->applyFilter($binary, 'thumbnail');
     }
 
@@ -73,42 +74,38 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedFilteredContent))
-        ;
+            ->will($this->returnValue($expectedFilteredContent));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFilteredContent, $filteredBinary->getContent());
     }
 
@@ -134,41 +131,37 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -196,41 +189,37 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -256,36 +245,31 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->never())
-            ->method('guess')
-        ;
+            ->method('guess');
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
@@ -296,7 +280,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -325,38 +309,33 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedContent))
-        ;
+            ->will($this->returnValue($expectedContent));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
-            ->will($this->returnValue($expectedMimeType))
-        ;
+            ->will($this->returnValue($expectedMimeType));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
@@ -367,7 +346,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -394,40 +373,36 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', array('quality' => $expectedQuality))
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
     public function testAlters100QualityIfNotSetOnApplyFilter()
@@ -452,40 +427,36 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', array('quality' => $expectedQuality))
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
     public function testMergeRuntimeConfigWithOneFromFilterConfigurationOnApplyFilter()
@@ -521,55 +492,53 @@ class FilterManagerTest extends AbstractTest
                     'thumbnail' => $thumbConfig,
                 ),
                 'post_processors' => array(),
-            )))
-        ;
+            )));
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagine = $this->createImagineMock();
+        $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbMergedConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf(
-            'Liip\ImagineBundle\Model\Binary',
+            '\Liip\ImagineBundle\Model\Binary',
             $filterManager->applyFilter($binary, 'thumbnail', $runtimeConfig)
         );
     }
-
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Could not find filter loader for "thumbnail" filter type
+     */
     public function testThrowsIfNoLoadersAddedForFilterOnApply()
     {
         $binary = new Binary('aContent', 'image/png', 'png');
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $this->createImagineMock(),
-            $this->getMockMimeTypeGuesser()
+            $this->createImagineInterfaceMock(),
+            $this->createMimeTypeGuesserInterfaceMock()
         );
 
-        $this->setExpectedException('InvalidArgumentException', 'Could not find filter loader for "thumbnail" filter type');
         $filterManager->apply($binary, array(
             'filters' => array(
                 'thumbnail' => array(
@@ -592,33 +561,30 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedFilteredContent))
-        ;
+            ->will($this->returnValue($expectedFilteredContent));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -629,7 +595,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFilteredContent, $filteredBinary->getContent());
     }
 
@@ -645,32 +611,29 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -681,7 +644,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -698,32 +661,29 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -735,7 +695,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -751,33 +711,29 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->never())
-            ->method('guess')
-        ;
+            ->method('guess');
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -793,7 +749,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -811,35 +767,31 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedContent))
-        ;
+            ->will($this->returnValue($expectedContent));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $mimeTypeGuesser = $this->getMockMimeTypeGuesser();
+        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
-            ->will($this->returnValue($expectedMimeType))
-        ;
+            ->will($this->returnValue($expectedMimeType));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -856,7 +808,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -872,33 +824,30 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', array('quality' => $expectedQuality))
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -910,7 +859,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
     }
 
     public function testAlters100QualityIfNotSetOnApply()
@@ -925,33 +874,30 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', array('quality' => $expectedQuality))
-            ->will($this->returnValue('aFilteredContent'))
-        ;
+            ->will($this->returnValue('aFilteredContent'));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -962,7 +908,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
     }
 
     public function testApplyPostProcessor()
@@ -988,40 +934,36 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => array(
                     'foo' => array(),
                 ),
-            )))
-        ;
+            )));
 
         $thumbConfig = array(
             'size' => array(180, 180),
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($originalContent))
-        ;
+            ->will($this->returnValue($originalContent));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $processedBinary = new Binary($expectedPostProcessedContent, 'image/png', 'png');
 
-        $postProcessor = $this->getPostProcessorMock();
+        $postProcessor = $this->createPostProcessorInterfaceMock();
         $postProcessor
             ->expects($this->once())
             ->method('process')
@@ -1031,16 +973,19 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
         $filterManager->addLoader('thumbnail', $loader);
         $filterManager->addPostProcessor('foo', $postProcessor);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
         $this->assertEquals($expectedPostProcessedContent, $filteredBinary->getContent());
     }
-
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Could not find post processor "foo"
+     */
     public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter()
     {
         $originalContent = 'aContent';
@@ -1063,56 +1008,50 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => array(
                     'foo' => array(),
                 ),
-            )))
-        ;
+            )));
 
         $thumbConfig = array(
             'size' => array(180, 180),
             'mode' => 'outbound',
         );
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($originalContent))
-        ;
+            ->will($this->returnValue($originalContent));
 
-        $imagineMock = $this->createImagineMock();
+        $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $loader = $this->getMockLoader();
+        $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
 
         $filterManager = new FilterManager(
             $config,
             $imagineMock,
-            $this->getMockMimeTypeGuesser()
+            $this->createMimeTypeGuesserInterfaceMock()
         );
+
         $filterManager->addLoader('thumbnail', $loader);
-
-        $this->setExpectedException('InvalidArgumentException', 'Could not find post processor "foo"');
-
         $filterManager->applyFilter($binary, 'thumbnail');
     }
 
     public function testApplyPostProcessorsWhenNotDefined()
     {
-        $binary = $this->getMock('Liip\ImagineBundle\Binary\BinaryInterface');
+        $binary = $this->getMockBuilder('\Liip\ImagineBundle\Binary\BinaryInterface')->getMock();
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
-            $this->createImagineMock(),
-            $this->getMockMimeTypeGuesser()
+            $this->createImagineInterfaceMock(),
+            $this->createMimeTypeGuesserInterfaceMock()
         );
 
         $this->assertSame($binary, $filterManager->applyPostProcessors($binary, array()));
@@ -1121,21 +1060,9 @@ class FilterManagerTest extends AbstractTest
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
      */
-    protected function getMockLoader()
+    protected function createFilterLoaderInterfaceMock()
     {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface
-     */
-    protected function getMockMimeTypeGuesser()
-    {
-        return $this->getMock('Liip\ImagineBundle\Binary\MimeTypeGuesserInterface');
-    }
-
-    protected function getPostProcessorMock()
-    {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface');
+//        $this->getMock()
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
     }
 }

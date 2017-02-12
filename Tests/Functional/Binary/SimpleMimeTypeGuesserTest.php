@@ -11,16 +11,17 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Binary;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
-class SimpleMimeTypeGuesserTest extends WebTestCase
+class SimpleMimeTypeGuesserTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
 
-        $service = self::$kernel->getContainer()->get('liip_imagine.binary.mime_type_guesser');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser',
+            self::$kernel->getContainer()->get('liip_imagine.binary.mime_type_guesser')
+        );
     }
 }

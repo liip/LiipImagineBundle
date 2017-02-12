@@ -38,7 +38,7 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
      */
     private static function getReaderParamAndDefaultAndExifValues()
     {
-        $r = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass');
+        $r = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass');
 
         return array(
             static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderParameter'),
@@ -54,7 +54,7 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
      */
     private function getMetadataReaderCompilerPass($return)
     {
-        $mock = $this->getMockBuilder('Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass')
+        $mock = $this->getMockBuilder('\Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass')
             ->setMethods(array('isExifExtensionLoaded'))
             ->getMock();
 

@@ -12,47 +12,19 @@
 namespace Liip\ImagineBundle\Tests\Functional\Controller;
 
 use Liip\ImagineBundle\Imagine\Cache\Signer;
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Component\Filesystem\Filesystem;
+use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
 
 /**
- * @covers Liip\ImagineBundle\Controller\ImagineController
+ * @covers \Liip\ImagineBundle\Controller\ImagineController
  */
-class ImagineControllerTest extends WebTestCase
+class ImagineControllerTest extends AbstractSetupWebTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
-
-    protected $webRoot;
-
-    protected $cacheRoot;
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->client = $this->createClient();
-
-        $this->webRoot = self::$kernel->getContainer()->getParameter('kernel.root_dir').'/web';
-        $this->cacheRoot = $this->webRoot.'/media/cache';
-
-        $this->filesystem = new Filesystem();
-        $this->filesystem->remove($this->cacheRoot);
-    }
-
     public function testCouldBeGetFromContainer()
     {
-        $controller = self::$kernel->getContainer()->get('liip_imagine.controller');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Controller\ImagineController', $controller);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Controller\ImagineController',
+            self::$kernel->getContainer()->get('liip_imagine.controller')
+        );
     }
 
     public function testShouldResolvePopulatingCacheFirst()
@@ -64,7 +36,7 @@ class ImagineControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
@@ -82,7 +54,7 @@ class ImagineControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
@@ -158,7 +130,7 @@ class ImagineControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
 
@@ -193,7 +165,7 @@ class ImagineControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
@@ -213,7 +185,7 @@ class ImagineControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
 

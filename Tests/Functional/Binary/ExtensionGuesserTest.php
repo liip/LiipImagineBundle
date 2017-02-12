@@ -9,15 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Tests\Functional;
+namespace Liip\ImagineBundle\Tests\Functional\Binary;
 
-class MimeTypeGuesserTest extends WebTestCase
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
+
+class ExtensionGuesserTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $guesser = self::$kernel->getContainer()->get('liip_imagine.mime_type_guesser');
 
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', $guesser);
+        $this->assertInstanceOf(
+            '\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser',
+            self::$kernel->getContainer()->get('liip_imagine.extension_guesser')
+        );
     }
 }

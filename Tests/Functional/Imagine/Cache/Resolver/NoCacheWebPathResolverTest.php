@@ -11,19 +11,20 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver
  */
-class NoCacheWebPathResolverTest extends WebTestCase
+class NoCacheWebPathResolverTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainer()
     {
         $this->createClient();
 
-        $resolver = self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache_web_path');
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver', $resolver);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver',
+            self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache_web_path')
+        );
     }
 }

@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader
  */
 class InterlaceFilterLoaderTest extends AbstractTest
 {
@@ -23,7 +23,7 @@ class InterlaceFilterLoaderTest extends AbstractTest
     {
         $loader = new InterlaceFilterLoader();
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('interlace')
@@ -32,6 +32,6 @@ class InterlaceFilterLoaderTest extends AbstractTest
 
         $result = $loader->load($image, array('mode' => 'TEST'));
 
-        $this->assertInstanceOf('Imagine\Image\ImageInterface', $result);
+        $this->assertInstanceOf('\Imagine\Image\ImageInterface', $result);
     }
 }

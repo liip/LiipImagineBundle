@@ -24,9 +24,9 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()

@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Tests\Events;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
 
 /**
- * @covers Liip\ImagineBundle\Events\CacheResolveEvent
+ * @covers \Liip\ImagineBundle\Events\CacheResolveEvent
  */
 class CacheResolveEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -22,7 +22,7 @@ class LocatorsCompilerPass extends AbstractCompilerPass
     {
         foreach ($container->findTaggedServiceIds('liip_imagine.binary.locator') as $id => $tags) {
             if (isset($tags[0]['shared'])) {
-                $this->setDefinitionSharing($container->getDefinition($id), $tags[0]['shared']);
+                $this->setDefinitionSharing($container->getDefinition($id), (bool) $tags[0]['shared']);
             }
         }
     }

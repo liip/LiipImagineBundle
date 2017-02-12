@@ -16,9 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for DownscaleFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader
  *
  * @author Minin Anton <anton.a.minin@gmail.com>
  */
@@ -31,17 +29,15 @@ class DownscaleFilterLoaderTest extends AbstractTest
         $initialSize = new Box(50, 200);
         $resultSize = new Box(50, 200);
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image
             ->method('getSize')
-            ->willReturn($initialSize)
-        ;
+            ->willReturn($initialSize);
         $image
             ->method('resize')
             ->willReturnCallback(function ($box) use (&$resultSize) {
                 $resultSize = $box;
-            })
-        ;
+            });
 
         $loader->load($image, array('max' => array(100, 90)));
 
