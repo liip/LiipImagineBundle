@@ -19,6 +19,12 @@ liip_imagine:
         default:
             filesystem:
                 data_root: "%kernel.root_dir%/web"
+        foo:
+            filesystem:
+                data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-01"
+        bar:
+            filesystem:
+                data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
     resolvers:
         default:
             web_path:

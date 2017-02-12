@@ -21,7 +21,7 @@ class FileSystemLocator implements LocatorInterface
     /**
      * @var string[]
      */
-    protected $roots;
+    private $roots;
 
     /**
      * @param array[] $options

@@ -247,9 +247,11 @@
         <!-- Data loader locators -->
 
         <service id="liip_imagine.binary.locator.filesystem" class="%liip_imagine.binary.locator.filesystem.class%" public="false">
+            <tag name="liip_imagine.binary.locator" />
         </service>
 
         <service id="liip_imagine.binary.locator.filesystem_insecure" class="%liip_imagine.binary.locator.filesystem_insecure.class%" public="false">
+            <tag name="liip_imagine.binary.locator" />
         </service>
 
         <!-- Cache resolver -->

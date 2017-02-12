@@ -15,15 +15,16 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactor
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Parser;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Configuration
- * @covers Liip\ImagineBundle\DependencyInjection\LiipImagineExtension
+ * @covers \Liip\ImagineBundle\DependencyInjection\Configuration
+ * @covers \Liip\ImagineBundle\DependencyInjection\LiipImagineExtension
  */
 class LiipImagineExtensionTest extends AbstractTest
 {
@@ -77,7 +78,7 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     public function testFactoriesConfiguration($service, $factory)
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+        if (SymfonyFramework::isKernelLessThan(2, 6)) {
             $this->markTestSkipped('No need to test on symfony < 2.6');
         }
 
@@ -88,11 +89,12 @@ class LiipImagineExtensionTest extends AbstractTest
     }
 
     /**
+     * @legacy
      * @dataProvider factoriesProvider
      */
     public function testLegacyFactoriesConfiguration($service, $factory)
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
             $this->markTestSkipped('No need to test on symfony >= 2.6');
         }
 
@@ -117,9 +119,6 @@ class LiipImagineExtensionTest extends AbstractTest
         );
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     protected function createEmptyConfiguration()
     {
         $this->containerBuilder = new ContainerBuilder();
@@ -130,9 +129,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     protected function createFullConfiguration()
     {
         $this->containerBuilder = new ContainerBuilder();
@@ -183,29 +179,39 @@ EOF;
         return $parser->parse($yaml);
     }
 
+    /**
+     * @param string $value
+     * @param string $key
+     */
     private function assertAlias($value, $key)
     {
         $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
+    /**
+     * @param string $value
+     * @param string $key
+     */
     private function assertParameter($value, $key)
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
+    /**
+     * @param string $id
+     */
     private function assertHasDefinition($id)
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
     }
 
-    private function assertNotHasDefinition($id)
+    /**
+     * @param Definition $definition
+     * @param array      $arguments
+     */
+    private function assertDICConstructorArguments(Definition $definition, array $arguments)
     {
-        $this->assertFalse(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
-    }
-
-    private function assertDICConstructorArguments($definition, $args)
-    {
-        $this->assertEquals($args, $definition->getArguments(), "Expected and actual DIC Service constructor arguments of definition '".$definition->getClass()."' don't match.");
+        $this->assertEquals($arguments, $definition->getArguments(), "Expected and actual DIC Service constructor arguments of definition '".$definition->getClass()."' don't match.");
     }
 
     protected function tearDown()
