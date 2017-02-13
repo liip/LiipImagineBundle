@@ -71,10 +71,12 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     private function createLocatorReference($reference)
     {
-        return new Reference(
-            sprintf('liip_imagine.binary.locator.%s', $reference),
-            ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE,
-            SymfonyFramework::hasDefinitionSharedToggle()
-        );
+        $name = sprintf('liip_imagine.binary.locator.%s', $reference);
+
+        if (SymfonyFramework::hasDefinitionSharedToggle()) {
+            return new Reference($name);
+        }
+
+        return new Reference($name, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, false);
     }
 }
