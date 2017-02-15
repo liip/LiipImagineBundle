@@ -11,9 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 class LocatorsCompilerPass extends AbstractCompilerPass
 {
@@ -22,20 +20,10 @@ class LocatorsCompilerPass extends AbstractCompilerPass
      */
     public function process(ContainerBuilder $container)
     {
-        foreach (array_keys($container->findTaggedServiceIds('liip_imagine.binary.locator')) as $id) {
-            $this->disableSharedDefinition($container->getDefinition($id));
-        }
-    }
-
-    /**
-     * @param Definition $definition
-     */
-    private function disableSharedDefinition(Definition $definition)
-    {
-        if (SymfonyFramework::hasDefinitionSharedToggle()) {
-            $definition->setShared(false);
-        } else {
-            $definition->setScope('prototype');
+        foreach ($container->findTaggedServiceIds('liip_imagine.binary.locator') as $id => $tags) {
+            if (isset($tags[0]['shared'])) {
+                $this->setDefinitionSharing($container->getDefinition($id), $tags[0]['shared']);
+            }
         }
     }
 }

@@ -12,40 +12,26 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\LocatorsCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\LocatorsCompilerPass
  */
-class LocatorsCompilerPassTest extends \PHPUnit_Framework_TestCase
+class LocatorsCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $locatorDefinition = new Definition();
-        $locatorDefinition->addTag('liip_imagine.binary.locator', array(
-            'shared' => true,
+        $l = $this->createDefinition(array('liip_imagine.binary.locator' => array(
+            'shared' => false,
+        )));
+
+        $container = $this->createContainerBuilder(array(
+            'liip_imagine.binary.locator.foo' => $l,
         ));
 
-        $container = new ContainerBuilder();
-        $container->setDefinition('liip_imagine.binary.locator.foo', $locatorDefinition);
-
         $pass = new LocatorsCompilerPass();
-
-        //guard
-        if (method_exists($locatorDefinition, 'isShared')) {
-            $this->assertTrue($locatorDefinition->isShared());
-        } else {
-            $this->assertSame('container', $locatorDefinition->getScope());
-        }
+        $this->assertDefinitionSharingEnabled($l);
 
         $pass->process($container);
-
-        if (method_exists($locatorDefinition, 'isShared')) {
-            $this->assertFalse($locatorDefinition->isShared());
-        } else {
-            $this->assertSame('prototype', $locatorDefinition->getScope());
-        }
+        $this->assertDefinitionSharingDisabled($l);
     }
 }

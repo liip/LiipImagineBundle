@@ -73,7 +73,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     {
         $name = sprintf('liip_imagine.binary.locator.%s', $reference);
 
-        if (SymfonyFramework::hasDefinitionSharedToggle()) {
+        if (SymfonyFramework::hasDefinitionSharing()) {
             return new Reference($name);
         }
 
