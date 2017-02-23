@@ -24,8 +24,22 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
+        $dataRoots = $config['data_root'];
+        
+        // Load bundle resources if requested
+        if ($config['bundle_resources']) {
+            foreach ($container->getParameter('kernel.bundles') as $bundle) {
+                $refClass = new \ReflectionClass($bundle);
+                $bundlePath = dirname($refClass->getFileName());
+                if (!is_dir($originDir = $bundlePath . '/Resources/public')) {
+                    continue;
+                }
+                $dataRoots[] = realpath($originDir);
+            }
+        }
+        
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, $config['data_root']);
+        $definition->replaceArgument(2, $dataRoots);
         $definition->replaceArgument(3, $this->createLocatorReference($config['locator']));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
@@ -46,6 +60,9 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     {
         $builder
             ->children()
+                ->booleanNode('bundle_resources')
+                  ->defaultFalse()
+                ->end()
                 ->enumNode('locator')
                     ->values(array('filesystem', 'filesystem_insecure'))
                     ->info('Using the "filesystem_insecure" locator is not recommended due to a less secure resolver mechanism, but is provided for those using heavily symlinked projects.')

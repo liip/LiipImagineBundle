@@ -382,7 +382,16 @@ liip_imagine:
                 data_root: /path/to/source/images/dir
 ```
 
-This location must be readable by your web server. On a system that supports 
+When you need assets from bundles which have a `Resources/public`-folder, you can automatically add them to the `data_root` by setting the `bundle_resources` parameter to `true`.
+```yml
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                bundle_resources: true
+```
+
+Image locations must be readable by your web server. On a system that supports 
 `setfacl` (such as Linux/BSD), use
 
 ```sh

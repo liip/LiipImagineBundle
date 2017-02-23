@@ -48,7 +48,8 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
 
         $loader->create($container, 'the_loader_name', array(
-            'data_root' => 'theDataRoot',
+            'bundle_resources' => false,
+            'data_root' => array('theDataRoot'),
             'locator' => 'filesystem',
         ));
 
@@ -59,7 +60,27 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
-        $this->assertEquals('theDataRoot', $loaderDefinition->getArgument(2));
+        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
+    }
+
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabled()
+    {
+        $container = new ContainerBuilder();
+
+        // We need at least an empty bundle parameter
+        $container->setParameter('kernel.bundles', array());
+
+        $loader = new FileSystemLoaderFactory();
+
+        $loader->create($container, 'the_loader_name', array(
+            'bundle_resources' => true,
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+        ));
+
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
+
+        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()

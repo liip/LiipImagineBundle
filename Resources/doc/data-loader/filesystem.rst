@@ -36,3 +36,17 @@ You can configure the ``data_root``, used as the root path to search for images:
             profile_photos:
                 filesystem:
                     data_root: "%kernel.root_dir%/../web"
+
+You can automatically load bundle resources in their ``Resources/public`` by enabling
+the ``bundle_resources`` parameter. This will automatically add those directories to the
+root path.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        loaders:
+            profile_photos:
+                filesystem:
+                    bundle_resources: true
