@@ -367,12 +367,12 @@ $response = $imagine
 ```
 
 
-## Images Outside Data Root
+## Data Roots
 
-When your setup requires your source images reside outside the web root,
-you have to set your loader's `data_root` parameter in your configuration 
-(often `app/config/config.yml`) with the absolute path to your source image 
-location.
+By default, Symfony's `web/` directory is registered as a data root to load
+assets from. For many installations this will be sufficient, but sometime you
+may need to load images from other locations. To do this, you must set the
+`data_root` parameter in your configuration (often located at `app/config/config.yml`).
 
 ```yml
 liip_imagine:
@@ -382,14 +382,68 @@ liip_imagine:
                 data_root: /path/to/source/images/dir
 ```
 
-When you need assets from bundles which have a `Resources/public`-folder, you can automatically add them to the `data_root` by setting the `bundle_resources` parameter to `true`.
+As of version `1.7.2` you can register multiple data root paths, and the 
+file locator will search each for the requested file.
+
 ```yml
 liip_imagine:
     loaders:
         default:
             filesystem:
-                bundle_resources: true
+                data_root:
+                    - /path/foo
+                    - /path/bar
 ```
+
+As of version `1.7.3` you ask for the public resource paths from all registered bundles
+to be auto-registered as data roots. This allows you to load assets from the
+`Resources/public` folders that reside within the loaded bundles. To enable this
+feature, set the `bundle_resources.enabled` configuration option to `true`.
+
+```yml
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                bundle_resources:
+                    enabled: true
+```
+
+If you want to register some of the `Resource/public` folders, but not all, you can do
+so by blacklisting the bundles you don't want registered or whitelisting the bundles you
+do want registered. For example, to blacklist (not register) the bundles "FooBundle" and
+"BarBundle", you would use the following configuration.
+
+```yml
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                bundle_resources:
+                    enabled: true
+                    access_control_type: blacklist
+                    access_control_list:
+                        - FooBundle
+                        - BarBundle
+```
+
+Alternatively, if you want to whitelist (only register) the bundles "FooBundle" and "BarBundle",
+you would use the following configuration.
+
+```yml
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                bundle_resources:
+                    enabled: true
+                    access_control_type: whitelist
+                    access_control_list:
+                        - FooBundle
+                        - BarBundle
+```
+
+### Permissions
 
 Image locations must be readable by your web server. On a system that supports 
 `setfacl` (such as Linux/BSD), use

@@ -46,11 +46,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $container = new ContainerBuilder();
 
         $loader = new FileSystemLoaderFactory();
-
         $loader->create($container, 'the_loader_name', array(
-            'bundle_resources' => false,
             'data_root' => array('theDataRoot'),
             'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => false,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => array(),
+            ),
         ));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
@@ -63,24 +66,163 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
     }
 
-    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabled()
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
     {
+        $fooBundleRootPath = realpath(__DIR__ . '/../../../Functional/Fixtures/FooBundle');
+        $barBundleRootPath = realpath(__DIR__ . '/../../../Functional/Fixtures/BarBundle');
+
         $container = new ContainerBuilder();
-
-        // We need at least an empty bundle parameter
-        $container->setParameter('kernel.bundles', array());
-
-        $loader = new FileSystemLoaderFactory();
-
-        $loader->create($container, 'the_loader_name', array(
-            'bundle_resources' => true,
-            'data_root' => array('theDataRoot'),
-            'locator' => 'filesystem',
+        $container->setParameter('kernel.bundles_metadata', array(
+            'LiipFooBundle' => array(
+                'path' => $fooBundleRootPath,
+            ),
+            'LiipBarBundle' => array(
+                'path' => $barBundleRootPath,
+            ),
         ));
 
-        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', array(
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => true,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => array(),
+            ),
+        ));
 
-        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
+        $expected = array(
+            'theDataRoot',
+            'LiipFooBundle' => $fooBundleRootPath . '/Resources/public',
+            'LiipBarBundle' => $barBundleRootPath . '/Resources/public',
+        );
+
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+    }
+
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
+    {
+        $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
+        $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
+
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.bundles_metadata', array(
+            'LiipFooBundle' => array(
+                'path' => $fooBundleRootPath,
+            ),
+            'LiipBarBundle' => array(
+                'path' => $barBundleRootPath,
+            ),
+        ));
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', array(
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => true,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => array(
+                    'LiipFooBundle',
+                ),
+            ),
+        ));
+
+        $expected = array(
+            'theDataRoot',
+            'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
+        );
+
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+    }
+
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
+    {
+        $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
+        $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
+
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.bundles_metadata', array(
+            'LiipFooBundle' => array(
+                'path' => $fooBundleRootPath,
+            ),
+            'LiipBarBundle' => array(
+                'path' => $barBundleRootPath,
+            ),
+        ));
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', array(
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => true,
+                'access_control_type' => 'whitelist',
+                'access_control_list' => array(
+                    'LiipFooBundle'
+                ),
+            ),
+        ));
+
+        $expected = array(
+            'theDataRoot',
+            'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
+        );
+
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+    }
+
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
+    {
+        $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
+        $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
+
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.bundles', array(
+            '\Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle',
+            '\Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle',
+        ));
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', array(
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => true,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => array(),
+            ),
+        ));
+
+        $expected = array(
+            'theDataRoot',
+            'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
+            'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
+        );
+
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Unable to resolve bundle "ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane" while auto-registering bundle resource paths
+     */
+    public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj()
+    {
+        $container = new ContainerBuilder();
+        $container->setParameter('kernel.bundles', array(
+            'ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane',
+        ));
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', array(
+            'data_root' => array('theDataRoot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => true,
+            ),
+        ));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()

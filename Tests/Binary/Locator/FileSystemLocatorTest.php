@@ -89,4 +89,18 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
             return array(array($prepend[mt_rand(0, count($prepend) - 1)], $params[0]), $params[1]);
         }, static::provideLoadCases());
     }
+
+    public function testNamedLoadCases()
+    {
+        $root01 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
+        $root02 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02');
+
+        $loader = $this->getLocator(array(
+            'root-01' => $root01,
+            'root-02' => $root02,
+        ));
+
+        $this->assertStringStartsWith($root01, $loader->locate('@root-01:file.ext'));
+        $this->assertStringStartsWith($root01, $loader->locate('@root-02:root-01/file.ext'));
+    }
 }
