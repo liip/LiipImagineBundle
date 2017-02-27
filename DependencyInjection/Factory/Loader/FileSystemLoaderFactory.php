@@ -11,8 +11,10 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
 class FileSystemLoaderFactory extends AbstractLoaderFactory
@@ -24,7 +26,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     {
         $definition = $this->getChildLoaderDefinition();
         $definition->replaceArgument(2, $config['data_root']);
-        $definition->replaceArgument(3, new Reference(sprintf('liip_imagine.binary.locator.%s', $config['locator'])));
+        $definition->replaceArgument(3, $this->createLocatorReference($config['locator']));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
@@ -60,5 +62,21 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                     ->end()
                 ->end()
             ->end();
+    }
+
+    /**
+     * @param string $reference
+     *
+     * @return Reference
+     */
+    private function createLocatorReference($reference)
+    {
+        $name = sprintf('liip_imagine.binary.locator.%s', $reference);
+
+        if (SymfonyFramework::hasDefinitionSharing()) {
+            return new Reference($name);
+        }
+
+        return new Reference($name, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, false);
     }
 }

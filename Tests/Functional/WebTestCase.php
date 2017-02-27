@@ -24,4 +24,32 @@ abstract class WebTestCase extends BaseWebTestCase
 
         return 'Liip\ImagineBundle\Tests\Functional\app\AppKernel';
     }
+
+    /**
+     * @param string $name
+     *
+     * @return object
+     */
+    protected function getService($name)
+    {
+        if (!static::$kernel) {
+            $this->createClient();
+        }
+
+        return static::$kernel->getContainer()->get($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    protected function getParameter($name)
+    {
+        if (!static::$kernel) {
+            $this->createClient();
+        }
+
+        return static::$kernel->getContainer()->getParameter($name);
+    }
 }

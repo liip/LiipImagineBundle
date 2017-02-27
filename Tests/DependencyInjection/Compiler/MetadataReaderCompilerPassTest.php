@@ -15,7 +15,6 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass
  */
 class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +25,7 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private static function getPrivateStaticProperty(\ReflectionClass $r, $p)
+    private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, $p)
     {
         $property = $r->getProperty($p);
         $property->setAccessible(true);
@@ -42,9 +41,9 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $r = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass');
 
         return array(
-            static::getPrivateStaticProperty($r, 'metadataReaderParameter'),
-            static::getPrivateStaticProperty($r, 'metadataReaderExifClass'),
-            static::getPrivateStaticProperty($r, 'metadataReaderDefaultClass'),
+            static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderParameter'),
+            static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderExifClass'),
+            static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderDefaultClass'),
         );
     }
 

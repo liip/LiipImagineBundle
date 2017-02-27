@@ -110,6 +110,22 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $this->getMockBuilder('Imagine\Image\ImagineInterface')->getMock();
     }
 
+    /**
+     * @param object $object
+     * @param string $name
+     *
+     * @return \ReflectionMethod
+     */
+    protected function getVisibilityRestrictedMethod($object, $name)
+    {
+        $r = new \ReflectionObject($object);
+
+        $m = $r->getMethod($name);
+        $m->setAccessible(true);
+
+        return $m;
+    }
+
     protected function tearDown()
     {
         if (!$this->filesystem) {

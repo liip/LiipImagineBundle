@@ -12,34 +12,28 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass
  */
-class LoadersCompilerPassTest extends \PHPUnit_Framework_TestCase
+class LoadersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $managerDefinition = new Definition();
-        $loaderDefinition = new Definition();
-        $loaderDefinition->addTag('liip_imagine.binary.loader', array(
-            'loader' => 'foo',
-        ));
+        $m = $this->createDefinition();
+        $l = $this->createDefinition(array('liip_imagine.binary.loader' => array(
+            'loader' => 'foobar',
+        )));
 
-        $container = new ContainerBuilder();
-        $container->setDefinition('liip_imagine.data.manager', $managerDefinition);
-        $container->setDefinition('a.binary.loader', $loaderDefinition);
+        $container = $this->createContainerBuilder(array(
+            'binary.loader.foobar' => $l,
+            'liip_imagine.data.manager' => $m,
+        ));
 
         $pass = new LoadersCompilerPass();
 
-        //guard
-        $this->assertCount(0, $managerDefinition->getMethodCalls());
-
+        $this->assertDefinitionMethodCallsNone($m);
         $pass->process($container);
-
-        $this->assertCount(1, $managerDefinition->getMethodCalls());
+        $this->assertDefinitionMethodCallCount(1, $m);
     }
 }

@@ -12,13 +12,13 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
  */
 class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 {
@@ -122,7 +122,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCreateS3ClientDefinitionWithFactoryOnCreate()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+        if (SymfonyFramework::isKernelLessThan(2, 6)) {
             $this->markTestSkipped('No need to test on symfony < 2.6');
         }
 
@@ -147,7 +147,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testLegacyCreateS3ClientDefinitionWithFactoryOnCreate()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
             $this->markTestSkipped('No need to test on symfony >= 2.6');
         }
 
