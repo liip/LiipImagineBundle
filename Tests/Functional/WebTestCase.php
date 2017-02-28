@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
+use Symfony\Component\HttpKernel\Kernel;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -32,10 +33,6 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     protected function getService($name)
     {
-        if (!static::$kernel) {
-            $this->createClient();
-        }
-
         return static::$kernel->getContainer()->get($name);
     }
 
@@ -46,10 +43,22 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     protected function getParameter($name)
     {
-        if (!static::$kernel) {
-            $this->createClient();
-        }
-
         return static::$kernel->getContainer()->getParameter($name);
+    }
+
+    /**
+     * @param object $object
+     * @param string $name
+     *
+     * @return mixed
+     */
+    protected function getPrivateProperty($object, $name)
+    {
+        $r = new \ReflectionObject($object);
+
+        $p = $r->getProperty($name);
+        $p->setAccessible(true);
+
+        return $p->getValue($object);
     }
 }

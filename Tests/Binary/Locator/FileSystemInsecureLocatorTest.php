@@ -22,7 +22,7 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
     /**
      * @return LocatorInterface
      */
-    protected function getLocator($paths)
+    protected function getFileSystemLocator($paths)
     {
         $locator = new FileSystemInsecureLocator();
         $locator->setOptions(array('roots' => (array) $paths));
@@ -30,45 +30,38 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         return $locator;
     }
 
-    public function testThrowExceptionIfRealPathIsOutsideRootPath1()
-    {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image not resolvable'
-        );
-
-        $locator = $this->getLocator(__DIR__);
-        $locator->locate('../Loader/../../Binary/Loader/../../../Resources/config/routing.xml');
-    }
-
-    public function testThrowExceptionIfRealPathIsOutsideRootPath2()
-    {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image not resolvable'
-        );
-
-        $loader = $this->getLocator(__DIR__);
-        $loader->locate('../../Binary/');
-    }
-
     public function testLoadsOnSymbolicLinks()
     {
-        $loader = $this->getLocator($root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'));
+        $loader = $this->getFileSystemLocator($root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'));
         $this->assertStringStartsWith(realpath($root), $loader->locate('root-01/file.ext'));
     }
 
-    public function testThrowsOnUpDirectoryInPaths()
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     * @expectedExceptionMessage Source image not resolvable
+     */
+    public function testThrowsIfPathHasDoublePeriodBackStep()
     {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image not resolvable'
-        );
-
-        $loader = $this->getLocator($root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'));
-        $this->assertStringStartsWith(realpath($root), $loader->locate('/../root-01/file.ext'));
+        $this->getFileSystemLocator(realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'))->locate('/../root-01/file.ext');
     }
 
+    public function testRootPlaceholders()
+    {
+        $root01 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
+        $root02 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02');
+
+        $loader = $this->getFileSystemLocator(array(
+            'root-01' => $root01,
+            'root-02' => $root02,
+        ));
+
+        $this->assertStringStartsWith($root01, $loader->locate('@root-01:file.ext'));
+        $this->assertStringStartsWith($root02, $loader->locate('@root-02:root-01/file.ext'));
+    }
+
+    /**
+     * @return array[]
+     */
     public static function provideLoadCases()
     {
         $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
@@ -82,6 +75,9 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         );
     }
 
+    /**
+     * @return array[]
+     */
     public static function provideMultipleRootLoadCases()
     {
         $prepend = array(

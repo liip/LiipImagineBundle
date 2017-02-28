@@ -21,10 +21,12 @@ class FileSystemInsecureLocator extends FileSystemLocator
      */
     protected function generateAbsolutePath($root, $path)
     {
-        if (false !== strpos($path, '..'.DIRECTORY_SEPARATOR)) {
+        if (false !== strpos($path, '..'.DIRECTORY_SEPARATOR) ||
+            false !== strpos($path, DIRECTORY_SEPARATOR.'..') ||
+            false === file_exists($absolute = $root.DIRECTORY_SEPARATOR.$path)) {
             return false;
         }
 
-        return file_exists($absolute = $root.DIRECTORY_SEPARATOR.$path) ? $absolute : false;
+        return $absolute;
     }
 }

@@ -25,6 +25,27 @@ liip_imagine:
         bar:
             filesystem:
                 data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
+        bundles_all:
+            filesystem:
+                data_root: ~
+                bundle_resources:
+                    enabled: true
+        bundles_only_foo:
+            filesystem:
+                data_root: ~
+                bundle_resources:
+                    enabled: true
+                    access_control_type: blacklist
+                    access_control_list:
+                        - LiipBarBundle
+        bundles_only_bar:
+            filesystem:
+                data_root: ~
+                bundle_resources:
+                    enabled: true
+                    access_control_type: whitelist
+                    access_control_list:
+                        - LiipBarBundle
     resolvers:
         default:
             web_path:

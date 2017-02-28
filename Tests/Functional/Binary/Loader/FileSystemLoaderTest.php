@@ -29,18 +29,10 @@ class FileSystemLoaderTest extends WebTestCase
         return $this->getService(sprintf('liip_imagine.binary.loader.%s', $name));
     }
 
-    private function getPrivateProperty($object, $name)
+    public function testMultipleLoadersHaveDifferentLocatorInstances()
     {
-        $r = new \ReflectionObject($object);
+        static::createClient();
 
-        $p = $r->getProperty($name);
-        $p->setAccessible(true);
-
-        return $p->getValue($object);
-    }
-
-    public function testMultipleLoadersContainIndependentLocators()
-    {
         $fooLoader = $this->getLoader('foo');
         $barLoader = $this->getLoader('bar');
 
