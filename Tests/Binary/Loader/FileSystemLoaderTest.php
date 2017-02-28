@@ -13,6 +13,8 @@ namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
+use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
@@ -21,228 +23,224 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
  */
 class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    public function testImplementsLoaderInterface()
+    {
+        $r = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FileSystemLoader');
+
+        $this->assertTrue($r->implementsInterface('Liip\ImagineBundle\Binary\Loader\LoaderInterface'));
+    }
+
+    public function testConstruction()
+    {
+        $this->getFileSystemLoader();
+    }
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FileSystemLocator
+     * @return array[]
      */
-    private function getLocator()
-    {
-        return new FileSystemLocator();
-    }
-
-    public function testShouldImplementLoaderInterface()
-    {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FileSystemLoader');
-
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Binary\Loader\LoaderInterface'));
-    }
-
-    public function testCouldBeConstructedWithExpectedArguments()
-    {
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            $this->getLocator()
-        );
-    }
-
-    public function testThrowExceptionIfNoRootPathsProvided()
-    {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\InvalidArgumentException',
-            'One or more data root paths must be specified.'
-        );
-
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(),
-            $this->getLocator()
-        );
-    }
-
-    public function testThrowExceptionIfRootPathIsEmpty()
-    {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\InvalidArgumentException',
-            'Root image path not resolvable'
-        );
-
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            '',
-            $this->getLocator()
-        );
-    }
-
-    public function testThrowExceptionIfRootPathDoesNotExist()
-    {
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\InvalidArgumentException',
-            'Root image path not resolvable'
-        );
-
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            '/a/bad/root/path',
-            $this->getLocator()
-        );
-    }
-
-    public function testThrowExceptionIfRealPathIsOutsideRootPath1()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            $this->getLocator()
-        );
-
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image invalid'
-        );
-
-        $loader->find('../Loader/../../Binary/Loader/../../../Resources/config/routing.xml');
-    }
-
-    public function testThrowExceptionIfRealPathIsOutsideRootPath2()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            $this->getLocator()
-        );
-
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image invalid'
-        );
-
-        $loader->find('../../Binary/');
-    }
-
-    public function testThrowExceptionIfPathHasDoublePointSlashInTheMiddle()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            $this->getLocator()
-        );
-
-        $loader->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME));
-    }
-
-    public function testThrowExceptionIfFileNotExist()
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            $this->getLocator()
-        );
-
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image not resolvable'
-        );
-
-        $loader->find('fileNotExist');
-    }
-
     public static function provideLoadCases()
     {
-        $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
+        $file = pathinfo(__FILE__, PATHINFO_BASENAME);
 
         return array(
-            array(__DIR__, $fileName),
-            array(__DIR__.'/', $fileName),
-            array(__DIR__, '/'.$fileName),
-            array(__DIR__.'/../../Binary/Loader', '/'.$fileName),
-            array(realpath(__DIR__.'/..'), 'Loader/'.$fileName),
-            array(__DIR__.'/../', '/Loader/../../Binary/Loader/'.$fileName),
+            array(
+                __DIR__,
+                $file,
+            ),
+            array(
+                __DIR__.'/',
+                $file,
+            ),
+            array(
+                __DIR__, '/'.
+                $file,
+            ),
+            array(
+                __DIR__.'/../../Binary/Loader',
+                '/'.$file,
+            ),
+            array(
+                realpath(__DIR__.'/..'),
+                'Loader/'.$file,
+            ),
+            array(
+                __DIR__.'/../',
+                '/Loader/../../Binary/Loader/'.$file,
+            ),
         );
     }
 
     /**
      * @dataProvider provideLoadCases
+     *
+     * @param string $root
+     * @param string $path
      */
-    public function testLoad($rootDir, $path)
+    public function testLoad($root, $path)
     {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            $rootDir,
-            $this->getLocator()
-        );
-
-        $binary = $loader->find($path);
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
-        $this->assertStringStartsWith('text/', $binary->getMimeType());
+        $this->assertValidLoaderFindReturn($this->getFileSystemLoader(array($root))->find($path));
     }
 
     /**
      * @dataProvider provideLoadCases
+     *
+     * @param string $root
+     * @param string $path
      */
-    public function testLoadUsingDeprecatedConstruction($rootDir, $path)
+    public function testDeprecatedConstruction($root, $path)
     {
         $loader = new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            $rootDir
+            array($root)
         );
 
-        $binary = $loader->find($path);
-
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
-        $this->assertStringStartsWith('text/', $binary->getMimeType());
+        $this->assertValidLoaderFindReturn($loader->find($path));
     }
 
-    public function testThrowsExceptionWhenFourthConstructorArgumentNotLoaderInterface()
-    {
-        $this->setExpectedExceptionRegExp('\InvalidArgumentException', '{Method .+ expects a LocatorInterface for the forth argument}');
-
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            __DIR__,
-            null
-        );
-    }
-
+    /**
+     * @return array[]
+     */
     public static function provideMultipleRootLoadCases()
     {
-        $prepend = array(
+        $pathsPrepended = array(
             realpath(__DIR__.'/../'),
             realpath(__DIR__.'/../../'),
             realpath(__DIR__.'/../../../'),
         );
 
-        return array_map(function ($params) use ($prepend) {
-            return array(array($prepend[mt_rand(0, count($prepend) - 1)], $params[0]), $params[1]);
+        return array_map(function ($parameters) use ($pathsPrepended) {
+            return array(array($pathsPrepended[mt_rand(0, count($pathsPrepended) - 1)], $parameters[0]), $parameters[1]);
         }, static::provideLoadCases());
     }
 
     /**
      * @dataProvider provideMultipleRootLoadCases
+     *
+     * @param string $root
+     * @param string $path
      */
-    public function testMultipleRootLoadCases($rootDirs, $path)
+    public function testMultipleRootLoadCases($root, $path)
     {
-        $loader = new FileSystemLoader(
+        $this->assertValidLoaderFindReturn($this->getFileSystemLoader($root)->find($path));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp {Method .+ expects a LocatorInterface for the forth argument}
+     */
+    public function testThrowsIfConstructionArgumentsInvalid()
+    {
+        new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            $rootDirs,
-            $this->getLocator()
+            array(__DIR__),
+            'not-instance-of-locator'
         );
+    }
 
-        $binary = $loader->find($path);
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
+     * @expectedExceptionMessage One or more data root paths must be specified
+     */
+    public function testThrowsIfZeroCountRootPathArray()
+    {
+        $this->getFileSystemLoader(array());
+    }
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\FileBinary', $binary);
-        $this->assertStringStartsWith('text/', $binary->getMimeType());
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Root image path not resolvable
+     */
+    public function testThrowsIfEmptyRootPath()
+    {
+        $this->getFileSystemLoader('');
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Root image path not resolvable
+     */
+    public function testThrowsIfRootPathDoesNotExist()
+    {
+        $this->getFileSystemLoader('/a/bad/root/path');
+    }
+
+    /**
+     * @return array[]
+     */
+    public function provideOutsideRootPathsData()
+    {
+        return array(
+            array('../Loader/../../Binary/Loader/../../../Resources/config/routing.xml'),
+            array('../../Binary/'),
+        );
+    }
+
+    /**
+     * @dataProvider provideOutsideRootPathsData
+     *
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     * @expectedExceptionMessage Source image invalid
+     */
+    public function testThrowsIfRealPathOutsideRootPath($path)
+    {
+        $this->getFileSystemLoader()->find($path);
+    }
+
+    public function testPathWithDoublePeriodBackStep()
+    {
+        $this->assertValidLoaderFindReturn($this->getFileSystemLoader()->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME)));
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     * @expectedExceptionMessage Source image not resolvable
+     */
+    public function testThrowsIfFileDoesNotExist()
+    {
+        $this->getFileSystemLoader()->find('fileNotExist');
+    }
+
+    /**
+     * @return FileSystemLocator
+     */
+    private function getFileSystemLocator()
+    {
+        return new FileSystemLocator();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getDefaultDataRoots()
+    {
+        return array(__DIR__);
+    }
+
+    /**
+     * @param string|array|null     $root
+     * @param LocatorInterface|null $locator
+     *
+     * @return FileSystemLoader
+     */
+    private function getFileSystemLoader($root = null, LocatorInterface $locator = null)
+    {
+        return new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            null !== $root ? $root : $this->getDefaultDataRoots(),
+            null !== $locator ? $locator : $this->getFileSystemLocator()
+        );
+    }
+
+    /**
+     * @param FileBinary|mixed $return
+     * @param string|null      $message
+     */
+    private function assertValidLoaderFindReturn($return, $message = null)
+    {
+        $this->assertInstanceOf('\Liip\ImagineBundle\Model\FileBinary', $return, $message);
+        $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
     }
 }

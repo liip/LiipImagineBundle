@@ -25,16 +25,16 @@ class FileSystemLocatorTest extends WebTestCase
      *
      * @return FileSystemLocator
      */
-    private function getLoaderLocator($name)
+    private function getFileSystemLoaderLocator($name)
     {
         return $this->getPrivateProperty($this->getService(sprintf('liip_imagine.binary.loader.%s', $name)), 'locator');
     }
 
-    public function testBundleResourcesAll()
+    public function testBundleResourcesOnAllLoader()
     {
-        $this->createClient();
+        static::createClient();
 
-        $locator = $this->getLoaderLocator('bundles_all');
+        $locator = $this->getFileSystemLoaderLocator('bundles_all');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
         $this->assertTrue(count($roots) >= 2);
@@ -45,11 +45,11 @@ class FileSystemLocatorTest extends WebTestCase
         $this->assertBarBundleResourcesExist($locator);
     }
 
-    public function testBundleResourcesOnlyFoo()
+    public function testBundleResourcesOnFooLoader()
     {
-        $this->createClient();
+        static::createClient();
 
-        $locator = $this->getLoaderLocator('bundles_only_foo');
+        $locator = $this->getFileSystemLoaderLocator('bundles_only_foo');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
         $this->assertTrue(count($roots) >= 1);
@@ -58,11 +58,11 @@ class FileSystemLocatorTest extends WebTestCase
         $this->assertFooBundleResourcesExist($locator);
     }
 
-    public function testBundleResourcesOnlyBar()
+    public function testBundleResourcesOnBarLoader()
     {
-        $this->createClient();
+        static::createClient();
 
-        $locator = $this->getLoaderLocator('bundles_only_bar');
+        $locator = $this->getFileSystemLoaderLocator('bundles_only_bar');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
         $this->assertTrue(count($roots) >= 1);
@@ -102,8 +102,6 @@ class FileSystemLocatorTest extends WebTestCase
      */
     private function assertLocatedFileContentsStartsWith(LocatorInterface $locator, $filePath, $expectedContents, $message = null)
     {
-        $fileContents = file_get_contents($locator->locate($filePath));
-
-        $this->assertStringStartsWith($expectedContents, $fileContents, $message);
+        $this->assertStringStartsWith($expectedContents, file_get_contents($locator->locate($filePath)), $message);
     }
 }

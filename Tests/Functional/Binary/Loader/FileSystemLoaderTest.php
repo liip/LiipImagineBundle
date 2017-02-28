@@ -29,9 +29,9 @@ class FileSystemLoaderTest extends WebTestCase
         return $this->getService(sprintf('liip_imagine.binary.loader.%s', $name));
     }
 
-    public function testMultipleLoadersContainIndependentLocators()
+    public function testMultipleLoadersHaveDifferentLocatorInstances()
     {
-        $this->createClient();
+        static::createClient();
 
         $fooLoader = $this->getLoader('foo');
         $barLoader = $this->getLoader('bar');
