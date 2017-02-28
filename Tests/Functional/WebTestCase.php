@@ -16,6 +16,17 @@ use Symfony\Component\HttpKernel\Kernel;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
+    public function setUp()
+    {
+        if (!class_exists('Symfony\Component\Asset\Package')) {
+            $this->markTestSkipped('The symfony/asset PHP library is not available.');
+        }
+        if (!class_exists('Symfony\Component\Translation\Translator')) {
+            $this->markTestSkipped('The symfony/translation PHP library is not installed.');
+        }
+        parent::setUp();
+    }
+
     /**
      * @return string
      */
