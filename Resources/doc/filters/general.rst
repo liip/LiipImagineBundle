@@ -68,7 +68,7 @@ Grayscale
 
 The built-in ``grayscale`` filter performs color transformations
 (which includes gray value calculations). This
-filter does not exposes any options which may be used
+filter does not expose any options which may be used
 to configure its behavior.
 
 Example configuration:
