@@ -17,7 +17,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory<extended>
  */
 class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
 {
@@ -26,17 +26,15 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
         parent::setUp();
 
         if (!class_exists('\League\Flysystem\Filesystem')) {
-            $this->markTestSkipped(
-                'The league/flysystem PHP library is not available.'
-            );
+            $this->markTestSkipped('Requires the league/flysystem package.');
         }
     }
 
     public function testImplementsResolverFactoryInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface'));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
@@ -67,7 +65,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
+        $this->assertInstanceOf('\Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.flysystem', $resolverDefinition->getParent());
 
         $this->assertEquals('http://images.example.com', $resolverDefinition->getArgument(2));

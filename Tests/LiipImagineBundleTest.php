@@ -11,12 +11,14 @@
 
 namespace Liip\ImagineBundle\Tests;
 
+use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers \Liip\ImagineBundle\LiipImagineBundle
  */
-class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
+class LiipImagineBundleTest extends AbstractTest
 {
     public function testSubClassOfBundle()
     {
@@ -30,7 +32,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createExtensionMock()));
+            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
         $containerMock
             ->expects($this->at(0))
             ->method('addCompilerPass')
@@ -47,7 +49,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createExtensionMock()));
+            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
         $containerMock
             ->expects($this->at(1))
             ->method('addCompilerPass')
@@ -64,7 +66,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createExtensionMock()));
+            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
         $containerMock
             ->expects($this->at(2))
             ->method('addCompilerPass')
@@ -81,7 +83,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createExtensionMock()));
+            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
         $containerMock
             ->expects($this->at(3))
             ->method('addCompilerPass')
@@ -98,7 +100,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createExtensionMock()));
+            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
         $containerMock
             ->expects($this->at(4))
             ->method('addCompilerPass')
@@ -110,7 +112,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddWebPathResolverFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(0))
             ->method('addResolverFactory')
@@ -129,7 +131,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddAwsS3ResolverFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(1))
             ->method('addResolverFactory')
@@ -148,7 +150,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddFlysystemResolverFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(2))
             ->method('addResolverFactory')
@@ -167,7 +169,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddStreamLoaderFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(3))
             ->method('addLoaderFactory')
@@ -186,7 +188,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddFilesystemLoaderFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(4))
             ->method('addLoaderFactory')
@@ -205,7 +207,7 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
 
     public function testAddFlysystemLoaderFactoryOnBuild()
     {
-        $extensionMock = $this->createExtensionMock();
+        $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(5))
             ->method('addLoaderFactory')
@@ -222,19 +224,23 @@ class LiipImagineBundleTest extends \Phpunit_Framework_TestCase
         $bundle->build($containerMock);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder
+     */
     protected function createContainerBuilderMock()
     {
-        return $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder', array(), array(), '', false);
+        return $this->createObjectMock('Symfony\Component\DependencyInjection\ContainerBuilder', array(), false);
     }
 
-    protected function createExtensionMock()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|LiipImagineExtension
+     */
+    protected function createLiipImagineExtensionMock()
     {
-        $methods = array(
+        return $this->createObjectMock('Liip\ImagineBundle\DependencyInjection\LiipImagineExtension', array(
             'getNamespace',
             'addResolverFactory',
             'addLoaderFactory',
-        );
-
-        return $this->getMock('Liip\ImagineBundle\DependencyInjection\LiipImagineExtension', $methods, array(), '', false);
+        ), false);
     }
 }

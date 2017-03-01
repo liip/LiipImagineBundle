@@ -12,38 +12,49 @@
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Doctrine\MongoDB\GridFSFile;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Liip\ImagineBundle\Binary\Loader\GridFSLoader;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Binary\Loader\GridFSLoader<extended>
+ * @covers \Liip\ImagineBundle\Binary\Loader\GridFSLoader<extended>
  */
-class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
+class GridFSLoaderTest extends AbstractTest
 {
     /**
-     * @var DocumentRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|DocumentRepository
      */
     private $repo;
 
     /**
-     * @var GridFSLoader
+     * @var \PHPUnit_Framework_MockObject_MockObject|GridFSLoader
      */
     private $loader;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DocumentManager
+     */
+    private $dm;
 
     public function setUp()
     {
         if (!extension_loaded('mongodb')) {
-            $this->markTestSkipped('ext/mongodb is not installed');
+            $this->markTestSkipped('Requires the mongodb extension.');
         }
-        if (!class_exists('Doctrine\MongoDB\GridFSFile')) {
-            $this->markTestSkipped('doctrine mongo odm is not installed');
+
+        if (!class_exists('\Doctrine\MongoDB\GridFSFile')) {
+            $this->markTestSkipped('Requires the Doctrine mongo ODM.');
         }
-        $this->repo = $this->getMockBuilder('Doctrine\ODM\MongoDB\DocumentRepository')->disableOriginalConstructor()->getMock();
 
-        $dm = $this->getMockBuilder('Doctrine\ODM\MongoDB\DocumentManager')->disableOriginalConstructor()->getMock();
-        $dm->expects($this->any())->method('getRepository')->with('\Foo\Bar')->will($this->returnValue($this->repo));
-
-        $this->loader = new GridFSLoader($dm, '\Foo\Bar');
+        $this->repo = $this->createObjectMock('\Doctrine\ODM\MongoDB\DocumentRepository');
+        $this->dm = $this->createObjectMock('\Doctrine\ODM\MongoDB\DocumentManager');
+        $this->dm
+            ->expects($this->any())
+            ->method('getRepository')
+            ->with('\Foo\Bar')
+            ->will($this->returnValue($this->repo));
+        $this->loader = new GridFSLoader($this->dm, '\Foo\Bar');
     }
 
     public function testFindWithValidDocument()
@@ -51,15 +62,18 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
         $image = new GridFSFile();
         $image->setBytes('01010101');
 
-        $imageDocument = $this->getMock('ImageDocument', array('getFile'));
+        $imageDocument = $this->createObjectMock('ImageDocument', array('getFile'));
         $imageDocument
             ->expects($this->any())
             ->method('getFile')
             ->with()
-            ->will($this->returnValue($image))
-        ;
+            ->will($this->returnValue($image));
 
-        $this->repo->expects($this->atLeastOnce())->method('find')->with($this->isInstanceOf('\MongoId'))->will($this->returnValue($imageDocument));
+        $this->repo
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->with($this->isInstanceOf('\MongoId'))
+            ->will($this->returnValue($imageDocument));
 
         $this->assertEquals('01010101', $this->loader->find('0123456789abcdef01234567'));
     }
@@ -69,7 +83,11 @@ class GridFSLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWithInValidDocument()
     {
-        $this->repo->expects($this->atLeastOnce())->method('find')->with($this->isInstanceOf('\MongoId'))->will($this->returnValue(null));
+        $this->repo
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->with($this->isInstanceOf('\MongoId'))
+            ->will($this->returnValue(null));
 
         $this->loader->find('0123456789abcdef01234567');
     }

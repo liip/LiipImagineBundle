@@ -17,9 +17,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for ScaleFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader
  *
  * @author Alex Wilson <a@ax.gy>
  */
@@ -51,7 +49,7 @@ class ScaleFilterLoaderTest extends AbstractTest
             self::UPSCALE_DUMMY_IMAGE_WIDTH,
             self::UPSCALE_DUMMY_IMAGE_HEIGHT
         );
-        $mockImage = parent::getMockImage();
+        $mockImage = parent::getImageInterfaceMock();
         $mockImage->method('getSize')->willReturn(new Box(
             self::UPSCALE_DUMMY_IMAGE_WIDTH,
             self::UPSCALE_DUMMY_IMAGE_HEIGHT
@@ -60,13 +58,13 @@ class ScaleFilterLoaderTest extends AbstractTest
         return $mockImage;
     }
 
-    protected function getMockImage()
+    protected function getImageInterfaceMock()
     {
         $mockImageSize = new Box(
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
         );
-        $mockImage = parent::getMockImage();
+        $mockImage = parent::getImageInterfaceMock();
         $mockImage->method('getSize')->willReturn(new Box(
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
@@ -76,12 +74,12 @@ class ScaleFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      */
     public function testItShouldPreserveRatio()
     {
         $loader = new ScaleFilterLoader();
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
             ->method('resize')
             ->with(new Box(
@@ -99,7 +97,7 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @param int[] $dimension
      * @param Box   $expected
      *
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      *
      * @dataProvider dimensionsDataProvider
      */
@@ -107,7 +105,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     {
         $loader = new ScaleFilterLoader();
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
             ->method('resize')
             ->with($expected)
@@ -121,14 +119,14 @@ class ScaleFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      *
      * @expectedException \InvalidArgumentException
      */
     public function itShouldThrowInvalidArgumentException()
     {
         $scale = new ScaleFilterLoader('foo', 'bar');
-        $scale->load($this->getMockImage(), array());
+        $scale->load($this->getImageInterfaceMock(), array());
     }
 
     /**

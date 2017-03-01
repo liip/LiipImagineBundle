@@ -23,16 +23,14 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
  */
 class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testImplementsLoaderInterface()
-    {
-        $r = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FileSystemLoader');
-
-        $this->assertTrue($r->implementsInterface('Liip\ImagineBundle\Binary\Loader\LoaderInterface'));
-    }
-
     public function testConstruction()
     {
         $this->getFileSystemLoader();
+    }
+
+    public function testImplementsLoaderInterface()
+    {
+        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Loader\LoaderInterface', $this->getFileSystemLoader());
     }
 
     /**

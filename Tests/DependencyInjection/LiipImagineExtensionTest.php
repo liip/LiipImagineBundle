@@ -39,8 +39,7 @@ class LiipImagineExtensionTest extends AbstractTest
     public function testUserLoadThrowsExceptionUnlessDriverIsValid()
     {
         $loader = new LiipImagineExtension();
-        $config = array('driver' => 'foo');
-        $loader->load(array($config), new ContainerBuilder());
+        $loader->load(array(array('driver' => 'foo')), new ContainerBuilder());
     }
 
     public function testLoadWithDefaults()
@@ -73,8 +72,22 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertEquals('value1', $variable1, sprintf('%s parameter is correct', $variable1));
     }
 
+    public static function provideFactoryData()
+    {
+        return array(
+            array(
+                'liip_imagine.mime_type_guesser',
+                array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
+            ),
+            array(
+                'liip_imagine.extension_guesser',
+                array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
+            ),
+        );
+    }
+
     /**
-     * @dataProvider factoriesProvider
+     * @dataProvider provideFactoryData
      */
     public function testFactoriesConfiguration($service, $factory)
     {
@@ -89,10 +102,11 @@ class LiipImagineExtensionTest extends AbstractTest
     }
 
     /**
-     * @legacy
-     * @dataProvider factoriesProvider
+     * @group legacy
+     *
+     * @dataProvider provideFactoryData
      */
-    public function testLegacyFactoriesConfiguration($service, $factory)
+    public function testFactoriesConfigurationLegacy($service, $factory)
     {
         if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
             $this->markTestSkipped('No need to test on symfony >= 2.6');
@@ -105,20 +119,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertEquals($factory[1], $definition->getFactoryMethod());
     }
 
-    public function factoriesProvider()
-    {
-        return array(
-            array(
-              'liip_imagine.mime_type_guesser',
-              array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
-            ),
-            array(
-              'liip_imagine.extension_guesser',
-              array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
-            ),
-        );
-    }
-
     protected function createEmptyConfiguration()
     {
         $this->containerBuilder = new ContainerBuilder();
@@ -126,6 +126,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
         $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load(array(array()), $this->containerBuilder);
+
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
 
@@ -136,6 +137,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
         $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load(array($this->getFullConfig()), $this->containerBuilder);
+
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
 

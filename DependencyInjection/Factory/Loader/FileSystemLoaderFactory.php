@@ -86,7 +86,6 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
             ->end();
     }
 
-
     /*
      * @param string[]         $staticPaths
      * @param array            $config

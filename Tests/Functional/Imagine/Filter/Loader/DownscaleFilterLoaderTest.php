@@ -11,15 +11,20 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
-class DownscaleFilterLoaderTest extends WebTestCase
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader
+ */
+class DownscaleFilterLoaderTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.filter.loader.downscale');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader',
+            self::$kernel->getContainer()->get('liip_imagine.filter.loader.downscale')
+        );
     }
 }

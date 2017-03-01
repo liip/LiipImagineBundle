@@ -19,9 +19,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for GrayscaleFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
  *
  * @author Gregoire Humeau <gregoire.humeau@gmail.com>
  */

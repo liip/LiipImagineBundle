@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Filter\FilterConfiguration
+ * @covers \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration
  */
 class FilterConfigurationTest extends AbstractTest
 {
@@ -54,11 +54,13 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertEquals(array('barConfig'), $filters['bar']);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Could not find configuration for a filter: thumbnail
+     */
     public function testGetUndefinedFilter()
     {
         $filterConfiguration = new FilterConfiguration();
-
-        $this->setExpectedException('RuntimeException', 'Could not find configuration for a filter: thumbnail');
         $filterConfiguration->get('thumbnail');
     }
 

@@ -11,9 +11,22 @@
 
 namespace Liip\ImagineBundle\Tests;
 
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
+use Imagine\Image\Metadata\MetadataBag;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -23,33 +36,44 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystem;
 
-    protected $fixturesDir;
-    protected $tempDir;
+    /**
+     * @var string
+     */
+    protected $fixturesPath;
+
+    /**
+     * @var string
+     */
+    protected $temporaryPath;
 
     protected function setUp()
     {
-        $this->fixturesDir = __DIR__.'/Fixtures';
-
-        $this->tempDir = str_replace('/', DIRECTORY_SEPARATOR, sys_get_temp_dir().'/liip_imagine_test');
-
+        $this->fixturesPath = realpath(__DIR__.DIRECTORY_SEPARATOR.'Fixtures');
+        $this->temporaryPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'liip_imagine_test';
         $this->filesystem = new Filesystem();
 
-        if ($this->filesystem->exists($this->tempDir)) {
-            $this->filesystem->remove($this->tempDir);
+        if ($this->filesystem->exists($this->temporaryPath)) {
+            $this->filesystem->remove($this->temporaryPath);
         }
 
-        $this->filesystem->mkdir($this->tempDir);
+        $this->filesystem->mkdir($this->temporaryPath);
     }
 
+    /**
+     * @return string[]
+     */
     public function invalidPathProvider()
     {
         return array(
-            array($this->fixturesDir.'/assets/../../foobar.png'),
-            array($this->fixturesDir.'/assets/some_folder/../foobar.png'),
+            array($this->fixturesPath.'/assets/../../foobar.png'),
+            array($this->fixturesPath.'/assets/some_folder/../foobar.png'),
             array('../../outside/foobar.jpg'),
         );
     }
 
+    /**
+     * @return FilterConfiguration
+     */
     protected function createFilterConfiguration()
     {
         $config = new FilterConfiguration();
@@ -61,9 +85,20 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
         return $config;
     }
 
-    protected function getMockCacheManager()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
+     */
+    protected function createCacheManagerMock()
     {
-        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Cache\CacheManager')->getMock();
+        return $this
+            ->getMockBuilder('\Liip\ImagineBundle\Imagine\Cache\CacheManager')
+            ->setConstructorArgs(array(
+                $this->createFilterConfiguration(),
+                $this->createRouterInterfaceMock(),
+                $this->createSignerInterfaceMock(),
+                $this->createEventDispatcherInterfaceMock(),
+            ))
+            ->getMock();
     }
 
     /**
@@ -71,43 +106,148 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFilterConfigurationMock()
     {
-        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Filter\FilterConfiguration')->getMock();
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\FilterConfiguration');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|SignerInterface
+     */
+    protected function createSignerInterfaceMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Cache\SignerInterface');
     }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|RouterInterface
      */
-    protected function createRouterMock()
+    protected function createRouterInterfaceMock()
     {
-        return $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        return $this->createObjectMock('\Symfony\Component\Routing\RouterInterface');
     }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
      */
-    protected function createResolverMock()
+    protected function createCacheResolverInterfaceMock()
     {
-        return $this->getMockBuilder('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface')->getMock();
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
     }
 
-    protected function createEventDispatcherMock()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     */
+    protected function createEventDispatcherInterfaceMock()
     {
-        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        return $this->createObjectMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 
-    protected function getMockImage()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ImageInterface
+     */
+    protected function getImageInterfaceMock()
     {
-        return $this->getMockBuilder('Imagine\Image\ImageInterface')->getMock();
+        return $this->createObjectMock('\Imagine\Image\ImageInterface');
     }
 
-    protected function getMockMetaData()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|MetadataBag
+     */
+    protected function getMetadataBagMock()
     {
-        return $this->getMockBuilder('Imagine\Image\Metadata\MetadataBag')->getMock();
+        return $this->createObjectMock('\Imagine\Image\Metadata\MetadataBag');
     }
 
-    protected function createImagineMock()
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ImagineInterface
+     */
+    protected function createImagineInterfaceMock()
     {
-        return $this->getMockBuilder('Imagine\Image\ImagineInterface')->getMock();
+        return $this->createObjectMock('\Imagine\Image\ImagineInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     */
+    protected function createLoggerInterfaceMock()
+    {
+        return $this->createObjectMock('\Psr\Log\LoggerInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
+     */
+    protected function createBinaryLoaderInterfaceMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Binary\Loader\LoaderInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|MimeTypeGuesserInterface
+     */
+    protected function createMimeTypeGuesserInterfaceMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionGuesserInterface
+     */
+    protected function createExtensionGuesserInterfaceMock()
+    {
+        return $this->createObjectMock('\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|PostProcessorInterface
+     */
+    protected function createPostProcessorInterfaceMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     */
+    protected function createFilterManagerMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|DataManager
+     */
+    protected function createDataManagerMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Data\DataManager', array(), false);
+    }
+
+    /**
+     * @param string   $object
+     * @param string[] $methods
+     * @param bool     $constructorInvoke
+     * @param mixed[]  $constructorParams
+     * 
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createObjectMock($object, array $methods = array(), $constructorInvoke = false, array $constructorParams = array())
+    {
+        $builder = $this->getMockBuilder($object);
+
+        if (count($methods) > 0) {
+            $builder->setMethods($methods);
+        }
+
+        if ($constructorInvoke) {
+            $builder->enableOriginalConstructor();
+        } else {
+            $builder->disableOriginalConstructor();
+        }
+
+        if (count($constructorParams) > 0) {
+            $builder->setConstructorArgs($constructorParams);
+        }
+
+        return $builder->getMock();
     }
 
     /**
@@ -132,8 +272,8 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
             return;
         }
 
-        if ($this->filesystem->exists($this->tempDir)) {
-            $this->filesystem->remove($this->tempDir);
+        if ($this->filesystem->exists($this->temporaryPath)) {
+            $this->filesystem->remove($this->temporaryPath);
         }
     }
 }

@@ -11,10 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-abstract class WebTestCase extends BaseWebTestCase
+abstract class AbstractWebTestCase extends WebTestCase
 {
     /**
      * @return string

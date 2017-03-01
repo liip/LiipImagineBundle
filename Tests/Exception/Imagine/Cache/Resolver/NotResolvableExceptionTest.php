@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Tests\Exception\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 
 /**
- * @covers Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
+ * @covers \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
  */
 class NotResolvableExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +29,6 @@ class NotResolvableExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $e = new NotResolvableException();
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Exception\ExceptionInterface', $e);
+        $this->assertInstanceOf('\Liip\ImagineBundle\Exception\ExceptionInterface', $e);
     }
 }

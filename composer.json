@@ -30,11 +30,11 @@
         "symfony/translation": "~2.3|~3.0"
     },
     "require-dev": {
+        "ext-gd": "*",
         "amazonwebservices/aws-sdk-for-php": "~1.0",
         "aws/aws-sdk-php": "~2.4",
         "doctrine/cache": "~1.1",
         "doctrine/orm": "~2.3",
-        "ext-gd": "*",
         "friendsofphp/php-cs-fixer": "~2.0",
         "phpunit/phpunit": "~4.3|~5.0",
         "psr/log": "~1.0",
@@ -50,16 +50,16 @@
         "twig/twig": "~1.12|~2.0"
     },
     "suggest": {
-        "alcaeus/mongo-php-adapter": "required on PHP >= 7.0 to use mongo components with mongodb extension",
-        "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
-        "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
-        "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
         "ext-exif": "required to read EXIF metadata from images",
         "ext-gd": "required to use gd driver",
         "ext-gmagick": "required to use gmagick driver",
         "ext-imagick": "required to use imagick driver",
         "ext-mongo": "required for mongodb components on PHP <7.0",
         "ext-mongodb": "required for mongodb components on PHP >=7.0",
+        "alcaeus/mongo-php-adapter": "required on PHP >= 7.0 to use mongo components with mongodb extension",
+        "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
+        "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
+        "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
         "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"

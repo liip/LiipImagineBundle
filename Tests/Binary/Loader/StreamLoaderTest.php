@@ -15,54 +15,46 @@ use Liip\ImagineBundle\Binary\Loader\StreamLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Binary\Loader\StreamLoader<extended>
+ * @covers \Liip\ImagineBundle\Binary\Loader\StreamLoader<extended>
  */
 class StreamLoaderTest extends AbstractTest
 {
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     * @expectedExceptionMessageRegExp {Source image file://.+ not found.}
+     */
     public function testThrowsIfInvalidPathGivenOnFind()
     {
         $loader = new StreamLoader('file://');
-
-        $path = $this->tempDir.'/invalid.jpeg';
-
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            'Source image file://'.$path.' not found.'
-        );
-
-        $loader->find($path);
+        $loader->find($this->temporaryPath.'/invalid.jpeg');
     }
 
     public function testReturnImageContentOnFind()
     {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
-
         $loader = new StreamLoader('file://');
 
         $this->assertSame(
-            $expectedContent,
-            $loader->find($this->fixturesDir.'/assets/cats.jpeg')
+            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
+            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
     public function testReturnImageContentWhenStreamContextProvidedOnFind()
     {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
-
-        $context = stream_context_create();
-
-        $loader = new StreamLoader('file://', $context);
+        $loader = new StreamLoader('file://', stream_context_create());
 
         $this->assertSame(
-            $expectedContent,
-            $loader->find($this->fixturesDir.'/assets/cats.jpeg')
+            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
+            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage The given context is no valid resource
+     */
     public function testThrowsIfInvalidResourceGivenInConstructor()
     {
-        $this->setExpectedException('InvalidArgumentException', 'The given context is no valid resource.');
-
-        new StreamLoader('not valid resource', true);
+        new StreamLoader('an-invalid-resource-name', true);
     }
 }

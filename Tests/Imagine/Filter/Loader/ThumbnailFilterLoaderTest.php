@@ -16,9 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for ThumbnailFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader
  *
  * @author Alex Wilson <a@ax.gy>
  */
@@ -39,7 +37,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
      * @param int $height
      * @param Box $expected
      *
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader::load
      *
      * @dataProvider heightWidthProvider
      */
@@ -51,7 +49,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
         );
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image->method('getSize')->willReturn($mockImageSize);
         $image->method('copy')->willReturn($image);
         $image->expects($this->once())

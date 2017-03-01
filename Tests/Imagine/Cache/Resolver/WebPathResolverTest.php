@@ -17,17 +17,23 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
  */
 class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Filesystem */
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $basePath;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $existingFile;
 
     public function setUp()
@@ -46,9 +52,9 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsResolverInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
     }
 
     public function testCouldBeConstructedWithRequiredArguments()
@@ -287,8 +293,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('dumpFile')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPath', 'theContent')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath', 'theContent');
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -305,8 +310,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $filesystemMock = $this->createFilesystemMock();
         $filesystemMock
             ->expects($this->never())
-            ->method('remove')
-        ;
+            ->method('remove');
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -324,8 +328,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPath')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPath');
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -343,13 +346,11 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $filesystemMock
             ->expects($this->at(0))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPathOne')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPathOne');
         $filesystemMock
             ->expects($this->at(1))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPathTwo')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilter/aPathTwo');
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -367,23 +368,19 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $filesystemMock
             ->expects($this->at(0))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathOne')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathOne');
         $filesystemMock
             ->expects($this->at(1))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathOne')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathOne');
         $filesystemMock
             ->expects($this->at(2))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathTwo')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathTwo');
         $filesystemMock
             ->expects($this->at(3))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathTwo')
-        ;
+            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathTwo');
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -406,8 +403,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
             ->method('remove')
             ->with(array(
                 '/aWebRoot/aCachePrefix/aFilter',
-            ))
-        ;
+            ));
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -428,8 +424,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
             ->with(array(
                 '/aWebRoot/aCachePrefix/aFilterOne',
                 '/aWebRoot/aCachePrefix/aFilterTwo',
-            ))
-        ;
+            ));
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -482,6 +477,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFilesystemMock()
     {
-        return $this->getMock('Symfony\Component\Filesystem\Filesystem');
+        return $this->getMockBuilder('\Symfony\Component\Filesystem\Filesystem')->getMock();
     }
 }

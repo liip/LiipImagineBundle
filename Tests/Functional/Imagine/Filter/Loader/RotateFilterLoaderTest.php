@@ -11,20 +11,22 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Functional test cases for RotateFilterLoader class.
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader
  *
  * @author Bocharsky Victor <bocharsky.bw@gmail.com>
  */
-class RotateFilterLoaderTest extends WebTestCase
+class RotateFilterLoaderTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.filter.loader.rotate');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader',
+            self::$kernel->getContainer()->get('liip_imagine.filter.loader.rotate')
+        );
     }
 }

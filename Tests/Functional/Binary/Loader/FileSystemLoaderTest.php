@@ -12,12 +12,12 @@
 namespace Liip\ImagineBundle\Tests\Functional\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
  */
-class FileSystemLoaderTest extends WebTestCase
+class FileSystemLoaderTest extends AbstractWebTestCase
 {
     /**
      * @param string $name
