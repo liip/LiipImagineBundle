@@ -36,7 +36,7 @@
         "doctrine/orm": "~2.3",
         "ext-gd": "*",
         "friendsofphp/php-cs-fixer": "~2.0",
-        "phpunit/phpunit": "~4.3",
+        "phpunit/phpunit": "~4.3|~5.0",
         "psr/log": "~1.0",
         "satooshi/php-coveralls": "~1.0",
         "sllh/php-cs-fixer-styleci-bridge": "~2.1",

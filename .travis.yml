@@ -1,5 +1,7 @@
 ---
 
+sudo: false
+
 language: php
 
 php:
@@ -11,14 +13,14 @@ php:
   - 7.1
   - hhvm
 
-sudo: false
-
 cache:
   directories:
     - $HOME/.composer/cache/files
 
 env:
-  - SYMFONY_VERSION=2.8.x
+  global:
+    - SYMFONY_VERSION=2.8.x
+    - SYMFONY_DEPRECATIONS_HELPER=weak
 
 matrix:
   include:
@@ -58,7 +60,7 @@ install:
   - travis_retry composer update $COMPOSER_FLAGS
 
 script:
-  - SYMFONY_DEPRECATIONS_HELPER=weak ./bin/phpunit -vvv
+  - bin/simple-phpunit -vvv || bin/phpunit -vvv
 
 after_script:
   - if [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then bin/coveralls -vvv; fi;
