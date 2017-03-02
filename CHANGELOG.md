@@ -1,10 +1,20 @@
 # Change Log
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-xx-xx)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...HEAD)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.3...HEAD)
 
-## [1.7.2](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-02-07)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...1.7.1)
+## [1.7.3](https://github.com/liip/LiipImagineBundle/tree/1.7.3) (2017-03-01)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...1.7.3)
+
+- [Tests] Support PHPUnit 5.x (and remove depredations) [\#887](https://github.com/liip/LiipImagineBundle/pull/887) ([robfrawley](https://github.com/robfrawley))
+- [Tests] Assert expected deprecation using symfony/phpunit-bridge [\#886](https://github.com/liip/LiipImagineBundle/pull/886) ([robfrawley](https://github.com/robfrawley))
+- \[Minor\] \[Docs\] Fix typo in general filters documentation [\#888](https://github.com/liip/LiipImagineBundle/pull/888) ([svenluijten](https://github.com/svenluijten))
+- \[Loader\] Add bundle resources to safe path when requested [\#883](https://github.com/liip/LiipImagineBundle/pull/883) ([bobvandevijver](https://github.com/bobvandevijver), [robfrawley](https://github.com/robfrawley))
+- \[Tests\] Enable mongo unit tests on PHP7 using "mongo" => "mongodb" extension adapter [\#882](https://github.com/liip/LiipImagineBundle/pull/882) ([robfrawley](https://github.com/robfrawley))
+- \[Loader\] \[Locator\] FileSystemLocator service must not be shared [\#875](https://github.com/liip/LiipImagineBundle/pull/875) ([robfrawley](https://github.com/liip/LiipImagineBundle/pull/875))
+
+## [1.7.2](https://github.com/liip/LiipImagineBundle/tree/1.7.2) (2017-02-07)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.1...1.7.2)
 
 - \[Loader\] Abstract filesystem resource locator and legacy insecure locator implementation [\#866](https://github.com/liip/LiipImagineBundle/pull/866) ([robfrawley](https://github.com/robfrawley))
 - \[Minor\] \[Loader\] Fix for FileSystemLoader annotation [\#868](https://github.com/liip/LiipImagineBundle/pull/868) ([tgabi333](https://github.com/tgabi333))
