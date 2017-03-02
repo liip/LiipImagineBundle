@@ -116,7 +116,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.client'));
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertEquals('\Aws\S3\S3Client', $clientDefinition->getClass());
+        $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getClass());
         $this->assertEquals(array('theClientConfigKey' => 'theClientConfigVal'), $clientDefinition->getArgument(0));
     }
 
@@ -142,7 +142,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         ));
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertEquals(array('\Aws\S3\S3Client', 'factory'), $clientDefinition->getFactory());
+        $this->assertEquals(array('Aws\S3\S3Client', 'factory'), $clientDefinition->getFactory());
     }
 
     /**
@@ -170,7 +170,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         ));
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertEquals('\Aws\S3\S3Client', $clientDefinition->getFactoryClass());
+        $this->assertEquals('Aws\S3\S3Client', $clientDefinition->getFactoryClass());
         $this->assertEquals('factory', $clientDefinition->getFactoryMethod());
     }
 
