@@ -3,7 +3,7 @@
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-xx-xx)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.4...HEAD)
 
-## [1.7.3](https://github.com/liip/LiipImagineBundle/tree/1.7.3) (2017-03-01)
+## [1.7.4](https://github.com/liip/LiipImagineBundle/tree/1.7.4) (2017-03-01)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.3...1.7.4)
 
 - \[Bug\] Revert adding leading slash to S3 class names [\#893](https://github.com/liip/LiipImagineBundle/pull/893) ([cedricziel](https://github.com/cedricziel))
