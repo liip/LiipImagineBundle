@@ -1,5 +1,75 @@
 # Upgrade
 
+## 1.7.3
+
+  - __[Data Loader]__ The `FileSystemLoader` now allows you to assign keys to data roots, and directly reference them when
+  requesting resources.
+
+    ```yml
+
+      # provide index for data roots
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              data_root:
+                foo: /path/to/foo
+                bar: /path/to/bar
+
+    ```
+
+    Assume you have a file name `file.ext` in both data root paths. Given the above configuration, you can specifically
+    request the file from the `/path/to/foo` root using the following file syntax: `@foo:file.ext`. Similarly, you can
+    request the same file from `/path/to/bar` using `@bar:file.ext`. Note, that the auto-registered bundles (detailed below)
+    are given indexes of their short bundle name (for example, given the bundle `FooBundle`, you can request a file from
+    its public resources path via `@FooBundle:path/to/file.ext`).
+
+  - __[Data Loader]__ The `FileSystemLoader` now supports automatically registering the `Resources/public` folders within
+  all loaded bundles. This can be enabled via the following configuration.
+
+    ```yml
+
+      # enable bundle auto-registration
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              bundle_resources:
+                enabled: true
+
+    ```
+
+    Additionally, you can whitelist or blacklist specific bundles from the auto-registration routine.
+
+    ```yml
+
+      # blacklist "FooBundle" from auto-registration
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              bundle_resources:
+                enabled: true
+                access_control_type: blacklist
+                access_control_list
+                  - FooBundle
+
+      # whitelist "BarBundle" from auto-registration
+      liip_imagine:
+        loaders:
+          default:
+            filesystem:
+              bundle_resources:
+                enabled: true
+                access_control_type: whitelist
+                access_control_list
+                  - BarBundle
+
+    ```
+
+  - __[Data Locator]__ The `*Locator` services passed to `FileSystemLoader` are now marked as "non-shared" or "prototype"
+  within the DI container, resulting in new instances being passed every time the services are requested.
+
 ## 1.7.2
 
   - __[Data Loader]__ The `FileSystemLoader`'s resource locator has been abstracted out into `FileSystemLocator`
