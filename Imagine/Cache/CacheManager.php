@@ -103,7 +103,7 @@ class CacheManager
      *
      * @return ResolverInterface
      */
-    protected function getResolver($filter, $resolver)
+    public function getResolver($filter, $resolver)
     {
         // BC
         if (false == $resolver) {
