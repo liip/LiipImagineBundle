@@ -122,7 +122,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
      */
     public function process(BinaryInterface $binary)
     {
-        return $this->processWithConfiguration($binary, array());
+        return $this->processWithConfiguration($binary, []);
     }
 
     /**
@@ -138,7 +138,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/jpeg', 'image/jpg'))) {
+        if (!in_array($type, ['image/jpeg', 'image/jpg'])) {
             return $binary;
         }
 
@@ -147,7 +147,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
-        $pb = new ProcessBuilder(array($this->jpegoptimBin));
+        $pb = new ProcessBuilder([$this->jpegoptimBin]);
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {

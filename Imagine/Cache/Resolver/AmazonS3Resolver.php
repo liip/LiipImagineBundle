@@ -50,7 +50,7 @@ class AmazonS3Resolver implements ResolverInterface
      * @param string    $acl           The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array     $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3
      */
-    public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = array())
+    public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
@@ -89,19 +89,19 @@ class AmazonS3Resolver implements ResolverInterface
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
-        $storageResponse = $this->storage->create_object($this->bucket, $objectPath, array(
+        $storageResponse = $this->storage->create_object($this->bucket, $objectPath, [
             'body' => $binary->getContent(),
             'contentType' => $binary->getMimeType(),
             'length' => strlen($binary->getContent()),
             'acl' => $this->acl,
-        ));
+        ]);
 
         if (!$storageResponse->isOK()) {
-            $this->logError('The object could not be created on Amazon S3.', array(
+            $this->logError('The object could not be created on Amazon S3.', [
                 'objectPath' => $objectPath,
                 'filter' => $filter,
                 's3_response' => $storageResponse,
-            ));
+            ]);
 
             throw new NotStorableException('The object could not be created on Amazon S3.');
         }
@@ -118,10 +118,10 @@ class AmazonS3Resolver implements ResolverInterface
 
         if (empty($paths)) {
             if (!$this->storage->delete_all_objects($this->bucket, sprintf('/%s/i', implode('|', $filters)))) {
-                $this->logError('The objects could not be deleted from Amazon S3.', array(
+                $this->logError('The objects could not be deleted from Amazon S3.', [
                     'filters' => implode(', ', $filters),
                     'bucket' => $this->bucket,
-                ));
+                ]);
             }
 
             return;
@@ -135,11 +135,11 @@ class AmazonS3Resolver implements ResolverInterface
                 }
 
                 if (!$this->storage->delete_object($this->bucket, $objectPath)->isOK()) {
-                    $this->logError('The objects could not be deleted from Amazon S3.', array(
+                    $this->logError('The objects could not be deleted from Amazon S3.', [
                         'filter' => $filter,
                         'bucket' => $this->bucket,
                         'path' => $path,
-                    ));
+                    ]);
                 }
             }
         }
@@ -205,7 +205,7 @@ class AmazonS3Resolver implements ResolverInterface
      * @param mixed $message
      * @param array $context
      */
-    protected function logError($message, array $context = array())
+    protected function logError($message, array $context = [])
     {
         if ($this->logger) {
             $this->logger->error($message, $context);

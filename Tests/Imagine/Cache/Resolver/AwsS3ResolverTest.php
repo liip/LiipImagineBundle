@@ -11,8 +11,10 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
+use Aws\S3\S3Client;
 use Guzzle\Service\Resource\Model;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -23,9 +25,9 @@ class AwsS3ResolverTest extends AbstractTest
 {
     public function testImplementsResolverInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver');
+        $rc = new \ReflectionClass(AwsS3Resolver::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+        $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
     public function testNoDoubleSlashesInObjectUrlOnResolve()
@@ -377,7 +379,7 @@ class AwsS3ResolverTest extends AbstractTest
      */
     protected function getS3ResponseMock()
     {
-        return $this->createObjectMock('Guzzle\Service\Resource\Model');
+        return $this->createObjectMock(Model::class);
     }
 
     /**
@@ -386,7 +388,7 @@ class AwsS3ResolverTest extends AbstractTest
     protected function getS3ClientMock()
     {
         return $this
-            ->getMockBuilder('Aws\S3\S3Client')
+            ->getMockBuilder(S3Client::class)
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'deleteObject',

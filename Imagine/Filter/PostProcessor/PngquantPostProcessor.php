@@ -67,7 +67,7 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
      */
     public function process(BinaryInterface $binary)
     {
-        return $this->processWithConfiguration($binary, array());
+        return $this->processWithConfiguration($binary, []);
     }
 
     /**
@@ -81,11 +81,11 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/png'))) {
+        if (!in_array($type, ['image/png'])) {
             return $binary;
         }
 
-        $pb = new ProcessBuilder(array($this->pngquantBin));
+        $pb = new ProcessBuilder([$this->pngquantBin]);
 
         // Specify quality.
         $tranformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
@@ -100,7 +100,7 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
         $proc->run();
 
         // 98 and 99 are "quality too low" to compress current current image which, while isn't ideal, is not a failure
-        if (!in_array($proc->getExitCode(), array(0, 98, 99))) {
+        if (!in_array($proc->getExitCode(), [0, 98, 99])) {
             throw new ProcessFailedException($proc);
         }
 

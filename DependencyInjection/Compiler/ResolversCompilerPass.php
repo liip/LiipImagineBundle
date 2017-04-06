@@ -27,8 +27,8 @@ class ResolversCompilerPass extends AbstractCompilerPass
             $manager = $container->getDefinition('liip_imagine.cache.manager');
 
             foreach ($tags as $id => $tag) {
-                $manager->addMethodCall('addResolver', array($tag[0]['resolver'], new Reference($id)));
-                $this->log($container, 'Registered imagine-bimdle cache resolver: %s', array($id));
+                $manager->addMethodCall('addResolver', [$tag[0]['resolver'], new Reference($id)]);
+                $this->log($container, 'Registered imagine-bimdle cache resolver: %s', [$id]);
             }
         }
     }

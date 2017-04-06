@@ -11,10 +11,12 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
@@ -23,9 +25,9 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory');
+        $rc = new \ReflectionClass(StreamLoaderFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
@@ -54,7 +56,7 @@ class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
+        $this->assertInstanceOf(DefinitionDecorator::class, $loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.stream', $loaderDefinition->getParent());
 
         $this->assertEquals('theWrapper', $loaderDefinition->getArgument(0));

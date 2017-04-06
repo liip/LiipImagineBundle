@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
 
@@ -32,11 +33,11 @@ class AbstractDoctrineLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->om = $this
-            ->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->getMockBuilder(ObjectManager::class)
             ->getMock();
 
         $this->loader = $this
-            ->getMockBuilder('\Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader')
+            ->getMockBuilder(AbstractDoctrineLoader::class)
             ->setConstructorArgs(array($this->om))
             ->getMockForAbstractClass();
     }

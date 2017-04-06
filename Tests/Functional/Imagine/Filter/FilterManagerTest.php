@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter;
 
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -23,7 +24,7 @@ class FilterManagerTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Filter\FilterManager',
+            FilterManager::class,
             self::$kernel->getContainer()->get('liip_imagine.filter.manager')
         );
     }

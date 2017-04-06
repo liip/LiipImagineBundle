@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Functional\Binary;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 class ExtensionGuesserTest extends AbstractWebTestCase
 {
@@ -20,7 +21,7 @@ class ExtensionGuesserTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser',
+            ExtensionGuesser::class,
             self::$kernel->getContainer()->get('liip_imagine.extension_guesser')
         );
     }

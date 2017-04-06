@@ -14,10 +14,9 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AwsS3ResolverFactory implements ResolverFactoryInterface
+class AwsS3ResolverFactory extends AbstractResolverFactory
 {
     /**
      * {@inheritdoc}
@@ -26,27 +25,22 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
     {
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
         $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
-        if (method_exists($awsS3ClientDefinition, 'setFactory')) {
-            $awsS3ClientDefinition->setFactory(array('Aws\S3\S3Client', 'factory'));
-        } else {
-            // to be removed when dependency on Symfony DependencyInjection is bumped to 2.6
-            $awsS3ClientDefinition->setFactoryClass('Aws\S3\S3Client');
-            $awsS3ClientDefinition->setFactoryMethod('factory');
-        }
+        $awsS3ClientDefinition->setFactory(['Aws\S3\S3Client', 'factory']);
         $awsS3ClientDefinition->addArgument($config['client_config']);
         $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
 
-        $resolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.aws_s3');
+        $resolverDefinition = $this->getChildResolverDefinition();
         $resolverDefinition->replaceArgument(0, new Reference($awsS3ClientId));
         $resolverDefinition->replaceArgument(1, $config['bucket']);
         $resolverDefinition->replaceArgument(2, $config['acl']);
-        $resolverDefinition->replaceArgument(3, array_replace($config['url_options'], $config['get_options']));
+        $resolverDefinition->replaceArgument(3, $config['get_options']);
         $resolverDefinition->replaceArgument(4, $config['put_options']);
+
         $resolverId = 'liip_imagine.cache.resolver.'.$resolverName;
         $container->setDefinition($resolverId, $resolverDefinition);
 
         if (isset($config['cache_prefix'])) {
-            $resolverDefinition->addMethodCall('setCachePrefix', array($config['cache_prefix']));
+            $resolverDefinition->addMethodCall('setCachePrefix', [$config['cache_prefix']]);
         }
 
         if ($config['proxies']) {
@@ -54,7 +48,7 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
 
             $container->setDefinition($proxiedResolverId, $resolverDefinition);
 
-            $proxyResolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.proxy');
+            $proxyResolverDefinition = $this->getChildResolverDefinition('proxy');
             $proxyResolverDefinition->replaceArgument(0, new Reference($proxiedResolverId));
             $proxyResolverDefinition->replaceArgument(1, $config['proxies']);
 
@@ -66,16 +60,16 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
 
             $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
-            $cacheResolverDefinition = new DefinitionDecorator('liip_imagine.cache.resolver.prototype.cache');
+            $cacheResolverDefinition = $this->getChildResolverDefinition('cache');
             $cacheResolverDefinition->replaceArgument(0, new Reference($config['cache']));
             $cacheResolverDefinition->replaceArgument(1, new Reference($cachedResolverId));
 
             $container->setDefinition($resolverId, $cacheResolverDefinition);
         }
 
-        $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', array(
+        $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', [
             'resolver' => $resolverName,
-        ));
+        ]);
 
         return $resolverId;
     }
@@ -95,35 +89,42 @@ class AwsS3ResolverFactory implements ResolverFactoryInterface
     {
         $builder
             ->children()
-                ->scalarNode('bucket')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('cache')->defaultValue(false)->end()
-                ->scalarNode('acl')->defaultValue('public-read')->cannotBeEmpty()->end()
-                ->scalarNode('cache_prefix')->defaultValue(null)->end()
+                ->scalarNode('bucket')
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('cache')
+                    ->defaultValue(false)
+                ->end()
+                ->scalarNode('acl')
+                    ->defaultValue('public-read')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('cache_prefix')
+                    ->defaultValue(null)
+                ->end()
                 ->arrayNode('client_config')
                     ->isRequired()
                     ->prototype('variable')
-                        ->treatNullLike(array())
+                        ->treatNullLike([])
                     ->end()
-                ->end()
-                /* @deprecated Use `get_options` instead */
-                ->arrayNode('url_options')
-                    ->useAttributeAsKey('key')
-                    ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('get_options')
                     ->useAttributeAsKey('key')
-                    ->prototype('scalar')->end()
+                        ->prototype('scalar')
+                    ->end()
                 ->end()
                 ->arrayNode('put_options')
                     ->useAttributeAsKey('key')
-                    ->prototype('scalar')->end()
+                        ->prototype('scalar')
+                    ->end()
                 ->end()
                 ->arrayNode('proxies')
-                    ->defaultValue(array())
+                    ->defaultValue([])
                     ->useAttributeAsKey('name')
-                    ->prototype('scalar')->end()
+                        ->prototype('scalar')
+                    ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 }

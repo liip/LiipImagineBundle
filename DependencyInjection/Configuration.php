@@ -76,7 +76,7 @@ class Configuration implements ConfigurationInterface
                 })
                 ->then(function ($v) {
                     if (empty($v['loaders'])) {
-                        $v['loaders'] = array();
+                        $v['loaders'] = [];
                     }
 
                     if (false == is_array($v['loaders'])) {
@@ -84,11 +84,11 @@ class Configuration implements ConfigurationInterface
                     }
 
                     if (false == array_key_exists('default', $v['loaders'])) {
-                        $v['loaders']['default'] = array('filesystem' => null);
+                        $v['loaders']['default'] = ['filesystem' => null];
                     }
 
                     if (empty($v['resolvers'])) {
-                        $v['resolvers'] = array();
+                        $v['resolvers'] = [];
                     }
 
                     if (false == is_array($v['resolvers'])) {
@@ -96,7 +96,7 @@ class Configuration implements ConfigurationInterface
                     }
 
                     if (false == array_key_exists('default', $v['resolvers'])) {
-                        $v['resolvers']['default'] = array('web_path' => null);
+                        $v['resolvers']['default'] = ['web_path' => null];
                     }
 
                     return $v;
@@ -110,7 +110,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !in_array($v, array('gd', 'imagick', 'gmagick'));
+                            return !in_array($v, ['gd', 'imagick', 'gmagick']);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
@@ -148,7 +148,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode('post_processors')
-                                ->defaultValue(array())
+                                ->defaultValue([])
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
                                     ->useAttributeAsKey('name')
@@ -166,24 +166,27 @@ class Configuration implements ConfigurationInterface
     /**
      * @param ArrayNodeDefinition $resolversPrototypeNode
      */
-    protected function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
+    private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
-        foreach ($this->resolversFactories as $factory) {
-            $factory->addConfiguration(
-                $resolversPrototypeNode->children()->arrayNode($factory->getName())
-            );
-        }
+        $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode);
     }
 
     /**
      * @param ArrayNodeDefinition $resolversPrototypeNode
      */
-    protected function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
+    private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
-        foreach ($this->loadersFactories as $factory) {
-            $factory->addConfiguration(
-                $resolversPrototypeNode->children()->arrayNode($factory->getName())
-            );
+        $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode);
+    }
+
+    /**
+     * @param array               $factories
+     * @param ArrayNodeDefinition $definition
+     */
+    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition)
+    {
+        foreach ($factories as $f) {
+            $f->addConfiguration($definition->children()->arrayNode($f->getName()));
         }
     }
 }

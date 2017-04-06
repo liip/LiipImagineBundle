@@ -45,7 +45,7 @@ by creating a class that implements the following interface:
 
     interface LoaderInterface
     {
-        public function load(ImageInterface $image, array $options = array());
+        public function load(ImageInterface $image, array $options = []);
     }
 
 As defined in ``LoaderInterface``, the only required method is one named ``load``,
@@ -70,7 +70,7 @@ the implementation for the ``load`` method to create a valid filter.
          *
          * @return ImageInterface
          */
-        public function load(ImageInterface $image, array $options = array())
+        public function load(ImageInterface $image, array $options = [])
         {
             /** @todo: implement */
         }
@@ -139,13 +139,13 @@ A simple example showing how to change the filter configuration dynamically.
         if (!$this->cacheManager->isStored($path, $filter)) {
             $binary = $this->dataManager->find($filter, $path);
 
-            $filteredBinary = $this->filterManager->applyFilter($binary, $filter, array(
-                'filters' => array(
-                    'thumbnail' => array(
-                        'size' => array(300, 100)
-                    )
-                )
-            ));
+            $filteredBinary = $this->filterManager->applyFilter($binary, $filter, [
+                'filters' => [
+                    'thumbnail' => [
+                        'size' => [300, 100]
+                    ]
+                ]
+            ]);
 
             $this->cacheManager->store($filteredBinary, $path, $filter);
         }

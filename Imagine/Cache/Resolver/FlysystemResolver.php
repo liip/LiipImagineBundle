@@ -141,7 +141,7 @@ class FlysystemResolver implements ResolverInterface
         $this->flysystem->put(
             $this->getFilePath($path, $filter),
             $binary->getContent(),
-            array('visibility' => $this->visibility)
+            ['visibility' => $this->visibility]
         );
     }
 

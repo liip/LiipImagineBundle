@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
+use Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -23,7 +24,7 @@ class InterlaceFilterLoaderTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader',
+            InterlaceFilterLoader::class,
             self::$kernel->getContainer()->get('liip_imagine.filter.loader.interlace')
         );
     }

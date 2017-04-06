@@ -11,10 +11,12 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory<extended>
@@ -23,9 +25,9 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsResolverFactoryInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory');
+        $rc = new \ReflectionClass(WebPathResolverFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(ResolverFactoryInterface::class));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
@@ -54,7 +56,7 @@ class WebPathResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf('\Symfony\Component\DependencyInjection\DefinitionDecorator', $resolverDefinition);
+        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.web_path', $resolverDefinition->getParent());
 
         $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(2));

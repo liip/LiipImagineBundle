@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Model\FileBinary;
@@ -30,7 +31,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsLoaderInterface()
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Loader\LoaderInterface', $this->getFileSystemLoader());
+        $this->assertInstanceOf(LoaderInterface::class, $this->getFileSystemLoader());
     }
 
     /**
@@ -80,26 +81,6 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideLoadCases
-     *
-     * @group legacy
-     * @expectedDeprecation Method %s() will have a forth `LocatorInterface $locator` argument in version 2.0. Not defining it is deprecated since version 1.7.2
-     *
-     * @param string $root
-     * @param string $path
-     */
-    public function testLegacyConstruction($root, $path)
-    {
-        $loader = new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array($root)
-        );
-
-        $this->assertValidLoaderFindReturn($loader->find($path));
-    }
-
-    /**
      * @return array[]
      */
     public static function provideMultipleRootLoadCases()
@@ -126,25 +107,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader($root)->find($path));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp {Method .+ expects a LocatorInterface for the forth argument}
-     */
-    public function testThrowsIfConstructionArgumentsInvalid()
-    {
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(__DIR__),
-            'not-instance-of-locator'
-        );
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage One or more data root paths must be specified
-     */
-    public function testThrowsIfZeroCountRootPathArray()
+    public function testAllowsEmptyRootPath()
     {
         $this->getFileSystemLoader(array());
     }
@@ -153,18 +116,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
      * @expectedExceptionMessage Root image path not resolvable
      */
-    public function testThrowsIfEmptyRootPath()
-    {
-        $this->getFileSystemLoader('');
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Root image path not resolvable
-     */
     public function testThrowsIfRootPathDoesNotExist()
     {
-        $this->getFileSystemLoader('/a/bad/root/path');
+        $this->getFileSystemLoader(array('/a/bad/root/path'));
     }
 
     /**
@@ -230,8 +184,8 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $root ? $root : $this->getDefaultDataRoots(),
-            null !== $locator ? $locator : $this->getFileSystemLocator()
+            null !== $locator ? $locator : $this->getFileSystemLocator(),
+            null !== $root ? $root : $this->getDefaultDataRoots()
         );
     }
 
@@ -241,7 +195,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      */
     private function assertValidLoaderFindReturn($return, $message = null)
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\FileBinary', $return, $message);
+        $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
     }
 }

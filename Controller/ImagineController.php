@@ -141,7 +141,7 @@ class ImagineController
         $resolver = $request->get('resolver');
 
         try {
-            $filters = $request->query->get('filters', array());
+            $filters = $request->query->get('filters', []);
 
             if (!is_array($filters)) {
                 throw new NotFoundHttpException(sprintf('Filters must be an array. Value was "%s"', $filters));
@@ -169,9 +169,9 @@ class ImagineController
             $rcPath = $this->cacheManager->getRuntimePath($path, $filters);
 
             $this->cacheManager->store(
-                $this->filterManager->applyFilter($binary, $filter, array(
+                $this->filterManager->applyFilter($binary, $filter, [
                     'filters' => $filters,
-                )),
+                ]),
                 $rcPath,
                 $filter,
                 $resolver

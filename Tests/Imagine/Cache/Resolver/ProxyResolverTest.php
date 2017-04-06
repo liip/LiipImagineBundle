@@ -33,7 +33,7 @@ class ProxyResolverTest extends AbstractTest
 
     public function setUp()
     {
-        $this->primaryResolver = $this->createObjectMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        $this->primaryResolver = $this->createObjectMock(ResolverInterface::class);
         $this->resolver = new ProxyResolver($this->primaryResolver, array('http://images.example.com'));
     }
 

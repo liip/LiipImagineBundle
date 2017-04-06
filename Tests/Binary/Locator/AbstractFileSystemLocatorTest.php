@@ -25,7 +25,7 @@ abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsLocatorInterface()
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Locator\LocatorInterface', new FileSystemLocator());
+        $this->assertInstanceOf(LocatorInterface::class, new FileSystemLocator());
     }
 
     /**

@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -29,11 +31,11 @@ class FlysystemLoaderTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists('\League\Flysystem\Filesystem')) {
+        if (!class_exists(Filesystem::class)) {
             $this->markTestSkipped('Requires the league/flysystem package.');
         }
 
-        $this->flyFilesystem = new \League\Flysystem\Filesystem(new \League\Flysystem\Adapter\Local($this->fixturesPath));
+        $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
     }
 
     public function testConstruction()
@@ -46,7 +48,7 @@ class FlysystemLoaderTest extends AbstractTest
      */
     public function testShouldImplementLoaderInterface(LoaderInterface $loader)
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Loader\LoaderInterface', $loader);
+        $this->assertInstanceOf(LoaderInterface::class, $loader);
     }
 
     /**
