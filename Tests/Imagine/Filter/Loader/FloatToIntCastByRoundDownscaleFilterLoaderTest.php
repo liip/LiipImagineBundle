@@ -16,7 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader
  *
  * Due to int casting in Imagine\Image\Box which can lead to wrong pixel
  * numbers ( e.g. float(201) casted to int(200) ). Solved by round the

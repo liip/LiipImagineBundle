@@ -12,31 +12,28 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass
  */
-class PostProcessorsCompilerPassTest extends \PHPUnit_Framework_TestCase
+class PostProcessorsCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $managerDefinition = new Definition();
-        $resolverDefinition = new Definition();
-        $resolverDefinition->addTag('liip_imagine.filter.post_processor', array(
-            'post_processor' => 'foo',
-        ));
+        $m = $this->createDefinition();
+        $l = $this->createDefinition(array('liip_imagine.filter.post_processor' => array(
+            'post_processor' => 'foobar',
+        )));
 
-        $container = new ContainerBuilder();
-        $container->setDefinition('liip_imagine.filter.manager', $managerDefinition);
-        $container->setDefinition('a.post_processor', $resolverDefinition);
+        $container = $this->createContainerBuilder(array(
+            'post_processor.foobar' => $l,
+            'liip_imagine.filter.manager' => $m,
+        ));
 
         $pass = new PostProcessorsCompilerPass();
 
-        $this->assertCount(0, $managerDefinition->getMethodCalls());
+        $this->assertDefinitionMethodCallsNone($m);
         $pass->process($container);
-        $this->assertCount(1, $managerDefinition->getMethodCalls());
+        $this->assertDefinitionMethodCallCount(1, $m);
     }
 }

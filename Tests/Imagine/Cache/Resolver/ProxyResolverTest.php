@@ -14,14 +14,15 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
  */
-class ProxyResolverTest extends \Phpunit_Framework_TestCase
+class ProxyResolverTest extends AbstractTest
 {
     /**
-     * @var ResolverInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
      */
     private $primaryResolver;
 
@@ -32,8 +33,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
 
     public function setUp()
     {
-        $this->primaryResolver = $this->getMock('Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
-
+        $this->primaryResolver = $this->createObjectMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
         $this->resolver = new ProxyResolver($this->primaryResolver, array('http://images.example.com'));
     }
 
@@ -46,8 +46,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
-        ;
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
@@ -63,8 +62,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
-        ;
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
@@ -80,8 +78,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png'))
-        ;
+            ->will($this->returnValue('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png'));
 
         $this->resolver = new ProxyResolver($this->primaryResolver, array(
             'https://s3-eu-west-1.amazonaws.com/s3-cache.example.com' => 'http://images.example.com',
@@ -101,8 +98,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'))
-        ;
+            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
 
         $this->resolver = new ProxyResolver($this->primaryResolver, array(
             'regexp/http:\/\/.*?\//' => 'http://bar.com/',
@@ -122,8 +118,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
             ->expects($this->once())
             ->method('isStored')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue(true))
-        ;
+            ->will($this->returnValue(true));
 
         $this->assertTrue($this->resolver->isStored($expectedPath, $expectedFilter));
     }
@@ -137,8 +132,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
         $this->primaryResolver
             ->expects($this->once())
             ->method('store')
-            ->with($expectedBinary, $expectedPath, $expectedFilter)
-        ;
+            ->with($expectedBinary, $expectedPath, $expectedFilter);
 
         $this->resolver->store($expectedBinary, $expectedPath, $expectedFilter);
     }
@@ -151,8 +145,7 @@ class ProxyResolverTest extends \Phpunit_Framework_TestCase
         $this->primaryResolver
             ->expects($this->once())
             ->method('remove')
-            ->with($expectedPaths, $expectedFilters)
-        ;
+            ->with($expectedPaths, $expectedFilters);
 
         $this->resolver->remove($expectedPaths, $expectedFilters);
     }

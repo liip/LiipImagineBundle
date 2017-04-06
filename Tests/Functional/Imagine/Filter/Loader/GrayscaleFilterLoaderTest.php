@@ -11,20 +11,22 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
- * Functional test cases for GrayscaleFilterLoader class.
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
  *
  * @author Gregoire Humeau <gregoire.humeau@gmail.com>
  */
-class GrayscaleFilterLoaderTest extends WebTestCase
+class GrayscaleFilterLoaderTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.filter.loader.grayscale');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader',
+                self::$kernel->getContainer()->get('liip_imagine.filter.loader.grayscale')
+        );
     }
 }

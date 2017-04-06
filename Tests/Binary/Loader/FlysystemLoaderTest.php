@@ -12,12 +12,14 @@
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 
 /**
  * @requires PHP 5.4
- * @covers Liip\ImagineBundle\Binary\Loader\FlysystemLoader
+ *
+ * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemLoader
  */
 class FlysystemLoaderTest extends AbstractTest
 {
@@ -28,55 +30,44 @@ class FlysystemLoaderTest extends AbstractTest
         parent::setUp();
 
         if (!class_exists('\League\Flysystem\Filesystem')) {
-            $this->markTestSkipped(
-              'The league/flysystem PHP library is not available.'
-            );
+            $this->markTestSkipped('Requires the league/flysystem package.');
         }
 
-        $adapter = new \League\Flysystem\Adapter\Local($this->fixturesDir);
-        $this->flyFilesystem = new \League\Flysystem\Filesystem($adapter);
+        $this->flyFilesystem = new \League\Flysystem\Filesystem(new \League\Flysystem\Adapter\Local($this->fixturesPath));
     }
 
-    public function testShouldImplementLoaderInterface()
+    public function testConstruction()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Binary\Loader\FlysystemLoader');
-
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\Binary\Loader\LoaderInterface'));
-    }
-
-    public function testCouldBeConstructedWithExpectedArguments()
-    {
-        return new FlysystemLoader(
-            ExtensionGuesser::getInstance(),
-            $this->flyFilesystem
-        );
+        return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
     }
 
     /**
-     * @depends testCouldBeConstructedWithExpectedArguments
+     * @depends testConstruction
      */
-    public function testReturnImageContentOnFind($loader)
+    public function testShouldImplementLoaderInterface(LoaderInterface $loader)
     {
-        $expectedContent = file_get_contents($this->fixturesDir.'/assets/cats.jpeg');
+        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Loader\LoaderInterface', $loader);
+    }
 
+    /**
+     * @depends testConstruction
+     */
+    public function testReturnImageContentOnFind(LoaderInterface $loader)
+    {
         $this->assertSame(
-            $expectedContent,
+            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
             $loader->find('assets/cats.jpeg')->getContent()
         );
     }
 
     /**
-     * @depends testCouldBeConstructedWithExpectedArguments
+     * @depends testConstruction
+     *
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     * @expectedExceptionMessageRegExp {Source image .+ not found}
      */
-    public function testThrowsIfInvalidPathGivenOnFind($loader)
+    public function testThrowsIfInvalidPathGivenOnFind(LoaderInterface $loader)
     {
-        $path = 'invalid.jpeg';
-
-        $this->setExpectedException(
-            'Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException',
-            sprintf('Source image "%s" not found.', $path)
-        );
-
-        $loader->find($path);
+        $loader->find('invalid.jpeg');
     }
 }

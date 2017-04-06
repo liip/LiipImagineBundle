@@ -24,6 +24,8 @@ class AppKernel extends Kernel
         $bundles = array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Liip\ImagineBundle\LiipImagineBundle(),
+            new \Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle(),
+            new \Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle(),
         );
 
         return $bundles;

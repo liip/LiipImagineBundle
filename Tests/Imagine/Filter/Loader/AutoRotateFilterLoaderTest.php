@@ -15,10 +15,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for RotateFilterLoader class.
- * Depending on the EXIF value checks whether rotate and flip are called.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader
  */
 class AutoRotateFilterLoaderTest extends AbstractTest
 {
@@ -36,12 +33,12 @@ class AutoRotateFilterLoaderTest extends AbstractTest
         $loader = new AutoRotateFilterLoader();
 
         // Mocks the image and makes it use the fake meta data.
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
 
-        if (method_exists('Imagine\Image\ImageInterface', 'metadata')) {
+        if (method_exists('\Imagine\Image\ImageInterface', 'metadata')) {
             // Mocks the metadata and makes it return the expected exif value for the rotation.
             // If $exifValue is null, it means the image doesn't contain any metadata.
-            $metaData = $this->getMockMetaData();
+            $metaData = $this->getMetadataBagMock();
 
             $metaData
                 ->expects($this->atLeastOnce())

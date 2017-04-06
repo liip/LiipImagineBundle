@@ -1,12 +1,33 @@
 # Change Log
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/2.0)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.1...2.0)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.4...2.0)
 
-- Use Prestissimo package for Travis build [\#864](https://github.com/liip/LiipImagineBundle/pull/864) ([robfrawley](https://github.com/robfrawley))
-- Add github issue and pr templates [\#863](https://github.com/liip/LiipImagineBundle/pull/863) ([robfrawley](https://github.com/robfrawley))
-- Bug fixes/deprecation cleanup for Symfony 3.3 [\#860](https://github.com/liip/LiipImagineBundle/pull/860) ([robfrawley](https://github.com/robfrawley))
-- Upscale filter should use the highest dimension [\#856](https://github.com/liip/LiipImagineBundle/pull/856) ([Rattler3](https://github.com/Rattler3))
+## [1.7.4](https://github.com/liip/LiipImagineBundle/tree/1.7.4) (2017-03-01)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.3...1.7.4)
+
+- \[Bug\] Revert adding leading slash to S3 class names [\#893](https://github.com/liip/LiipImagineBundle/pull/893) ([cedricziel](https://github.com/cedricziel))
+
+## [1.7.3](https://github.com/liip/LiipImagineBundle/tree/1.7.3) (2017-03-01)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.2...1.7.3)
+
+- \[Tests\] Support PHPUnit 5.x (and remove depredations) [\#887](https://github.com/liip/LiipImagineBundle/pull/887) ([robfrawley](https://github.com/robfrawley))
+- \[Tests\] Assert expected deprecation using symfony/phpunit-bridge [\#886](https://github.com/liip/LiipImagineBundle/pull/886) ([robfrawley](https://github.com/robfrawley))
+- \[Minor\] \[Docs\] Fix typo in general filters documentation [\#888](https://github.com/liip/LiipImagineBundle/pull/888) ([svenluijten](https://github.com/svenluijten))
+- \[Loader\] Add bundle resources to safe path when requested [\#883](https://github.com/liip/LiipImagineBundle/pull/883) ([bobvandevijver](https://github.com/bobvandevijver), [robfrawley](https://github.com/robfrawley))
+- \[Tests\] Enable mongo unit tests on PHP7 using "mongo" => "mongodb" extension adapter [\#882](https://github.com/liip/LiipImagineBundle/pull/882) ([robfrawley](https://github.com/robfrawley))
+- \[Loader\] \[Locator\] FileSystemLocator service must not be shared [\#875](https://github.com/liip/LiipImagineBundle/pull/875) ([robfrawley](https://github.com/liip/LiipImagineBundle/pull/875))
+
+## [1.7.2](https://github.com/liip/LiipImagineBundle/tree/1.7.2) (2017-02-07)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.1...1.7.2)
+
+- \[Loader\] Abstract filesystem resource locator and legacy insecure locator implementation [\#866](https://github.com/liip/LiipImagineBundle/pull/866) ([robfrawley](https://github.com/robfrawley))
+- \[Minor\] \[Loader\] Fix for FileSystemLoader annotation [\#868](https://github.com/liip/LiipImagineBundle/pull/868) ([tgabi333](https://github.com/tgabi333))
+- \[DependencyInjection\] Container logging for compiler passes [\#867](https://github.com/liip/LiipImagineBundle/pull/867) ([robfrawley](https://github.com/robfrawley))
+- \[CI\] Use Prestissimo package for Travis build [\#864](https://github.com/liip/LiipImagineBundle/pull/864) ([robfrawley](https://github.com/robfrawley))
+- \[GitHub\] Add Hithub templates for issues and PRs [\#863](https://github.com/liip/LiipImagineBundle/pull/863) ([robfrawley](https://github.com/robfrawley))
+- \[Symfony\] Bug fixes and deprecation cleanup for Symfony 3.3 [\#860](https://github.com/liip/LiipImagineBundle/pull/860) ([robfrawley](https://github.com/robfrawley))
+- \[Filter\] Upscale filter should use the highest dimension to calculate ratio [\#856](https://github.com/liip/LiipImagineBundle/pull/856) ([Rattler3](https://github.com/Rattler3))
 
 ## [1.7.1](https://github.com/liip/LiipImagineBundle/tree/1.7.1) (2017-01-19)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.0...1.7.1)

@@ -22,15 +22,15 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Configuration
+ * @covers \Liip\ImagineBundle\DependencyInjection\Configuration
  */
 class ConfigurationTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsConfigurationInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Configuration');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Configuration');
 
-        $this->assertTrue($rc->implementsInterface('Symfony\Component\Config\Definition\ConfigurationInterface'));
+        $this->assertTrue($rc->implementsInterface('\Symfony\Component\Config\Definition\ConfigurationInterface'));
     }
 
     public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments()
@@ -146,9 +146,12 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Loaders has to be array
+     */
     public function testThrowIfLoadersNotArray()
     {
-        $this->setExpectedException('LogicException', 'Loaders has to be array');
         $this->processConfiguration(
             new Configuration(
                 array(
@@ -336,9 +339,12 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
         $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
     }
 
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Resolvers has to be array
+     */
     public function testThrowsIfResolversNotArray()
     {
-        $this->setExpectedException('LogicException', 'Resolvers has to be array');
         $config = $this->processConfiguration(
             new Configuration(
                 array(

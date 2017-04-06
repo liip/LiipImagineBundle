@@ -1,19 +1,21 @@
 {
     "name": "liip/imagine-bundle",
     "type": "symfony-bundle",
-    "description": "This Bundle assists in imagine manipulation using the imagine library",
-    "keywords": ["imagine", "image"],
+    "description": "This bundle provides an image manipulation abstraction toolkit for Symfony-based projects.",
+    "keywords": [ "imagine", "image", "manipulation", "pictures", "photos", "transformation", "bundle", "symfony", "liip" ],
     "homepage": "http://liip.ch",
     "license": "MIT",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Liip and other contributors",
             "homepage": "https://github.com/liip/LiipImagineBundle/contributors"
         }
     ],
-    "archive": {
-        "exclude": ["/Tests"]
+    "autoload": {
+        "psr-4": {
+            "Liip\\ImagineBundle\\": ""
+        },
+        "exclude-from-classmap": [ "/Tests/" ]
     },
     "require": {
         "php": "^5.3.9|^7.0",
@@ -34,7 +36,7 @@
         "doctrine/cache": "~1.1",
         "doctrine/orm": "~2.3",
         "friendsofphp/php-cs-fixer": "~2.0",
-        "phpunit/phpunit": "~4.3",
+        "phpunit/phpunit": "~4.3|~5.0",
         "psr/log": "~1.0",
         "satooshi/php-coveralls": "~1.0",
         "sllh/php-cs-fixer-styleci-bridge": "~2.1",
@@ -43,28 +45,33 @@
         "symfony/dependency-injection": "~2.3|~3.0",
         "symfony/form": "~2.3|~3.0",
         "symfony/phpunit-bridge": "~2.3|~3.0",
+        "symfony/validator": "~2.3|~3.0",
         "symfony/yaml": "~2.3|~3.0",
-        "twig/twig": "~1.12"
+        "twig/twig": "~1.12|~2.0"
     },
     "suggest": {
-        "amazonwebservices/aws-sdk-for-php": "Required to use AWS version 1 cache resolver.",
-        "aws/aws-sdk-php": "Required to use AWS version 2/3 cache resolver.",
-        "ext-exif": "Required to read metadata from Exif information",
-        "league/flysystem": "Required to use FlySystem data loader or cache resolver.",
-        "monolog/monolog": "A psr/log compatible logger is required to enable logging.",
-        "twig/twig": "Required to use the provided Twig extension. Version 1.12 or greater needed."
+        "ext-exif": "required to read EXIF metadata from images",
+        "ext-gd": "required to use gd driver",
+        "ext-gmagick": "required to use gmagick driver",
+        "ext-imagick": "required to use imagick driver",
+        "ext-mongo": "required for mongodb components on PHP <7.0",
+        "ext-mongodb": "required for mongodb components on PHP >=7.0",
+        "alcaeus/mongo-php-adapter": "required on PHP >= 7.0 to use mongo components with mongodb extension",
+        "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
+        "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
+        "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
+        "league/flysystem": "required to use FlySystem data loader or cache resolver",
+        "monolog/monolog": "A psr/log compatible logger is required to enable logging",
+        "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
     },
-    "autoload": {
-        "psr-4": { "Liip\\ImagineBundle\\": "" },
-        "exclude-from-classmap": ["/Tests/"]
-    },
+    "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin",
-        "sort-packages" : true
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.x-dev"
+            "dev-1.0": "1.7-dev"
         }
     }
 }

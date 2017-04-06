@@ -11,15 +11,20 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Tests\Functional\WebTestCase;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
-class InterlaceFilterLoaderTest extends WebTestCase
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader
+ */
+class InterlaceFilterLoaderTest extends AbstractWebTestCase
 {
     public function testCouldBeGetFromContainerAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.filter.loader.interlace');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader',
+            self::$kernel->getContainer()->get('liip_imagine.filter.loader.interlace')
+        );
     }
 }

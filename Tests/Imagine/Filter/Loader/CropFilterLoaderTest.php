@@ -17,9 +17,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * Test cases for CropFilterLoader class.
- *
- * @covers Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader
+ * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader
  *
  * @author Alex Wilson <a@ax.gy>
  */
@@ -29,7 +27,7 @@ class CropFilterLoaderTest extends AbstractTest
      * @param int[] $coordinates
      * @param int[] $area
      *
-     * @covers Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader::load
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader::load
      *
      * @dataProvider cropDataProvider
      */
@@ -43,7 +41,7 @@ class CropFilterLoaderTest extends AbstractTest
 
         $loader = new CropFilterLoader();
 
-        $image = $this->getMockImage();
+        $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
             ->method('crop')
             ->with(new Point($x, $y), new Box($width, $height))

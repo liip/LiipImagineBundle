@@ -12,14 +12,15 @@
 namespace Liip\ImagineBundle\Tests\Form\Type;
 
 use Liip\ImagineBundle\Form\Type\ImageType;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * @covers Liip\ImagineBundle\Form\Type\ImageType
+ * @covers \Liip\ImagineBundle\Form\Type\ImageType
  */
-class ImageTypeTest extends \PHPUnit_Framework_TestCase
+class ImageTypeTest extends AbstractTest
 {
     public function testGetName()
     {
@@ -37,7 +38,7 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigureOptions()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') < 0) {
+        if (SymfonyFramework::isKernelLessThan(2, 6)) {
             $this->markTestSkipped('No need to test on symfony < 2.6');
         }
 
@@ -55,9 +56,12 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isDefined('link_attr'));
     }
 
-    public function testLegacySetDefaultOptions()
+    /**
+     * @group legacy
+     */
+    public function testSetDefaultOptionsLegacy()
     {
-        if (version_compare(Kernel::VERSION_ID, '20600') >= 0) {
+        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
             $this->markTestSkipped('No need to test on symfony >= 2.6');
         }
 
@@ -88,7 +92,7 @@ class ImageTypeTest extends \PHPUnit_Framework_TestCase
 
         $view = new FormView();
         $type = new ImageType();
-        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $form = $this->createObjectMock('\Symfony\Component\Form\Test\FormInterface');
 
         $type->buildView($view, $form, $options);
 

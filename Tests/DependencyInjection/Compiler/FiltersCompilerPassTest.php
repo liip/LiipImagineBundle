@@ -12,34 +12,28 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass
  */
-class FiltersCompilerPassTest extends \PHPUnit_Framework_TestCase
+class FiltersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $managerDefinition = new Definition();
-        $loaderDefinition = new Definition();
-        $loaderDefinition->addTag('liip_imagine.filter.loader', array(
-            'loader' => 'foo',
-        ));
+        $m = $this->createDefinition();
+        $l = $this->createDefinition(array('liip_imagine.filter.loader' => array(
+            'loader' => 'foobar',
+        )));
 
-        $container = new ContainerBuilder();
-        $container->setDefinition('liip_imagine.filter.manager', $managerDefinition);
-        $container->setDefinition('a.loader', $loaderDefinition);
+        $container = $this->createContainerBuilder(array(
+            'filter.loader.foobar' => $l,
+            'liip_imagine.filter.manager' => $m,
+        ));
 
         $pass = new FiltersCompilerPass();
 
-        //guard
-        $this->assertCount(0, $managerDefinition->getMethodCalls());
-
+        $this->assertDefinitionMethodCallsNone($m);
         $pass->process($container);
-
-        $this->assertCount(1, $managerDefinition->getMethodCalls());
+        $this->assertDefinitionMethodCallCount(1, $m);
     }
 }

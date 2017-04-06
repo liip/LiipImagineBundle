@@ -17,15 +17,15 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
  */
 class StreamLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()

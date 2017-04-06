@@ -9,15 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Tests\Functional;
+namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache;
 
-class SignerTest extends WebTestCase
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
+
+class SignerTest extends AbstractWebTestCase
 {
     public function testGetAsService()
     {
         $this->createClient();
-        $service = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Imagine\Cache\SignerInterface', $service);
+        $this->assertInstanceOf(
+            '\Liip\ImagineBundle\Imagine\Cache\SignerInterface',
+            self::$kernel->getContainer()->get('liip_imagine.cache.signer')
+        );
     }
 }

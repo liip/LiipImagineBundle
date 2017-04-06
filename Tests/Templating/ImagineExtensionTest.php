@@ -13,17 +13,18 @@ namespace Liip\ImagineBundle\Tests\Templating\Helper;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\ImagineExtension;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
- * @covers Liip\ImagineBundle\Templating\ImagineExtension
+ * @covers \Liip\ImagineBundle\Templating\ImagineExtension
  */
-class ImagineExtensionTest extends \PHPUnit_Framework_TestCase
+class ImagineExtensionTest extends AbstractTest
 {
     public function testSubClassOfHelper()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Templating\ImagineExtension');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\Templating\ImagineExtension');
 
-        $this->assertTrue($rc->isSubclassOf('Twig_Extension'));
+        $this->assertTrue($rc->isSubclassOf('\Twig_Extension'));
     }
 
     public function testCouldBeConstructedWithCacheManagerAsArgument()
@@ -49,8 +50,7 @@ class ImagineExtensionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getBrowserPath')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue($expectedCachePath))
-        ;
+            ->will($this->returnValue($expectedCachePath));
 
         $extension = new ImagineExtension($cacheManager);
 
@@ -65,13 +65,5 @@ class ImagineExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $filters);
         $this->assertCount(1, $filters);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
-     */
-    protected function createCacheManagerMock()
-    {
-        return $this->getMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
     }
 }

@@ -18,7 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @requires PHP 5.4
- * @covers Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
+ *
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
 class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 {
@@ -27,17 +28,15 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
         parent::setUp();
 
         if (!class_exists('\League\Flysystem\Filesystem')) {
-            $this->markTestSkipped(
-              'The league/flysystem PHP library is not available.'
-            );
+            $this->markTestSkipped('Requires the league/flysystem package.');
         }
     }
 
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory');
+        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory');
 
-        $this->assertTrue($rc->implementsInterface('Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
