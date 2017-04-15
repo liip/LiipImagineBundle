@@ -102,6 +102,7 @@
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
+            <argument>%liip_imagine.default_filter_settings%</argument>
         </service>
 
         <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">

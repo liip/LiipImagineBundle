@@ -55,11 +55,13 @@ class FilterManager
     public function __construct(
         FilterConfiguration $filterConfig,
         ImagineInterface $imagine,
-        MimeTypeGuesserInterface $mimeTypeGuesser
+        MimeTypeGuesserInterface $mimeTypeGuesser,
+        $defaultFilterSettings
     ) {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
         $this->mimeTypeGuesser = $mimeTypeGuesser;
+        $this->defaultFilterSettings = $defaultFilterSettings;
     }
 
     /**
@@ -140,6 +142,9 @@ class FilterManager
 
         if (isset($config['jpeg_quality'])) {
             $options['jpeg_quality'] = $config['jpeg_quality'];
+        }
+        elseif (isset($this->defaultFilterSettings['jpeg_quality'])) {
+            $options['jpeg_quality'] = $this->defaultFilterSettings['jpeg_quality'];
         }
         if (isset($config['png_compression_level'])) {
             $options['png_compression_level'] = $config['png_compression_level'];
