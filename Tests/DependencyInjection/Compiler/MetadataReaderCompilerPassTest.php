@@ -99,11 +99,11 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
         list($metadataServiceId) = static::getReaderParamAndDefaultAndExifValues();
 
         $container = new ContainerBuilder();
-        $container->setDefinition($metadataServiceId, new Definition(stdClass::class));
+        $container->setDefinition($metadataServiceId, new Definition('stdClass'));
 
         $pass = static::getMetadataReaderCompilerPass(false);
 
         $pass->process($container);
-        $this->assertInstanceOf(stdClass::class, $container->get($metadataServiceId));
+        $this->assertInstanceOf('stdClass', $container->get($metadataServiceId));
     }
 }
