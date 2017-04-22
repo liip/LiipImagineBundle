@@ -40,7 +40,7 @@ If you are using the `KnpGaufretteBundle`_ you can make use of the
 
     services:
         acme.liip_imagine.binary.loader.stream.profile_photos:
-            class: "%liip_imagine.binary.loader.stream.class%"
+            class: Liip\ImagineBundle\Binary\Loader\StreamLoader
             arguments:
                 - 'gaufrette://profile_photos/'
             tags:
