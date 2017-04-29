@@ -12,10 +12,9 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Utility\OptionsResolver\OptionsResolver;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 class FlipFilterLoader implements LoaderInterface
@@ -40,22 +39,12 @@ class FlipFilterLoader implements LoaderInterface
      */
     private function sanitizeOptions(array $options)
     {
-        $normalizer = function (Options $options, $value) {
-            return $value === 'horizontal' ? 'x' : ($value === 'vertical' ? 'y' : $value);
-        };
-
         $resolver = new OptionsResolver();
-
-        /** @todo remove in v2.0 */
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo('2', '7')) {
-            $resolver->setDefault('axis', 'x');
-            $resolver->setAllowedValues('axis', array('x', 'horizontal', 'y', 'vertical'));
-            $resolver->setNormalizer('axis', $normalizer);
-        } else {
-            $resolver->setDefaults(array('axis' => 'x'));
-            $resolver->setAllowedValues(array('axis' => array('x', 'horizontal', 'y', 'vertical')));
-            $resolver->setNormalizers(array('axis' => $normalizer));
-        }
+        $resolver->setDefault('axis', 'x');
+        $resolver->setAllowedValues('axis', array('x', 'horizontal', 'y', 'vertical'));
+        $resolver->setNormalizer('axis', function (Options $options, $value) {
+            return $value === 'horizontal' ? 'x' : ($value === 'vertical' ? 'y' : $value);
+        });
 
         try {
             return $resolver->resolve($options);
