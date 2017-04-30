@@ -12,7 +12,9 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
+use stdClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass
@@ -41,18 +43,18 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $r = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass');
 
         return array(
-            static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderParameter'),
+            static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderServiceId'),
             static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderExifClass'),
             static::getVisibilityRestrictedStaticProperty($r, 'metadataReaderDefaultClass'),
         );
     }
 
     /**
-     * @param bool $return
+     * @param bool $isExifExtensionLoaded
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|MetadataReaderCompilerPass
      */
-    private function getMetadataReaderCompilerPass($return)
+    private function getMetadataReaderCompilerPass($isExifExtensionLoaded)
     {
         $mock = $this->getMockBuilder('\Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass')
             ->setMethods(array('isExifExtensionLoaded'))
@@ -61,36 +63,47 @@ class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->atLeastOnce())
             ->method('isExifExtensionLoaded')
-            ->willReturn($return);
+            ->willReturn($isExifExtensionLoaded);
 
         return $mock;
     }
 
     public function testProcessWithoutExtExifAddsDefaultReader()
     {
-        list($metadataParameter, $metadataExifClass, $metadataDefaultClass) = static::getReaderParamAndDefaultAndExifValues();
+        list($metadataServiceId, $metadataExifClass, $metadataDefaultClass) = static::getReaderParamAndDefaultAndExifValues();
 
         $container = new ContainerBuilder();
-        $container->setParameter($metadataParameter, $metadataExifClass);
+        $container->setDefinition($metadataServiceId, new Definition($metadataExifClass));
 
         $pass = $this->getMetadataReaderCompilerPass(false);
-        $this->assertEquals($metadataExifClass, $container->getParameter($metadataParameter));
 
         $pass->process($container);
-        $this->assertEquals($metadataDefaultClass, $container->getParameter($metadataParameter));
+        $this->assertInstanceOf($metadataDefaultClass, $container->get($metadataServiceId));
     }
 
     public function testProcessWithExtExifKeepsExifReader()
     {
-        list($metadataParameter, $metadataExifClass) = static::getReaderParamAndDefaultAndExifValues();
+        list($metadataServiceId, $metadataExifClass) = static::getReaderParamAndDefaultAndExifValues();
 
         $container = new ContainerBuilder();
-        $container->setParameter($metadataParameter, $metadataExifClass);
+        $container->setDefinition($metadataServiceId, new Definition($metadataExifClass));
 
         $pass = static::getMetadataReaderCompilerPass(true);
-        $this->assertEquals($metadataExifClass, $container->getParameter($metadataParameter));
 
         $pass->process($container);
-        $this->assertEquals($metadataExifClass, $container->getParameter($metadataParameter));
+        $this->assertInstanceOf($metadataExifClass, $container->get($metadataServiceId));
+    }
+
+    public function testDoesNotOverrideCustomReaderWhenExifNotAvailable()
+    {
+        list($metadataServiceId) = static::getReaderParamAndDefaultAndExifValues();
+
+        $container = new ContainerBuilder();
+        $container->setDefinition($metadataServiceId, new Definition('stdClass'));
+
+        $pass = static::getMetadataReaderCompilerPass(false);
+
+        $pass->process($container);
+        $this->assertInstanceOf('stdClass', $container->get($metadataServiceId));
     }
 }

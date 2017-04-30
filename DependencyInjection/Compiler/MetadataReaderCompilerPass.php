@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Be default, a metadata reader that requires the "exif" PHP extension is used. This compiler pass checks if the
@@ -22,7 +23,7 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
     /**
      * @var string
      */
-    private static $metadataReaderParameter = 'liip_imagine.meta_data.reader.class';
+    private static $metadataReaderServiceId = 'liip_imagine.meta_data.reader';
 
     /**
      * @var string
@@ -40,14 +41,14 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
     public function process(ContainerBuilder $container)
     {
         if (!$this->isExifExtensionLoaded() && $this->isExifMetadataReaderSet($container)) {
-            $container->setParameter(self::$metadataReaderParameter, self::$metadataReaderDefaultClass);
-            $message = 'Overwrote "%s" parameter value from "%s" to "%s" due to missing "exif" extension '
+            $container->setDefinition(self::$metadataReaderServiceId, new Definition(self::$metadataReaderDefaultClass));
+            $message = 'Overwrote "%s" service to use "%s" instead of "%s" due to missing "exif" extension '
                 .'(installing the "exif" extension is highly recommended; you may experience degraded '
                 .'metadata handling without it)';
             $this->log($container, $message, array(
-                self::$metadataReaderParameter,
-                self::$metadataReaderExifClass,
+                self::$metadataReaderServiceId,
                 self::$metadataReaderDefaultClass,
+                self::$metadataReaderExifClass,
             ));
         }
     }
@@ -59,7 +60,7 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
      */
     private function isExifMetadataReaderSet(ContainerBuilder $container)
     {
-        return $container->getParameter(self::$metadataReaderParameter) === self::$metadataReaderExifClass;
+        return $container->getDefinition(self::$metadataReaderServiceId)->getClass() === self::$metadataReaderExifClass;
     }
 
     /**
