@@ -4,26 +4,39 @@
 |:----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
 | [![Travis](https://src.run/shield/liip/LiipImagineBundle/1.0/travis.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/travis) | [![Style CI](https://src.run/shield/liip/LiipImagineBundle/1.0/styleci.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/styleci) | [![Coverage](https://src.run/shield/liip/LiipImagineBundle/1.0/coveralls.svg)](https://src.run/service/liip/LiipImagineBundle/1.0/coveralls) | [![Downloads](https://src.run/shield/liip/LiipImagineBundle/packagist_dt.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | [![Latest Stable Version](https://src.run/shield/liip/LiipImagineBundle/packagist_v.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | 
 
-*This bundle provides an image manipulation abstraction toolkit for
-[Symfony](http://symfony.com/)-based projects.*
+*This bundle provides an image manipulation abstraction toolkit for [Symfony](http://symfony.com/)-based projects.*
 
 ## Overview
 
 - [Filter Sets](http://symfony.com/doc/master/bundles/LiipImagineBundle/basic-usage.html):
-  Using any Symfony-supported configuration language (such as YML and XML), 
-  you can create *filter set* definitions that specify transformation routines. 
-  These include a set of *filters* and *post-processors*, as well as other,
-  optional parameters.
+  Using any Symfony-supported configuration language (such as YML and XML), you can create *filter set* definitions that
+  specify transformation routines. These definitions include a set of
+  *[filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html)* and
+  *[post-processors](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors.html)*,
+  as well as other optional parameters.
+
 - [Filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html):
-  Many built-in filters are provided, allowing the application of common 
-  transformations. Examples include `thumbnail`, `scale`, `crop`, `strip`, `watermark`,  
-  and many more. Additionally, [custom filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html#filter-custom) 
-  are supported.
+  Image transformations are applied using *filters*. A set of
+  [build-in filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html) are provided by the bundle,
+  implementing the most common transformations; examples include
+  [thumbnail](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/sizing.html#thumbnails),
+  [scale](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/sizing.html#scale),
+  [crop](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/sizing.html#cropping-images),
+  [flip](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/orientation.html#flip),
+  [strip](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/general.html#strip), and
+  [watermark](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/general.html#watermark).
+  For more advances transformations, you can easily create your own
+  [custom filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html#filter-custom).
+
 - [Post-Processors](http://symfony.com/doc/master/bundles/LiipImagineBundle/post-processors.html):
-  This component allows for the modification of the resulting binary file 
-  created by filters. Examples include `jpegoptim`, `optipng`, `cjpeg`, 
-  and `pngquant`. Additionally, [custom post-processors](http://symfony.com/doc/master/bundles/LiipImagineBundle/post-processors.html#post-processors-custom) 
-  are supported.
+  Modification of the resulting binary image file (created from your *filters*) are handled by *post-processors*.
+  Examples include
+  [JPEG Optim](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/jpeg-optim.html),
+  [Moz JPEG](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/jpeg-moz.html),
+  [Opti PNG](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/png-opti.html), and
+  [PNG Quant](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/png-quant.html). Just like filters
+  you can easily create your own
+  [custom post-processors](http://symfony.com/doc/master/bundles/LiipImagineBundle/post-processors.html#post-processors-custom).
 
 
 ### Example
