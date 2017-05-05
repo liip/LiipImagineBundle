@@ -40,8 +40,8 @@ class ImagineController
     private $signer;
 
     /**
-     * @param FilterService $filterService
-     * @param DataManager $dataManager
+     * @param FilterService   $filterService
+     * @param DataManager     $dataManager
      * @param SignerInterface $signer
      */
     public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer)
@@ -58,9 +58,9 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param string $path
-     * @param string $filter
+     * @param Request $request
+     * @param string  $path
+     * @param string  $filter
      *
      * @throws \RuntimeException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -96,10 +96,10 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param string $hash
-     * @param string $path
-     * @param string $filter
+     * @param Request $request
+     * @param string  $hash
+     * @param string  $path
+     * @param string  $filter
      *
      * @throws \RuntimeException
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException

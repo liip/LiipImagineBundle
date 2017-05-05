@@ -41,10 +41,9 @@ class FilterService
     private $logger;
 
     /**
-     * FilterService constructor.
-     * @param DataManager $dataManager
-     * @param FilterManager $filterManager
-     * @param CacheManager $cacheManager
+     * @param DataManager     $dataManager
+     * @param FilterManager   $filterManager
+     * @param CacheManager    $cacheManager
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -60,9 +59,10 @@ class FilterService
     }
 
     /**
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
+     * @param string      $path
+     * @param string      $filter
+     * @param string|null $resolver
+     *
      * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
      */
@@ -86,10 +86,11 @@ class FilterService
     }
 
     /**
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
-     * @param array $runtimeFilters
+     * @param string      $path
+     * @param string      $filter
+     * @param array       $runtimeFilters
+     * @param string|null $resolver
+     *
      * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
      */
@@ -118,6 +119,7 @@ class FilterService
      * @param string $path
      * @param string $filter
      * @param string $resolver
+     *
      * @return string
      */
     public function getUrlOfFilteredImage($path, $filter, $resolver = null)
@@ -126,10 +128,11 @@ class FilterService
     }
 
     /**
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
-     * @param array $runtimeFilters
+     * @param string      $path
+     * @param string      $filter
+     * @param array       $runtimeFilters
+     * @param string|null $resolver
+     *
      * @return string
      */
     public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
@@ -141,9 +144,11 @@ class FilterService
     /**
      * @param string $path
      * @param string $filter
-     * @param array|null $runtimeFilters
-     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     * @param array  $runtimeFilters
+     *
      * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
+
+     * @return \Liip\ImagineBundle\Binary\BinaryInterface
      */
     private function createFilteredBinary($path, $filter, array $runtimeFilters = array())
     {
