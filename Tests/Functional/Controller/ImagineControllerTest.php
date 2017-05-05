@@ -89,7 +89,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @expectedExceptionMessage Source image could not be found
+     * @expectedExceptionMessage Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found
      */
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
     {

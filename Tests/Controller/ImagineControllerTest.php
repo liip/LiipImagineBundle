@@ -22,11 +22,9 @@ class ImagineControllerTest extends AbstractTest
     public function testConstruction()
     {
         new ImagineController(
+            $this->createFilterServiceMock(),
             $this->createDataManagerMock(),
-            $this->createFilterManagerMock(),
-            $this->createCacheManagerMock(),
-            $this->createSignerInterfaceMock(),
-            $this->createLoggerInterfaceMock()
+            $this->createSignerInterfaceMock()
         );
     }
 }

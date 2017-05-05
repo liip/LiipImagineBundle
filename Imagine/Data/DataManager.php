@@ -149,7 +149,7 @@ class DataManager
      *
      * @param string $filter
      *
-     * @return string
+     * @return string|null
      */
     public function getDefaultImageUrl($filter)
     {

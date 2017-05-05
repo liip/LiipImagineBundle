@@ -52,11 +52,9 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
             array(
+                new Reference('liip_imagine.service.filter'),
                 new Reference('liip_imagine.data.manager'),
-                new Reference('liip_imagine.filter.manager'),
-                new Reference('liip_imagine.cache.manager'),
                 new Reference('liip_imagine.cache.signer'),
-                new Reference('logger', ContainerInterface::IGNORE_ON_INVALID_REFERENCE),
             )
         );
     }
