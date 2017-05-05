@@ -93,7 +93,7 @@ class FilterService
      * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
      */
-    public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
+    public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
     {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         if ($this->cacheManager->isStored($runtimePath, $filter, $resolver)) {
@@ -132,7 +132,7 @@ class FilterService
      * @param array $runtimeFilters
      * @return string
      */
-    public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
+    public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
     {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
@@ -145,14 +145,14 @@ class FilterService
      * @return \Liip\ImagineBundle\Binary\BinaryInterface
      * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
      */
-    private function createFilteredBinary($path, $filter, array $runtimeFilters = [])
+    private function createFilteredBinary($path, $filter, array $runtimeFilters = array())
     {
         $binary = $this->dataManager->find($filter, $path);
 
         try {
-            return $this->filterManager->applyFilter($binary, $filter, [
+            return $this->filterManager->applyFilter($binary, $filter, array(
                 'filters' => $runtimeFilters,
-            ]);
+            ));
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
 
