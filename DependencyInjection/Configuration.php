@@ -158,7 +158,10 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->booleanNode('enqueue')->defaultFalse()->info('Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ.')->end()
+            ->booleanNode('enqueue')
+                ->defaultFalse()
+                ->info('Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ.')
+            ->end()
         ->end();
 
         return $treeBuilder;
