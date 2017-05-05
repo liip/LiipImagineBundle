@@ -299,8 +299,8 @@ from our documentation.
 ## Use as a Service
 
 If you need to use your defined "filter sets" from within your controller, you 
-can fetch this bundle's controller from the service container and handle 
-the response yourself.
+can fetch this bundle's FilterService from the service container to do the heavy
+lifting for you.
 
 ```php
 <?php
@@ -309,30 +309,31 @@ class MyController extends Controller
 {
     public function indexAction()
     {
-        /** @var ImagineController */
+        /** @var FilterService */
         $imagine = $this
             ->container
-            ->get('liip_imagine.controller');
+            ->get('liip_imagine.service.filter');
 
-        /** @var RedirectResponse */
-        $imagemanagerResponse = $imagine
-            ->filterAction(
-                $this->request,         // http request
-                'uploads/foo.jpg',      // original image you want to apply a filter to
-                'my_thumb'              // filter defined in config.yml
-            );
-
-        /** @var CacheManager */
-        $cacheManager = $this
-            ->container
-            ->get('liip_imagine.cache.manager');
-
-        /** @var string */
-        $sourcePath = $cacheManager
-            ->getBrowserPath(
-                'uploads/foo.jpg',
-                'my_thumb'
-            );
+        // 1) Simple filter, OR
+        $imagine->createFilteredImage('uploads/foo.jpg', 'my_thumb');
+        $resourcePath = $imagine->getUrlOfFilteredImage('uploads/foo.jpg', 'my_thumb');
+        
+        // 2) Runtime configuration
+        $runtimeConfig = [
+            'thumbnail' => [
+                'size' => [200, 200]
+            ],
+        ];
+        $imagine->createFilteredImageWithRuntimeFilters(
+            'uploads/foo.jpg',
+            'my_thumb',
+            $runtimeConfig
+        );
+        $resourcePath = $imagine->getUrlOfFilteredImageWithRuntimeFilters(
+            'uploads/foo.jpg',
+            'my_thumb',
+            $runtimeConfig
+        );
 
         // ..
     }
@@ -340,32 +341,6 @@ class MyController extends Controller
 
 ?>
 ```
-
-If you need to add more logic, the recommended solution is to either
-extend `ImagineController.php` or use it as the basis for your own 
-implementation.
-
-To use the controller in another service, you have to simulate a new request.
-
-```php
-<?php
-
-/** @var ImagineController */
-$imagine = $this
-    ->container
-    ->get('liip_imagine.controller');
-
-/** @var Response */
-$response = $imagine
-    ->filterAction(
-        new Symfony\Component\HttpFoundation\Request(),
-        'uploads/foo.jpg',
-        'my_thumb'
-    );
-
-?>
-```
-
 
 ## Data Roots
 
