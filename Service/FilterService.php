@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Service;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
@@ -63,8 +65,8 @@ class FilterService
      * @param string      $filter
      * @param string|null $resolver
      *
-     * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
+     * @throws NotLoadableException
+     * @throws NonExistingFilterException
      */
     public function createFilteredImage($path, $filter, $resolver = null)
     {
@@ -91,8 +93,8 @@ class FilterService
      * @param array       $runtimeFilters
      * @param string|null $resolver
      *
-     * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
+     * @throws NotLoadableException
+     * @throws NonExistingFilterException
      */
     public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
     {
@@ -146,9 +148,9 @@ class FilterService
      * @param string $filter
      * @param array  $runtimeFilters
      *
-     * @throws \Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException
+     * @throws NonExistingFilterException
 
-     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     * @return BinaryInterface
      */
     private function createFilteredBinary($path, $filter, array $runtimeFilters = array())
     {

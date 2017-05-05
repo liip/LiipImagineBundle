@@ -62,10 +62,10 @@ class ImagineController
      * @param string  $path
      * @param string  $filter
      *
-     * @throws \RuntimeException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws RuntimeException
+     * @throws NotFoundHttpException
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function filterAction(Request $request, $path, $filter)
     {
@@ -101,11 +101,11 @@ class ImagineController
      * @param string  $path
      * @param string  $filter
      *
-     * @throws \RuntimeException
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws RuntimeException
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
