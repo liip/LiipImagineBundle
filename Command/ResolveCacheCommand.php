@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Command;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,12 +64,11 @@ EOF
         $paths = $input->getArgument('paths');
         $filters = $input->getOption('filters');
 
-        /* @var FilterManager filterManager */
+        /* @var FilterManager $filterManager */
         $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
-        /* @var CacheManager cacheManager */
-        $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
-        /* @var DataManager dataManager */
-        $dataManager = $this->getContainer()->get('liip_imagine.data.manager');
+
+        /* @var FilterService $filterService */
+        $filterService = $this->getContainer()->get('liip_imagine.service.filter');
 
         if (empty($filters)) {
             $filters = array_keys($filterManager->getFilterConfiguration()->all());
@@ -76,17 +76,9 @@ EOF
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                if (!$cacheManager->isStored($path, $filter)) {
-                    $binary = $dataManager->find($filter, $path);
+                $filterService->createFilteredImage($path, $filter);
 
-                    $cacheManager->store(
-                        $filterManager->applyFilter($binary, $filter),
-                        $path,
-                        $filter
-                    );
-                }
-
-                $output->writeln($cacheManager->resolve($path, $filter));
+                $output->writeln($filterService->getUrlOfFilteredImage($path, $filter));
             }
         }
     }

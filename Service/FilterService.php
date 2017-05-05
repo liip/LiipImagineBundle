@@ -120,7 +120,7 @@ class FilterService
      * @param string $resolver
      * @return string
      */
-    public function getUrlOfFilteredImage($path, $filter, $resolver)
+    public function getUrlOfFilteredImage($path, $filter, $resolver = null)
     {
         return $this->cacheManager->resolve($path, $filter, $resolver);
     }
