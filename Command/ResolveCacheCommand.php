@@ -11,8 +11,6 @@
 
 namespace Liip\ImagineBundle\Command;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
