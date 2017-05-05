@@ -1,5 +1,58 @@
 # Upgrade
 
+## 2.0.0
+
+  - __[Data Loader]__ The `FileSystemLoader::__construct()` method signature has changed in-line with the prior deprecation
+  notice; the third parameter must be of signature `\Liip\ImagineBundle\Binary\Locator\LocatorInterface $locator` and the
+  fourth parameter must be of signiture `array $dataRoots`.
+
+  - __[Data Loader]__ The `GridFSLoader` data loader has been removed as the required [mongo](https://pecl.php.net/package/mongo)
+  extension has been deprecated and will not be ported to PHP `7.x`.
+
+  - __[Dependency Injection]__ A new interface `\Liip\ImagineBundle\DependencyInjection/Factory/FactoryInterface` has been
+  introduced and is shared between the loaders (`LoaderFactoryInterface`) and resolvers (`ResolverFactoryInterface`).
+
+  - __[Dependency Injection]__ All class name parameters have been removed from the service definitions. Instead of
+  overwriting the class name parameters to provide your own implementation, use
+  [service decoration](http://symfony.com/doc/current/service_container/service_decoration.html).
+
+  - __[Data Transformer]__ The data transformer interface (`\Liip\ImagineBundle\Imagine\Data\Transforme\TransformerInterface`)
+  was deprecated in version `1.x` and has been removed.
+
+  - __[Templating]__ The imagine extension `\Liip\ImagineBundle\Templating\ImagineExtension` has been renamed to
+  `FilterExtension`. Similarly, the template helper `\Liip\ImagineBundle\Templating\Helper\ImagineHelper` has been
+  renamed to `FilterHelper`.
+
+  - __[Utility]__ The `\Liip\ImagineBundle\Utility/Framework/SymfonyFramework::hasDefinitionSharing()` method has been
+  removed due to our higher Symfony requirements rending it unnecessary.
+
+  - __[General]__ The use of fully-qualified class name strings is no longer supported and the `::class` compile-time
+  class constant is now used.
+
+  - __[Travis]__ The continuous integration set-up and tear-down operations have been cleaned up and moved to their own
+  bash scripts, allowing for them to be run locally, if desired.
+
+    ```bash
+
+      # run the set-up operations
+      bash .travis/exec-before.bash
+
+      # run the tear-down operations
+      bash .travis/exec-after.bash
+
+    ```
+
+    Note that when run outside the Travis environment, you must have [`phpenv`](https://github.com/phpenv/phpenv) installed
+  and set the following environment variables:
+
+    ```bash
+
+      TRAVIS_BUILD_DIR=/repo/path  # the path to your repo root
+      TRAVIS_PHP_VERSION=7.0.0     # the installed PHP version
+
+    ```
+
+
 ## 1.7.3
 
   - __[Data Loader]__ The `FileSystemLoader` now allows you to assign keys to data roots, and directly reference them when
