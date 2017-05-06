@@ -173,7 +173,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     public function provideOutsideRootPathsData()
     {
         return array(
-            array('../Loader/../../Binary/Loader/../../../Resources/config/routing.xml'),
+            array('../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'),
             array('../../Binary/'),
         );
     }
