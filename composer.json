@@ -63,7 +63,8 @@
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
-        "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
+        "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed",
+        "enqueue/enqueue-bundle": "add if you like to process images in background"
     },
     "minimum-stability": "dev",
     "config": {

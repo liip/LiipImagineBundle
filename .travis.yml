@@ -27,6 +27,8 @@ matrix:
     - php: 7.1
       env: SYMFONY_VERSION=3.3.x-dev
     - php: 7.1
+      env: SYMFONY_VERSION=3.3.x-dev WITH_ENQUEUE=true
+    - php: 7.1
       env: SYMFONY_VERSION=dev-master
   allow_failures:
     - php: hhvm-stable
@@ -35,6 +37,7 @@ matrix:
 
 before_install:
   - bash ./.travis/exec-before.bash
+  - if [ "$WITH_ENQUEUE" = true ] ; then composer require --no-update --dev enqueue/enqueue-bundle:^0.3.6; fi;
 
 install:
   - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS

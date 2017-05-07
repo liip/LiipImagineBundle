@@ -76,6 +76,10 @@ class LiipImagineExtension extends Extension
             new Reference('liip_imagine.meta_data.reader')
         ]);
 
+        if ($config['enqueue']) {
+            $loader->load('enqueue.xml');
+        }
+
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
 
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);

@@ -157,6 +157,10 @@
             <tag name="liip_imagine.filter.loader" loader="rotate" />
         </service>
 
+        <service id="liip_imagine.filter.loader.flip" class="Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="flip" />
+        </service>
+
         <service id="liip_imagine.filter.loader.interlace" class="Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader">
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
