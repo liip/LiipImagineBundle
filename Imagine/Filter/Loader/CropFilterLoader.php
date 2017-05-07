@@ -21,7 +21,7 @@ class CropFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $x = isset($options['start'][0]) ? $options['start'][0] : null;
         $y = isset($options['start'][1]) ? $options['start'][1] : null;

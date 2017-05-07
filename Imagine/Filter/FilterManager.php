@@ -40,12 +40,12 @@ class FilterManager
     /**
      * @var LoaderInterface[]
      */
-    protected $loaders = array();
+    protected $loaders = [];
 
     /**
      * @var PostProcessorInterface[]
      */
-    protected $postProcessors = array();
+    protected $postProcessors = [];
 
     /**
      * @param FilterConfiguration      $filterConfig
@@ -103,11 +103,11 @@ class FilterManager
     public function apply(BinaryInterface $binary, array $config)
     {
         $config = array_replace(
-            array(
-                'filters' => array(),
+            [
+                'filters' => [],
                 'quality' => 100,
                 'animated' => false,
-            ),
+            ],
             $config
         );
 
@@ -134,9 +134,9 @@ class FilterManager
             }
         }
 
-        $options = array(
+        $options = [
             'quality' => $config['quality'],
-        );
+        ];
 
         if (isset($config['jpeg_quality'])) {
             $options['jpeg_quality'] = $config['jpeg_quality'];
@@ -175,7 +175,7 @@ class FilterManager
      */
     public function applyPostProcessors(BinaryInterface $binary, $config)
     {
-        $config += array('post_processors' => array());
+        $config += ['post_processors' => []];
         foreach ($config['post_processors'] as $postProcessorName => $postProcessorOptions) {
             if (!isset($this->postProcessors[$postProcessorName])) {
                 throw new \InvalidArgumentException(sprintf(
@@ -203,7 +203,7 @@ class FilterManager
      *
      * @return BinaryInterface
      */
-    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = array())
+    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = [])
     {
         $config = array_replace_recursive(
             $this->getFilterConfiguration()->get($filter),

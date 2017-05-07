@@ -20,7 +20,7 @@ class ThumbnailFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $mode = ImageInterface::THUMBNAIL_OUTBOUND;
         if (!empty($options['mode']) && 'inset' === $options['mode']) {

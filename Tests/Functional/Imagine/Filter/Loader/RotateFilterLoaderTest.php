@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
+use Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -25,7 +26,7 @@ class RotateFilterLoaderTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader',
+            RotateFilterLoader::class,
             self::$kernel->getContainer()->get('liip_imagine.filter.loader.rotate')
         );
     }

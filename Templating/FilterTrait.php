@@ -9,24 +9,23 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Templating\Helper;
+namespace Liip\ImagineBundle\Templating;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Component\Templating\Helper\Helper;
 
-class ImagineHelper extends Helper
+trait FilterTrait
 {
     /**
      * @var CacheManager
      */
-    protected $cacheManager;
+    private $cache;
 
     /**
-     * @param CacheManager $cacheManager
+     * @param CacheManager $cache
      */
-    public function __construct(CacheManager $cacheManager)
+    public function __construct(CacheManager $cache)
     {
-        $this->cacheManager = $cacheManager;
+        $this->cache = $cache;
     }
 
     /**
@@ -34,13 +33,13 @@ class ImagineHelper extends Helper
      *
      * @param string $path
      * @param string $filter
-     * @param array  $runtimeConfig
+     * @param array  $config
      *
      * @return string
      */
-    public function filter($path, $filter, array $runtimeConfig = array())
+    public function filter($path, $filter, array $config = [], $resolver = null)
     {
-        return $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig);
+        return $this->cache->getBrowserPath($path, $filter, $config, $resolver);
     }
 
     /**

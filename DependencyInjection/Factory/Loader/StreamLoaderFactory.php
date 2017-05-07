@@ -43,9 +43,13 @@ class StreamLoaderFactory extends AbstractLoaderFactory
     {
         $builder
             ->children()
-                ->scalarNode('wrapper')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('context')->defaultValue(null)->end()
-            ->end()
-        ;
+                ->scalarNode('wrapper')
+                    ->isRequired()
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('context')
+                    ->defaultValue(null)
+                ->end()
+            ->end();
     }
 }

@@ -16,7 +16,7 @@ use Imagine\Image\ImageInterface;
 
 class StripFilterLoader implements LoaderInterface
 {
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $filter = new Strip();
         $image = $filter->apply($image);

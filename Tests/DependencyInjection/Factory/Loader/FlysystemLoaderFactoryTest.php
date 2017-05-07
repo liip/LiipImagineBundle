@@ -11,10 +11,13 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
+use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * @requires PHP 5.4
@@ -27,16 +30,16 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
     {
         parent::setUp();
 
-        if (!class_exists('\League\Flysystem\Filesystem')) {
+        if (!class_exists(Filesystem::class)) {
             $this->markTestSkipped('Requires the league/flysystem package.');
         }
     }
 
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory');
+        $rc = new \ReflectionClass(FlysystemLoaderFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
@@ -64,7 +67,7 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
-        $this->assertInstanceOf('Symfony\Component\DependencyInjection\DefinitionDecorator', $loaderDefinition);
+        $this->assertInstanceOf(DefinitionDecorator::class, $loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.flysystem', $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);

@@ -70,7 +70,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      */
     public function process(BinaryInterface $binary)
     {
-        return $this->processWithConfiguration($binary, array());
+        return $this->processWithConfiguration($binary, []);
     }
 
     /**
@@ -86,7 +86,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/png'))) {
+        if (!in_array($type, ['image/png'])) {
             return $binary;
         }
 
@@ -95,7 +95,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
-        $pb = new ProcessBuilder(array($this->optipngBin));
+        $pb = new ProcessBuilder([$this->optipngBin]);
 
         $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
         if ($level !== null) {

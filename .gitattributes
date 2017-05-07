@@ -1,5 +1,5 @@
 * text=auto
-/.composer/ export-ignore
+/.travis/ export-ignore
 /.github/ export-ignore
 /Tests/ export-ignore
 /.coveralls.yml export-ignore

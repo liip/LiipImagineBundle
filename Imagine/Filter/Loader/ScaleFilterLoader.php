@@ -47,7 +47,7 @@ class ScaleFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (!isset($options[$this->dimensionKey]) && !isset($options[$this->ratioKey])) {
             throw new \InvalidArgumentException("Missing $this->dimensionKey or $this->ratioKey option.");

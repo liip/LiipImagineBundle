@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Functional\Binary;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 class MimeTypeGuesserTest extends AbstractWebTestCase
 {
@@ -20,7 +21,7 @@ class MimeTypeGuesserTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser',
+            MimeTypeGuesser::class,
             self::$kernel->getContainer()->get('liip_imagine.mime_type_guesser')
         );
     }

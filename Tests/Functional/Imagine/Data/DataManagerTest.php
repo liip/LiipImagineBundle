@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Data;
 
+use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -23,7 +24,7 @@ class DataManagerTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Data\DataManager',
+            DataManager::class,
             self::$kernel->getContainer()->get('liip_imagine.data.manager')
         );
     }

@@ -12,10 +12,8 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
 class FileSystemLoaderFactory extends AbstractLoaderFactory
@@ -26,8 +24,8 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
-        $definition->replaceArgument(3, $this->createLocatorReference($config['locator']));
+        $definition->replaceArgument(2, new Reference(sprintf('liip_imagine.binary.locator.%s', $config['locator'])));
+        $definition->replaceArgument(3, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
@@ -48,18 +46,18 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $builder
             ->children()
                 ->enumNode('locator')
-                    ->values(array('filesystem', 'filesystem_insecure'))
+                    ->values(['filesystem', 'filesystem_insecure'])
                     ->info('Using the "filesystem_insecure" locator is not recommended due to a less secure resolver mechanism, but is provided for those using heavily symlinked projects.')
                     ->defaultValue('filesystem')
                 ->end()
                 ->arrayNode('data_root')
                     ->beforeNormalization()
                     ->ifString()
-                        ->then(function ($value) { return array($value); })
+                        ->then(function ($value) { return [$value]; })
                     ->end()
-                    ->treatNullLike(array())
-                    ->treatFalseLike(array())
-                    ->defaultValue(array('%kernel.root_dir%/../web'))
+                    ->treatNullLike([])
+                    ->treatFalseLike([])
+                    ->defaultValue(['%kernel.root_dir%/../web'])
                     ->prototype('scalar')
                         ->cannotBeEmpty()
                     ->end()
@@ -71,12 +69,12 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                             ->defaultFalse()
                         ->end()
                         ->enumNode('access_control_type')
-                            ->values(array('blacklist', 'whitelist'))
+                            ->values(['blacklist', 'whitelist'])
                             ->info('Sets the access control method applied to bundle names in "access_control_list" into a blacklist or whitelist.')
                             ->defaultValue('blacklist')
                         ->end()
                         ->arrayNode('access_control_list')
-                            ->defaultValue(array())
+                            ->defaultValue([])
                             ->prototype('scalar')
                                 ->cannotBeEmpty()
                             ->end()
@@ -99,7 +97,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
             return $staticPaths;
         }
 
-        $resourcePaths = array();
+        $resourcePaths = [];
 
         foreach ($this->getBundleResourcePaths($container) as $name => $path) {
             if (('whitelist' === $config['access_control_type']) === in_array($name, $config['access_control_list']) && is_dir($path)) {
@@ -147,7 +145,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     private function getBundlePathsUsingNamedObj(array $classes)
     {
-        $paths = array();
+        $paths = [];
 
         foreach ($classes as $c) {
             try {
@@ -160,21 +158,5 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         }
 
         return $paths;
-    }
-
-    /**
-     * @param string $reference
-     *
-     * @return Reference
-     */
-    private function createLocatorReference($reference)
-    {
-        $name = sprintf('liip_imagine.binary.locator.%s', $reference);
-
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            return new Reference($name);
-        }
-
-        return new Reference($name, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, false);
     }
 }

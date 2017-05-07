@@ -11,7 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -105,7 +107,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFilteredContent, $filteredBinary->getContent());
     }
 
@@ -161,7 +163,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -219,7 +221,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -280,7 +282,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -346,7 +348,7 @@ class FilterManagerTest extends AbstractTest
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -402,7 +404,7 @@ class FilterManagerTest extends AbstractTest
         );
         $filterManager->addLoader('thumbnail', $loader);
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
+        $this->assertInstanceOf(Binary::class, $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
     public function testAlters100QualityIfNotSetOnApplyFilter()
@@ -456,7 +458,7 @@ class FilterManagerTest extends AbstractTest
         );
         $filterManager->addLoader('thumbnail', $loader);
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filterManager->applyFilter($binary, 'thumbnail'));
+        $this->assertInstanceOf(Binary::class, $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
     public function testMergeRuntimeConfigWithOneFromFilterConfigurationOnApplyFilter()
@@ -521,7 +523,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Model\Binary',
+            Binary::class,
             $filterManager->applyFilter($binary, 'thumbnail', $runtimeConfig)
         );
     }
@@ -595,7 +597,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFilteredContent, $filteredBinary->getContent());
     }
 
@@ -644,7 +646,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -695,7 +697,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedFormat, $filteredBinary->getFormat());
     }
 
@@ -749,7 +751,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -808,7 +810,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedMimeType, $filteredBinary->getMimeType());
     }
 
@@ -859,7 +861,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
     }
 
     public function testAlters100QualityIfNotSetOnApply()
@@ -908,7 +910,7 @@ class FilterManagerTest extends AbstractTest
             'post_processors' => array(),
         ));
 
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
     }
 
     public function testApplyPostProcessor()
@@ -979,7 +981,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager->addPostProcessor('foo', $postProcessor);
 
         $filteredBinary = $filterManager->applyFilter($binary, 'thumbnail');
-        $this->assertInstanceOf('\Liip\ImagineBundle\Model\Binary', $filteredBinary);
+        $this->assertInstanceOf(Binary::class, $filteredBinary);
         $this->assertEquals($expectedPostProcessedContent, $filteredBinary->getContent());
     }
     /**
@@ -1047,7 +1049,7 @@ class FilterManagerTest extends AbstractTest
 
     public function testApplyPostProcessorsWhenNotDefined()
     {
-        $binary = $this->getMockBuilder('\Liip\ImagineBundle\Binary\BinaryInterface')->getMock();
+        $binary = $this->getMockBuilder(BinaryInterface::class)->getMock();
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
             $this->createImagineInterfaceMock(),
@@ -1063,6 +1065,6 @@ class FilterManagerTest extends AbstractTest
     protected function createFilterLoaderInterfaceMock()
     {
 //        $this->getMock()
-        return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        return $this->createObjectMock(LoaderInterface::class);
     }
 }

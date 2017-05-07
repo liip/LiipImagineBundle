@@ -21,15 +21,15 @@ class FileSystemLocator implements LocatorInterface
     /**
      * @var string[]
      */
-    private $roots = array();
+    private $roots = [];
 
     /**
      * @param array[] $options
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         $resolver = new OptionsResolver();
-        $resolver->setDefaults(array('roots' => array()));
+        $resolver->setDefaults(['roots' => []]);
 
         try {
             $options = $resolver->resolve($options);
@@ -37,7 +37,7 @@ class FileSystemLocator implements LocatorInterface
             throw new InvalidArgumentException(sprintf('Invalid options provided to %s()', __METHOD__), null, $e);
         }
 
-        $this->roots = array_map(array($this, 'sanitizeRootPath'), (array) $options['roots']);
+        $this->roots = array_map([$this, 'sanitizeRootPath'], (array) $options['roots']);
     }
 
     /**

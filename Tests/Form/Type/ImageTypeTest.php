@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Form\Type;
 use Liip\ImagineBundle\Form\Type\ImageType;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -38,10 +39,6 @@ class ImageTypeTest extends AbstractTest
 
     public function testConfigureOptions()
     {
-        if (SymfonyFramework::isKernelLessThan(2, 6)) {
-            $this->markTestSkipped('No need to test on symfony < 2.6');
-        }
-
         $resolver = new OptionsResolver();
         $type = new ImageType();
 
@@ -54,29 +51,6 @@ class ImageTypeTest extends AbstractTest
         $this->assertTrue($resolver->isDefined('link_url'));
         $this->assertTrue($resolver->isDefined('link_filter'));
         $this->assertTrue($resolver->isDefined('link_attr'));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testSetDefaultOptionsLegacy()
-    {
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
-            $this->markTestSkipped('No need to test on symfony >= 2.6');
-        }
-
-        $resolver = new OptionsResolver();
-        $type = new ImageType();
-
-        $type->setDefaultOptions($resolver);
-
-        $this->assertTrue($resolver->isRequired('image_path'));
-        $this->assertTrue($resolver->isRequired('image_filter'));
-
-        $this->assertTrue($resolver->isKnown('image_attr'));
-        $this->assertTrue($resolver->isKnown('link_url'));
-        $this->assertTrue($resolver->isKnown('link_filter'));
-        $this->assertTrue($resolver->isKnown('link_attr'));
     }
 
     public function testBuildView()
@@ -92,7 +66,7 @@ class ImageTypeTest extends AbstractTest
 
         $view = new FormView();
         $type = new ImageType();
-        $form = $this->createObjectMock('\Symfony\Component\Form\Test\FormInterface');
+        $form = $this->createObjectMock(FormInterface::class);
 
         $type->buildView($view, $form, $options);
 

@@ -64,7 +64,7 @@ class AwsS3Resolver implements ResolverInterface
      * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
      * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
      */
-    public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = array(), $putOptions = array())
+    public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = [], $putOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
@@ -116,22 +116,22 @@ class AwsS3Resolver implements ResolverInterface
             $this->storage->putObject(
                 array_merge(
                     $this->putOptions,
-                    array(
+                    [
                         'ACL' => $this->acl,
                         'Bucket' => $this->bucket,
                         'Key' => $objectPath,
                         'Body' => $binary->getContent(),
                         'ContentType' => $binary->getMimeType(),
-                    )
+                    ]
                 )
             );
         } catch (\Exception $e) {
-            $this->logError('The object could not be created on Amazon S3.', array(
+            $this->logError('The object could not be created on Amazon S3.', [
                 'objectPath' => $objectPath,
                 'filter' => $filter,
                 'bucket' => $this->bucket,
                 'exception' => $e,
-            ));
+            ]);
 
             throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
         }
@@ -153,11 +153,11 @@ class AwsS3Resolver implements ResolverInterface
                     implode('|', $filters)
                 ));
             } catch (\Exception $e) {
-                $this->logError('The objects could not be deleted from Amazon S3.', array(
+                $this->logError('The objects could not be deleted from Amazon S3.', [
                     'filter' => implode(', ', $filters),
                     'bucket' => $this->bucket,
                     'exception' => $e,
-                ));
+                ]);
             }
 
             return;
@@ -171,39 +171,20 @@ class AwsS3Resolver implements ResolverInterface
                 }
 
                 try {
-                    $this->storage->deleteObject(array(
+                    $this->storage->deleteObject([
                         'Bucket' => $this->bucket,
                         'Key' => $objectPath,
-                    ));
+                    ]);
                 } catch (\Exception $e) {
-                    $this->logError('The object could not be deleted from Amazon S3.', array(
+                    $this->logError('The object could not be deleted from Amazon S3.', [
                         'objectPath' => $objectPath,
                         'filter' => $filter,
                         'bucket' => $this->bucket,
                         'exception' => $e,
-                    ));
+                    ]);
                 }
             }
         }
-    }
-
-    /**
-     * Sets a single option to be passed when retrieving an objects URL.
-     *
-     * If the option is already set, it will be overwritten.
-     *
-     * @see Aws\S3\S3Client::getObjectUrl() for available options
-     *
-     * @param string $key   The name of the option
-     * @param mixed  $value The value to be set
-     *
-     * @return AmazonS3Resolver $this
-     *
-     * @deprecated Use `setGetOption` instead
-     */
-    public function setObjectUrlOption($key, $value)
-    {
-        return $this->setGetOption($key, $value);
     }
 
     /**
@@ -289,7 +270,7 @@ class AwsS3Resolver implements ResolverInterface
      * @param mixed $message
      * @param array $context
      */
-    protected function logError($message, array $context = array())
+    protected function logError($message, array $context = [])
     {
         if ($this->logger) {
             $this->logger->error($message, $context);

@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Filesystem\Filesystem;
@@ -52,9 +53,9 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsResolverInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver');
+        $rc = new \ReflectionClass(WebPathResolver::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+        $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
     public function testCouldBeConstructedWithRequiredArguments()
@@ -477,6 +478,6 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function createFilesystemMock()
     {
-        return $this->getMockBuilder('\Symfony\Component\Filesystem\Filesystem')->getMock();
+        return $this->getMockBuilder(Filesystem::class)->getMock();
     }
 }

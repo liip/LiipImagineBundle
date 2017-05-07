@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -23,7 +24,7 @@ class NoCacheWebPathResolverTest extends AbstractWebTestCase
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver',
+            NoCacheWebPathResolver::class,
             self::$kernel->getContainer()->get('liip_imagine.cache.resolver.no_cache_web_path')
         );
     }

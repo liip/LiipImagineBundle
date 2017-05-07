@@ -84,12 +84,12 @@
 
         <!--  Templating helpers and extensions -->
 
-        <service id="liip_imagine.twig.extension" class="Liip\ImagineBundle\Templating\ImagineExtension" public="false">
+        <service id="liip_imagine.templating.filter_extension" class="Liip\ImagineBundle\Templating\FilterExtension" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
-        <service id="liip_imagine.templating.helper" class="Liip\ImagineBundle\Templating\Helper\ImagineHelper">
+        <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
             <tag name="templating.helper" alias="imagine" />
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
@@ -182,11 +182,11 @@
 
         <!-- Data loader locators -->
 
-        <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false">
+        <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false" shared="false">
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 
-        <service id="liip_imagine.binary.locator.filesystem_insecure" class="Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator" public="false">
+        <service id="liip_imagine.binary.locator.filesystem_insecure" class="Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator" public="false" shared="false">
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 
@@ -238,15 +238,13 @@
 
         <!-- Guessers -->
 
-        <service
-            id="liip_imagine.mime_type_guesser"
-            class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface"
-        />
+        <service id="liip_imagine.mime_type_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface">
+            <factory class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser" method="getInstance" />
+        </service>
 
-        <service
-            id="liip_imagine.extension_guesser"
-            class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface"
-        />
+        <service id="liip_imagine.extension_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface">
+            <factory class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser" method="getInstance" />
+        </service>
 
         <service id="liip_imagine.binary.mime_type_guesser" class="Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser">
             <argument type="service" id="liip_imagine.mime_type_guesser" />

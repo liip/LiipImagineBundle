@@ -13,7 +13,6 @@ namespace Liip\ImagineBundle;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
-use Liip\ImagineBundle\DependencyInjection\Compiler\LocatorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
@@ -36,7 +35,6 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new LocatorsCompilerPass());
         $container->addCompilerPass(new LoadersCompilerPass());
         $container->addCompilerPass(new FiltersCompilerPass());
         $container->addCompilerPass(new PostProcessorsCompilerPass());

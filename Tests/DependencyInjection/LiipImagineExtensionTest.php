@@ -15,11 +15,12 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactor
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -77,11 +78,11 @@ class LiipImagineExtensionTest extends AbstractTest
         return array(
             array(
                 'liip_imagine.mime_type_guesser',
-                array('Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance'),
+                array(MimeTypeGuesser::class, 'getInstance'),
             ),
             array(
                 'liip_imagine.extension_guesser',
-                array('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance'),
+                array(ExtensionGuesser::class, 'getInstance'),
             ),
         );
     }
@@ -91,32 +92,10 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     public function testFactoriesConfiguration($service, $factory)
     {
-        if (SymfonyFramework::isKernelLessThan(2, 6)) {
-            $this->markTestSkipped('No need to test on symfony < 2.6');
-        }
-
         $this->createEmptyConfiguration();
         $definition = $this->containerBuilder->getDefinition($service);
 
         $this->assertEquals($factory, $definition->getFactory());
-    }
-
-    /**
-     * @group legacy
-     *
-     * @dataProvider provideFactoryData
-     */
-    public function testFactoriesConfigurationLegacy($service, $factory)
-    {
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 6)) {
-            $this->markTestSkipped('No need to test on symfony >= 2.6');
-        }
-
-        $this->createEmptyConfiguration();
-        $definition = $this->containerBuilder->getDefinition($service);
-
-        $this->assertEquals($factory[0], $definition->getFactoryClass());
-        $this->assertEquals($factory[1], $definition->getFactoryMethod());
     }
 
     protected function createEmptyConfiguration()

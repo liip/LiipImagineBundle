@@ -30,7 +30,7 @@ class ProxyResolver implements ResolverInterface
      *
      * @var array
      */
-    protected $hosts = array();
+    protected $hosts = [];
 
     /**
      * @param ResolverInterface $resolver

@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
+use Liip\ImagineBundle\DependencyInjection\Factory\ChildDefinitionTrait;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -18,6 +19,8 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 abstract class AbstractLoaderFactory implements LoaderFactoryInterface
 {
+    use ChildDefinitionTrait;
+
     /**
      * @var string
      */
@@ -28,10 +31,7 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
      */
     final protected function getChildLoaderDefinition()
     {
-        $parent = sprintf('%s.prototype.%s', static::$namePrefix, $this->getName());
-
-        return class_exists('\Symfony\Component\DependencyInjection\ChildDefinition') ?
-            new ChildDefinition($parent) : new DefinitionDecorator($parent);
+        return $this->getChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $this->getName()));
     }
 
     /**
@@ -43,9 +43,9 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
      */
     final protected function setTaggedLoaderDefinition($name, Definition $definition, ContainerBuilder $container)
     {
-        $definition->addTag(static::$namePrefix, array(
+        $definition->addTag(static::$namePrefix, [
             'loader' => $name,
-        ));
+        ]);
 
         $container->setDefinition(
             $id = sprintf('%s.%s', static::$namePrefix, $name),
