@@ -68,8 +68,8 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
     {
-        $fooBundleRootPath = realpath(__DIR__ . '/../../../Functional/Fixtures/FooBundle');
-        $barBundleRootPath = realpath(__DIR__ . '/../../../Functional/Fixtures/BarBundle');
+        $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
+        $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
 
         $container = new ContainerBuilder();
         $container->setParameter('kernel.bundles_metadata', array(
@@ -94,8 +94,8 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
         $expected = array(
             'theDataRoot',
-            'LiipFooBundle' => $fooBundleRootPath . '/Resources/public',
-            'LiipBarBundle' => $barBundleRootPath . '/Resources/public',
+            'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
+            'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
         $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
@@ -160,7 +160,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
                 'enabled' => true,
                 'access_control_type' => 'whitelist',
                 'access_control_list' => array(
-                    'LiipFooBundle'
+                    'LiipFooBundle',
                 ),
             ),
         ));

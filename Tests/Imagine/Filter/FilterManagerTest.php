@@ -1062,7 +1062,6 @@ class FilterManagerTest extends AbstractTest
      */
     protected function createFilterLoaderInterfaceMock()
     {
-//        $this->getMock()
         return $this->createObjectMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
     }
 }

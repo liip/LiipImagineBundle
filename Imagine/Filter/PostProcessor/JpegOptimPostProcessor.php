@@ -112,13 +112,9 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
     /**
      * @param BinaryInterface $binary
      *
-     * @uses JpegOptimPostProcessor::processWithConfiguration
-     *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
-     *
-     * @see Implementation taken from Assetic\Filter\JpegoptimFilter
      */
     public function process(BinaryInterface $binary)
     {
@@ -132,8 +128,6 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
-     *
-     * @see Implementation taken from Assetic\Filter\JpegoptimFilter
      */
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
