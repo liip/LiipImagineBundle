@@ -96,7 +96,7 @@ class FilterService
      * @throws NotLoadableException
      * @throws NonExistingFilterException
      */
-    public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
+    public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
     {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         if ($this->cacheManager->isStored($runtimePath, $filter, $resolver)) {
@@ -137,7 +137,7 @@ class FilterService
      *
      * @return string
      */
-    public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = array(), $resolver = null)
+    public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
     {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
@@ -152,14 +152,14 @@ class FilterService
 
      * @return BinaryInterface
      */
-    private function createFilteredBinary($path, $filter, array $runtimeFilters = array())
+    private function createFilteredBinary($path, $filter, array $runtimeFilters = [])
     {
         $binary = $this->dataManager->find($filter, $path);
 
         try {
-            return $this->filterManager->applyFilter($binary, $filter, array(
+            return $this->filterManager->applyFilter($binary, $filter, [
                 'filters' => $runtimeFilters,
-            ));
+            ]);
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
 
