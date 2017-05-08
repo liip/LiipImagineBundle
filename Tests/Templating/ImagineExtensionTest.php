@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Templating\Helper;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\ImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
