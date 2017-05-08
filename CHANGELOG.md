@@ -1,7 +1,15 @@
 # Change Log
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-xx-xx)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.4...HEAD)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.8.0...HEAD)
+
+## [1.8.0](https://github.com/liip/LiipImagineBundle/tree/1.8.0) (2017-05-08)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.4...1.8.0)
+
+- \[Minor\] \[Bug\] Revert to php-cs-fixer 1.x and run fixer [\#927](https://github.com/liip/LiipImagineBundle/pull/927) ([robfrawley](https://github.com/robfrawley))
+- \[Routing\] Deprecate XML routing file in favor of YAML [\#925](https://github.com/liip/LiipImagineBundle/pull/925) ([robfrawley](https://github.com/robfrawley))
+- \[Filter\] Add flip filter implementation to core [\#920](https://github.com/liip/LiipImagineBundle/pull/920) ([robfrawley](https://github.com/robfrawley))
+- \[Queue\] Resolve image caches in background using message queue. [\#919](https://github.com/liip/LiipImagineBundle/pull/919) ([makasim](https://github.com/makasim))
 
 ## [1.7.4](https://github.com/liip/LiipImagineBundle/tree/1.7.4) (2017-03-01)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.3...1.7.4)
