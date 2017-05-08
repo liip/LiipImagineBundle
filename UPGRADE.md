@@ -1,5 +1,10 @@
 # Upgrade
 
+## 1.8.0
+
+ - __[Routing]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
+ YAML variant moving forward `Resources/config/routing.yaml`.
+
 ## 1.7.3
 
   - __[Data Loader]__ The `FileSystemLoader` now allows you to assign keys to data roots, and directly reference them when
