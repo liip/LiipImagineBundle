@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Routing\RequestContext;
@@ -26,18 +27,16 @@ class FlysystemResolverTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists('\League\Flysystem\Filesystem')) {
-            $this->markTestSkipped(
-                'The league/flysystem PHP library is not available.'
-            );
+        if (!class_exists(Filesystem::class)) {
+            $this->markTestSkipped('The league/flysystem PHP library is not available.');
         }
     }
 
     public function testImplementsResolverInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver');
+        $rc = new \ReflectionClass(FlysystemResolver::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+        $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
     public function testResolveUriForFilter()
@@ -258,7 +257,7 @@ class FlysystemResolverTest extends AbstractTest
     protected function createFlySystemMock()
     {
         return $this
-            ->getMockBuilder('\League\Flysystem\Filesystem')
+            ->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'delete',

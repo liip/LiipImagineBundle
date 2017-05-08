@@ -69,7 +69,7 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      */
     public function process(BinaryInterface $binary)
     {
-        return $this->processWithConfiguration($binary, array());
+        return $this->processWithConfiguration($binary, []);
     }
 
     /**
@@ -83,11 +83,11 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
         $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/jpeg', 'image/jpg'))) {
+        if (!in_array($type, ['image/jpeg', 'image/jpg'])) {
             return $binary;
         }
 
-        $pb = new ProcessBuilder(array($this->mozjpegBin));
+        $pb = new ProcessBuilder([$this->mozjpegBin]);
 
         // Places emphasis on DC
         $pb->add('-quant-table');

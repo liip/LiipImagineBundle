@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -48,38 +47,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
         }
 
         return $container;
-    }
-
-    /**
-     * @param Definition  $definition
-     * @param string|null $message
-     */
-    protected function assertDefinitionSharingEnabled(Definition $definition, $message = null)
-    {
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            $this->assertTrue($definition->isShared(), $message);
-        } elseif (SymfonyFramework::hasDefinitionScoping()) {
-            $this->assertSame('container', $definition->getScope(), $message);
-        } else {
-            $this->fail(sprintf('Neither sharing or scoping is available for assertion: %s',
-                $message ?: var_export($definition)));
-        }
-    }
-
-    /**
-     * @param Definition  $definition
-     * @param string|null $message
-     */
-    protected function assertDefinitionSharingDisabled(Definition $definition, $message = null)
-    {
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            $this->assertFalse($definition->isShared(), $message);
-        } elseif (SymfonyFramework::hasDefinitionScoping()) {
-            $this->assertSame('prototype', $definition->getScope(), $message);
-        } else {
-            $this->fail(sprintf('Neither sharing or scoping is available for assertion: %s',
-                $message ?: var_export($definition)));
-        }
     }
 
     /**

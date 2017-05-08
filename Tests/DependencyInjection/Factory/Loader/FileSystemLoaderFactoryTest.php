@@ -12,7 +12,10 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\Tests\DependencyInjection\Factory\FactoryTestCase;
+use Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle;
+use Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,9 +27,9 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory');
+        $rc = new \ReflectionClass(FileSystemLoaderFactory::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface'));
+        $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
@@ -63,7 +66,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
-        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
+        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
@@ -98,7 +101,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath . '/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
@@ -134,7 +137,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
@@ -170,7 +173,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
@@ -180,8 +183,8 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
         $container = new ContainerBuilder();
         $container->setParameter('kernel.bundles', array(
-            '\Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle',
-            '\Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle',
+            LiipFooBundle::class,
+            LiipBarBundle::class,
         ));
 
         $loader = new FileSystemLoaderFactory();
@@ -201,7 +204,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     /**

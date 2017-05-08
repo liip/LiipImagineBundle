@@ -67,7 +67,7 @@ subsequently provides an instance of ``BinaryInterface`` in return.
 
 The following is a template for creating your own post-processor that calls an executable.
 You must set the ``EXECUTABLE_PATH`` class constant to the absolute path of the desired
-executable. You may also want to change ``array('image/png')`` to the supported mime types
+executable. You may also want to change ``['image/png']`` to the supported mime types
 for your custom post-processor.
 
 .. code-block:: php
@@ -92,7 +92,7 @@ for your custom post-processor.
         public function process(BinaryInterface $binary)
         {
             // ensure the passed binary is a png
-            if (!in_array(strtolower($binary->getMimeType()), array('image/png'))) {
+            if (!in_array(strtolower($binary->getMimeType()), ['image/png'])) {
                 return $binary;
             }
 
@@ -105,7 +105,7 @@ for your custom post-processor.
             file_put_contents($input, $binary->getContent());
 
             // create a process builder, add the input file as argument
-            $pb = new ProcessBuilder(array(self::EXECUTABLE_PATH));
+            $pb = new ProcessBuilder([self::EXECUTABLE_PATH]);
             $pb->add($input);
 
             // get a process instance and run it

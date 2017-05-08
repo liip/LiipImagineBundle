@@ -25,7 +25,7 @@ class ResizeFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $width = isset($options['size'][0]) ? $options['size'][0] : null;
         $height = isset($options['size'][1]) ? $options['size'][1] : null;

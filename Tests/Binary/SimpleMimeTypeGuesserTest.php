@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Binary;
 
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
@@ -34,7 +35,7 @@ class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsMimeTypeGuesserInterface()
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\MimeTypeGuesserInterface', $this->getSimpleMimeTypeGuesser());
+        $this->assertInstanceOf(MimeTypeGuesserInterface::class, $this->getSimpleMimeTypeGuesser());
     }
 
     /**

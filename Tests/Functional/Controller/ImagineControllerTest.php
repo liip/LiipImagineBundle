@@ -11,8 +11,10 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Controller;
 
+use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @covers \Liip\ImagineBundle\Controller\ImagineController
@@ -21,10 +23,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 {
     public function testCouldBeGetFromContainer()
     {
-        $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Controller\ImagineController',
-            self::$kernel->getContainer()->get('liip_imagine.controller')
-        );
+        $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get('liip_imagine.controller'));
     }
 
     public function testShouldResolvePopulatingCacheFirst()
@@ -36,7 +35,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
@@ -54,7 +53,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
@@ -130,7 +129,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
 
@@ -165,7 +164,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
@@ -185,7 +184,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals(301, $response->getStatusCode());
         $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
 

@@ -48,7 +48,7 @@ class DataManager
     /**
      * @var LoaderInterface[]
      */
-    protected $loaders = array();
+    protected $loaders = [];
 
     /**
      * @param MimeTypeGuesserInterface  $mimeTypeGuesser

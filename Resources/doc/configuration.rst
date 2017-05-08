@@ -72,7 +72,6 @@ Each filter set that you specify has the following options:
   for more information) and options that should be passed to the specific filter type.
 * ``post_processors`` - sets post-processors to be applied on filtered image
   (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
-* ``quality`` - override the default quality of 100 for the generated images. **(deprecated)**
 * ``jpeg_quality`` - override the quality for jpeg images (this overrides the
   ``quality`` option above)
 * ``png_compression_level`` - set the compression level for png images (0-9)

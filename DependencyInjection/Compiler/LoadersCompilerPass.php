@@ -27,8 +27,8 @@ class LoadersCompilerPass extends AbstractCompilerPass
             $manager = $container->getDefinition('liip_imagine.data.manager');
 
             foreach ($tags as $id => $tag) {
-                $manager->addMethodCall('addLoader', array($tag[0]['loader'], new Reference($id)));
-                $this->log($container, 'Registered imagine-bimdle binary loader: %s', array($id));
+                $manager->addMethodCall('addLoader', [$tag[0]['loader'], new Reference($id)]);
+                $this->log($container, 'Registered imagine-bimdle binary loader: %s', [$id]);
             }
         }
     }

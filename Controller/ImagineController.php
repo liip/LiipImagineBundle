@@ -110,7 +110,7 @@ class ImagineController
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
         $resolver = $request->get('resolver');
-        $runtimeConfig = $request->query->get('filters', array());
+        $runtimeConfig = $request->query->get('filters', []);
 
         if (!is_array($runtimeConfig)) {
             throw new NotFoundHttpException(sprintf('Filters must be an array. Value was "%s"', $runtimeConfig));

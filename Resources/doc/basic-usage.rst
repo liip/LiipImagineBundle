@@ -148,11 +148,11 @@ passing the template helper an options array.
     .. code-block:: html+php
 
         <?php
-        $runtimeConfig = array(
-            "thumbnail" => array(
-                "size" => array(50, 50)
-            )
-        );
+        $runtimeConfig = [
+            "thumbnail" => [
+                "size" => [50, 50]
+            ]
+        ];
         ?>
 
         <img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', $runtimeConfig) ?>" />

@@ -20,7 +20,7 @@ class BinaryTest extends \PHPUnit_Framework_TestCase
 {
     public function testImplementsBinaryInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Model\Binary');
+        $rc = new \ReflectionClass(Binary::class);
 
         $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Binary\BinaryInterface'));
     }

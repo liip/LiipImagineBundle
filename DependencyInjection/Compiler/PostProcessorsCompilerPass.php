@@ -32,8 +32,8 @@ class PostProcessorsCompilerPass extends AbstractCompilerPass
             $manager = $container->getDefinition('liip_imagine.filter.manager');
 
             foreach ($tags as $id => $tag) {
-                $manager->addMethodCall('addPostProcessor', array($tag[0]['post_processor'], new Reference($id)));
-                $this->log($container, 'Registered imagine-bimdle filter post-processor: %s', array($id));
+                $manager->addMethodCall('addPostProcessor', [$tag[0]['post_processor'], new Reference($id)]);
+                $this->log($container, 'Registered imagine-bimdle filter post-processor: %s', [$id]);
             }
         }
     }

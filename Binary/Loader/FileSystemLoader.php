@@ -38,30 +38,19 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @param MimeTypeGuesserInterface  $mimeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
-     * @param string[]                  $dataRoots
      * @param LocatorInterface          $locator
+     * @param string[]                  $rootPaths
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
-        $dataRoots
-        /* LocatorInterface $locator */
+        LocatorInterface $locator,
+        array $rootPaths = []
     ) {
         $this->mimeTypeGuesser = $mimeGuesser;
         $this->extensionGuesser = $extensionGuesser;
-
-        if (count($dataRoots) === 0) {
-            throw new InvalidArgumentException('One or more data root paths must be specified.');
-        }
-
-        if (func_num_args() >= 4 && false === ($this->locator = func_get_arg(3)) instanceof LocatorInterface) {
-            throw new \InvalidArgumentException(sprintf('Method %s() expects a LocatorInterface for the forth argument.', __METHOD__));
-        } elseif (func_num_args() < 4) {
-            @trigger_error(sprintf('Method %s() will have a forth `LocatorInterface $locator` argument in version 2.0. Not defining it is deprecated since version 1.7.2', __METHOD__), E_USER_DEPRECATED);
-            $this->locator = new FileSystemLocator();
-        }
-
-        $this->locator->setOptions(array('roots' => (array) $dataRoots));
+        $this->locator = $locator;
+        $this->locator->setOptions(['roots' => $rootPaths]);
     }
 
     /**

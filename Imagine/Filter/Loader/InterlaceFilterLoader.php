@@ -18,7 +18,7 @@ class InterlaceFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $mode = ImageInterface::INTERLACE_LINE;
         if (!empty($options['mode'])) {

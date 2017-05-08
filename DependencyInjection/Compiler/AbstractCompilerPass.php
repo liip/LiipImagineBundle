@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 abstract class AbstractCompilerPass implements CompilerPassInterface
 {
@@ -23,7 +22,7 @@ abstract class AbstractCompilerPass implements CompilerPassInterface
      * @param string           $message
      * @param mixed[]          $replacements
      */
-    protected function log(ContainerBuilder $container, $message, array $replacements = array())
+    protected function log(ContainerBuilder $container, $message, array $replacements = [])
     {
         if (count($replacements) > 0) {
             $message = vsprintf($message, $replacements);
@@ -34,19 +33,6 @@ abstract class AbstractCompilerPass implements CompilerPassInterface
         } else {
             $compiler = $container->getCompiler();
             $compiler->addLogMessage($compiler->getLoggingFormatter()->format($this, $message));
-        }
-    }
-
-    /**
-     * @param Definition $definition
-     * @param bool       $enable
-     */
-    protected function setDefinitionSharing(Definition $definition, $enable)
-    {
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            $definition->setShared($enable);
-        } else {
-            $definition->setScope($enable ? 'container' : 'prototype');
         }
     }
 }

@@ -18,12 +18,12 @@ class FilterConfiguration
     /**
      * @var array
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * @param array $filters
      */
-    public function __construct(array $filters = array())
+    public function __construct(array $filters = [])
     {
         $this->filters = $filters;
     }

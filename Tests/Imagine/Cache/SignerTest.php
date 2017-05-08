@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\Signer;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 /**
@@ -21,9 +22,9 @@ class SignerTest extends AbstractTest
 {
     public function testImplementsSignerInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Signer');
+        $rc = new \ReflectionClass(Signer::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\SignerInterface'));
+        $this->assertTrue($rc->implementsInterface(SignerInterface::class));
     }
 
     public function testCouldBeConstructedWithSecret()

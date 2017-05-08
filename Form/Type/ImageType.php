@@ -42,17 +42,17 @@ class ImageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'image_path',
             'image_filter',
-        ));
+        ]);
 
-        $resolver->setDefaults(array(
-            'image_attr' => array(),
+        $resolver->setDefaults([
+            'image_attr' => [],
             'link_url' => null,
             'link_filter' => null,
-            'link_attr' => array(),
-        ));
+            'link_attr' => [],
+        ]);
     }
 
     /**

@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\Compiler\Compiler;
+use Symfony\Component\DependencyInjection\Compiler\LoggingFormatter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -30,7 +31,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
     private function createAbstractCompilerPassMock(array $methods = array())
     {
         return $this
-            ->getMockBuilder('\Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass')
+            ->getMockBuilder(AbstractCompilerPass::class)
             ->setMethods($methods)
             ->getMock();
     }
@@ -43,7 +44,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
     private function createContainerBuilderMock(array $methods = array())
     {
         return $this
-            ->getMockBuilder('\Symfony\Component\DependencyInjection\ContainerBuilder')
+            ->getMockBuilder(ContainerBuilder::class)
             ->setMethods($methods)
             ->getMock();
     }
@@ -56,7 +57,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
     private function createCompilerMock(array $methods = array())
     {
         return $this
-            ->getMockBuilder('\Symfony\Component\DependencyInjection\Compiler\Compiler')
+            ->getMockBuilder(Compiler::class)
             ->setMethods($methods)
             ->getMock();
     }
@@ -69,7 +70,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
     private function createLoggingFormatterMock(array $methods = array())
     {
         return $this
-            ->getMockBuilder('\Symfony\Component\DependencyInjection\Compiler\LoggingFormatter')
+            ->getMockBuilder(LoggingFormatter::class)
             ->setMethods($methods)
             ->getMock();
     }
@@ -82,7 +83,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
     private function createDefinitionMock(array $methods = array())
     {
         return $this
-            ->getMockBuilder('\Symfony\Component\DependencyInjection\Definition')
+            ->getMockBuilder(Definition::class)
             ->setMethods($methods)
             ->getMock();
     }
@@ -126,43 +127,5 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
 
         $log = $this->getVisibilityRestrictedMethod($pass, 'log');
         $log->invoke($pass, $container, $message, $messageReplaces);
-    }
-
-    public function testSetDefinitionSharing()
-    {
-        $p = $this->createAbstractCompilerPassMock();
-        $m = $this->getVisibilityRestrictedMethod($p, 'setDefinitionSharing');
-
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            $definition = $this->createDefinitionMock(array('setShared'));
-            $definition
-                ->expects($this->atLeastOnce())
-                ->method('setShared')
-                ->with(false);
-        } else {
-            $definition = $this->createDefinitionMock(array('setScope'));
-            $definition
-                ->expects($this->atLeastOnce())
-                ->method('setScope')
-                ->with('prototype');
-        }
-
-        $m->invoke($p, $definition, false);
-
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            $definition = $this->createDefinitionMock(array('setShared'));
-            $definition
-                ->expects($this->atLeastOnce())
-                ->method('setShared')
-                ->with(true);
-        } else {
-            $definition = $this->createDefinitionMock(array('setScope'));
-            $definition
-                ->expects($this->atLeastOnce())
-                ->method('setScope')
-                ->with('container');
-        }
-
-        $m->invoke($p, $definition, true);
     }
 }

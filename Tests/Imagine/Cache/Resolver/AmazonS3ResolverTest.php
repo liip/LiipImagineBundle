@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -22,9 +23,9 @@ class AmazonS3ResolverTest extends AbstractTest
 {
     public function testImplementsResolverInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver');
+        $rc = new \ReflectionClass(AmazonS3Resolver::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface'));
+        $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
     public function testNoDoubleSlashesInObjectUrlOnResolve()
@@ -325,7 +326,7 @@ class AmazonS3ResolverTest extends AbstractTest
      */
     protected function createCFResponseMock($ok = true)
     {
-        $s3Response = $this->createObjectMock('CFResponse', array('isOK'), false);
+        $s3Response = $this->createObjectMock(\CFResponse::class, array('isOK'), false);
         $s3Response
             ->expects($this->once())
             ->method('isOK')
@@ -340,7 +341,7 @@ class AmazonS3ResolverTest extends AbstractTest
     protected function createAmazonS3Mock()
     {
         return $this
-            ->getMockBuilder('AmazonS3')
+            ->getMockBuilder(\AmazonS3::class)
             ->disableOriginalConstructor()
             ->setMethods(array(
                 'if_object_exists',

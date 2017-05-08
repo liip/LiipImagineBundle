@@ -124,7 +124,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         list($rootCachePath) = explode(current($filters), $this->getFilePath('whateverpath', current($filters)));
 
         if (empty($paths)) {
-            $filtersCachePaths = array();
+            $filtersCachePaths = [];
             foreach ($filters as $filter) {
                 $filterCachePath = $rootCachePath.$filter;
                 if (is_dir($filterCachePath)) {

@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\Cache;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -104,7 +105,7 @@ class CacheResolverTest extends AbstractTest
             ->with($this->path, $this->filter)
             ->will($this->returnValue('/the/expected/browser'));
 
-        $cache = $this->getMockBuilder('\Doctrine\Common\Cache\Cache')->getMock();
+        $cache = $this->getMockBuilder(Cache::class)->getMock();
         $cache
             ->expects($this->exactly(1))
             ->method('save');

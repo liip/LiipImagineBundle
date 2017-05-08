@@ -276,7 +276,7 @@ class DataManagerTest extends AbstractTest
 
         $binary = $dataManager->find('thumbnail', 'cats.jpeg');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
+        $this->assertInstanceOf(Binary::class, $binary);
         $this->assertEquals($expectedContent, $binary->getContent());
         $this->assertEquals($expectedMimeType, $binary->getMimeType());
     }
@@ -323,7 +323,7 @@ class DataManagerTest extends AbstractTest
 
         $binary = $dataManager->find('thumbnail', 'cats.jpeg');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Model\Binary', $binary);
+        $this->assertInstanceOf(Binary::class, $binary);
         $this->assertEquals($expectedFormat, $binary->getFormat());
     }
 

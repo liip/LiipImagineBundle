@@ -16,7 +16,7 @@ interface LocatorInterface
     /**
      * @param array $options[]
      */
-    public function setOptions(array $options = array());
+    public function setOptions(array $options = []);
 
     /**
      * @param string $path

@@ -18,24 +18,6 @@ class SymfonyFramework
     /**
      * @return bool
      */
-    public static function hasDefinitionSharing()
-    {
-        return method_exists('\Symfony\Component\DependencyInjection\Definition', 'setShared')
-            && method_exists('\Symfony\Component\DependencyInjection\Definition', 'isShared');
-    }
-
-    /**
-     * @return bool
-     */
-    public static function hasDefinitionScoping()
-    {
-        return method_exists('\Symfony\Component\DependencyInjection\Definition', 'setScope')
-            && method_exists('\Symfony\Component\DependencyInjection\Definition', 'getScope');
-    }
-
-    /**
-     * @return bool
-     */
     public static function hasDirectContainerBuilderLogging()
     {
         return method_exists('\Symfony\Component\DependencyInjection\ContainerBuilder', 'log');

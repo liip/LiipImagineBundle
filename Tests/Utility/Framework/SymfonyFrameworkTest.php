@@ -18,22 +18,22 @@ use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
  */
 class SymfonyFrameworkTest extends \PHPUnit_Framework_TestCase
 {
-    public function testHasDefinitionSharing()
+    public function testKernelComparisonForCurrentKernel()
     {
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(2, 8)) {
-            $this->assertTrue(SymfonyFramework::hasDefinitionSharing());
-        } else {
-            $this->assertFalse(SymfonyFramework::hasDefinitionSharing());
+        if (1 !== preg_match('{(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9x]+)(?:-dev)?}', getenv('SYMFONY_VERSION'), $matches)) {
+            $this->markTestSkipped('Requires environment variable SYMFONY_VERSION with value matching "[0-9].[0-9].[0-9x](-dev)?"');
         }
+
+        list($major, $minor) = [$matches['major'], $matches['minor']];
+
+        $this->assertTrue(SymfonyFramework::isKernelGreaterThanOrEqualTo($major, $minor));
+        $this->assertFalse(SymfonyFramework::isKernelLessThan($major, $minor));
     }
 
-    public function testHasDefinitionScoping()
+    public function testIsKernelLessThan()
     {
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(3, 0)) {
-            $this->assertFalse(SymfonyFramework::hasDefinitionScoping());
-        } else {
-            $this->assertTrue(SymfonyFramework::hasDefinitionScoping());
-        }
+        $this->assertTrue(SymfonyFramework::isKernelLessThan(100, 100, 100));
+        $this->assertFalse(SymfonyFramework::isKernelLessThan(1, 1, 1));
     }
 
     public function testHasDirectContainerBuilderLogging()
@@ -43,25 +43,5 @@ class SymfonyFrameworkTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse(SymfonyFramework::hasDirectContainerBuilderLogging());
         }
-    }
-
-    public function testIsKernelGreaterThanOrEqualToOrLessThan()
-    {
-        if (false === $v = getenv('SYMFONY_VERSION')) {
-            $this->markTestSkipped('Requires SYMFONY_VERSION environment variable.');
-        }
-
-        if (1 !== preg_match('{(?<major>[0-9]+)\.(?<minor>[0-9]+)\.x(?:-dev)?}', $v, $matches)) {
-            $this->markTestSkipped('Requires SYMFONY_VERSION in format x.x.x[-dev]');
-        }
-
-        $this->assertTrue(SymfonyFramework::isKernelGreaterThanOrEqualTo($matches['major'], $matches['minor']));
-        $this->assertFalse(SymfonyFramework::isKernelLessThan($matches['major'], $matches['minor']));
-    }
-
-    public function testIsKernelLessThan()
-    {
-        $this->assertTrue(SymfonyFramework::isKernelLessThan(100, 100, 100));
-        $this->assertFalse(SymfonyFramework::isKernelLessThan(1, 1, 1));
     }
 }

@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -31,7 +32,7 @@ class CacheManagerTest extends AbstractTest
     private function createCacheManagerAwareResolverMock()
     {
         return $resolver = $this
-            ->getMockBuilder('\Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver')
+            ->getMockBuilder(CacheManagerAwareResolver::class)
             ->getMock();
     }
 
@@ -593,7 +594,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf('\Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
             ->will($this->returnCallback(function ($name, $event) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
@@ -627,7 +628,7 @@ class CacheManagerTest extends AbstractTest
             }));
 
         $cacheManager = $this
-            ->getMockBuilder('\Liip\ImagineBundle\Imagine\Cache\CacheManager')
+            ->getMockBuilder(CacheManager::class)
             ->setMethods(array('getResolver'))
             ->setConstructorArgs(array(
                 $this->createFilterConfigurationMock(),
@@ -651,7 +652,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf('\Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
             ->will($this->returnCallback(function ($name, $event) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
@@ -663,7 +664,7 @@ class CacheManagerTest extends AbstractTest
             ->with(
                 ImagineEvents::POST_RESOLVE,
                 $this->logicalAnd(
-                    $this->isInstanceOf('\Liip\ImagineBundle\Events\CacheResolveEvent'),
+                    $this->isInstanceOf(CacheResolveEvent::class),
                     $this->attributeEqualTo('path', 'changed_path'),
                     $this->attributeEqualTo('filter', 'changed_filter')
             ));
@@ -685,7 +686,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(ImagineEvents::POST_RESOLVE, $this->isInstanceOf('\Liip\ImagineBundle\Events\CacheResolveEvent'))
+            ->with(ImagineEvents::POST_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
             ->will($this->returnCallback(function ($name, $event) {
                 $event->setUrl('changed_url');
             }));

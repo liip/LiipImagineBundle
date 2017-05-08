@@ -20,15 +20,15 @@ use Imagine\Image\ImageInterface;
  */
 class AutoRotateFilterLoader implements LoaderInterface
 {
-    protected $orientationKeys = array(
+    protected $orientationKeys = [
         'exif.Orientation',
         'ifd0.Orientation',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if ($orientation = $this->getOrientation($image)) {
             if ($orientation < 1 || $orientation > 8) {

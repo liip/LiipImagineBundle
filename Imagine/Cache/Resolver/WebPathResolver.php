@@ -102,7 +102,7 @@ class WebPathResolver implements ResolverInterface
         }
 
         if (empty($paths)) {
-            $filtersCacheDir = array();
+            $filtersCacheDir = [];
             foreach ($filters as $filter) {
                 $filtersCacheDir[] = $this->cacheRoot.'/'.$filter;
             }

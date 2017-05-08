@@ -28,9 +28,9 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
 {
     public function testImplementsConfigurationInterface()
     {
-        $rc = new \ReflectionClass('\Liip\ImagineBundle\DependencyInjection\Configuration');
+        $rc = new \ReflectionClass(Configuration::class);
 
-        $this->assertTrue($rc->implementsInterface('\Symfony\Component\Config\Definition\ConfigurationInterface'));
+        $this->assertTrue($rc->implementsInterface(ConfigurationInterface::class));
     }
 
     public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments()
@@ -462,7 +462,7 @@ class FooLoaderFactory implements LoaderFactoryInterface
 
 class BarResolverFactory implements ResolverFactoryInterface
 {
-    public function create(ContainerBuilder $container, $loaderName, array $config)
+    public function create(ContainerBuilder $container, $resolverName, array $config)
     {
     }
 
