@@ -45,9 +45,9 @@ class ResolveCacheProcessor implements PsrProcessor, TopicSubscriberInterface, Q
     private $producer;
 
     /**
-     * @param CacheManager $cacheManager
-     * @param FilterManager $filterManager
-     * @param DataManager $dataManager
+     * @param CacheManager      $cacheManager
+     * @param FilterManager     $filterManager
+     * @param DataManager       $dataManager
      * @param ProducerInterface $producer
      */
     public function __construct(

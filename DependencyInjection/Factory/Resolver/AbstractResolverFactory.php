@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\ChildDefinitionTrait;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 

@@ -25,7 +25,7 @@ class FlipFilterLoader implements LoaderInterface
      *
      * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $options = $this->sanitizeOptions($options);
 
@@ -41,7 +41,7 @@ class FlipFilterLoader implements LoaderInterface
     {
         $resolver = new OptionsResolver();
         $resolver->setDefault('axis', 'x');
-        $resolver->setAllowedValues('axis', array('x', 'horizontal', 'y', 'vertical'));
+        $resolver->setAllowedValues('axis', ['x', 'horizontal', 'y', 'vertical']);
         $resolver->setNormalizer('axis', function (Options $options, $value) {
             return $value === 'horizontal' ? 'x' : ($value === 'vertical' ? 'y' : $value);
         });

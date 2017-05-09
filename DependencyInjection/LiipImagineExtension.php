@@ -77,7 +77,7 @@ class LiipImagineExtension extends Extension
         }
 
         $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', [
-            new Reference('liip_imagine.meta_data.reader')
+            new Reference('liip_imagine.meta_data.reader'),
         ]);
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));

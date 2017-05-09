@@ -25,9 +25,9 @@ class CacheResolved implements \JsonSerializable
      * @var string[]
      */
     private $uris;
-    
+
     /**
-     * @param string $path
+     * @param string        $path
      * @param string[]|null $uris
      */
     public function __construct(string $path, array $uris)

@@ -43,6 +43,13 @@ class LiipImagineBundle extends Bundle
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
 
+        if (class_exists(AddTopicMetaPass::class)) {
+            $container->addCompilerPass(AddTopicMetaPass::create()
+                ->add(Topics::RESOLVE_CACHE, 'Send message to this topic when you want to resolve image\'s cache.')
+                ->add(Topics::CACHE_RESOLVED, 'The topic contains messages about resolved image\'s caches')
+            );
+        }
+
         /** @var $extension LiipImagineExtension */
         $extension = $container->getExtension('liip_imagine');
 
@@ -53,12 +60,5 @@ class LiipImagineBundle extends Bundle
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
-
-        if (class_exists('Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass')) {
-            $container->addCompilerPass(AddTopicMetaPass::create()
-                ->add(Topics::RESOLVE_CACHE, 'Send message to this topic when you want to resolve image\'s cache.')
-                ->add(Topics::CACHE_RESOLVED, 'The topic contains messages about resolved image\'s caches')
-            );
-        }
-     }
+    }
 }

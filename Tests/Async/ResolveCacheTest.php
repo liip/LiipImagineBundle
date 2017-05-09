@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
@@ -74,15 +75,21 @@ class ResolveCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($message->isForce());
     }
 
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\LogicException
+     * @expectedExceptionMessage The message does not contain "path" but it is required.
+     */
     public function testThrowIfMessageMissingPathOnJsonDeserialize()
     {
-        $this->setExpectedException('LogicException', 'The message does not contain "path" but it is required.');
         ResolveCache::jsonDeserialize('{}');
     }
 
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\LogicException
+     * @expectedExceptionMessage The message filters could be either null or array.
+     */
     public function testThrowIfMessageContainsNotSupportedFilters()
     {
-        $this->setExpectedException('LogicException', 'The message filters could be either null or array.');
         ResolveCache::jsonDeserialize('{"path": "aPath", "filters": "stringFilterIsNotAllowed"}');
     }
 }

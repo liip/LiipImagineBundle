@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
@@ -9,13 +10,11 @@ use Enqueue\Null\NullMessage;
 use Liip\ImagineBundle\Async\CacheResolved;
 use Liip\ImagineBundle\Async\ResolveCacheProcessor;
 use Liip\ImagineBundle\Async\Topics;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Model\Binary;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
-class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
+class ResolveCacheProcessorTest extends AbstractTest
 {
     public static function setUpBeforeClass()
     {
@@ -261,7 +260,7 @@ class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
         $cacheManagerMock
             ->expects($this->atLeastOnce())
             ->method('resolve')
-            ->willReturnCallback(function($path, $filter) {
+            ->willReturnCallback(function ($path, $filter) {
                 return $path.$filter.'Uri';
             })
         ;
@@ -279,7 +278,7 @@ class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('send')
             ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
-        ->willReturnCallback(function($topic, CacheResolved $message) use ($testCase) {
+        ->willReturnCallback(function ($topic, CacheResolved $message) use ($testCase) {
             $testCase->assertEquals('theImagePath', $message->getPath());
             $testCase->assertEquals(array(
                 'fooFilter' => 'theImagePathfooFilterUri',
@@ -304,35 +303,11 @@ class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
-     */
-    private function createCacheManagerMock()
-    {
-        return $this->createMock('Liip\ImagineBundle\Imagine\Cache\CacheManager', array(), array(), '', false);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterManager
-     */
-    private function createFilterManagerMock()
-    {
-        return $this->createMock('Liip\ImagineBundle\Imagine\Filter\FilterManager', array(), array(), '', false);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DataManager
-     */
-    private function createDataManagerMock()
-    {
-        return $this->createMock('Liip\ImagineBundle\Imagine\Data\DataManager', array(), array(), '', false);
-    }
-
-    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ProducerInterface
      */
     private function createProducerMock()
     {
-        return $this->createMock('Enqueue\Client\ProducerInterface');
+        return $this->createMock(ProducerInterface::class);
     }
 
     /**

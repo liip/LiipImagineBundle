@@ -32,9 +32,9 @@ class ResolveCache implements \JsonSerializable
     private $force;
 
     /**
-     * @param string $path
+     * @param string        $path
      * @param string[]|null $filters
-     * @param bool $force
+     * @param bool          $force
      */
     public function __construct(string $path, array $filters = null, bool $force = false)
     {
