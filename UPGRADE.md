@@ -52,6 +52,10 @@
 
     ```
 
+## 1.8.0
+
+ - __[Routing]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
+ YAML variant moving forward `Resources/config/routing.yaml`.
 
 ## 1.7.3
 

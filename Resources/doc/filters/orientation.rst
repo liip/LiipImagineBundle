@@ -69,6 +69,43 @@ Rotate Options
     Sets the "rotation angle" that defines the degree to rotate the image. Must be a
     positive number.
 
+
+.. _filter-flip:
+
+Flip
+----
+
+The built-in ``flip`` filter performs orientation transformations (specifically
+image flipping). This filter exposes `flip options`_ which may be used to
+configure its behavior.
+
+Example configuration:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        filter_sets:
+
+            # name our filter set "my_flip_filter"
+            my_flip_filter:
+                filters:
+
+                    # use the "flip" filter
+                    flip:
+
+                        # set the axis to flip on
+                        axis: x
+
+
+Flip Options
+~~~~~~~~~~~~
+
+:strong:`axis:` ``string``
+    Sets the "flip axis" that defines the axis on which to flip the image. Valid values:
+    ``x``, ``horizontal``, ``y``, ``vertical``.
+
+
 .. _`BoxInterface`: http://imagine.readthedocs.io/en/latest/usage/coordinates.html#boxinterface
 .. _`Imagine Library`: http://imagine.readthedocs.io/en/latest/
-

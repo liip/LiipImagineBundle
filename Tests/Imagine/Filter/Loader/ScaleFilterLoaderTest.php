@@ -200,5 +200,4 @@ class ScaleFilterLoaderTest extends AbstractTest
             array(array(600, 400), new Box(600, 400)),
         );
     }
-
 }

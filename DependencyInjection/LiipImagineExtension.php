@@ -72,6 +72,10 @@ class LiipImagineExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
+        if ($config['enqueue']) {
+            $loader->load('enqueue.xml');
+        }
+
         $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', [
             new Reference('liip_imagine.meta_data.reader')
         ]);

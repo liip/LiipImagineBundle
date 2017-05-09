@@ -1064,7 +1064,6 @@ class FilterManagerTest extends AbstractTest
      */
     protected function createFilterLoaderInterfaceMock()
     {
-//        $this->getMock()
         return $this->createObjectMock(LoaderInterface::class);
     }
 }

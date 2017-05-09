@@ -53,7 +53,9 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                 ->arrayNode('data_root')
                     ->beforeNormalization()
                     ->ifString()
-                        ->then(function ($value) { return [$value]; })
+                        ->then(function ($value) {
+                            return array($value);
+                        })
                     ->end()
                     ->treatNullLike([])
                     ->treatFalseLike([])

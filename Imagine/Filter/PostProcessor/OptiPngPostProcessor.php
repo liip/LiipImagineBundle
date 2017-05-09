@@ -80,8 +80,6 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      * @throws ProcessFailedException
      *
      * @return BinaryInterface|Binary
-     *
-     * @see    Implementation taken from Assetic\Filter\optipngFilter
      */
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {

@@ -59,8 +59,6 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
     /**
      * @param BinaryInterface $binary
      *
-     * @uses PngquantPostProcessor::processWithConfiguration
-     *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface

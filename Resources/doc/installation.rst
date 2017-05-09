@@ -61,11 +61,11 @@ routing file:
 
         # app/config/routing.yml
         _liip_imagine:
-            resource: "@LiipImagineBundle/Resources/config/routing.xml"
+            resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 
     .. code-block:: xml
 
-        <import resource="@LiipImagineBundle/Resources/config/routing.xml"/>
+        <import resource="@LiipImagineBundle/Resources/config/routing.yaml"/>
 
 Congratulations; you are ready to rock your images!
 
