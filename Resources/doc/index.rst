@@ -45,5 +45,10 @@ usage to the architecture of bundle.
     cache-manager
     commands
 
+.. toctree::
+    :maxdepth: 1
+
+    resolve-cache-images-in-background
+
 
 .. _`LiipImagineBundle`: https://github.com/liip/LiipImagineBundle

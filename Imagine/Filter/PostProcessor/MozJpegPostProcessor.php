@@ -61,8 +61,6 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     /**
      * @param BinaryInterface $binary
      *
-     * @uses MozJpegPostProcessor::processWithConfiguration
-     *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface

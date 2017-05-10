@@ -235,7 +235,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
      * @param string[] $methods
      * @param bool     $constructorInvoke
      * @param mixed[]  $constructorParams
-     * 
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function createObjectMock($object, array $methods = array(), $constructorInvoke = false, array $constructorParams = array())

@@ -11,9 +11,9 @@
 
 use SLLH\StyleCIBridge\ConfigBridge;
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/vendor/sllh/php-cs-fixer-styleci-bridge/autoload.php';
 
-$headerString = <<<EOF
+$header = <<<EOF
 This file is part of the `liip/LiipImagineBundle` project.
 
 (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -22,9 +22,11 @@ For the full copyright and license information, please view the LICENSE.md
 file that was distributed with this source code.
 EOF;
 
-$headerConfig = array( 'header_comment' => array( 'header' => $headerString ) );
-
 $config = ConfigBridge::create();
-$config->setRules(array_merge($config->getRules(), $headerConfig));
+$config
+    ->setRules(array_merge($config->getRules(), [
+        'header_comment' => ['header' => $header],
+    ]))
+    ->setUsingCache(false);
 
 return $config;
