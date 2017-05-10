@@ -67,9 +67,8 @@ class ResolveCacheProcessorTest extends AbstractTest
     public function testCouldBeConstructedWithExpectedArguments()
     {
         new ResolveCacheProcessor(
-            $this->createCacheManagerMock(),
             $this->createFilterManagerMock(),
-            $this->createDataManagerMock(),
+            $this->createFilterServiceMock(),
             $this->createProducerMock()
         );
     }
@@ -77,9 +76,8 @@ class ResolveCacheProcessorTest extends AbstractTest
     public function testShouldRejectMessagesWithInvalidJsonBody()
     {
         $processor = new ResolveCacheProcessor(
-            $this->createCacheManagerMock(),
             $this->createFilterManagerMock(),
-            $this->createDataManagerMock(),
+            $this->createFilterServiceMock(),
             $this->createProducerMock()
         );
 
@@ -96,9 +94,8 @@ class ResolveCacheProcessorTest extends AbstractTest
     public function testShouldRejectMessagesWithoutPass()
     {
         $processor = new ResolveCacheProcessor(
-            $this->createCacheManagerMock(),
             $this->createFilterManagerMock(),
-            $this->createDataManagerMock(),
+            $this->createFilterServiceMock(),
             $this->createProducerMock()
         );
 
@@ -112,71 +109,178 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertEquals('The message does not contain "path" but it is required.', $result->getReason());
     }
 
-    public function testShouldResolveCacheIfNotStored()
+    public function testShouldCreateFilteredImage()
     {
-        $originalBinary = $this->createDummyBinary();
-        $filteredBinary = $this->createDummyBinary();
+        $filterName = 'fooFilter';
+        $imagePath = 'theImagePath';
 
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
             ->expects($this->once())
             ->method('getFilterConfiguration')
             ->willReturn(new FilterConfiguration(array(
-                'fooFilter' => array('fooFilterConfig'),
+                $filterName => array('fooFilterConfig'),
             )))
         ;
-        $filterManagerMock
-            ->expects($this->once())
-            ->method('applyFilter')
-            ->with($this->identicalTo($originalBinary), 'fooFilter')
-            ->willReturn($filteredBinary)
-        ;
 
-        $cacheManagerMock = $this->createCacheManagerMock();
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->willReturn(false)
-        ;
-        $cacheManagerMock
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
             ->expects($this->once())
-            ->method('store')
-            ->with(
-                $this->identicalTo($filteredBinary),
-                'theImagePath',
-                'fooFilter'
-            )
-        ;
-        $cacheManagerMock
-            ->expects($this->once())
-            ->method('resolve')
-            ->with('theImagePath', 'fooFilter')
-        ;
-
-        $dataManagerMock = $this->createDataManagerMock();
-        $dataManagerMock
-            ->expects($this->once())
-            ->method('find')
-            ->with('fooFilter', 'theImagePath')
-            ->willReturn($originalBinary)
-        ;
+            ->method('createFilteredImage')
+            ->with($imagePath, $filterName);
 
         $processor = new ResolveCacheProcessor(
-            $cacheManagerMock,
             $filterManagerMock,
-            $dataManagerMock,
+            $filterServiceMock,
             $this->createProducerMock()
         );
 
         $message = new NullMessage();
-        $message->setBody('{"path": "theImagePath"}');
+        $message->setBody(json_encode(['path' => $imagePath]));
 
         $result = $processor->process($message, new NullContext());
 
         $this->assertEquals(Result::ACK, $result);
     }
 
-    public function testShouldNotResolveCacheIfStoredAndNotForce()
+    public function testShouldCreateOneImagePerFilter()
+    {
+        $filterName1 = 'fooFilter';
+        $filterName2 = 'barFilter';
+        $imagePath = 'theImagePath';
+
+        $filterManagerMock = $this->createFilterManagerMock();
+        $filterManagerMock
+            ->expects($this->once())
+            ->method('getFilterConfiguration')
+            ->willReturn(new FilterConfiguration(array(
+                $filterName1 => array('fooFilterConfig'),
+                $filterName2 => array('fooFilterConfig'),
+            )))
+        ;
+
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
+            ->expects($this->exactly(2))
+            ->method('createFilteredImage')
+            ->withConsecutive(
+                [$imagePath, $filterName1],
+                [$imagePath, $filterName2]
+            );
+
+        $processor = new ResolveCacheProcessor(
+            $filterManagerMock,
+            $filterServiceMock,
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody(json_encode(['path' => $imagePath]));
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertEquals(Result::ACK, $result);
+    }
+
+    public function testShouldOnlyCreateImageForRequestedFilter()
+    {
+        $relevantFilter = 'fooFilter';
+        $imagePath = 'theImagePath';
+
+        $filterManagerMock = $this->createFilterManagerMock();
+        $filterManagerMock
+            ->expects($this->never())
+            ->method('getFilterConfiguration');
+
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
+            ->expects($this->once())
+            ->method('createFilteredImage')
+            ->with($imagePath, $relevantFilter);
+
+        $processor = new ResolveCacheProcessor(
+            $filterManagerMock,
+            $filterServiceMock,
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody(json_encode(['path' => $imagePath, 'filters' => [$relevantFilter]]));
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertEquals(Result::ACK, $result);
+    }
+
+    public function testShouldCreateOneImagePerRequestedFilter()
+    {
+        $relevantFilter1 = 'fooFilter';
+        $relevantFilter2 = 'fooFilter';
+        $imagePath = 'theImagePath';
+
+        $filterManagerMock = $this->createFilterManagerMock();
+        $filterManagerMock
+            ->expects($this->never())
+            ->method('getFilterConfiguration');
+
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
+            ->expects($this->exactly(2))
+            ->method('createFilteredImage')
+            ->withConsecutive(
+                [$imagePath, $relevantFilter1],
+                [$imagePath, $relevantFilter2]
+            );
+
+        $processor = new ResolveCacheProcessor(
+            $filterManagerMock,
+            $filterServiceMock,
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody(json_encode(['path' => $imagePath, 'filters' => [$relevantFilter1, $relevantFilter2]]));
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertEquals(Result::ACK, $result);
+    }
+
+    public function testShouldBurstCacheWhenResolvingForced()
+    {
+        $filterName = 'fooFilter';
+        $imagePath = 'theImagePath';
+
+        $filterManagerMock = $this->createFilterManagerMock();
+        $filterManagerMock
+            ->expects($this->once())
+            ->method('getFilterConfiguration')
+            ->willReturn(new FilterConfiguration(array(
+                $filterName => array('fooFilterConfig'),
+            )))
+        ;
+
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
+            ->expects($this->once())
+            ->method('bustCache')
+            ->with($imagePath, $filterName);
+
+        $processor = new ResolveCacheProcessor(
+            $filterManagerMock,
+            $filterServiceMock,
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody(json_encode(['path' => $imagePath, 'force' => true]));
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertEquals(Result::ACK, $result);
+    }
+
+    public function testShouldNotBurstCacheWhenResolvingNotForced()
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -186,43 +290,20 @@ class ResolveCacheProcessorTest extends AbstractTest
                 'fooFilter' => array('fooFilterConfig'),
             )))
         ;
-        $filterManagerMock
-            ->expects($this->never())
-            ->method('applyFilter')
-        ;
 
-        $cacheManagerMock = $this->createCacheManagerMock();
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->willReturn(true)
-        ;
-        $cacheManagerMock
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
             ->expects($this->never())
-            ->method('store')
-        ;
-        $cacheManagerMock
-            ->expects($this->once())
-            ->method('resolve')
-            ->with('theImagePath', 'fooFilter')
-            ->willReturn('fooFilterUri')
-        ;
-
-        $dataManagerMock = $this->createDataManagerMock();
-        $dataManagerMock
-            ->expects($this->never())
-            ->method('find')
-        ;
+            ->method('bustCache');
 
         $processor = new ResolveCacheProcessor(
-            $cacheManagerMock,
             $filterManagerMock,
-            $dataManagerMock,
+            $filterServiceMock,
             $this->createProducerMock()
         );
 
         $message = new NullMessage();
-        $message->setBody('{"path": "theImagePath"}');
+        $message->setBody(json_encode(['path' => 'theImagePath']));
 
         $result = $processor->process($message, new NullContext());
 
@@ -241,46 +322,23 @@ class ResolveCacheProcessorTest extends AbstractTest
                 'bazFilter' => array('bazFilterConfig'),
             )))
         ;
-        $filterManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->willReturn($this->createDummyBinary())
-        ;
 
-        $cacheManagerMock = $this->createCacheManagerMock();
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->willReturn(false)
-        ;
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('store')
-        ;
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('resolve')
-            ->willReturnCallback(function ($path, $filter) {
+        $filterServiceMock = $this->createFilterServiceMock();
+        $filterServiceMock
+            ->expects($this->exactly(3))
+            ->method('getUrlOfFilteredImage')
+            ->willReturnCallback(function($path, $filter) {
                 return $path.$filter.'Uri';
-            })
-        ;
+            });
 
-        $dataManagerMock = $this->createDataManagerMock();
-        $dataManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->willReturn($this->createDummyBinary())
-        ;
-
-        $testCase = $this;
         $producerMock = $this->createProducerMock();
         $producerMock
             ->expects($this->once())
             ->method('send')
             ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
-        ->willReturnCallback(function ($topic, CacheResolved $message) use ($testCase) {
-            $testCase->assertEquals('theImagePath', $message->getPath());
-            $testCase->assertEquals(array(
+        ->willReturnCallback(function ($topic, CacheResolved $message) {
+            $this->assertEquals('theImagePath', $message->getPath());
+            $this->assertEquals(array(
                 'fooFilter' => 'theImagePathfooFilterUri',
                 'barFilter' => 'theImagePathbarFilterUri',
                 'bazFilter' => 'theImagePathbazFilterUri',
@@ -288,14 +346,13 @@ class ResolveCacheProcessorTest extends AbstractTest
         });
 
         $processor = new ResolveCacheProcessor(
-            $cacheManagerMock,
             $filterManagerMock,
-            $dataManagerMock,
+            $filterServiceMock,
             $producerMock
         );
 
         $message = new NullMessage();
-        $message->setBody('{"path": "theImagePath"}');
+        $message->setBody(json_encode(['path' => 'theImagePath']));
 
         $result = $processor->process($message, new NullContext());
 
@@ -308,13 +365,5 @@ class ResolveCacheProcessorTest extends AbstractTest
     private function createProducerMock()
     {
         return $this->createMock(ProducerInterface::class);
-    }
-
-    /**
-     * @return Binary
-     */
-    private function createDummyBinary()
-    {
-        return new Binary('theContent', 'image/png', 'png');
     }
 }

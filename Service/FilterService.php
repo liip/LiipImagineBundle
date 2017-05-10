@@ -120,6 +120,19 @@ class FilterService
     /**
      * @param string $path
      * @param string $filter
+     */
+    public function bustCache($path, $filter)
+    {
+        if (!$this->cacheManager->isStored($path, $filter)) {
+            return;
+        }
+
+        $this->cacheManager->remove($path, $filter);
+    }
+
+    /**
+     * @param string $path
+     * @param string $filter
      * @param string $resolver
      *
      * @return string
