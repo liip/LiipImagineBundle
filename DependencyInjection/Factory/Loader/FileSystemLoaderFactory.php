@@ -14,8 +14,8 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class FileSystemLoaderFactory extends AbstractLoaderFactory
 {
@@ -24,9 +24,11 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
+        $locatorDefinition = new ChildDefinition(sprintf('liip_imagine.binary.locator.%s', $config['locator']));
+        $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, new Reference(sprintf('liip_imagine.binary.locator.%s', $config['locator'])));
-        $definition->replaceArgument(3, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+        $definition->replaceArgument(2, $locatorDefinition);
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }

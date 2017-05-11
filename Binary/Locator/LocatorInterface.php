@@ -14,11 +14,6 @@ namespace Liip\ImagineBundle\Binary\Locator;
 interface LocatorInterface
 {
     /**
-     * @param array $options[]
-     */
-    public function setOptions(array $options = []);
-
-    /**
      * @param string $path
      *
      * @return string

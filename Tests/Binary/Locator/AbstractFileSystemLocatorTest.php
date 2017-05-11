@@ -46,14 +46,6 @@ abstract class AbstractFileSystemLocatorTest extends TestCase
         $this->getFileSystemLocator(__DIR__)->locate('fileNotExist');
     }
 
-    public function testThrowsIfInvalidOptionProvided()
-    {
-        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid options provided to');
-
-        $this->getFileSystemLocator(__DIR__)->setOptions(['foo' => 'bar']);
-    }
-
     public function testThrowsIfRootPlaceholderInvalid()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);

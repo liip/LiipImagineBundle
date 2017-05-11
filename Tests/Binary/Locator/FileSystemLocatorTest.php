@@ -81,9 +81,6 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
      */
     protected function getFileSystemLocator($paths)
     {
-        $locator = new FileSystemLocator();
-        $locator->setOptions(['roots' => (array) $paths]);
-
-        return $locator;
+        return new FileSystemLocator((array) $paths);
     }
 }
