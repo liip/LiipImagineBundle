@@ -43,6 +43,8 @@ Options
 :strong:`quality:` ``int``
     Sets the image quality factor.
 
+:strong:`quant_table:` ``int``
+    Sets the quantization table.
 
 Parameters
 ----------

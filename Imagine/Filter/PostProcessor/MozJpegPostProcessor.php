@@ -32,18 +32,24 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     /** @var null|int Quality factor */
     protected $quality;
 
+    /** @var null|int quantization table */
+    protected $quantTable;
+
     /**
      * Constructor.
      *
      * @param string   $mozjpegBin Path to the mozjpeg cjpeg binary
      * @param int|null $quality    Quality factor
+     * @param int|null $quantTable    Quantization table
      */
     public function __construct(
         $mozjpegBin = '/opt/mozjpeg/bin/cjpeg',
-        $quality = null
+        $quality = null,
+        $quantTable = 2
     ) {
         $this->mozjpegBin = $mozjpegBin;
         $this->setQuality($quality);
+        $this->setQuantTable($quantTable);
     }
 
     /**
@@ -54,6 +60,18 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
     public function setQuality($quality)
     {
         $this->quality = $quality;
+
+        return $this;
+    }
+
+    /**
+     * @param int $quantTable
+     *
+     * @return MozJpegPostProcessor
+     */
+    public function setQuantTable($quantTable)
+    {
+        $this->quantTable = $quantTable;
 
         return $this;
     }
@@ -88,8 +106,12 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
         $pb = new ProcessBuilder(array($this->mozjpegBin));
 
         // Places emphasis on DC
-        $pb->add('-quant-table');
-        $pb->add(2);
+        $quantTable = array_key_exists('quant_table', $options) ? $options['quant_table'] : $this->quantTable;
+        if (null !== $quantTable) {
+            $pb->add('-quant-table');
+            $pb->add($quantTable);
+        }
+
 
         $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
         if ($transformQuality !== null) {
