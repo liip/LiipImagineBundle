@@ -1,5 +1,21 @@
 # Upgrade
 
+## 1.9.0
+
+ - __[Data Loader]__ The arguments for the `FileSystemLoader` class constructor have changed. Instead of passing data
+ roots as third parameter and optionally a `LocatorInterace` as fourth parameter, a `LocatorInterface`
+ should now be passed as third parameter. The data roots no longer need to be passed to the `FileSystemLoader` class
+ constructor but need to be passed to `LocatorInterface` class constructor instead.
+ Passing data roots as a third parameter to the `FileSystemLoader` class constructor is still allowed, but deprecated
+ and will be removed in `2.0`.
+ Passing both data roots as well as a `LocatorInterface` instance to the `FileSystemLoader` class constructor is no
+ longer allowed since the `FileSystemLoader` is no longer able to pass the data roots to the supplied `LocatorInterface`
+ as the data roots are now a constructor argument to the `LocatorInterface` and thus cannot be overwritten at runtime
+ anymore.
+ - __[Data Locator]__ The `setOptions` method has been removed from the `LocatorInterface`. Data roots need to be passed
+ to the constructor directly instead. For example `FileSystemLocator::setOptions(array('roots' => array(__DIR__))` would
+ change to `new FileSystemLocator(array(__DIR__))`. Changing root paths at runtime is no longer supported.
+
 ## 1.8.0
 
  - __[Routing]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
