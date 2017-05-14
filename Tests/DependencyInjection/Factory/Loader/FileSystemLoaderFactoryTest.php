@@ -210,6 +210,38 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
+    public function testAbleToCreateTwoDistinctLoaders()
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'first_loader', array(
+            'data_root' => array('firstLoaderDataroot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => false,
+            ),
+        ));
+
+        $loader->create($container, 'second_loader', array(
+            'data_root' => array('secondLoaderDataroot'),
+            'locator' => 'filesystem',
+            'bundle_resources' => array(
+                'enabled' => false,
+            ),
+        ));
+
+        $this->assertEquals(
+            array('firstLoaderDataroot'),
+            $container->getDefinition('liip_imagine.binary.loader.first_loader')->getArgument(2)->getArgument(0)
+        );
+
+        $this->assertEquals(
+            array('secondLoaderDataroot'),
+            $container->getDefinition('liip_imagine.binary.loader.second_loader')->getArgument(2)->getArgument(0)
+        );
+    }
+
     public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
