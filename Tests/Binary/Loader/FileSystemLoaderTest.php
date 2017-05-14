@@ -18,7 +18,6 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
@@ -110,7 +109,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
             array(__DIR__),
-            new FileSystemLocator([__DIR__.'/../'])
+            new FileSystemLocator(array(__DIR__.'/../'))
         );
     }
 
@@ -213,7 +212,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      *
      * @return FileSystemLoader
      */
-    private function getFileSystemLoader($roots = [], LocatorInterface $locator = null)
+    private function getFileSystemLoader($roots = array(), LocatorInterface $locator = null)
     {
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
