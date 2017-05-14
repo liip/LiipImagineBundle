@@ -65,4 +65,30 @@ class ImagineExtensionTest extends AbstractTest
         $this->assertInternalType('array', $filters);
         $this->assertCount(1, $filters);
     }
+
+    public function testStripsQueryStringFromPathAndAppendToFinalUrl()
+    {
+        $cacheManager = $this->createCacheManagerMock();
+
+        $cacheManager
+            ->method('getBrowserPath')
+            ->will($this->returnValue('/resolved/abc.png'));
+
+        $extension = new ImagineExtension($cacheManager);
+
+        $this->assertEquals('/resolved/abc.png?v=123', $extension->filter('abc.png?v=123', 'foo'));
+    }
+
+    public function testAppendsQueryStringToExistingQueryStringInFinalUrl()
+    {
+        $cacheManager = $this->createCacheManagerMock();
+
+        $cacheManager
+            ->method('getBrowserPath')
+            ->will($this->returnValue('/resolved/abc.png?foo=bar'));
+
+        $extension = new ImagineExtension($cacheManager);
+
+        $this->assertEquals('/resolved/abc.png?foo=bar&v=123', $extension->filter('abc.png?v=123', 'foo'));
+    }
 }
