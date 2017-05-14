@@ -13,8 +13,6 @@ namespace Liip\ImagineBundle\Binary\Locator;
 
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileSystemLocator implements LocatorInterface
 {
