@@ -88,4 +88,5 @@ script:
 after_script:
   - if [ "${TRAVIS_PHP_VERSION}" != "5.3" ]; then bin/coveralls -vvv; fi;
 
+
 ...
