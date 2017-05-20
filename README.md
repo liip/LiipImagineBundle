@@ -329,7 +329,6 @@ class MyController extends Controller
             ->get('liip_imagine.service.filter');
 
         // 1) Simple filter, OR
-        $imagine->createFilteredImage('uploads/foo.jpg', 'my_thumb');
         $resourcePath = $imagine->getUrlOfFilteredImage('uploads/foo.jpg', 'my_thumb');
         
         // 2) Runtime configuration
@@ -338,11 +337,6 @@ class MyController extends Controller
                 'size' => [200, 200]
             ],
         ];
-        $imagine->createFilteredImageWithRuntimeFilters(
-            'uploads/foo.jpg',
-            'my_thumb',
-            $runtimeConfig
-        );
         $resourcePath = $imagine->getUrlOfFilteredImageWithRuntimeFilters(
             'uploads/foo.jpg',
             'my_thumb',
