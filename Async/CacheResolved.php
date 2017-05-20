@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Async;
 
 use Enqueue\Util\JSON;
@@ -14,9 +15,9 @@ class CacheResolved implements \JsonSerializable
      * @var \string[]
      */
     private $uris;
-    
+
     /**
-     * @param string $path
+     * @param string        $path
      * @param string[]|null $uris
      */
     public function __construct($path, array $uris)

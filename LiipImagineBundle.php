@@ -62,5 +62,5 @@ class LiipImagineBundle extends Bundle
                 ->add(Topics::CACHE_RESOLVED, 'The topic contains messages about resolved image\'s caches')
             );
         }
-     }
+    }
 }
