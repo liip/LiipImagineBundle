@@ -128,7 +128,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp {Method .+ expects a LocatorInterface for the forth argument}
+     * @expectedExceptionMessageRegExp {Unknown call to [^(]+__construct\(\)\. Please check the method signature\.}
      */
     public function testThrowsIfConstructionArgumentsInvalid()
     {
@@ -146,7 +146,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsIfZeroCountRootPathArray()
     {
-        $this->getFileSystemLoader(array());
+        new FileSystemLoader(MimeTypeGuesser::getInstance(), ExtensionGuesser::getInstance(), array());
     }
 
     /**
@@ -206,9 +206,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return FileSystemLocator
      */
-    private function getFileSystemLocator()
+    private function getFileSystemLocator($dataRoots)
     {
-        return new FileSystemLocator();
+        return new FileSystemLocator((array) $dataRoots);
     }
 
     /**
@@ -230,8 +230,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $root ? $root : $this->getDefaultDataRoots(),
-            null !== $locator ? $locator : $this->getFileSystemLocator()
+            null !== $locator ? $locator : $this->getFileSystemLocator(null !== $root ? $root : $this->getDefaultDataRoots())
         );
     }
 

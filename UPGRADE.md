@@ -1,5 +1,17 @@
 # Upgrade
 
+## 1.8.1
+
+ - __[Data Loader]__ The arguments for the `FileSystemLoader` class constructor have changed. Instead of passing data
+ roots as third parameter and optionally a `LocatorInterace` as fourth parameter, a `LocatorInterface`
+ should now be passed as third parameter. The data roots no longer need to be passed to the `FileSystemLoader` class
+ constructor but need to be passed to `LocatorInterface` class constructor instead.
+ Passing data roots as a third parameter to the `FileSystemLoader` class constructor is still allowed, but deprecated
+ and will be removed in `2.0`.
+ Passing both data roots as well as a `LocatorInterface` instance to the `FileSystemLoader` class constructor is still
+ supported but deprecated and will be removed in `2.0` as well. Note that when you this, any data root that was already
+ set in the `LocatorInteface` will be overwritten by de data roots passed to the `FileSystemLoader`.
+ 
 ## 1.8.0
 
  - __[Routing]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
