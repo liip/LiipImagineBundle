@@ -23,6 +23,11 @@ class FileSystemLocator implements LocatorInterface
      */
     private $roots = array();
 
+    public function __construct(array $dataRoots = array())
+    {
+        $this->setOptions(array('roots' => $dataRoots));
+    }
+
     /**
      * @param array[] $options
      */

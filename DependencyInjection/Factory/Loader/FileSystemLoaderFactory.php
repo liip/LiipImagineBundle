@@ -14,8 +14,10 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
 class FileSystemLoaderFactory extends AbstractLoaderFactory
@@ -25,9 +27,18 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
+        $parentLocatorServiceId = sprintf('liip_imagine.binary.locator.%s', $config['locator']);
+
+        $locatorDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition') ?
+            new ChildDefinition($parentLocatorServiceId) : new DefinitionDecorator($parentLocatorServiceId);
+
+        $locatorServiceId = sprintf('liip_imagine.binary.locator.%s.%s', $config['locator'], $loaderName);
+        $container->setDefinition($locatorServiceId, $locatorDefinition);
+
+        $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
-        $definition->replaceArgument(3, $this->createLocatorReference($config['locator']));
+        $definition->replaceArgument(2, new Reference($locatorServiceId));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
@@ -162,21 +173,5 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         }
 
         return $paths;
-    }
-
-    /**
-     * @param string $reference
-     *
-     * @return Reference
-     */
-    private function createLocatorReference($reference)
-    {
-        $name = sprintf('liip_imagine.binary.locator.%s', $reference);
-
-        if (SymfonyFramework::hasDefinitionSharing()) {
-            return new Reference($name);
-        }
-
-        return new Reference($name, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, false);
     }
 }
