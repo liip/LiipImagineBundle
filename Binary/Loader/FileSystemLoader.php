@@ -68,6 +68,7 @@ class FileSystemLoader implements LoaderInterface
                     );
 
                     $this->locator = func_get_arg(3);
+                    $this->locator->setOptions(array('roots' => (array) $locatorOrDataRoots));
                 } else {
                     throw new \InvalidArgumentException(sprintf('Unknown call to %s(). Please check the method signature.', __METHOD__));
                 }
@@ -80,10 +81,8 @@ class FileSystemLoader implements LoaderInterface
                     E_USER_DEPRECATED
                 );
 
-                $this->locator = new FileSystemLocator();
+                $this->locator = new FileSystemLocator((array) $locatorOrDataRoots);
             }
-
-            $this->locator->setOptions(array('roots' => (array) $locatorOrDataRoots));
         } elseif ($locatorOrDataRoots instanceof LocatorInterface) {
             $this->locator = $locatorOrDataRoots;
         } else {
