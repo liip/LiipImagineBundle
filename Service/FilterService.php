@@ -57,7 +57,7 @@ class FilterService
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
-        $this->logger = $logger ? $logger : new NullLogger();
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
