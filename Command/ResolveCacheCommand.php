@@ -74,8 +74,6 @@ EOF
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $filterService->createFilteredImage($path, $filter);
-
                 $output->writeln($filterService->getUrlOfFilteredImage($path, $filter));
             }
         }

@@ -72,8 +72,6 @@ class ResolveCacheProcessor implements PsrProcessor, TopicSubscriberInterface, Q
                 $this->filterService->bustCache($path, $filter);
             }
 
-            $this->filterService->createFilteredImage($path, $filter);
-
             $results[$filter] = $this->filterService->getUrlOfFilteredImage($path, $filter);
         }
 

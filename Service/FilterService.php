@@ -61,63 +61,6 @@ class FilterService
     }
 
     /**
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $resolver
-     *
-     * @throws NotLoadableException
-     * @throws NonExistingFilterException
-     */
-    public function createFilteredImage($path, $filter, $resolver = null)
-    {
-        if ($this->cacheManager->isStored($path, $filter, $resolver)) {
-            return;
-        }
-
-        $filteredBinary = $this->createFilteredBinary(
-            $path,
-            $filter
-        );
-
-        $this->cacheManager->store(
-            $filteredBinary,
-            $path,
-            $filter,
-            $resolver
-        );
-    }
-
-    /**
-     * @param string      $path
-     * @param string      $filter
-     * @param array       $runtimeFilters
-     * @param string|null $resolver
-     *
-     * @throws NotLoadableException
-     * @throws NonExistingFilterException
-     */
-    public function createFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
-    {
-        $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
-        if ($this->cacheManager->isStored($runtimePath, $filter, $resolver)) {
-            return;
-        }
-
-        $filteredBinary = $this->createFilteredBinary(
-            $path,
-            $filter,
-            $runtimeFilters
-        );
-
-        $this->cacheManager->store(
-            $filteredBinary,
-            $runtimePath,
-            $filter,
-            $resolver
-        );
-    }
-
-    /**
      * @param string $path
      * @param string $filter
      */
@@ -139,6 +82,22 @@ class FilterService
      */
     public function getUrlOfFilteredImage($path, $filter, $resolver = null)
     {
+        if ($this->cacheManager->isStored($path, $filter, $resolver)) {
+            return $this->cacheManager->resolve($path, $filter, $resolver);
+        }
+
+        $filteredBinary = $this->createFilteredBinary(
+            $path,
+            $filter
+        );
+
+        $this->cacheManager->store(
+            $filteredBinary,
+            $path,
+            $filter,
+            $resolver
+        );
+
         return $this->cacheManager->resolve($path, $filter, $resolver);
     }
 
@@ -153,6 +112,23 @@ class FilterService
     public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
     {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
+        if ($this->cacheManager->isStored($runtimePath, $filter, $resolver)) {
+            return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
+        }
+
+        $filteredBinary = $this->createFilteredBinary(
+            $path,
+            $filter,
+            $runtimeFilters
+        );
+
+        $this->cacheManager->store(
+            $filteredBinary,
+            $runtimePath,
+            $filter,
+            $resolver
+        );
+
         return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
     }
 

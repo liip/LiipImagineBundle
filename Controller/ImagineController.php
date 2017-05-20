@@ -73,8 +73,6 @@ class ImagineController
         $resolver = $request->get('resolver');
 
         try {
-            $this->filterService->createFilteredImage($path, $filter, $resolver);
-
             return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), 301);
         } catch (NotLoadableException $e) {
             if ($this->dataManager->getDefaultImageUrl($filter) !== null) {
@@ -126,8 +124,6 @@ class ImagineController
         }
 
         try {
-            $this->filterService->createFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver);
-
             return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), 301);
         } catch (NotLoadableException $e) {
             if ($this->dataManager->getDefaultImageUrl($filter) !== null) {

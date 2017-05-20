@@ -126,7 +126,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock = $this->createFilterServiceMock();
         $filterServiceMock
             ->expects($this->once())
-            ->method('createFilteredImage')
+            ->method('getUrlOfFilteredImage')
             ->with($imagePath, $filterName);
 
         $processor = new ResolveCacheProcessor(
@@ -162,7 +162,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock = $this->createFilterServiceMock();
         $filterServiceMock
             ->expects($this->exactly(2))
-            ->method('createFilteredImage')
+            ->method('getUrlOfFilteredImage')
             ->withConsecutive(
                 [$imagePath, $filterName1],
                 [$imagePath, $filterName2]
@@ -195,7 +195,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock = $this->createFilterServiceMock();
         $filterServiceMock
             ->expects($this->once())
-            ->method('createFilteredImage')
+            ->method('getUrlOfFilteredImage')
             ->with($imagePath, $relevantFilter);
 
         $processor = new ResolveCacheProcessor(
@@ -226,7 +226,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock = $this->createFilterServiceMock();
         $filterServiceMock
             ->expects($this->exactly(2))
-            ->method('createFilteredImage')
+            ->method('getUrlOfFilteredImage')
             ->withConsecutive(
                 [$imagePath, $relevantFilter1],
                 [$imagePath, $relevantFilter2]
