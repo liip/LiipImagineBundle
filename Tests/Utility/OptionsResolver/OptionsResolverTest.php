@@ -31,6 +31,20 @@ class OptionsResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(100, $options['bar']);
     }
 
+    public function testDefinedOptions()
+    {
+        $r = static::setupOptionsResolver();
+        $options = $r->resolve(array(
+            'foo' => 'a',
+            'bar' => 100,
+            'baz' => 'a-string',
+            'qux' => 1000,
+        ));
+
+        $this->assertSame('a-string', $options['baz']);
+        $this->assertSame(1000, $options['qux']);
+    }
+
     public function testDefaultOptions()
     {
         $r = static::setupOptionsResolver();
@@ -56,6 +70,7 @@ class OptionsResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
+     * @expectedExceptionMessageRegExp {.+"bar", "baz", "foo", "qux"+}
      */
     public function testInvalidOptions()
     {
@@ -67,6 +82,7 @@ class OptionsResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedExceptionMessage expected to be of type "integer"
      */
     public function testRequiredTypes()
     {
@@ -93,16 +109,18 @@ class OptionsResolverTest extends \PHPUnit_Framework_TestCase
      */
     private static function setupOptionsResolver()
     {
-        $r = new OptionsResolver();
-        $r->setRequired(array('foo', 'bar'));
-        $r->setAllowedValues('foo', array('a', 'b', 'c', 'z'));
-        $r->setDefault('foo', 'a');
-        $r->setAllowedTypes('foo', array('string'));
-        $r->setAllowedTypes('bar', array('integer'));
-        $r->setNormalizer('foo', function (Options $options, $value) {
+        $resolver = new OptionsResolver();
+        $resolver->setRequired(array('foo', 'bar'));
+        $resolver->setDefined(array('baz', 'qux'));
+        $resolver->setAllowedValues('foo', array('a', 'b', 'c', 'z'));
+        $resolver->setDefault('foo', 'a');
+        $resolver->setAllowedTypes('foo', array('string'));
+        $resolver->setAllowedTypes('bar', array('integer'));
+        $resolver->setAllowedTypes('baz', array('string'));
+        $resolver->setNormalizer('foo', function (Options $options, $value) {
             return $value === 'c' ? 'z' : $value;
         });
 
-        return $r;
+        return $resolver;
     }
 }

@@ -15,10 +15,20 @@ use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\OptionsResolver\OptionsResolver as BaseOptionsResolver;
 
 /**
- * @deprecated Deprecated in v1.7.x and scheduled for removal in v2.0.x
+ * Provides a compatible interface for Symfony's newest OptionsResolver implementation, while internally supporting
+ * legacy variants of the interface. This allows for a clean migration plan in our 2.x branch where any classes
+ * implementing this must simple "use" the real "Symfony\Component\OptionsResolver\OptionsResolver" class without any
+ * changes to usage within the code (once support for Symfony <2.7 is dropped).
+ *
+ * @deprecated Deprecated in v1.7 and scheduled for removal in v2.0.x
  */
 class OptionsResolver
 {
+    /**
+     * @var array
+     */
+    private $defined = array();
+
     /**
      * @var array
      */
@@ -45,20 +55,40 @@ class OptionsResolver
     private $normalizers = array();
 
     /**
+     * @param array $defined
+     *
+     * @return $this
+     */
+    public function setDefined(array $defined)
+    {
+        $this->defined = $defined;
+
+        return $this;
+    }
+
+    /**
      * @param string $option
      * @param mixed  $value
+     *
+     * @return $this
      */
     public function setDefault($option, $value)
     {
         $this->defaults[$option] = $value;
+
+        return $this;
     }
 
     /**
      * @param array $options
+     *
+     * @return $this
      */
     public function setRequired(array $options)
     {
         $this->required = $options;
+
+        return $this;
     }
 
     /**
@@ -125,6 +155,8 @@ class OptionsResolver
      */
     private function setupResolver(BaseOptionsResolver $resolver)
     {
+        $resolver->setDefined($this->defined);
+
         foreach ($this->allowedValues as $option => $values) {
             $resolver->setAllowedValues($option, $values);
         }
@@ -143,6 +175,7 @@ class OptionsResolver
      */
     private function setupResolverLegacy(BaseOptionsResolver $resolver)
     {
+        $resolver->setOptional($this->defined);
         $resolver->setAllowedValues($this->allowedValues);
         $resolver->setAllowedTypes($this->allowedTypes);
         $resolver->setNormalizers($this->normalizers);
