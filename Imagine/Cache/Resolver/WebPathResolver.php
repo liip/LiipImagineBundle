@@ -158,8 +158,7 @@ class WebPathResolver implements ResolverInterface
         }
         $baseUrl = rtrim($baseUrl, '/\\');
 
-        return sprintf('%s://%s%s%s',
-            $this->requestContext->getScheme(),
+        return sprintf('//%s%s%s',
             $this->requestContext->getHost(),
             $port,
             $baseUrl

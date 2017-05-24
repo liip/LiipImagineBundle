@@ -166,10 +166,9 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($resolver->isStored('', 'aFilter'));
     }
 
-    public function testComposeSchemaHostAndFileUrlOnResolve()
+    public function testComposeHostAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
-        $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
 
         $resolver = new WebPathResolver(
@@ -180,15 +179,14 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://thehost/aCachePrefix/aFilter/aPath',
+            '//thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
 
-    public function testComposeSchemaHostAndBasePathWithPhpFileAndFileUrlOnResolve()
+    public function testComposeHostAndBasePathWithPhpFileAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
-        $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/app.php');
 
@@ -200,15 +198,14 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://thehost/theBasePath/aCachePrefix/aFilter/aPath',
+            '//thehost/theBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
 
-    public function testComposeSchemaHostAndBasePathWithDirsOnlyAndFileUrlOnResolve()
+    public function testComposeHostAndBasePathWithDirsOnlyAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
-        $requestContext->setScheme('theSchema');
         $requestContext->setHost('thehost');
         $requestContext->setBaseUrl('/theBasePath/theSubBasePath');
 
@@ -220,12 +217,12 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://thehost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
+            '//thehost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
 
-    public function testComposeSchemaHostAndBasePathWithBackSplashOnResolve()
+    public function testComposeHostAndBasePathWithBackSplashOnResolve()
     {
         $requestContext = new RequestContext();
         $requestContext->setScheme('theSchema');
@@ -240,12 +237,12 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'theschema://thehost/aCachePrefix/aFilter/aPath',
+            '//thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
 
-    public function testComposeSchemaHttpAndCustomPortAndFileUrlOnResolve()
+    public function testComposeCustomHttpPortAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
         $requestContext->setScheme('http');
@@ -260,12 +257,12 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'http://thehost:88/aCachePrefix/aFilter/aPath',
+            '//thehost:88/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }
 
-    public function testComposeSchemaHttpsAndCustomPortAndFileUrlOnResolve()
+    public function testComposeCustomHttpsPortAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
         $requestContext->setScheme('https');
@@ -280,7 +277,7 @@ class WebPathResolverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'https://thehost:444/aCachePrefix/aFilter/aPath',
+            '//thehost:444/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
     }

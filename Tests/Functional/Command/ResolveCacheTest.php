@@ -31,7 +31,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
     }
 
     public function testShouldResolveWithCacheExists()
@@ -50,7 +50,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
     }
 
     public function testShouldResolveWithFewPathsAndSingleFilter()
@@ -62,8 +62,8 @@ class ResolveCacheTest extends AbstractCommandTestCase
                 '--filters' => array('thumbnail_web_path'), )
         );
 
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
     }
 
     public function testShouldResolveWithFewPathsSingleFilterAndPartiallyFullCache()
@@ -85,8 +85,8 @@ class ResolveCacheTest extends AbstractCommandTestCase
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats2.jpeg');
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
     }
 
     public function testShouldResolveWithFewPathsAndFewFilters()
@@ -98,10 +98,10 @@ class ResolveCacheTest extends AbstractCommandTestCase
                 '--filters' => array('thumbnail_web_path', 'thumbnail_default'), )
         );
 
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
     }
 
     public function testShouldResolveWithFewPathsAndWithoutFilters()
@@ -111,9 +111,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
             array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
         );
 
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
-        $this->assertContains('http://localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_web_path/images/cats2.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_default/images/cats.jpeg', $output);
+        $this->assertContains('//localhost/media/cache/thumbnail_default/images/cats2.jpeg', $output);
     }
 }
