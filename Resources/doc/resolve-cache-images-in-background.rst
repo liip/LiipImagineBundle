@@ -32,9 +32,8 @@ It is based on `filesystem transport`_.
 
     enqueue:
         transport:
-            default: fs
-            fs:
-                store_dir: '%kernel.root_dir%/../var/queues'
+            # you could set other available transports
+            default: 'file://%kernel.root_dir%/../var/enqueue'
         client: ~
 
 Step 2: Configure LiipImagineBundle
