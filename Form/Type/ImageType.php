@@ -68,7 +68,11 @@ class ImageType extends AbstractType
      */
     public function getParent()
     {
+      if(\Liip\ImagineBundle\Utility\Framework\SymfonyFramework::isKernelGreaterThanOrEqualTo(3)) {
+        return 'Symfony\Component\Form\Extension\Core\Type\FileType';
+      } else {
         return 'file';
+      }
     }
 
     /**
