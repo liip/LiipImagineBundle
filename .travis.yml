@@ -1,17 +1,16 @@
 ---
 
 sudo: false
+dist: trusty
 
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
   - 7.0
   - 7.1
-  - hhvm
 
 cache:
   directories:
@@ -26,6 +25,7 @@ matrix:
   include:
     - php: 5.3
       env: COMPOSER_FLAGS="--prefer-lowest"
+      dist: precise
     - php: 5.6
       env: SYMFONY_VERSION=2.3.x-dev
     - php: 5.6
@@ -42,6 +42,7 @@ matrix:
       env: SYMFONY_VERSION=3.3.x-dev WITH_ENQUEUE=true
     - php: 7.1
       env: SYMFONY_VERSION=dev-master
+    - php: hhvm
   allow_failures:
     - php: 7.1
       env: SYMFONY_VERSION=3.3.x-dev
