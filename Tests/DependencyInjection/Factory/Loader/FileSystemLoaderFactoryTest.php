@@ -63,7 +63,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
-        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2));
+        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
@@ -98,7 +98,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
@@ -134,7 +134,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
@@ -170,7 +170,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
@@ -201,7 +201,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         );
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2));
+        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     /**

@@ -13,8 +13,6 @@ namespace Liip\ImagineBundle\Binary\Locator;
 
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FileSystemLocator implements LocatorInterface
 {
@@ -23,21 +21,13 @@ class FileSystemLocator implements LocatorInterface
      */
     private $roots = array();
 
-    /**
-     * @param array[] $options
-     */
-    public function setOptions(array $options = array())
+    public function __construct(array $roots = array())
     {
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults(array('roots' => array()));
-
-        try {
-            $options = $resolver->resolve($options);
-        } catch (ExceptionInterface $e) {
-            throw new InvalidArgumentException(sprintf('Invalid options provided to %s()', __METHOD__), null, $e);
+        if (count($roots) === 0) {
+            throw new InvalidArgumentException('One or more data root paths must be specified');
         }
 
-        $this->roots = array_map(array($this, 'sanitizeRootPath'), (array) $options['roots']);
+        $this->roots = array_map(array($this, 'sanitizeRootPath'), $roots);
     }
 
     /**

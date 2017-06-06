@@ -13,7 +13,6 @@ namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
-use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
@@ -38,30 +37,41 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @param MimeTypeGuesserInterface  $mimeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
-     * @param string[]                  $dataRoots
-     * @param LocatorInterface          $locator
+     * @param LocatorInterface|string[] $locatorOrDataRoots
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
-        $dataRoots
-        /* LocatorInterface $locator */
+        $locatorOrDataRoots
     ) {
         $this->mimeTypeGuesser = $mimeGuesser;
         $this->extensionGuesser = $extensionGuesser;
 
-        if (count($dataRoots) === 0) {
-            throw new InvalidArgumentException('One or more data root paths must be specified.');
-        }
+        if (is_array($locatorOrDataRoots)) { // BC
+            if (func_num_args() === 4 && func_get_arg(3) instanceof LocatorInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Passing a LocatorInterface as fourth parameter to %s() is no longer allowed. It needs to be the third parameter. '.
+                        'The previous third parameter (data roots) is removed and the data roots must now be passed as a constructor argument '.
+                        'to the LocatorInterface passed to this method.',
+                        __METHOD__
+                    )
+                );
+            }
+            @trigger_error(
+                sprintf(
+                    'Method %s() will expect the third parameter to be a LocatorInterface in version 2.0. Defining dataroots instead is deprecated since version 1.9.0',
+                    __METHOD__
+                ),
+                E_USER_DEPRECATED
+            );
 
-        if (func_num_args() >= 4 && false === ($this->locator = func_get_arg(3)) instanceof LocatorInterface) {
-            throw new \InvalidArgumentException(sprintf('Method %s() expects a LocatorInterface for the forth argument.', __METHOD__));
-        } elseif (func_num_args() < 4) {
-            @trigger_error(sprintf('Method %s() will have a forth `LocatorInterface $locator` argument in version 2.0. Not defining it is deprecated since version 1.7.2', __METHOD__), E_USER_DEPRECATED);
-            $this->locator = new FileSystemLocator();
+            $this->locator = new FileSystemLocator($locatorOrDataRoots);
+        } elseif ($locatorOrDataRoots instanceof LocatorInterface) {
+            $this->locator = $locatorOrDataRoots;
+        } else {
+            throw new \InvalidArgumentException(sprintf('Method %s() expects a LocatorInterface for the third argument.', __METHOD__));
         }
-
-        $this->locator->setOptions(array('roots' => (array) $dataRoots));
     }
 
     /**

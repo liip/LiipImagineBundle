@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Binary\Loader;
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
@@ -83,7 +84,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideLoadCases
      *
      * @group legacy
-     * @expectedDeprecation Method %s() will have a forth `LocatorInterface $locator` argument in version 2.0. Not defining it is deprecated since version 1.7.2
+     * @expectedDeprecation Method %s() will expect the third parameter to be a LocatorInterface in version 2.0. Defining dataroots instead is deprecated since version 1.9.0
      *
      * @param string $root
      * @param string $path
@@ -97,6 +98,31 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertValidLoaderFindReturn($loader->find($path));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInstantiationWithDataRootsAndLocatorNotAllowed()
+    {
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            array(__DIR__),
+            new FileSystemLocator(array(__DIR__.'/../'))
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInstantiationFailsWhenThirdParameterInvalidType()
+    {
+        new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            'not-array-and-not-instance-of-locator'
+        );
     }
 
     /**
@@ -124,47 +150,6 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     public function testMultipleRootLoadCases($root, $path)
     {
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader($root)->find($path));
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp {Method .+ expects a LocatorInterface for the forth argument}
-     */
-    public function testThrowsIfConstructionArgumentsInvalid()
-    {
-        new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
-            array(__DIR__),
-            'not-instance-of-locator'
-        );
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage One or more data root paths must be specified
-     */
-    public function testThrowsIfZeroCountRootPathArray()
-    {
-        $this->getFileSystemLoader(array());
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Root image path not resolvable
-     */
-    public function testThrowsIfEmptyRootPath()
-    {
-        $this->getFileSystemLoader('');
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Root image path not resolvable
-     */
-    public function testThrowsIfRootPathDoesNotExist()
-    {
-        $this->getFileSystemLoader('/a/bad/root/path');
     }
 
     /**
@@ -204,11 +189,13 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string[] $roots
+     *
      * @return FileSystemLocator
      */
-    private function getFileSystemLocator()
+    private function getFileSystemLocator($roots)
     {
-        return new FileSystemLocator();
+        return new FileSystemLocator($roots);
     }
 
     /**
@@ -220,18 +207,17 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string|array|null     $root
+     * @param array                 $roots
      * @param LocatorInterface|null $locator
      *
      * @return FileSystemLoader
      */
-    private function getFileSystemLoader($root = null, LocatorInterface $locator = null)
+    private function getFileSystemLoader($roots = array(), LocatorInterface $locator = null)
     {
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $root ? $root : $this->getDefaultDataRoots(),
-            null !== $locator ? $locator : $this->getFileSystemLocator()
+            null !== $locator ? $locator : $this->getFileSystemLocator(!empty($roots) ? (array) $roots : $this->getDefaultDataRoots())
         );
     }
 

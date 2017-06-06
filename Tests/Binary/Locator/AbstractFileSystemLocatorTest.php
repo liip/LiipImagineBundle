@@ -25,7 +25,16 @@ abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testImplementsLocatorInterface()
     {
-        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Locator\LocatorInterface', new FileSystemLocator());
+        $this->assertInstanceOf('\Liip\ImagineBundle\Binary\Locator\LocatorInterface', new FileSystemLocator(array(__DIR__)));
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
+     * @expectedExceptionMessage One or more data root paths must be specified
+     */
+    public function testRequiresAtLeastOneDataRoot()
+    {
+        $this->getFileSystemLocator(array());
     }
 
     /**
@@ -53,15 +62,6 @@ abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
     public function testThrowsIfFileDoesNotExist()
     {
         $this->getFileSystemLocator(__DIR__)->locate('fileNotExist');
-    }
-
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid options provided to
-     */
-    public function testThrowsIfInvalidOptionProvided()
-    {
-        $this->getFileSystemLocator(__DIR__)->setOptions(array('foo' => 'bar'));
     }
 
     /**
