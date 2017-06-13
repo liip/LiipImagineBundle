@@ -109,7 +109,7 @@ class ImagineController
                 );
             }
 
-            return new RedirectResponse($this->cacheManager->resolve($path, $filter, $resolver), 301);
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter, $resolver), 307);
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
 
@@ -177,7 +177,7 @@ class ImagineController
                 $resolver
             );
 
-            return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter, $resolver), 301);
+            return new RedirectResponse($this->cacheManager->resolve($rcPath, $filter, $resolver), 307);
         } catch (NonExistingFilterException $e) {
             $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $hash.'/'.$path, $e->getMessage());
 
