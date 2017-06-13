@@ -5,7 +5,7 @@ Overview
 --------
 
 By default the LiipImagineBundle processes the image on demand.
-It does in resolve controller and saves the result, does a 301 redirect to the processed static image.
+It does in resolve controller and saves the result, does a 307 redirect to the processed static image.
 The approach has its benefits.
 The most notable is simplicity.
 Though there are some disadvantages:
