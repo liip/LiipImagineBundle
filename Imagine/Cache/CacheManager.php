@@ -262,8 +262,7 @@ class CacheManager
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());
-        }
-        if (!is_array($filters)) {
+        } elseif (!is_array($filters)) {
             $filters = [$filters];
         }
         if (!is_array($paths)) {
