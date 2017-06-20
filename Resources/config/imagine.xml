@@ -53,6 +53,7 @@
         <parameter key="liip_imagine.binary.loader.filesystem.class">Liip\ImagineBundle\Binary\Loader\FileSystemLoader</parameter>
         <parameter key="liip_imagine.binary.loader.stream.class">Liip\ImagineBundle\Binary\Loader\StreamLoader</parameter>
         <parameter key="liip_imagine.binary.loader.flysystem.class">Liip\ImagineBundle\Binary\Loader\FlysystemLoader</parameter>
+        <parameter key="liip_imagine.binary.loader.chain.class">Liip\ImagineBundle\Binary\Loader\ChainLoader</parameter>
 
         <!-- Data loader loaders' classes -->
 
@@ -247,6 +248,10 @@
         <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.binary.loader.prototype.chain" class="%liip_imagine.binary.loader.chain.class%" abstract="true">
+            <argument><!-- will be injected by ChainLoaderFactory --></argument>
         </service>
 
         <!-- Data loader locators -->
