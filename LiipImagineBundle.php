@@ -19,6 +19,7 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\LocatorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
@@ -55,6 +56,7 @@ class LiipImagineBundle extends Bundle
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
+        $extension->addLoaderFactory(new ChainLoaderFactory());
 
         if (class_exists('Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass')) {
             $container->addCompilerPass(AddTopicMetaPass::create()

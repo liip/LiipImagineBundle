@@ -224,6 +224,25 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
+    public function testAddChainLoaderFactoryOnBuild()
+    {
+        $extensionMock = $this->createLiipImagineExtensionMock();
+        $extensionMock
+            ->expects($this->at(6))
+            ->method('addLoaderFactory')
+            ->with($this->isInstanceOf('Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory'));
+
+        $containerMock = $this->createContainerBuilderMock();
+        $containerMock
+            ->expects($this->atLeastOnce())
+            ->method('getExtension')
+            ->with('liip_imagine')
+            ->will($this->returnValue($extensionMock));
+
+        $bundle = new LiipImagineBundle();
+        $bundle->build($containerMock);
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder
      */
