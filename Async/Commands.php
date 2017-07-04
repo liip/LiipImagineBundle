@@ -11,10 +11,10 @@
 
 namespace Liip\ImagineBundle\Async;
 
-class Topics
+class Commands
 {
     /**
      * @var string
      */
-    const CACHE_RESOLVED = 'liip_imagine_cache_resolved';
+    const RESOLVE_CACHE = 'liip_imagine_resolve_cache';
 }

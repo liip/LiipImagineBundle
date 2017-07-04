@@ -45,7 +45,6 @@ class LiipImagineBundle extends Bundle
 
         if (class_exists(AddTopicMetaPass::class)) {
             $container->addCompilerPass(AddTopicMetaPass::create()
-                ->add(Topics::RESOLVE_CACHE, 'Send message to this topic when you want to resolve image\'s cache.')
                 ->add(Topics::CACHE_RESOLVED, 'The topic contains messages about resolved image\'s caches')
             );
         }
