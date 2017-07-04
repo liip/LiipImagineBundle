@@ -51,6 +51,18 @@
       TRAVIS_PHP_VERSION=7.0.0     # the installed PHP version
 
     ```
+    
+  - __[Enqueue]__ You have to replace the given code with a new one If use enqueue to resolve images in background.
+
+    ```php
+    <?php
+
+      // 1.0
+      $producer->send(\Liip\ImagineBundle\Async\Topics::RESOLVE_CACHE /* ... */);
+
+      // 2.0
+      $producer->sendCommand(\Liip\ImagineBundle\Async\Commands::RESOLVE_CACHE /* ... */);
+    ```
 
 ## 1.8.0
 
