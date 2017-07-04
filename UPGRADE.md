@@ -52,7 +52,7 @@
 
     ```
     
-  - __[Enqueue]__ You have to replace the given code with a new one If use enqueue to resolve images in background.
+  - __[Enqueue]__ Enqueue's producer send() method has been deprecated and will be removed, use sendCommand() instead. When interacting with the producer to resolve images in the background you must make the following changes to your code:
 
     ```php
     <?php
