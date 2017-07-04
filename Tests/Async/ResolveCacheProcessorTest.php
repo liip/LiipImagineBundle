@@ -8,6 +8,7 @@ use Enqueue\Consumption\Result;
 use Enqueue\Null\NullContext;
 use Enqueue\Null\NullMessage;
 use Liip\ImagineBundle\Async\CacheResolved;
+use Liip\ImagineBundle\Async\Commands;
 use Liip\ImagineBundle\Async\ResolveCacheProcessor;
 use Liip\ImagineBundle\Async\Topics;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
@@ -30,11 +31,11 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertTrue($rc->implementsInterface('Enqueue\Psr\PsrProcessor'));
     }
 
-    public function testShouldImplementTopicSubscriberInterface()
+    public function testShouldImplementCommandSubscriberInterface()
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\Async\ResolveCacheProcessor');
 
-        $this->assertTrue($rc->implementsInterface('Enqueue\Client\TopicSubscriberInterface'));
+        $this->assertTrue($rc->implementsInterface('Enqueue\Client\CommandSubscriberInterface'));
     }
 
     public function testShouldImplementQueueSubscriberInterface()
@@ -44,16 +45,17 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertTrue($rc->implementsInterface('Enqueue\Consumption\QueueSubscriberInterface'));
     }
 
-    public function testShouldSubscribeToExpectedTopic()
+    public function testShouldSubscribeToExpectedCommand()
     {
-        $topics = ResolveCacheProcessor::getSubscribedTopics();
+        $command = ResolveCacheProcessor::getSubscribedCommand();
 
-        $this->assertInternalType('array', $topics);
-        $this->assertArrayHasKey(Topics::RESOLVE_CACHE, $topics);
+        $this->assertInternalType('array', $command);
         $this->assertEquals(array(
-            'queueName' => 'liip_imagine_resolve_cache',
+            'processorName' => Commands::RESOLVE_CACHE,
+            'queueName' => Commands::RESOLVE_CACHE,
             'queueNameHardcoded' => true,
-        ), $topics[Topics::RESOLVE_CACHE]);
+            'exclusive' => true,
+        ), $command);
     }
 
     public function testShouldSubscribeToExpectedQueue()
@@ -89,8 +91,33 @@ class ResolveCacheProcessorTest extends AbstractTest
         $result = $processor->process($message, new NullContext());
 
         $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
-        $this->assertEquals(Result::REJECT, (string) $result);
+        $this->assertEquals(Result::REJECT, $result->getStatus());
         $this->assertStringStartsWith('The malformed json given.', $result->getReason());
+    }
+
+    public function testShouldSendFailedReplyOnException()
+    {
+        $processor = new ResolveCacheProcessor(
+            $this->createCacheManagerMock(),
+            $this->createFilterManagerMock(),
+            $this->createDataManagerMock(),
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody('[}');
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf('Enqueue\Psr\PsrMessage', $result->getReply());
+        $this->assertEquals(
+            array(
+                "status" => false,
+                "exception" => "The malformed json given. Error 2 and message State mismatch (invalid or malformed JSON)"
+            ),
+            json_decode($result->getReply()->getBody(), true)
+        );
     }
 
     public function testShouldRejectMessagesWithoutPass()
@@ -173,7 +200,8 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertEquals(Result::ACK, $result);
+        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertEquals(Result::ACK, (string) $result);
     }
 
     public function testShouldNotResolveCacheIfStoredAndNotForce()
@@ -226,7 +254,8 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertEquals(Result::ACK, $result);
+        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertEquals(Result::ACK, (string) $result);
     }
 
     public function testShouldSendMessageOnSuccessResolve()
@@ -276,7 +305,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $producerMock = $this->createProducerMock();
         $producerMock
             ->expects($this->once())
-            ->method('send')
+            ->method('sendEvent')
             ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
         ->willReturnCallback(function ($topic, CacheResolved $message) use ($testCase) {
             $testCase->assertEquals('theImagePath', $message->getPath());
@@ -299,7 +328,78 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertEquals(Result::ACK, $result);
+        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertEquals(Result::ACK, (string) $result);
+    }
+
+    public function testShouldReturnReplyOnSuccessResolve()
+    {
+        $filterManagerMock = $this->createFilterManagerMock();
+        $filterManagerMock
+            ->expects($this->once())
+            ->method('getFilterConfiguration')
+            ->willReturn(new FilterConfiguration(array(
+                'fooFilter' => array('fooFilterConfig'),
+                'barFilter' => array('barFilterConfig'),
+                'bazFilter' => array('bazFilterConfig'),
+            )))
+        ;
+        $filterManagerMock
+            ->expects($this->atLeastOnce())
+            ->method('applyFilter')
+            ->willReturn($this->createDummyBinary())
+        ;
+
+        $cacheManagerMock = $this->createCacheManagerMock();
+        $cacheManagerMock
+            ->expects($this->atLeastOnce())
+            ->method('isStored')
+            ->willReturn(false)
+        ;
+        $cacheManagerMock
+            ->expects($this->atLeastOnce())
+            ->method('store')
+        ;
+        $cacheManagerMock
+            ->expects($this->atLeastOnce())
+            ->method('resolve')
+            ->willReturnCallback(function ($path, $filter) {
+                return $path.$filter.'Uri';
+            })
+        ;
+
+        $dataManagerMock = $this->createDataManagerMock();
+        $dataManagerMock
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->willReturn($this->createDummyBinary())
+        ;
+
+        $processor = new ResolveCacheProcessor(
+            $cacheManagerMock,
+            $filterManagerMock,
+            $dataManagerMock,
+            $this->createProducerMock()
+        );
+
+        $message = new NullMessage();
+        $message->setBody('{"path": "theImagePath"}');
+
+        $result = $processor->process($message, new NullContext());
+
+        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf('Enqueue\Psr\PsrMessage', $result->getReply());
+        $this->assertEquals(
+            array(
+                "status" => true,
+                "results" => array(
+                    'fooFilter' => 'theImagePathfooFilterUri',
+                    'barFilter' => 'theImagePathbarFilterUri',
+                    'bazFilter' => 'theImagePathbazFilterUri',
+                )
+            ),
+            json_decode($result->getReply()->getBody(), true)
+        );
     }
 
     /**
