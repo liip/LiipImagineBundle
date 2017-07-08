@@ -13,6 +13,9 @@ namespace Liip\ImagineBundle\Utility\Framework;
 
 use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * @internal
+ */
 class SymfonyFramework
 {
     /**
@@ -75,19 +78,6 @@ class SymfonyFramework
      */
     private static function kernelVersionCompare($operator, $major, $minor = null, $patch = null)
     {
-        $vernum = $major;
-        $kernel = Kernel::MAJOR_VERSION;
-
-        if ($minor) {
-            $vernum .= '.'.$minor;
-            $kernel .= '.'.Kernel::MINOR_VERSION;
-
-            if ($patch) {
-                $vernum .= '.'.$patch;
-                $kernel .= '.'.Kernel::RELEASE_VERSION;
-            }
-        }
-
-        return version_compare($kernel, $vernum, $operator);
+        return version_compare(Kernel::VERSION_ID, sprintf("%d%'.02d%'.02d", $major, $minor ?: 0, $patch ?: 0), $operator);
     }
 }

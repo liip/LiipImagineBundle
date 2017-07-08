@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Client\ProducerInterface;
@@ -260,7 +261,7 @@ class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
         $cacheManagerMock
             ->expects($this->atLeastOnce())
             ->method('resolve')
-            ->willReturnCallback(function($path, $filter) {
+            ->willReturnCallback(function ($path, $filter) {
                 return $path.$filter.'Uri';
             })
         ;
@@ -278,7 +279,7 @@ class ResolveCacheProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('send')
             ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
-        ->willReturnCallback(function($topic, CacheResolved $message) use ($testCase) {
+        ->willReturnCallback(function ($topic, CacheResolved $message) use ($testCase) {
             $testCase->assertEquals('theImagePath', $message->getPath());
             $testCase->assertEquals(array(
                 'fooFilter' => 'theImagePathfooFilterUri',

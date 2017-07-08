@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Async;
 
 use Enqueue\Util\JSON;
@@ -21,9 +22,9 @@ class ResolveCache implements \JsonSerializable
     private $force;
 
     /**
-     * @param string $path
+     * @param string        $path
      * @param string[]|null $filters
-     * @param bool $force
+     * @param bool          $force
      */
     public function __construct($path, array $filters = null, $force = false)
     {

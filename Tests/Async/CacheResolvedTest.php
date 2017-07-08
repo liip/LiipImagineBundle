@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Liip\ImagineBundle\Async\CacheResolved;

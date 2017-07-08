@@ -1,4 +1,5 @@
 <?php
+
 namespace Liip\ImagineBundle\Async;
 
 class Topics
