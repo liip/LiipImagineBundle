@@ -24,7 +24,7 @@ env:
 matrix:
   include:
     - php: 5.3
-      env: COMPOSER_FLAGS="--prefer-lowest"
+      env: COMPOSER_FLAGS="--prefer-lowest" IMAGINE_VERSION=^0.6.3
       dist: precise
     - php: 5.6
       env: SYMFONY_VERSION=2.3.x-dev
@@ -53,6 +53,7 @@ before_install:
   - if [ "${TRAVIS_PHP_VERSION}" == "5.3" ]; then composer remove --no-update --dev satooshi/php-coveralls; fi;
   - if [ "${SYMFONY_VERSION:0:3}" == "2.3" ]; then composer remove --no-update --dev friendsofphp/php-cs-fixer; fi;
   - if [ "${SYMFONY_VERSION:-x}" != "x" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+  - if [ "${IMAGINE_VERSION:-x}" != "x" ]; then composer require "imagine/Imagine:${IMAGINE_VERSION}" --no-update; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION:0:3}" != "5.3" ]; then composer require --no-update --dev league/flysystem:~1.0; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION:0:1}" != "7" ]; then yes "" | pecl -q install -f mongo; composer require --no-update --dev doctrine/mongodb-odm:~1.0; fi;
   - if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ] && [ "${TRAVIS_PHP_VERSION:0:1}" == "7" ]; then yes "" | pecl -q install -f mongodb; travis_retry composer require --dev alcaeus/mongo-php-adapter:~1.0; composer require --no-update --dev doctrine/mongodb-odm:~1.0; fi

@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^5.3.9|^7.0",
-        "imagine/Imagine": "^0.6.3,<0.7",
+        "imagine/Imagine": "^0.6.3|^0.7.0,<0.8",
         "symfony/asset": "~2.3|~3.0",
         "symfony/filesystem": "~2.3|~3.0",
         "symfony/finder": "~2.3|~3.0",
