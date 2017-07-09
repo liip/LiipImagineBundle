@@ -23,6 +23,11 @@ class FileSystemLocator implements LocatorInterface
      */
     private $roots = array();
 
+    public function __construct(array $dataRoots = array())
+    {
+        $this->roots = array_map(array($this, 'sanitizeRootPath'), (array) $dataRoots);
+    }
+
     /**
      * @param array[] $options
      */
@@ -36,6 +41,11 @@ class FileSystemLocator implements LocatorInterface
         } catch (ExceptionInterface $e) {
             throw new InvalidArgumentException(sprintf('Invalid options provided to %s()', __METHOD__), null, $e);
         }
+
+        @trigger_error(
+            sprintf('%s() is deprecated. Pass the dataroots to the constuctor instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
 
         $this->roots = array_map(array($this, 'sanitizeRootPath'), (array) $options['roots']);
     }
