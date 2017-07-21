@@ -12,11 +12,10 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -27,18 +26,8 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $parentLocatorServiceId = sprintf('liip_imagine.binary.locator.%s', $config['locator']);
-
-        $locatorDefinition = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition') ?
-            new ChildDefinition($parentLocatorServiceId) : new DefinitionDecorator($parentLocatorServiceId);
-
-        $locatorServiceId = sprintf('liip_imagine.binary.locator.%s.%s', $config['locator'], $loaderName);
-        $container->setDefinition($locatorServiceId, $locatorDefinition);
-
-        $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
-
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, new Reference($locatorServiceId));
+        $definition->replaceArgument(2, new Reference($this->setupLocator($loaderName, $config, $container)));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
@@ -173,5 +162,37 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         }
 
         return $paths;
+    }
+
+    /**
+     * @param string           $loaderName
+     * @param array            $config
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     */
+    private function setupLocator($loaderName, array $config, ContainerBuilder $container)
+    {
+        $locator = $this->getLocatorDefinition($config);
+        $locator->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+
+        $locatorId = sprintf('liip_imagine.binary.locator.%s.%s', $config['locator'], $loaderName);
+        $container->setDefinition($locatorId, $locator);
+
+        return $locatorId;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Definition
+     */
+    private function getLocatorDefinition(array $config)
+    {
+        $key = sprintf('liip_imagine.binary.locator.%s', $config['locator']);
+        $def = class_exists('\Symfony\Component\DependencyInjection\ChildDefinition') ?
+            new ChildDefinition($key) : new DefinitionDecorator($key);
+
+        return $def;
     }
 }

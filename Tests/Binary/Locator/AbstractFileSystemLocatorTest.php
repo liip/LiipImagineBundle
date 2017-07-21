@@ -17,11 +17,11 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param string[]|string $paths
+     * @param string[]|string $roots
      *
      * @return LocatorInterface
      */
-    abstract protected function getFileSystemLocator($paths);
+    abstract protected function getFileSystemLocator($roots);
 
     public function testImplementsLocatorInterface()
     {

@@ -204,14 +204,6 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return FileSystemLocator
-     */
-    private function getFileSystemLocator($dataRoots)
-    {
-        return new FileSystemLocator((array) $dataRoots);
-    }
-
-    /**
      * @return string[]
      */
     private function getDefaultDataRoots()
@@ -232,6 +224,16 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             ExtensionGuesser::getInstance(),
             null !== $locator ? $locator : $this->getFileSystemLocator(null !== $root ? $root : $this->getDefaultDataRoots())
         );
+    }
+
+    /**
+     * @param string|string[] $roots
+     *
+     * @return FileSystemLocator
+     */
+    private function getFileSystemLocator($roots)
+    {
+        return new FileSystemLocator((array) $roots);
     }
 
     /**

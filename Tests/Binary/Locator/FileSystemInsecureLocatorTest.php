@@ -19,14 +19,6 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
  */
 class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
 {
-    /**
-     * @return LocatorInterface
-     */
-    protected function getFileSystemLocator($paths)
-    {
-        return new FileSystemInsecureLocator((array) $paths);
-    }
-
     public function testLoadsOnSymbolicLinks()
     {
         $loader = $this->getFileSystemLocator($root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'));
@@ -86,5 +78,15 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         return array_map(function ($params) use ($prepend) {
             return array(array($prepend[mt_rand(0, count($prepend) - 1)], $params[0]), $params[1]);
         }, static::provideLoadCases());
+    }
+
+    /**
+     * @param string|string[] $roots
+     *
+     * @return LocatorInterface
+     */
+    protected function getFileSystemLocator($roots)
+    {
+        return new FileSystemInsecureLocator((array) $roots);
     }
 }
