@@ -31,7 +31,7 @@ class FileBinary implements FileBinaryInterface
     protected $format;
 
     /**
-     * @param string $content
+     * @param string $path
      * @param string $mimeType
      * @param string $format
      */
