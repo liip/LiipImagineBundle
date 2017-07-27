@@ -26,12 +26,10 @@ class RemoveCacheCommand extends ContainerAwareCommand
             ->setName('liip:imagine:cache:remove')
             ->setDescription('Remove cache for given paths and set of filters.')
             ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Image paths')
-            ->addOption(
-                'filters',
-                'f',
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Filters list'
-            )
+            ->addOption('filters', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'List of filters to remove for passed images (Deprecated, use "filter").')
+            ->addOption('filter', 'f', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'List of filters to remove for passed images.')
             ->setHelp(<<<'EOF'
 The <info>%command.name%</info> command removes cache by specified parameters.
 
@@ -39,12 +37,12 @@ Paths should be separated by spaces:
 <info>php app/console %command.name% path1 path2</info>
 All cache for a given `paths` will be lost.
 
-If you use --filters parameter:
-<info>php app/console %command.name% --filters=thumb1 --filters=thumb2</info>
+If you use --filter parameter:
+<info>php app/console %command.name% --filter=thumb1 --filter=thumb2</info>
 All cache for a given filters will be lost.
 
 You can combine these parameters:
-<info>php app/console %command.name% path1 path2 --filters=thumb1 --filters=thumb2</info>
+<info>php app/console %command.name% path1 path2 --filter=thumb1 --filter=thumb2</info>
 
 <info>php app/console %command.name%</info>
 Cache for all paths and filters will be lost when executing this command without parameters.
@@ -52,10 +50,16 @@ EOF
             );
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $paths = $input->getArgument('paths');
-        $filters = $input->getOption('filters');
+        $filters = $this->resolveInputFilters($input);
 
         if (empty($filters)) {
             $filters = null;
@@ -63,7 +67,25 @@ EOF
 
         /* @var CacheManager cacheManager */
         $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
-
         $cacheManager->remove($paths, $filters);
+
+        return 0;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return array|mixed
+     */
+    private function resolveInputFilters(InputInterface $input)
+    {
+        $filters = $input->getOption('filter');
+
+        if (count($filtersDeprecated = $input->getOption('filters'))) {
+            $filters = array_merge($filters, $filtersDeprecated);
+            @trigger_error('As of 1.9, use of the "--filters" option has been deprecated in favor of "--filter" and will be removed in 2.0.', E_USER_DEPRECATED);
+        }
+
+        return $filters;
     }
 }
