@@ -287,5 +287,20 @@
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
 
+        <!-- Commands -->
+
+        <service id="liip_imagine.command.cache_remove" class="Liip\ImagineBundle\Command\RemoveCacheCommand">
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <tag name="console.command" command="liip:imagine:cache:remove" alias="imagine:del" />
+        </service>
+
+        <service id="liip_imagine.command.cache_resolve" class="Liip\ImagineBundle\Command\ResolveCacheCommand">
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <tag name="console.command" command="liip:imagine:cache:resolve" alias="imagine:get" />
+        </service>
+
     </services>
 </container>
