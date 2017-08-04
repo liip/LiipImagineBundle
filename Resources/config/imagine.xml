@@ -134,6 +134,7 @@
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="logger" on-invalid="ignore" />
+            <argument>%liip_imagine.controller.redirect_response_code%</argument>
         </service>
 
         <service id="liip_imagine.meta_data.reader" class="%liip_imagine.meta_data.reader.class%" public="false" />
