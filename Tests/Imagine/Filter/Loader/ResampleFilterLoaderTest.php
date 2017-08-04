@@ -11,7 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
-use Imagine\Imagick\Imagine;
+use Imagine\Imagick\Imagine as ImagickImagine;
+use Imagine\Gmagick\Imagine as GmagickImagine;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -21,29 +22,55 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class ResampleFilterLoaderTest extends AbstractTest
 {
-    public function testResample()
+    /**
+     * @dataProvider provideResampleData
+     *
+     * @param string $imgPath
+     * @param float  $resolution
+     */
+    public function testResample($imgPath, $resolution)
     {
-        if (!class_exists('\Imagick')) {
-            $this->markTestSkipped('Requires \Imagick class (`imagick` extension) to be available.');
-        }
-
-        $imgPath = realpath(__DIR__.'/../../../Fixtures/assets/cats.png');
-        $tmpPath = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-test');
-        $imagine = new Imagine();
-        $ppc     = 240.0;
+        $imgType = static::getSupportedDriver();
+        $tmpPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.sprintf('liip-imagine-bundle-test-%s-%d.%s', md5($imgPath), time(), pathinfo($imgPath, PATHINFO_EXTENSION));
+        $imagine = $this->getImagineInstance($imgType);
 
         $image = $imagine->open($imgPath);
         $image = $this->createResampleFilterLoaderInstance($imagine)->load($image, array(
-            'x' => $ppc,
-            'y' => $ppc,
+            'x' => $resolution,
+            'y' => $resolution,
             'unit' => 'ppc',
         ));
         $image->save($tmpPath);
 
-        $imagick = new \Imagick($tmpPath);
-        $this->assertSame(array('x' => $ppc, 'y' => $ppc), $imagick->getImageResolution());
-
+        $tmpSize = $this->getImageResolution($imgType, $tmpPath);
         @unlink($tmpPath);
+        $this->assertSame(array('x' => $resolution, 'y' => $resolution), $tmpSize);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function provideResampleData()
+    {
+        $paths = array(
+            realpath(__DIR__.'/../../../Fixtures/assets/cats.png'),
+            realpath(__DIR__.'/../../../Fixtures/assets/cats.jpeg'),
+        );
+
+        $resolutions = array(
+            72.0,
+            120.0,
+            240.0
+        );
+
+        $data = array();
+        foreach ($paths as $path) {
+            foreach ($resolutions as $resolution) {
+                $data[] = array($path, $resolution);
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -169,5 +196,56 @@ class ResampleFilterLoaderTest extends AbstractTest
     private function createResampleFilterLoaderInstance(ImagineInterface $imagine = null)
     {
         return new ResampleFilterLoader($imagine ?: $this->createImagineInterfaceMock());
+    }
+
+    /**
+     * @return string
+     */
+    private static function getSupportedDriver()
+    {
+        if (class_exists('\Imagick')) {
+            return 'imagick';
+        } elseif (class_exists('\Gmagick')) {
+            return 'gmagick';
+        }
+
+        static::markTestSkipped('Data set requires "imagick" or "gmagick" extension to be installed and loaded.');
+    }
+
+    /**
+     * @return ImagickImagine|GmagickImagine
+     */
+    private function getImagineInstance($driver)
+    {
+        switch ($driver) {
+            case 'imagick':
+                return new ImagickImagine();
+
+            case 'gmagick':
+            default:
+                return new GmagickImagine();
+        }
+    }
+
+    /**
+     * @param string $driver
+     * @param string $file
+     *
+     * @return float[]
+     */
+    private function getImageResolution($driver, $file)
+    {
+        switch ($driver) {
+            case 'imagick':
+                $driver = new \Imagick($file);
+                break;
+
+            case 'gmagick':
+            default:
+                $driver = new \Gmagick($file);
+                break;
+        }
+
+        return $driver->getImageResolution();
     }
 }
