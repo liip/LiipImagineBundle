@@ -36,9 +36,13 @@ class FileSystemLoader implements LoaderInterface
     protected $locator;
 
     /**
+     * This method will continue to support two prior, deprecated signitures for the duration of the 1.x
+     * release. The currently documented signiture will be the only valid usage once 2.0 is release. You
+     * can reference PR-963 {@see https://github.com/liip/LiipImagineBundle/pull/963} for more information.
+     *
      * @param MimeTypeGuesserInterface  $mimeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
-     * @param string[]|LocatorInterface $locator
+     * @param LocatorInterface          $locator
      */
     public function __construct(MimeTypeGuesserInterface $mimeGuesser, ExtensionGuesserInterface $extensionGuesser, $locator)
     {
