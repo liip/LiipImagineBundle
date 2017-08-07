@@ -15,15 +15,15 @@ use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Client\ProducerInterface;
 use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
-use Enqueue\Psr\PsrContext;
-use Enqueue\Psr\PsrMessage;
-use Enqueue\Psr\PsrProcessor;
+use Interop\Queue\PsrContext;
+use Interop\Queue\PsrMessage;
+use Interop\Queue\PsrProcessor;
 use Enqueue\Util\JSON;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
-class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
+final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
 {
     /**
      * @var CacheManager

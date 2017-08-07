@@ -35,7 +35,7 @@
         "aws/aws-sdk-php": "~2.4",
         "doctrine/cache": "~1.1",
         "doctrine/orm": "~2.3",
-        "enqueue/enqueue-bundle": "^0.5",
+        "enqueue/enqueue-bundle": "^0.7",
         "friendsofphp/php-cs-fixer": "~1.0",
         "league/flysystem": "~1.0",
         "phpunit/phpunit": "~5.0",
@@ -62,7 +62,7 @@
         "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
         "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
-        "enqueue/enqueue-bundle": "add if you like to process images in background",
+        "enqueue/enqueue-bundle": "^0.6|^0.7 add if you like to process images in background",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
         "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
