@@ -28,7 +28,7 @@ class ResolveCacheProcessorTest extends AbstractTest
     {
         $rc = new \ReflectionClass('Liip\ImagineBundle\Async\ResolveCacheProcessor');
 
-        $this->assertTrue($rc->implementsInterface('Enqueue\Psr\PsrProcessor'));
+        $this->assertTrue($rc->implementsInterface('Interop\Queue\PsrProcessor'));
     }
 
     public function testShouldImplementCommandSubscriberInterface()
@@ -110,7 +110,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $result = $processor->process($message, new NullContext());
 
         $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
-        $this->assertInstanceOf('Enqueue\Psr\PsrMessage', $result->getReply());
+        $this->assertInstanceOf('Interop\Queue\PsrMessage', $result->getReply());
         $this->assertEquals(
             array(
                 "status" => false,
@@ -388,7 +388,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $result = $processor->process($message, new NullContext());
 
         $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
-        $this->assertInstanceOf('Enqueue\Psr\PsrMessage', $result->getReply());
+        $this->assertInstanceOf('Interop\Queue\PsrMessage', $result->getReply());
         $this->assertEquals(
             array(
                 "status" => true,
