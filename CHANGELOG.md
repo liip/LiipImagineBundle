@@ -1,7 +1,28 @@
 # Change Log
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2017-xx-xx)
-[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.8.0...HEAD)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.0...HEAD)
+
+## [1.9.0](https://github.com/liip/LiipImagineBundle/tree/1.9.0) (2017-08-30)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.8.0...1.9.0)
+
+- \[Data Loader\] \[Tests\] Fix filesystem loader deprecation message in tests [\#982](https://github.com/liip/LiipImagineBundle/pull/982) ([robfrawley](https://github.com/robfrawley))
+- \[Data Loader\] Add "centerright" and "centerleft" positions to background filter loader [\#974](https://github.com/liip/LiipImagineBundle/pull/974) ([cmodijk](https://github.com/cmodijk))
+- \[Controller\] Allow to configure the HTTP response code for redirects [\#970](https://github.com/liip/LiipImagineBundle/pull/970) ([lstrojny](https://github.com/lstrojny))
+- \[Console\] Add forced resolve to command and prittify and detail output [\#967](https://github.com/liip/LiipImagineBundle/pull/967) ([robfrawley](https://github.com/robfrawley))
+- \[CS\] Fix two docblock annotations [\#965](https://github.com/liip/LiipImagineBundle/pull/965) ([imanalopher](https://github.com/imanalopher))
+- \[Data Loader\] Pass root paths to file system locator constructor (instead of loader) [\#963](https://github.com/liip/LiipImagineBundle/pull/963/) ([robfrawley](https://github.com/robfrawley), [rpkamp](https://github.com/rpkamp))
+- \[Composer\] Allow imagine-library version 0.7.0 [\#958](https://github.com/liip/LiipImagineBundle/pull/958) ([robfrawley](https://github.com/robfrawley))
+- \[Data Loader\] \[Documentation\] Add chain loader documentation [\#957](https://github.com/liip/LiipImagineBundle/pull/957) ([robfrawley](https://github.com/robfrawley))
+- \[Data Loader\] Add chain loader implementation [\#953](https://github.com/liip/LiipImagineBundle/pull/953) ([robfrawley](https://github.com/robfrawley))
+- \[CS\] Fix templating extension "filter" return type [\#951](https://github.com/liip/LiipImagineBundle/pull/951) ([imanalopher](https://github.com/imanalopher))
+- \[Dependency Injection\] Fix compiler pass log message typo [\#947](https://github.com/liip/LiipImagineBundle/pull/947) ([you-ser](https://github.com/you-ser))
+- \[Travis\] Default to trusty container image (with precise image for php 5.3) [\#945](https://github.com/liip/LiipImagineBundle/pull/945) ([robfrawley](https://github.com/robfrawley))
+- \[Enqueue\] Use simplified transport configuration [\#942](https://github.com/liip/LiipImagineBundle/pull/942) ([makasim](https://github.com/makasim))
+- \[Filter\] Add resolution loader implementation [\#941](https://github.com/liip/LiipImagineBundle/pull/941) ([robfrawley](https://github.com/robfrawley))
+- \[Travis\] Remove Symfony 3.3 from allowed failures [\#940](https://github.com/liip/LiipImagineBundle/pull/940) ([robfrawley](https://github.com/robfrawley))
+- \[Utility\] \[CS\] Use simplified symfony version comparison and minor cs fixes [\#939](https://github.com/liip/LiipImagineBundle/pull/939) ([robfrawley](https://github.com/robfrawley))
+
 
 ## [1.8.0](https://github.com/liip/LiipImagineBundle/tree/1.8.0) (2017-05-08)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/1.7.4...1.8.0)

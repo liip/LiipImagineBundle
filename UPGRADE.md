@@ -6,6 +6,9 @@
  as the third parameter and an (optional) `LocatorInterace` as the fourth parameter is deprecated. A `LocatorInterface`
  should now be passed as third parameter, and the array of data roots to the `LocatorInterface::__construct()` method
  directly. All prior signatures will continue to work until `2.0` is release.
+ - __[Console]__ Added the `--force` parameter to resolve console command to force image resolution regardless of cache.
+ Added the `--as-script` parameter to resolve console command to disable verbose, "prettified" output.
+ - __[Composer]__ Imagine library upgraded to version 0.7.x.
 
 ## 1.8.0
 
