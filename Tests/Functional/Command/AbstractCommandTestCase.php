@@ -22,11 +22,11 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
     /**
      * @param Command $command
      * @param array   $arguments
-     * @param array   $options
+     * @param int     $return
      *
      * @return string
      */
-    protected function executeConsole(Command $command, array $arguments = array(), array $options = array())
+    protected function executeConsole(Command $command, array $arguments = array(), &$return = null)
     {
         $command->setApplication(new Application($this->createClient()->getKernel()));
         if ($command instanceof ContainerAwareCommand) {
@@ -34,10 +34,9 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
         }
 
         $arguments = array_replace(array('command' => $command->getName()), $arguments);
-        $options = array_replace(array('--env' => 'test'), $options);
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute($arguments, $options);
+        $return = $commandTester->execute($arguments, array('--env' => 'test'));
 
         return $commandTester->getDisplay();
     }

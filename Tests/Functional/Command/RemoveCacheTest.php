@@ -33,7 +33,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'),
+                '--filter' => array('thumbnail_web_path'),
         ));
     }
 
@@ -53,7 +53,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             new RemoveCacheCommand(),
-            array('--filters' => array('thumbnail_web_path', 'thumbnail_default'))
+            array('--filter' => array('thumbnail_web_path', 'thumbnail_default'))
         );
     }
 
@@ -160,7 +160,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             new RemoveCacheCommand(),
-            array('--filters' => array('thumbnail_default'))
+            array('--filter' => array('thumbnail_default'))
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
@@ -190,7 +190,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             new RemoveCacheCommand(),
-            array('--filters' => array('thumbnail_default', 'thumbnail_web_path'))
+            array('--filter' => array('thumbnail_default', 'thumbnail_web_path'))
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -218,7 +218,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_default', 'thumbnail_web_path'), )
+                '--filter' => array('thumbnail_default', 'thumbnail_web_path'), )
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -245,11 +245,25 @@ class RemoveCacheTest extends AbstractCommandTestCase
             new RemoveCacheCommand(),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+                '--filter' => array('thumbnail_web_path'), )
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats2.jpeg');
         $this->assertFileExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation As of 1.9, use of the "--filters" option has been deprecated in favor of "--filter" and will be removed in 2.0.
+     */
+    public function testDeprecatedFiltersOption()
+    {
+        $this->executeConsole(
+            new RemoveCacheCommand(),
+            array(
+                'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
+                '--filters' => array('thumbnail_web_path'), )
+        );
     }
 }
