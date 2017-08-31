@@ -83,7 +83,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideLoadCases
      *
      * @group legacy
-     * @expectedDeprecation Method %s() will have a forth `LocatorInterface $locator` argument in version 2.0. Not defining it is deprecated since version 1.7.2
+     * @expectedDeprecation Method %s::__construct() will expect the third parameter to be a LocatorInterface in version 2.0. Defining data roots instead is deprecated since version 1.9.0
      *
      * @param string $root
      * @param string $path
