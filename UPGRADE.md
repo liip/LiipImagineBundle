@@ -1,5 +1,12 @@
 # Upgrade
 
+## 1.9.0
+
+ - __[Data Loader]__ The arguments for the `FileSystemLoader` class constructor have changed. Passing an array of roots
+ as the third parameter and an (optional) `LocatorInterace` as the fourth parameter is deprecated. A `LocatorInterface`
+ should now be passed as third parameter, and the array of data roots to the `LocatorInterface::__construct()` method
+ directly. All prior signatures will continue to work until `2.0` is release.
+
 ## 1.8.0
 
  - __[Routing]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
