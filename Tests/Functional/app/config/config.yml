@@ -84,4 +84,6 @@ liip_imagine:
             filters:
                 thumbnail: { size: [223, 223], mode: inset }
 
-...
+
+    controller:
+        redirect_response_code: 302

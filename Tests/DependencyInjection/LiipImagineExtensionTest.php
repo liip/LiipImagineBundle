@@ -57,6 +57,7 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.cache.manager'),
                 new Reference('liip_imagine.cache.signer'),
                 new Reference('logger', ContainerInterface::IGNORE_ON_INVALID_REFERENCE),
+                '%liip_imagine.controller.redirect_response_code%'
             )
         );
     }
