@@ -47,6 +47,7 @@
         <parameter key="liip_imagine.filter.loader.rotate.class">Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.flip.class">Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader</parameter>
         <parameter key="liip_imagine.filter.loader.interlace.class">Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader</parameter>
+        <parameter key="liip_imagine.filter.loader.resample.class">Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader</parameter>
 
         <!-- Data loaders' classes -->
 
@@ -229,6 +230,11 @@
 
         <service id="liip_imagine.filter.loader.interlace" class="%liip_imagine.filter.loader.interlace.class%">
             <tag name="liip_imagine.filter.loader" loader="interlace" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.resample" class="%liip_imagine.filter.loader.resample.class%">
+            <argument type="service" id="liip_imagine" />
+            <tag name="liip_imagine.filter.loader" loader="resample" />
         </service>
 
         <!-- Data loaders -->
