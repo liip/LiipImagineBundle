@@ -9,7 +9,7 @@ This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html
 
 ## v1.9.0
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v190) for the `1.9.0` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v190) for the `1.9.0` release.*
 
  - __\[Data Loader\]__ The arguments for the `FileSystemLoader` class constructor have changed. Passing an array of roots
  as the third parameter and an (optional) `LocatorInterace` as the fourth parameter is deprecated. A `LocatorInterface`
@@ -24,7 +24,7 @@ This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html
 
 ## v1.8.0
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v180) for the `1.8.0` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v180) for the `1.8.0` release.*
 
  - __\[Routing\]__ The `Resources/config/routing.xml` file has been deprecated and will be removed in `2.0`. Use the new
  YAML variant moving forward `Resources/config/routing.yaml`.
@@ -32,7 +32,7 @@ This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html
 
 ## v1.7.3
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v173) for the `1.7.3` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v173) for the `1.7.3` release.*
 
   - __\[Data Loader\]__ The `FileSystemLoader` now allows you to assign keys to data roots, and directly reference them when
   requesting resources.
@@ -105,7 +105,7 @@ This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html
 
 ## v1.7.2
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v172) for the `1.7.2` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v172) for the `1.7.2` release.*
 
   - __\[Data Loader\]__ The `FileSystemLoader`'s resource locator has been abstracted out into `FileSystemLocator`
   (provides the same `realpath`-based locator algorithm introduced in the `1.7.0` release) and `FileSystemInsecureLocator`
@@ -179,7 +179,7 @@ setup.
 
 ## v1.7.1
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v171) for the `1.7.1` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v171) for the `1.7.1` release.*
 
   - __\[Data Loader\]__ The `FileSystemLoader` data loader performs a more robust security check against image resource
     paths to ensure they reside within the defined data root path(s). If utilizing symbolic links, you should reference
@@ -229,7 +229,7 @@ setup.
 
 ## v1.0.0-alpha7
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha7) for the `1.0.0-alpha7` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha7) for the `1.0.0-alpha7` release.*
 
   - __\[Configuration\]__ `liip_imagine.controller_action` option was removed in favour of an array of actions. See
     `liip_imagine.controller` config
@@ -247,7 +247,7 @@ setup.
 
 ## v1.0.0-alpha6
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha6) for the `1.0.0-alpha6` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha6) for the `1.0.0-alpha6` release.*
 
   - __\[Route\]__ `ImagineLoader` was removed. Please adjust your `app/config/routing.yml` file.
 
@@ -268,7 +268,7 @@ setup.
 
 ## v1.0.0-alpha5
 
-*View the [changelog entry](https://github.com/robfrawley/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha5) for the `1.0.0-alpha5` release.*
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v100-alpha5) for the `1.0.0-alpha5` release.*
 
   - __\[Symfony\]__ Required minimum symfony version was updated to 2.3.
 
