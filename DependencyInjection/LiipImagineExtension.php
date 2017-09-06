@@ -94,7 +94,7 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('twig.form.resources', array_merge(
             $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
-            ['LiipImagineBundle:Form:form_div_layout.html.twig']
+            ['@LiipImagine/Form/form_div_layout.html.twig']
         ));
     }
 
