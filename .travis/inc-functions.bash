@@ -17,29 +17,6 @@ function out_main()
 }
 
 #
-# disable the php memory limit by setting it to "-1"
-#
-function disable_php_memory_limit()
-{
-  if [[ ! -d "$(dirname ${CONF_PATH_PHP7})" ]]; then
-    return
-  fi
-
-  out_line "Disabling PHP memory limit in '${CONF_PATH_PHP7}'"
-  echo "memory_limit = -1" >> "${CONF_PATH_PHP7}";
-}
-
-#
-# enable the hhvm php7 mode by setting it to "1"
-#
-function enable_hhvm_php7_mode()
-{
-  out_line "Enabling HHVM PHP7 mode in '${CONF_PATH_HHVM}'"
-  echo "hhvm.php7.all = 1" >> "${CONF_PATH_HHVM}"
-  echo "hhvm.php7.scalar_types = 0" >> "${CONF_PATH_HHVM}"
-}
-
-#
 # configure the prestissimo package
 #
 function configure_prestissimo()

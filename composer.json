@@ -18,7 +18,7 @@
         "exclude-from-classmap": [ "/Tests/" ]
     },
     "require": {
-        "php": "~7.0",
+        "php": "~7.1",
         "imagine/Imagine": "^0.6.3,<0.7",
         "symfony/asset": "~3.0",
         "symfony/filesystem": "~3.0",
