@@ -24,50 +24,38 @@ use Symfony\Component\Process\ProcessBuilder;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class MozJpegPostProcessor extends AbstractPostProcessor
 {
-    /** @var string Path to the mozjpeg cjpeg binary */
-    protected $mozjpegBin;
-
-    /** @var null|int Quality factor */
+    /**
+     * @var null|int Quality factor
+     */
     protected $quality;
 
     /**
-     * Constructor.
-     *
-     * @param string   $mozjpegBin Path to the mozjpeg cjpeg binary
-     * @param int|null $quality    Quality factor
+     * @param string   $executablePath Path to the mozjpeg cjpeg binary
+     * @param int|null $quality        Quality factor
      */
-    public function __construct(
-        $mozjpegBin = '/opt/mozjpeg/bin/cjpeg',
-        $quality = null
-    ) {
-        $this->mozjpegBin = $mozjpegBin;
-        $this->setQuality($quality);
+    public function __construct($executablePath = '/opt/mozjpeg/bin/cjpeg', $quality = null)
+    {
+        parent::__construct($executablePath);
+
+        $this->quality = $quality;
     }
 
     /**
+     * @deprecated All post-processor setters have been deprecated in 1.10.0 for removal in 2.0. You must only use the
+     *             class's constructor to set the property state.
+     *
      * @param int $quality
      *
      * @return MozJpegPostProcessor
      */
     public function setQuality($quality)
     {
+        $this->triggerSetterMethodDeprecation(__METHOD__);
         $this->quality = $quality;
 
         return $this;
-    }
-
-    /**
-     * @param BinaryInterface $binary
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, array());
     }
 
     /**
@@ -78,39 +66,43 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      *
      * @return BinaryInterface
      */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    protected function doProcess(BinaryInterface $binary, array $options = array())
     {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, array('image/jpeg', 'image/jpg'))) {
+        if (!$this->isBinaryTypeJpgImage($binary)) {
             return $binary;
         }
 
-        $pb = new ProcessBuilder(array($this->mozjpegBin));
+        $process = $this->setupProcessBuilder($options, $binary)->setInput($binary->getContent())->getProcess();
+        $process->run();
 
-        // Places emphasis on DC
-        $pb->add('-quant-table');
-        $pb->add(2);
-
-        $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
-        if ($transformQuality !== null) {
-            $pb->add('-quality');
-            $pb->add($transformQuality);
+        if (!$this->isSuccessfulProcess($process)) {
+            throw new ProcessFailedException($process);
         }
 
-        $pb->add('-optimise');
+        return new Binary($process->getOutput(), $binary->getMimeType(), $binary->getFormat());
+    }
 
-        // Favor stdin/stdout so we don't waste time creating a new file.
-        $pb->setInput($binary->getContent());
+    /**
+     * @param array $options
+     *
+     * @return ProcessBuilder
+     */
+    private function setupProcessBuilder(array $options = array())
+    {
+        $builder = $this->createProcessBuilder(array($this->executablePath), $options);
 
-        $proc = $pb->getProcess();
-        $proc->run();
-
-        if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
-            throw new ProcessFailedException($proc);
+        if ($quantTable = isset($options['quant_table']) ? $options['quant_table'] : 2) {
+            $builder->add('-quant-table')->add($quantTable);
         }
 
-        $result = new Binary($proc->getOutput(), $binary->getMimeType(), $binary->getFormat());
+        if (isset($options['optimise']) ? $options['optimise'] : true) {
+            $builder->add('-optimise');
+        }
 
-        return $result;
+        if (null !== $quality = isset($options['quality']) ? $options['quality'] : $this->quality) {
+            $builder->add('-quality')->add($quality);
+        }
+
+        return $builder;
     }
 }

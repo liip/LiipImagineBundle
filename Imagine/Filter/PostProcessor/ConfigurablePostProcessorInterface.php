@@ -14,16 +14,16 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
- * Interface to make PostProcessors configurable without breaking BC.
- *
- * @see PostProcessorInterface for the original interface
+ * @deprecated This interface was deprecated in 1.10.0 and will be removed in 2.0. Use PostProcessorInterface::process().
  *
  * @author Alex Wilson <a@ax.gy>
  */
 interface ConfigurablePostProcessorInterface
 {
     /**
-     * Allows processing a BinaryInterface, with run-time options, so PostProcessors remain stateless.
+     * Performs post-process operation on passed binary and returns the resulting binary.
+     *
+     * @deprecated This interface was deprecated in 1.10.0 and will be removed in 2.0. Use PostProcessorInterface::process().
      *
      * @param BinaryInterface $binary
      * @param array           $options Operation-specific options

@@ -984,7 +984,7 @@ class FilterManagerTest extends AbstractTest
     }
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Could not find post processor "foo"
+     * @expectedExceptionMessage Post-processor "foo" could not be found
      */
     public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter()
     {

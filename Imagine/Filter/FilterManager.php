@@ -98,7 +98,7 @@ class FilterManager
      *
      * @throws \InvalidArgumentException
      *
-     * @return Binary
+     * @return BinaryInterface
      */
     public function apply(BinaryInterface $binary, array $config)
     {
@@ -176,17 +176,13 @@ class FilterManager
     public function applyPostProcessors(BinaryInterface $binary, $config)
     {
         $config += array('post_processors' => array());
+
         foreach ($config['post_processors'] as $postProcessorName => $postProcessorOptions) {
             if (!isset($this->postProcessors[$postProcessorName])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find post processor "%s"', $postProcessorName
-                ));
+                throw new \InvalidArgumentException(sprintf('Post-processor "%s" could not be found', $postProcessorName));
             }
-            if ($this->postProcessors[$postProcessorName] instanceof ConfigurablePostProcessorInterface) {
-                $binary = $this->postProcessors[$postProcessorName]->processWithConfiguration($binary, $postProcessorOptions);
-            } else {
-                $binary = $this->postProcessors[$postProcessorName]->process($binary);
-            }
+
+            $binary = $this->postProcessors[$postProcessorName]->process($binary, $postProcessorOptions);
         }
 
         return $binary;
