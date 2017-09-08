@@ -7,6 +7,21 @@ All important upgrade requirements will be enumerated in this
 This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## v1.9.1
+
+*View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v191) for the `1.9.1` release.*
+
+ - __\[Console\]__ __\[BC BREAK\]__ The resolve command's `--as-script`/`-s` option name/shortcut conflicted with Symfony
+ 2.x core console options (specifically `--shell`/`-s`) and has been renamed to `--machine-readable`/`-m`
+ \(fixes [\#988](https://github.com/liip/LiipImagineBundle/pull/988)\). The `-s` option shortcut was the only conflict,
+ but the `--as-script` option name proved confusing and unclear so it too was renamed.
+
+ - __\[Console\]__ The output formatting for the `remove` command has been updated and aligned with the behavior
+ previously introduced in `1.9.0` for the `resolve` command, making both of them consistent and in-line with the
+ expected `2.0.0` output. The `--machine-readable`/`-m` option name/shortcut has now been added to the `remove` command
+ as well, enabling predictable, consistent, script parseable output stripped of text styles and supplemental formatting.
+
+
 ## v1.9.0
 
 *View the [changelog entry](https://github.com/liip/LiipImagineBundle/blob/1.0/CHANGELOG.md#v190) for the `1.9.0` release.*

@@ -10,9 +10,16 @@ This project adheres to [semantic versioning](http://semver.org/spec/v2.0.0.html
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
 
 *Note: Recent developments can be tracked via the
-[latest changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.0...HEAD), the
-[active milestone](https://github.com/liip/LiipImagineBundle/milestone/15), as well as all
+[latest changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.1...HEAD), the
+[active milestone](https://github.com/liip/LiipImagineBundle/milestone/16), as well as all
 [open milestones](https://github.com/liip/LiipImagineBundle/milestones).*
+
+
+## [v1.9.1](https://github.com/liip/LiipImagineBundle/tree/1.9.1)
+
+*Released on* 2017-09-08 *and assigned* [`1.9.1`](https://github.com/liip/LiipImagineBundle/releases/tag/1.9.1) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.0...1.9.1)\).*
+
+- __\[Console\]__ __\[BC BREAK\]__ The resolve command's --as-script/-s option/shortcut renamed to --machine-readable/-m \(fixes [\#988](https://github.com/liip/LiipImagineBundle/pull/988)\), its output updated to aligned with the resolve command, and the "--machine-readable/-m" option added.  [\#991](https://github.com/liip/LiipImagineBundle/pull/991) *([robfrawley](https://github.com/robfrawley))*
 
 
 ## [v1.9.0](https://github.com/liip/LiipImagineBundle/tree/1.9.0)

@@ -11,193 +11,113 @@
 
 namespace Liip\ImagineBundle\Command;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ResolveCacheCommand extends ContainerAwareCommand
+class ResolveCacheCommand extends AbstractCacheCommand
 {
     protected function configure()
     {
         $this
             ->setName('liip:imagine:cache:resolve')
-            ->setDescription('Resolve cache for given path and set of filters.')
+            ->setDescription('Resolves asset caches for the passed asset paths(s) and filter set name(s)')
             ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
-                'Any number of image paths to act on.')
-            ->addOption('filters', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'List of filters to apply to passed images (Deprecated, use "filter").')
+                'Asset paths to resolve caches for')
             ->addOption('filter', 'f', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'List of filters to apply to passed images.')
+                'Filter name to resolve caches for (passing none will use all registered filters)')
             ->addOption('force', 'F', InputOption::VALUE_NONE,
-                'Force image resolution regardless of cache.')
-            ->addOption('as-script', 's', InputOption::VALUE_NONE,
-                'Only print machine-parseable results.')
+                'Force asset cache resolution (ignoring whether it already cached)')
+            ->addOption('machine-readable', 'm', InputOption::VALUE_NONE,
+                'Enable machine parseable output (removing extraneous output and all text styles)')
+            ->addOption('filters', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Deprecated in 1.9.0 and removed in 2.0.0 (use the --filter option instead)')
             ->setHelp(<<<'EOF'
-The <comment>%command.name%</comment> command resolves the passed image(s) for the resolved
-filter(s), outputting results using the following basic format:
-  <info>- "image.ext[filter]" (resolved|cached|failed) as "path/to/cached/image.ext"</>
+The <comment>%command.name%</comment> command resolves asset cache for the passed image(s) and filter(s).
 
-<comment># bin/console %command.name% --filter=thumb1 foo.ext bar.ext</comment>
-Resolve <options=bold>both</> <comment>foo.ext</comment> and <comment>bar.ext</comment> using <comment>thumb1</comment> filter, outputting:
-  <info>- "foo.ext[thumb1]" resolved as "http://localhost/media/cache/thumb1/foo.ext"</>
-  <info>- "bar.ext[thumb1]" resolved as "http://localhost/media/cache/thumb1/bar.ext"</>
+For an application that has only the two files "foo.ext" and "bar.ext", and only the filter sets
+named "thumb_sm" and "thumb_lg", the following examples will behave as shown.
 
-<comment># bin/console %command.name% --filter=thumb1 --filter=thumb2 foo.ext</comment>
-Resolve <comment>foo.ext</comment> using <options=bold>both</> <comment>thumb1</comment> and <comment>thumb2</comment> filters, outputting:
-  <info>- "foo.ext[thumb1]" resolved as "http://localhost/media/cache/thumb1/foo.ext"</>
-  <info>- "foo.ext[thumb2]" resolved as "http://localhost/media/cache/thumb2/foo.ext"</>
+<comment># bin/console %command.name% foo.ext bar.ext</comment>
+Resolves caches for <options=bold>both</> <options=bold>foo.ext</> and <options=bold>bar.ext</> using <options=bold>all configured filters</>, outputting:
+  <info>- foo.ext[thumb_sm] resolved: http://localhost/media/cache/thumb_sm/foo.ext</>
+  <info>- bar.ext[thumb_sm] resolved: http://localhost/media/cache/thumb_sm/bar.ext</>
+  <info>- foo.ext[thumb_lg] resolved: http://localhost/media/cache/thumb_lg/foo.ext</>
+  <info>- bar.ext[thumb_lg] resolved: http://localhost/media/cache/thumb_lg/bar.ext</>
 
-<comment># bin/console %command.name% foo.ext</comment>
-Resolve <comment>foo.ext</comment> using <options=bold>all configured filters</> (as none are specified), outputting:
-  <info>- "foo.ext[thumb1]" resolved as "http://localhost/media/cache/thumb1/foo.ext"</>
-  <info>- "foo.ext[thumb2]" resolved as "http://localhost/media/cache/thumb2/foo.ext"</>
+<comment># bin/console %command.name% --filter=thumb_sm foo.ext</comment>
+Resolves caches for <options=bold>foo.ext</> using <options=bold>only</> <options=bold>thumb_sm</> filter, outputting:
+  <info>- foo.ext[thumb_sm] resolved: http://localhost/media/cache/thumb_sm/foo.ext</>
 
-<comment># bin/console %command.name% --force --filter=thumb1 foo.ext</comment>
-Resolve <comment>foo.ext</comment> using <comment>thumb1</comment> and <options=bold>force creation</> regardless of cache, outputting:
-  <info>- "foo.ext[thumb1]" resolved as "http://localhost/media/cache/thumb1/foo.ext"</>
+<comment># bin/console %command.name% --filter=thumb_sm --filter=thumb_lg foo.ext</comment>
+Resolves caches for <options=bold>foo.ext</> using <options=bold>both</> <options=bold>thumb_sm</> and <options=bold>thumb_lg</> filters, outputting:
+  <info>- foo.ext[thumb_sm] resolved: http://localhost/media/cache/thumb_sm/foo.ext</>
+  <info>- foo.ext[thumb_lg] resolved: http://localhost/media/cache/thumb_lg/foo.ext</>
+
+<comment># bin/console %command.name% --force --filter=thumb_sm foo.ext</comment>
+Resolving caches for <options=bold>foo.ext</> using <options=bold>thumb_sm</> filter when <options=bold>already cached</> will caused <options=bold>skipped</>, outputting:
+  <info>- foo.ext[thumb_sm] skipped: http://localhost/media/cache/thumb_sm/foo.ext</>
+
+<comment># bin/console %command.name% --force --filter=thumb_sm foo.ext</comment>
+Resolving caches for <options=bold>foo.ext</> using <options=bold>thumb_sm</> filter when <options=bold>already cached</> with <options=bold>force</> option <options=bold>re-resolves</> (ignoring cache), outputting:
+  <info>- foo.ext[thumb_sm] resolved: http://localhost/media/cache/thumb_sm/foo.ext</>
+
+<comment># bin/console %command.name% --filter=does_not_exist --filter=thumb_sm foo.ext</comment>
+Resolves caches for <options=bold>foo.ext</> using <options=bold>thumb_sm</> while <options=bold>failing inline</> on invalid filter (or other errors), outputting:
+  <info>- foo.ext[does_not_exist] failed: Could not find configuration for a filter: does_not_exist</>
+  <info>- foo.ext[thumb_sm] removed: http://localhost/media/cache/thumb_sm/foo.ext</>
 
 EOF
             );
     }
 
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $force = $input->getOption('force');
-        $paths = $input->getArgument('paths');
-        $filters = $this->resolveInputFilters($input);
-        $machine = $input->getOption('as-script');
-        $failed = 0;
+        $this->initializeInstState($input, $output);
+        $this->writeCommandHeading('resolve');
 
-        $filterManager = $this->getFilterManager();
-        $dataManager = $this->getDataManager();
-        $cacheManager = $this->getCacheManager();
+        $filters = $this->resolveFilters($input);
+        $targets = $input->getArgument('paths');
+        $doForce = $input->getOption('force');
 
-        if (0 === count($filters)) {
-            $filters = array_keys($filterManager->getFilterConfiguration()->all());
-        }
-
-        $this->outputTitle($output, $machine);
-
-        foreach ($paths as $path) {
-            foreach ($filters as $filter) {
-                $output->write(sprintf('- %s[%s] ', $path, $filter));
-
-                try {
-                    if ($force || !$cacheManager->isStored($path, $filter)) {
-                        $cacheManager->store($filterManager->applyFilter($dataManager->find($filter, $path), $filter), $path, $filter);
-                        $output->write('resolved: ');
-                    } else {
-                        $output->write('cached: ');
-                    }
-
-                    $output->writeln($cacheManager->resolve($path, $filter));
-                } catch (\Exception $e) {
-                    $output->writeln(sprintf('failed: %s', $e->getMessage()));
-                    ++$failed;
-                }
+        foreach ($targets as $t) {
+            foreach ($filters as $f) {
+                $this->doCacheResolve($t, $f, $doForce);
             }
         }
 
-        $this->outputSummary($output, $machine, count($filters), count($paths), $failed);
+        $this->writeResultSummary($filters, $targets);
 
-        return 0 === $failed ? 0 : 255;
+        return $this->getReturnCode();
     }
 
     /**
-     * @param OutputInterface $output
-     * @param bool            $machine
+     * @param string $target
+     * @param string $filter
+     * @param bool   $forced
      */
-    private function outputTitle(OutputInterface $output, $machine)
+    private function doCacheResolve($target, $filter, $forced)
     {
-        if (!$machine) {
-            $title = '[liip/imagine-bundle] Image Resolver';
+        $this->writeActionStart($filter, $target);
 
-            $output->writeln(sprintf('<info>%s</info>', $title));
-            $output->writeln(str_repeat('=', strlen($title)));
-            $output->writeln('');
+        try {
+            if ($forced || !$this->getCacheManager()->isStored($target, $filter)) {
+                $this->getCacheManager()->store($this->getFilterManager()->applyFilter($this->getDataManager()->find($filter, $target), $filter), $target, $filter);
+                $this->writeActionResult('resolved');
+            } else {
+                $this->writeActionResult('skipped');
+            }
+
+            $this->writeActionDetail($this->getCacheManager()->resolve($target, $filter));
+        } catch (\Exception $e) {
+            $this->writeActionException($e);
         }
-    }
-
-    /**
-     * @param OutputInterface $output
-     * @param bool            $machine
-     * @param int             $filters
-     * @param int             $paths
-     * @param int             $failed
-     */
-    private function outputSummary(OutputInterface $output, $machine, $filters, $paths, $failed)
-    {
-        if (!$machine) {
-            $operations = ($filters * $paths) - $failed;
-
-            $output->writeln('');
-            $output->writeln(vsprintf('Completed %d %s (%d %s on %d %s) <fg=red;options=bold>%s</>', array(
-                $operations,
-                $this->pluralizeWord($operations, 'operation'),
-                $filters,
-                $this->pluralizeWord($filters, 'filter'),
-                $paths,
-                $this->pluralizeWord($paths, 'image'),
-                0 === $failed ? '' : sprintf('[encountered %d %s]', $failed, $this->pluralizeWord($failed, 'failure')),
-            )));
-        }
-    }
-
-    /**
-     * @param int    $count
-     * @param string $singular
-     * @param string $pluralEnding
-     *
-     * @return string
-     */
-    private function pluralizeWord($count, $singular, $pluralEnding = 's')
-    {
-        return 1 === $count ? $singular : $singular.$pluralEnding;
-    }
-
-    /**
-     * @param InputInterface $input
-     *
-     * @return array|mixed
-     */
-    private function resolveInputFilters(InputInterface $input)
-    {
-        $filters = $input->getOption('filter');
-
-        if (count($filtersDeprecated = $input->getOption('filters'))) {
-            $filters = array_merge($filters, $filtersDeprecated);
-            @trigger_error('As of 1.9, use of the "--filters" option has been deprecated in favor of "--filter" and will be removed in 2.0.', E_USER_DEPRECATED);
-        }
-
-        return $filters;
-    }
-
-    /**
-     * @return FilterManager
-     */
-    private function getFilterManager()
-    {
-        return $this->getContainer()->get('liip_imagine.filter.manager');
-    }
-
-    /**
-     * @return DataManager
-     */
-    private function getDataManager()
-    {
-        return $this->getContainer()->get('liip_imagine.data.manager');
-    }
-
-    /**
-     * @return CacheManager
-     */
-    private function getCacheManager()
-    {
-        return $this->getContainer()->get('liip_imagine.cache.manager');
     }
 }

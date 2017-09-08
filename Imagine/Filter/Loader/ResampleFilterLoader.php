@@ -128,7 +128,7 @@ class ResampleFilterLoader implements LoaderInterface
 
         $resolver->setAllowedValues('unit', array(
             ImageInterface::RESOLUTION_PIXELSPERINCH,
-            ImageInterface::RESOLUTION_PIXELSPERCENTIMETER
+            ImageInterface::RESOLUTION_PIXELSPERCENTIMETER,
         ));
 
         $resolver->setNormalizer('filter', function (Options $options, $value) {

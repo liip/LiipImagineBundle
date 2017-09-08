@@ -26,6 +26,14 @@ liip_imagine:
     loaders:
 
         default:
+            chain:
+                loaders:
+                    - web
+                    - foo
+                    - bar
+                    - bundles_all
+
+        web:
             filesystem:
                 data_root: "%kernel.root_dir%/web"
 
@@ -36,14 +44,6 @@ liip_imagine:
         bar:
             filesystem:
                 data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
-
-        baz:
-            chain:
-                loaders:
-                    - foo
-                    - bar
-                    - default
-                    - bundles_all
 
         bundles_all:
             filesystem:
@@ -76,14 +76,22 @@ liip_imagine:
 
     filter_sets:
 
-        thumbnail_web_path:
+        profile_thumb_sm:
             filters:
-                thumbnail: { size: [223, 223], mode: inset }
+                thumbnail:
+                    size: [100, 100]
+                    mode: inset
 
-        thumbnail_default:
+        profile_thumb_lg:
             filters:
-                thumbnail: { size: [223, 223], mode: inset }
+                thumbnail:
+                    size: [200, 200]
+                    mode: inset
 
+        profile_main:
+            filters:
+                scale:
+                    dim: [300, 300]
 
     controller:
         redirect_response_code: 302
