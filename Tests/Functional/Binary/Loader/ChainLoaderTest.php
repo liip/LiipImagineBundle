@@ -33,7 +33,7 @@ class ChainLoaderTest extends AbstractWebTestCase
     {
         static::createClient();
 
-        $loader = $this->getLoader('baz');
+        $loader = $this->getLoader('default');
 
         foreach (array('images/cats.jpeg', 'images/cats2.jpeg', 'file.ext', 'bar-bundle-file.ext', 'foo-bundle-file.ext') as $file) {
             $this->assertNotNull($loader->find($file));

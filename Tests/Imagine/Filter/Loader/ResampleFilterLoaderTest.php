@@ -60,7 +60,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $resolutions = array(
             72.0,
             120.0,
-            240.0
+            240.0,
         );
 
         $data = array();

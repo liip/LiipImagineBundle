@@ -30,44 +30,44 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolvePopulatingCacheFirst()
     {
         //guard
-        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileNotExists($this->cacheRoot.'/profile_thumb_sm/images/cats.jpeg');
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/images/cats.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        $this->assertEquals('http://localhost/media/cache/profile_thumb_sm/images/cats.jpeg', $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/profile_thumb_sm/images/cats.jpeg');
     }
 
     public function testShouldResolveFromCache()
     {
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
+            $this->cacheRoot.'/profile_thumb_sm/images/cats.jpeg',
             'anImageContent'
         );
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/images/cats.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        $this->assertEquals('http://localhost/media/cache/profile_thumb_sm/images/cats.jpeg', $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/profile_thumb_sm/images/cats.jpeg');
     }
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @expectedExceptionMessage Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}
+     * @expectedExceptionMessage Signed url does not pass the sign check for path "images/cats.jpeg" and filter "profile_thumb_sm" and runtime config {"thumbnail":{"size":["50","50"]}}
      */
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => array(
                 'thumbnail' => array('size' => array(50, 50)),
             ),
@@ -81,7 +81,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
      */
     public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray()
     {
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/rc/invalidHash/images/cats.jpeg?'.http_build_query(array(
             'filters' => 'some-string',
             '_hash' => 'hash',
         )));
@@ -93,7 +93,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
      */
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
     {
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
     /**
@@ -119,7 +119,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $hash = $signer->sign($path, $params['filters']);
 
-        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+        $expectedCachePath = 'profile_thumb_sm/rc/'.$hash.'/'.$path;
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
@@ -152,7 +152,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $hash = $signer->sign($path, $params['filters']);
 
-        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+        $expectedCachePath = 'profile_thumb_sm/rc/'.$hash.'/'.$path;
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
@@ -175,20 +175,20 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces()
     {
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg',
+            $this->cacheRoot.'/profile_thumb_sm/images/foo bar.jpeg',
             'anImageContent'
         );
 
         // we are calling url with encoded file name as it will be called by browser
         $urlEncodedFileName = 'foo+bar';
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/profile_thumb_sm/images/'.$urlEncodedFileName.'.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
+        $this->assertEquals('http://localhost/media/cache/profile_thumb_sm/images/foo bar.jpeg', $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/profile_thumb_sm/images/foo bar.jpeg');
     }
 }
