@@ -15,13 +15,13 @@ $config = PhpCsFixer\Config::create()
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'long'],
         'combine_consecutive_unsets' => true,
-	'linebreak_after_opening_tag' => true,
+        'linebreak_after_opening_tag' => true,
         'header_comment' => ['header' => $header],
         'list_syntax' => ['syntax' => 'long'],
         'no_short_echo_tag' => true,
-	'ordered_imports' => true,
-	'php_unit_construct' => true,
-	'php_unit_dedicate_assert' => true,
+        'ordered_imports' => true,
+        'php_unit_construct' => true,
+        'php_unit_dedicate_assert' => true,
         'phpdoc_order' => true,
     ])
     ->setFinder(
