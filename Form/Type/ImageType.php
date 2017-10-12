@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -68,7 +69,7 @@ class ImageType extends AbstractType
      */
     public function getParent()
     {
-        return 'file';
+        return FileType::class;
     }
 
     /**

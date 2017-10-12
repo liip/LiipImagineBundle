@@ -51,6 +51,18 @@
       TRAVIS_PHP_VERSION=7.0.0     # the installed PHP version
 
     ```
+    
+  - __[Enqueue]__ Enqueue's producer send() method has been deprecated and will be removed, use sendCommand() instead. When interacting with the producer to resolve images in the background you must make the following changes to your code:
+
+    ```php
+    <?php
+
+      // 1.0
+      $producer->send(\Liip\ImagineBundle\Async\Topics::RESOLVE_CACHE /* ... */);
+
+      // 2.0
+      $producer->sendCommand(\Liip\ImagineBundle\Async\Commands::RESOLVE_CACHE /* ... */);
+    ```
 
 ## 1.8.0
 

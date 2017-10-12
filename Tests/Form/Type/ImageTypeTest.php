@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Form\Type;
 
 use Liip\ImagineBundle\Form\Type\ImageType;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,7 +34,7 @@ class ImageTypeTest extends AbstractTest
     {
         $type = new ImageType();
 
-        $this->assertEquals('file', $type->getParent());
+        $this->assertEquals(FileType::class, $type->getParent());
     }
 
     public function testConfigureOptions()

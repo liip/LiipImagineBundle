@@ -17,14 +17,6 @@ function main()
 {
   out_main "Running 'exec-before' operations"
 
-  if [[ ! ${TRAVIS_PHP_VERSION} = hhvm* ]]; then
-    disable_php_memory_limit
-  fi
-
-  if [[ ${TRAVIS_PHP_VERSION} = hhvm* ]]; then
-    enable_hhvm_php7_mode
-  fi
-
   initialize_prestissimo
 }
 
