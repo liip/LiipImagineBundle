@@ -68,6 +68,7 @@
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="logger" on-invalid="ignore" />
+            <argument>%liip_imagine.controller.redirect_response_code%</argument>
         </service>
 
         <service id="liip_imagine.meta_data.reader" class="Imagine\Image\Metadata\ExifMetadataReader" public="false" />
@@ -165,6 +166,11 @@
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
 
+        <service id="liip_imagine.filter.loader.resample" class="%liip_imagine.filter.loader.resample.class%">
+            <argument type="service" id="liip_imagine" />
+            <tag name="liip_imagine.filter.loader" loader="resample" />
+        </service>
+
         <!-- Data loaders -->
 
         <service id="liip_imagine.binary.loader.prototype.filesystem" class="Liip\ImagineBundle\Binary\Loader\FileSystemLoader">
@@ -182,6 +188,10 @@
         <service id="liip_imagine.binary.loader.prototype.flysystem" class="Liip\ImagineBundle\Binary\Loader\FlysystemLoader" abstract="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.binary.loader.prototype.chain" class="%liip_imagine.binary.loader.chain.class%" abstract="true">
+            <argument><!-- will be injected by ChainLoaderFactory --></argument>
         </service>
 
         <!-- Data loader locators -->

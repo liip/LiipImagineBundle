@@ -20,17 +20,6 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
 {
     /**
-     * @return LocatorInterface
-     */
-    protected function getFileSystemLocator($paths)
-    {
-        $locator = new FileSystemLocator();
-        $locator->setOptions(array('roots' => (array) $paths));
-
-        return $locator;
-    }
-
-    /**
      * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @expectedExceptionMessage Source image invalid
      */
@@ -84,5 +73,15 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
         return array_map(function ($params) use ($prepend) {
             return array(array($prepend[mt_rand(0, count($prepend) - 1)], $params[0]), $params[1]);
         }, static::provideLoadCases());
+    }
+
+    /**
+     * @param string|string[] $roots
+     *
+     * @return LocatorInterface
+     */
+    protected function getFileSystemLocator($roots)
+    {
+        return new FileSystemLocator((array) $roots);
     }
 }

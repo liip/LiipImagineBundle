@@ -32,6 +32,7 @@ It is based on `filesystem transport`_.
 
     enqueue:
         transport:
+            # you could set other available transports
             default: 'file://%kernel.root_dir%/../var/queues'
         client: ~
 

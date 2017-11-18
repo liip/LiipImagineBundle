@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 

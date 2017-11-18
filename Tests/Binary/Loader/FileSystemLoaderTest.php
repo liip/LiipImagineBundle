@@ -109,7 +109,7 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsEmptyRootPath()
     {
-        $this->getFileSystemLoader(array());
+        new FileSystemLoader(MimeTypeGuesser::getInstance(), ExtensionGuesser::getInstance(), array());
     }
 
     /**
@@ -158,14 +158,6 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return FileSystemLocator
-     */
-    private function getFileSystemLocator()
-    {
-        return new FileSystemLocator();
-    }
-
-    /**
      * @return string[]
      */
     private function getDefaultDataRoots()
@@ -187,6 +179,16 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
             null !== $locator ? $locator : $this->getFileSystemLocator(),
             null !== $root ? $root : $this->getDefaultDataRoots()
         );
+    }
+
+    /**
+     * @param string|string[] $roots
+     *
+     * @return FileSystemLocator
+     */
+    private function getFileSystemLocator($roots)
+    {
+        return new FileSystemLocator((array) $roots);
     }
 
     /**

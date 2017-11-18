@@ -6,6 +6,7 @@ language: php
 
 php:
   - 7.1
+  - 7.2
   - nightly
 
 cache:
@@ -36,5 +37,3 @@ script:
 
 after_script:
   - bash ./.travis/exec-after.bash
-
-...

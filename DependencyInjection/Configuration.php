@@ -124,6 +124,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('filter_action')->defaultValue('liip_imagine.controller:filterAction')->end()
                         ->scalarNode('filter_runtime_action')->defaultValue('liip_imagine.controller:filterRuntimeAction')->end()
+                        ->scalarNode('redirect_response_code')->defaultValue(301)->end()
                     ->end()
                 ->end()
                 ->arrayNode('filter_sets')
