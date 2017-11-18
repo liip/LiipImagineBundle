@@ -36,7 +36,7 @@
         "doctrine/cache": "~1.1",
         "doctrine/orm": "~2.3",
         "enqueue/enqueue-bundle": "^0.7",
-        "friendsofphp/php-cs-fixer": "~1.0",
+        "friendsofphp/php-cs-fixer": "~1.0|~2.0",
         "league/flysystem": "~1.0",
         "phpunit/phpunit": "~5.0",
         "psr/log": "~1.0",
