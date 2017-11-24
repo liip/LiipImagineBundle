@@ -21,6 +21,7 @@ matrix:
   include:
     - env: SYMFONY_VERSION=3.3.x-dev
     - env: SYMFONY_VERSION=3.4.x-dev
+    - env: SYMFONY_VERSION=4.0.x-dev
   allow_failures:
     - php: nightly
   fast_finish: true
