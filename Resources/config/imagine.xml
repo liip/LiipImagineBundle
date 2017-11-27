@@ -60,14 +60,19 @@
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
-        <!-- Controller -->
-
-        <service id="liip_imagine.controller" class="Liip\ImagineBundle\Controller\ImagineController">
+        <service id="liip_imagine.service.filter" class="Liip\ImagineBundle\Service\FilterService">
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
-            <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <!-- Controller -->
+
+        <service id="liip_imagine.controller" class="Liip\ImagineBundle\Controller\ImagineController">
+            <argument type="service" id="liip_imagine.service.filter" />
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.cache.signer" />
         </service>
 
         <service id="liip_imagine.meta_data.reader" class="Imagine\Image\Metadata\ExifMetadataReader" public="false" />

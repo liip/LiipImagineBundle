@@ -19,26 +19,20 @@ use Interop\Queue\PsrContext;
 use Interop\Queue\PsrMessage;
 use Interop\Queue\PsrProcessor;
 use Enqueue\Util\JSON;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Service\FilterService;
 
 final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
 {
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
     /**
      * @var FilterManager
      */
     private $filterManager;
 
     /**
-     * @var DataManager
+     * @var FilterService
      */
-    private $dataManager;
+    private $filterService;
 
     /**
      * @var ProducerInterface
@@ -46,20 +40,17 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
     private $producer;
 
     /**
-     * @param CacheManager      $cacheManager
      * @param FilterManager     $filterManager
-     * @param DataManager       $dataManager
+     * @param FilterService     $filterService
      * @param ProducerInterface $producer
      */
     public function __construct(
-        CacheManager $cacheManager,
         FilterManager $filterManager,
-        DataManager $dataManager,
+        FilterService $filterService,
         ProducerInterface $producer
     ) {
-        $this->cacheManager = $cacheManager;
         $this->filterManager = $filterManager;
-        $this->dataManager = $dataManager;
+        $this->filterService = $filterService;
         $this->producer = $producer;
     }
 
@@ -75,20 +66,11 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
             $path = $message->getPath();
             $results = [];
             foreach ($filters as $filter) {
-                if ($this->cacheManager->isStored($path, $filter) && $message->isForce()) {
-                    $this->cacheManager->remove($path, $filter);
+                if ($message->isForce()) {
+                    $this->filterService->bustCache($path, $filter);
                 }
 
-                if (false == $this->cacheManager->isStored($path, $filter)) {
-                    $binary = $this->dataManager->find($filter, $path);
-                    $this->cacheManager->store(
-                        $this->filterManager->applyFilter($binary, $filter),
-                        $path,
-                        $filter
-                    );
-                }
-
-                $results[$filter] = $this->cacheManager->resolve($path, $filter);
+                $results[$filter] = $this->filterService->getUrlOfFilteredImage($path, $filter);
             }
 
             $this->producer->sendEvent(Topics::CACHE_RESOLVED, new CacheResolved($path, $results));
@@ -97,7 +79,6 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
                 'status' => true,
                 'results' => $results,
             ])));
-
         } catch (\Exception $e) {
             return Result::reply($psrContext->createMessage(JSON::encode([
                 'status' => false,

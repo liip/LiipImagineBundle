@@ -23,6 +23,7 @@ use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Liip\ImagineBundle\Service\FilterService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -211,6 +212,14 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function createFilterManagerMock()
     {
         return $this->createObjectMock(FilterManager::class, array(), false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FilterService
+     */
+    protected function createFilterServiceMock()
+    {
+        return $this->createObjectMock('\Liip\ImagineBundle\Service\FilterService');
     }
 
     /**
