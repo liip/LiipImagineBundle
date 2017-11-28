@@ -49,9 +49,7 @@ class ThumbnailFilterLoader implements LoaderInterface
             }
         }
 
-        if (($origWidth > $width || $origHeight > $height)
-            || (!empty($options['allow_upscale']) && ($origWidth !== $width || $origHeight !== $height))
-        ) {
+        if ($origWidth > $width || $origHeight > $height) {
             $filter = new Thumbnail(new Box($width, $height), $mode, $filter);
             $image = $filter->apply($image);
         }

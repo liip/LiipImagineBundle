@@ -51,7 +51,6 @@ class ThumbnailFilterLoaderTest extends AbstractTest
         );
         $image = $this->getImageInterfaceMock();
         $image->method('getSize')->willReturn($mockImageSize);
-        $image->method('copy')->willReturn($image);
         $image->expects($this->once())
             ->method('thumbnail')
             ->with($expected)
@@ -59,7 +58,6 @@ class ThumbnailFilterLoaderTest extends AbstractTest
 
         $options = array();
         $options['size'] = array($width, $height);
-        $options['allow_upscale'] = true;
 
         $result = $loader->load($image, $options);
     }
@@ -75,7 +73,27 @@ class ThumbnailFilterLoaderTest extends AbstractTest
             array(1, 30, new Box(1, 30)),
             array(null, 60, new Box(50, 60)),
             array(50, null, new Box(50, 60)),
-            array(1000, 1000, new Box(1000, 1000)),
         );
+    }
+
+    /**
+     * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader::load
+     */
+    public function testLoadUpscale()
+    {
+        $loader = new ThumbnailFilterLoader();
+
+        $mockImageSize = new Box(
+            self::DUMMY_IMAGE_WIDTH,
+            self::DUMMY_IMAGE_HEIGHT
+        );
+        $image = $this->getImageInterfaceMock();
+        $image->method('getSize')->willReturn($mockImageSize);
+
+        $options = array();
+        $options['size'] = array(1000, 1000);
+        $image->expects($this->never())->method('thumbnail');
+
+        $result = $loader->load($image, $options);
     }
 }
