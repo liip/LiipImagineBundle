@@ -31,10 +31,10 @@ class FixedFilterLoader implements LoaderInterface
      *
      * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = array())
     {
         $optionsResolver = new OptionsResolver();
-        $optionsResolver->setRequired(['width', 'height']);
+        $optionsResolver->setRequired(array('width', 'height'));
         $options = $optionsResolver->resolve($options);
 
         // get the original image size and create a crop box
