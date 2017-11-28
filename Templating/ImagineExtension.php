@@ -41,7 +41,10 @@ class ImagineExtension extends \Twig_Extension
     }
 
     /**
-     * Gets the browser path for the image and filter to apply.
+     * Gets the browser path for the image and filter to apply. If your path inadvertently contains a query string
+     * - which might happen if you use asset versioning - the query string will be stripped from the path, the
+     * URL will be resolved using the path without query string, and the stripped query string will be appended to
+     * the resulting URL.
      *
      * @param string $path
      * @param string $filter
@@ -52,7 +55,13 @@ class ImagineExtension extends \Twig_Extension
      */
     public function filter($path, $filter, array $runtimeConfig = array(), $resolver = null)
     {
-        return $this->cacheManager->getBrowserPath($path, $filter, $runtimeConfig, $resolver);
+        $pathParts = explode('?', $path, 2);
+        $url = $this->cacheManager->getBrowserPath($pathParts[0], $filter, $runtimeConfig, $resolver);
+        if (empty($pathParts[1])) {
+            return $url;
+        }
+
+        return $url.(strpos($url, '?') ? '&' : '?').$pathParts[1];
     }
 
     /**
