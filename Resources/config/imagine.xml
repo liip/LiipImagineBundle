@@ -69,7 +69,7 @@
 
         <!-- Controller -->
 
-        <service id="liip_imagine.controller" class="Liip\ImagineBundle\Controller\ImagineController">
+        <service id="liip_imagine.controller" class="Liip\ImagineBundle\Controller\ImagineController" public="true">
             <argument type="service" id="liip_imagine.service.filter" />
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
