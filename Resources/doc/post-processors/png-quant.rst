@@ -23,7 +23,7 @@ To add this post-processor to the filter set created in the
                 post_processors:
                     pngquant: { quality: "75-85" }
 
-This configuration sets a quality factor range of 75 to 80 for the resulting image binary.
+This configuration sets a quality factor range of 75 to 85 for the resulting image binary.
 
 .. note::
 
