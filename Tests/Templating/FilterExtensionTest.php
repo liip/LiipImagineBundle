@@ -37,6 +37,10 @@ class FilterExtensionTest extends AbstractFilterTest
      */
     protected function createTemplatingMock(CacheManager $manager = null)
     {
-        return new FilterExtension($manager ?: $this->createCacheManagerMock());
+        $mock = new FilterExtension($manager ?: $this->createCacheManagerMock());
+
+        $this->assertInstanceOf(FilterExtension::class, $mock);
+
+        return $mock;
     }
 }

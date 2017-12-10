@@ -34,6 +34,10 @@ class FilterHelperTest extends AbstractFilterTest
      */
     protected function createTemplatingMock(CacheManager $manager = null)
     {
-        return new FilterHelper($manager ?: $this->createCacheManagerMock());
+        $mock = new FilterHelper($manager ?: $this->createCacheManagerMock());
+
+        $this->assertInstanceOf(FilterHelper::class, $mock);
+
+        return $mock;
     }
 }

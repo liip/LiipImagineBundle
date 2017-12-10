@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Configuration
  */
-class ConfigurationTest extends \Phpunit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     public function testImplementsConfigurationInterface()
     {
@@ -35,7 +35,9 @@ class ConfigurationTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments()
     {
-        new Configuration(array(), array());
+        $config = new Configuration(array(), array());
+
+        $this->assertInstanceOf(Configuration::class, $config);
     }
 
     public function testInjectLoaderFactoryConfig()

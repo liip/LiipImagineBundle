@@ -16,7 +16,7 @@ use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 /**
  * @covers \Liip\ImagineBundle\Utility\Framework\SymfonyFramework
  */
-class SymfonyFrameworkTest extends \PHPUnit_Framework_TestCase
+class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
 {
     public function testKernelComparisonForCurrentKernel()
     {

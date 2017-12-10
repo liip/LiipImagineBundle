@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader<extended>
  */
-class AbstractDoctrineLoaderTest extends \PHPUnit_Framework_TestCase
+class AbstractDoctrineLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ObjectRepository

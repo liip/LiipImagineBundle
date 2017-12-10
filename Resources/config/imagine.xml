@@ -34,13 +34,13 @@
 
         <!-- Utility services -->
 
-        <service id="liip_imagine.filter.manager" class="Liip\ImagineBundle\Imagine\Filter\FilterManager">
+        <service id="liip_imagine.filter.manager" class="Liip\ImagineBundle\Imagine\Filter\FilterManager" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
         </service>
 
-        <service id="liip_imagine.data.manager" class="Liip\ImagineBundle\Imagine\Data\DataManager">
+        <service id="liip_imagine.data.manager" class="Liip\ImagineBundle\Imagine\Data\DataManager" public="true">
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument type="service" id="liip_imagine.filter.configuration" />
@@ -117,7 +117,7 @@
             <tag name="liip_imagine.filter.loader" loader="crop" />
         </service>
 
-        <service id="liip_imagine.filter.loader.grayscale" class="Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader">
+        <service id="liip_imagine.filter.loader.grayscale" class="Liip\ImagineBundle\Imagine\Filter\Loader\GrayscaleFilterLoader" public="true">
             <tag name="liip_imagine.filter.loader" loader="grayscale" />
         </service>
 
@@ -150,7 +150,7 @@
             <tag name="liip_imagine.filter.loader" loader="upscale" />
         </service>
 
-        <service id="liip_imagine.filter.loader.downscale" class="Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader">
+        <service id="liip_imagine.filter.loader.downscale" class="Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader" public="true">
             <tag name="liip_imagine.filter.loader" loader="downscale" />
         </service>
 
@@ -158,15 +158,15 @@
             <tag name="liip_imagine.filter.loader" loader="auto_rotate" />
         </service>
 
-        <service id="liip_imagine.filter.loader.rotate" class="Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader">
+        <service id="liip_imagine.filter.loader.rotate" class="Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader" public="true">
             <tag name="liip_imagine.filter.loader" loader="rotate" />
         </service>
 
-        <service id="liip_imagine.filter.loader.flip" class="Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader">
+        <service id="liip_imagine.filter.loader.flip" class="Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader" public="true">
             <tag name="liip_imagine.filter.loader" loader="flip" />
         </service>
 
-        <service id="liip_imagine.filter.loader.interlace" class="Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader">
+        <service id="liip_imagine.filter.loader.interlace" class="Liip\ImagineBundle\Imagine\Filter\Loader\InterlaceFilterLoader" public="true">
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
 
@@ -259,7 +259,7 @@
             <argument type="service" id="liip_imagine.mime_type_guesser" />
         </service>
 
-        <service id="liip_imagine.cache.signer" class="Liip\ImagineBundle\Imagine\Cache\Signer">
+        <service id="liip_imagine.cache.signer" class="Liip\ImagineBundle\Imagine\Cache\Signer" public="true">
             <argument>%kernel.secret%</argument>
         </service>
 

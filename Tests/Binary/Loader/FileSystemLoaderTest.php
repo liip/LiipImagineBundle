@@ -22,11 +22,13 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
  */
-class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
+class FileSystemLoaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruction()
     {
-        $this->getFileSystemLoader();
+        $loader = $this->getFileSystemLoader();
+
+        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     public function testImplementsLoaderInterface()
@@ -109,7 +111,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsEmptyRootPath()
     {
-        $this->getFileSystemLoader(array());
+        $loader = $this->getFileSystemLoader(array());
+
+        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     /**
@@ -118,7 +122,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsIfRootPathDoesNotExist()
     {
-        $this->getFileSystemLoader(array('/a/bad/root/path'));
+        $loader = $this->getFileSystemLoader(array('/a/bad/root/path'));
+
+        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     /**
@@ -140,7 +146,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsIfRealPathOutsideRootPath($path)
     {
-        $this->getFileSystemLoader()->find($path);
+        $loader = $this->getFileSystemLoader()->find($path);
+
+        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     public function testPathWithDoublePeriodBackStep()
@@ -154,7 +162,9 @@ class FileSystemLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsIfFileDoesNotExist()
     {
-        $this->getFileSystemLoader()->find('fileNotExist');
+        $loader = $this->getFileSystemLoader()->find('fileNotExist');
+
+        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     /**

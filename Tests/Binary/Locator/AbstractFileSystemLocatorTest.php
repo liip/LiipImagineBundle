@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Tests\Binary\Locator;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 
-abstract class AbstractFileSystemLocatorTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractFileSystemLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string[]|string $paths

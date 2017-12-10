@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass
  */
-class MetadataReaderCompilerPassTest extends \PHPUnit_Framework_TestCase
+class MetadataReaderCompilerPassTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param \ReflectionClass $r

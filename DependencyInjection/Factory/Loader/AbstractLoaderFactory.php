@@ -47,6 +47,8 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
             'loader' => $name,
         ]);
 
+        $definition->setPublic(true);
+
         $container->setDefinition(
             $id = sprintf('%s.%s', static::$namePrefix, $name),
             $definition

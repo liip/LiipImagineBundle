@@ -17,7 +17,7 @@ use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
 /**
  * @covers \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException
  */
-class NotStorableExceptionTest extends \PHPUnit_Framework_TestCase
+class NotStorableExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testSubClassOfRuntimeException()
     {

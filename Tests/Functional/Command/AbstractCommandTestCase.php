@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -28,12 +27,6 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
      */
     protected function executeConsole(Command $command, array $arguments = array(), array $options = array())
     {
-        $command->setApplication(new Application($this->createClient()->getKernel()));
-        if ($command instanceof ContainerAwareCommand) {
-            $command->setContainer($this->createClient()->getContainer());
-        }
-
-        $arguments = array_replace(array('command' => $command->getName()), $arguments);
         $options = array_replace(array('--env' => 'test'), $options);
 
         $commandTester = new CommandTester($command);

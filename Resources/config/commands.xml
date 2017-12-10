@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="liip_imagine.command.remove_cache_command" class="Liip\ImagineBundle\Command\RemoveCacheCommand" public="true">
+            <argument type="service" id="liip_imagine.cache.manager"/>
+            <tag name="console.command" command="liip:imagine:cache:remove" />
+        </service>
+
+        <service id="liip_imagine.command.resolve_cache_command" class="Liip\ImagineBundle\Command\ResolveCacheCommand" public="true">
+            <argument type="service" id="liip_imagine.filter.manager"/>
+            <argument type="service" id="liip_imagine.service.filter"/>
+            <tag name="console.command" command="liip:imagine:cache:resolve" />
+        </service>
+
+    </services>
+</container>

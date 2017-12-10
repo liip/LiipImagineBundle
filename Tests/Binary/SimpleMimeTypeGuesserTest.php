@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 /**
  * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
  */
-class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
+class SimpleMimeTypeGuesserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return SimpleMimeTypeGuesser
@@ -30,7 +30,9 @@ class SimpleMimeTypeGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
     {
-        $this->getSimpleMimeTypeGuesser();
+        $guesser = $this->getSimpleMimeTypeGuesser();
+
+        $this->assertInstanceOf(SimpleMimeTypeGuesser::class, $guesser);
     }
 
     public function testImplementsMimeTypeGuesserInterface()

@@ -69,11 +69,13 @@ class ResolveCacheProcessorTest extends AbstractTest
 
     public function testCouldBeConstructedWithExpectedArguments()
     {
-        new ResolveCacheProcessor(
+        $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
             $this->createFilterServiceMock(),
             $this->createProducerMock()
         );
+
+        $this->assertInstanceOf(ResolveCacheProcessor::class, $processor);
     }
 
     public function testShouldRejectMessagesWithInvalidJsonBody()

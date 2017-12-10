@@ -22,7 +22,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class DownscaleFilterLoaderTest extends AbstractTest
 {
-    public function testItWorksSomeHow()
+    public function downscale()
     {
         $loader = new DownscaleFilterLoader();
 
@@ -45,7 +45,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @depends testItWorksSomeHow
+     * @depends downscale
      */
     public function testDontScaleUp($sizes)
     {
@@ -55,7 +55,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @depends testItWorksSomeHow
+     * @depends downscale
      */
     public function testFitBoundingBox($sizes)
     {

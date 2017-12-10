@@ -13,18 +13,31 @@ namespace Liip\ImagineBundle\Command;
 
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ResolveCacheCommand extends ContainerAwareCommand
+class ResolveCacheCommand extends Command
 {
+    /* @var FilterManager $filterManager */
+    private $filterManager;
+
+    /* @var FilterService $filterService */
+    private $filterService;
+
+    public function __construct(FilterManager $filterManager, FilterService $filterService)
+    {
+        $this->filterManager = $filterManager;
+        $this->filterService = $filterService;
+
+        parent::__construct('liip:imagine:cache:resolve');
+    }
+
     protected function configure()
     {
         $this
-            ->setName('liip:imagine:cache:resolve')
             ->setDescription('Resolve cache for given path and set of filters.')
             ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Image paths')
             ->addOption(
@@ -62,19 +75,13 @@ EOF
         $paths = $input->getArgument('paths');
         $filters = $input->getOption('filters');
 
-        /* @var FilterManager $filterManager */
-        $filterManager = $this->getContainer()->get('liip_imagine.filter.manager');
-
-        /* @var FilterService $filterService */
-        $filterService = $this->getContainer()->get('liip_imagine.service.filter');
-
         if (empty($filters)) {
-            $filters = array_keys($filterManager->getFilterConfiguration()->all());
+            $filters = array_keys($this->filterManager->getFilterConfiguration()->all());
         }
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $output->writeln($filterService->getUrlOfFilteredImage($path, $filter));
+                $output->writeln($this->filterService->getUrlOfFilteredImage($path, $filter));
             }
         }
     }

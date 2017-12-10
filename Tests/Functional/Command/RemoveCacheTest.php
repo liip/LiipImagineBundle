@@ -22,7 +22,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
     {
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
-        $this->executeConsole(new RemoveCacheCommand());
+        $this->executeConsole($this->getService('liip_imagine.command.remove_cache_command'));
     }
 
     public function testExecuteSuccessfullyWithEmptyCacheAndOnePathAndOneFilter()
@@ -30,7 +30,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg'),
                 '--filters' => array('thumbnail_web_path'),
@@ -42,7 +42,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
         );
     }
@@ -52,7 +52,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('--filters' => array('thumbnail_web_path', 'thumbnail_default'))
         );
     }
@@ -72,7 +72,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
             'anImageContent'
         );
 
-        $this->executeConsole(new RemoveCacheCommand());
+        $this->executeConsole($this->getService('liip_imagine.command.remove_cache_command'));
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats2.jpeg');
@@ -99,7 +99,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('paths' => array('images/cats.jpeg'))
         );
 
@@ -129,7 +129,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
         );
 
@@ -159,7 +159,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('--filters' => array('thumbnail_default'))
         );
 
@@ -189,7 +189,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array('--filters' => array('thumbnail_default', 'thumbnail_web_path'))
         );
 
@@ -215,7 +215,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg'),
                 '--filters' => array('thumbnail_default', 'thumbnail_web_path'), )
@@ -242,7 +242,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
         );
 
         $this->executeConsole(
-            new RemoveCacheCommand(),
+            $this->getService('liip_imagine.command.remove_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
                 '--filters' => array('thumbnail_web_path'), )

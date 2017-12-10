@@ -12,18 +12,27 @@
 namespace Liip\ImagineBundle\Command;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveCacheCommand extends ContainerAwareCommand
+class RemoveCacheCommand extends Command
 {
+    /* @var CacheManager cacheManager */
+    private $cacheManager;
+
+    public function __construct(CacheManager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+
+        parent::__construct('liip:imagine:cache:remove');
+    }
+
     protected function configure()
     {
         $this
-            ->setName('liip:imagine:cache:remove')
             ->setDescription('Remove cache for given paths and set of filters.')
             ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Image paths')
             ->addOption(
@@ -61,9 +70,6 @@ EOF
             $filters = null;
         }
 
-        /* @var CacheManager cacheManager */
-        $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
-
-        $cacheManager->remove($paths, $filters);
+        $this->cacheManager->remove($paths, $filters);
     }
 }

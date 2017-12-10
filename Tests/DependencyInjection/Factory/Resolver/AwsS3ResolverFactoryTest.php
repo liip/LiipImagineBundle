@@ -16,13 +16,13 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInter
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
  */
-class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
+class AwsS3ResolverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testImplementsResolverFactoryInterface()
     {
@@ -33,7 +33,9 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new AwsS3ResolverFactory();
+        $loader = new AwsS3ResolverFactory();
+
+        $this->assertInstanceOf(AwsS3ResolverFactory::class, $loader);
     }
 
     public function testReturnExpectedName()
@@ -62,7 +64,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $resolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
@@ -135,14 +137,14 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
         $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
-        $this->assertInstanceOf(DefinitionDecorator::class, $proxiedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
         $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $resolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
@@ -169,14 +171,14 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
         $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(DefinitionDecorator::class, $cachedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $cachedResolverDefinition->getParent());
 
         $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
@@ -204,12 +206,12 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
         $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
-        $this->assertInstanceOf(DefinitionDecorator::class, $proxiedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
         $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(DefinitionDecorator::class, $cachedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $cachedResolverDefinition->getArgument(0));
@@ -219,7 +221,7 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
@@ -247,12 +249,12 @@ class AwsS3ResolverFactoryTest extends \Phpunit_Framework_TestCase
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
         $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
-        $this->assertInstanceOf(DefinitionDecorator::class, $proxiedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $proxiedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
 
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
         $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(DefinitionDecorator::class, $cachedResolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $cachedResolverDefinition->getArgument(0));
