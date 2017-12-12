@@ -1,5 +1,3 @@
----
-
 preset: symfony
 
 enabled:
@@ -16,5 +14,3 @@ finder :
   name    : [ "*.php", "*.twig" ]
   exclude : [ "vendor", "var" ]
   path    : [ "./" ]
-
-...

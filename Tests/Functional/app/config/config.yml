@@ -1,9 +1,11 @@
----
-
 parameters:
 
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+
+services:
+    logger:
+        class: "\\Psr\\Log\\NullLogger"
 
 framework:
 
@@ -75,5 +77,3 @@ liip_imagine:
         thumbnail_default:
             filters:
                 thumbnail: { size: [223, 223], mode: inset }
-
-...

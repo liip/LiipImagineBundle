@@ -17,12 +17,12 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInter
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory<extended>
  */
-class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
+class FlysystemResolverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -42,7 +42,9 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new FlysystemResolverFactory();
+        $loader = new FlysystemResolverFactory();
+
+        $this->assertInstanceOf(FlysystemResolverFactory::class, $loader);
     }
 
     public function testReturnExpectedName()
@@ -68,7 +70,7 @@ class FlysystemResolverFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $resolverDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertEquals('liip_imagine.cache.resolver.prototype.flysystem', $resolverDefinition->getParent());
 
         $this->assertEquals('http://images.example.com', $resolverDefinition->getArgument(2));

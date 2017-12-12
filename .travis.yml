@@ -1,12 +1,10 @@
----
-
 sudo: false
 
 language: php
 
 php:
   - 7.1
-  - nightly
+  - 7.2
 
 cache:
   directories:
@@ -15,15 +13,11 @@ cache:
 env:
   global:
     - SYMFONY_DEPRECATIONS_HELPER=weak
-    - SYMFONY_VERSION=3.2.x-dev
+    - SYMFONY_VERSION=3.4.*
 
 matrix:
   include:
-    - env: SYMFONY_VERSION=3.3.x-dev
-    - env: SYMFONY_VERSION=3.4.x-dev
-    - env: SYMFONY_VERSION=4.0.x-dev
-  allow_failures:
-    - php: nightly
+    - env: SYMFONY_VERSION=4.0.*
   fast_finish: true
 
 before_install:
@@ -33,9 +27,7 @@ install:
   - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
 
 script:
-  - bin/simple-phpunit -vvv || bin/phpunit -vvv
+  - ./vendor/bin/simple-phpunit -vvv || ./vendor/bin/phpunit -vvv
 
 after_script:
   - bash ./.travis/exec-after.bash
-
-...

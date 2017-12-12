@@ -5,7 +5,7 @@ namespace Liip\ImagineBundle\Tests\Async;
 use Enqueue\Bundle\EnqueueBundle;
 use Liip\ImagineBundle\Async\ResolveCache;
 
-class ResolveCacheTest extends \PHPUnit_Framework_TestCase
+class ResolveCacheTest extends \PHPUnit\Framework\TestCase
 {
     public static function setUpBeforeClass()
     {

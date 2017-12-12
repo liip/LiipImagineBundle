@@ -13,17 +13,14 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory;
 
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
-abstract class FactoryTestCase extends \Phpunit_Framework_TestCase
+abstract class FactoryTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param Definition $definition
      */
     protected function assertInstanceOfChildDefinition(Definition $definition)
     {
-        $expected = class_exists(ChildDefinition::class) ? ChildDefinition::class : DefinitionDecorator::class;
-
-        $this->assertInstanceOf($expected, $definition);
+        $this->assertInstanceOf(ChildDefinition::class, $definition);
     }
 }

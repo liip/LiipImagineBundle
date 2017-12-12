@@ -16,7 +16,7 @@ use Liip\ImagineBundle\Model\Binary;
 /**
  * @covers \Liip\ImagineBundle\Model\Binary
  */
-class BinaryTest extends \PHPUnit_Framework_TestCase
+class BinaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testImplementsBinaryInterface()
     {

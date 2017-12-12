@@ -71,6 +71,7 @@ class LiipImagineExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
+        $loader->load('commands.xml');
 
         if ($config['enqueue']) {
             $loader->load('enqueue.xml');

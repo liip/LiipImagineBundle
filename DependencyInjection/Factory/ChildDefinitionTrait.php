@@ -12,16 +12,14 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory;
 
 use Symfony\Component\DependencyInjection\ChildDefinition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 trait ChildDefinitionTrait
 {
     /**
-     * @return ChildDefinition|DefinitionDecorator
+     * @return ChildDefinition
      */
     private function getChildDefinition($parent)
     {
-        return class_exists(ChildDefinition::class) ?
-            new ChildDefinition($parent) : new DefinitionDecorator($parent);
+        return new ChildDefinition($parent);
     }
 }

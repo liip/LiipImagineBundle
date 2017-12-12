@@ -34,7 +34,9 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new FileSystemLoaderFactory();
+        $loader = new FileSystemLoaderFactory();
+
+        $this->assertInstanceOf(FileSystemLoaderFactory::class, $loader);
     }
 
     public function testReturnExpectedName()

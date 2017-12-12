@@ -20,7 +20,7 @@ use Symfony\Component\Routing\RequestContext;
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
  */
-class WebPathResolverTest extends \PHPUnit_Framework_TestCase
+class WebPathResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Filesystem

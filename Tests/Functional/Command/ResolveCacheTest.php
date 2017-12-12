@@ -23,7 +23,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg'),
                 '--filters' => array('thumbnail_web_path'), )
@@ -42,7 +42,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
         );
 
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg'),
                 '--filters' => array('thumbnail_web_path'), )
@@ -56,7 +56,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
     public function testShouldResolveWithFewPathsAndSingleFilter()
     {
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
                 '--filters' => array('thumbnail_web_path'), )
@@ -76,7 +76,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
         );
 
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
                 '--filters' => array('thumbnail_web_path'), )
@@ -92,7 +92,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
     public function testShouldResolveWithFewPathsAndFewFilters()
     {
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array(
                 'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
                 '--filters' => array('thumbnail_web_path', 'thumbnail_default'), )
@@ -107,7 +107,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
     public function testShouldResolveWithFewPathsAndWithoutFilters()
     {
         $output = $this->executeConsole(
-            new ResolveCacheCommand(),
+            $this->getService('liip_imagine.command.resolve_cache_command'),
             array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
         );
 

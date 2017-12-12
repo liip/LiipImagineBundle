@@ -38,13 +38,13 @@ class FlysystemLoaderTest extends AbstractTest
         $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
     }
 
-    public function testConstruction()
+    public function getLoader()
     {
         return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
     }
 
     /**
-     * @depends testConstruction
+     * @depends getLoader
      */
     public function testShouldImplementLoaderInterface(LoaderInterface $loader)
     {
@@ -52,7 +52,7 @@ class FlysystemLoaderTest extends AbstractTest
     }
 
     /**
-     * @depends testConstruction
+     * @depends getLoader
      */
     public function testReturnImageContentOnFind(LoaderInterface $loader)
     {
@@ -63,7 +63,7 @@ class FlysystemLoaderTest extends AbstractTest
     }
 
     /**
-     * @depends testConstruction
+     * @depends getLoader
      *
      * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @expectedExceptionMessageRegExp {Source image .+ not found}

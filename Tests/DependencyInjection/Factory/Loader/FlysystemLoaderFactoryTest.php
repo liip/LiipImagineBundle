@@ -17,14 +17,14 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 
 /**
  * @requires PHP 5.4
  *
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
-class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
+class FlysystemLoaderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {
@@ -44,7 +44,9 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        new FlysystemLoaderFactory();
+        $loader = new FlysystemLoaderFactory();
+
+        $this->assertInstanceOf(FlysystemLoaderFactory::class, $loader);
     }
 
     public function testReturnExpectedName()
@@ -67,7 +69,7 @@ class FlysystemLoaderFactoryTest extends \Phpunit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
-        $this->assertInstanceOf(DefinitionDecorator::class, $loaderDefinition);
+        $this->assertInstanceOf(ChildDefinition::class, $loaderDefinition);
         $this->assertEquals('liip_imagine.binary.loader.prototype.flysystem', $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);

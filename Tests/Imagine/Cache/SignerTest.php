@@ -29,7 +29,9 @@ class SignerTest extends AbstractTest
 
     public function testCouldBeConstructedWithSecret()
     {
-        new Signer('aSecret');
+        $signer = new Signer('aSecret');
+
+        $this->assertInstanceOf(Signer::class, $signer);
     }
 
     public function testShouldReturnShortHashOnSign()
