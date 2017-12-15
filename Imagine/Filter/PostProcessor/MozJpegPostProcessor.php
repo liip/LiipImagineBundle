@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 
 /**
  * mozjpeg post-processor, for noticably better jpeg compression.
@@ -85,24 +85,23 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
             return $binary;
         }
 
-        $pb = new ProcessBuilder([$this->mozjpegBin]);
+        $processArguments = [$this->mozjpegBin];
 
         // Places emphasis on DC
-        $pb->add('-quant-table');
-        $pb->add(2);
+        $processArguments[] =  '-quant-table';
+        $processArguments[] =  2;
 
         $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
         if ($transformQuality !== null) {
-            $pb->add('-quality');
-            $pb->add($transformQuality);
+            $processArguments[] =  '-quality';
+            $processArguments[] =  $transformQuality;
         }
 
-        $pb->add('-optimise');
+        $processArguments[] =  '-optimise';
 
         // Favor stdin/stdout so we don't waste time creating a new file.
-        $pb->setInput($binary->getContent());
-
-        $proc = $pb->getProcess();
+        $proc = new Process($processArguments);
+        $proc->setInput($binary->getContent());
         $proc->run();
 
         if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
