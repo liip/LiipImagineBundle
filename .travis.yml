@@ -28,6 +28,9 @@ install:
 
 script:
   - ./vendor/bin/simple-phpunit -vvv
+  - ls Tests
+  - cat phpunit.xml.dist
+  - cat phpunit.xml
 
 after_script:
   - bash ./.travis/exec-after.bash
