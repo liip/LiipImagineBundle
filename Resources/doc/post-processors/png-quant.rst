@@ -49,4 +49,4 @@ Parameters
 ----------
 
 :strong:`liip_imagine.pngquant.binary:` ``string``
-    Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pnquant``.
+    Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pngquant``.
