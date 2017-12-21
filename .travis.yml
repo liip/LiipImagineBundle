@@ -27,7 +27,9 @@ install:
   - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
 
 script:
-  - ./vendor/bin/simple-phpunit -vvv || ./vendor/bin/phpunit -vvv
+  - ./vendor/bin/simple-phpunit -vvv
+  - ls Tests
+  - cat phpunit.xml.dist
 
 after_script:
   - bash ./.travis/exec-after.bash
