@@ -13,7 +13,7 @@
 
     <testsuites>
         <testsuite name="liip/imagine-bundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
+            <directory>./Tests</directory>
         </testsuite>
     </testsuites>
 
