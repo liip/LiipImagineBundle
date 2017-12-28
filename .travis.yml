@@ -9,11 +9,13 @@ php:
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
 
 env:
   global:
-    - SYMFONY_DEPRECATIONS_HELPER=weak
+    - SYMFONY_DEPRECATIONS_HELPER=weak_vendors
     - SYMFONY_VERSION=3.4.*
+    - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
 matrix:
   include:
@@ -22,12 +24,15 @@ matrix:
 
 before_install:
   - bash ./.travis/exec-before.bash
+  - composer self-update
 
 install:
   - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
+  - ./vendor/bin/simple-phpunit install
 
 script:
-  - ./vendor/bin/simple-phpunit -vvv || ./vendor/bin/phpunit -vvv
+  - ./vendor/bin/simple-phpunit -vvv 
+  - composer validate --strict
 
 after_script:
   - bash ./.travis/exec-after.bash
