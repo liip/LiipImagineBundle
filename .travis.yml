@@ -23,11 +23,12 @@ matrix:
   fast_finish: true
 
 before_install:
-  - bash ./.travis/exec-before.bash
+  #- bash ./.travis/exec-before.bash
   - composer self-update
 
 install:
-  - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
+  #- travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
+  - composer install
   - ./vendor/bin/simple-phpunit install
 
 script:
@@ -35,4 +36,4 @@ script:
   - composer validate --strict
 
 after_script:
-  - bash ./.travis/exec-after.bash
+  #- bash ./.travis/exec-after.bash
