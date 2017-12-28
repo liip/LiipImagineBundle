@@ -14,8 +14,7 @@
     "autoload": {
         "psr-4": {
             "Liip\\ImagineBundle\\": ""
-        },
-        "exclude-from-classmap": [ "Tests/" ]
+        }
     },
     "autoload-dev": {
         "Liip\\ImagineBundle\\Tests\\": "Tests/"
