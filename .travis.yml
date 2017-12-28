@@ -32,7 +32,8 @@ install:
   - ./vendor/bin/simple-phpunit install
 
 script:
-  - ./vendor/bin/simple-phpunit -vvv 
+  - ./vendor/bin/simple-phpunit
+  - ./vendor/bin/phpunit
   - composer validate --strict
 
 after_script:
