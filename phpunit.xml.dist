@@ -13,21 +13,6 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>Resources/</directory>
-                <directory>Tests/</directory>
-                <directory>vendor/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-clover" target="var/build/clover.xml"/>
-    </logging>
-
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
