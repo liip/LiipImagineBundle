@@ -12,6 +12,10 @@
             <directory>Tests/</directory>
         </testsuite>
     </testsuites>
+         
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>     
 
     <php>
         <ini name="error_reporting" value="-1" />
