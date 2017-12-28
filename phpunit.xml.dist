@@ -9,23 +9,13 @@
         convertWarningsToExceptions="true"
         syntaxCheck="true"
         forceCoversAnnotation="true"
-        bootstrap="./Tests/bootstrap.php">
+        bootstrap="Tests/bootstrap.php">
 
     <testsuites>
         <testsuite name="liip/imagine-bundle test suite">
             <directory>Tests/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 
     <logging>
         <log type="coverage-clover" target="var/build/clover.xml"/>
