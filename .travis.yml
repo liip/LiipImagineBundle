@@ -8,8 +8,6 @@ cache:
 
 env:
   global:
-    - deps="no"
-    - SYMFONY_VERSION="3.4.*"
     - SYMFONY_DEPRECATIONS_HELPER="weak"
 
 matrix:
