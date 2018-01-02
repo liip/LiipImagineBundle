@@ -26,12 +26,12 @@ matrix:
         - STABILITY=dev
         - SYMFONY_VERSION=dev-master
     - php: nightly
-      env: SYMFONY_VERSION=4.0.*
-  allow_failures:
-    - php: nightly    
+      env:
+        - STABILITY=dev
+        - SYMFONY_VERSION=4.0.*
+  allow_failures: 
     - env: STABILITY=dev
-
-
+    
 before_install:
   - bash ./.travis/exec-before.bash
 
