@@ -24,6 +24,7 @@ matrix:
 
 before_install:
   #- bash ./.travis/exec-before.bash
+  - export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
   - composer self-update
 
 install:
