@@ -29,6 +29,7 @@ before_install:
   
 
 install:
+  - composer require "symfony/phpunit-bridge:^4.0" --no-update $COMPOSER_FLAGS
   - composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS
   - composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS
   - vendor/bin/simple-phpunit install
