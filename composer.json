@@ -14,10 +14,8 @@
     "autoload": {
         "psr-4": {
             "Liip\\ImagineBundle\\": ""
-        }
-    },
-    "autoload-dev": {
-        "Liip\\ImagineBundle\\Tests\\": "Tests/"
+        },
+        "exclude-from-classmap": [ "/Tests/" ]
     },
     "require": {
         "php": "^7.1",
