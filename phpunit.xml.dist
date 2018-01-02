@@ -33,7 +33,6 @@
     </logging>
 
     <php>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="6.3" />
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
         <ini name="intl.error_level" value="0" />
