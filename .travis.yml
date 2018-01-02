@@ -8,14 +8,13 @@ php:
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
-    - $HOME/symfony-bridge/.phpunit
+    - $HOME/.composer/cache
 
 env:
   global:
-    - SYMFONY_DEPRECATIONS_HELPER=weak_vendors
-    - SYMFONY_VERSION=3.4.*
-    - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
+    - deps="no"
+    - SYMFONY_VERSION="3.4.*"
+    - SYMFONY_DEPRECATIONS_HELPER="weak"
 
 matrix:
   include:
@@ -24,17 +23,16 @@ matrix:
 
 before_install:
   #- bash ./.travis/exec-before.bash
-  - export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
-  - composer self-update
+  
 
 install:
   #- travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
   - composer install
-  - ./vendor/bin/simple-phpunit install
+  - vendor/bin/simple-phpunit install
 
 script:
-  - ./vendor/bin/simple-phpunit
-  - ./vendor/bin/phpunit
+  - vendor/bin/simple-phpunit
+  - vendor/bin/phpunit
   - composer validate --strict
 
 after_script:
