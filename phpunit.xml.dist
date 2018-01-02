@@ -24,7 +24,7 @@
 
     <php>
         <server name="KERNEL_CLASS" value="\AppKernel" />  
-        <env name="SYMFONY_PHPUNIT_VERSION" value="5.5" />
+        <env name="SYMFONY_PHPUNIT_VERSION" value="6.0" />
         <ini name="error_reporting" value="-1" />
         <ini name="intl.default_locale" value="en" />
         <ini name="intl.error_level" value="0" />
