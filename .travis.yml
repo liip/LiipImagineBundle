@@ -27,7 +27,7 @@ before_install:
 
 install:
   #- travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
-  - composer install
+  - composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS
   - vendor/bin/simple-phpunit install
 
 script:
