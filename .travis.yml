@@ -2,24 +2,33 @@ sudo: false
 
 language: php
 
-php:
-  - 7.1
-  - 7.2
-
 cache:
   directories:
-    - $HOME/.composer/cache/files
+    - $HOME/.composer/cache
 
 env:
   global:
-    - SYMFONY_DEPRECATIONS_HELPER=weak
-    - SYMFONY_VERSION=3.4.*
+    - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
 
 matrix:
-  include:
-    - env: SYMFONY_VERSION=4.0.*
   fast_finish: true
-
+  include:
+    - php: 7.1
+      env: SYMFONY_VERSION=4.0.*
+    - php: 7.1
+      env: SYMFONY_VERSION=3.4.*
+    - php: 7.2
+      env: SYMFONY_VERSION=4.0.*
+    - php: 7.2
+      env: SYMFONY_VERSION=3.4.*
+    - php: 7.2
+      env: SYMFONY_VERSION=dev-master
+    - php: nightly
+      env: SYMFONY_VERSION=4.0.*
+  allow_failures: 
+    - env: SYMFONY_VERSION=dev-master
+    - php: nightly
+    
 before_install:
   - bash ./.travis/exec-before.bash
 
@@ -27,7 +36,7 @@ install:
   - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
 
 script:
-  - ./vendor/bin/simple-phpunit -vvv || ./vendor/bin/phpunit -vvv
+  - ./vendor/bin/simple-phpunit -vvv
 
 after_script:
   - bash ./.travis/exec-after.bash
