@@ -25,6 +25,15 @@ class CacheResolverTest extends AbstractTest
     protected $filter = 'thumbnail';
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
+    
+    protected function setUp()
+    {
+        if (!class_exists(ArrayCache::class)) {
+            $this->markTestSkipped('Requires the doctrine/cache package.');
+        }
+
+        parent::setUp();
+    }
 
     public function testResolveIsSavedToCache()
     {

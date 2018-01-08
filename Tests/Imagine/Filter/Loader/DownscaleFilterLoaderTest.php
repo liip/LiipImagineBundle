@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Tests\Filter;
+namespace Liip\ImagineBundle\Tests\Image\Filter\Loader;
 
 use Imagine\Image\Box;
 use Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader;
@@ -22,7 +22,25 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class DownscaleFilterLoaderTest extends AbstractTest
 {
-    public function downscale()
+    /**
+     * @dataProvider provideSizes
+     */
+    public function testDontScaleUp($initialSize, $resultSize)
+    {
+        $this->assertLessThanOrEqual($initialSize->getHeight(), $resultSize->getHeight());
+        $this->assertLessThanOrEqual($initialSize->getWidth(), $resultSize->getWidth());
+    }
+
+    /**
+     * @dataProvider provideSizes
+     */
+    public function testFitBoundingBox($initialSize, $resultSize)
+    {
+        $this->assertLessThanOrEqual(100, $resultSize->getHeight());
+        $this->assertLessThanOrEqual(90, $resultSize->getWidth());
+    }
+
+    public function provideSizes()
     {
         $loader = new DownscaleFilterLoader();
 
@@ -41,26 +59,6 @@ class DownscaleFilterLoaderTest extends AbstractTest
 
         $loader->load($image, array('max' => array(100, 90)));
 
-        return array($initialSize, $resultSize);
-    }
-
-    /**
-     * @depends downscale
-     */
-    public function testDontScaleUp($sizes)
-    {
-        list($initialSize, $resultSize) = $sizes;
-        $this->assertLessThanOrEqual($initialSize->getHeight(), $resultSize->getHeight());
-        $this->assertLessThanOrEqual($initialSize->getWidth(), $resultSize->getWidth());
-    }
-
-    /**
-     * @depends downscale
-     */
-    public function testFitBoundingBox($sizes)
-    {
-        list($initialSize, $resultSize) = $sizes;
-        $this->assertLessThanOrEqual(100, $resultSize->getHeight());
-        $this->assertLessThanOrEqual(90, $resultSize->getWidth());
+        yield [$initialSize, $resultSize];
     }
 }
