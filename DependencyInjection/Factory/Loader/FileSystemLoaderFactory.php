@@ -59,7 +59,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                     ->end()
                     ->treatNullLike([])
                     ->treatFalseLike([])
-                    ->defaultValue(['%kernel.root_dir%/../web'])
+                    ->defaultValue(['%kernel.root_dir%/../public'])
                     ->prototype('scalar')
                         ->cannotBeEmpty()
                     ->end()

@@ -50,7 +50,7 @@ class WebPathResolverFactory extends AbstractResolverFactory
         $builder
             ->children()
                 ->scalarNode('web_root')
-                    ->defaultValue('%kernel.root_dir%/../web')
+                    ->defaultValue('%kernel.root_dir%/../public')
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache_prefix')

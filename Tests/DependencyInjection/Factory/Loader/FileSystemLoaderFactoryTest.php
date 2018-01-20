@@ -252,7 +252,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $expectedDataRoot = array('%kernel.root_dir%/../web');
+        $expectedDataRoot = array('%kernel.root_dir%/../public');
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -270,7 +270,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testAddAsScalarExpectingArrayNormalizationOfConfiguration()
     {
-        $expectedDataRoot = array('%kernel.root_dir%/../web');
+        $expectedDataRoot = array('%kernel.root_dir%/../public');
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
