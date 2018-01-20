@@ -103,7 +103,7 @@ class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
         ));
 
         $this->assertArrayHasKey('web_root', $config);
-        $this->assertEquals('%kernel.root_dir%/../web', $config['web_root']);
+        $this->assertEquals('%kernel.root_dir%/../public', $config['web_root']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
         $this->assertEquals('media/cache', $config['cache_prefix']);
