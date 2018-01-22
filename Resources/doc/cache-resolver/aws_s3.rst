@@ -54,12 +54,12 @@ Create Resolver from a Factory
         resolvers:
             profile_photos:
                 aws_s3:
+                    bucket: "%amazon.s3.cache_bucket%"
                     client_config:
                         credentials:
                             key:    "%amazon.s3.key%"
                             secret: "%amazon.s3.secret%"
                         region: "%amazon.s3.region%"
-                        bucket: "%amazon.s3.cache_bucket%"
                     get_options:
                         Scheme: https
                     put_options:
