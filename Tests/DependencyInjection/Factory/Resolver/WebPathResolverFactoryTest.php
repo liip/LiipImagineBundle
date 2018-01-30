@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -103,7 +104,7 @@ class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
         ));
 
         $this->assertArrayHasKey('web_root', $config);
-        $this->assertEquals('%kernel.root_dir%/../web', $config['web_root']);
+        $this->assertEquals(SymfonyFramework::getContainerResolvableRootWebPath(), $config['web_root']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
         $this->assertEquals('media/cache', $config['cache_prefix']);

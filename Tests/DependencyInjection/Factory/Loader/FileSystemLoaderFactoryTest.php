@@ -16,6 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface
 use Liip\ImagineBundle\Tests\DependencyInjection\Factory\FactoryTestCase;
 use Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle;
 use Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -252,7 +253,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $expectedDataRoot = array('%kernel.root_dir%/../web');
+        $expectedDataRoot = array(SymfonyFramework::getContainerResolvableRootWebPath());
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -270,7 +271,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
     public function testAddAsScalarExpectingArrayNormalizationOfConfiguration()
     {
-        $expectedDataRoot = array('%kernel.root_dir%/../web');
+        $expectedDataRoot = array(SymfonyFramework::getContainerResolvableRootWebPath());
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');

@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -50,7 +51,7 @@ class WebPathResolverFactory extends AbstractResolverFactory
         $builder
             ->children()
                 ->scalarNode('web_root')
-                    ->defaultValue('%kernel.root_dir%/../web')
+                    ->defaultValue(SymfonyFramework::getContainerResolvableRootWebPath())
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache_prefix')
