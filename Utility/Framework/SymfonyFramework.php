@@ -18,9 +18,17 @@ class SymfonyFramework
     /**
      * @return bool
      */
-    public static function hasDirectContainerBuilderLogging()
+    public static function hasDirectContainerBuilderLogging(): bool
     {
         return method_exists('\Symfony\Component\DependencyInjection\ContainerBuilder', 'log');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getContainerResolvableRootWebPath(): string
+    {
+        return sprintf('%%kernel.project_dir%%/%s', self::isKernelLessThan(4) ? 'web' : 'public');
     }
 
     /**
@@ -30,7 +38,7 @@ class SymfonyFramework
      *
      * @return bool
      */
-    public static function isKernelGreaterThanOrEqualTo($major, $minor = null, $patch = null)
+    public static function isKernelGreaterThanOrEqualTo(int $major, int $minor = null, int $patch = null): bool
     {
         return static::kernelVersionCompare('>=', $major, $minor, $patch);
     }
@@ -42,7 +50,7 @@ class SymfonyFramework
      *
      * @return bool
      */
-    public static function isKernelLessThan($major, $minor = null, $patch = null)
+    public static function isKernelLessThan(int $major, int $minor = null, int $patch = null): bool
     {
         return static::kernelVersionCompare('<', $major, $minor, $patch);
     }
@@ -55,21 +63,8 @@ class SymfonyFramework
      *
      * @return bool
      */
-    private static function kernelVersionCompare($operator, $major, $minor = null, $patch = null)
+    private static function kernelVersionCompare(string $operator, int $major, int $minor = null, int $patch = null): bool
     {
-        $vernum = $major;
-        $kernel = Kernel::MAJOR_VERSION;
-
-        if ($minor) {
-            $vernum .= '.'.$minor;
-            $kernel .= '.'.Kernel::MINOR_VERSION;
-
-            if ($patch) {
-                $vernum .= '.'.$patch;
-                $kernel .= '.'.Kernel::RELEASE_VERSION;
-            }
-        }
-
-        return version_compare($kernel, $vernum, $operator);
+        return version_compare(Kernel::VERSION_ID, sprintf("%d%'.02d%'.02d", $major, $minor ?: 0, $patch ?: 0), $operator);
     }
 }

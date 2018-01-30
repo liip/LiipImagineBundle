@@ -11,7 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Utility\Framework;
 
+use Liip\ImagineBundle\Tests\Filter\PasteFilterLoaderTest;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers \Liip\ImagineBundle\Utility\Framework\SymfonyFramework
@@ -43,5 +45,13 @@ class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->assertFalse(SymfonyFramework::hasDirectContainerBuilderLogging());
         }
+    }
+
+    public function testGetContainerResolvableRootWebPath()
+    {
+        $path = SymfonyFramework::getContainerResolvableRootWebPath();
+
+        $this->assertStringStartsWith('%kernel.project_dir%/', $path);
+        $this->assertStringEndsWith(Kernel::VERSION_ID < 40000 ? 'web' : 'public', $path);
     }
 }

@@ -13,13 +13,13 @@ The default configuration for the bundle looks like this:
         resolvers:
             default:
                 web_path:
-                    web_root: ~ # %kernel.root_dir%/../web
+                    web_root: ~ # %kernel.project_dir%/public (%kernel.project_dir%/web for Symfony < 4.0.0)
                     cache_prefix: ~ # media/cache
 
         loaders:
             default:
                 filesystem:
-                    data_root: ~  # %kernel.root_dir%/../web/
+                    data_root: ~  # %kernel.project_dir%/public (%kernel.project_dir%/web for Symfony < 4.0.0)
 
         driver:               gd
         cache:                default
