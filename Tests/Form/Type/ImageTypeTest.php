@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Form\Type;
 
 use Liip\ImagineBundle\Form\Type\ImageType;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -23,6 +24,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ImageTypeTest extends AbstractTest
 {
+    protected function setUp()
+    {
+        if (!class_exists(AbstractType::class)) {
+            $this->markTestSkipped('Requires the symfony/form package.');
+        }
+    }
+
     public function testGetName()
     {
         $type = new ImageType();

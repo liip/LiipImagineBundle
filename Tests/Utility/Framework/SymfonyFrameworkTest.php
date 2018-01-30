@@ -22,11 +22,8 @@ class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
 {
     public function testKernelComparisonForCurrentKernel()
     {
-        if (1 !== preg_match('{(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9x]+)(?:-dev)?}', getenv('SYMFONY_VERSION'), $matches)) {
-            $this->markTestSkipped('Requires environment variable SYMFONY_VERSION with value matching "[0-9].[0-9].[0-9x](-dev)?"');
-        }
-
-        list($major, $minor) = [$matches['major'], $matches['minor']];
+        $major = Kernel::MAJOR_VERSION;
+        $minor = Kernel::MINOR_VERSION;
 
         $this->assertTrue(SymfonyFramework::isKernelGreaterThanOrEqualTo($major, $minor));
         $this->assertFalse(SymfonyFramework::isKernelLessThan($major, $minor));

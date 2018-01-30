@@ -340,6 +340,10 @@ class AmazonS3ResolverTest extends AbstractTest
      */
     protected function createAmazonS3Mock()
     {
+        if (!class_exists(\AmazonS3::class)) {
+            $this->markTestSkipped('Requires the amazonwebservices/aws-sdk-for-php package.');
+        }
+        
         return $this
             ->getMockBuilder(\AmazonS3::class)
             ->disableOriginalConstructor()
