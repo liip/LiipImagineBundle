@@ -39,7 +39,7 @@ matrix:
     - php: nightly
   allow_failures:
     - env:
-      - ENABLE_CODE_COVERAGE="true"
+        - ENABLE_CODE_COVERAGE="true"
     - env:
         - SYMFONY_VERSION=dev-master
         - STABILITY=dev
@@ -49,7 +49,7 @@ before_install:
   - if [[ "$SYMFONY_VERSION" != "" ]]; then travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS; fi;
   - if [[ "$DEPENDENCIES" != "" ]]; then travis_retry composer require ${DEPENDENCIES} --no-update $COMPOSER_FLAGS; fi;
   - if [[ "$STABILITY" != "" ]]; then composer config minimum-stability $STABILITY; fi
-  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then phpenv config-rm xdebug.ini; fi;
+  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then phpenv config-rm xdebug.ini || true; fi;
   - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then travis_retry composer require satooshi/php-coveralls:^1.0 --no-update $COMPOSER_FLAGS; fi;
 
 install:
