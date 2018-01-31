@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
  */
-class StreamLoaderFactoryTest extends \PHPUnit\Framework\TestCase
+class StreamLoaderFactoryTest extends TestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {

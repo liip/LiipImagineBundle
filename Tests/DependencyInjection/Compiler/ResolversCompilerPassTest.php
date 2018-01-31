@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass
@@ -20,20 +21,34 @@ class ResolversCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $m = $this->createDefinition();
-        $l = $this->createDefinition(array('liip_imagine.cache.resolver' => array(
-            'resolver' => 'foobar',
-        )));
+        list($d, $m) = $this->getResolversCompilerPassContainerDefinitions();
 
-        $container = $this->createContainerBuilder(array(
-            'resolver.foobar' => $l,
-            'liip_imagine.cache.manager' => $m,
-        ));
+        $container = $this->createContainerBuilder($d);
 
         $pass = new ResolversCompilerPass();
 
         $this->assertDefinitionMethodCallsNone($m);
         $pass->process($container);
         $this->assertDefinitionMethodCallCount(1, $m);
+    }
+
+    public function testProcessLogging()
+    {
+        $this->assertContainerLogMethodCalledForCompilerPass(
+            new ResolversCompilerPass(),
+            $this->getResolversCompilerPassContainerDefinitions()
+        );
+    }
+
+    /**
+     * @return Definition[]|array[]
+     */
+    private function getResolversCompilerPassContainerDefinitions(): array
+    {
+        return $this->getCompilerPassContainerDefinitions(
+            'resolver.foobar',
+            'liip_imagine.cache.manager',
+            ['liip_imagine.cache.resolver' => ['resolver' => 'foobar']]
+        );
     }
 }

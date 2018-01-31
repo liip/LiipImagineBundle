@@ -12,11 +12,12 @@
 namespace Liip\ImagineBundle\Tests\Model;
 
 use Liip\ImagineBundle\Model\Binary;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Model\Binary
  */
-class BinaryTest extends \PHPUnit\Framework\TestCase
+class BinaryTest extends TestCase
 {
     public function testImplementsBinaryInterface()
     {

@@ -31,9 +31,10 @@ trait FilterTrait
     /**
      * Gets the browser path for the image and filter to apply.
      *
-     * @param string $path
-     * @param string $filter
-     * @param array  $config
+     * @param string      $path
+     * @param string      $filter
+     * @param array       $config
+     * @param string|null $resolver
      *
      * @return string
      */

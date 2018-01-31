@@ -13,11 +13,12 @@ namespace Liip\ImagineBundle\Tests\Exception\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Exception\ExceptionInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException
  */
-class NotStorableExceptionTest extends \PHPUnit\Framework\TestCase
+class NotStorableExceptionTest extends TestCase
 {
     public function testSubClassOfRuntimeException()
     {

@@ -4,8 +4,9 @@ namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
 use Liip\ImagineBundle\Async\ResolveCache;
+use PHPUnit\Framework\TestCase;
 
-class ResolveCacheTest extends \PHPUnit\Framework\TestCase
+class ResolveCacheTest extends TestCase
 {
     public static function setUpBeforeClass()
     {

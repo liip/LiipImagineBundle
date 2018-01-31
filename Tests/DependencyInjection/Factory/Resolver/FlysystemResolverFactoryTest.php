@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,7 +23,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory<extended>
  */
-class FlysystemResolverFactoryTest extends \PHPUnit\Framework\TestCase
+class FlysystemResolverFactoryTest extends TestCase
 {
     public function setUp()
     {
@@ -124,7 +125,7 @@ class FlysystemResolverFactoryTest extends \PHPUnit\Framework\TestCase
         $resolver = new FlysystemResolverFactory();
         $resolver->addConfiguration($rootNode);
 
-        $config = $this->processConfigTree($treeBuilder, array(
+        $this->processConfigTree($treeBuilder, array(
             'flysystem' => array(),
         ));
     }

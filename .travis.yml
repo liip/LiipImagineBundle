@@ -53,10 +53,9 @@ before_install:
   - if [[ "$DEPENDENCIES" != "" ]]; then travis_retry composer require ${DEPENDENCIES} --no-update $COMPOSER_FLAGS; fi;
   - if [[ "$STABILITY" != "" ]]; then composer config minimum-stability $STABILITY; fi
   - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then phpenv config-rm xdebug.ini || true; fi;
-  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then travis_retry composer require satooshi/php-coveralls:^1.0 --no-update $COMPOSER_FLAGS; fi;
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then travis_retry composer require satooshi/php-coveralls:^2.0 --no-update $COMPOSER_FLAGS; fi;
 
 install:
-  - travis_retry composer update  --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_OPTIONS
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then travis_retry composer require --dev satooshi/php-coveralls; fi
   - ./vendor/bin/simple-phpunit install
 
@@ -64,4 +63,4 @@ script:
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then vendor/bin/simple-phpunit --coverage-text --coverage-clover build/logs/clover.xml; else vendor/bin/simple-phpunit -v; fi;
 
 after_success:
-  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then php vendor/bin/php-coveralls -v --config .coveralls.yml; fi;

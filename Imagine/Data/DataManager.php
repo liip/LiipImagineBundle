@@ -116,7 +116,7 @@ class DataManager
      *
      * @throws \LogicException
      *
-     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     * @return BinaryInterface
      */
     public function find($filter, $path)
     {

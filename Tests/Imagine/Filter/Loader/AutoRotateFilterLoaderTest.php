@@ -24,9 +24,9 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     /**
      * Starts a test with expected results.
      *
-     * @param $exifValue {String} The exif value to be returned by the metadata mock
-     * @param $expectCallRotateValue {null|number} The expected rotation value, null if no rotation is expected
-     * @param $expectCallFlip {Boolean} True if a horizontal flip is expected, false otherwise
+     * @param string   $exifValue The exif value to be returned by the metadata mock
+     * @param null|int $expectCallRotateValue {null|number} The expected rotation value, null if no rotation is expected
+     * @param bool     $expectCallFlip True if a horizontal flip is expected, false otherwise
      */
     private function loadExif($exifValue, $expectCallRotateValue, $expectCallFlip)
     {
@@ -168,7 +168,11 @@ class AutoRotateFilterLoaderTest extends AbstractTest
         return array(array(0, 9, 255, 65535));
     }
 
-    /** @dataProvider getInvalidOrientations */
+    /**
+     * @dataProvider getInvalidOrientations
+     *
+     * @param string $orientation
+     */
     public function testLoadExifInvalid($orientation)
     {
         $this->loadExif($orientation, null, false);

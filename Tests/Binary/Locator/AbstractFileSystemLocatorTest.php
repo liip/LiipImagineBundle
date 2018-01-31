@@ -13,8 +13,9 @@ namespace Liip\ImagineBundle\Tests\Binary\Locator;
 
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractFileSystemLocatorTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractFileSystemLocatorTest extends TestCase
 {
     /**
      * @param string[]|string $paths
@@ -127,6 +128,8 @@ abstract class AbstractFileSystemLocatorTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
      * @expectedExceptionMessage Root image path not resolvable
+     *
+     * @param string $path
      */
     public function testThrowsIfRealPathOutsideRootPath($path)
     {

@@ -30,7 +30,7 @@ class AutoRotateFilterLoader implements LoaderInterface
      */
     public function load(ImageInterface $image, array $options = [])
     {
-        if ($orientation = $this->getOrientation($image)) {
+        if (null !== $orientation = $this->getOrientation($image)) {
             if ($orientation < 1 || $orientation > 8) {
                 return $image;
             }
@@ -78,28 +78,21 @@ class AutoRotateFilterLoader implements LoaderInterface
     /**
      * @param ImageInterface $image
      *
-     * @return int
+     * @return int|null
      */
     private function getOrientation(ImageInterface $image)
     {
-        //>0.6 imagine meta data interface
-        if (method_exists($image, 'metadata')) {
-            foreach ($this->orientationKeys as $orientationKey) {
-                $orientation = $image->metadata()->offsetGet($orientationKey);
+        foreach ($this->orientationKeys as $orientationKey) {
+            $orientation = $image->metadata()->offsetGet($orientationKey);
 
-                if ($orientation) {
-                    $image->metadata()->offsetSet($orientationKey, '1');
+            if ($orientation) {
+                $image->metadata()->offsetSet($orientationKey, '1');
 
-                    return intval($orientation);
-                }
+                return intval($orientation);
             }
-        } else {
-            $data = exif_read_data('data://image/jpeg;base64,'.base64_encode($image->get('jpg')));
-
-            return isset($data['Orientation']) ? $data['Orientation'] : null;
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -111,18 +104,6 @@ class AutoRotateFilterLoader implements LoaderInterface
      */
     private function isFlipped($orientation)
     {
-        switch ($orientation) {
-            case 1:
-            case 3:
-            case 6:
-            case 8:
-                return false;
-
-            case 2:
-            case 4:
-            case 5:
-            case 7:
-                return true;
-        }
+        return in_array((int) $orientation, [2, 4, 5, 7]);
     }
 }

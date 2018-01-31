@@ -11,10 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Definition;
 
-abstract class FactoryTestCase extends \PHPUnit\Framework\TestCase
+abstract class FactoryTestCase extends TestCase
 {
     /**
      * @param Definition $definition

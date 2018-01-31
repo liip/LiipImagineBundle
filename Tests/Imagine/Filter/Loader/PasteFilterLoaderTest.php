@@ -66,7 +66,7 @@ class PasteFilterLoaderTest extends AbstractTest
         $options['start'] = array($x, $y);
         $options['image'] = '';
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**

@@ -31,13 +31,6 @@ class ImageTypeTest extends AbstractTest
         }
     }
 
-    public function testGetName()
-    {
-        $type = new ImageType();
-
-        $this->assertEquals('liip_imagine_image', $type->getName());
-    }
-
     public function testGetParent()
     {
         $type = new ImageType();

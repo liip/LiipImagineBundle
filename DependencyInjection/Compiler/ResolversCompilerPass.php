@@ -28,7 +28,7 @@ class ResolversCompilerPass extends AbstractCompilerPass
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addResolver', [$tag[0]['resolver'], new Reference($id)]);
-                $this->log($container, 'Registered imagine-bimdle cache resolver: %s', [$id]);
+                $this->log($container, 'Registered cache resolver: %s', $id);
             }
         }
     }

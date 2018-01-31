@@ -12,7 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
-use Symfony\Component\Console\Application;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
