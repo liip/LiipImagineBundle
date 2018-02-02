@@ -109,6 +109,10 @@ class LiipImagineExtensionTest extends AbstractTest
 
     protected function createFullConfiguration()
     {
+        if (!class_exists(Parser::class)) {
+            $this->markTestSkipped('Requires the symfony/yaml package.');
+        }
+
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
         $loader->addLoaderFactory(new FileSystemLoaderFactory());

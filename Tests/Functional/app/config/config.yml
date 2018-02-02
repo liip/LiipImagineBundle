@@ -29,7 +29,7 @@ liip_imagine:
 
         default:
             filesystem:
-                data_root: "%kernel.root_dir%/web"
+                data_root: "%kernel.root_dir%/public"
 
         foo:
             filesystem:
@@ -65,7 +65,7 @@ liip_imagine:
 
         default:
             web_path:
-                web_root:     "%kernel.root_dir%/web"
+                web_root:     "%kernel.root_dir%/public"
                 cache_prefix: media/cache
 
     filter_sets:

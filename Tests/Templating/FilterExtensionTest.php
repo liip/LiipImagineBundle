@@ -37,6 +37,10 @@ class FilterExtensionTest extends AbstractFilterTest
      */
     protected function createTemplatingMock(CacheManager $manager = null)
     {
+        if (!class_exists(\Twig_Extension::class)) {
+            $this->markTestSkipped('Requires the twig/twig package.');
+        }
+        
         $mock = new FilterExtension($manager ?: $this->createCacheManagerMock());
 
         $this->assertInstanceOf(FilterExtension::class, $mock);

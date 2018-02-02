@@ -4,5 +4,6 @@
 /composer.phar
 /vendor/
 /Tests/Functional/app/web/media/cache
+/Tests/Functional/app/public/media/cache
 /.idea/
 /var/

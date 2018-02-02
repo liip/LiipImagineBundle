@@ -11,7 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Utility\Framework;
 
+use Liip\ImagineBundle\Tests\Filter\PasteFilterLoaderTest;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers \Liip\ImagineBundle\Utility\Framework\SymfonyFramework
@@ -20,11 +22,8 @@ class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
 {
     public function testKernelComparisonForCurrentKernel()
     {
-        if (1 !== preg_match('{(?<major>[0-9]+)\.(?<minor>[0-9]+)\.(?<patch>[0-9x]+)(?:-dev)?}', getenv('SYMFONY_VERSION'), $matches)) {
-            $this->markTestSkipped('Requires environment variable SYMFONY_VERSION with value matching "[0-9].[0-9].[0-9x](-dev)?"');
-        }
-
-        list($major, $minor) = [$matches['major'], $matches['minor']];
+        $major = Kernel::MAJOR_VERSION;
+        $minor = Kernel::MINOR_VERSION;
 
         $this->assertTrue(SymfonyFramework::isKernelGreaterThanOrEqualTo($major, $minor));
         $this->assertFalse(SymfonyFramework::isKernelLessThan($major, $minor));
@@ -43,5 +42,13 @@ class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
         } else {
             $this->assertFalse(SymfonyFramework::hasDirectContainerBuilderLogging());
         }
+    }
+
+    public function testGetContainerResolvableRootWebPath()
+    {
+        $path = SymfonyFramework::getContainerResolvableRootWebPath();
+
+        $this->assertStringStartsWith('%kernel.project_dir%/', $path);
+        $this->assertStringEndsWith(Kernel::VERSION_ID < 40000 ? 'web' : 'public', $path);
     }
 }

@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -59,7 +60,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                     ->end()
                     ->treatNullLike([])
                     ->treatFalseLike([])
-                    ->defaultValue(['%kernel.root_dir%/../web'])
+                    ->defaultValue([SymfonyFramework::getContainerResolvableRootWebPath()])
                     ->prototype('scalar')
                         ->cannotBeEmpty()
                     ->end()

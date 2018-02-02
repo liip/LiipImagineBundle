@@ -9,34 +9,58 @@ cache:
 env:
   global:
     - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+    - ENABLE_CODE_COVERAGE="false"
 
 matrix:
   fast_finish: true
   include:
     - php: 7.1
-      env: SYMFONY_VERSION=4.0.*
     - php: 7.1
+      env:
+        - SYMFONY_VERSION=4.0.*
+        - COMPOSER_FLAGS="--prefer-lowest"
+        - DEPENDENCIES="symfony/phpunit-bridge:^4"
+    - php: 7.2
+    - php: 7.2
       env: SYMFONY_VERSION=3.4.*
     - php: 7.2
       env: SYMFONY_VERSION=4.0.*
     - php: 7.2
-      env: SYMFONY_VERSION=3.4.*
+      env:
+        - DEPENDENCIES="symfony/phpunit-bridge:^4"
+        - COMPOSER_UPDATE_OPTIONS="--no-dev"
     - php: 7.2
-      env: SYMFONY_VERSION=dev-master
+      env:
+        - ENABLE_CODE_COVERAGE="true"
+    - php: 7.2
+      env:
+        - SYMFONY_VERSION=dev-master
+        - STABILITY=dev
     - php: nightly
-      env: SYMFONY_VERSION=4.0.*
-  allow_failures: 
-    - env: SYMFONY_VERSION=dev-master
+      env:
+        - SYMFONY_VERSION=4.0.*
+        - COMPOSER_FLAGS="--ignore-platform-reqs"
+  allow_failures:
+    - env:
+        - ENABLE_CODE_COVERAGE="true"
+    - env:
+        - SYMFONY_VERSION=dev-master
+        - STABILITY=dev
     - php: nightly
-    
+
 before_install:
-  - bash ./.travis/exec-before.bash
+  - if [[ "$SYMFONY_VERSION" != "" ]]; then travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS; fi;
+  - if [[ "$DEPENDENCIES" != "" ]]; then travis_retry composer require ${DEPENDENCIES} --no-update $COMPOSER_FLAGS; fi;
+  - if [[ "$STABILITY" != "" ]]; then composer config minimum-stability $STABILITY; fi
+  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then phpenv config-rm xdebug.ini || true; fi;
+  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then travis_retry composer require satooshi/php-coveralls:^1.0 --no-update $COMPOSER_FLAGS; fi;
 
 install:
-  - travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" $COMPOSER_FLAGS
+  - travis_retry composer update  --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_OPTIONS
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then travis_retry composer require --dev satooshi/php-coveralls; fi
 
 script:
-  - ./vendor/bin/simple-phpunit -vvv
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then vendor/bin/simple-phpunit --coverage-text --coverage-clover build/logs/clover.xml; else vendor/bin/simple-phpunit -v; fi;
 
-after_script:
-  - bash ./.travis/exec-after.bash
+after_success:
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;

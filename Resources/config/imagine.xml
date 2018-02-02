@@ -48,7 +48,7 @@
             <argument>%liip_imagine.default_image%</argument>
         </service>
 
-        <service id="liip_imagine.cache.manager" class="Liip\ImagineBundle\Imagine\Cache\CacheManager">
+        <service id="liip_imagine.cache.manager" class="Liip\ImagineBundle\Imagine\Cache\CacheManager" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
             <argument type="service" id="liip_imagine.cache.signer" />

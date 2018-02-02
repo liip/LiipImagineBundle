@@ -32,6 +32,10 @@ class AbstractDoctrineLoaderTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
+        if (!interface_exists(ObjectManager::class)) {
+            $this->markTestSkipped('Requires the doctrine/orm package.');
+        }
+
         $this->om = $this
             ->getMockBuilder(ObjectManager::class)
             ->getMock();

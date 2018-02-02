@@ -38,24 +38,23 @@ class FlysystemLoaderTest extends AbstractTest
         $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
     }
 
-    public function getLoader()
+    /**
+     * @return FlysystemLoader
+     */
+    public function getFlysystemLoader()
     {
         return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
     }
 
-    /**
-     * @depends getLoader
-     */
-    public function testShouldImplementLoaderInterface(LoaderInterface $loader)
+    public function testShouldImplementLoaderInterface()
     {
-        $this->assertInstanceOf(LoaderInterface::class, $loader);
+        $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
     }
 
-    /**
-     * @depends getLoader
-     */
-    public function testReturnImageContentOnFind(LoaderInterface $loader)
+    public function testReturnImageContentOnFind()
     {
+        $loader = $this->getFlysystemLoader();
+
         $this->assertSame(
             file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
             $loader->find('assets/cats.jpeg')->getContent()
@@ -63,13 +62,13 @@ class FlysystemLoaderTest extends AbstractTest
     }
 
     /**
-     * @depends getLoader
-     *
      * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @expectedExceptionMessageRegExp {Source image .+ not found}
      */
-    public function testThrowsIfInvalidPathGivenOnFind(LoaderInterface $loader)
+    public function testThrowsIfInvalidPathGivenOnFind()
     {
+        $loader = $this->getFlysystemLoader();
+
         $loader->find('invalid.jpeg');
     }
 }
