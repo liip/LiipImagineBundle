@@ -67,7 +67,7 @@ install:
 
 script:
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then vendor/bin/simple-phpunit --coverage-text --coverage-clover build/logs/clover.xml; fi;
-  - if [[ "$RUN_UNIT_TESTS" == "true" && "$ENABLE_CODE_COVERAGE" == "false"]]; then vendor/bin/simple-phpunit -v; fi;
+  - if [[ "$RUN_UNIT_TESTS" == "true" && "$ENABLE_CODE_COVERAGE" == "false" ]]; then vendor/bin/simple-phpunit -v; fi;
   - if [[ "$CHECK_PHP_SYNTAX" == "true" ]]; then vendor/bin/php-cs-fixer --dry-run --diff -v fix; fi;
 
 after_success:
