@@ -20,7 +20,7 @@ matrix:
     - php: 7.1
       env:
         - RUN_UNIT_TESTS="false"
-        - CHECK_PHP_SYNTAX="yes"
+        - CHECK_PHP_SYNTAX="true"
     - php: 7.1
       env:
         - SYMFONY_VERSION=4.0.*
