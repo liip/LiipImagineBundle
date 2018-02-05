@@ -58,6 +58,7 @@ before_install:
 install:
   - travis_retry composer update  --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_OPTIONS
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then travis_retry composer require --dev satooshi/php-coveralls; fi
+  - ./vendor/bin/simple-phpunit install
 
 script:
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then vendor/bin/simple-phpunit --coverage-text --coverage-clover build/logs/clover.xml; else vendor/bin/simple-phpunit -v; fi;
