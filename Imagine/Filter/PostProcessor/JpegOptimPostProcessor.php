@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 
 class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
@@ -141,33 +141,33 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
-        $pb = new ProcessBuilder([$this->jpegoptimBin]);
+        $processArguments = [$this->jpegoptimBin];
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
-            $pb->add('--strip-all');
+            $processArguments[] =  '--strip-all';
         }
 
         $max = array_key_exists('max', $options) ? $options['max'] : $this->max;
         if ($max) {
-            $pb->add('--max='.$max);
+            $processArguments[] =  '--max='.$max;
         }
 
         $progressive = array_key_exists('progressive', $options) ? $options['progressive'] : $this->progressive;
         if ($progressive) {
-            $pb->add('--all-progressive');
+            $processArguments[] =  '--all-progressive';
         } else {
-            $pb->add('--all-normal');
+            $processArguments[] =  '--all-normal';
         }
 
-        $pb->add($input);
+        $processArguments[] = $input;
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
         } else {
             file_put_contents($input, $binary->getContent());
         }
 
-        $proc = $pb->getProcess();
+        $proc = new Process($processArguments);
         $proc->run();
 
         if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {

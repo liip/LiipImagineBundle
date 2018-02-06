@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 
 class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
@@ -93,19 +93,19 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
-        $pb = new ProcessBuilder([$this->optipngBin]);
+        $processArguments = [$this->optipngBin];
 
         $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
         if ($level !== null) {
-            $pb->add(sprintf('--o%d', $level));
+            $processArguments[] =  sprintf('--o%d', $level);
         }
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
-            $pb->add('--strip=all');
+            $processArguments[] =  '--strip=all';
         }
 
-        $pb->add($input);
+        $processArguments[] =  $input;
 
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
@@ -113,7 +113,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
             file_put_contents($input, $binary->getContent());
         }
 
-        $proc = $pb->getProcess();
+        $proc = new Process($processArguments);
         $proc->run();
 
         if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {

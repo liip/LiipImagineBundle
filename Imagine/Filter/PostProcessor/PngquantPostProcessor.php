@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 
 /**
  * pngquant post-processor, for optimal, web-safe, lossy png compression
@@ -83,18 +83,17 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
             return $binary;
         }
 
-        $pb = new ProcessBuilder([$this->pngquantBin]);
+        $processArguments = [$this->pngquantBin];
 
         // Specify quality.
         $tranformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
-        $pb->add('--quality');
-        $pb->add($tranformQuality);
+        $processArguments[] =  '--quality';
+        $processArguments[] =  $tranformQuality;
 
         // Read to/from stdout to save resources.
-        $pb->add('-');
-        $pb->setInput($binary->getContent());
-
-        $proc = $pb->getProcess();
+        $processArguments[] =  '-';
+        $proc = new Process($processArguments);
+        $proc->setInput($binary->getContent());
         $proc->run();
 
         // 98 and 99 are "quality too low" to compress current current image which, while isn't ideal, is not a failure
