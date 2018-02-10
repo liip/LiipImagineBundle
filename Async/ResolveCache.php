@@ -84,11 +84,11 @@ class ResolveCache implements \JsonSerializable
     {
         $data = array_replace(['path' => null, 'filters' => null, 'force' => false], JSON::decode($json));
 
-        if (false == $data['path']) {
+        if (!$data['path']) {
             throw new LogicException('The message does not contain "path" but it is required.');
         }
 
-        if (false == (is_null($data['filters']) || is_array($data['filters']))) {
+        if (!(is_null($data['filters']) || is_array($data['filters']))) {
             throw new LogicException('The message filters could be either null or array.');
         }
 

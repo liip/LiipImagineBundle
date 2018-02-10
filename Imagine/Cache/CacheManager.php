@@ -106,7 +106,7 @@ class CacheManager
     protected function getResolver($filter, $resolver)
     {
         // BC
-        if (false == $resolver) {
+        if (!$resolver) {
             $config = $this->filterConfig->get($filter);
 
             $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
