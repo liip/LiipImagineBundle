@@ -1,19 +1,27 @@
-sudo: false
-
 language: php
 
+sudo: false
+
 cache:
+
   directories:
     - $HOME/.composer/cache
 
+
 env:
+
   global:
     - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
     - ENABLE_CODE_COVERAGE="false"
+    - SIMPLE_PHPUNIT_FLAGS="-v"
+
 
 matrix:
+
   fast_finish: true
+
   include:
+
     - php: 7.1
     - php: 7.1
       env:
@@ -28,10 +36,11 @@ matrix:
     - php: 7.2
       env:
         - DEPENDENCIES="symfony/phpunit-bridge:^4"
-        - COMPOSER_UPDATE_OPTIONS="--no-dev"
+        - COMPOSER_UPDATE_FLAGS="--no-dev"
     - php: 7.2
       env:
         - ENABLE_CODE_COVERAGE="true"
+        - SIMPLE_PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
     - php: 7.2
       env:
         - SYMFONY_VERSION=dev-master
@@ -40,27 +49,50 @@ matrix:
       env:
         - SYMFONY_VERSION=4.0.*
         - COMPOSER_FLAGS="--ignore-platform-reqs"
+
   allow_failures:
+
     - env:
         - ENABLE_CODE_COVERAGE="true"
+        - SIMPLE_PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
     - env:
         - SYMFONY_VERSION=dev-master
         - STABILITY=dev
     - php: nightly
 
+
 before_install:
-  - if [[ "$SYMFONY_VERSION" != "" ]]; then travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS; fi;
-  - if [[ "$DEPENDENCIES" != "" ]]; then travis_retry composer require ${DEPENDENCIES} --no-update $COMPOSER_FLAGS; fi;
-  - if [[ "$STABILITY" != "" ]]; then composer config minimum-stability $STABILITY; fi
-  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then phpenv config-rm xdebug.ini || true; fi;
-  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" != "cron" ]]; then travis_retry composer require satooshi/php-coveralls:^2.0 --no-update $COMPOSER_FLAGS; fi;
+
+  - if [[ "$SYMFONY_VERSION" != "" ]]; then
+      travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS;
+    fi
+  - if [[ "$DEPENDENCIES" != "" ]]; then
+      travis_retry composer require $DEPENDENCIES --no-update $COMPOSER_FLAGS;
+    fi
+  - if [[ "$STABILITY" != "" ]]; then
+      travis_retry composer config minimum-stability $STABILITY;
+    fi
+  - if [[ "$ENABLE_CODE_COVERAGE" != "true" ]]; then
+      phpenv config-rm xdebug.ini || true;
+    fi
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then
+      travis_retry composer require --dev satooshi/php-coveralls:^2.0@dev --no-update $COMPOSER_FLAGS;
+    fi
+
 
 install:
-  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then travis_retry composer require --dev satooshi/php-coveralls; fi
+
+  - travis_retry composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_FLAGS
   - ./vendor/bin/simple-phpunit install
 
+
 script:
-  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then vendor/bin/simple-phpunit --coverage-text --coverage-clover build/logs/clover.xml; else vendor/bin/simple-phpunit -v; fi;
+
+  - ./vendor/bin/simple-phpunit $SIMPLE_PHPUNIT_FLAGS
+
 
 after_success:
-  - if [[ "$ENABLE_CODE_COVERAGE" == "true" && "$TRAVIS_EVENT_TYPE" == "cron" ]]; then php vendor/bin/php-coveralls -v --config .coveralls.yml; fi;
+
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then
+      ./vendor/bin/php-coveralls -vvv --config .coveralls.yml;
+    fi;
