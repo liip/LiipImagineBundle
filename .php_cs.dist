@@ -1,32 +1,47 @@
 <?php
 
-/*
- * This file is part of the `liip/LiipImagineBundle` project.
- *
- * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
- *
- * For the full copyright and license information, please view the LICENSE.md
- * file that was distributed with this source code.
- */
-
-use SLLH\StyleCIBridge\ConfigBridge;
-
-require_once __DIR__.'/vendor/sllh/php-cs-fixer-styleci-bridge/autoload.php';
-
-$header = <<<EOF
+$fileHeaderComment = <<<COMMENT
 This file is part of the `liip/LiipImagineBundle` project.
 
 (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
 
 For the full copyright and license information, please view the LICENSE.md
 file that was distributed with this source code.
-EOF;
+COMMENT;
 
-$config = ConfigBridge::create();
-$config
-    ->setRules(array_merge($config->getRules(), [
-        'header_comment' => ['header' => $header],
-    ]))
-    ->setUsingCache(false);
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__)
+    ->ignoreDotFiles(true)
+    ->ignoreVCS(true)
+    ->exclude(array('build', 'vendor'))
+    ->files()
+    ->name('*.php')
+;
 
-return $config;
+return PhpCsFixer\Config::create()
+    ->setFinder($finder)
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'combine_consecutive_unsets' => true,
+        'header_comment' => ['header' => $fileHeaderComment, 'separate' => 'both'],
+        'heredoc_to_nowdoc' => true,
+        'linebreak_after_opening_tag' => true,
+        'mb_str_functions' => true,
+        'no_php4_constructor' => true,
+        'no_unreachable_default_argument_value' => true,
+        'no_useless_else' => true,
+        'no_useless_return' => true,
+        'ordered_imports' => true,
+        'phpdoc_order' => true,
+        'phpdoc_summary' => false,
+        'psr4' => true,
+        'semicolon_after_instruction' => true,
+        'strict_comparison' => true,
+        'strict_param' => true,
+    ])
+    ->setFinder($finder)
+    ->setUsingCache(true)
+;
