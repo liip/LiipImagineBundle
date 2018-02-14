@@ -22,10 +22,10 @@ class WebPathResolverFactory extends AbstractResolverFactory
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
-        if (!array_key_exists("alt_url", $config)) {
-            $resolverDefinition = $this->getChildResolverDefinition();
-        } else {
+        if ($config["alt_url"]) {
             $resolverDefinition = $this->getChildResolverDefinition(sprintf("alt_%s", $this->getName()));
+        } else {
+            $resolverDefinition = $this->getChildResolverDefinition();
         }
         $resolverDefinition->replaceArgument(2, $config['web_root']);
         $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
