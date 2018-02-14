@@ -200,13 +200,16 @@
         </service>
 
         <!-- Cache resolver -->
-
-        <service id="liip_imagine.cache.resolver.prototype.web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver" public="true" abstract="true">
+        <service id="liip_imagine.cache.resolver.prototype.abstract_web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AbstractWebPathResolver" public="false" abstract="true">
             <argument type="service" id="filesystem" />
             <argument type="service" id="router.request_context" />
             <argument><!-- will be injected by WebPathResolverFactory --></argument>
             <argument><!-- will be injected by WebPathResolverFactory --></argument>
         </service>
+
+        <service id="liip_imagine.cache.resolver.prototype.web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver" public="true" abstract="true" parent="liip_imagine.cache.resolver.prototype.abstract_web_path" />
+
+        <service id="liip_imagine.cache.resolver.prototype.alt_web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AlternativeWebPathResolver" public="true" abstract="true" parent="liip_imagine.cache.resolver.prototype.abstract_web_path"/>
 
         <service id="liip_imagine.cache.resolver.prototype.aws_s3" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver" public="true" abstract="true">
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>

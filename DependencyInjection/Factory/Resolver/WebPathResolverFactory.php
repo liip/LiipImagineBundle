@@ -22,7 +22,11 @@ class WebPathResolverFactory extends AbstractResolverFactory
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
-        $resolverDefinition = $this->getChildResolverDefinition();
+        if (!array_key_exists("alt_url", $config)) {
+            $resolverDefinition = $this->getChildResolverDefinition();
+        } else {
+            $resolverDefinition = $this->getChildResolverDefinition(sprintf("alt_%s", $this->getName()));
+        }
         $resolverDefinition->replaceArgument(2, $config['web_root']);
         $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
         $resolverDefinition->addTag('liip_imagine.cache.resolver', [
@@ -57,6 +61,9 @@ class WebPathResolverFactory extends AbstractResolverFactory
                 ->scalarNode('cache_prefix')
                     ->defaultValue('media/cache')
                     ->cannotBeEmpty()
+                ->end()
+                ->booleanNode('alt_url')
+                    ->defaultFalse()
                 ->end()
             ->end();
     }
