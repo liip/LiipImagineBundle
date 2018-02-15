@@ -263,7 +263,7 @@
 
         <!-- Data loader locators -->
 
-        <service id="liip_imagine.binary.locator.filesystem" class="%liip_imagine.binary.locator.filesystem.class%" public="false" public="true">
+        <service id="liip_imagine.binary.locator.filesystem" class="%liip_imagine.binary.locator.filesystem.class%" public="false">
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
