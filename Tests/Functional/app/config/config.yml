@@ -5,7 +5,7 @@ parameters:
 
 services:
     logger:
-        class: "\\Psr\\Log\\NullLogger"
+        class: \Psr\Log\NullLogger
 
 framework:
 

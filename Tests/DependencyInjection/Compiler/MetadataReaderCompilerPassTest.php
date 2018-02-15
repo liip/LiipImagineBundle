@@ -12,14 +12,15 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
-use stdClass;
+
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass
  */
-class MetadataReaderCompilerPassTest extends \PHPUnit\Framework\TestCase
+class MetadataReaderCompilerPassTest extends TestCase
 {
     /**
      * @param \ReflectionClass $r
@@ -37,6 +38,8 @@ class MetadataReaderCompilerPassTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return mixed[]
+     *
+     * @throws \ReflectionException
      */
     private static function getReaderParamAndDefaultAndExifValues()
     {
@@ -66,6 +69,18 @@ class MetadataReaderCompilerPassTest extends \PHPUnit\Framework\TestCase
             ->willReturn($isExifExtensionLoaded);
 
         return $mock;
+    }
+
+    public function testProcessBasedOnExtensionsInEnvironment()
+    {
+        list($metadataServiceId, $metadataExifClass, $metadataDefaultClass) = static::getReaderParamAndDefaultAndExifValues();
+
+        $container = new ContainerBuilder();
+        $container->setDefinition($metadataServiceId, new Definition($metadataExifClass));
+
+        $pass = new MetadataReaderCompilerPass();
+        $pass->process($container);
+        $this->assertInstanceOf(extension_loaded('exif') ? $metadataExifClass : $metadataDefaultClass, $container->get($metadataServiceId));
     }
 
     public function testProcessWithoutExtExifAddsDefaultReader()

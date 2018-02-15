@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -20,19 +19,12 @@ abstract class AbstractCompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param string           $message
-     * @param mixed[]          $replacements
+     * @param mixed[]          ...$replacements
      */
-    protected function log(ContainerBuilder $container, $message, array $replacements = [])
+    protected function log(ContainerBuilder $container, string $message, ...$replacements): void
     {
-        if (count($replacements) > 0) {
-            $message = vsprintf($message, $replacements);
-        }
-
-        if (SymfonyFramework::hasDirectContainerBuilderLogging()) {
-            $container->log($this, $message);
-        } else {
-            $compiler = $container->getCompiler();
-            $compiler->addLogMessage($compiler->getLoggingFormatter()->format($this, $message));
-        }
+        $container->log($this, sprintf(
+            '[liip/imagine-bundle] %s', empty($replacements) ? $message : vsprintf($message, $replacements)
+        ));
     }
 }

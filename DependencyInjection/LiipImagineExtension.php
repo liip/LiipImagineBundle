@@ -59,6 +59,9 @@ class LiipImagineExtension extends Extension
 
     /**
      * @see \Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
+     *
+     * @param array            $configs
+     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {

@@ -205,6 +205,8 @@ class CacheManagerTest extends AbstractTest
     /**
      * @dataProvider invalidPathProvider
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @param string $path
      */
     public function testResolveInvalidPath($path)
     {

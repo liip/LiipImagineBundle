@@ -194,6 +194,8 @@ class AmazonS3Resolver implements ResolverInterface
      *
      * @param string $objectPath
      *
+     * @throws \S3_Exception
+     *
      * @return bool
      */
     protected function objectExists($objectPath)

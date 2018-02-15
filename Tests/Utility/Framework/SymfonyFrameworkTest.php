@@ -11,14 +11,14 @@
 
 namespace Liip\ImagineBundle\Tests\Utility\Framework;
 
-use Liip\ImagineBundle\Tests\Filter\PasteFilterLoaderTest;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * @covers \Liip\ImagineBundle\Utility\Framework\SymfonyFramework
  */
-class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
+class SymfonyFrameworkTest extends TestCase
 {
     public function testKernelComparisonForCurrentKernel()
     {
@@ -33,15 +33,6 @@ class SymfonyFrameworkTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(SymfonyFramework::isKernelLessThan(100, 100, 100));
         $this->assertFalse(SymfonyFramework::isKernelLessThan(1, 1, 1));
-    }
-
-    public function testHasDirectContainerBuilderLogging()
-    {
-        if (SymfonyFramework::isKernelGreaterThanOrEqualTo(3, 3)) {
-            $this->assertTrue(SymfonyFramework::hasDirectContainerBuilderLogging());
-        } else {
-            $this->assertFalse(SymfonyFramework::hasDirectContainerBuilderLogging());
-        }
     }
 
     public function testGetContainerResolvableRootWebPath()

@@ -33,7 +33,7 @@ class PostProcessorsCompilerPass extends AbstractCompilerPass
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addPostProcessor', [$tag[0]['post_processor'], new Reference($id)]);
-                $this->log($container, 'Registered imagine-bimdle filter post-processor: %s', [$id]);
+                $this->log($container, 'Registered filter post-processor: %s', $id);
             }
         }
     }

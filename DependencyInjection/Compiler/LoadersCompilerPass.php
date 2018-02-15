@@ -28,7 +28,7 @@ class LoadersCompilerPass extends AbstractCompilerPass
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addLoader', [$tag[0]['loader'], new Reference($id)]);
-                $this->log($container, 'Registered imagine-bimdle binary loader: %s', [$id]);
+                $this->log($container, 'Registered binary loader: %s', $id);
             }
         }
     }

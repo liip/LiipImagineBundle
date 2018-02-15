@@ -37,6 +37,7 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
      * Constructor.
      *
      * @param string $pngquantBin Path to the pngquant binary
+     * @param string $quality
      */
     public function __construct($pngquantBin = '/usr/bin/pngquant', $quality = '80-100')
     {

@@ -43,7 +43,7 @@ class ResizeFilterLoaderTest extends AbstractTest
         $options = array();
         $options['size'] = array($width, $height);
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**

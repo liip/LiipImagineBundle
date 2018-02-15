@@ -11,14 +11,10 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
-use Liip\ImagineBundle\DependencyInjection\Factory\ChildDefinitionTrait;
 use Symfony\Component\DependencyInjection\ChildDefinition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 abstract class AbstractResolverFactory implements ResolverFactoryInterface
 {
-    use ChildDefinitionTrait;
-
     /**
      * @var string
      */
@@ -27,10 +23,10 @@ abstract class AbstractResolverFactory implements ResolverFactoryInterface
     /**
      * @param string|null $name
      *
-     * @return ChildDefinition|DefinitionDecorator
+     * @return ChildDefinition
      */
     final protected function getChildResolverDefinition($name = null)
     {
-        return $this->getChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
+        return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }
 }

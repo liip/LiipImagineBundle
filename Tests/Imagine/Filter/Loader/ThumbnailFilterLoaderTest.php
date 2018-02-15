@@ -61,7 +61,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
         $options['size'] = array($width, $height);
         $options['allow_upscale'] = true;
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**

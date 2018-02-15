@@ -16,6 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactor
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Configuration
  */
-class ConfigurationTest extends \PHPUnit\Framework\TestCase
+class ConfigurationTest extends TestCase
 {
     public function testImplementsConfigurationInterface()
     {

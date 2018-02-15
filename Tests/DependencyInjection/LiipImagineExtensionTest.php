@@ -16,7 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFacto
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
@@ -87,6 +87,9 @@ class LiipImagineExtensionTest extends AbstractTest
 
     /**
      * @dataProvider provideFactoryData
+     *
+     * @param string $service
+     * @param string $factory
      */
     public function testFactoriesConfiguration($service, $factory)
     {

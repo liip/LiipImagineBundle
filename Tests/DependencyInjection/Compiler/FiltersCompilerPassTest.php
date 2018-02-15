@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass
@@ -20,20 +21,34 @@ class FiltersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        $m = $this->createDefinition();
-        $l = $this->createDefinition(array('liip_imagine.filter.loader' => array(
-            'loader' => 'foobar',
-        )));
+        list($d, $m) = $this->getFiltersCompilerPassContainerDefinitions();
 
-        $container = $this->createContainerBuilder(array(
-            'filter.loader.foobar' => $l,
-            'liip_imagine.filter.manager' => $m,
-        ));
+        $container = $this->createContainerBuilder($d);
 
         $pass = new FiltersCompilerPass();
 
         $this->assertDefinitionMethodCallsNone($m);
         $pass->process($container);
         $this->assertDefinitionMethodCallCount(1, $m);
+    }
+
+    public function testProcessLogging()
+    {
+        $this->assertContainerLogMethodCalledForCompilerPass(
+            new FiltersCompilerPass(),
+            $this->getFiltersCompilerPassContainerDefinitions()
+        );
+    }
+
+    /**
+     * @return Definition[]|array[]
+     */
+    private function getFiltersCompilerPassContainerDefinitions(): array
+    {
+        return $this->getCompilerPassContainerDefinitions(
+            'filter.loader.foobar',
+            'liip_imagine.filter.manager',
+            ['liip_imagine.filter.loader' => ['loader' => 'foobar']]
+        );
     }
 }

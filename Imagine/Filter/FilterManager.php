@@ -98,18 +98,15 @@ class FilterManager
      *
      * @throws \InvalidArgumentException
      *
-     * @return Binary
+     * @return BinaryInterface
      */
     public function apply(BinaryInterface $binary, array $config)
     {
-        $config = array_replace(
-            [
-                'filters' => [],
-                'quality' => 100,
-                'animated' => false,
-            ],
-            $config
-        );
+        $config = array_replace([
+            'filters' => [],
+            'quality' => 100,
+            'animated' => false,
+        ], $config);
 
         if ($binary instanceof FileBinaryInterface) {
             $image = $this->imagine->open($binary->getPath());

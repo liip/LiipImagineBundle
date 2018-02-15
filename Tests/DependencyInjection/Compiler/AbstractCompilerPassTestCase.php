@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
+use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -34,7 +35,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param array $definitions
+     * @param Definition[] $definitions
      *
      * @return ContainerBuilder
      */
@@ -47,6 +48,43 @@ class AbstractCompilerPassTestCase extends AbstractTest
         }
 
         return $container;
+    }
+
+    /**
+     * @param string[]     $methods
+     * @param Definition[] $definitions
+     *
+     * @return ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createContainerBuilderMock(array $methods = array(), array $definitions = array())
+    {
+        $container = $this
+            ->getMockBuilder(ContainerBuilder::class)
+            ->setMethods($methods)
+            ->getMock();
+
+        foreach ($definitions as $name => $object) {
+            $container->setDefinition($name, $object);
+        }
+
+        return $container;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $container
+     * @param mixed[]                                  ...$expectedArguments
+     */
+    protected function expectContainerLogMethodCalledOnce(\PHPUnit_Framework_MockObject_MockObject $container, ...$expectedArguments): void
+    {
+        $expectation = $container
+            ->expects($this->once())
+            ->method('log');
+
+        if (!empty($expectedArguments)) {
+            $expectation->with(...$expectedArguments);
+        } else {
+            $expectation->withAnyParameters();
+        }
     }
 
     /**
@@ -66,5 +104,35 @@ class AbstractCompilerPassTestCase extends AbstractTest
     protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = null)
     {
         $this->assertCount($expect, $definition->getMethodCalls(), $message);
+    }
+
+    /**
+     * @param AbstractCompilerPass $pass
+     * @param Definition[]|array[] $definitions
+     */
+    protected function assertContainerLogMethodCalledForCompilerPass(AbstractCompilerPass $pass, array $definitions): void
+    {
+        $container = $this->createContainerBuilderMock(['log'], $definitions[0]);
+
+        $this->expectContainerLogMethodCalledOnce($container);
+        $pass->process($container);
+    }
+
+    /**
+     * @param string $definition
+     * @param string $manager
+     * @param array  $tags
+     *
+     * @return Definition[]|array[]
+     */
+    protected function getCompilerPassContainerDefinitions(string $definition, string $manager, array $tags): array
+    {
+        $m = $this->createDefinition();
+        $l = $this->createDefinition($tags);
+
+        return [[
+            $definition => $l,
+            $manager => $m,
+        ], $m];
     }
 }

@@ -28,7 +28,7 @@ class FiltersCompilerPass extends AbstractCompilerPass
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addLoader', [$tag[0]['loader'], new Reference($id)]);
-                $this->log($container, 'Registered imagine-bimdle filter loader: %s', [$id]);
+                $this->log($container, 'Registered filter loader: %s', $id);
             }
         }
     }

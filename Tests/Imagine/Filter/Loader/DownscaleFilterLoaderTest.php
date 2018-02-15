@@ -24,22 +24,29 @@ class DownscaleFilterLoaderTest extends AbstractTest
 {
     /**
      * @dataProvider provideSizes
+     *
+     * @param Box $resultSize
+     * @param Box $initialSize
      */
-    public function testDontScaleUp($initialSize, $resultSize)
+    public function testDontScaleUp($resultSize, $initialSize)
     {
         $this->assertLessThanOrEqual($initialSize->getHeight(), $resultSize->getHeight());
         $this->assertLessThanOrEqual($initialSize->getWidth(), $resultSize->getWidth());
     }
-
     /**
      * @dataProvider provideSizes
+     *
+     * @param Box $resultSize
      */
-    public function testFitBoundingBox($initialSize, $resultSize)
+    public function testFitBoundingBox($resultSize)
     {
         $this->assertLessThanOrEqual(100, $resultSize->getHeight());
         $this->assertLessThanOrEqual(90, $resultSize->getWidth());
     }
 
+    /**
+     * @return \Generator|Box[]
+     */
     public function provideSizes()
     {
         $loader = new DownscaleFilterLoader();
@@ -59,6 +66,6 @@ class DownscaleFilterLoaderTest extends AbstractTest
 
         $loader->load($image, array('max' => array(100, 90)));
 
-        yield [$initialSize, $resultSize];
+        yield [$resultSize, $initialSize];
     }
 }

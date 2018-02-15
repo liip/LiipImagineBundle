@@ -45,10 +45,6 @@ class ScaleFilterLoaderTest extends AbstractTest
 
     protected function getUpscaleMockImage()
     {
-        $mockImageSize = new Box(
-            self::UPSCALE_DUMMY_IMAGE_WIDTH,
-            self::UPSCALE_DUMMY_IMAGE_HEIGHT
-        );
         $mockImage = parent::getImageInterfaceMock();
         $mockImage->method('getSize')->willReturn(new Box(
             self::UPSCALE_DUMMY_IMAGE_WIDTH,
@@ -60,10 +56,6 @@ class ScaleFilterLoaderTest extends AbstractTest
 
     protected function getImageInterfaceMock()
     {
-        $mockImageSize = new Box(
-            self::DUMMY_IMAGE_WIDTH,
-            self::DUMMY_IMAGE_HEIGHT
-        );
         $mockImage = parent::getImageInterfaceMock();
         $mockImage->method('getSize')->willReturn(new Box(
             self::DUMMY_IMAGE_WIDTH,
@@ -88,18 +80,18 @@ class ScaleFilterLoaderTest extends AbstractTest
             ))
             ->willReturn($image);
 
-        $result = $loader->load($image, array(
+        $loader->load($image, array(
           'to' => 1.0,
         ));
     }
 
     /**
-     * @param int[] $dimension
-     * @param Box   $expected
-     *
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      *
      * @dataProvider dimensionsDataProvider
+     *
+     * @param int[] $dimensions
+     * @param Box   $expected
      */
     public function testItShouldUseDimensions($dimensions, $expected)
     {
@@ -115,7 +107,7 @@ class ScaleFilterLoaderTest extends AbstractTest
             'dim' => $dimensions,
         );
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**
@@ -143,6 +135,9 @@ class ScaleFilterLoaderTest extends AbstractTest
 
     /**
      * @dataProvider minScaleDataProvider
+     *
+     * @param int[] $dimensions
+     * @param Box   $expected
      */
     public function testShouldScale($dimensions, $expected)
     {
@@ -157,7 +152,7 @@ class ScaleFilterLoaderTest extends AbstractTest
             'min' => $dimensions,
         );
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**
@@ -173,6 +168,9 @@ class ScaleFilterLoaderTest extends AbstractTest
 
     /**
      * @dataProvider minNotScaleDataProvider
+     *
+     * @param int[] $dimensions
+     * @param Box   $expected
      */
     public function testShouldNotScale($dimensions, $expected)
     {
@@ -187,7 +185,7 @@ class ScaleFilterLoaderTest extends AbstractTest
             'min' => $dimensions,
         );
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**

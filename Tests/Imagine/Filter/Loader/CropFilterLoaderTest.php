@@ -51,7 +51,7 @@ class CropFilterLoaderTest extends AbstractTest
         $options['start'] = $coordinates;
         $options['size'] = $area;
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**
