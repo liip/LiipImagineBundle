@@ -11,8 +11,28 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
+use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\RequestContext;
+
 class WebPathResolver extends AbstractWebPathResolver
 {
+    private $requestContext;
+    
+    /**
+     * @param Filesystem     $filesystem
+     * @param PathResolverInterface $pathResolver
+     * @param RequestContext $requestContext
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        PathResolverInterface $pathResolver,
+        RequestContext $requestContext
+    ) {
+        parent::__construct($filesystem, $pathResolver);
+        $this->requestContext = $requestContext;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -20,7 +40,7 @@ class WebPathResolver extends AbstractWebPathResolver
     {
         return sprintf('%s/%s',
             $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter)
+            $this->getPathResolver()->getFileUrl($path, $filter)
         );
     }
     

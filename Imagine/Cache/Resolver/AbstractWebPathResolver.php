@@ -3,8 +3,8 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Routing\RequestContext;
 
 abstract class AbstractWebPathResolver implements ResolverInterface
 {
@@ -14,43 +14,20 @@ abstract class AbstractWebPathResolver implements ResolverInterface
     protected $filesystem;
     
     /**
-     * @var RequestContext
+     * @var PathResolverInterface
      */
-    protected $requestContext;
-    
-    /**
-     * @var string
-     */
-    protected $webRoot;
-    
-    /**
-     * @var string
-     */
-    protected $cachePrefix;
-    
-    /**
-     * @var string
-     */
-    protected $cacheRoot;
+    protected $pathResolver;
     
     /**
      * @param Filesystem     $filesystem
-     * @param RequestContext $requestContext
-     * @param string         $webRootDir
-     * @param string         $cachePrefix
+     * @param PathResolverInterface $pathResolver
      */
     public function __construct(
         Filesystem $filesystem,
-        RequestContext $requestContext,
-        $webRootDir,
-        $cachePrefix = 'media/cache'
+        PathResolverInterface $pathResolver
     ) {
         $this->filesystem = $filesystem;
-        $this->requestContext = $requestContext;
-        
-        $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
-        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
-        $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
+        $this->pathResolver = $pathResolver;
     }
     
     /**
@@ -63,7 +40,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return is_file($this->getFilePath($path, $filter));
+        return is_file($this->pathResolver->getFilePath($path, $filter));
     }
     
     /**
@@ -72,7 +49,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
+            $this->pathResolver->getFilePath($path, $filter),
             $binary->getContent()
         );
     }
@@ -89,7 +66,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
         if (empty($paths)) {
             $filtersCacheDir = [];
             foreach ($filters as $filter) {
-                $filtersCacheDir[] = $this->cacheRoot.'/'.$filter;
+                $filtersCacheDir[] = $this->pathResolver->getCacheRoot().'/'.$filter;
             }
             
             $this->filesystem->remove($filtersCacheDir);
@@ -99,27 +76,16 @@ abstract class AbstractWebPathResolver implements ResolverInterface
         
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter));
+                $this->filesystem->remove($this->pathResolver->getFilePath($path, $filter));
             }
         }
     }
     
     /**
-     * {@inheritdoc}
+     * @return PathResolverInterface
      */
-    protected function getFilePath($path, $filter)
+    protected function getPathResolver()
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFileUrl($path, $filter)
-    {
-        // crude way of sanitizing URL scheme ("protocol") part
-        $path = str_replace('://', '---', $path);
-        
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        return $this->pathResolver;
     }
 }

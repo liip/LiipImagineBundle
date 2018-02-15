@@ -50,21 +50,27 @@ class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
         $container = new ContainerBuilder();
 
         $resolver = new WebPathResolverFactory();
-
-        $resolver->create($container, 'the_resolver_name', array(
-            'web_root' => 'theWebRoot',
-            'cache_prefix' => 'theCachePrefix',
-            'alt_url' => false,
-        ));
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
-
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        $this->assertEquals('liip_imagine.cache.resolver.prototype.web_path', $resolverDefinition->getParent());
-
-        $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(2));
-        $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(3));
+    
+        $testCases = [
+            ['alt_url' => false, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.web_path'],
+            ['alt_url' => true, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.alt_web_path'],
+        ];
+        foreach ($testCases as $testCase) {
+            $resolver->create($container, 'the_resolver_name', array(
+                'web_root' => 'theWebRoot',
+                'cache_prefix' => 'theCachePrefix',
+                'alt_url' => $testCase["alt_url"],
+            ));
+    
+            $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+    
+            $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
+            $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
+            $this->assertEquals($testCase['resolverPrototype'], $resolverDefinition->getParent());
+    
+            $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(2));
+            $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(3));
+        }
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()

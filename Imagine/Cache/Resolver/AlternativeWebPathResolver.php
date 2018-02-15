@@ -9,6 +9,6 @@ class AlternativeWebPathResolver extends AbstractWebPathResolver
      */
     public function resolve($path, $filter)
     {
-        return sprintf('/%s', $this->getFileUrl($path, $filter));
+        return sprintf('/%s', $this->getPathResolver()->getFileUrl($path, $filter));
     }
 }
