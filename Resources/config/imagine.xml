@@ -101,13 +101,13 @@
     <services>
         <!-- Utility services -->
 
-        <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%">
+        <service id="liip_imagine.filter.manager" class="%liip_imagine.filter.manager.class%" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
         </service>
 
-        <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%">
+        <service id="liip_imagine.data.manager" class="%liip_imagine.data.manager.class%" public="true">
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument type="service" id="liip_imagine.filter.configuration" />
@@ -115,7 +115,7 @@
             <argument>%liip_imagine.default_image%</argument>
         </service>
 
-        <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%">
+        <service id="liip_imagine.cache.manager" class="%liip_imagine.cache.manager.class%" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
             <argument type="service" id="liip_imagine.cache.signer" />
@@ -123,13 +123,13 @@
             <argument>%liip_imagine.cache.resolver.default%</argument>
         </service>
 
-        <service id="liip_imagine.filter.configuration" class="%liip_imagine.filter.configuration.class%">
+        <service id="liip_imagine.filter.configuration" class="%liip_imagine.filter.configuration.class%" public="true">
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
 
         <!-- Controller -->
 
-        <service id="liip_imagine.controller" class="%liip_imagine.controller.class%">
+        <service id="liip_imagine.controller" class="%liip_imagine.controller.class%"  public="true">
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
@@ -142,7 +142,7 @@
 
         <!-- ImagineInterface instances -->
 
-        <service id="liip_imagine" alias="liip_imagine.gd" />
+        <service id="liip_imagine" alias="liip_imagine.gd" public="true" />
 
         <service id="liip_imagine.gd" class="%liip_imagine.gd.class%" public="false" />
 
@@ -157,107 +157,107 @@
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
-        <service id="liip_imagine.templating.helper" class="%liip_imagine.templating.helper.class%">
+        <service id="liip_imagine.templating.helper" class="%liip_imagine.templating.helper.class%" public="true">
             <tag name="templating.helper" alias="imagine" />
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
         <!-- Filter loaders -->
 
-        <service id="liip_imagine.filter.loader.relative_resize" class="%liip_imagine.filter.loader.relative_resize.class%">
+        <service id="liip_imagine.filter.loader.relative_resize" class="%liip_imagine.filter.loader.relative_resize.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="relative_resize" />
         </service>
 
-        <service id="liip_imagine.filter.loader.resize" class="%liip_imagine.filter.loader.resize.class%">
+        <service id="liip_imagine.filter.loader.resize" class="%liip_imagine.filter.loader.resize.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="resize" />
         </service>
 
-        <service id="liip_imagine.filter.loader.thumbnail" class="%liip_imagine.filter.loader.thumbnail.class%">
+        <service id="liip_imagine.filter.loader.thumbnail" class="%liip_imagine.filter.loader.thumbnail.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="thumbnail" />
         </service>
 
-        <service id="liip_imagine.filter.loader.crop" class="%liip_imagine.filter.loader.crop.class%">
+        <service id="liip_imagine.filter.loader.crop" class="%liip_imagine.filter.loader.crop.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="crop" />
         </service>
 
-        <service id="liip_imagine.filter.loader.grayscale" class="%liip_imagine.filter.loader.grayscale.class%">
+        <service id="liip_imagine.filter.loader.grayscale" class="%liip_imagine.filter.loader.grayscale.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="grayscale" />
         </service>
 
-        <service id="liip_imagine.filter.loader.paste" class="%liip_imagine.filter.loader.paste.class%">
+        <service id="liip_imagine.filter.loader.paste" class="%liip_imagine.filter.loader.paste.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="paste" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.root_dir%</argument>
         </service>
 
-        <service id="liip_imagine.filter.loader.watermark" class="%liip_imagine.filter.loader.watermark.class%">
+        <service id="liip_imagine.filter.loader.watermark" class="%liip_imagine.filter.loader.watermark.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="watermark" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.root_dir%</argument>
         </service>
 
-        <service id="liip_imagine.filter.loader.background" class="%liip_imagine.filter.loader.background.class%">
+        <service id="liip_imagine.filter.loader.background" class="%liip_imagine.filter.loader.background.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="background" />
             <argument type="service" id="liip_imagine" />
         </service>
 
-        <service id="liip_imagine.filter.loader.strip" class="%liip_imagine.filter.loader.strip.class%">
+        <service id="liip_imagine.filter.loader.strip" class="%liip_imagine.filter.loader.strip.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="strip" />
         </service>
 
-        <service id="liip_imagine.filter.loader.scale" class="%liip_imagine.filter.loader.scale.class%">
+        <service id="liip_imagine.filter.loader.scale" class="%liip_imagine.filter.loader.scale.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="scale" />
         </service>
 
-        <service id="liip_imagine.filter.loader.upscale" class="%liip_imagine.filter.loader.upscale.class%">
+        <service id="liip_imagine.filter.loader.upscale" class="%liip_imagine.filter.loader.upscale.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="upscale" />
         </service>
 
-        <service id="liip_imagine.filter.loader.downscale" class="%liip_imagine.filter.loader.downscale.class%">
+        <service id="liip_imagine.filter.loader.downscale" class="%liip_imagine.filter.loader.downscale.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="downscale" />
         </service>
 
-        <service id="liip_imagine.filter.loader.auto_rotate" class="%liip_imagine.filter.loader.auto_rotate.class%">
+        <service id="liip_imagine.filter.loader.auto_rotate" class="%liip_imagine.filter.loader.auto_rotate.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="auto_rotate" />
         </service>
 
-        <service id="liip_imagine.filter.loader.rotate" class="%liip_imagine.filter.loader.rotate.class%">
+        <service id="liip_imagine.filter.loader.rotate" class="%liip_imagine.filter.loader.rotate.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="rotate" />
         </service>
 
-        <service id="liip_imagine.filter.loader.flip" class="%liip_imagine.filter.loader.flip.class%">
+        <service id="liip_imagine.filter.loader.flip" class="%liip_imagine.filter.loader.flip.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="flip" />
         </service>
 
-        <service id="liip_imagine.filter.loader.interlace" class="%liip_imagine.filter.loader.interlace.class%">
+        <service id="liip_imagine.filter.loader.interlace" class="%liip_imagine.filter.loader.interlace.class%" public="true">
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
 
-        <service id="liip_imagine.filter.loader.resample" class="%liip_imagine.filter.loader.resample.class%">
+        <service id="liip_imagine.filter.loader.resample" class="%liip_imagine.filter.loader.resample.class%" public="true">
             <argument type="service" id="liip_imagine" />
             <tag name="liip_imagine.filter.loader" loader="resample" />
         </service>
 
         <!-- Data loaders -->
 
-        <service id="liip_imagine.binary.loader.prototype.filesystem" class="%liip_imagine.binary.loader.filesystem.class%">
+        <service id="liip_imagine.binary.loader.prototype.filesystem" class="%liip_imagine.binary.loader.filesystem.class%" public="true">
             <argument type="service" id="liip_imagine.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
-        <service id="liip_imagine.binary.loader.prototype.stream" class="%liip_imagine.binary.loader.stream.class%">
+        <service id="liip_imagine.binary.loader.prototype.stream" class="%liip_imagine.binary.loader.stream.class%" public="true">
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
             <argument><!-- will be injected by StreamLoaderFactory --></argument>
         </service>
 
-        <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true">
+        <service id="liip_imagine.binary.loader.prototype.flysystem" class="%liip_imagine.binary.loader.flysystem.class%" abstract="true" public="true">
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
 
-        <service id="liip_imagine.binary.loader.prototype.chain" class="%liip_imagine.binary.loader.chain.class%" abstract="true">
+        <service id="liip_imagine.binary.loader.prototype.chain" class="%liip_imagine.binary.loader.chain.class%" abstract="true" public="true">
             <argument><!-- will be injected by ChainLoaderFactory --></argument>
         </service>
 
@@ -315,7 +315,7 @@
 
         <!-- Form types -->
 
-        <service id="liip_imagine.form.type.image" class="%liip_imagine.form.type.image.class%">
+        <service id="liip_imagine.form.type.image" class="%liip_imagine.form.type.image.class%" public="true">
             <tag name="form.type" alias="liip_imagine_image" />
         </service>
 
@@ -324,23 +324,25 @@
         <service
             id="liip_imagine.mime_type_guesser"
             class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface"
+            public="true"
         />
 
         <service
             id="liip_imagine.extension_guesser"
             class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface"
+            public="true"
         />
 
-        <service id="liip_imagine.binary.mime_type_guesser" class="%liip_imagine.binary.mime_type_guesser.class%">
+        <service id="liip_imagine.binary.mime_type_guesser" class="%liip_imagine.binary.mime_type_guesser.class%" public="true">
             <argument type="service" id="liip_imagine.mime_type_guesser" />
         </service>
 
-        <service id="liip_imagine.cache.signer" class="%liip_imagine.cache.signer.class%">
+        <service id="liip_imagine.cache.signer" class="%liip_imagine.cache.signer.class%" public="true">
             <argument>%kernel.secret%</argument>
         </service>
 
         <!-- Post processors -->
-        <service id="liip_imagine.filter.post_processor.jpegoptim" class="%liip_imagine.filter.post_processor.jpegoptim.class%">
+        <service id="liip_imagine.filter.post_processor.jpegoptim" class="%liip_imagine.filter.post_processor.jpegoptim.class%" public="true">
             <argument>%liip_imagine.jpegoptim.binary%</argument>
             <argument>%liip_imagine.jpegoptim.stripAll%</argument>
             <argument>%liip_imagine.jpegoptim.max%</argument>
@@ -348,18 +350,18 @@
             <argument>%liip_imagine.jpegoptim.tempDir%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="jpegoptim" />
         </service>
-        <service id="liip_imagine.filter.post_processor.optipng" class="%liip_imagine.filter.post_processor.optipng.class%">
+        <service id="liip_imagine.filter.post_processor.optipng" class="%liip_imagine.filter.post_processor.optipng.class%" public="true">
             <argument>%liip_imagine.optipng.binary%</argument>
             <argument>%liip_imagine.optipng.level%</argument>
             <argument>%liip_imagine.optipng.stripAll%</argument>
             <argument>%liip_imagine.optipng.tempDir%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="optipng" />
         </service>
-        <service id="liip_imagine.filter.post_processor.pngquant" class="%liip_imagine.filter.post_processor.pngquant.class%">
+        <service id="liip_imagine.filter.post_processor.pngquant" class="%liip_imagine.filter.post_processor.pngquant.class%" public="true">
             <argument>%liip_imagine.pngquant.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="pngquant" />
         </service>
-        <service id="liip_imagine.filter.post_processor.mozjpeg" class="%liip_imagine.filter.post_processor.mozjpeg.class%">
+        <service id="liip_imagine.filter.post_processor.mozjpeg" class="%liip_imagine.filter.post_processor.mozjpeg.class%" public="true">
             <argument>%liip_imagine.mozjpeg.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
