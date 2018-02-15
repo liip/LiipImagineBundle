@@ -13,9 +13,9 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
+use Liip\ImagineBundle\Compat\ProcessBuilder;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\ProcessBuilder;
 
 class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
 {
