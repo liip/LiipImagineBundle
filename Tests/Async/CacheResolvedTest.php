@@ -6,6 +6,9 @@ use Enqueue\Bundle\EnqueueBundle;
 use Liip\ImagineBundle\Async\CacheResolved;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Async\CacheResolved
+ */
 class CacheResolvedTest extends TestCase
 {
     public static function setUpBeforeClass()

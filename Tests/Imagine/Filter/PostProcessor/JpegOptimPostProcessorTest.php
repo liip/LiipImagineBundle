@@ -7,6 +7,9 @@ use Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor
+ */
 class JpegOptimPostProcessorTest extends AbstractTest
 {
     public function testJpegOptimPostProcessor()
