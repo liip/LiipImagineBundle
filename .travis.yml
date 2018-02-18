@@ -7,15 +7,14 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-
 env:
 
   global:
     - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
-    - COVERALLS_ENABLED="false"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
     - PHPCSFIXER_ENABLED="false"
+    - COVERALLS_ENABLED="false"
 
 matrix:
 
@@ -84,12 +83,10 @@ before_install:
       travis_retry composer require --dev satooshi/php-coveralls:^2.0@dev --no-update $COMPOSER_FLAGS;
     fi
 
-
 install:
 
   - travis_retry composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_FLAGS
   - ./vendor/bin/simple-phpunit install
-
 
 script:
 
@@ -99,7 +96,6 @@ script:
   - if [[ "$PHPCSFIXER_ENABLED" == "true" ]]; then
       vendor/bin/php-cs-fixer --dry-run --diff -vvv fix;
     fi
-
 
 after_success:
 
