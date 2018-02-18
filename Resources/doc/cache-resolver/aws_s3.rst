@@ -34,10 +34,11 @@ To begin, you must assign your AWS key, secret, bucket, and region to their resp
     # app/config/config.yml or app/config/parameters.yml
 
     parameters:
-        amazon.s3.key:    "your-aws-key"
-        amazon.s3.secret: "your-aws-secret"
-        amazon.s3.bucket: "your-bucket.example.com"
-        amazon.s3.region: "your-bucket-region"
+        amazon.s3.key:     "your-aws-key"
+        amazon.s3.secret:  "your-aws-secret"
+        amazon.s3.bucket:  "your-bucket.example.com"
+        amazon.s3.region:  "your-bucket-region"
+        amazon.s3.version: "2006-03-01"
 
 
 Prerequisites
@@ -59,7 +60,7 @@ Create Resolver from a Factory
                             key:    "%amazon.s3.key%"
                             secret: "%amazon.s3.secret%"
                         region: "%amazon.s3.region%"
-                        version: "2006-03-01"
+                        version: "%amazon.s3.version%"
                     bucket: "%amazon.s3.bucket%"
                     get_options:
                         Scheme: https
@@ -101,6 +102,7 @@ You have to set up the services required:
                 -
                     credentials: { key: "%amazon.s3.key%", secret: "%amazon.s3.secret%" }
                     region: "%amazon.s3.region%"
+                    version: "%amazon.s3.version%"
 
         acme.imagine.cache.resolver.amazon_s3:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
@@ -136,6 +138,8 @@ You have to set up the services required:
                 -
                     credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
                     region: %amazon.s3.region%
+                    version: "%amazon.s3.version%"
+
 
 Usage
 -----
