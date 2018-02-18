@@ -92,7 +92,7 @@ class AmazonS3Resolver implements ResolverInterface
         $storageResponse = $this->storage->create_object($this->bucket, $objectPath, [
             'body' => $binary->getContent(),
             'contentType' => $binary->getMimeType(),
-            'length' => strlen($binary->getContent()),
+            'length' => mb_strlen($binary->getContent()),
             'acl' => $this->acl,
         ]);
 

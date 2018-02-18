@@ -16,6 +16,9 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
+/**
+ * @coversNothing
+ */
 class AbstractCompilerPassTestCase extends AbstractTest
 {
     /**
@@ -23,7 +26,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      *
      * @return Definition
      */
-    protected function createDefinition(array $tags = array())
+    protected function createDefinition(array $tags = [])
     {
         $definition = new Definition();
 
@@ -39,7 +42,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      *
      * @return ContainerBuilder
      */
-    protected function createContainerBuilder(array $definitions = array())
+    protected function createContainerBuilder(array $definitions = [])
     {
         $container = new ContainerBuilder();
 
@@ -56,7 +59,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      *
      * @return ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createContainerBuilderMock(array $methods = array(), array $definitions = array())
+    protected function createContainerBuilderMock(array $methods = [], array $definitions = [])
     {
         $container = $this
             ->getMockBuilder(ContainerBuilder::class)

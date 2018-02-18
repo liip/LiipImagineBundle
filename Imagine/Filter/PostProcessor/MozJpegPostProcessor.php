@@ -80,31 +80,31 @@ class MozJpegPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      */
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'])) {
+        $type = mb_strtolower($binary->getMimeType());
+        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
             return $binary;
         }
 
         $processArguments = [$this->mozjpegBin];
 
         // Places emphasis on DC
-        $processArguments[] =  '-quant-table';
-        $processArguments[] =  2;
+        $processArguments[] = '-quant-table';
+        $processArguments[] = 2;
 
         $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
-        if ($transformQuality !== null) {
-            $processArguments[] =  '-quality';
-            $processArguments[] =  $transformQuality;
+        if (null !== $transformQuality) {
+            $processArguments[] = '-quality';
+            $processArguments[] = $transformQuality;
         }
 
-        $processArguments[] =  '-optimise';
+        $processArguments[] = '-optimise';
 
         // Favor stdin/stdout so we don't waste time creating a new file.
         $proc = new Process($processArguments);
         $proc->setInput($binary->getContent());
         $proc->run();
 
-        if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
+        if (false !== mb_strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
             throw new ProcessFailedException($proc);
         }
 

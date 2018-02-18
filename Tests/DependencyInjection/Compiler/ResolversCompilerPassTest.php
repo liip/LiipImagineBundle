@@ -21,7 +21,7 @@ class ResolversCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        list($d, $m) = $this->getResolversCompilerPassContainerDefinitions();
+        [$d, $m] = $this->getResolversCompilerPassContainerDefinitions();
 
         $container = $this->createContainerBuilder($d);
 

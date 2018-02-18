@@ -21,7 +21,7 @@ class PostProcessorsCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        list($d, $m) = $this->getPostProcessorsCompilerPassContainerDefinitions();
+        [$d, $m] = $this->getPostProcessorsCompilerPassContainerDefinitions();
 
         $container = $this->createContainerBuilder($d);
 

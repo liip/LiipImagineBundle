@@ -28,10 +28,9 @@ class InterlaceFilterLoaderTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('interlace')
-            ->with('TEST')
-        ;
+            ->with('TEST');
 
-        $result = $loader->load($image, array('mode' => 'TEST'));
+        $result = $loader->load($image, ['mode' => 'TEST']);
 
         $this->assertInstanceOf(ImageInterface::class, $result);
     }

@@ -62,8 +62,8 @@ class PasteFilterLoaderTest extends AbstractTest
             ->willReturn($image);
         $loader = new PasteFilterLoader($imagineMock, '');
 
-        $options = array();
-        $options['start'] = array($x, $y);
+        $options = [];
+        $options['start'] = [$x, $y];
         $options['image'] = '';
 
         $loader->load($image, $options);
@@ -74,10 +74,10 @@ class PasteFilterLoaderTest extends AbstractTest
      */
     public function pasteProvider()
     {
-        return array(
-            array(200, 129, new Point(200, 129)),
-            array(50, 50, new Point(50, 50)),
-            array(1, 30, new Point(1, 30)),
-        );
+        return [
+            [200, 129, new Point(200, 129)],
+            [50, 50, new Point(50, 50)],
+            [1, 30, new Point(1, 30)],
+        ];
     }
 }

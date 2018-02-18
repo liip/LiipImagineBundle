@@ -223,7 +223,7 @@ class LiipImagineBundleTest extends AbstractTest
      */
     protected function createContainerBuilderMock()
     {
-        return $this->createObjectMock(ContainerBuilder::class, array(), false);
+        return $this->createObjectMock(ContainerBuilder::class, [], false);
     }
 
     /**
@@ -231,10 +231,10 @@ class LiipImagineBundleTest extends AbstractTest
      */
     protected function createLiipImagineExtensionMock()
     {
-        return $this->createObjectMock(LiipImagineExtension::class, array(
+        return $this->createObjectMock(LiipImagineExtension::class, [
             'getNamespace',
             'addResolverFactory',
             'addLoaderFactory',
-        ), false);
+        ], false);
     }
 }

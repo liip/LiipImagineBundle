@@ -145,7 +145,7 @@ class FilterManager
             $options['png_compression_filter'] = $config['png_compression_filter'];
         }
 
-        if ($binary->getFormat() === 'gif' && $config['animated']) {
+        if ('gif' === $binary->getFormat() && $config['animated']) {
             $options['animated'] = $config['animated'];
         }
 

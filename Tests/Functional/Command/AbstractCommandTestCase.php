@@ -12,10 +12,12 @@
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
-
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @coversNothing
+ */
 class AbstractCommandTestCase extends AbstractSetupWebTestCase
 {
     /**
@@ -25,9 +27,9 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
      *
      * @return string
      */
-    protected function executeConsole(Command $command, array $arguments = array(), array $options = array())
+    protected function executeConsole(Command $command, array $arguments = [], array $options = [])
     {
-        $options = array_replace(array('--env' => 'test'), $options);
+        $options = array_replace(['--env' => 'test'], $options);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute($arguments, $options);

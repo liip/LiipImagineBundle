@@ -25,7 +25,7 @@ class CacheResolverTest extends AbstractTest
     protected $filter = 'thumbnail';
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
-    
+
     protected function setUp()
     {
         if (!class_exists(ArrayCache::class)) {
@@ -46,11 +46,11 @@ class CacheResolverTest extends AbstractTest
 
         $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
-        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertSame($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
         // Call multiple times to verify the cache is used.
-        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
-        $this->assertEquals($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertSame($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
+        $this->assertSame($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
     public function testNotCallInternalResolverIfCachedOnIsStored()
@@ -148,7 +148,7 @@ class CacheResolverTest extends AbstractTest
          */
         $this->assertCount(2, $this->getCacheEntries($cache));
 
-        $cacheResolver->remove(array($this->path), array($this->filter));
+        $cacheResolver->remove([$this->path], [$this->filter]);
 
         // Cache including index has been removed.
         $this->assertCount(0, $this->getCacheEntries($cache));
@@ -180,7 +180,7 @@ class CacheResolverTest extends AbstractTest
          */
         $this->assertCount(6, $this->getCacheEntries($cache));
 
-        $cacheResolver->remove(array(), array('thumbnail_233x233'));
+        $cacheResolver->remove([], ['thumbnail_233x233']);
 
         // Cache including index has been removed.
         $this->assertCount(3, $this->getCacheEntries($cache));

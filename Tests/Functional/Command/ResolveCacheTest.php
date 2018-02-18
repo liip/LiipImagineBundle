@@ -22,9 +22,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
 
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg'],
+                '--filters' => ['thumbnail_web_path'], ]
         );
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -41,9 +41,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
 
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg'],
+                '--filters' => ['thumbnail_web_path'], ]
         );
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -55,9 +55,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
     {
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg', 'images/cats2.jpeg'],
+                '--filters' => ['thumbnail_web_path'], ]
         );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
@@ -75,9 +75,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
 
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg', 'images/cats2.jpeg'],
+                '--filters' => ['thumbnail_web_path'], ]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
@@ -91,9 +91,9 @@ class ResolveCacheTest extends AbstractCommandTestCase
     {
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path', 'thumbnail_default'), )
+            [
+                'paths' => ['images/cats.jpeg', 'images/cats2.jpeg'],
+                '--filters' => ['thumbnail_web_path', 'thumbnail_default'], ]
         );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);
@@ -106,7 +106,7 @@ class ResolveCacheTest extends AbstractCommandTestCase
     {
         $output = $this->executeConsole(
             $this->getService('liip_imagine.command.resolve_cache_command'),
-            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
+            ['paths' => ['images/cats.jpeg', 'images/cats2.jpeg']]
         );
 
         $this->assertContains('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $output);

@@ -47,7 +47,7 @@ class CropFilterLoaderTest extends AbstractTest
             ->with(new Point($x, $y), new Box($width, $height))
             ->willReturn($image);
 
-        $options = array();
+        $options = [];
         $options['start'] = $coordinates;
         $options['size'] = $area;
 
@@ -59,10 +59,10 @@ class CropFilterLoaderTest extends AbstractTest
      */
     public function cropDataProvider()
     {
-        return array(
-            array(array(140, 130), array(200, 129)),
-            array(array(30, 60), array(50, 50)),
-            array(array(400, 500), array(1, 30)),
-        );
+        return [
+            [[140, 130], [200, 129]],
+            [[30, 60], [50, 50]],
+            [[400, 500], [1, 30]],
+        ];
     }
 }

@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Tests\Functional;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * @coversNothing
+ */
 class AbstractSetupWebTestCase extends AbstractWebTestCase
 {
     /**

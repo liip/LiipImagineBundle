@@ -40,7 +40,7 @@ class FilterExtensionTest extends AbstractFilterTest
         if (!class_exists(\Twig_Extension::class)) {
             $this->markTestSkipped('Requires the twig/twig package.');
         }
-        
+
         $mock = new FilterExtension($manager ?: $this->createCacheManagerMock());
 
         $this->assertInstanceOf(FilterExtension::class, $mock);

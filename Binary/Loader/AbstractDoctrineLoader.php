@@ -37,24 +37,6 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     }
 
     /**
-     * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    abstract protected function mapPathToId($path);
-
-    /**
-     * Return a stream resource from the Doctrine entity/document with the image content.
-     *
-     * @param object $image
-     *
-     * @return resource
-     */
-    abstract protected function getStreamFromImage($image);
-
-    /**
      * {@inheritdoc}
      */
     public function find($path)
@@ -75,4 +57,22 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
 
         return stream_get_contents($this->getStreamFromImage($image));
     }
+
+    /**
+     * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    abstract protected function mapPathToId($path);
+
+    /**
+     * Return a stream resource from the Doctrine entity/document with the image content.
+     *
+     * @param object $image
+     *
+     * @return resource
+     */
+    abstract protected function getStreamFromImage($image);
 }

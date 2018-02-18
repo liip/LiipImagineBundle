@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
-
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -22,7 +21,7 @@ class LoadersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        list($d, $m) = $this->getLoadersCompilerPassContainerDefinitions();
+        [$d, $m] = $this->getLoadersCompilerPassContainerDefinitions();
 
         $container = $this->createContainerBuilder($d);
 

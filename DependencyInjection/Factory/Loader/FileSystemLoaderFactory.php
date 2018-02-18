@@ -55,7 +55,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                     ->beforeNormalization()
                     ->ifString()
                         ->then(function ($value) {
-                            return array($value);
+                            return [$value];
                         })
                     ->end()
                     ->treatNullLike([])
@@ -103,7 +103,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $resourcePaths = [];
 
         foreach ($this->getBundleResourcePaths($container) as $name => $path) {
-            if (('whitelist' === $config['access_control_type']) === in_array($name, $config['access_control_list']) && is_dir($path)) {
+            if (('whitelist' === $config['access_control_type']) === in_array($name, $config['access_control_list'], true) && is_dir($path)) {
                 $resourcePaths[$name] = $path;
             }
         }

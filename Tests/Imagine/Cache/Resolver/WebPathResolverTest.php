@@ -181,7 +181,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -201,7 +201,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/theBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -221,7 +221,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -241,7 +241,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -261,7 +261,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://thehost:88/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -281,7 +281,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'https://thehost:444/aCachePrefix/aFilter/aPath',
             $resolver->resolve('aPath', 'aFilter')
         );
@@ -321,7 +321,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $resolver->remove(array(), array());
+        $resolver->remove([], []);
     }
 
     public function testRemoveCacheForPathAndFilterOnRemove()
@@ -339,7 +339,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $resolver->remove(array('aPath'), array('aFilter'));
+        $resolver->remove(['aPath'], ['aFilter']);
     }
 
     public function testRemoveCacheForSomePathsAndFilterOnRemove()
@@ -361,7 +361,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $resolver->remove(array('aPathOne', 'aPathTwo'), array('aFilter'));
+        $resolver->remove(['aPathOne', 'aPathTwo'], ['aFilter']);
     }
 
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
@@ -392,8 +392,8 @@ class WebPathResolverTest extends TestCase
         );
 
         $resolver->remove(
-            array('aPathOne', 'aPathTwo'),
-            array('aFilterOne', 'aFilterTwo')
+            ['aPathOne', 'aPathTwo'],
+            ['aFilterOne', 'aFilterTwo']
         );
     }
 
@@ -403,9 +403,9 @@ class WebPathResolverTest extends TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
-            ->with(array(
+            ->with([
                 '/aWebRoot/aCachePrefix/aFilter',
-            ));
+            ]);
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -414,7 +414,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $resolver->remove(array(), array('aFilter'));
+        $resolver->remove([], ['aFilter']);
     }
 
     public function testRemoveCacheForSomeFiltersOnRemove()
@@ -423,10 +423,10 @@ class WebPathResolverTest extends TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
-            ->with(array(
+            ->with([
                 '/aWebRoot/aCachePrefix/aFilterOne',
                 '/aWebRoot/aCachePrefix/aFilterTwo',
-            ));
+            ]);
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -435,7 +435,7 @@ class WebPathResolverTest extends TestCase
             'aCachePrefix'
         );
 
-        $resolver->remove(array(), array('aFilterOne', 'aFilterTwo'));
+        $resolver->remove([], ['aFilterOne', 'aFilterTwo']);
     }
 
     public function testShouldRemoveDoubleSlashInUrl()
@@ -451,9 +451,9 @@ class WebPathResolverTest extends TestCase
         $method = $rc->getMethod('getFileUrl');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($resolver, array('/cats.jpg', 'some_filter'));
+        $result = $method->invokeArgs($resolver, ['/cats.jpg', 'some_filter']);
 
-        $this->assertEquals('aCachePrefix/some_filter/cats.jpg', $result);
+        $this->assertSame('aCachePrefix/some_filter/cats.jpg', $result);
     }
 
     public function testShouldSanitizeSeparatorBetweenSchemeAndAuthorityInUrl()
@@ -469,9 +469,9 @@ class WebPathResolverTest extends TestCase
         $method = $rc->getMethod('getFileUrl');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($resolver, array('https://some.meme.com/cute/cats.jpg', 'some_filter'));
+        $result = $method->invokeArgs($resolver, ['https://some.meme.com/cute/cats.jpg', 'some_filter']);
 
-        $this->assertEquals('aCachePrefix/some_filter/https---some.meme.com/cute/cats.jpg', $result);
+        $this->assertSame('aCachePrefix/some_filter/https---some.meme.com/cute/cats.jpg', $result);
     }
 
     /**
