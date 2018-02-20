@@ -214,7 +214,7 @@
             <argument type="service" id="router.request_context" />
         </service>
 
-        <service id="liip_imagine.cache.resolver.prototype.alt_web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AlternativeWebPathResolver" public="true" abstract="true" parent="liip_imagine.cache.resolver.prototype.abstract_web_path"/>
+        <service id="liip_imagine.cache.resolver.prototype.rel_web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\RelativeWebPathResolver" public="true" abstract="true" parent="liip_imagine.cache.resolver.prototype.abstract_web_path"/>
 
         <service id="liip_imagine.cache.resolver.prototype.aws_s3" class="Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver" public="true" abstract="true">
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>

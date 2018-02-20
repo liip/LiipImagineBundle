@@ -2,7 +2,7 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-class AlternativeWebPathResolver extends AbstractWebPathResolver
+class RelativeWebPathResolver extends AbstractWebPathResolver
 {
     /**
      * {@inheritdoc}

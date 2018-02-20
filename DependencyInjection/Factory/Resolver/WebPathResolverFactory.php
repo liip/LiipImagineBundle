@@ -24,8 +24,8 @@ class WebPathResolverFactory extends AbstractResolverFactory
      */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
-        if ($config["alt_url"]) {
-            $resolverDefinition = $this->getChildResolverDefinition(sprintf("alt_%s", $this->getName()));
+        if ($config["rel_url"]) {
+            $resolverDefinition = $this->getChildResolverDefinition(sprintf("rel_%s", $this->getName()));
         } else {
             $resolverDefinition = $this->getChildResolverDefinition();
         }
@@ -71,7 +71,7 @@ class WebPathResolverFactory extends AbstractResolverFactory
                     ->defaultValue('media/cache')
                     ->cannotBeEmpty()
                 ->end()
-                ->booleanNode('alt_url')
+                ->booleanNode('rel_url')
                     ->defaultFalse()
                 ->end()
             ->end();

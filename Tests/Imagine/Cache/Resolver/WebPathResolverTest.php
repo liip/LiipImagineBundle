@@ -65,10 +65,7 @@ class WebPathResolverTest extends \PHPUnit\Framework\TestCase
         $filesystemMock = $this->createFilesystemMock();
         $pathResolver = $this->createPathResolverMock();
         $requestContext = new RequestContext();
-    
-        /**
-         * @var PathResolverInterface $pathResolver
-         */
+        
         $resolver = new WebPathResolver($filesystemMock, $pathResolver, $requestContext);
 
         $this->assertAttributeSame($filesystemMock, 'filesystem', $resolver);

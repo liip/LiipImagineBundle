@@ -53,14 +53,14 @@ class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
         $resolver = new WebPathResolverFactory();
     
         $testCases = [
-            ['alt_url' => false, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.web_path'],
-            ['alt_url' => true, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.alt_web_path'],
+            ['rel_url' => false, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.web_path'],
+            ['rel_url' => true, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.rel_web_path'],
         ];
         foreach ($testCases as $testCase) {
             $resolver->create($container, 'the_resolver_name', array(
                 'web_root' => 'theWebRoot',
                 'cache_prefix' => 'theCachePrefix',
-                'alt_url' => $testCase["alt_url"],
+                'rel_url' => $testCase["rel_url"],
             ));
     
             $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
