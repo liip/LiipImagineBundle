@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
  *
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
-class FlysystemLoaderFactoryTest extends \PHPUnit\Framework\TestCase
+class FlysystemLoaderFactoryTest extends TestCase
 {
     public function setUp()
     {

@@ -7,6 +7,9 @@ use Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor
+ */
 class MozJpegPostProcessorTest extends AbstractTest
 {
     public function testMozJpegPostProcessor()

@@ -16,7 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFacto
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
@@ -87,6 +87,9 @@ class LiipImagineExtensionTest extends AbstractTest
 
     /**
      * @dataProvider provideFactoryData
+     *
+     * @param string $service
+     * @param string $factory
      */
     public function testFactoriesConfiguration($service, $factory)
     {
@@ -194,11 +197,20 @@ EOF;
      */
     private function assertDICConstructorArguments(Definition $definition, array $arguments)
     {
-        $this->assertEquals($arguments, $definition->getArguments(), "Expected and actual DIC Service constructor arguments of definition '".$definition->getClass()."' don't match.");
-    }
+        $castArrayElementsToString = function (array $a): array {
+            return array_map(function ($v) { return (string) $v; }, $a);
+        };
 
-    protected function tearDown()
-    {
-        unset($this->containerBuilder);
+        $implodeArrayElements = function (array $a): string {
+            return sprintf('[%s]:%d', implode(',', $a), count($a));
+        };
+
+        $expectedArguments = $castArrayElementsToString($arguments);
+        $providedArguments = $castArrayElementsToString($definition->getArguments());
+
+        $this->assertSame($expectedArguments, $providedArguments, vsprintf('Definition arguments (%s) do not match expected arguments (%s).', [
+            $implodeArrayElements($providedArguments),
+            $implodeArrayElements($expectedArguments),
+        ]));
     }
 }

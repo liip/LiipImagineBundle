@@ -13,12 +13,13 @@ namespace Liip\ImagineBundle\Tests\Binary;
 
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
  */
-class SimpleMimeTypeGuesserTest extends \PHPUnit\Framework\TestCase
+class SimpleMimeTypeGuesserTest extends TestCase
 {
     /**
      * @return SimpleMimeTypeGuesser
@@ -59,6 +60,8 @@ class SimpleMimeTypeGuesserTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $fileName
      * @param string $mimeType
+     *
+     * @throws \Exception
      */
     public function testGuessMimeType($fileName, $mimeType)
     {

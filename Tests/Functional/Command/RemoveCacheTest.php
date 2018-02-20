@@ -11,8 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
-use Liip\ImagineBundle\Command\RemoveCacheCommand;
-
 /**
  * @covers \Liip\ImagineBundle\Command\RemoveCacheCommand
  */

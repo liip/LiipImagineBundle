@@ -16,13 +16,14 @@ use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Model\FileBinary;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
  */
-class FileSystemLoaderTest extends \PHPUnit\Framework\TestCase
+class FileSystemLoaderTest extends TestCase
 {
     public function testConstruction()
     {
@@ -143,6 +144,8 @@ class FileSystemLoaderTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      * @expectedExceptionMessage Source image invalid
+     *
+     * @param string $path
      */
     public function testThrowsIfRealPathOutsideRootPath($path)
     {

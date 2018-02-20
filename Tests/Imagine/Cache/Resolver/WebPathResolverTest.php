@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
+use PHPUnit\Framework\TestCase;
 use Liip\ImagineBundle\Utility\Path\PathResolver;
 use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\RequestContext;
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver
  */
-class WebPathResolverTest extends \PHPUnit\Framework\TestCase
+class WebPathResolverTest extends TestCase
 {
     /**
      * @var Filesystem
@@ -125,8 +126,9 @@ class WebPathResolverTest extends \PHPUnit\Framework\TestCase
         
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            $pathResolver,
-            $requestContext
+            $requestContext,
+            '/aWebRoot',
+            'aCachePrefix'
         );
 
         $this->assertEquals(

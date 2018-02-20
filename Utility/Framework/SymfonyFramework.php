@@ -16,14 +16,6 @@ use Symfony\Component\HttpKernel\Kernel;
 class SymfonyFramework
 {
     /**
-     * @return bool
-     */
-    public static function hasDirectContainerBuilderLogging(): bool
-    {
-        return method_exists('\Symfony\Component\DependencyInjection\ContainerBuilder', 'log');
-    }
-
-    /**
      * @return string
      */
     public static function getContainerResolvableRootWebPath(): string

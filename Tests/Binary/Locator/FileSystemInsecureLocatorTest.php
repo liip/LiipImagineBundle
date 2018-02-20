@@ -20,6 +20,8 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
 {
     /**
+     * @param string|string[] $paths
+     *
      * @return LocatorInterface
      */
     protected function getFileSystemLocator($paths)

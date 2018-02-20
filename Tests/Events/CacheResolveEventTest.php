@@ -12,11 +12,12 @@
 namespace Liip\ImagineBundle\Tests\Events;
 
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Events\CacheResolveEvent
  */
-class CacheResolveEventTest extends \PHPUnit\Framework\TestCase
+class CacheResolveEventTest extends TestCase
 {
     protected function setUp()
     {

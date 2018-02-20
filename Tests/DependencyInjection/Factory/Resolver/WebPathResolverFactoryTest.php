@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory<extended>
  */
-class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
+class WebPathResolverFactoryTest extends TestCase
 {
     public function testImplementsResolverFactoryInterface()
     {

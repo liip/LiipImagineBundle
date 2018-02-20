@@ -17,6 +17,11 @@ use Symfony\Component\Routing\RequestContext;
 class NoCacheWebPathResolver implements ResolverInterface
 {
     /**
+     * @var RequestContext
+     */
+    private $requestContext;
+
+    /**
      * @param RequestContext $requestContext
      */
     public function __construct(RequestContext $requestContext)

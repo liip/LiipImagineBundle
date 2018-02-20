@@ -51,8 +51,6 @@ class FilterConfiguration
      *
      * @param string $filter
      * @param array  $config
-     *
-     * @return array
      */
     public function set($filter, array $config)
     {

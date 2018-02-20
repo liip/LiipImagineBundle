@@ -56,6 +56,7 @@ class ScaleFilterLoader implements LoaderInterface
         $size = $image->getSize();
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
+        $ratio = 1;
 
         if (isset($options[$this->ratioKey])) {
             $ratio = $this->absoluteRatio ? $options[$this->ratioKey] : $this->calcAbsoluteRatio($options[$this->ratioKey]);

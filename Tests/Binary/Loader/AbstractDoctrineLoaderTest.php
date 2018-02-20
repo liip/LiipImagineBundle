@@ -14,11 +14,12 @@ namespace Liip\ImagineBundle\Tests\Binary\Loader;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader<extended>
  */
-class AbstractDoctrineLoaderTest extends \PHPUnit\Framework\TestCase
+class AbstractDoctrineLoaderTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ObjectRepository

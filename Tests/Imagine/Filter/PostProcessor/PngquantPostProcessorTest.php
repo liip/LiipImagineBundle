@@ -7,6 +7,9 @@ use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor
+ */
 class PngquantPostProcessorTest extends AbstractTest
 {
     public function testPngquantPostProcessor()

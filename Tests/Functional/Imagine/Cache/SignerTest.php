@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Tests\Functional\Imagine\Cache;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Signer
+ */
 class SignerTest extends AbstractWebTestCase
 {
     public function testGetAsService()

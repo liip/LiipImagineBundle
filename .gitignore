@@ -1,9 +1,10 @@
+/.idea/
+/.php_cs.cache
 /bin/
-/phpunit.xml
 /composer.lock
 /composer.phar
-/vendor/
-/Tests/Functional/app/web/media/cache
+/phpunit.xml
 /Tests/Functional/app/public/media/cache
-/.idea/
+/Tests/Functional/app/web/media/cache
 /var/
+/vendor/
