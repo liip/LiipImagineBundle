@@ -4,11 +4,12 @@ namespace Liip\ImagineBundle\Tests\Utility\Path;
 
 use Liip\ImagineBundle\Utility\Path\PathResolver;
 use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Utility\Path\PathResolver
  */
-class PathResolverTest extends \PHPUnit\Framework\TestCase
+class PathResolverTest extends TestCase
 {
     public function testForInterfaceImplementation()
     {

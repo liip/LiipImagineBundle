@@ -126,9 +126,8 @@ class WebPathResolverTest extends TestCase
         
         $resolver = new WebPathResolver(
             $this->createFilesystemMock(),
-            $requestContext,
-            '/aWebRoot',
-            'aCachePrefix'
+            $pathResolver,
+            $requestContext
         );
 
         $this->assertEquals(
