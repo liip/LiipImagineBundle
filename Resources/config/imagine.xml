@@ -67,9 +67,9 @@
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
-        <service id="liip_imagine.resolver.prototype.path" class="Liip\ImagineBundle\Utility\Path\PathResolver" abstract="true">
-            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
-            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
+        <service id="liip_imagine.util.resolver.prototype.path" class="Liip\ImagineBundle\Utility\Path\PathResolver" abstract="true">
+            <argument><!-- will be injected by dynamically --></argument>
+            <argument><!-- will be injected by dynamically --></argument>
         </service>
 
         <!-- Controller -->

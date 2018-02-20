@@ -18,6 +18,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ChildDefinition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory<extended>
@@ -64,12 +65,30 @@ class WebPathResolverFactoryTest extends \PHPUnit\Framework\TestCase
     
             $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
     
+            /**
+             * @var ChildDefinition $resolverDefinition
+             */
             $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
             $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
             $this->assertEquals($testCase['resolverPrototype'], $resolverDefinition->getParent());
-    
-            $this->assertEquals('theWebRoot', $resolverDefinition->getArgument(2));
-            $this->assertEquals('theCachePrefix', $resolverDefinition->getArgument(3));
+            /**
+             * @var Reference $utilPathResolverReference
+             */
+            $utilPathResolverReference = $resolverDefinition->getArgument(1);
+            $this->assertInstanceOf(Reference::class, $utilPathResolverReference);
+            
+            $utilPathResolverServiceId = $utilPathResolverReference->__toString();
+            $this->assertEquals('liip_imagine.util.resolver.path', $utilPathResolverServiceId);
+            $this->assertTrue($container->hasDefinition($utilPathResolverServiceId));
+            /**
+             * @var ChildDefinition $utilPathResolverDefinition
+             */
+            $utilPathResolverDefinition = $container->getDefinition($utilPathResolverServiceId);
+            $this->assertInstanceOf(ChildDefinition::class, $utilPathResolverDefinition);
+            $this->assertEquals('liip_imagine.util.resolver.prototype.path', $utilPathResolverDefinition->getParent());
+            
+            $this->assertEquals('theWebRoot', $utilPathResolverDefinition->getArgument(0));
+            $this->assertEquals('theCachePrefix', $utilPathResolverDefinition->getArgument(1));
         }
     }
 

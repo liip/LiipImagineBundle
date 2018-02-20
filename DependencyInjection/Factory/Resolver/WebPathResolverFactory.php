@@ -29,11 +29,11 @@ class WebPathResolverFactory extends AbstractResolverFactory
         } else {
             $resolverDefinition = $this->getChildResolverDefinition();
         }
-        $pathResolverDefinition = new ChildDefinition('liip_imagine.resolver.prototype.path');
+        $pathResolverDefinition = new ChildDefinition('liip_imagine.util.resolver.prototype.path');
         $pathResolverDefinition->replaceArgument(0, $config['web_root']);
         $pathResolverDefinition->replaceArgument(1, $config['cache_prefix']);
         
-        $pathResolverServiceId = 'liip_imagine.resolver.path';
+        $pathResolverServiceId = 'liip_imagine.util.resolver.path';
         $container->setDefinition($pathResolverServiceId, $pathResolverDefinition);
         
         $resolverDefinition->replaceArgument(1, new Reference($pathResolverServiceId));
