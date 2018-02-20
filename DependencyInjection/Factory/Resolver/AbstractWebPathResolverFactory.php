@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-abstract class AbstractWebPathResolver extends AbstractResolverFactory
+abstract class AbstractWebPathResolverFactory extends AbstractResolverFactory
 {
     /**
      * {@inheritdoc}

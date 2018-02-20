@@ -11,13 +11,13 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
-class RelativeWebPathResolverFactory extends AbstractWebPathResolver
+class WebPathResolverFactoryFactory extends AbstractWebPathResolverFactory
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'relative_web_path';
+        return 'web_path';
     }
 }

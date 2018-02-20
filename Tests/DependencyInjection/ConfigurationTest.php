@@ -15,7 +15,7 @@ use Liip\ImagineBundle\DependencyInjection\Configuration;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactoryFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -46,7 +46,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FooLoaderFactory(),
@@ -77,7 +77,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FooLoaderFactory(),
@@ -111,7 +111,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -133,7 +133,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -158,7 +158,7 @@ class ConfigurationTest extends TestCase
         $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -175,7 +175,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -194,7 +194,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -213,7 +213,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FooLoaderFactory(),
@@ -243,7 +243,7 @@ class ConfigurationTest extends TestCase
             new Configuration(
                 array(
                     new BarResolverFactory(),
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ), array(
                     new FileSystemLoaderFactory(),
                 )
@@ -273,7 +273,7 @@ class ConfigurationTest extends TestCase
             new Configuration(
                 array(
                     new BarResolverFactory(),
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -306,7 +306,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ), array(
                     new FileSystemLoaderFactory(),
                 )
@@ -327,7 +327,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ), array(
                     new FileSystemLoaderFactory(),
                 )
@@ -351,7 +351,7 @@ class ConfigurationTest extends TestCase
         $config = $this->processConfiguration(
             new Configuration(
                 array(
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ), array(
                     new FileSystemLoaderFactory(),
                 )
@@ -372,7 +372,7 @@ class ConfigurationTest extends TestCase
             new Configuration(
                 array(
                     new BarResolverFactory(),
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),
@@ -401,7 +401,7 @@ class ConfigurationTest extends TestCase
             new Configuration(
                 array(
                     new BarResolverFactory(),
-                    new WebPathResolverFactory(),
+                    new WebPathResolverFactoryFactory(),
                 ),
                 array(
                     new FileSystemLoaderFactory(),

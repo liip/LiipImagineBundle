@@ -23,8 +23,8 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\RelativeWebPathResolverFactory;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\RelativeWebPathResolverFactoryFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactoryFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -53,10 +53,10 @@ class LiipImagineBundle extends Bundle
         /** @var $extension LiipImagineExtension */
         $extension = $container->getExtension('liip_imagine');
 
-        $extension->addResolverFactory(new WebPathResolverFactory());
+        $extension->addResolverFactory(new WebPathResolverFactoryFactory());
         $extension->addResolverFactory(new AwsS3ResolverFactory());
         $extension->addResolverFactory(new FlysystemResolverFactory());
-        $extension->addResolverFactory(new RelativeWebPathResolverFactory());
+        $extension->addResolverFactory(new RelativeWebPathResolverFactoryFactory());
 
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());

@@ -20,7 +20,8 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\RelativeWebPathResolverFactoryFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactoryFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -110,7 +111,7 @@ class LiipImagineBundleTest extends AbstractTest
         $extensionMock
             ->expects($this->at(0))
             ->method('addResolverFactory')
-            ->with($this->isInstanceOf(WebPathResolverFactory::class));
+            ->with($this->isInstanceOf(WebPathResolverFactoryFactory::class));
 
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -157,6 +158,25 @@ class LiipImagineBundleTest extends AbstractTest
             ->with('liip_imagine')
             ->will($this->returnValue($extensionMock));
 
+        $bundle = new LiipImagineBundle();
+        $bundle->build($containerMock);
+    }
+    
+    public function testAddRelativeWebPAthResolverFactoryOnBuild()
+    {
+        $extensionMock = $this->createLiipImagineExtensionMock();
+        $extensionMock
+            ->expects($this->at(3))
+            ->method('addResolverFactory')
+            ->with($this->isInstanceOf(RelativeWebPathResolverFactoryFactory::class));
+        
+        $containerMock = $this->createContainerBuilderMock();
+        $containerMock
+            ->expects($this->atLeastOnce())
+            ->method('getExtension')
+            ->with('liip_imagine')
+            ->will($this->returnValue($extensionMock));
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
