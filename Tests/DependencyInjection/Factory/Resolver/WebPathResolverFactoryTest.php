@@ -53,44 +53,37 @@ class WebPathResolverFactoryTest extends TestCase
 
         $resolver = new WebPathResolverFactory();
     
-        $testCases = [
-            ['rel_url' => false, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.web_path'],
-            ['rel_url' => true, 'resolverPrototype' => 'liip_imagine.cache.resolver.prototype.rel_web_path'],
-        ];
-        foreach ($testCases as $testCase) {
-            $resolver->create($container, 'the_resolver_name', array(
-                'web_root' => 'theWebRoot',
-                'cache_prefix' => 'theCachePrefix',
-                'rel_url' => $testCase["rel_url"],
-            ));
+        $resolver->create($container, 'the_resolver_name', array(
+            'web_root' => 'theWebRoot',
+            'cache_prefix' => 'theCachePrefix',
+        ));
     
-            $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
     
-            /**
-             * @var ChildDefinition $resolverDefinition
-             */
-            $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-            $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-            $this->assertEquals($testCase['resolverPrototype'], $resolverDefinition->getParent());
-            /**
-             * @var Reference $utilPathResolverReference
-             */
-            $utilPathResolverReference = $resolverDefinition->getArgument(1);
-            $this->assertInstanceOf(Reference::class, $utilPathResolverReference);
-            
-            $utilPathResolverServiceId = $utilPathResolverReference->__toString();
-            $this->assertEquals('liip_imagine.util.resolver.path', $utilPathResolverServiceId);
-            $this->assertTrue($container->hasDefinition($utilPathResolverServiceId));
-            /**
-             * @var ChildDefinition $utilPathResolverDefinition
-             */
-            $utilPathResolverDefinition = $container->getDefinition($utilPathResolverServiceId);
-            $this->assertInstanceOf(ChildDefinition::class, $utilPathResolverDefinition);
-            $this->assertEquals('liip_imagine.util.resolver.prototype.path', $utilPathResolverDefinition->getParent());
-            
-            $this->assertEquals('theWebRoot', $utilPathResolverDefinition->getArgument(0));
-            $this->assertEquals('theCachePrefix', $utilPathResolverDefinition->getArgument(1));
-        }
+        /**
+         * @var ChildDefinition $resolverDefinition
+         */
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
+        $this->assertEquals("liip_imagine.cache.resolver.prototype.web_path", $resolverDefinition->getParent());
+        /**
+         * @var Reference $utilPathResolverReference
+         */
+        $utilPathResolverReference = $resolverDefinition->getArgument(1);
+        $this->assertInstanceOf(Reference::class, $utilPathResolverReference);
+    
+        $utilPathResolverServiceId = $utilPathResolverReference->__toString();
+        $this->assertEquals('liip_imagine.util.resolver.path', $utilPathResolverServiceId);
+        $this->assertTrue($container->hasDefinition($utilPathResolverServiceId));
+        /**
+         * @var ChildDefinition $utilPathResolverDefinition
+         */
+        $utilPathResolverDefinition = $container->getDefinition($utilPathResolverServiceId);
+        $this->assertInstanceOf(ChildDefinition::class, $utilPathResolverDefinition);
+        $this->assertEquals('liip_imagine.util.resolver.prototype.path', $utilPathResolverDefinition->getParent());
+    
+        $this->assertEquals('theWebRoot', $utilPathResolverDefinition->getArgument(0));
+        $this->assertEquals('theCachePrefix', $utilPathResolverDefinition->getArgument(1));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()

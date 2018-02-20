@@ -165,7 +165,7 @@ class LiipImagineBundleTest extends AbstractTest
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
-            ->expects($this->at(3))
+            ->expects($this->at(4))
             ->method('addLoaderFactory')
             ->with($this->isInstanceOf(StreamLoaderFactory::class));
 
@@ -184,7 +184,7 @@ class LiipImagineBundleTest extends AbstractTest
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
-            ->expects($this->at(4))
+            ->expects($this->at(5))
             ->method('addLoaderFactory')
             ->with($this->isInstanceOf(FileSystemLoaderFactory::class));
 
@@ -203,7 +203,7 @@ class LiipImagineBundleTest extends AbstractTest
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
-            ->expects($this->at(5))
+            ->expects($this->at(6))
             ->method('addLoaderFactory')
             ->with($this->isInstanceOf(FlysystemLoaderFactory::class));
 
