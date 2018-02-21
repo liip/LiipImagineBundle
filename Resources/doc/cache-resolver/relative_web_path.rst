@@ -4,9 +4,6 @@
 Relative Web Path Resolver
 =================
 
-``RelativeWebPathResolver`` is similar with :ref:`web path cache resolver <cache-resolver-web-path>`
-
-
 This cache resolver (``RelativeWebPathResolver``), as well as
 :ref:`web path cache resolver <cache-resolver-web-path>`, enables cache resolution for
 local, web-path-based setups. This means images will be cached on your
