@@ -129,13 +129,13 @@ You have to set up the services required:
                         secret: "%amazon.s3.secret%"
                         region: "%amazon.s3.region%"
 
-    acme.amazon_s3:
-        class: Aws\S3\S3Client
-        factory: [Aws\S3\S3Client, factory]
-        arguments:
-            -
-                credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
-                region: %amazon.s3.region%
+        acme.amazon_s3:
+            class: Aws\S3\S3Client
+            factory: [Aws\S3\S3Client, factory]
+            arguments:
+                -
+                    credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
+                    region: %amazon.s3.region%
 
 Usage
 -----
