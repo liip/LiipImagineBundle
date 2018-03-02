@@ -192,7 +192,7 @@ class FileSystemLoaderTest extends TestCase
      *
      * @return FileSystemLoader
      */
-    private function getFileSystemLoader(array $roots = array(), LocatorInterface $locator = null)
+    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
     {
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),

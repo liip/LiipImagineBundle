@@ -215,29 +215,29 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $container = new ContainerBuilder();
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'first_loader', array(
-            'data_root' => array('firstLoaderDataroot'),
+        $loader->create($container, 'first_loader', [
+            'data_root' => ['firstLoaderDataroot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => false,
-            ),
-        ));
+            ],
+        ]);
 
-        $loader->create($container, 'second_loader', array(
-            'data_root' => array('secondLoaderDataroot'),
+        $loader->create($container, 'second_loader', [
+            'data_root' => ['secondLoaderDataroot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => false,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertEquals(
-            array('firstLoaderDataroot'),
+        $this->assertSame(
+            ['firstLoaderDataroot'],
             $container->getDefinition('liip_imagine.binary.loader.first_loader')->getArgument(2)->getArgument(0)
         );
 
-        $this->assertEquals(
-            array('secondLoaderDataroot'),
+        $this->assertSame(
+            ['secondLoaderDataroot'],
             $container->getDefinition('liip_imagine.binary.loader.second_loader')->getArgument(2)->getArgument(0)
         );
     }
