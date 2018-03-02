@@ -18,5 +18,5 @@ interface LocatorInterface
      *
      * @return string
      */
-    public function locate($path);
+    public function locate(string $path): string;
 }

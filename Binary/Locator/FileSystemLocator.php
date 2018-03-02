@@ -26,7 +26,9 @@ class FileSystemLocator implements LocatorInterface
      */
     public function __construct(array $roots = [])
     {
-        $this->roots = array_map([$this, 'sanitizeRootPath'], $roots);
+        $this->roots = array_map(function (string $root): string {
+            return $this->sanitizeRootPath($root);
+        }, $roots);
     }
 
     /**
@@ -36,13 +38,13 @@ class FileSystemLocator implements LocatorInterface
      *
      * @return string
      */
-    public function locate($path)
+    public function locate(string $path): string
     {
-        if (false !== $absolute = $this->locateUsingRootPlaceholder($path)) {
+        if (null !== $absolute = $this->locateUsingRootPlaceholder($path)) {
             return $this->sanitizeAbsolutePath($absolute);
         }
 
-        if (false !== $absolute = $this->locateUsingRootPathsSearch($path)) {
+        if (null !== $absolute = $this->locateUsingRootPathsSearch($path)) {
             return $this->sanitizeAbsolutePath($absolute);
         }
 
@@ -54,62 +56,66 @@ class FileSystemLocator implements LocatorInterface
      * @param string $root
      * @param string $path
      *
-     * @return string|false
+     * @return string|null
      */
-    protected function generateAbsolutePath($root, $path)
+    protected function generateAbsolutePath(string $root, string $path): ?string
     {
-        return realpath($root.DIRECTORY_SEPARATOR.$path);
+        if (false !== $absolute = realpath($root.DIRECTORY_SEPARATOR.$path)) {
+            return $absolute;
+        }
+
+        return null;
     }
 
     /**
      * @param string $path
      *
-     * @return bool|string
+     * @return string|null
      */
-    private function locateUsingRootPathsSearch($path)
+    private function locateUsingRootPathsSearch(string $path): ?string
     {
         foreach ($this->roots as $root) {
-            if (false !== $absolute = $this->generateAbsolutePath($root, $path)) {
+            if (null !== $absolute = $this->generateAbsolutePath($root, $path)) {
                 return $absolute;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
      * @param string $path
      *
-     * @return bool|string
+     * @return string|null
      */
-    private function locateUsingRootPlaceholder($path)
+    private function locateUsingRootPlaceholder(string $path): ?string
     {
-        if (0 !== mb_strpos($path, '@') || 1 !== preg_match('{@(?<name>[^:]+):(?<path>.+)}', $path, $matches)) {
-            return false;
+        if (0 !== mb_strpos($path, '@') || 1 !== preg_match('{^@(?<name>[^:]+):(?<path>.+)$}', $path, $match)) {
+            return null;
         }
 
-        if (isset($this->roots[$matches['name']])) {
-            return $this->generateAbsolutePath($this->roots[$matches['name']], $matches['path']);
+        if (isset($this->roots[$match['name']])) {
+            return $this->generateAbsolutePath($this->roots[$match['name']], $match['path']);
         }
 
-        throw new NotLoadableException(sprintf('Invalid root placeholder "%s" for path "%s"',
-            $matches['name'], $matches['path']));
+        throw new NotLoadableException(sprintf('Invalid root placeholder "@%s" for path "%s"',
+            $match['name'], $match['path']));
     }
 
     /**
-     * @param string $root
+     * @param string $path
      *
      * @throws InvalidArgumentException
      *
      * @return string
      */
-    private function sanitizeRootPath($root)
+    private function sanitizeRootPath(string $path): string
     {
-        if (!empty($root) && false !== $realRoot = realpath($root)) {
-            return $realRoot;
+        if (!empty($path) && false !== $real = realpath($path)) {
+            return $real;
         }
 
-        throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $root));
+        throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $path));
     }
 
     /**
@@ -119,7 +125,7 @@ class FileSystemLocator implements LocatorInterface
      *
      * @return string
      */
-    private function sanitizeAbsolutePath($path)
+    private function sanitizeAbsolutePath(string $path): string
     {
         foreach ($this->roots as $root) {
             if (0 === mb_strpos($path, $root)) {

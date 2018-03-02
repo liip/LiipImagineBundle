@@ -49,7 +49,7 @@ abstract class AbstractFileSystemLocatorTest extends TestCase
     public function testThrowsIfRootPlaceholderInvalid()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
-        $this->expectExceptionMessage('Invalid root placeholder "invalid-placeholder" for path');
+        $this->expectExceptionMessage('Invalid root placeholder "@invalid-placeholder" for path');
 
         $this->getFileSystemLocator(__DIR__)->locate('@invalid-placeholder:file.ext');
     }
