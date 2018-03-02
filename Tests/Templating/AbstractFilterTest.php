@@ -25,7 +25,7 @@ abstract class AbstractFilterTest extends AbstractTest
 
     public function testInvokeGetNameMethod()
     {
-        $this->assertEquals('liip_imagine', $this->createTemplatingMock()->getName());
+        $this->assertSame('liip_imagine', $this->createTemplatingMock()->getName());
     }
 
     public function testInvokeFilterMethod()
@@ -41,7 +41,7 @@ abstract class AbstractFilterTest extends AbstractTest
             ->with($expectedInputPath, $expectedFilter)
             ->will($this->returnValue($expectedCachePath));
 
-        $this->assertEquals($expectedCachePath, $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter));
+        $this->assertSame($expectedCachePath, $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter));
     }
 
     /**

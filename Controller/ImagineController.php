@@ -75,7 +75,7 @@ class ImagineController
         try {
             return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), 301);
         } catch (NotLoadableException $e) {
-            if ($this->dataManager->getDefaultImageUrl($filter) !== null) {
+            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
             }
 
@@ -126,7 +126,7 @@ class ImagineController
         try {
             return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), 301);
         } catch (NotLoadableException $e) {
-            if ($this->dataManager->getDefaultImageUrl($filter) !== null) {
+            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
             }
 

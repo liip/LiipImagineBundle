@@ -44,7 +44,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
     {
         $loader = new FileSystemLoaderFactory();
 
-        $this->assertEquals('filesystem', $loader->getName());
+        $this->assertSame('filesystem', $loader->getName());
     }
 
     public function testCreateLoaderDefinitionOnCreate()
@@ -52,24 +52,24 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $container = new ContainerBuilder();
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => false,
                 'access_control_type' => 'blacklist',
-                'access_control_list' => array(),
-            ),
-        ));
+                'access_control_list' => [],
+            ],
+        ]);
 
         $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
 
         $this->assertInstanceOfChildDefinition($loaderDefinition);
-        $this->assertEquals('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
+        $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
-        $this->assertEquals(array('theDataRoot'), $loaderDefinition->getArgument(3));
+        $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
@@ -78,33 +78,33 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
 
         $container = new ContainerBuilder();
-        $container->setParameter('kernel.bundles_metadata', array(
-            'LiipFooBundle' => array(
+        $container->setParameter('kernel.bundles_metadata', [
+            'LiipFooBundle' => [
                 'path' => $fooBundleRootPath,
-            ),
-            'LiipBarBundle' => array(
+            ],
+            'LiipBarBundle' => [
                 'path' => $barBundleRootPath,
-            ),
-        ));
+            ],
+        ]);
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => true,
                 'access_control_type' => 'blacklist',
-                'access_control_list' => array(),
-            ),
-        ));
+                'access_control_list' => [],
+            ],
+        ]);
 
-        $expected = array(
+        $expected = [
             'theDataRoot',
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
-        );
+        ];
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
@@ -113,34 +113,34 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
 
         $container = new ContainerBuilder();
-        $container->setParameter('kernel.bundles_metadata', array(
-            'LiipFooBundle' => array(
+        $container->setParameter('kernel.bundles_metadata', [
+            'LiipFooBundle' => [
                 'path' => $fooBundleRootPath,
-            ),
-            'LiipBarBundle' => array(
+            ],
+            'LiipBarBundle' => [
                 'path' => $barBundleRootPath,
-            ),
-        ));
+            ],
+        ]);
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => true,
                 'access_control_type' => 'blacklist',
-                'access_control_list' => array(
+                'access_control_list' => [
                     'LiipFooBundle',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $expected = array(
+        $expected = [
             'theDataRoot',
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
-        );
+        ];
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
@@ -149,34 +149,34 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
 
         $container = new ContainerBuilder();
-        $container->setParameter('kernel.bundles_metadata', array(
-            'LiipFooBundle' => array(
+        $container->setParameter('kernel.bundles_metadata', [
+            'LiipFooBundle' => [
                 'path' => $fooBundleRootPath,
-            ),
-            'LiipBarBundle' => array(
+            ],
+            'LiipBarBundle' => [
                 'path' => $barBundleRootPath,
-            ),
-        ));
+            ],
+        ]);
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => true,
                 'access_control_type' => 'whitelist',
-                'access_control_list' => array(
+                'access_control_list' => [
                     'LiipFooBundle',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $expected = array(
+        $expected = [
             'theDataRoot',
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
-        );
+        ];
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
@@ -185,55 +185,54 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
 
         $container = new ContainerBuilder();
-        $container->setParameter('kernel.bundles', array(
+        $container->setParameter('kernel.bundles', [
             LiipFooBundle::class,
             LiipBarBundle::class,
-        ));
+        ]);
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => true,
                 'access_control_type' => 'blacklist',
-                'access_control_list' => array(),
-            ),
-        ));
+                'access_control_list' => [],
+            ],
+        ]);
 
-        $expected = array(
+        $expected = [
             'theDataRoot',
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
-        );
+        ];
 
-        $this->assertEquals($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Unable to resolve bundle "ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane" while auto-registering bundle resource paths
-     */
     public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unable to resolve bundle "ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane" while auto-registering bundle resource paths');
+
         $container = new ContainerBuilder();
-        $container->setParameter('kernel.bundles', array(
+        $container->setParameter('kernel.bundles', [
             'ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane',
-        ));
+        ]);
 
         $loader = new FileSystemLoaderFactory();
-        $loader->create($container, 'the_loader_name', array(
-            'data_root' => array('theDataRoot'),
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
             'locator' => 'filesystem',
-            'bundle_resources' => array(
+            'bundle_resources' => [
                 'enabled' => true,
-            ),
-        ));
+            ],
+        ]);
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration()
     {
-        $expectedDataRoot = array('theDataRoot');
+        $expectedDataRoot = ['theDataRoot'];
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -241,19 +240,19 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
-        $config = $this->processConfigTree($treeBuilder, array(
-            'filesystem' => array(
+        $config = $this->processConfigTree($treeBuilder, [
+            'filesystem' => [
                 'data_root' => $expectedDataRoot,
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertArrayHasKey('data_root', $config);
-        $this->assertEquals($expectedDataRoot, $config['data_root']);
+        $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $expectedDataRoot = array(SymfonyFramework::getContainerResolvableRootWebPath());
+        $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -261,17 +260,17 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
-        $config = $this->processConfigTree($treeBuilder, array(
-            'filesystem' => array(),
-        ));
+        $config = $this->processConfigTree($treeBuilder, [
+            'filesystem' => [],
+        ]);
 
         $this->assertArrayHasKey('data_root', $config);
-        $this->assertEquals($expectedDataRoot, $config['data_root']);
+        $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
     public function testAddAsScalarExpectingArrayNormalizationOfConfiguration()
     {
-        $expectedDataRoot = array(SymfonyFramework::getContainerResolvableRootWebPath());
+        $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('filesystem', 'array');
@@ -279,14 +278,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
-        $config = $this->processConfigTree($treeBuilder, array(
-            'filesystem' => array(
+        $config = $this->processConfigTree($treeBuilder, [
+            'filesystem' => [
                 'data_root' => $expectedDataRoot[0],
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertArrayHasKey('data_root', $config);
-        $this->assertEquals($expectedDataRoot, $config['data_root']);
+        $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
     /**

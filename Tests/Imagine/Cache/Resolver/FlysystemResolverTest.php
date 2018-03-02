@@ -43,7 +43,7 @@ class FlysystemResolverTest extends AbstractTest
     {
         $resolver = new FlysystemResolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com');
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://images.example.com/media/cache/thumb/some-folder/path.jpg',
             $resolver->resolve('/some-folder/path.jpg', 'thumb')
         );
@@ -59,7 +59,7 @@ class FlysystemResolverTest extends AbstractTest
             ->with('media/cache/theFilter');
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
-        $resolver->remove(array(), array($expectedFilter));
+        $resolver->remove([], [$expectedFilter]);
     }
 
     public function testCreateObjectInAdapter()
@@ -96,7 +96,7 @@ class FlysystemResolverTest extends AbstractTest
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://images.example.com/media/cache/thumb/some-folder/path.jpg',
             $resolver->resolve('/some-folder/path.jpg', 'thumb')
         );
@@ -117,7 +117,7 @@ class FlysystemResolverTest extends AbstractTest
             ->will($this->returnValue(true));
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
-        $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
+        $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
     public function testRemoveCacheForSomePathsAndFilterOnRemove()
@@ -146,8 +146,8 @@ class FlysystemResolverTest extends AbstractTest
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
-            array('pathOne.jpg', 'pathTwo.jpg'),
-            array('thumb')
+            ['pathOne.jpg', 'pathTwo.jpg'],
+            ['thumb']
         );
     }
 
@@ -197,8 +197,8 @@ class FlysystemResolverTest extends AbstractTest
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
-            array('pathOne.jpg', 'pathTwo.jpg'),
-            array('filterOne', 'filterTwo')
+            ['pathOne.jpg', 'pathTwo.jpg'],
+            ['filterOne', 'filterTwo']
         );
     }
 
@@ -215,7 +215,7 @@ class FlysystemResolverTest extends AbstractTest
             ->method('delete');
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
-        $resolver->remove(array('some-folder/path.jpg'), array('thumb'));
+        $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
     public function testRemoveCacheForFilterOnRemove()
@@ -229,7 +229,7 @@ class FlysystemResolverTest extends AbstractTest
             ->with('media/cache/theFilter');
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
-        $resolver->remove(array(), array($expectedFilter));
+        $resolver->remove([], [$expectedFilter]);
     }
 
     public function testRemoveCacheForSomeFiltersOnRemove()
@@ -248,7 +248,7 @@ class FlysystemResolverTest extends AbstractTest
             ->with('media/cache/theFilterTwo');
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
-        $resolver->remove(array(), array($expectedFilterOne, $expectedFilterTwo));
+        $resolver->remove([], [$expectedFilterOne, $expectedFilterTwo]);
     }
 
     /**
@@ -259,13 +259,13 @@ class FlysystemResolverTest extends AbstractTest
         return $this
             ->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'delete',
                 'deleteDir',
                 'has',
                 'put',
                 'remove',
-            ))
+            ])
             ->getMock();
     }
 }

@@ -44,32 +44,32 @@ class FileSystemLoaderTest extends TestCase
     {
         $file = pathinfo(__FILE__, PATHINFO_BASENAME);
 
-        return array(
-            array(
+        return [
+            [
                 __DIR__,
                 $file,
-            ),
-            array(
+            ],
+            [
                 __DIR__.'/',
                 $file,
-            ),
-            array(
+            ],
+            [
                 __DIR__, '/'.
                 $file,
-            ),
-            array(
+            ],
+            [
                 __DIR__.'/../../Binary/Loader',
                 '/'.$file,
-            ),
-            array(
+            ],
+            [
                 realpath(__DIR__.'/..'),
                 'Loader/'.$file,
-            ),
-            array(
+            ],
+            [
                 __DIR__.'/../',
                 '/Loader/../../Binary/Loader/'.$file,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -80,7 +80,7 @@ class FileSystemLoaderTest extends TestCase
      */
     public function testLoad($root, $path)
     {
-        $this->assertValidLoaderFindReturn($this->getFileSystemLoader(array($root))->find($path));
+        $this->assertValidLoaderFindReturn($this->getFileSystemLoader([$root])->find($path));
     }
 
     /**
@@ -88,14 +88,14 @@ class FileSystemLoaderTest extends TestCase
      */
     public static function provideMultipleRootLoadCases()
     {
-        $pathsPrepended = array(
+        $pathsPrepended = [
             realpath(__DIR__.'/../'),
             realpath(__DIR__.'/../../'),
             realpath(__DIR__.'/../../../'),
-        );
+        ];
 
         return array_map(function ($parameters) use ($pathsPrepended) {
-            return array(array($pathsPrepended[mt_rand(0, count($pathsPrepended) - 1)], $parameters[0]), $parameters[1]);
+            return [[$pathsPrepended[mt_rand(0, count($pathsPrepended) - 1)], $parameters[0]], $parameters[1]];
         }, static::provideLoadCases());
     }
 
@@ -112,18 +112,17 @@ class FileSystemLoaderTest extends TestCase
 
     public function testAllowsEmptyRootPath()
     {
-        $loader = $this->getFileSystemLoader(array());
+        $loader = $this->getFileSystemLoader([]);
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Root image path not resolvable
-     */
     public function testThrowsIfRootPathDoesNotExist()
     {
-        $loader = $this->getFileSystemLoader(array('/a/bad/root/path'));
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Root image path not resolvable');
+
+        $loader = $this->getFileSystemLoader(['/a/bad/root/path']);
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
@@ -133,22 +132,22 @@ class FileSystemLoaderTest extends TestCase
      */
     public function provideOutsideRootPathsData()
     {
-        return array(
-            array('../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'),
-            array('../../Binary/'),
-        );
+        return [
+            ['../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'],
+            ['../../Binary/'],
+        ];
     }
 
     /**
      * @dataProvider provideOutsideRootPathsData
      *
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @expectedExceptionMessage Source image invalid
-     *
      * @param string $path
      */
     public function testThrowsIfRealPathOutsideRootPath($path)
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectExceptionMessage('Source image invalid');
+
         $loader = $this->getFileSystemLoader()->find($path);
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
@@ -159,12 +158,11 @@ class FileSystemLoaderTest extends TestCase
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader()->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME)));
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @expectedExceptionMessage Source image not resolvable
-     */
     public function testThrowsIfFileDoesNotExist()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectExceptionMessage('Source image not resolvable');
+
         $loader = $this->getFileSystemLoader()->find('fileNotExist');
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
@@ -183,7 +181,7 @@ class FileSystemLoaderTest extends TestCase
      */
     private function getDefaultDataRoots()
     {
-        return array(__DIR__);
+        return [__DIR__];
     }
 
     /**

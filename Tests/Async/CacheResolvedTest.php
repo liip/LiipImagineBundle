@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
@@ -20,12 +29,12 @@ class CacheResolvedTest extends TestCase
 
     public function testCouldBeJsonSerialized()
     {
-        $message = new CacheResolved('thePath', array(
+        $message = new CacheResolved('thePath', [
             'fooFilter' => 'http://example.com/fooFilter/thePath',
             'barFilter' => 'http://example.com/barFilter/thePath',
-        ));
+        ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '{"path":"thePath","uris":{"fooFilter":"http:\/\/example.com\/fooFilter\/thePath","barFilter":"http:\/\/example.com\/barFilter\/thePath"}}',
             json_encode($message)
         );
@@ -36,10 +45,10 @@ class CacheResolvedTest extends TestCase
         $message = CacheResolved::jsonDeserialize('{"path":"thePath","uris":{"fooFilter":"http:\/\/example.com\/fooFilter\/thePath","barFilter":"http:\/\/example.com\/barFilter\/thePath"}}');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Async\CacheResolved', $message);
-        $this->assertEquals('thePath', $message->getPath());
-        $this->assertEquals(array(
+        $this->assertSame('thePath', $message->getPath());
+        $this->assertSame([
             'fooFilter' => 'http://example.com/fooFilter/thePath',
             'barFilter' => 'http://example.com/barFilter/thePath',
-        ), $message->getUris());
+        ], $message->getUris());
     }
 }

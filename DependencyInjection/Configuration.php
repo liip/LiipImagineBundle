@@ -52,16 +52,14 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('resolvers')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
-                        ->performNoDeepMerging()
-        ;
+                        ->performNoDeepMerging();
         $this->addResolversSections($resolversPrototypeNode);
 
         $loadersPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('loaders')
                     ->useAttributeAsKey('name')
-                    ->prototype('array')
-        ;
+                    ->prototype('array');
         $this->addLoadersSections($loadersPrototypeNode);
 
         $rootNode
@@ -71,19 +69,18 @@ class Configuration implements ConfigurationInterface
                         empty($v['loaders']) ||
                         empty($v['loaders']['default']) ||
                         empty($v['resolvers']) ||
-                        empty($v['resolvers']['default'])
-                    ;
+                        empty($v['resolvers']['default']);
                 })
                 ->then(function ($v) {
                     if (empty($v['loaders'])) {
                         $v['loaders'] = [];
                     }
 
-                    if (false == is_array($v['loaders'])) {
+                    if (false === is_array($v['loaders'])) {
                         throw new \LogicException('Loaders has to be array');
                     }
 
-                    if (false == array_key_exists('default', $v['loaders'])) {
+                    if (false === array_key_exists('default', $v['loaders'])) {
                         $v['loaders']['default'] = ['filesystem' => null];
                     }
 
@@ -91,18 +88,17 @@ class Configuration implements ConfigurationInterface
                         $v['resolvers'] = [];
                     }
 
-                    if (false == is_array($v['resolvers'])) {
+                    if (false === is_array($v['resolvers'])) {
                         throw new \LogicException('Resolvers has to be array');
                     }
 
-                    if (false == array_key_exists('default', $v['resolvers'])) {
+                    if (false === array_key_exists('default', $v['resolvers'])) {
                         $v['resolvers']['default'] = ['web_path' => null];
                     }
 
                     return $v;
                 })
-            ->end()
-        ;
+            ->end();
 
         $rootNode
             ->fixXmlConfig('filter_set', 'filter_sets')
@@ -110,7 +106,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !in_array($v, ['gd', 'imagick', 'gmagick']);
+                            return !in_array($v, ['gd', 'imagick', 'gmagick'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()

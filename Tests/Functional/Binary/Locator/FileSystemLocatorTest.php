@@ -20,16 +20,6 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FileSystemLocatorTest extends AbstractWebTestCase
 {
-    /**
-     * @param string $name
-     *
-     * @return FileSystemLocator
-     */
-    private function getFileSystemLoaderLocator($name)
-    {
-        return $this->getPrivateProperty($this->getService(sprintf('liip_imagine.binary.loader.%s', $name)), 'locator');
-    }
-
     public function testBundleResourcesOnAllLoader()
     {
         static::createClient();
@@ -69,6 +59,16 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertStringEndsWith('BarBundle/Resources/public', $roots['LiipBarBundle']);
 
         $this->assertBarBundleResourcesExist($locator, true);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return FileSystemLocator
+     */
+    private function getFileSystemLoaderLocator($name)
+    {
+        return $this->getPrivateProperty($this->getService(sprintf('liip_imagine.binary.loader.%s', $name)), 'locator');
     }
 
     /**

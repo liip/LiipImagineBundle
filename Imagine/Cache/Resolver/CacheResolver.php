@@ -70,8 +70,7 @@ class CacheResolver implements ResolverInterface
 
         return
             $this->cache->contains($cacheKey) ||
-            $this->resolver->isStored($path, $filter)
-        ;
+            $this->resolver->isStored($path, $filter);
     }
 
     /**
@@ -117,36 +116,6 @@ class CacheResolver implements ResolverInterface
         }
     }
 
-    protected function removePathAndFilter($path, $filter)
-    {
-        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
-        if (!$this->cache->contains($indexKey)) {
-            return;
-        }
-
-        $index = $this->cache->fetch($indexKey);
-
-        if (null === $path) {
-            foreach ($index as $eachCacheKey) {
-                $this->cache->delete($eachCacheKey);
-            }
-
-            $index = [];
-        } else {
-            $cacheKey = $this->generateCacheKey($path, $filter);
-            if (false !== $indexIndex = array_search($cacheKey, $index)) {
-                unset($index[$indexIndex]);
-                $this->cache->delete($cacheKey);
-            }
-        }
-
-        if (empty($index)) {
-            $this->cache->delete($indexKey);
-        } else {
-            $this->cache->save($indexKey, $index);
-        }
-    }
-
     /**
      * Generate a unique cache key based on the given parameters.
      *
@@ -165,6 +134,36 @@ class CacheResolver implements ResolverInterface
             $this->sanitizeCacheKeyPart($filter),
             $this->sanitizeCacheKeyPart($path),
         ]);
+    }
+
+    protected function removePathAndFilter($path, $filter)
+    {
+        $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
+        if (!$this->cache->contains($indexKey)) {
+            return;
+        }
+
+        $index = $this->cache->fetch($indexKey);
+
+        if (null === $path) {
+            foreach ($index as $eachCacheKey) {
+                $this->cache->delete($eachCacheKey);
+            }
+
+            $index = [];
+        } else {
+            $cacheKey = $this->generateCacheKey($path, $filter);
+            if (false !== $indexIndex = array_search($cacheKey, $index, true)) {
+                unset($index[$indexIndex]);
+                $this->cache->delete($cacheKey);
+            }
+        }
+
+        if (empty($index)) {
+            $this->cache->delete($indexKey);
+        } else {
+            $this->cache->save($indexKey, $index);
+        }
     }
 
     /**
@@ -213,7 +212,7 @@ class CacheResolver implements ResolverInterface
         if ($this->cache->contains($indexKey)) {
             $index = (array) $this->cache->fetch($indexKey);
 
-            if (!in_array($cacheKey, $index)) {
+            if (!in_array($cacheKey, $index, true)) {
                 $index[] = $cacheKey;
             }
         } else {

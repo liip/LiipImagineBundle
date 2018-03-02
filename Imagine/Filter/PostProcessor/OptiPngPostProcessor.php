@@ -83,8 +83,8 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
      */
     public function processWithConfiguration(BinaryInterface $binary, array $options)
     {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/png'])) {
+        $type = mb_strtolower($binary->getMimeType());
+        if (!in_array($type, ['image/png'], true)) {
             return $binary;
         }
 
@@ -96,16 +96,16 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
         $processArguments = [$this->optipngBin];
 
         $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
-        if ($level !== null) {
-            $processArguments[] =  sprintf('--o%d', $level);
+        if (null !== $level) {
+            $processArguments[] = sprintf('--o%d', $level);
         }
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
-            $processArguments[] =  '--strip=all';
+            $processArguments[] = '--strip=all';
         }
 
-        $processArguments[] =  $input;
+        $processArguments[] = $input;
 
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
@@ -116,7 +116,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
         $proc = new Process($processArguments);
         $proc->run();
 
-        if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
+        if (false !== mb_strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
             unlink($input);
             throw new ProcessFailedException($proc);
         }

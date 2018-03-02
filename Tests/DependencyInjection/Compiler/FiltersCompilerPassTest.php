@@ -21,7 +21,7 @@ class FiltersCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {
-        list($d, $m) = $this->getFiltersCompilerPassContainerDefinitions();
+        [$d, $m] = $this->getFiltersCompilerPassContainerDefinitions();
 
         $container = $this->createContainerBuilder($d);
 

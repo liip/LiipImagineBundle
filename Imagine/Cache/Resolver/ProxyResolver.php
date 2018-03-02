@@ -95,8 +95,8 @@ class ProxyResolver implements ResolverInterface
             return str_replace($host, $proxyHost, $url);
         }
 
-        if (0 === strpos($randKey, 'regexp/')) {
-            $regExp = substr($randKey, 6);
+        if (0 === mb_strpos($randKey, 'regexp/')) {
+            $regExp = mb_substr($randKey, 6);
 
             return preg_replace($regExp, $this->hosts[$randKey], $url);
         }

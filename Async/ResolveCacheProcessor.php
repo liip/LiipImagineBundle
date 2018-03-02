@@ -15,10 +15,10 @@ use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Client\ProducerInterface;
 use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
+use Enqueue\Util\JSON;
 use Interop\Queue\PsrContext;
 use Interop\Queue\PsrMessage;
 use Interop\Queue\PsrProcessor;
-use Enqueue\Util\JSON;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
 
