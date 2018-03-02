@@ -86,9 +86,6 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
      */
     protected function getFileSystemLocator($paths)
     {
-        $locator = new FileSystemInsecureLocator();
-        $locator->setOptions(['roots' => (array) $paths]);
-
-        return $locator;
+        return new FileSystemInsecureLocator((array) $paths);
     }
 }

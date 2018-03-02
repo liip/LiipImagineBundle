@@ -84,7 +84,7 @@ class FileSystemLoaderTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return string[][]
      */
     public static function provideMultipleRootLoadCases()
     {
@@ -102,12 +102,12 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @dataProvider provideMultipleRootLoadCases
      *
-     * @param string $root
-     * @param string $path
+     * @param string[] $roots
+     * @param string   $path
      */
-    public function testMultipleRootLoadCases($root, $path)
+    public function testMultipleRootLoadCases($roots, $path)
     {
-        $this->assertValidLoaderFindReturn($this->getFileSystemLoader($root)->find($path));
+        $this->assertValidLoaderFindReturn($this->getFileSystemLoader($roots)->find($path));
     }
 
     public function testAllowsEmptyRootPath()
@@ -169,11 +169,13 @@ class FileSystemLoaderTest extends TestCase
     }
 
     /**
+     * @param string[] $roots
+     *
      * @return FileSystemLocator
      */
-    private function getFileSystemLocator()
+    private function getFileSystemLocator(array $roots)
     {
-        return new FileSystemLocator();
+        return new FileSystemLocator($roots);
     }
 
     /**
@@ -185,18 +187,17 @@ class FileSystemLoaderTest extends TestCase
     }
 
     /**
-     * @param string|array|null     $root
+     * @param array                 $roots
      * @param LocatorInterface|null $locator
      *
      * @return FileSystemLoader
      */
-    private function getFileSystemLoader($root = null, LocatorInterface $locator = null)
+    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
     {
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $locator ? $locator : $this->getFileSystemLocator(),
-            null !== $root ? $root : $this->getDefaultDataRoots()
+            null !== $locator ? $locator : $this->getFileSystemLocator(count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }
 

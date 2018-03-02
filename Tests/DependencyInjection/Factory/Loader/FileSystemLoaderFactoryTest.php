@@ -69,7 +69,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
-        $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(3));
+        $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
@@ -104,7 +104,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         ];
 
-        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
@@ -140,7 +140,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         ];
 
-        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
@@ -176,7 +176,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipFooBundle' => $fooBundleRootPath.'/Resources/public',
         ];
 
-        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
@@ -207,7 +207,39 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             'LiipBarBundle' => $barBundleRootPath.'/Resources/public',
         ];
 
-        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(3));
+        $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
+    }
+
+    public function testAbleToCreateTwoDistinctLoaders()
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'first_loader', [
+            'data_root' => ['firstLoaderDataroot'],
+            'locator' => 'filesystem',
+            'bundle_resources' => [
+                'enabled' => false,
+            ],
+        ]);
+
+        $loader->create($container, 'second_loader', [
+            'data_root' => ['secondLoaderDataroot'],
+            'locator' => 'filesystem',
+            'bundle_resources' => [
+                'enabled' => false,
+            ],
+        ]);
+
+        $this->assertSame(
+            ['firstLoaderDataroot'],
+            $container->getDefinition('liip_imagine.binary.loader.first_loader')->getArgument(2)->getArgument(0)
+        );
+
+        $this->assertSame(
+            ['secondLoaderDataroot'],
+            $container->getDefinition('liip_imagine.binary.loader.second_loader')->getArgument(2)->getArgument(0)
+        );
     }
 
     public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj()
