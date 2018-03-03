@@ -51,6 +51,10 @@ filter.
 <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
 ```
 
+### Contributor Code of Conduct
+
+This project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
 ### Attribution
 
