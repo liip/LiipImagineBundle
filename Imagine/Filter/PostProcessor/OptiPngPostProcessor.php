@@ -17,7 +17,7 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class OptiPngPostProcessor implements PostProcessorInterface
 {
     /**
      * @var string Path to optipng binary
@@ -63,25 +63,13 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
 
     /**
      * @param BinaryInterface $binary
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface|Binary
      */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary, array $options = [])
     {
         $type = mb_strtolower($binary->getMimeType());
         if (!in_array($type, ['image/png'], true)) {

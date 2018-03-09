@@ -987,7 +987,7 @@ class FilterManagerTest extends AbstractTest
     public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Could not find post processor "foo"');
+        $this->expectExceptionMessage('Could not find post processor(s): "foo"');
 
         $originalContent = 'aContent';
         $binary = new Binary($originalContent, 'image/png', 'png');

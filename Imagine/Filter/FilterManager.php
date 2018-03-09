@@ -164,29 +164,39 @@ class FilterManager
 
     /**
      * @param BinaryInterface $binary
-     * @param array           $config
+     * @param array           $options
      *
      * @throws \InvalidArgumentException
      *
      * @return BinaryInterface
      */
-    public function applyPostProcessors(BinaryInterface $binary, $config)
+    public function applyPostProcessors(BinaryInterface $binary, $options)
     {
-        $config += ['post_processors' => []];
-        foreach ($config['post_processors'] as $postProcessorName => $postProcessorOptions) {
-            if (!isset($this->postProcessors[$postProcessorName])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find post processor "%s"', $postProcessorName
-                ));
-            }
-            if ($this->postProcessors[$postProcessorName] instanceof ConfigurablePostProcessorInterface) {
-                $binary = $this->postProcessors[$postProcessorName]->processWithConfiguration($binary, $postProcessorOptions);
-            } else {
-                $binary = $this->postProcessors[$postProcessorName]->process($binary);
-            }
+        foreach ($this->sanitizePostProcessors($options['post_processors'] ?? []) as $name => $config) {
+            $binary = $this->postProcessors[$name]->process($binary, $config);
         }
 
         return $binary;
+    }
+
+    /**
+     * @param array $processors
+     *
+     * @return array
+     */
+    private function sanitizePostProcessors(array $processors): array
+    {
+        $sanitized = array_filter($processors, function (string $name): bool {
+            return isset($this->postProcessors[$name]);
+        }, ARRAY_FILTER_USE_KEY);
+
+        if (count($processors) !== count($sanitized)) {
+            throw new \InvalidArgumentException(sprintf('Could not find post processor(s): %s', implode(', ', array_map(function (string $name): string {
+                return sprintf('"%s"', $name);
+            }, array_diff(array_keys($processors), array_keys($sanitized))))));
+        }
+
+        return $sanitized;
     }
 
     /**

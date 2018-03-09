@@ -17,9 +17,11 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class JpegOptimPostProcessor implements PostProcessorInterface
 {
-    /** @var string Path to jpegoptim binary */
+    /**
+     * @var string Path to jpegoptim binary
+     */
     protected $jpegoptimBin;
 
     /**
@@ -111,25 +113,13 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
 
     /**
      * @param BinaryInterface $binary
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary, array $options = [])
     {
         $type = mb_strtolower($binary->getMimeType());
         if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
