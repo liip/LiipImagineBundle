@@ -26,5 +26,5 @@ interface PostProcessorInterface
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary, array $options = []);
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface;
 }

@@ -25,7 +25,7 @@ class FilterManagerTest extends AbstractTest
     public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Could not find filter loader for "thumbnail" filter type');
+        $this->expectExceptionMessage('Could not find filter(s): "thumbnail"');
 
         $config = $this->createFilterConfigurationMock();
         $config
@@ -530,7 +530,7 @@ class FilterManagerTest extends AbstractTest
     public function testThrowsIfNoLoadersAddedForFilterOnApply()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Could not find filter loader for "thumbnail" filter type');
+        $this->expectExceptionMessage('Could not find filter(s): "thumbnail"');
 
         $binary = new Binary('aContent', 'image/png', 'png');
 

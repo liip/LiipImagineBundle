@@ -11,12 +11,12 @@
 
 namespace Liip\ImagineBundle\Imagine\Filter;
 
+use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
-use Liip\ImagineBundle\Imagine\Filter\PostProcessor\ConfigurablePostProcessorInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
 
@@ -52,11 +52,8 @@ class FilterManager
      * @param ImagineInterface         $imagine
      * @param MimeTypeGuesserInterface $mimeTypeGuesser
      */
-    public function __construct(
-        FilterConfiguration $filterConfig,
-        ImagineInterface $imagine,
-        MimeTypeGuesserInterface $mimeTypeGuesser
-    ) {
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser)
+    {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
         $this->mimeTypeGuesser = $mimeTypeGuesser;
@@ -68,7 +65,7 @@ class FilterManager
      * @param string          $filter
      * @param LoaderInterface $loader
      */
-    public function addLoader($filter, LoaderInterface $loader)
+    public function addLoader(string $filter, LoaderInterface $loader): void
     {
         $this->loaders[$filter] = $loader;
     }
@@ -79,7 +76,7 @@ class FilterManager
      * @param string                 $name
      * @param PostProcessorInterface $postProcessor
      */
-    public function addPostProcessor($name, PostProcessorInterface $postProcessor)
+    public function addPostProcessor(string $name, PostProcessorInterface $postProcessor): void
     {
         $this->postProcessors[$name] = $postProcessor;
     }
@@ -87,7 +84,7 @@ class FilterManager
     /**
      * @return FilterConfiguration
      */
-    public function getFilterConfiguration()
+    public function getFilterConfiguration(): FilterConfiguration
     {
         return $this->filterConfig;
     }
@@ -100,37 +97,89 @@ class FilterManager
      *
      * @return BinaryInterface
      */
-    public function apply(BinaryInterface $binary, array $config)
+    public function apply(BinaryInterface $binary, array $config): BinaryInterface
     {
-        $config = array_replace([
-            'filters' => [],
+        $config += [
             'quality' => 100,
             'animated' => false,
-        ], $config);
+        ];
 
+        return $this->applyPostProcessors($this->applyFilters($binary, $config), $config);
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param array           $config
+     *
+     * @return BinaryInterface
+     */
+    public function applyFilters(BinaryInterface $binary, array $config): BinaryInterface
+    {
         if ($binary instanceof FileBinaryInterface) {
             $image = $this->imagine->open($binary->getPath());
         } else {
             $image = $this->imagine->load($binary->getContent());
         }
 
-        foreach ($config['filters'] as $eachFilter => $eachOptions) {
-            if (!isset($this->loaders[$eachFilter])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find filter loader for "%s" filter type', $eachFilter
-                ));
-            }
+        foreach ($this->sanitizeFilters($config['filters'] ?? []) as $name => $options) {
+            $prior = $image;
+            $image = $this->loaders[$name]->load($image, $options);
 
-            $prevImage = $image;
-            $image = $this->loaders[$eachFilter]->load($image, $eachOptions);
-
-            // If the filter returns a different image object destruct the old one because imagick keeps consuming memory if we don't
-            // See https://github.com/liip/LiipImagineBundle/pull/682
-            if ($prevImage !== $image && method_exists($prevImage, '__destruct')) {
-                $prevImage->__destruct();
+            if ($prior !== $image) {
+                $this->destroyImage($prior);
             }
         }
 
+        return $this->exportConfiguredImageBinary($binary, $image, $config);
+    }
+
+    /**
+     * Apply the provided filter set on the given binary.
+     *
+     * @param BinaryInterface $binary
+     * @param string          $filter
+     * @param array           $runtimeConfig
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return BinaryInterface
+     */
+    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = [])
+    {
+        $config = array_replace_recursive(
+            $this->getFilterConfiguration()->get($filter),
+            $runtimeConfig
+        );
+
+        return $this->apply($binary, $config);
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param array           $config
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return BinaryInterface
+     */
+    public function applyPostProcessors(BinaryInterface $binary, array $config): BinaryInterface
+    {
+        foreach ($this->sanitizePostProcessors($config['post_processors'] ?? []) as $name => $options) {
+            $binary = $this->postProcessors[$name]->process($binary, $options);
+        }
+
+        return $binary;
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     * @param ImageInterface  $image
+     * @param array           $config
+     *
+     * @return BinaryInterface
+     */
+    private function exportConfiguredImageBinary(BinaryInterface $binary, ImageInterface $image, array $config): BinaryInterface
+    {
         $options = [
             'quality' => $config['quality'],
         ];
@@ -149,34 +198,36 @@ class FilterManager
             $options['animated'] = $config['animated'];
         }
 
-        $filteredFormat = isset($config['format']) ? $config['format'] : $binary->getFormat();
-        $filteredContent = $image->get($filteredFormat, $options);
-        $filteredMimeType = $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredContent);
+        $filteredFormat = $config['format'] ?? $binary->getFormat();
+        $filteredString = $image->get($filteredFormat, $options);
 
-        // We are done with the image object so we can destruct the this because imagick keeps consuming memory if we don't
-        // See https://github.com/liip/LiipImagineBundle/pull/682
-        if (method_exists($image, '__destruct')) {
-            $image->__destruct();
-        }
+        $this->destroyImage($image);
 
-        return $this->applyPostProcessors(new Binary($filteredContent, $filteredMimeType, $filteredFormat), $config);
+        return new Binary(
+            $filteredString,
+            $filteredFormat === $binary->getFormat() ? $binary->getMimeType() : $this->mimeTypeGuesser->guess($filteredString),
+            $filteredFormat
+        );
     }
 
     /**
-     * @param BinaryInterface $binary
-     * @param array           $options
+     * @param array $filters
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return BinaryInterface
+     * @return array
      */
-    public function applyPostProcessors(BinaryInterface $binary, $options)
+    private function sanitizeFilters(array $filters): array
     {
-        foreach ($this->sanitizePostProcessors($options['post_processors'] ?? []) as $name => $config) {
-            $binary = $this->postProcessors[$name]->process($binary, $config);
+        $sanitized = array_filter($filters, function (string $name): bool {
+            return isset($this->loaders[$name]);
+        }, ARRAY_FILTER_USE_KEY);
+
+        if (count($filters) !== count($sanitized)) {
+            throw new \InvalidArgumentException(sprintf('Could not find filter(s): %s', implode(', ', array_map(function (string $name): string {
+                return sprintf('"%s"', $name);
+            }, array_diff(array_keys($filters), array_keys($sanitized))))));
         }
 
-        return $binary;
+        return $sanitized;
     }
 
     /**
@@ -200,23 +251,15 @@ class FilterManager
     }
 
     /**
-     * Apply the provided filter set on the given binary.
+     * We are done with the image object so we can destruct the this because imagick keeps consuming memory if we don't.
+     * See https://github.com/liip/LiipImagineBundle/pull/682
      *
-     * @param BinaryInterface $binary
-     * @param string          $filter
-     * @param array           $runtimeConfig
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return BinaryInterface
+     * @param ImageInterface $image
      */
-    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = [])
+    private function destroyImage(ImageInterface $image): void
     {
-        $config = array_replace_recursive(
-            $this->getFilterConfiguration()->get($filter),
-            $runtimeConfig
-        );
-
-        return $this->apply($binary, $config);
+        if (method_exists($image, '__destruct')) {
+            $image->__destruct();
+        }
     }
 }
