@@ -25,12 +25,16 @@ use Symfony\Component\Process\Process;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class PngquantPostProcessor implements PostProcessorInterface
 {
-    /** @var string Path to pngquant binary */
+    /**
+     * @var string Path to pngquant binary
+     */
     protected $pngquantBin;
 
-    /** @var string Quality to pass to pngquant */
+    /**
+     * @var string Quality to pass to pngquant
+     */
     protected $quality;
 
     /**
@@ -64,20 +68,7 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
-     * @param array           $options
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
         if (!in_array($type, ['image/png'], true)) {
