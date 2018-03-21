@@ -127,13 +127,20 @@ class FileSystemLocator implements LocatorInterface
      */
     private function sanitizeAbsolutePath(string $path): string
     {
-        foreach ($this->roots as $root) {
-            if (0 === mb_strpos($path, $root)) {
-                return $path;
-            }
+        $roots = array_filter($this->roots, function (string $root) use ($path): bool {
+            return 0 === mb_strpos($path, $root);
+        });
+
+        if (0 === count($roots)) {
+            throw new NotLoadableException(
+                sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"', $path, implode(':', $this->roots))
+            );
         }
 
-        throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"',
-            $path, implode(':', $this->roots)));
+        if (!is_readable($path)) {
+            throw new NotLoadableException(sprintf('Source image invalid "%s" as it is not readable', $path));
+        }
+
+        return $path;
     }
 }
