@@ -308,7 +308,7 @@ $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jp
 
 ## Filters
 
-This bundle provides a set of built-in filters andy ou may easily
+This bundle provides a set of built-in filters and you may easily
 define your own filters as well. Reference the
 [filters chapter](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html)
 from our documentation.
