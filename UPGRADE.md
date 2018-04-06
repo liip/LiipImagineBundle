@@ -6,8 +6,10 @@ application code or are otherwise particularly noteworthy. Reference our full
 [changelog](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md) for a complete list of all changes for a
 given release.
 
+## [2.0.0](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md#191)
 
-## [Unreleased](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md#unreleased)
+*Released on* 2018-04-06 *and assigned* [`2.0.0`](https://github.com/liip/LiipImagineBundle/releases/tag/2.0.0) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.1...2.0.0)\).*
+
 
   - __[Post Processor]__  __\[BC BREAK\]__ The `PostProcessorConfigurablePostProcessorInterface` interface has been completely removed
   and the `PostProcessorInterface` interface has been updated to allow passing the configuration array to its
