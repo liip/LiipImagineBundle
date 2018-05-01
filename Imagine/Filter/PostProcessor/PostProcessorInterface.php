@@ -15,17 +15,16 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
  * Interface for PostProcessors - handlers which can operate on binaries prepared in FilterManager.
- *
- * @see ConfigurablePostProcessorInterface For a means to configure these at run-time
- *
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
 interface PostProcessorInterface
 {
     /**
+     * Allows processing a BinaryInterface, with run-time options, so PostProcessors remain stateless.
+     *
      * @param BinaryInterface $binary
+     * @param array           $options Operation-specific options
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary);
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface;
 }

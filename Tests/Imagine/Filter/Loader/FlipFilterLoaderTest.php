@@ -24,10 +24,10 @@ class FlipFilterLoaderTest extends AbstractTest
      */
     public static function provideLoadWithAxisXOptionData()
     {
-        return array(
-            array('x'),
-            array('horizontal'),
-        );
+        return [
+            ['x'],
+            ['horizontal'],
+        ];
     }
 
     /**
@@ -42,7 +42,7 @@ class FlipFilterLoaderTest extends AbstractTest
             ->method('flipHorizontally')
             ->willReturn($image);
 
-        $this->createFlipFilterLoaderInstance()->load($image, array('axis' => $axis));
+        $this->createFlipFilterLoaderInstance()->load($image, ['axis' => $axis]);
     }
 
     /**
@@ -50,10 +50,10 @@ class FlipFilterLoaderTest extends AbstractTest
      */
     public static function provideLoadWithAxisYOptionData()
     {
-        return array(
-            array('y'),
-            array('vertical'),
-        );
+        return [
+            ['y'],
+            ['vertical'],
+        ];
     }
 
     /**
@@ -68,19 +68,18 @@ class FlipFilterLoaderTest extends AbstractTest
             ->method('flipVertically')
             ->willReturn($image);
 
-        $this->createFlipFilterLoaderInstance()->load($image, array('axis' => $axis));
+        $this->createFlipFilterLoaderInstance()->load($image, ['axis' => $axis]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The "axis" option must be set to "x", "horizontal", "y", or "vertical".
-     */
     public function testThrowsOnInvalidOptions()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "axis" option must be set to "x", "horizontal", "y", or "vertical".');
+
         $loader = new FlipFilterLoader();
-        $loader->load($this->getImageInterfaceMock(), array(
+        $loader->load($this->getImageInterfaceMock(), [
             'axis' => 'invalid',
-        ));
+        ]);
     }
 
     /**

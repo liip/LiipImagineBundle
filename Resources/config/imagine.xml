@@ -181,7 +181,6 @@
             <argument type="service" id="liip_imagine.mime_type_guesser" />
             <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
-            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
         <service id="liip_imagine.binary.loader.prototype.stream" class="Liip\ImagineBundle\Binary\Loader\StreamLoader">
@@ -197,10 +196,12 @@
         <!-- Data loader locators -->
 
         <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false" shared="false">
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 
         <service id="liip_imagine.binary.locator.filesystem_insecure" class="Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator" public="false" shared="false">
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 

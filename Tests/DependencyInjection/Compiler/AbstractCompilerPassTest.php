@@ -13,25 +13,11 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 
-
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
  */
 class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    /**
-     * @param string[] $methods
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|AbstractCompilerPass
-     */
-    private function createAbstractCompilerPassMock(array $methods = array())
-    {
-        return $this
-            ->getMockBuilder(AbstractCompilerPass::class)
-            ->setMethods($methods)
-            ->getMock();
-    }
-
     public function testCompilerLogging()
     {
         $pass = $this->createAbstractCompilerPassMock();
@@ -45,5 +31,18 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
 
         $log = $this->getVisibilityRestrictedMethod($pass, 'log');
         $log->invoke($pass, $container, $message, ...$replace);
+    }
+
+    /**
+     * @param string[] $methods
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|AbstractCompilerPass
+     */
+    private function createAbstractCompilerPassMock(array $methods = [])
+    {
+        return $this
+            ->getMockBuilder(AbstractCompilerPass::class)
+            ->setMethods($methods)
+            ->getMock();
     }
 }

@@ -137,7 +137,7 @@ class FilterService
      * @param array  $runtimeFilters
      *
      * @throws NonExistingFilterException
-
+     *
      * @return BinaryInterface
      */
     private function createFilteredBinary($path, $filter, array $runtimeFilters = [])

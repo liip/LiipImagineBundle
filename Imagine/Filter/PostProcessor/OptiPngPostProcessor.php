@@ -17,7 +17,7 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class OptiPngPostProcessor implements PostProcessorInterface
 {
     /**
      * @var string Path to optipng binary
@@ -63,28 +63,16 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
 
     /**
      * @param BinaryInterface $binary
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface|Binary
      */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/png'])) {
+        $type = mb_strtolower($binary->getMimeType());
+        if (!in_array($type, ['image/png'], true)) {
             return $binary;
         }
 
@@ -96,16 +84,16 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
         $processArguments = [$this->optipngBin];
 
         $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
-        if ($level !== null) {
-            $processArguments[] =  sprintf('--o%d', $level);
+        if (null !== $level) {
+            $processArguments[] = sprintf('--o%d', $level);
         }
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
-            $processArguments[] =  '--strip=all';
+            $processArguments[] = '--strip=all';
         }
 
-        $processArguments[] =  $input;
+        $processArguments[] = $input;
 
         if ($binary instanceof FileBinaryInterface) {
             copy($binary->getPath(), $input);
@@ -116,7 +104,7 @@ class OptiPngPostProcessor implements PostProcessorInterface, ConfigurablePostPr
         $proc = new Process($processArguments);
         $proc->run();
 
-        if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
+        if (false !== mb_strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
             unlink($input);
             throw new ProcessFailedException($proc);
         }

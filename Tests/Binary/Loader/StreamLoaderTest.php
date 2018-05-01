@@ -19,12 +19,11 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class StreamLoaderTest extends AbstractTest
 {
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @expectedExceptionMessageRegExp {Source image file://.+ not found.}
-     */
     public function testThrowsIfInvalidPathGivenOnFind()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectExceptionMessageRegExp('{Source image file://.+ not found.}');
+
         $loader = new StreamLoader('file://');
         $loader->find($this->temporaryPath.'/invalid.jpeg');
     }
@@ -49,12 +48,11 @@ class StreamLoaderTest extends AbstractTest
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The given context is no valid resource
-     */
     public function testThrowsIfInvalidResourceGivenInConstructor()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The given context is no valid resource');
+
         new StreamLoader('an-invalid-resource-name', true);
     }
 }

@@ -92,40 +92,6 @@ class CacheManager
     }
 
     /**
-     * Gets a resolver for the given filter.
-     *
-     * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
-     *
-     * @param string $filter
-     * @param string $resolver
-     *
-     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
-     *
-     * @return ResolverInterface
-     */
-    protected function getResolver($filter, $resolver)
-    {
-        // BC
-        if (!$resolver) {
-            $config = $this->filterConfig->get($filter);
-
-            $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
-        } else {
-            $resolverName = $resolver;
-        }
-
-        if (!isset($this->resolvers[$resolverName])) {
-            throw new \OutOfBoundsException(sprintf(
-                'Could not find resolver "%s" for "%s" filter type',
-                $resolverName,
-                $filter
-            ));
-        }
-
-        return $this->resolvers[$resolverName];
-    }
-
-    /**
      * Gets filtered path for rendering in the browser.
      * It could be the cached one or an url of filter action.
      *
@@ -143,14 +109,12 @@ class CacheManager
 
             return $this->isStored($rcPath, $filter, $resolver) ?
                 $this->resolve($rcPath, $filter, $resolver) :
-                $this->generateUrl($path, $filter, $runtimeConfig, $resolver)
-            ;
+                $this->generateUrl($path, $filter, $runtimeConfig, $resolver);
         }
 
         return $this->isStored($path, $filter, $resolver) ?
             $this->resolve($path, $filter, $resolver) :
-            $this->generateUrl($path, $filter, [], $resolver)
-        ;
+            $this->generateUrl($path, $filter, [], $resolver);
     }
 
     /**
@@ -226,7 +190,7 @@ class CacheManager
      */
     public function resolve($path, $filter, $resolver = null)
     {
-        if (false !== strpos($path, '/../') || 0 === strpos($path, '../')) {
+        if (false !== mb_strpos($path, '/../') || 0 === mb_strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
         }
 
@@ -286,5 +250,39 @@ class CacheManager
         foreach ($mapping as $resolver) {
             $resolver->remove($paths, $mapping[$resolver]);
         }
+    }
+
+    /**
+     * Gets a resolver for the given filter.
+     *
+     * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
+     *
+     * @param string $filter
+     * @param string $resolver
+     *
+     * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
+     *
+     * @return ResolverInterface
+     */
+    protected function getResolver($filter, $resolver)
+    {
+        // BC
+        if (!$resolver) {
+            $config = $this->filterConfig->get($filter);
+
+            $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
+        } else {
+            $resolverName = $resolver;
+        }
+
+        if (!isset($this->resolvers[$resolverName])) {
+            throw new \OutOfBoundsException(sprintf(
+                'Could not find resolver "%s" for "%s" filter type',
+                $resolverName,
+                $filter
+            ));
+        }
+
+        return $this->resolvers[$resolverName];
     }
 }

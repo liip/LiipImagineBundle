@@ -12,11 +12,10 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactoryFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
@@ -34,13 +33,12 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     protected $containerBuilder;
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testUserLoadThrowsExceptionUnlessDriverIsValid()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new LiipImagineExtension();
-        $loader->load(array(array('driver' => 'foo')), new ContainerBuilder());
+        $loader->load([['driver' => 'foo']], new ContainerBuilder());
     }
 
     public function testLoadWithDefaults()
@@ -52,11 +50,11 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
             $this->containerBuilder->getDefinition('liip_imagine.controller'),
-            array(
+            [
                 new Reference('liip_imagine.service.filter'),
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
-            )
+            ]
         );
     }
 
@@ -68,21 +66,21 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertTrue(isset($param['small']['filters']['route']['requirements']));
 
         $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
-        $this->assertEquals('value1', $variable1, sprintf('%s parameter is correct', $variable1));
+        $this->assertSame('value1', $variable1, sprintf('%s parameter is correct', $variable1));
     }
 
     public static function provideFactoryData()
     {
-        return array(
-            array(
+        return [
+            [
                 'liip_imagine.mime_type_guesser',
-                array(MimeTypeGuesser::class, 'getInstance'),
-            ),
-            array(
+                [MimeTypeGuesser::class, 'getInstance'],
+            ],
+            [
                 'liip_imagine.extension_guesser',
-                array(ExtensionGuesser::class, 'getInstance'),
-            ),
-        );
+                [ExtensionGuesser::class, 'getInstance'],
+            ],
+        ];
     }
 
     /**
@@ -96,7 +94,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->createEmptyConfiguration();
         $definition = $this->containerBuilder->getDefinition($service);
 
-        $this->assertEquals($factory, $definition->getFactory());
+        $this->assertSame($factory, $definition->getFactory());
     }
 
     protected function createEmptyConfiguration()
@@ -104,8 +102,8 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
-        $loader->addResolverFactory(new WebPathResolverFactoryFactory());
-        $loader->load(array(array()), $this->containerBuilder);
+        $loader->addResolverFactory(new WebPathResolverFactory());
+        $loader->load([[]], $this->containerBuilder);
 
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
@@ -119,8 +117,8 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
-        $loader->addResolverFactory(new WebPathResolverFactoryFactory());
-        $loader->load(array($this->getFullConfig()), $this->containerBuilder);
+        $loader->addResolverFactory(new WebPathResolverFactory());
+        $loader->load([$this->getFullConfig()], $this->containerBuilder);
 
         $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
     }
@@ -171,7 +169,7 @@ EOF;
      */
     private function assertAlias($value, $key)
     {
-        $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
+        $this->assertSame($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
     /**
@@ -180,7 +178,7 @@ EOF;
      */
     private function assertParameter($value, $key)
     {
-        $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
+        $this->assertSame($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
     /**

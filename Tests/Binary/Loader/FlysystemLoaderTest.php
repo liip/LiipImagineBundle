@@ -61,12 +61,11 @@ class FlysystemLoaderTest extends AbstractTest
         );
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     * @expectedExceptionMessageRegExp {Source image .+ not found}
-     */
     public function testThrowsIfInvalidPathGivenOnFind()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectExceptionMessageRegExp('{Source image .+ not found}');
+
         $loader = $this->getFlysystemLoader();
 
         $loader->find('invalid.jpeg');

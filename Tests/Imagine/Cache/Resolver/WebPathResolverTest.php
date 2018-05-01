@@ -130,7 +130,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/aCachePrefix/aFilter/aPath',
             $resolver->resolve($path, $filter)
         );
@@ -157,7 +157,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/theBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve($path, $filter)
         );
@@ -184,7 +184,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'theschema://thehost/theBasePath/theSubBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve($path, $filter)
         );
@@ -212,7 +212,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             sprintf('theschema://thehost/%s', $fileUrl),
             $resolver->resolve($path, $filter)
         );
@@ -240,7 +240,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             sprintf('http://thehost:88/%s', $fileUrl),
             $resolver->resolve($path, $filter)
         );
@@ -268,7 +268,7 @@ class WebPathResolverTest extends TestCase
             $requestContext
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             sprintf('https://thehost:444/%s', $fileUrl),
             $resolver->resolve($path, $filter)
         );
@@ -316,7 +316,7 @@ class WebPathResolverTest extends TestCase
             new RequestContext()
         );
 
-        $resolver->remove(array(), array());
+        $resolver->remove([], []);
     }
 
     public function testRemoveCacheForPathAndFilterOnRemove()
@@ -338,7 +338,7 @@ class WebPathResolverTest extends TestCase
             new RequestContext()
         );
 
-        $resolver->remove(array('aPath'), array('aFilter'));
+        $resolver->remove(['aPath'], ['aFilter']);
     }
 
     public function testRemoveCacheForSomePathsAndFilterOnRemove()
@@ -373,7 +373,7 @@ class WebPathResolverTest extends TestCase
             new RequestContext()
         );
 
-        $resolver->remove(array($pathOne, $pathTwo), array($filter));
+        $resolver->remove([$pathOne, $pathTwo], [$filter]);
     }
 
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
@@ -420,8 +420,8 @@ class WebPathResolverTest extends TestCase
         );
 
         $resolver->remove(
-            array($pathOne, $pathTwo),
-            array($filterOne, $filterTwo)
+            [$pathOne, $pathTwo],
+            [$filterOne, $filterTwo]
         );
     }
 
@@ -433,9 +433,9 @@ class WebPathResolverTest extends TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
-            ->with(array(
+            ->with([
                 sprintf("%s/aFilter", $cacheRoot),
-            ));
+            ]);
         
         $pathResolver = $this->createPathResolverMock();
         $pathResolver->method("getCacheRoot")
@@ -447,7 +447,7 @@ class WebPathResolverTest extends TestCase
             new RequestContext()
         );
 
-        $resolver->remove(array(), array('aFilter'));
+        $resolver->remove([], ['aFilter']);
     }
 
     public function testRemoveCacheForSomeFiltersOnRemove()
@@ -458,10 +458,10 @@ class WebPathResolverTest extends TestCase
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
-            ->with(array(
+            ->with([
                 sprintf("%s/aFilterOne", $cacheRoot),
                 sprintf("%s/aFilterTwo", $cacheRoot),
-            ));
+            ]);
         
         $pathResolver = $this->createPathResolverMock();
         $pathResolver->method("getCacheRoot")
@@ -473,7 +473,7 @@ class WebPathResolverTest extends TestCase
             new RequestContext()
         );
 
-        $resolver->remove(array(), array('aFilterOne', 'aFilterTwo'));
+        $resolver->remove([], ['aFilterOne', 'aFilterTwo']);
     }
 
     /**

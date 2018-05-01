@@ -51,6 +51,10 @@ filter.
 <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
 ```
 
+### Contributor Code of Conduct
+
+This project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
 ### Attribution
 
@@ -304,7 +308,7 @@ $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jp
 
 ## Filters
 
-This bundle provides a set of built-in filters andy ou may easily
+This bundle provides a set of built-in filters and you may easily
 define your own filters as well. Reference the
 [filters chapter](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html)
 from our documentation.

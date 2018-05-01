@@ -49,6 +49,14 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
     }
 
     /**
+     * @return bool
+     */
+    protected function isExifExtensionLoaded(): bool
+    {
+        return extension_loaded('exif');
+    }
+
+    /**
      * @param ContainerBuilder $container
      *
      * @return bool
@@ -56,13 +64,5 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
     private function isExifMetadataReaderSet(ContainerBuilder $container): bool
     {
         return $container->getDefinition(self::$metadataReaderServiceId)->getClass() === self::$metadataReaderExifClass;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isExifExtensionLoaded(): bool
-    {
-        return extension_loaded('exif');
     }
 }

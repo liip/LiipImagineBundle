@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
@@ -22,21 +31,21 @@ class ResolveCacheTest extends TestCase
     {
         $message = new ResolveCache('thePath');
 
-        $this->assertEquals('{"path":"thePath","filters":null,"force":false}', json_encode($message));
+        $this->assertSame('{"path":"thePath","filters":null,"force":false}', json_encode($message));
     }
 
     public function testCouldBeJsonSerializedWithFilters()
     {
-        $message = new ResolveCache('thePath', array('fooFilter', 'barFilter'));
+        $message = new ResolveCache('thePath', ['fooFilter', 'barFilter']);
 
-        $this->assertEquals('{"path":"thePath","filters":["fooFilter","barFilter"],"force":false}', json_encode($message));
+        $this->assertSame('{"path":"thePath","filters":["fooFilter","barFilter"],"force":false}', json_encode($message));
     }
 
     public function testCouldBeJsonSerializedWithFiltersAndForce()
     {
-        $message = new ResolveCache('thePath', array('fooFilter', 'barFilter'), true);
+        $message = new ResolveCache('thePath', ['fooFilter', 'barFilter'], true);
 
-        $this->assertEquals('{"path":"thePath","filters":["fooFilter","barFilter"],"force":true}', json_encode($message));
+        $this->assertSame('{"path":"thePath","filters":["fooFilter","barFilter"],"force":true}', json_encode($message));
     }
 
     public function testCouldBeJsonDeSerializedWithoutFiltersAndForce()
@@ -44,7 +53,7 @@ class ResolveCacheTest extends TestCase
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":null,"force":false}');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Async\ResolveCache', $message);
-        $this->assertEquals('thePath', $message->getPath());
+        $this->assertSame('thePath', $message->getPath());
         $this->assertNull($message->getFilters());
         $this->assertFalse($message->isForce());
     }
@@ -54,8 +63,8 @@ class ResolveCacheTest extends TestCase
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":["fooFilter","barFilter"],"force":false}');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Async\ResolveCache', $message);
-        $this->assertEquals('thePath', $message->getPath());
-        $this->assertEquals(array('fooFilter', 'barFilter'), $message->getFilters());
+        $this->assertSame('thePath', $message->getPath());
+        $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());
         $this->assertFalse($message->isForce());
     }
 
@@ -64,8 +73,8 @@ class ResolveCacheTest extends TestCase
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":["fooFilter","barFilter"],"force":true}');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Async\ResolveCache', $message);
-        $this->assertEquals('thePath', $message->getPath());
-        $this->assertEquals(array('fooFilter', 'barFilter'), $message->getFilters());
+        $this->assertSame('thePath', $message->getPath());
+        $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());
         $this->assertTrue($message->isForce());
     }
 
@@ -74,26 +83,24 @@ class ResolveCacheTest extends TestCase
         $message = ResolveCache::jsonDeserialize('{"path":"thePath"}');
 
         $this->assertInstanceOf('Liip\ImagineBundle\Async\ResolveCache', $message);
-        $this->assertEquals('thePath', $message->getPath());
+        $this->assertSame('thePath', $message->getPath());
         $this->assertNull($message->getFilters());
         $this->assertFalse($message->isForce());
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\LogicException
-     * @expectedExceptionMessage The message does not contain "path" but it is required.
-     */
     public function testThrowIfMessageMissingPathOnJsonDeserialize()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\LogicException::class);
+        $this->expectExceptionMessage('The message does not contain "path" but it is required.');
+
         ResolveCache::jsonDeserialize('{}');
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\LogicException
-     * @expectedExceptionMessage The message filters could be either null or array.
-     */
     public function testThrowIfMessageContainsNotSupportedFilters()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\LogicException::class);
+        $this->expectExceptionMessage('The message filters could be either null or array.');
+
         ResolveCache::jsonDeserialize('{"path": "aPath", "filters": "stringFilterIsNotAllowed"}');
     }
 }

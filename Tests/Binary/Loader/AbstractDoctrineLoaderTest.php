@@ -43,7 +43,7 @@ class AbstractDoctrineLoaderTest extends TestCase
 
         $this->loader = $this
             ->getMockBuilder(AbstractDoctrineLoader::class)
-            ->setConstructorArgs(array($this->om))
+            ->setConstructorArgs([$this->om])
             ->getMockForAbstractClass();
     }
 
@@ -69,7 +69,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->with(null, 1337)
             ->will($this->returnValue($image));
 
-        $this->assertEquals('foo', $this->loader->find('/foo/bar'));
+        $this->assertSame('foo', $this->loader->find('/foo/bar'));
     }
 
     public function testFindWithValidObjectSecondHit()
@@ -79,10 +79,10 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
-            ->will($this->returnValueMap(array(
-                array('/foo/bar.png', 1337),
-                array('/foo/bar', 4711),
-            )));
+            ->will($this->returnValueMap([
+                ['/foo/bar.png', 1337],
+                ['/foo/bar', 4711],
+            ]));
 
         $this->loader
             ->expects($this->atLeastOnce())
@@ -93,19 +93,18 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
-            ->will($this->returnValueMap(array(
-                array(null, 1337, null),
-                array(null, 4711, $image),
-            )));
+            ->will($this->returnValueMap([
+                [null, 1337, null],
+                [null, 4711, $image],
+            ]));
 
-        $this->assertEquals('foo', $this->loader->find('/foo/bar.png'));
+        $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
-     */
     public function testFindWithInvalidObject()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')

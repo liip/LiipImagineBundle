@@ -61,16 +61,27 @@ abstract class AbstractTest extends TestCase
         $this->filesystem->mkdir($this->temporaryPath);
     }
 
+    protected function tearDown()
+    {
+        if (!$this->filesystem) {
+            return;
+        }
+
+        if ($this->filesystem->exists($this->temporaryPath)) {
+            $this->filesystem->remove($this->temporaryPath);
+        }
+    }
+
     /**
      * @return string[]
      */
     public function invalidPathProvider()
     {
-        return array(
-            array($this->fixturesPath.'/assets/../../foobar.png'),
-            array($this->fixturesPath.'/assets/some_folder/../foobar.png'),
-            array('../../outside/foobar.jpg'),
-        );
+        return [
+            [$this->fixturesPath.'/assets/../../foobar.png'],
+            [$this->fixturesPath.'/assets/some_folder/../foobar.png'],
+            ['../../outside/foobar.jpg'],
+        ];
     }
 
     /**
@@ -79,10 +90,10 @@ abstract class AbstractTest extends TestCase
     protected function createFilterConfiguration()
     {
         $config = new FilterConfiguration();
-        $config->set('thumbnail', array(
-            'size' => array(180, 180),
+        $config->set('thumbnail', [
+            'size' => [180, 180],
             'mode' => 'outbound',
-        ));
+        ]);
 
         return $config;
     }
@@ -94,12 +105,12 @@ abstract class AbstractTest extends TestCase
     {
         return $this
             ->getMockBuilder(CacheManager::class)
-            ->setConstructorArgs(array(
+            ->setConstructorArgs([
                 $this->createFilterConfiguration(),
                 $this->createRouterInterfaceMock(),
                 $this->createSignerInterfaceMock(),
                 $this->createEventDispatcherInterfaceMock(),
-            ))
+            ])
             ->getMock();
     }
 
@@ -212,7 +223,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function createFilterManagerMock()
     {
-        return $this->createObjectMock(FilterManager::class, array(), false);
+        return $this->createObjectMock(FilterManager::class, [], false);
     }
 
     /**
@@ -228,7 +239,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function createDataManagerMock()
     {
-        return $this->createObjectMock(DataManager::class, array(), false);
+        return $this->createObjectMock(DataManager::class, [], false);
     }
 
     /**
@@ -239,7 +250,7 @@ abstract class AbstractTest extends TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createObjectMock($object, array $methods = array(), $constructorInvoke = false, array $constructorParams = array())
+    protected function createObjectMock($object, array $methods = [], $constructorInvoke = false, array $constructorParams = [])
     {
         $builder = $this->getMockBuilder($object);
 
@@ -274,16 +285,5 @@ abstract class AbstractTest extends TestCase
         $m->setAccessible(true);
 
         return $m;
-    }
-
-    protected function tearDown()
-    {
-        if (!$this->filesystem) {
-            return;
-        }
-
-        if ($this->filesystem->exists($this->temporaryPath)) {
-            $this->filesystem->remove($this->temporaryPath);
-        }
     }
 }

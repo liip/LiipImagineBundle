@@ -25,12 +25,16 @@ use Symfony\Component\Process\Process;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class PngquantPostProcessor implements PostProcessorInterface
 {
-    /** @var string Path to pngquant binary */
+    /**
+     * @var string Path to pngquant binary
+     */
     protected $pngquantBin;
 
-    /** @var string Quality to pass to pngquant */
+    /**
+     * @var string Quality to pass to pngquant
+     */
     protected $quality;
 
     /**
@@ -64,23 +68,10 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
      *
      * @return BinaryInterface
      */
-    public function process(BinaryInterface $binary)
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
-     * @param array           $options
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
-    {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/png'])) {
+        $type = mb_strtolower($binary->getMimeType());
+        if (!in_array($type, ['image/png'], true)) {
             return $binary;
         }
 
@@ -88,17 +79,17 @@ class PngquantPostProcessor implements PostProcessorInterface, ConfigurablePostP
 
         // Specify quality.
         $tranformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
-        $processArguments[] =  '--quality';
-        $processArguments[] =  $tranformQuality;
+        $processArguments[] = '--quality';
+        $processArguments[] = $tranformQuality;
 
         // Read to/from stdout to save resources.
-        $processArguments[] =  '-';
+        $processArguments[] = '-';
         $proc = new Process($processArguments);
         $proc->setInput($binary->getContent());
         $proc->run();
 
         // 98 and 99 are "quality too low" to compress current current image which, while isn't ideal, is not a failure
-        if (!in_array($proc->getExitCode(), [0, 98, 99])) {
+        if (!in_array($proc->getExitCode(), [0, 98, 99], true)) {
             throw new ProcessFailedException($proc);
         }
 

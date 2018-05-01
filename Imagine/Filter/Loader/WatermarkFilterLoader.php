@@ -49,8 +49,8 @@ class WatermarkFilterLoader implements LoaderInterface
             'position' => 'center',
         ];
 
-        if (substr($options['size'], -1) == '%') {
-            $options['size'] = substr($options['size'], 0, -1) / 100;
+        if ('%' === mb_substr($options['size'], -1)) {
+            $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
         $watermark = $this->imagine->open($this->rootPath.'/'.$options['image']);

@@ -21,14 +21,6 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
  */
 class SimpleMimeTypeGuesserTest extends TestCase
 {
-    /**
-     * @return SimpleMimeTypeGuesser
-     */
-    private function getSimpleMimeTypeGuesser()
-    {
-        return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
-    }
-
     public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
     {
         $guesser = $this->getSimpleMimeTypeGuesser();
@@ -46,13 +38,13 @@ class SimpleMimeTypeGuesserTest extends TestCase
      */
     public static function provideImageData()
     {
-        return array(
-            'gif' => array(__DIR__.'/../Fixtures/assets/cats.gif', 'image/gif'),
-            'png' => array(__DIR__.'/../Fixtures/assets/cats.png', 'image/png'),
-            'jpg' => array(__DIR__.'/../Fixtures/assets/cats.jpeg', 'image/jpeg'),
-            'pdf' => array(__DIR__.'/../Fixtures/assets/cats.pdf', 'application/pdf'),
-            'txt' => array(__DIR__.'/../Fixtures/assets/cats.txt', 'text/plain'),
-        );
+        return [
+            'gif' => [__DIR__.'/../Fixtures/assets/cats.gif', 'image/gif'],
+            'png' => [__DIR__.'/../Fixtures/assets/cats.png', 'image/png'],
+            'jpg' => [__DIR__.'/../Fixtures/assets/cats.jpeg', 'image/jpeg'],
+            'pdf' => [__DIR__.'/../Fixtures/assets/cats.pdf', 'application/pdf'],
+            'txt' => [__DIR__.'/../Fixtures/assets/cats.txt', 'text/plain'],
+        ];
     }
 
     /**
@@ -65,6 +57,14 @@ class SimpleMimeTypeGuesserTest extends TestCase
      */
     public function testGuessMimeType($fileName, $mimeType)
     {
-        $this->assertEquals($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
+        $this->assertSame($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
+    }
+
+    /**
+     * @return SimpleMimeTypeGuesser
+     */
+    private function getSimpleMimeTypeGuesser()
+    {
+        return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
     }
 }

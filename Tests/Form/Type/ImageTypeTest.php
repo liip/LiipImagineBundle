@@ -35,7 +35,7 @@ class ImageTypeTest extends AbstractTest
     {
         $type = new ImageType();
 
-        $this->assertEquals(FileType::class, $type->getParent());
+        $this->assertSame(FileType::class, $type->getParent());
     }
 
     public function testConfigureOptions()
@@ -56,14 +56,14 @@ class ImageTypeTest extends AbstractTest
 
     public function testBuildView()
     {
-        $options = array(
+        $options = [
             'image_path' => 'foo',
             'image_filter' => 'bar',
             'image_attr' => 'bazz',
             'link_url' => 'http://liip.com',
             'link_filter' => 'foo',
             'link_attr' => 'bazz',
-        );
+        ];
 
         $view = new FormView();
         $type = new ImageType();
@@ -73,7 +73,7 @@ class ImageTypeTest extends AbstractTest
 
         foreach ($options as $name => $value) {
             $this->assertArrayHasKey($name, $view->vars);
-            $this->assertEquals($value, $view->vars[$name]);
+            $this->assertSame($value, $view->vars[$name]);
         }
     }
 }

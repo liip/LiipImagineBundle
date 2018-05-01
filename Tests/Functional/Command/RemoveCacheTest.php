@@ -29,10 +29,10 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_web_path'),
-        ));
+            [
+                'paths' => ['images/cats.jpeg'],
+                '--filters' => ['thumbnail_web_path'],
+        ]);
     }
 
     public function testExecuteSuccessfullyWithEmptyCacheAndMultiplePaths()
@@ -41,7 +41,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
+            ['paths' => ['images/cats.jpeg', 'images/cats2.jpeg']]
         );
     }
 
@@ -51,7 +51,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('--filters' => array('thumbnail_web_path', 'thumbnail_default'))
+            ['--filters' => ['thumbnail_web_path', 'thumbnail_default']]
         );
     }
 
@@ -98,7 +98,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('paths' => array('images/cats.jpeg'))
+            ['paths' => ['images/cats.jpeg']]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -128,7 +128,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('paths' => array('images/cats.jpeg', 'images/cats2.jpeg'))
+            ['paths' => ['images/cats.jpeg', 'images/cats2.jpeg']]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -158,7 +158,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('--filters' => array('thumbnail_default'))
+            ['--filters' => ['thumbnail_default']]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_default/images/cats.jpeg');
@@ -188,7 +188,7 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array('--filters' => array('thumbnail_default', 'thumbnail_web_path'))
+            ['--filters' => ['thumbnail_default', 'thumbnail_web_path']]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -214,9 +214,9 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg'),
-                '--filters' => array('thumbnail_default', 'thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg'],
+                '--filters' => ['thumbnail_default', 'thumbnail_web_path'], ]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -241,9 +241,9 @@ class RemoveCacheTest extends AbstractCommandTestCase
 
         $this->executeConsole(
             $this->getService('liip_imagine.command.remove_cache_command'),
-            array(
-                'paths' => array('images/cats.jpeg', 'images/cats2.jpeg'),
-                '--filters' => array('thumbnail_web_path'), )
+            [
+                'paths' => ['images/cats.jpeg', 'images/cats2.jpeg'],
+                '--filters' => ['thumbnail_web_path'], ]
         );
 
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');

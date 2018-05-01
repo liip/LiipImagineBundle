@@ -19,10 +19,10 @@ abstract class AbstractWebTestCase extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function createClient(array $options = array(), array $server = array())
+    public static function createClient(array $options = [], array $server = [])
     {
         if (!class_exists(Client::class)) {
-            self::markTestSkipped("Requires the symfony/browser-kit package.");
+            self::markTestSkipped('Requires the symfony/browser-kit package.');
         }
 
         return parent::createClient($options, $server);

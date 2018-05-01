@@ -17,9 +17,11 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePostProcessorInterface
+class JpegOptimPostProcessor implements PostProcessorInterface
 {
-    /** @var string Path to jpegoptim binary */
+    /**
+     * @var string Path to jpegoptim binary
+     */
     protected $jpegoptimBin;
 
     /**
@@ -111,28 +113,16 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
 
     /**
      * @param BinaryInterface $binary
-     *
-     * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
-     */
-    public function process(BinaryInterface $binary)
-    {
-        return $this->processWithConfiguration($binary, []);
-    }
-
-    /**
-     * @param BinaryInterface $binary
      * @param array           $options
      *
      * @throws ProcessFailedException
      *
      * @return BinaryInterface
      */
-    public function processWithConfiguration(BinaryInterface $binary, array $options)
+    public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        $type = strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'])) {
+        $type = mb_strtolower($binary->getMimeType());
+        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
             return $binary;
         }
 
@@ -145,19 +135,19 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
 
         $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
-            $processArguments[] =  '--strip-all';
+            $processArguments[] = '--strip-all';
         }
 
         $max = array_key_exists('max', $options) ? $options['max'] : $this->max;
         if ($max) {
-            $processArguments[] =  '--max='.$max;
+            $processArguments[] = '--max='.$max;
         }
 
         $progressive = array_key_exists('progressive', $options) ? $options['progressive'] : $this->progressive;
         if ($progressive) {
-            $processArguments[] =  '--all-progressive';
+            $processArguments[] = '--all-progressive';
         } else {
-            $processArguments[] =  '--all-normal';
+            $processArguments[] = '--all-normal';
         }
 
         $processArguments[] = $input;
@@ -170,7 +160,7 @@ class JpegOptimPostProcessor implements PostProcessorInterface, ConfigurablePost
         $proc = new Process($processArguments);
         $proc->run();
 
-        if (false !== strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
+        if (false !== mb_strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
             unlink($input);
             throw new ProcessFailedException($proc);
         }

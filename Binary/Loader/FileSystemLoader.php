@@ -37,18 +37,15 @@ class FileSystemLoader implements LoaderInterface
      * @param MimeTypeGuesserInterface  $mimeGuesser
      * @param ExtensionGuesserInterface $extensionGuesser
      * @param LocatorInterface          $locator
-     * @param string[]                  $rootPaths
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeGuesser,
         ExtensionGuesserInterface $extensionGuesser,
-        LocatorInterface $locator,
-        array $rootPaths = []
+        LocatorInterface $locator
     ) {
         $this->mimeTypeGuesser = $mimeGuesser;
         $this->extensionGuesser = $extensionGuesser;
         $this->locator = $locator;
-        $this->locator->setOptions(['roots' => $rootPaths]);
     }
 
     /**

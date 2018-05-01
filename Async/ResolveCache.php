@@ -88,7 +88,7 @@ class ResolveCache implements \JsonSerializable
             throw new LogicException('The message does not contain "path" but it is required.');
         }
 
-        if (!(is_null($data['filters']) || is_array($data['filters']))) {
+        if (!(null === $data['filters'] || is_array($data['filters']))) {
             throw new LogicException('The message filters could be either null or array.');
         }
 
