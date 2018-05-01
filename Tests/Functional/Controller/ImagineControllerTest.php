@@ -60,43 +60,43 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
-    public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
+    public function testBadRequestIfSignInvalidWhileUsingCustomFilters()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
-        $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
-
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
             'filters' => [
                 'thumbnail' => ['size' => [50, 50]],
             ],
             '_hash' => 'invalid',
         ]));
+    
+        $response = $this->client->getResponse();
+        $this->assertSame(400, $response->getStatusCode());
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray()
+    public function testShouldReturnNotFoundHttpCodeIfFiltersNotArray()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-        $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
-
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
             'filters' => 'some-string',
             '_hash' => 'hash',
         ]));
+        $response = $this->client->getResponse();
+        $this->assertSame(404, $response->getStatusCode());
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
+    public function testShouldReturnNotFoundHttpCodeIfFileNotExists()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-        $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
-
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
+        $response = $this->client->getResponse();
+        $this->assertSame(404, $response->getStatusCode());
     }
 
-    public function testInvalidFilterShouldThrowNotFoundHttpException()
+    public function testInvalidFilterShouldReturnNotFoundHttpCode()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-
         $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
+    
+        $response = $this->client->getResponse();
+        $this->assertSame(404, $response->getStatusCode());
+
     }
 
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
