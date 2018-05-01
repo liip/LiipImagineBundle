@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
-class RelativeWebPathResolverFactoryFactory extends AbstractWebPathResolverFactory
+class RelativeWebPathResolverFactory extends AbstractWebPathResolverFactory
 {
     /**
      * {@inheritdoc}
