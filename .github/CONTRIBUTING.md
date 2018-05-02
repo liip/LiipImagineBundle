@@ -154,7 +154,7 @@ into the upstream repository is the same.
  * [General GitHub documentation][gh-help]
  * [GitHub pull request documentation][gh-help-pr]
 
-[cs-conf]:       .php_cs.dist
+[cs-conf]:       ../.php_cs.dist
 [cs]:            http://cs.sensiolabs.org/
 [gh-help]:       https://help.github.com
 [gh-help-pr]:    https://help.github.com/send-pull-requests
@@ -167,7 +167,7 @@ into the upstream repository is the same.
 [rst-info]:      http://symfony.com/doc/current/contributing/documentation/format.html#restructuredtext
 [rst-make]:      https://github.com/liip/LiipImagineBundle/wiki/Building-RST-Documentation
 [php-unit]:      http://phpunit.de/
-[composer-file]: composer.json
+[composer-file]: ../composer.json
 [composer]:      https://getcomposer.org/
 [composer-dl]:   https://getcomposer.org/download/
 [coc-14]:        https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
