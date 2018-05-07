@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
+use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
@@ -49,7 +50,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition('liip_imagine.controller'),
+            $this->containerBuilder->getDefinition(ImagineController::class),
             [
                 new Reference('liip_imagine.service.filter'),
                 new Reference('liip_imagine.data.manager'),

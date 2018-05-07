@@ -69,11 +69,13 @@
 
         <!-- Controller -->
 
-        <service id="liip_imagine.controller" class="Liip\ImagineBundle\Controller\ImagineController" public="true">
+        <service id="Liip\ImagineBundle\Controller\ImagineController" public="true">
             <argument type="service" id="liip_imagine.service.filter" />
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
         </service>
+
+        <service id="liip_imagine.controller" alias="Liip\ImagineBundle\Controller\ImagineController" public="true" />
 
         <service id="liip_imagine.meta_data.reader" class="Imagine\Image\Metadata\ExifMetadataReader" public="false" />
 

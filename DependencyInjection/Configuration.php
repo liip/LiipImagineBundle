@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection;
 
+use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -118,8 +119,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('controller')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('filter_action')->defaultValue('liip_imagine.controller:filterAction')->end()
-                        ->scalarNode('filter_runtime_action')->defaultValue('liip_imagine.controller:filterRuntimeAction')->end()
+                        ->scalarNode('filter_action')->defaultValue(sprintf('%s::filterAction', ImagineController::class))->end()
+                        ->scalarNode('filter_runtime_action')->defaultValue(sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
                     ->end()
                 ->end()
                 ->arrayNode('filter_sets')

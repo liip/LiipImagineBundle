@@ -23,7 +23,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 {
     public function testCouldBeGetFromContainer()
     {
-        $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get('liip_imagine.controller'));
+        $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
     }
 
     public function testShouldResolvePopulatingCacheFirst()
