@@ -56,6 +56,25 @@ will search each for the requested file.
                         - /path/foo
                         - /path/bar
 
+As of version ``2.1.0`` you can allow invalid data roots (which are removed at runtime)
+in your configuration (normally invalid data roots will cause an exception to be thrown).
+This allows you to configure your data roots for production and development environments
+without relying on multiple configurations.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        loaders:
+            default:
+                filesystem:
+                    data_root:
+                        - /path/foo
+                        - /path/bar
+                        - /invalid/path/will/be/removed/at/runtime
+                    allow_unresolvable_data_roots: true
+
 As of version ``1.7.3`` you ask for the public resource paths from all registered bundles
 to be auto-registered as data roots. This allows you to load assets from the
 ``Resources/public`` folders that reside within the loaded bundles. To enable this

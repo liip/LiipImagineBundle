@@ -29,9 +29,7 @@ class FileSystemLocator implements LocatorInterface
     {
         $this->roots = array_filter(array_map(function (string $root) use ($allowUnresolvable): ?string {
             return $this->sanitizeRootPath($root, $allowUnresolvable);
-        }, $roots), function (string $root = null): bool {
-            return null !== $root;
-        });
+        }, $roots));
     }
 
     /**
