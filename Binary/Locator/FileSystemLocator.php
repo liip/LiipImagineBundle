@@ -23,12 +23,15 @@ class FileSystemLocator implements LocatorInterface
 
     /**
      * @param string[] $roots
+     * @param bool     $allowUnresolvable
      */
-    public function __construct(array $roots = [])
+    public function __construct(array $roots = [], bool $allowUnresolvable = false)
     {
-        $this->roots = array_map(function (string $root): string {
-            return $this->sanitizeRootPath($root);
-        }, $roots);
+        $this->roots = array_filter(array_map(function (string $root) use ($allowUnresolvable): ?string {
+            return $this->sanitizeRootPath($root, $allowUnresolvable);
+        }, $roots), function (string $root = null): bool {
+            return null !== $root;
+        });
     }
 
     /**
@@ -104,15 +107,20 @@ class FileSystemLocator implements LocatorInterface
 
     /**
      * @param string $path
+     * @param bool   $allowUnresolvable
      *
      * @throws InvalidArgumentException
      *
-     * @return string
+     * @return string|null
      */
-    private function sanitizeRootPath(string $path): string
+    private function sanitizeRootPath(string $path, bool $allowUnresolvable): ?string
     {
         if (!empty($path) && false !== $real = realpath($path)) {
             return $real;
+        }
+
+        if ($allowUnresolvable) {
+            return null;
         }
 
         throw new InvalidArgumentException(sprintf('Root image path not resolvable "%s"', $path));

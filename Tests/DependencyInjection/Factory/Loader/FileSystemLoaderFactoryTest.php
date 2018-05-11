@@ -54,6 +54,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -70,6 +71,34 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
         $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(2)->getArgument(0));
+        $this->assertFalse($loaderDefinition->getArgument(2)->getArgument(1));
+    }
+
+    public function testCreateLoaderDefinitionWithUnresolvableRoots()
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => true,
+            'locator' => 'filesystem',
+            'bundle_resources' => [
+                'enabled' => false,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => [],
+            ],
+        ]);
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
+
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
+
+        $this->assertInstanceOfChildDefinition($loaderDefinition);
+        $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
+
+        $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(2)->getArgument(0));
+        $this->assertTrue($loaderDefinition->getArgument(2)->getArgument(1));
     }
 
     public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
@@ -90,6 +119,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -125,6 +155,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -161,6 +192,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -193,6 +225,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -217,6 +250,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'first_loader', [
             'data_root' => ['firstLoaderDataroot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -225,6 +259,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
         $loader->create($container, 'second_loader', [
             'data_root' => ['secondLoaderDataroot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -255,6 +290,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
