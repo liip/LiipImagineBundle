@@ -85,6 +85,8 @@ given release.
       $producer->sendCommand(\Liip\ImagineBundle\Async\Commands::RESOLVE_CACHE /* ... */);
     ```
 
+  - __[Routing]__ The `Resources/config/routing.xml` file has been removed. Use the new `Resources/config/routing.yaml` YAML file instead.
+
 
 ## [1.9.1](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md#191)
 
