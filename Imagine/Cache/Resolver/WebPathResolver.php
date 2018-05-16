@@ -18,7 +18,7 @@ use Symfony\Component\Routing\RequestContext;
 class WebPathResolver extends AbstractWebPathResolver
 {
     private $requestContext;
-    
+
     /**
      * @param Filesystem            $filesystem
      * @param PathResolverInterface $pathResolver
@@ -32,7 +32,7 @@ class WebPathResolver extends AbstractWebPathResolver
         parent::__construct($filesystem, $pathResolver);
         $this->requestContext = $requestContext;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +44,7 @@ class WebPathResolver extends AbstractWebPathResolver
             $this->getPathResolver()->getFileUrl($path, $filter)
         );
     }
-    
+
     /**
      * @return string
      */
@@ -54,17 +54,17 @@ class WebPathResolver extends AbstractWebPathResolver
         if ('https' === $this->requestContext->getScheme() && 443 !== $this->requestContext->getHttpsPort()) {
             $port = ":{$this->requestContext->getHttpsPort()}";
         }
-        
+
         if ('http' === $this->requestContext->getScheme() && 80 !== $this->requestContext->getHttpPort()) {
             $port = ":{$this->requestContext->getHttpPort()}";
         }
-        
+
         $baseUrl = $this->requestContext->getBaseUrl();
         if ('.php' === mb_substr($this->requestContext->getBaseUrl(), -4)) {
             $baseUrl = pathinfo($this->requestContext->getBaseurl(), PATHINFO_DIRNAME);
         }
         $baseUrl = rtrim($baseUrl, '/\\');
-        
+
         return sprintf(
             '%s://%s%s%s',
             $this->requestContext->getScheme(),

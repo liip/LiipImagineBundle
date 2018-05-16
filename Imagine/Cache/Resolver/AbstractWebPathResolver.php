@@ -21,12 +21,12 @@ abstract class AbstractWebPathResolver implements ResolverInterface
      * @var Filesystem
      */
     protected $filesystem;
-    
+
     /**
      * @var PathResolverInterface
      */
     protected $pathResolver;
-    
+
     /**
      * @param Filesystem            $filesystem
      * @param PathResolverInterface $pathResolver
@@ -38,7 +38,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
         $this->filesystem = $filesystem;
         $this->pathResolver = $pathResolver;
     }
-    
+
     /**
      * Checks whether the given path is stored within this Resolver.
      *
@@ -51,7 +51,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
     {
         return is_file($this->pathResolver->getFilePath($path, $filter));
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -62,7 +62,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
             $binary->getContent()
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -71,25 +71,25 @@ abstract class AbstractWebPathResolver implements ResolverInterface
         if (empty($paths) && empty($filters)) {
             return;
         }
-        
+
         if (empty($paths)) {
             $filtersCacheDir = [];
             foreach ($filters as $filter) {
-                $filtersCacheDir[] = $this->pathResolver->getCacheRoot() . '/' . $filter;
+                $filtersCacheDir[] = $this->pathResolver->getCacheRoot().'/'.$filter;
             }
-            
+
             $this->filesystem->remove($filtersCacheDir);
-            
+
             return;
         }
-        
+
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
                 $this->filesystem->remove($this->pathResolver->getFilePath($path, $filter));
             }
         }
     }
-    
+
     /**
      * @return PathResolverInterface
      */

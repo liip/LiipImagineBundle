@@ -20,7 +20,7 @@ interface PathResolverInterface
      * @return string
      */
     public function getFilePath($path, $filter);
-    
+
     /**
      * @param string $path
      * @param string $filter
@@ -28,7 +28,7 @@ interface PathResolverInterface
      * @return string
      */
     public function getFileUrl($path, $filter);
-    
+
     /**
      * @return string
      */

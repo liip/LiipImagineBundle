@@ -21,11 +21,11 @@ class RelativeWebPathResolverFactoryTest extends AbstractWebPathResolverTest
 {
     public function testReturnExpectedName()
     {
-        $resolver = new RelativeWebPathResolverFactory;
-        
-        $this->assertEquals('relative_web_path', $resolver->getName());
+        $resolver = new RelativeWebPathResolverFactory();
+
+        $this->assertSame('relative_web_path', $resolver->getName());
     }
-    
+
     /**
      * @return string|ResolverFactoryInterface
      */
