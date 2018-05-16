@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\Utility\Framework\SymfonyFramework;
@@ -25,12 +34,15 @@ abstract class AbstractWebPathResolverFactory extends AbstractResolverFactory
         
         $resolverDefinition->replaceArgument(1, new Reference($pathResolverServiceId));
         
-        $resolverDefinition->addTag('liip_imagine.cache.resolver', [
-            'resolver' => $resolverName,
-        ]);
+        $resolverDefinition->addTag(
+            'liip_imagine.cache.resolver',
+            [
+                'resolver' => $resolverName,
+            ]
+        );
         
         $resolverId = 'liip_imagine.cache.resolver.';
-        $container->setDefinition($resolverId.$resolverName, $resolverDefinition);
+        $container->setDefinition($resolverId . $resolverName, $resolverDefinition);
         
         return $resolverId;
     }
@@ -40,16 +52,17 @@ abstract class AbstractWebPathResolverFactory extends AbstractResolverFactory
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
-        $builder
-            ->children()
-                ->scalarNode('web_root')
-                    ->defaultValue(SymfonyFramework::getContainerResolvableRootWebPath())
-                    ->cannotBeEmpty()
-                ->end()
-                ->scalarNode('cache_prefix')
-                    ->defaultValue('media/cache')
-                    ->cannotBeEmpty()
-                ->end()
+        $builder->children()
+            ->scalarNode('web_root')
+            ->defaultValue(
+                SymfonyFramework::getContainerResolvableRootWebPath()
+            )
+            ->cannotBeEmpty()
+            ->end()
+            ->scalarNode('cache_prefix')
+            ->defaultValue('media/cache')
+            ->cannotBeEmpty()
+            ->end()
             ->end();
     }
 }

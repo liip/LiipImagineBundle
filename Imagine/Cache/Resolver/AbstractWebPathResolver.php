@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
@@ -19,7 +28,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
     protected $pathResolver;
     
     /**
-     * @param Filesystem     $filesystem
+     * @param Filesystem            $filesystem
      * @param PathResolverInterface $pathResolver
      */
     public function __construct(
@@ -66,7 +75,7 @@ abstract class AbstractWebPathResolver implements ResolverInterface
         if (empty($paths)) {
             $filtersCacheDir = [];
             foreach ($filters as $filter) {
-                $filtersCacheDir[] = $this->pathResolver->getCacheRoot().'/'.$filter;
+                $filtersCacheDir[] = $this->pathResolver->getCacheRoot() . '/' . $filter;
             }
             
             $this->filesystem->remove($filtersCacheDir);

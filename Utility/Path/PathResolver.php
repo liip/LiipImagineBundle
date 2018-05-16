@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Utility\Path;
 
 class PathResolver implements PathResolverInterface
@@ -25,7 +34,7 @@ class PathResolver implements PathResolverInterface
     ) {
         $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
         $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
-        $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
+        $this->cacheRoot = $this->webRoot . '/' . $this->cachePrefix;
     }
     
     /**
@@ -33,7 +42,7 @@ class PathResolver implements PathResolverInterface
      */
     public function getFilePath($path, $filter)
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+        return $this->webRoot . '/' . $this->getFileUrl($path, $filter);
     }
     
     /**
@@ -43,8 +52,8 @@ class PathResolver implements PathResolverInterface
     {
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
-    
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        
+        return $this->cachePrefix . '/' . $filter . '/' . ltrim($path, '/');
     }
     
     /**

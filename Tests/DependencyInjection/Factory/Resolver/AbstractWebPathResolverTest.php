@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AbstractWebPathResolverFactory;
@@ -44,10 +53,10 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $resolver->create(
             $container,
             'the_resolver_name',
-            array(
-                'web_root' => 'theWebRoot',
+            [
+                'web_root'     => 'theWebRoot',
                 'cache_prefix' => 'theCachePrefix',
-            )
+            ]
         );
         
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
@@ -61,13 +70,13 @@ abstract class AbstractWebPathResolverTest extends TestCase
             sprintf('liip_imagine.cache.resolver.prototype.%s', $resolver->getName()),
             $resolverDefinition->getParent()
         );
-    
+        
         /**
          * @var Reference $utilPathResolverReference
          */
         $utilPathResolverReference = $resolverDefinition->getArgument(1);
         $this->assertInstanceOf(Reference::class, $utilPathResolverReference);
-    
+        
         $utilPathResolverServiceId = $utilPathResolverReference->__toString();
         $this->assertEquals('liip_imagine.util.resolver.path', $utilPathResolverServiceId);
         $this->assertTrue($container->hasDefinition($utilPathResolverServiceId));
@@ -77,7 +86,7 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $utilPathResolverDefinition = $container->getDefinition($utilPathResolverServiceId);
         $this->assertInstanceOf(ChildDefinition::class, $utilPathResolverDefinition);
         $this->assertEquals('liip_imagine.util.resolver.prototype.path', $utilPathResolverDefinition->getParent());
-    
+        
         $this->assertEquals('theWebRoot', $utilPathResolverDefinition->getArgument(0));
         $this->assertEquals('theCachePrefix', $utilPathResolverDefinition->getArgument(1));
     }
@@ -93,12 +102,15 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $resolver = $this->createResolver();
         $resolver->addConfiguration($rootNode);
         
-        $config = $this->processConfigTree($treeBuilder, array(
-            $resolver->getName() => array(
-                'web_root' => $expectedWebPath,
-                'cache_prefix' => $expectedCachePrefix,
-            ),
-        ));
+        $config = $this->processConfigTree(
+            $treeBuilder,
+            [
+                $resolver->getName() => [
+                    'web_root'     => $expectedWebPath,
+                    'cache_prefix' => $expectedCachePrefix,
+                ],
+            ]
+        );
         
         $this->assertArrayHasKey('web_root', $config);
         $this->assertEquals($expectedWebPath, $config['web_root']);
@@ -111,13 +123,16 @@ abstract class AbstractWebPathResolverTest extends TestCase
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('test_resolver_name', 'array');
-    
+        
         $resolver = $this->createResolver();
         $resolver->addConfiguration($rootNode);
         
-        $config = $this->processConfigTree($treeBuilder, array(
-            $resolver->getName() => array(),
-        ));
+        $config = $this->processConfigTree(
+            $treeBuilder,
+            [
+                $resolver->getName() => [],
+            ]
+        );
         
         $this->assertArrayHasKey('web_root', $config);
         $this->assertEquals(SymfonyFramework::getContainerResolvableRootWebPath(), $config['web_root']);
@@ -134,7 +149,7 @@ abstract class AbstractWebPathResolverTest extends TestCase
      */
     protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
     {
-        $processor = new Processor();
+        $processor = new Processor;
         
         return $processor->process($treeBuilder->buildTree(), $configs);
     }

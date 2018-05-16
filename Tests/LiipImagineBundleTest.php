@@ -36,7 +36,7 @@ class LiipImagineBundleTest extends AbstractTest
     {
         $this->assertInstanceOf(Bundle::class, new LiipImagineBundle());
     }
-
+    
     public function testAddLoadersCompilerPassOnBuild()
     {
         $containerMock = $this->createContainerBuilderMock();
@@ -44,16 +44,20 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->will(
+                $this->returnValue($this->createLiipImagineExtensionMock())
+            );
         $containerMock
             ->expects($this->at(0))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf(LoadersCompilerPass::class));
-
+            ->with(
+                $this->isInstanceOf(LoadersCompilerPass::class)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddFiltersCompilerPassOnBuild()
     {
         $containerMock = $this->createContainerBuilderMock();
@@ -61,33 +65,40 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->will(
+                $this->returnValue($this->createLiipImagineExtensionMock())
+            );
         $containerMock
             ->expects($this->at(1))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf(FiltersCompilerPass::class));
-
+            ->with(
+                $this->isInstanceOf(FiltersCompilerPass::class)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddPostProcessorsCompilerPassOnBuild()
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
-            ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->with('liip_imagine')->will(
+                $this->returnValue($this->createLiipImagineExtensionMock())
+            );
         $containerMock
             ->expects($this->at(2))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf(PostProcessorsCompilerPass::class));
-
+            ->with(
+                $this->isInstanceOf(PostProcessorsCompilerPass::class)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddResolversCompilerPassOnBuild()
     {
         $containerMock = $this->createContainerBuilderMock();
@@ -95,69 +106,84 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->will(
+                $this->returnValue($this->createLiipImagineExtensionMock())
+            );
         $containerMock
             ->expects($this->at(3))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf(ResolversCompilerPass::class));
-
+            ->with(
+                $this->isInstanceOf(ResolversCompilerPass::class)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddWebPathResolverFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(0))
             ->method('addResolverFactory')
-            ->with($this->isInstanceOf(WebPathResolverFactory::class));
-
+            ->with(
+                $this->isInstanceOf(WebPathResolverFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddAwsS3ResolverFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(1))
             ->method('addResolverFactory')
-            ->with($this->isInstanceOf(AwsS3ResolverFactory::class));
-
+            ->with(
+                $this->isInstanceOf(AwsS3ResolverFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddFlysystemResolverFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
-        $extensionMock
-            ->expects($this->at(2))
+        $extensionMock->expects($this->at(2))
             ->method('addResolverFactory')
-            ->with($this->isInstanceOf(FlysystemResolverFactory::class));
-
+            ->with(
+                $this->isInstanceOf(FlysystemResolverFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
@@ -168,76 +194,92 @@ class LiipImagineBundleTest extends AbstractTest
         $extensionMock
             ->expects($this->at(3))
             ->method('addResolverFactory')
-            ->with($this->isInstanceOf(RelativeWebPathResolverFactory::class));
+            ->with(
+                $this->isInstanceOf(RelativeWebPathResolverFactory::class)
+            );
         
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->will(
+                $this->returnValue($extensionMock)
+            );
         
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddStreamLoaderFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(4))
             ->method('addLoaderFactory')
-            ->with($this->isInstanceOf(StreamLoaderFactory::class));
-
+            ->with(
+                $this->isInstanceOf(StreamLoaderFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddFilesystemLoaderFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(5))
             ->method('addLoaderFactory')
-            ->with($this->isInstanceOf(FileSystemLoaderFactory::class));
-
+            ->with(
+                $this->isInstanceOf(FileSystemLoaderFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     public function testAddFlysystemLoaderFactoryOnBuild()
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
             ->expects($this->at(6))
             ->method('addLoaderFactory')
-            ->with($this->isInstanceOf(FlysystemLoaderFactory::class));
-
+            ->with(
+                $this->isInstanceOf(FlysystemLoaderFactory::class)
+            );
+        
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
-
+            ->will(
+                $this->returnValue($extensionMock)
+            );
+        
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
-
+    
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder
      */
@@ -245,16 +287,20 @@ class LiipImagineBundleTest extends AbstractTest
     {
         return $this->createObjectMock(ContainerBuilder::class, [], false);
     }
-
+    
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|LiipImagineExtension
      */
     protected function createLiipImagineExtensionMock()
     {
-        return $this->createObjectMock(LiipImagineExtension::class, [
-            'getNamespace',
-            'addResolverFactory',
-            'addLoaderFactory',
-        ], false);
+        return $this->createObjectMock(
+            LiipImagineExtension::class,
+            [
+                'getNamespace',
+                'addResolverFactory',
+                'addLoaderFactory',
+            ],
+            false
+        );
     }
 }

@@ -22,7 +22,7 @@ class WebPathResolverFactoryTest extends AbstractWebPathResolverTest
     public function testReturnExpectedName()
     {
         $resolver = new WebPathResolverFactory();
-
+        
         $this->assertEquals('web_path', $resolver->getName());
     }
     

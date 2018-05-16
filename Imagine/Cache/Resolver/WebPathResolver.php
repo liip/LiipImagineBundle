@@ -20,9 +20,9 @@ class WebPathResolver extends AbstractWebPathResolver
     private $requestContext;
     
     /**
-     * @param Filesystem     $filesystem
+     * @param Filesystem            $filesystem
      * @param PathResolverInterface $pathResolver
-     * @param RequestContext $requestContext
+     * @param RequestContext        $requestContext
      */
     public function __construct(
         Filesystem $filesystem,
@@ -38,7 +38,8 @@ class WebPathResolver extends AbstractWebPathResolver
      */
     public function resolve($path, $filter)
     {
-        return sprintf('%s/%s',
+        return sprintf(
+            '%s/%s',
             $this->getBaseUrl(),
             $this->getPathResolver()->getFileUrl($path, $filter)
         );
@@ -53,18 +54,19 @@ class WebPathResolver extends AbstractWebPathResolver
         if ('https' === $this->requestContext->getScheme() && 443 !== $this->requestContext->getHttpsPort()) {
             $port = ":{$this->requestContext->getHttpsPort()}";
         }
-
+        
         if ('http' === $this->requestContext->getScheme() && 80 !== $this->requestContext->getHttpPort()) {
             $port = ":{$this->requestContext->getHttpPort()}";
         }
-
+        
         $baseUrl = $this->requestContext->getBaseUrl();
         if ('.php' === mb_substr($this->requestContext->getBaseUrl(), -4)) {
             $baseUrl = pathinfo($this->requestContext->getBaseurl(), PATHINFO_DIRNAME);
         }
         $baseUrl = rtrim($baseUrl, '/\\');
-
-        return sprintf('%s://%s%s%s',
+        
+        return sprintf(
+            '%s://%s%s%s',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
             $port,
