@@ -39,6 +39,14 @@ liip_imagine:
             filesystem:
                 data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
 
+        baz:
+            chain:
+                loaders:
+                    - foo
+                    - bar
+                    - default
+                    - bundles_all
+
         bundles_all:
             filesystem:
                 data_root: ~

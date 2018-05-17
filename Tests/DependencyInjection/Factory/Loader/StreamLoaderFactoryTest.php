@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory
  */
 class StreamLoaderFactoryTest extends TestCase
 {
