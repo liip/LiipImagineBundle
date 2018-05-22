@@ -61,6 +61,10 @@ Background Options
     values: ``topleft``, ``top``, ``topright``, ``left``, ``center``, ``right``, ``bottomleft``,
     ``bottom``, and ``bottomright``.
 
+:strong:`transparency:` ``integer``
+    Sets the background alpha value. The value should be within a range of 0 - 100.
+
+
 .. _filter-grayscale:
 
 Grayscale
