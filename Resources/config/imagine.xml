@@ -32,6 +32,33 @@
 
     <services>
 
+        <!-- Factory services -->
+
+        <service id="liip_imagine.factory.config.filter" class="Liip\ImagineBundle\Factory\Config\FilterFactory" />
+        <service id="Liip\ImagineBundle\Factory\Config\FilterFactory" alias="liip_imagine.factory.config.filter"/>
+
+        <service id="liip_imagine.factory.config.filter_set" class="Liip\ImagineBundle\Factory\Config\FilterSetFactory" />
+        <service id="Liip\ImagineBundle\Factory\Config\FilterSetFactory" alias="liip_imagine.factory.config.filter_set"/>
+
+        <!-- Config services -->
+
+        <service id="liip_imagine.config.filter_builder" class="Liip\ImagineBundle\Config\FilterBuilder">
+            <argument type="service" id="liip_imagine.factory.config.filter" />
+        </service>
+        <service id="Liip\ImagineBundle\Config\FilterBuilder" alias="liip_imagine.config.filter_builder"/>
+
+        <service id="liip_imagine.config.filter_set_builder" class="Liip\ImagineBundle\Config\FilterSetBuilder">
+            <argument type="service" id="liip_imagine.factory.config.filter_set" />
+            <argument type="service" id="liip_imagine.config.filter_builder" />
+        </service>
+        <service id="Liip\ImagineBundle\Config\FilterSetBuilder" alias="liip_imagine.config.filter_set_builder"/>
+
+        <service id="liip_imagine.config.filter_set_collection" class="Liip\ImagineBundle\Config\FilterSetCollection" public="true">
+            <argument type="service" id="liip_imagine.filter.configuration" />
+            <argument type="service" id="liip_imagine.config.filter_set_builder" />
+        </service>
+        <service id="Liip\ImagineBundle\Config\FilterSetCollection" alias="liip_imagine.config.filter_set_collection"/>
+
         <!-- Utility services -->
 
         <service id="liip_imagine.filter.manager" class="Liip\ImagineBundle\Imagine\Filter\FilterManager" public="true">
