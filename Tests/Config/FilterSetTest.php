@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -12,9 +13,11 @@ namespace Liip\ImagineBundle\Tests\Config;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\FilterSet;
-use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Config\FilterSet
+ */
 class FilterSetTest extends TestCase
 {
     /**
@@ -27,12 +30,11 @@ class FilterSetTest extends TestCase
         $this->model = new FilterSet();
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Unknown filter provided.
-     */
     public function testSetFiltersWithInvalidFilterThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown filter provided.');
+
         $this->model->setFilters(['not_a_filter']);
     }
 

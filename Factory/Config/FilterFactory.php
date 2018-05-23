@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors

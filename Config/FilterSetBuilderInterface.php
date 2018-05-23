@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -14,7 +15,8 @@ interface FilterSetBuilderInterface
 {
     /**
      * @param string $filterSetName
-     * @param array $filterSetData
+     * @param array  $filterSetData
+     *
      * @return FilterSetInterface
      */
     public function build(string $filterSetName, array $filterSetData): FilterSetInterface;

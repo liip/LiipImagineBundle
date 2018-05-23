@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -18,6 +19,9 @@ use Liip\ImagineBundle\Config\FilterSetInterface;
 use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Config\FilterSetBuilder
+ */
 class FilterSetBuilderTest extends TestCase
 {
     /**
@@ -84,10 +88,10 @@ class FilterSetBuilderTest extends TestCase
             'quality' => $quality,
             'filters' => $filters,
         ]);
-        $this->assertEquals($name, $filterSet->getName());
-        $this->assertEquals($dataLoader, $filterSet->getDataLoader());
-        $this->assertEquals($quality, $filterSet->getQuality());
-        $this->assertEquals($filters, $filterSet->getFilters());
+        $this->assertSame($name, $filterSet->getName());
+        $this->assertSame($dataLoader, $filterSet->getDataLoader());
+        $this->assertSame($quality, $filterSet->getQuality());
+        $this->assertSame($filters, $filterSet->getFilters());
     }
 
     public function testBuildWithFilters()
@@ -147,9 +151,9 @@ class FilterSetBuilderTest extends TestCase
             'quality' => $quality,
             'filters' => $filters,
         ]);
-        $this->assertEquals($name, $filterSet->getName());
-        $this->assertEquals($dataLoader, $filterSet->getDataLoader());
-        $this->assertEquals($quality, $filterSet->getQuality());
-        $this->assertEquals([$filterMock], $filterSet->getFilters());
+        $this->assertSame($name, $filterSet->getName());
+        $this->assertSame($dataLoader, $filterSet->getDataLoader());
+        $this->assertSame($quality, $filterSet->getQuality());
+        $this->assertSame([$filterMock], $filterSet->getFilters());
     }
 }

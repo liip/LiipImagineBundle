@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -79,7 +80,7 @@ final class FilterSet implements FilterSetInterface
      */
     public function setDataLoader($dataLoader): void
     {
-        $this->dataLoader = (string)$dataLoader;
+        $this->dataLoader = (string) $dataLoader;
     }
 
     /**

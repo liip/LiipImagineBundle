@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -16,6 +17,9 @@ use Liip\ImagineBundle\Config\FilterSetInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Config\FilterSetCollection
+ */
 class FilterSetCollectionTest extends TestCase
 {
     /**
@@ -57,7 +61,7 @@ class FilterSetCollectionTest extends TestCase
             ->with($filterSetName, $filterSetData)
             ->will($this->returnValue($filterSetMock));
 
-        $this->assertEquals([$filterSetMock], $this->model->getFilterSets());
-        $this->assertEquals([$filterSetMock], $this->model->getFilterSets());
+        $this->assertSame([$filterSetMock], $this->model->getFilterSets());
+        $this->assertSame([$filterSetMock], $this->model->getFilterSets());
     }
 }

@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
  * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
@@ -15,6 +16,9 @@ use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Liip\ImagineBundle\Config\FilterBuilder
+ */
 class FilterBuilderTest extends TestCase
 {
     /**
@@ -61,7 +65,7 @@ class FilterBuilderTest extends TestCase
             ->will($this->returnValue($options));
 
         $filter = $this->model->build($name, $options);
-        $this->assertEquals($name, $filter->getName());
-        $this->assertEquals($options, $filter->getOptions());
+        $this->assertSame($name, $filter->getName());
+        $this->assertSame($options, $filter->getOptions());
     }
 }
