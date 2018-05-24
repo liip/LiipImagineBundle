@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config;
 
+use Liip\ImagineBundle\Factory\Config\FilterFactory;
 use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
 
 final class FilterSetBuilder implements FilterSetBuilderInterface
@@ -21,18 +22,18 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
     private $filterSetFactory;
 
     /**
-     * @var FilterBuilderInterface
+     * @var FilterFactory
      */
-    private $filterBuilder;
+    private $filterFactory;
 
     /**
-     * @param FilterSetFactory       $filterSetFactory
-     * @param FilterBuilderInterface $filterBuilder
+     * @param FilterSetFactory $filterSetFactory
+     * @param FilterFactory $filterFactory
      */
-    public function __construct(FilterSetFactory $filterSetFactory, FilterBuilderInterface $filterBuilder)
+    public function __construct(FilterSetFactory $filterSetFactory, FilterFactory $filterFactory)
     {
         $this->filterSetFactory = $filterSetFactory;
-        $this->filterBuilder = $filterBuilder;
+        $this->filterFactory = $filterFactory;
     }
 
     /**
@@ -43,19 +44,18 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
      */
     public function build(string $filterSetName, array $filterSetData): FilterSetInterface
     {
-        $filterSet = $this->filterSetFactory->create();
-        $filterSet->setName($filterSetName);
-        $filterSet->setDataLoader($filterSetData['data_loader']);
-        $filterSet->setQuality($filterSetData['quality']);
-
+        $filters = [];
         if (!empty($filterSetData['filters'])) {
-            $filters = [];
             foreach ($filterSetData['filters'] as $filterName => $filterData) {
-                $filters[] = $this->filterBuilder->build($filterName, $filterData);
+                $filters[] = $this->filterFactory->create($filterName, $filterData);
             }
-            $filterSet->setFilters($filters);
         }
 
-        return $filterSet;
+        return $this->filterSetFactory->create(
+            $filterSetName,
+            $filterSetData['data_loader'],
+            $filterSetData['quality'],
+            $filters
+        );
     }
 }

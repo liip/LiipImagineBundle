@@ -16,10 +16,12 @@ use Liip\ImagineBundle\Config\Filter;
 class FilterFactory
 {
     /**
+     * @param string $name
+     * @param array $options
      * @return Filter
      */
-    public function create()
+    public function create(string $name, array $options)
     {
-        return new Filter();
+        return new Filter($name, $options);
     }
 }

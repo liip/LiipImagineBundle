@@ -36,6 +36,20 @@ final class FilterSet implements FilterSetInterface
     private $filters = [];
 
     /**
+     * @param string $name
+     * @param string $dataLoader
+     * @param int $quality
+     * @param FilterInterface[] $filters
+     */
+    public function __construct(string $name, string $dataLoader, int $quality, array $filters)
+    {
+        $this->name = $name;
+        $this->dataLoader = $dataLoader;
+        $this->quality = $quality;
+        $this->setFilters($filters);
+    }
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -68,33 +82,9 @@ final class FilterSet implements FilterSetInterface
     }
 
     /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @param string|null $dataLoader
-     */
-    public function setDataLoader($dataLoader): void
-    {
-        $this->dataLoader = (string) $dataLoader;
-    }
-
-    /**
-     * @param int $quality
-     */
-    public function setQuality(int $quality): void
-    {
-        $this->quality = $quality;
-    }
-
-    /**
      * @param FilterInterface[] $filters
      */
-    public function setFilters(array $filters): void
+    private function setFilters(array $filters): void
     {
         foreach ($filters as $filter) {
             if (!($filter instanceof FilterInterface)) {

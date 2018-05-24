@@ -11,11 +11,10 @@
 
 namespace Liip\ImagineBundle\Tests\Config;
 
-use Liip\ImagineBundle\Config\FilterBuilder;
-use Liip\ImagineBundle\Config\FilterBuilderInterface;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\FilterSetBuilder;
 use Liip\ImagineBundle\Config\FilterSetInterface;
+use Liip\ImagineBundle\Factory\Config\FilterFactory;
 use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -30,9 +29,9 @@ class FilterSetBuilderTest extends TestCase
     private $filterSetFactoryMock;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $filterBuilderMock;
+    private $filterFactoryMock;
 
     /**
      * @var FilterSetBuilder
@@ -42,8 +41,8 @@ class FilterSetBuilderTest extends TestCase
     protected function setUp()
     {
         $this->filterSetFactoryMock = $this->createMock(FilterSetFactory::class);
-        $this->filterBuilderMock = $this->createMock(FilterBuilderInterface::class);
-        $this->model = new FilterSetBuilder($this->filterSetFactoryMock, $this->filterBuilderMock);
+        $this->filterFactoryMock = $this->createMock(FilterFactory::class);
+        $this->model = new FilterSetBuilder($this->filterSetFactoryMock, $this->filterFactoryMock);
     }
 
     public function testBuildWithEmptyFilters()
@@ -57,41 +56,18 @@ class FilterSetBuilderTest extends TestCase
 
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
+            ->with($name, $dataLoader, $quality, $filters)
             ->will($this->returnValue($filterSetMock));
 
-        $filterSetMock->expects($this->once())
-            ->method('setName')
-            ->with($name);
-        $filterSetMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($name));
-
-        $filterSetMock->expects($this->once())
-            ->method('setDataLoader')
-            ->with($dataLoader);
-        $filterSetMock->expects($this->once())
-            ->method('getDataLoader')
-            ->will($this->returnValue($dataLoader));
-
-        $filterSetMock->expects($this->once())
-            ->method('setQuality')
-            ->with($quality);
-        $filterSetMock->expects($this->once())
-            ->method('getQuality')
-            ->will($this->returnValue($quality));
-
-        $this->filterBuilderMock->expects($this->never())
-            ->method('build');
+        $this->filterFactoryMock->expects($this->never())
+            ->method('create');
 
         $filterSet = $this->model->build($name, [
             'data_loader' => $dataLoader,
             'quality' => $quality,
             'filters' => $filters,
         ]);
-        $this->assertSame($name, $filterSet->getName());
-        $this->assertSame($dataLoader, $filterSet->getDataLoader());
-        $this->assertSame($quality, $filterSet->getQuality());
-        $this->assertSame($filters, $filterSet->getFilters());
+        $this->assertSame($filterSetMock, $filterSet);
     }
 
     public function testBuildWithFilters()
@@ -113,36 +89,8 @@ class FilterSetBuilderTest extends TestCase
             ->method('create')
             ->will($this->returnValue($filterSetMock));
 
-        $filterSetMock->expects($this->once())
-            ->method('setName')
-            ->with($name);
-        $filterSetMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($name));
-
-        $filterSetMock->expects($this->once())
-            ->method('setDataLoader')
-            ->with($dataLoader);
-        $filterSetMock->expects($this->once())
-            ->method('getDataLoader')
-            ->will($this->returnValue($dataLoader));
-
-        $filterSetMock->expects($this->once())
-            ->method('setQuality')
-            ->with($quality);
-        $filterSetMock->expects($this->once())
-            ->method('getQuality')
-            ->will($this->returnValue($quality));
-
-        $filterSetMock->expects($this->once())
-            ->method('setFilters')
-            ->with([$filterMock]);
-        $filterSetMock->expects($this->once())
-            ->method('getFilters')
-            ->will($this->returnValue([$filterMock]));
-
-        $this->filterBuilderMock->expects($this->once())
-            ->method('build')
+        $this->filterFactoryMock->expects($this->once())
+            ->method('create')
             ->with($filterCode, $filterData)
             ->will($this->returnValue($filterMock));
 
@@ -151,9 +99,6 @@ class FilterSetBuilderTest extends TestCase
             'quality' => $quality,
             'filters' => $filters,
         ]);
-        $this->assertSame($name, $filterSet->getName());
-        $this->assertSame($dataLoader, $filterSet->getDataLoader());
-        $this->assertSame($quality, $filterSet->getQuality());
-        $this->assertSame([$filterMock], $filterSet->getFilters());
+        $this->assertSame($filterSetMock, $filterSet);
     }
 }

@@ -32,24 +32,4 @@ interface FilterSetInterface
      * @return FilterInterface[]
      */
     public function getFilters(): array;
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void;
-
-    /**
-     * @param string $dataLoader
-     */
-    public function setDataLoader($dataLoader): void;
-
-    /**
-     * @param int $quality
-     */
-    public function setQuality(int $quality): void;
-
-    /**
-     * @param array $filters
-     */
-    public function setFilters(array $filters): void;
 }

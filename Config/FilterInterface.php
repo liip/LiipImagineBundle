@@ -22,14 +22,4 @@ interface FilterInterface
      * @return array
      */
     public function getOptions(): array;
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void;
-
-    /**
-     * @param array $options
-     */
-    public function setOptions(array $options): void;
 }

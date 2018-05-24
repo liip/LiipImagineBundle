@@ -24,6 +24,16 @@ final class Filter implements FilterInterface
     private $options = [];
 
     /**
+     * @param string $name
+     * @param array $options
+     */
+    public function __construct(string $name, array $options)
+    {
+        $this->name = $name;
+        $this->options = $options;
+    }
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -32,26 +42,10 @@ final class Filter implements FilterInterface
     }
 
     /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
      * @return array
      */
     public function getOptions(): array
     {
         return $this->options;
-    }
-
-    /**
-     * @param array $options
-     */
-    public function setOptions(array $options): void
-    {
-        $this->options = $options;
     }
 }
