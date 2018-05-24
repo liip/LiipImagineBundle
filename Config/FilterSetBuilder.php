@@ -28,7 +28,7 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
 
     /**
      * @param FilterSetFactory $filterSetFactory
-     * @param FilterFactory $filterFactory
+     * @param FilterFactory    $filterFactory
      */
     public function __construct(FilterSetFactory $filterSetFactory, FilterFactory $filterFactory)
     {

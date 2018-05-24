@@ -18,8 +18,9 @@ class FilterSetFactory
     /**
      * @param string $name
      * @param string $dataLoader
-     * @param int $quality
-     * @param array $filters
+     * @param int    $quality
+     * @param array  $filters
+     *
      * @return FilterSet
      */
     public function create(string $name, string $dataLoader, int $quality, array $filters)

@@ -36,9 +36,9 @@ final class FilterSet implements FilterSetInterface
     private $filters = [];
 
     /**
-     * @param string $name
-     * @param string $dataLoader
-     * @param int $quality
+     * @param string            $name
+     * @param string            $dataLoader
+     * @param int               $quality
      * @param FilterInterface[] $filters
      */
     public function __construct(string $name, string $dataLoader, int $quality, array $filters)

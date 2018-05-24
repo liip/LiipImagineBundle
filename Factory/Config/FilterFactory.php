@@ -17,7 +17,8 @@ class FilterFactory
 {
     /**
      * @param string $name
-     * @param array $options
+     * @param array  $options
+     *
      * @return Filter
      */
     public function create(string $name, array $options)

@@ -25,7 +25,7 @@ final class Filter implements FilterInterface
 
     /**
      * @param string $name
-     * @param array $options
+     * @param array  $options
      */
     public function __construct(string $name, array $options)
     {
