@@ -57,8 +57,10 @@ class ImagineController
         $this->dataManager = $dataManager;
         $this->signer = $signer;
 
-        if (4 !== func_num_args()) {
-            @trigger_error(sprintf('Instantiating "%s" without a forth argument "%s" is deprecated.', self::class, ControllerConfig::class), E_USER_DEPRECATED);
+        if (null === $controllerConfig) {
+            @trigger_error(sprintf(
+                'Instantiating "%s" without a forth argument of type "%s" is deprecated since 2.1.0 and will be required in 3.0.', self::class, ControllerConfig::class
+            ), E_USER_DEPRECATED);
         }
 
         $this->controllerConfig = $controllerConfig ?? new ControllerConfig(301);
@@ -82,22 +84,12 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $path = urldecode($path);
         $resolver = $request->get('resolver');
+        $path = urldecode($path);
 
-        try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), $this->controllerConfig->getRedirectResponseCode());
-        } catch (NotLoadableException $e) {
-            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
-                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
-            }
-
-            throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
-        } catch (NonExistingFilterException $e) {
-            throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
-        } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
-        }
+        return $this->createRedirectResponse(function () use ($path, $filter, $resolver) {
+            return $this->filterService->getUrlOfFilteredImage($path, $filter, $resolver);
+        }, $path, $filter);
     }
 
     /**
@@ -121,6 +113,7 @@ class ImagineController
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
         $resolver = $request->get('resolver');
+        $path = urldecode($path);
         $runtimeConfig = $request->query->get('filters', []);
 
         if (!is_array($runtimeConfig)) {
@@ -136,18 +129,37 @@ class ImagineController
             ));
         }
 
+        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver) {
+            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver);
+        }, $path, $filter, $hash);
+    }
+
+    /**
+     * @param \Closure    $url
+     * @param string      $path
+     * @param string      $filter
+     * @param null|string $hash
+     *
+     * @return RedirectResponse
+     */
+    private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
+    {
         try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), $this->controllerConfig->getRedirectResponseCode());
-        } catch (NotLoadableException $e) {
+            return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
+        } catch (NotLoadableException $exception) {
             if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
             }
 
             throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
-        } catch (NonExistingFilterException $e) {
+        } catch (NonExistingFilterException $exception) {
             throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
-        } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
+        } catch (RuntimeException $exception) {
+            throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [
+                $hash ? sprintf('%s/%s', $hash, $path) : $path,
+                $filter,
+                $exception->getMessage(),
+            ]), 0, $exception);
         }
     }
 }

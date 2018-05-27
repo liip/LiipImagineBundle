@@ -26,7 +26,7 @@ class ImagineControllerTest extends AbstractTest
 {
     /**
      * @group legacy
-     * @expectedDeprecation Instantiating "%s" without a forth argument "%s" is deprecated.
+     * @expectedDeprecation Instantiating "%s" without a forth argument of type "%s" is deprecated since 2.1.0 and will be required in 3.0.
      */
     public function testDeprecatedConstruction()
     {
