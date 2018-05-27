@@ -16,6 +16,7 @@ use Imagine\Image\ImagineInterface;
 use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
@@ -240,6 +241,16 @@ abstract class AbstractTest extends TestCase
     protected function createDataManagerMock()
     {
         return $this->createObjectMock(DataManager::class, [], false);
+    }
+
+    /**
+     * @param int|null $redirectResponseCode
+     *
+     * @return ControllerConfig
+     */
+    protected function createControllerConfigInstance(int $redirectResponseCode = null): ControllerConfig
+    {
+        return new ControllerConfig($redirectResponseCode ?? 301);
     }
 
     /**

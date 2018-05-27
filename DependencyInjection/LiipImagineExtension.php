@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection;
 
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
@@ -84,6 +85,10 @@ class LiipImagineExtension extends Extension
         $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', [
             new Reference('liip_imagine.meta_data.reader'),
         ]);
+
+        $container
+            ->getDefinition(ControllerConfig::class)
+            ->replaceArgument(0, $config['controller']['redirect_response_code']);
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));

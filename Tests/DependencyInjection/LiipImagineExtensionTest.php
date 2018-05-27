@@ -18,7 +18,6 @@ use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\Yaml\Parser;
@@ -49,14 +48,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertParameter('default', 'liip_imagine.cache.resolver.default');
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
-        $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition(ImagineController::class),
-            [
-                new Reference('liip_imagine.service.filter'),
-                new Reference('liip_imagine.data.manager'),
-                new Reference('liip_imagine.cache.signer'),
-            ]
-        );
+        $this->assertDICConstructorArguments($this->containerBuilder->getDefinition(ImagineController::class), []);
     }
 
     public function testCustomRouteRequirements()

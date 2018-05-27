@@ -48,6 +48,8 @@
             <argument>%liip_imagine.default_image%</argument>
         </service>
 
+        <service id="Liip\ImagineBundle\Imagine\Data\DataManager" alias="liip_imagine.data.manager" />
+
         <service id="liip_imagine.cache.manager" class="Liip\ImagineBundle\Imagine\Cache\CacheManager" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="router" />
@@ -67,13 +69,17 @@
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
+        <service id="Liip\ImagineBundle\Service\FilterService" alias="liip_imagine.service.filter" />
+
+        <!-- Config -->
+
+        <service id="Liip\ImagineBundle\Config\Controller\ControllerConfig" public="false">
+            <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
+        </service>
+
         <!-- Controller -->
 
-        <service id="Liip\ImagineBundle\Controller\ImagineController" public="true">
-            <argument type="service" id="liip_imagine.service.filter" />
-            <argument type="service" id="liip_imagine.data.manager" />
-            <argument type="service" id="liip_imagine.cache.signer" />
-        </service>
+        <service id="Liip\ImagineBundle\Controller\ImagineController" public="true" autowire="true" />
 
         <service id="liip_imagine.controller" alias="Liip\ImagineBundle\Controller\ImagineController" public="true" />
 
@@ -269,6 +275,8 @@
         <service id="liip_imagine.cache.signer" class="Liip\ImagineBundle\Imagine\Cache\Signer" public="true">
             <argument>%kernel.secret%</argument>
         </service>
+
+        <service id="Liip\ImagineBundle\Imagine\Cache\SignerInterface" alias="liip_imagine.cache.signer" />
 
         <!-- Post processors -->
 

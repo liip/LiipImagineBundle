@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Controller;
 
 use Imagine\Exception\RuntimeException;
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
@@ -40,15 +41,27 @@ class ImagineController
     private $signer;
 
     /**
-     * @param FilterService   $filterService
-     * @param DataManager     $dataManager
-     * @param SignerInterface $signer
+     * @var ControllerConfig
      */
-    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer)
+    private $controllerConfig;
+
+    /**
+     * @param FilterService         $filterService
+     * @param DataManager           $dataManager
+     * @param SignerInterface       $signer
+     * @param ControllerConfig|null $controllerConfig
+     */
+    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer, ?ControllerConfig $controllerConfig = null)
     {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
+
+        if (4 !== func_num_args()) {
+            @trigger_error(sprintf('Instantiating "%s" without a forth argument "%s" is deprecated.', self::class, ControllerConfig::class), E_USER_DEPRECATED);
+        }
+
+        $this->controllerConfig = $controllerConfig ?? new ControllerConfig(301);
     }
 
     /**
@@ -73,7 +86,7 @@ class ImagineController
         $resolver = $request->get('resolver');
 
         try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), 301);
+            return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $e) {
             if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
@@ -124,7 +137,7 @@ class ImagineController
         }
 
         try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), 301);
+            return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $e) {
             if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
