@@ -49,6 +49,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertAlias('liip_imagine.gd', 'liip_imagine');
         $this->assertHasDefinition('liip_imagine.controller');
         $this->assertDICConstructorArguments($this->containerBuilder->getDefinition(ImagineController::class), []);
+        $this->assertTrue($this->containerBuilder->getDefinition(ImagineController::class)->isAutowired());
     }
 
     public function testCustomRouteRequirements()
