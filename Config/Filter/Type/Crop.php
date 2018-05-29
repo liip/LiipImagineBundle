@@ -32,8 +32,8 @@ final class Crop implements FilterInterface
 
     /**
      * @param string $name
-     * @param array $start
-     * @param array $size
+     * @param array  $start
+     * @param array  $size
      */
     public function __construct(string $name, array $start, array $size)
     {

@@ -21,7 +21,7 @@ interface FilterFactoryInterface
     public function getName(): string;
 
     /**
-     * @param array  $options
+     * @param array $options
      *
      * @return FilterInterface
      */

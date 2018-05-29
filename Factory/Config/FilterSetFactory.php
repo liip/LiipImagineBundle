@@ -16,10 +16,10 @@ use Liip\ImagineBundle\Config\FilterSet;
 class FilterSetFactory
 {
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $dataLoader
-     * @param int|null $quality
-     * @param array $filters
+     * @param int|null    $quality
+     * @param array       $filters
      *
      * @return FilterSet
      */

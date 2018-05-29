@@ -14,4 +14,5 @@ namespace Liip\ImagineBundle\Exception\Config\Filter;
 use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class NotFoundException extends \Exception implements ExceptionInterface
-{}
+{
+}

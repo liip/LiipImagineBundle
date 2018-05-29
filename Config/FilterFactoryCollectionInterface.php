@@ -17,6 +17,7 @@ interface FilterFactoryCollectionInterface
 {
     /**
      * @param string $name
+     *
      * @return FilterFactoryInterface
      */
     public function getFilterFactoryByName(string $name): FilterFactoryInterface;

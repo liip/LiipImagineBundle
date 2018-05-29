@@ -29,6 +29,7 @@ final class StripFactory implements FilterFactoryInterface
 
     /**
      * @param array $options
+     *
      * @return FilterInterface
      */
     public function create(array $options): FilterInterface

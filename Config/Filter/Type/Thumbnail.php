@@ -41,10 +41,10 @@ final class Thumbnail implements FilterInterface
     private $filter;
 
     /**
-     * @param string $name
-     * @param array $size
+     * @param string      $name
+     * @param array       $size
      * @param string|null $mode
-     * @param bool|null $allowUpscale
+     * @param bool|null   $allowUpscale
      * @param string|null $filter
      */
     public function __construct(

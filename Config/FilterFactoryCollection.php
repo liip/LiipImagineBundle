@@ -23,6 +23,7 @@ final class FilterFactoryCollection implements FilterFactoryCollectionInterface
 
     /**
      * FilterCollection constructor.
+     *
      * @param FilterFactoryInterface ...$filterFactories
      */
     public function __construct(FilterFactoryInterface ...$filterFactories)
@@ -32,8 +33,10 @@ final class FilterFactoryCollection implements FilterFactoryCollectionInterface
 
     /**
      * @param string $name
-     * @return FilterFactoryInterface
+     *
      * @throws NotFoundException
+     *
+     * @return FilterFactoryInterface
      */
     public function getFilterFactoryByName(string $name): FilterFactoryInterface
     {
