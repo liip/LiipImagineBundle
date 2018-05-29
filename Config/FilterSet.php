@@ -37,11 +37,11 @@ final class FilterSet implements FilterSetInterface
 
     /**
      * @param string            $name
-     * @param string            $dataLoader
-     * @param int               $quality
+     * @param string|null       $dataLoader
+     * @param int|null          $quality
      * @param FilterInterface[] $filters
      */
-    public function __construct(string $name, string $dataLoader, int $quality, array $filters)
+    public function __construct(string $name, string $dataLoader = null, int $quality = null, array $filters)
     {
         $this->name = $name;
         $this->dataLoader = $dataLoader;
@@ -58,17 +58,17 @@ final class FilterSet implements FilterSetInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDataLoader(): string
+    public function getDataLoader()
     {
         return $this->dataLoader;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getQuality(): int
+    public function getQuality()
     {
         return $this->quality;
     }

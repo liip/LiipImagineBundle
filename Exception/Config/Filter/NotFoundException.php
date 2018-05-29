@@ -9,12 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Config;
+namespace Liip\ImagineBundle\Exception\Config\Filter;
 
-interface FilterInterface
-{
-    /**
-     * @return string
-     */
-    public function getName(): string;
-}
+use Liip\ImagineBundle\Exception\ExceptionInterface;
+
+class NotFoundException extends \Exception implements ExceptionInterface
+{}

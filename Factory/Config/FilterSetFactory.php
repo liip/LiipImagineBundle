@@ -17,13 +17,13 @@ class FilterSetFactory
 {
     /**
      * @param string $name
-     * @param string $dataLoader
-     * @param int    $quality
-     * @param array  $filters
+     * @param string|null $dataLoader
+     * @param int|null $quality
+     * @param array $filters
      *
      * @return FilterSet
      */
-    public function create(string $name, string $dataLoader, int $quality, array $filters)
+    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters)
     {
         return new FilterSet($name, $dataLoader, $quality, $filters);
     }

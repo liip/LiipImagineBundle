@@ -11,18 +11,19 @@
 
 namespace Liip\ImagineBundle\Factory\Config;
 
-use Liip\ImagineBundle\Config\Filter;
+use Liip\ImagineBundle\Config\FilterInterface;
 
-class FilterFactory
+interface FilterFactoryInterface
 {
     /**
-     * @param string $name
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * @param array  $options
      *
-     * @return Filter
+     * @return FilterInterface
      */
-    public function create(string $name, array $options)
-    {
-        return new Filter($name, $options);
-    }
+    public function create(array $options): FilterInterface;
 }

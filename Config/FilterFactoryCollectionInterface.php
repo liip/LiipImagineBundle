@@ -11,25 +11,18 @@
 
 namespace Liip\ImagineBundle\Config;
 
-interface FilterSetInterface
+use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
+
+interface FilterFactoryCollectionInterface
 {
     /**
-     * @return string
+     * @param string $name
+     * @return FilterFactoryInterface
      */
-    public function getName(): string;
+    public function getFilterFactoryByName(string $name): FilterFactoryInterface;
 
     /**
-     * @return string|null
+     * @return FilterFactoryInterface[]
      */
-    public function getDataLoader();
-
-    /**
-     * @return int|null
-     */
-    public function getQuality();
-
-    /**
-     * @return FilterInterface[]
-     */
-    public function getFilters(): array;
+    public function getAll();
 }

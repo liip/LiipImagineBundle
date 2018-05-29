@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Config;
 
-use Liip\ImagineBundle\Factory\Config\FilterFactory;
 use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
 
 final class FilterSetBuilder implements FilterSetBuilderInterface
@@ -22,23 +21,23 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
     private $filterSetFactory;
 
     /**
-     * @var FilterFactory
+     * @var FilterFactoryCollectionInterface
      */
-    private $filterFactory;
+    private $filterFactoryCollection;
 
     /**
      * @param FilterSetFactory $filterSetFactory
-     * @param FilterFactory    $filterFactory
+     * @param FilterFactoryCollection $filterFactoryCollection
      */
-    public function __construct(FilterSetFactory $filterSetFactory, FilterFactory $filterFactory)
+    public function __construct(FilterSetFactory $filterSetFactory, FilterFactoryCollectionInterface $filterFactoryCollection)
     {
         $this->filterSetFactory = $filterSetFactory;
-        $this->filterFactory = $filterFactory;
+        $this->filterFactoryCollection = $filterFactoryCollection;
     }
 
     /**
      * @param string $filterSetName
-     * @param array  $filterSetData
+     * @param array $filterSetData
      *
      * @return FilterSetInterface
      */
@@ -47,7 +46,8 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
         $filters = [];
         if (!empty($filterSetData['filters'])) {
             foreach ($filterSetData['filters'] as $filterName => $filterData) {
-                $filters[] = $this->filterFactory->create($filterName, $filterData);
+                $filterFactory = $this->filterFactoryCollection->getFilterFactoryByName($filterName);
+                $filters[] = $filterFactory->create($filterData);
             }
         }
 
