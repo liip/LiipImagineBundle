@@ -102,6 +102,18 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
+    public function testResolveWithEmptyCachePrefix()
+    {
+        $fs = $this->createFlySystemMock();
+
+        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com', '');
+
+        $this->assertEquals(
+            'http://images.example.com/thumb/some-folder/path.jpg',
+            $resolver->resolve('/some-folder/path.jpg', 'thumb')
+        );
+    }
+
     public function testRemoveCacheForPathAndFilterOnRemove()
     {
         $fs = $this->createFlySystemMock();
