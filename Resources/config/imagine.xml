@@ -34,13 +34,25 @@
 
         <!-- Factory services -->
         <service id="liip_imagine.factory.config.stack" class="Liip\ImagineBundle\Factory\Config\StackFactory" />
+        <service id="liip_imagine.factory.config.filter.auto_rotate" class="Liip\ImagineBundle\Factory\Config\Filter\AutoRotateFactory" />
+        <service id="liip_imagine.factory.config.filter.background" class="Liip\ImagineBundle\Factory\Config\Filter\BackgroundFactory" />
         <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory" />
+        <service id="liip_imagine.factory.config.filter.flip" class="Liip\ImagineBundle\Factory\Config\Filter\FlipFactory" />
+        <service id="liip_imagine.factory.config.filter.grayscale" class="Liip\ImagineBundle\Factory\Config\Filter\GrayscaleFactory" />
+        <service id="liip_imagine.factory.config.filter.interlace" class="Liip\ImagineBundle\Factory\Config\Filter\InterlaceFactory" />
+        <service id="liip_imagine.factory.config.filter.paste" class="Liip\ImagineBundle\Factory\Config\Filter\PasteFactory" />
         <service id="liip_imagine.factory.config.filter.strip" class="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" />
         <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory" />
 
         <!-- Config services -->
         <service id="liip_imagine.config.filter_factory_collection" class="Liip\ImagineBundle\Config\FilterFactoryCollection">
+            <argument type="service" id="liip_imagine.factory.config.filter.auto_rotate"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.background"/>
             <argument type="service" id="liip_imagine.factory.config.filter.crop"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.flip"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.grayscale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.interlace"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.paste"/>
             <argument type="service" id="liip_imagine.factory.config.filter.strip"/>
             <argument type="service" id="liip_imagine.factory.config.filter.thumbnail"/>
         </service>
