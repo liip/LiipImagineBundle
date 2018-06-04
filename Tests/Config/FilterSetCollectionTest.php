@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\Tests\Config;
 use Liip\ImagineBundle\Config\FilterSetBuilderInterface;
 use Liip\ImagineBundle\Config\FilterSetCollection;
 use Liip\ImagineBundle\Config\FilterSetInterface;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,29 +21,6 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterSetCollectionTest extends TestCase
 {
-    /**
-     * @var FilterConfiguration|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filterConfigurationMock;
-
-    /**
-     * @var FilterSetBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filterSetBuilderMock;
-
-    /**
-     * @var FilterSetCollection
-     */
-    private $model;
-
-    protected function setUp()
-    {
-        $this->filterConfigurationMock = $this->createMock(FilterConfiguration::class);
-        $this->filterSetBuilderMock = $this->createMock(FilterSetBuilderInterface::class);
-
-        $this->model = new FilterSetCollection($this->filterConfigurationMock, $this->filterSetBuilderMock);
-    }
-
     public function testGetFilterSets()
     {
         $filterSetName = 'foo';
@@ -52,16 +28,14 @@ class FilterSetCollectionTest extends TestCase
 
         $filterSetMock = $this->createMock(FilterSetInterface::class);
 
-        $this->filterConfigurationMock->expects($this->once())
-            ->method('all')
-            ->will($this->returnValue([$filterSetName => $filterSetData]));
-
-        $this->filterSetBuilderMock->expects($this->once())
+        $filterSetBuilderMock = $this->createMock(FilterSetBuilderInterface::class);
+        $filterSetBuilderMock->expects($this->once())
             ->method('build')
             ->with($filterSetName, $filterSetData)
             ->will($this->returnValue($filterSetMock));
 
-        $this->assertSame([$filterSetMock], $this->model->getFilterSets());
-        $this->assertSame([$filterSetMock], $this->model->getFilterSets());
+        $model = new FilterSetCollection($filterSetBuilderMock, [$filterSetName => $filterSetData]);
+        $this->assertSame([$filterSetMock], $model->getFilterSets());
+        $this->assertSame([$filterSetMock], $model->getFilterSets());
     }
 }

@@ -53,8 +53,8 @@
         <service id="Liip\ImagineBundle\Config\FilterSetBuilder" alias="liip_imagine.config.filter_set_builder"/>
 
         <service id="liip_imagine.config.filter_set_collection" class="Liip\ImagineBundle\Config\FilterSetCollection" public="true">
-            <argument type="service" id="liip_imagine.filter.configuration" />
             <argument type="service" id="liip_imagine.config.filter_set_builder" />
+            <argument>%liip_imagine.filter_sets%</argument>
         </service>
         <service id="Liip\ImagineBundle\Config\FilterSetCollection" alias="liip_imagine.config.filter_set_collection"/>
 

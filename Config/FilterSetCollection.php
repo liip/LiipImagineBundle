@@ -11,8 +11,6 @@
 
 namespace Liip\ImagineBundle\Config;
 
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-
 final class FilterSetCollection
 {
     /**
@@ -21,23 +19,23 @@ final class FilterSetCollection
     private $filterSets = [];
 
     /**
-     * @var FilterConfiguration
-     */
-    private $filterConfiguration;
-
-    /**
      * @var FilterSetBuilderInterface
      */
     private $filterSetBuilder;
 
     /**
-     * @param FilterConfiguration       $filterConfiguration
-     * @param FilterSetBuilderInterface $filterSetBuilder
+     * @var array
      */
-    public function __construct(FilterConfiguration $filterConfiguration, FilterSetBuilderInterface $filterSetBuilder)
+    private $filtersConfiguration;
+
+    /**
+     * @param FilterSetBuilderInterface $filterSetBuilder
+     * @param array                     $filtersConfiguration
+     */
+    public function __construct(FilterSetBuilderInterface $filterSetBuilder, array $filtersConfiguration = [])
     {
-        $this->filterConfiguration = $filterConfiguration;
         $this->filterSetBuilder = $filterSetBuilder;
+        $this->filtersConfiguration = $filtersConfiguration;
     }
 
     /**
@@ -49,7 +47,7 @@ final class FilterSetCollection
             return $this->filterSets;
         }
 
-        foreach ($this->filterConfiguration->all() as $filterSetName => $filterSetData) {
+        foreach ($this->filtersConfiguration as $filterSetName => $filterSetData) {
             $this->filterSets[] = $this->filterSetBuilder->build($filterSetName, $filterSetData);
         }
 
