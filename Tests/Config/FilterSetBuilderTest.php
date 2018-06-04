@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\Tests\Config;
 
 use Liip\ImagineBundle\Config\FilterFactoryCollection;
-use Liip\ImagineBundle\Config\FilterFactoryCollectionInterface;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\FilterSetBuilder;
 use Liip\ImagineBundle\Config\FilterSetInterface;
@@ -43,7 +42,7 @@ class FilterSetBuilderTest extends TestCase
     protected function setUp()
     {
         $this->filterSetFactoryMock = $this->createMock(FilterSetFactory::class);
-        $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollectionInterface::class);
+        $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollection::class);
         $this->model = new FilterSetBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
 

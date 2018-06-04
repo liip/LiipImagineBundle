@@ -20,7 +20,7 @@ final class ThumbnailFactory implements FilterFactoryInterface
     const NAME = 'thumbnail';
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -28,9 +28,7 @@ final class ThumbnailFactory implements FilterFactoryInterface
     }
 
     /**
-     * @param array $options
-     *
-     * @return FilterInterface
+     * {@inheritdoc}
      */
     public function create(array $options): FilterInterface
     {

@@ -20,7 +20,7 @@ final class StripFactory implements FilterFactoryInterface
     const NAME = 'strip';
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -28,9 +28,7 @@ final class StripFactory implements FilterFactoryInterface
     }
 
     /**
-     * @param array $options
-     *
-     * @return FilterInterface
+     * {@inheritdoc}
      */
     public function create(array $options): FilterInterface
     {

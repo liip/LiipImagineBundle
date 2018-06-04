@@ -42,7 +42,7 @@ final class Thumbnail implements FilterInterface
 
     /**
      * @param string      $name
-     * @param array       $size
+     * @param array       $size         size parameters {width, height}
      * @param string|null $mode
      * @param bool|null   $allowUpscale
      * @param string|null $filter

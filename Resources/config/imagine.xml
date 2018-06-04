@@ -34,16 +34,9 @@
 
         <!-- Factory services -->
         <service id="liip_imagine.factory.config.filter_set" class="Liip\ImagineBundle\Factory\Config\FilterSetFactory" />
-        <service id="Liip\ImagineBundle\Factory\Config\FilterSetFactory" alias="liip_imagine.factory.config.filter_set"/>
-
         <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory" />
-        <service id="Liip\ImagineBundle\Factory\Config\Filter\CropFactory" alias="liip_imagine.factory.config.filter.crop"/>
-
         <service id="liip_imagine.factory.config.filter.strip" class="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" />
-        <service id="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" alias="liip_imagine.factory.config.filter.strip"/>
-
         <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory" />
-        <service id="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory" alias="liip_imagine.factory.config.filter.thumbnail"/>
 
         <!-- Config services -->
         <service id="liip_imagine.config.filter_factory_collection" class="Liip\ImagineBundle\Config\FilterFactoryCollection">

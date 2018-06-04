@@ -16,6 +16,8 @@ use Liip\ImagineBundle\Config\FilterInterface;
 interface FilterFactoryInterface
 {
     /**
+     * Filter name
+     *
      * @return string
      */
     public function getName(): string;

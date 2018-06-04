@@ -14,21 +14,21 @@ namespace Liip\ImagineBundle\Config;
 use Liip\ImagineBundle\Exception\Config\Filter\NotFoundException;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
-final class FilterFactoryCollection implements FilterFactoryCollectionInterface
+class FilterFactoryCollection
 {
     /**
      * @var FilterFactoryInterface[]
      */
-    private $filterFactories;
+    private $filterFactories = [];
 
     /**
-     * FilterCollection constructor.
-     *
      * @param FilterFactoryInterface ...$filterFactories
      */
     public function __construct(FilterFactoryInterface ...$filterFactories)
     {
-        $this->filterFactories = $filterFactories;
+        foreach ($filterFactories as $filterFactory) {
+            $this->filterFactories[$filterFactory->getName()] = $filterFactory;
+        }
     }
 
     /**
@@ -40,13 +40,10 @@ final class FilterFactoryCollection implements FilterFactoryCollectionInterface
      */
     public function getFilterFactoryByName(string $name): FilterFactoryInterface
     {
-        foreach ($this->filterFactories as $filterFactory) {
-            if ($filterFactory->getName() === $name) {
-                return $filterFactory;
-            }
+        if (!isset($this->filterFactories[$name])) {
+            throw new NotFoundException(sprintf("Filter factory with name '%s' was not found.", $name));
         }
-
-        throw new NotFoundException(sprintf("Filter factory with name '%s' was not found.", $name));
+        return $this->filterFactories[$name];
     }
 
     /**

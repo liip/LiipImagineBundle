@@ -20,7 +20,7 @@ final class CropFactory implements FilterFactoryInterface
     const NAME = 'crop';
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName(): string
     {
@@ -28,9 +28,7 @@ final class CropFactory implements FilterFactoryInterface
     }
 
     /**
-     * @param array $options
-     *
-     * @return FilterInterface
+     * {@inheritdoc}
      */
     public function create(array $options): FilterInterface
     {

@@ -21,7 +21,7 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
     private $filterSetFactory;
 
     /**
-     * @var FilterFactoryCollectionInterface
+     * @var FilterFactoryCollection
      */
     private $filterFactoryCollection;
 
@@ -29,7 +29,7 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
      * @param FilterSetFactory        $filterSetFactory
      * @param FilterFactoryCollection $filterFactoryCollection
      */
-    public function __construct(FilterSetFactory $filterSetFactory, FilterFactoryCollectionInterface $filterFactoryCollection)
+    public function __construct(FilterSetFactory $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
     {
         $this->filterSetFactory = $filterSetFactory;
         $this->filterFactoryCollection = $filterFactoryCollection;
