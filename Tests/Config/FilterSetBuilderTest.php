@@ -13,19 +13,19 @@ namespace Liip\ImagineBundle\Tests\Config;
 
 use Liip\ImagineBundle\Config\FilterFactoryCollection;
 use Liip\ImagineBundle\Config\FilterInterface;
-use Liip\ImagineBundle\Config\FilterSetBuilder;
-use Liip\ImagineBundle\Config\FilterSetInterface;
+use Liip\ImagineBundle\Config\StackBuilder;
+use Liip\ImagineBundle\Config\StackInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
-use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
+use Liip\ImagineBundle\Factory\Config\StackFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Liip\ImagineBundle\Config\FilterSetBuilder
+ * @covers \Liip\ImagineBundle\Config\StackBuilder
  */
 class FilterSetBuilderTest extends TestCase
 {
     /**
-     * @var FilterSetFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StackFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterSetFactoryMock;
 
@@ -35,15 +35,15 @@ class FilterSetBuilderTest extends TestCase
     private $filterFactoryCollectionMock;
 
     /**
-     * @var FilterSetBuilder
+     * @var StackBuilder
      */
     private $model;
 
     protected function setUp()
     {
-        $this->filterSetFactoryMock = $this->createMock(FilterSetFactory::class);
+        $this->filterSetFactoryMock = $this->createMock(StackFactory::class);
         $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollection::class);
-        $this->model = new FilterSetBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
+        $this->model = new StackBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
 
     public function testBuildWithEmptyFilters()
@@ -53,7 +53,7 @@ class FilterSetBuilderTest extends TestCase
         $quality = 42;
         $filters = [];
 
-        $filterSetMock = $this->createMock(FilterSetInterface::class);
+        $filterSetMock = $this->createMock(StackInterface::class);
 
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
@@ -85,7 +85,7 @@ class FilterSetBuilderTest extends TestCase
 
         $filterMock = $this->createMock(FilterInterface::class);
         $filterFactoryMock = $this->createMock(FilterFactoryInterface::class);
-        $filterSetMock = $this->createMock(FilterSetInterface::class);
+        $filterSetMock = $this->createMock(StackInterface::class);
 
         $filterFactoryMock->expects($this->once())
             ->method('create')

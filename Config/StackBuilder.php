@@ -11,12 +11,12 @@
 
 namespace Liip\ImagineBundle\Config;
 
-use Liip\ImagineBundle\Factory\Config\FilterSetFactory;
+use Liip\ImagineBundle\Factory\Config\StackFactory;
 
-final class FilterSetBuilder implements FilterSetBuilderInterface
+final class StackBuilder implements StackBuilderInterface
 {
     /**
-     * @var FilterSetFactory
+     * @var StackFactory
      */
     private $filterSetFactory;
 
@@ -26,10 +26,10 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
     private $filterFactoryCollection;
 
     /**
-     * @param FilterSetFactory        $filterSetFactory
+     * @param StackFactory        $filterSetFactory
      * @param FilterFactoryCollection $filterFactoryCollection
      */
-    public function __construct(FilterSetFactory $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
+    public function __construct(StackFactory $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
     {
         $this->filterSetFactory = $filterSetFactory;
         $this->filterFactoryCollection = $filterFactoryCollection;
@@ -39,9 +39,9 @@ final class FilterSetBuilder implements FilterSetBuilderInterface
      * @param string $filterSetName
      * @param array  $filterSetData
      *
-     * @return FilterSetInterface
+     * @return StackInterface
      */
-    public function build(string $filterSetName, array $filterSetData): FilterSetInterface
+    public function build(string $filterSetName, array $filterSetData): StackInterface
     {
         $filters = [];
         if (!empty($filterSetData['filters'])) {

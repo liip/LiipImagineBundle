@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Config;
 
-final class FilterSetCollection
+final class StackCollection
 {
     /**
      * @var array
@@ -19,7 +19,7 @@ final class FilterSetCollection
     private $filterSets = [];
 
     /**
-     * @var FilterSetBuilderInterface
+     * @var StackBuilderInterface
      */
     private $filterSetBuilder;
 
@@ -29,17 +29,17 @@ final class FilterSetCollection
     private $filtersConfiguration;
 
     /**
-     * @param FilterSetBuilderInterface $filterSetBuilder
+     * @param StackBuilderInterface $filterSetBuilder
      * @param array                     $filtersConfiguration
      */
-    public function __construct(FilterSetBuilderInterface $filterSetBuilder, array $filtersConfiguration = [])
+    public function __construct(StackBuilderInterface $filterSetBuilder, array $filtersConfiguration = [])
     {
         $this->filterSetBuilder = $filterSetBuilder;
         $this->filtersConfiguration = $filtersConfiguration;
     }
 
     /**
-     * @return FilterSetInterface[]
+     * @return StackInterface[]
      */
     public function getFilterSets()
     {

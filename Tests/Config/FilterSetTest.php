@@ -12,11 +12,11 @@
 namespace Liip\ImagineBundle\Tests\Config;
 
 use Liip\ImagineBundle\Config\FilterInterface;
-use Liip\ImagineBundle\Config\FilterSet;
+use Liip\ImagineBundle\Config\Stack;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Liip\ImagineBundle\Config\FilterSet
+ * @covers \Liip\ImagineBundle\Config\Stack
  */
 class FilterSetTest extends TestCase
 {
@@ -39,6 +39,6 @@ class FilterSetTest extends TestCase
      */
     private function buildFilterSet(array $filters)
     {
-        new FilterSet('filter_name', 'data_loader', 42, $filters);
+        new Stack('filter_name', 'data_loader', 42, $filters);
     }
 }

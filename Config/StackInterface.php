@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Config;
 
-interface FilterSetInterface
+interface StackInterface
 {
     /**
      * @return string

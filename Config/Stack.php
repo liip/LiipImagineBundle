@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config;
 
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 
-final class FilterSet implements FilterSetInterface
+final class Stack implements StackInterface
 {
     /**
      * @var string

@@ -33,7 +33,7 @@
     <services>
 
         <!-- Factory services -->
-        <service id="liip_imagine.factory.config.filter_set" class="Liip\ImagineBundle\Factory\Config\FilterSetFactory" />
+        <service id="liip_imagine.factory.config.stack" class="Liip\ImagineBundle\Factory\Config\StackFactory" />
         <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory" />
         <service id="liip_imagine.factory.config.filter.strip" class="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" />
         <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory" />
@@ -46,17 +46,17 @@
         </service>
         <service id="Liip\ImagineBundle\Config\FilterFactoryCollection" alias="liip_imagine.config.filter_factory_collection"/>
 
-        <service id="liip_imagine.config.filter_set_builder" class="Liip\ImagineBundle\Config\FilterSetBuilder">
-            <argument type="service" id="liip_imagine.factory.config.filter_set" />
+        <service id="liip_imagine.config.stack_builder" class="Liip\ImagineBundle\Config\StackBuilder">
+            <argument type="service" id="liip_imagine.factory.config.stack" />
             <argument type="service" id="liip_imagine.config.filter_factory_collection" />
         </service>
-        <service id="Liip\ImagineBundle\Config\FilterSetBuilder" alias="liip_imagine.config.filter_set_builder"/>
+        <service id="Liip\ImagineBundle\Config\StackBuilder" alias="liip_imagine.config.stack_builder"/>
 
-        <service id="liip_imagine.config.filter_set_collection" class="Liip\ImagineBundle\Config\FilterSetCollection" public="true">
-            <argument type="service" id="liip_imagine.config.filter_set_builder" />
+        <service id="liip_imagine.config.stack_collection" class="Liip\ImagineBundle\Config\StackCollection" public="true">
+            <argument type="service" id="liip_imagine.config.stack_builder" />
             <argument>%liip_imagine.filter_sets%</argument>
         </service>
-        <service id="Liip\ImagineBundle\Config\FilterSetCollection" alias="liip_imagine.config.filter_set_collection"/>
+        <service id="Liip\ImagineBundle\Config\StackCollection" alias="liip_imagine.config.stack_collection"/>
 
         <!-- Utility services -->
 

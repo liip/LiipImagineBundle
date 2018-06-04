@@ -11,9 +11,9 @@
 
 namespace Liip\ImagineBundle\Factory\Config;
 
-use Liip\ImagineBundle\Config\FilterSet;
+use Liip\ImagineBundle\Config\Stack;
 
-class FilterSetFactory
+class StackFactory
 {
     /**
      * @param string      $name
@@ -21,10 +21,10 @@ class FilterSetFactory
      * @param int|null    $quality
      * @param array       $filters
      *
-     * @return FilterSet
+     * @return Stack
      */
     public function create(string $name, string $dataLoader = null, int $quality = null, array $filters)
     {
-        return new FilterSet($name, $dataLoader, $quality, $filters);
+        return new Stack($name, $dataLoader, $quality, $filters);
     }
 }

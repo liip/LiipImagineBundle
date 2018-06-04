@@ -11,13 +11,13 @@
 
 namespace Liip\ImagineBundle\Tests\Config;
 
-use Liip\ImagineBundle\Config\FilterSetBuilderInterface;
-use Liip\ImagineBundle\Config\FilterSetCollection;
-use Liip\ImagineBundle\Config\FilterSetInterface;
+use Liip\ImagineBundle\Config\StackBuilderInterface;
+use Liip\ImagineBundle\Config\StackCollection;
+use Liip\ImagineBundle\Config\StackInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Liip\ImagineBundle\Config\FilterSetCollection
+ * @covers \Liip\ImagineBundle\Config\StackCollection
  */
 class FilterSetCollectionTest extends TestCase
 {
@@ -26,15 +26,15 @@ class FilterSetCollectionTest extends TestCase
         $filterSetName = 'foo';
         $filterSetData = ['bar'];
 
-        $filterSetMock = $this->createMock(FilterSetInterface::class);
+        $filterSetMock = $this->createMock(StackInterface::class);
 
-        $filterSetBuilderMock = $this->createMock(FilterSetBuilderInterface::class);
+        $filterSetBuilderMock = $this->createMock(StackBuilderInterface::class);
         $filterSetBuilderMock->expects($this->once())
             ->method('build')
             ->with($filterSetName, $filterSetData)
             ->will($this->returnValue($filterSetMock));
 
-        $model = new FilterSetCollection($filterSetBuilderMock, [$filterSetName => $filterSetData]);
+        $model = new StackCollection($filterSetBuilderMock, [$filterSetName => $filterSetData]);
         $this->assertSame([$filterSetMock], $model->getFilterSets());
         $this->assertSame([$filterSetMock], $model->getFilterSets());
     }
