@@ -43,6 +43,7 @@ class FilterFactoryCollection
         if (!isset($this->filterFactories[$name])) {
             throw new NotFoundException(sprintf("Filter factory with name '%s' was not found.", $name));
         }
+
         return $this->filterFactories[$name];
     }
 
