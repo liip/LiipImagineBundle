@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Flip implements FilterInterface
+final class Rotate implements FilterInterface
 {
     /**
      * @var string
@@ -21,18 +21,17 @@ final class Flip implements FilterInterface
     private $name;
 
     /**
-     * @var string
+     * @var int
      */
-    private $axis;
+    private $angle;
 
     /**
      * @param string $name
-     * @param string $axis possible values are: "x", "horizontal", "y", or "vertical"
      */
-    public function __construct(string $name, string $axis)
+    public function __construct(string $name, int $angle)
     {
         $this->name = $name;
-        $this->axis = $axis;
+        $this->angle = $angle;
     }
 
     /**
@@ -44,10 +43,10 @@ final class Flip implements FilterInterface
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getAxis(): string
+    public function getAngle(): int
     {
-        return $this->axis;
+        return $this->angle;
     }
 }

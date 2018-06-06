@@ -11,13 +11,13 @@
 
 namespace Liip\ImagineBundle\Factory\Config\Filter;
 
-use Liip\ImagineBundle\Config\Filter\Type\AutoRotate;
+use Liip\ImagineBundle\Config\Filter\Type\Downscale;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
-final class AutoRotateFactory implements FilterFactoryInterface
+final class DownscaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'auto_rotate';
+    const NAME = 'downscale';
 
     /**
      * {@inheritdoc}
@@ -32,6 +32,9 @@ final class AutoRotateFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new AutoRotate(self::NAME);
+        $max = isset($options['max']) ? $options['max'] : [];
+        $by = isset($options['by']) ? (float) $options['by'] : null;
+
+        return new Downscale(self::NAME, $max, $by);
     }
 }

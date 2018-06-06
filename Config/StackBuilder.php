@@ -26,7 +26,7 @@ final class StackBuilder implements StackBuilderInterface
     private $filterFactoryCollection;
 
     /**
-     * @param StackFactory        $filterSetFactory
+     * @param StackFactory            $filterSetFactory
      * @param FilterFactoryCollection $filterFactoryCollection
      */
     public function __construct(StackFactory $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)

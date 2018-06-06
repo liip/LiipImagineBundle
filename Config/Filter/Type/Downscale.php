@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Flip implements FilterInterface
+final class Downscale implements FilterInterface
 {
     /**
      * @var string
@@ -21,18 +21,25 @@ final class Flip implements FilterInterface
     private $name;
 
     /**
-     * @var string
+     * @var array
      */
-    private $axis;
+    private $max;
+
+    /**
+     * @var float
+     */
+    private $by;
 
     /**
      * @param string $name
-     * @param string $axis possible values are: "x", "horizontal", "y", or "vertical"
+     * @param array  $max  desired max dimensions {width, height}
+     * @param float  $by   sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(string $name, string $axis)
+    public function __construct(string $name, array $max = [], float $by = null)
     {
         $this->name = $name;
-        $this->axis = $axis;
+        $this->max = $max;
+        $this->by = $by;
     }
 
     /**
@@ -44,10 +51,18 @@ final class Flip implements FilterInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getAxis(): string
+    public function getMax(): array
     {
-        return $this->axis;
+        return $this->max;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getBy()
+    {
+        return $this->by;
     }
 }

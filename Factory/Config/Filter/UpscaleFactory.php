@@ -11,13 +11,13 @@
 
 namespace Liip\ImagineBundle\Factory\Config\Filter;
 
-use Liip\ImagineBundle\Config\Filter\Type\AutoRotate;
+use Liip\ImagineBundle\Config\Filter\Type\Upscale;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
-final class AutoRotateFactory implements FilterFactoryInterface
+final class UpscaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'auto_rotate';
+    const NAME = 'upscale';
 
     /**
      * {@inheritdoc}
@@ -32,6 +32,9 @@ final class AutoRotateFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new AutoRotate(self::NAME);
+        $min = isset($options['min']) ? $options['min'] : [];
+        $by = isset($options['by']) ? (float) $options['by'] : null;
+
+        return new Upscale(self::NAME, $min, $by);
     }
 }

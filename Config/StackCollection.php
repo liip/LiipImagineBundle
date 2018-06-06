@@ -30,7 +30,7 @@ final class StackCollection
 
     /**
      * @param StackBuilderInterface $filterSetBuilder
-     * @param array                     $filtersConfiguration
+     * @param array                 $filtersConfiguration
      */
     public function __construct(StackBuilderInterface $filterSetBuilder, array $filtersConfiguration = [])
     {

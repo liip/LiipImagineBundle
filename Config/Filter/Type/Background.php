@@ -41,11 +41,11 @@ final class Background implements FilterInterface
     private $size;
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $color
      * @param string|null $transparency
      * @param string|null $position
-     * @param array $size
+     * @param array       $size
      */
     public function __construct(
         string $name,

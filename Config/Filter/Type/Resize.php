@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Flip implements FilterInterface
+final class Resize implements FilterInterface
 {
     /**
      * @var string
@@ -21,18 +21,18 @@ final class Flip implements FilterInterface
     private $name;
 
     /**
-     * @var string
+     * @var array
      */
-    private $axis;
+    private $size = [];
 
     /**
      * @param string $name
-     * @param string $axis possible values are: "x", "horizontal", "y", or "vertical"
+     * @param array  $size size parameters {width, height}
      */
-    public function __construct(string $name, string $axis)
+    public function __construct(string $name, array $size)
     {
         $this->name = $name;
-        $this->axis = $axis;
+        $this->size = $size;
     }
 
     /**
@@ -44,10 +44,10 @@ final class Flip implements FilterInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getAxis(): string
+    public function getSize(): array
     {
-        return $this->axis;
+        return $this->size;
     }
 }

@@ -11,13 +11,13 @@
 
 namespace Liip\ImagineBundle\Factory\Config\Filter;
 
-use Liip\ImagineBundle\Config\Filter\Type\AutoRotate;
+use Liip\ImagineBundle\Config\Filter\Type\Rotate;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
-final class AutoRotateFactory implements FilterFactoryInterface
+final class RotateFactory implements FilterFactoryInterface
 {
-    const NAME = 'auto_rotate';
+    const NAME = 'rotate';
 
     /**
      * {@inheritdoc}
@@ -32,6 +32,8 @@ final class AutoRotateFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new AutoRotate(self::NAME);
+        $angle = isset($options['angle']) ? (int) $options['angle'] : 0;
+
+        return new Rotate(self::NAME, $angle);
     }
 }

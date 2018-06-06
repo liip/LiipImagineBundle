@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Paste implements FilterInterface
+final class Scale implements FilterInterface
 {
     /**
      * @var string
@@ -23,16 +23,23 @@ final class Paste implements FilterInterface
     /**
      * @var array
      */
-    private $start;
+    private $dimensions = [];
 
     /**
-     * @param string $name
-     * @param array  $start
+     * @var float
      */
-    public function __construct(string $name, array $start = [])
+    private $to;
+
+    /**
+     * @param string     $name
+     * @param array      $dimensions array containing a width and height integer
+     * @param float|null $to         proportional scale operation computed by multiplying all image sides by this value
+     */
+    public function __construct(string $name, array $dimensions, float $to = null)
     {
         $this->name = $name;
-        $this->start = $start;
+        $this->dimensions = $dimensions;
+        $this->to = $to;
     }
 
     /**
@@ -46,8 +53,16 @@ final class Paste implements FilterInterface
     /**
      * @return array
      */
-    public function getStart(): array
+    public function getDimensions(): array
     {
-        return $this->start;
+        return $this->dimensions;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTo()
+    {
+        return $this->to;
     }
 }

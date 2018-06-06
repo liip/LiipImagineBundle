@@ -11,6 +11,12 @@
 
 namespace Liip\ImagineBundle\Config;
 
+/**
+ * A filter contains the configuration for an image transformation operation.
+ *
+ * The type of operation is defined by the filter class. The operation parameters are specific to
+ * the filter.
+ */
 interface FilterInterface
 {
     /**

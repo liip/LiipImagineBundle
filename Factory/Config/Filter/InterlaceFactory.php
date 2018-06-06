@@ -37,6 +37,7 @@ final class InterlaceFactory implements FilterFactoryInterface
         if (!empty($options['mode'])) {
             $mode = $options['mode'];
         }
+
         return new Interlace(self::NAME, $mode);
     }
 }

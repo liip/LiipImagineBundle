@@ -36,6 +36,7 @@ final class PasteFactory implements FilterFactoryInterface
         if (isset($options['start'])) {
             $start = $options['start'];
         }
+
         return new Paste(self::NAME, $start);
     }
 }
