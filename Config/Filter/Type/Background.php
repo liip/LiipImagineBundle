@@ -43,9 +43,9 @@ final class Background implements FilterInterface
 
     /**
      * @param string      $name
-     * @param string|null $color
-     * @param string|null $transparency
-     * @param string|null $position
+     * @param string|null $color        background color HEX value
+     * @param string|null $transparency possible values 0..100
+     * @param string|null $position     position of the input image on the newly created background image. Valid values: topleft, top, topright, left, center, right, bottomleft, bottom, and bottomright
      * @param Size        $size
      */
     public function __construct(

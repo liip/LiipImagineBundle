@@ -11,15 +11,16 @@
 
 namespace Liip\ImagineBundle\Factory\Config;
 
+use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\Stack;
 
 class StackFactory
 {
     /**
-     * @param string      $name
-     * @param string|null $dataLoader
-     * @param int|null    $quality
-     * @param array       $filters
+     * @param string            $name
+     * @param string|null       $dataLoader
+     * @param int|null          $quality
+     * @param FilterInterface[] $filters
      *
      * @return Stack
      */
