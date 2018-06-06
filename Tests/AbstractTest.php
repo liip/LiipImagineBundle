@@ -50,8 +50,8 @@ abstract class AbstractTest extends TestCase
 
     protected function setUp()
     {
-        $this->fixturesPath = realpath(__DIR__.DIRECTORY_SEPARATOR.'Fixtures');
-        $this->temporaryPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'liip_imagine_test';
+        $this->fixturesPath = realpath(__DIR__.\DIRECTORY_SEPARATOR.'Fixtures');
+        $this->temporaryPath = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'liip_imagine_test';
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->temporaryPath)) {
