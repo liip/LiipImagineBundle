@@ -32,10 +32,10 @@ final class RelativeResizeFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $heighten = isset($options['heighten']) ? $options['heighten'] : null;
-        $widen = isset($options['widen']) ? $options['widen'] : null;
-        $increase = isset($options['increase']) ? $options['increase'] : null;
-        $scale = isset($options['scale']) ? $options['scale'] : null;
+        $heighten = $options['heighten'] ?? null;
+        $widen = $options['widen'] ?? null;
+        $increase = $options['increase'] ?? null;
+        $scale = $options['scale'] ?? null;
 
         return new RelativeResize(self::NAME, $heighten, $widen, $increase, $scale);
     }

@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Point;
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Crop implements FilterInterface
@@ -21,24 +23,19 @@ final class Crop implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Point
      */
-    private $start;
+    private $startPoint;
 
     /**
-     * @var array
+     * @var Size
      */
     private $size;
 
-    /**
-     * @param string $name
-     * @param array  $start start coordinates {x,y}
-     * @param array  $size  size parameters {width, height}
-     */
-    public function __construct(string $name, array $start, array $size)
+    public function __construct(string $name, Point $startPoint, Size $size)
     {
         $this->name = $name;
-        $this->start = $start;
+        $this->startPoint = $startPoint;
         $this->size = $size;
     }
 
@@ -47,12 +44,12 @@ final class Crop implements FilterInterface
         return $this->name;
     }
 
-    public function getStart(): array
+    public function getStartPoint(): Point
     {
-        return $this->start;
+        return $this->startPoint;
     }
 
-    public function getSize(): array
+    public function getSize(): Size
     {
         return $this->size;
     }

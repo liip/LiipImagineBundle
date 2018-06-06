@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Paste implements FilterInterface
@@ -21,15 +22,15 @@ final class Paste implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Point
      */
     private $start;
 
     /**
      * @param string $name
-     * @param array  $start
+     * @param Point  $start
      */
-    public function __construct(string $name, array $start = [])
+    public function __construct(string $name, Point $start)
     {
         $this->name = $name;
         $this->start = $start;
@@ -40,7 +41,7 @@ final class Paste implements FilterInterface
         return $this->name;
     }
 
-    public function getStart(): array
+    public function getStart(): Point
     {
         return $this->start;
     }

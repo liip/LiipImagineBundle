@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Downscale;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class DownscaleFactory implements FilterFactoryInterface
 {
     const NAME = 'downscale';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    public function __construct(SizeFactory $sizeFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,7 +43,7 @@ final class DownscaleFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $max = isset($options['max']) ? $options['max'] : [];
+        $max = $this->sizeFactory->createFromOptions($options, 'max');
         $by = isset($options['by']) ? (float) $options['by'] : null;
 
         return new Downscale(self::NAME, $max, $by);

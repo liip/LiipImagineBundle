@@ -28,13 +28,13 @@ class FilterSetCollectionTest extends TestCase
 
         $filterSetMock = $this->createMock(StackInterface::class);
 
-        $filterSetBuilderMock = $this->createMock(StackBuilderInterface::class);
-        $filterSetBuilderMock->expects($this->once())
+        $stackBuilderMock = $this->createMock(StackBuilderInterface::class);
+        $stackBuilderMock->expects($this->once())
             ->method('build')
             ->with($filterSetName, $filterSetData)
             ->will($this->returnValue($filterSetMock));
 
-        $model = new StackCollection($filterSetBuilderMock, [$filterSetName => $filterSetData]);
+        $model = new StackCollection($stackBuilderMock, [$filterSetName => $filterSetData]);
         $this->assertSame([$filterSetMock], $model->getFilterSets());
         $this->assertSame([$filterSetMock], $model->getFilterSets());
     }

@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Background;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class BackgroundFactory implements FilterFactoryInterface
 {
     const NAME = 'background';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    public function __construct(SizeFactory $sizeFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -35,7 +46,7 @@ final class BackgroundFactory implements FilterFactoryInterface
         $color = isset($options['color']) ? $options['color'] : null;
         $transparency = isset($options['transparency']) ? $options['transparency'] : null;
         $position = isset($options['position']) ? $options['position'] : null;
-        $size = isset($options['size']) ? $options['size'] : [];
+        $size = $this->sizeFactory->createFromOptions($options);
 
         return new Background(self::NAME, $color, $transparency, $position, $size);
     }

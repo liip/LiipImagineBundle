@@ -25,9 +25,6 @@ final class Rotate implements FilterInterface
      */
     private $angle;
 
-    /**
-     * @param string $name
-     */
     public function __construct(string $name, int $angle)
     {
         $this->name = $name;

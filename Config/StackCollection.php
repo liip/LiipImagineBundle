@@ -21,7 +21,7 @@ final class StackCollection
     /**
      * @var StackBuilderInterface
      */
-    private $filterSetBuilder;
+    private $stackBuilder;
 
     /**
      * @var array
@@ -29,12 +29,12 @@ final class StackCollection
     private $filtersConfiguration;
 
     /**
-     * @param StackBuilderInterface $filterSetBuilder
+     * @param StackBuilderInterface $stackBuilder
      * @param array                 $filtersConfiguration
      */
-    public function __construct(StackBuilderInterface $filterSetBuilder, array $filtersConfiguration = [])
+    public function __construct(StackBuilderInterface $stackBuilder, array $filtersConfiguration = [])
     {
-        $this->filterSetBuilder = $filterSetBuilder;
+        $this->stackBuilder = $stackBuilder;
         $this->filtersConfiguration = $filtersConfiguration;
     }
 
@@ -48,7 +48,7 @@ final class StackCollection
         }
 
         foreach ($this->filtersConfiguration as $filterSetName => $filterSetData) {
-            $this->filterSets[] = $this->filterSetBuilder->build($filterSetName, $filterSetData);
+            $this->filterSets[] = $this->stackBuilder->build($filterSetName, $filterSetData);
         }
 
         return $this->filterSets;

@@ -13,11 +13,29 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Crop;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class CropFactory implements FilterFactoryInterface
 {
     const NAME = 'crop';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    /**
+     * @var PointFactory
+     */
+    private $pointFactory;
+
+    public function __construct(SizeFactory $sizeFactory, PointFactory $pointFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+        $this->pointFactory = $pointFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,6 +50,10 @@ final class CropFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Crop(self::NAME, $options['start'], $options['size']);
+        return new Crop(
+            self::NAME,
+            $this->pointFactory->createFromOptions($options, 'start'),
+            $this->sizeFactory->createFromOptions($options)
+        );
     }
 }

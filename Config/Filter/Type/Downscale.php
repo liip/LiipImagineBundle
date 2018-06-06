@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Downscale implements FilterInterface
@@ -21,7 +22,7 @@ final class Downscale implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Size
      */
     private $max;
 
@@ -31,11 +32,11 @@ final class Downscale implements FilterInterface
     private $by;
 
     /**
-     * @param string $name
-     * @param array  $max  desired max dimensions {width, height}
-     * @param float  $by   sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
+     * @param string     $name
+     * @param Size       $max
+     * @param float|null $by   sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(string $name, array $max = [], float $by = null)
+    public function __construct(string $name, Size $max, float $by = null)
     {
         $this->name = $name;
         $this->max = $max;
@@ -47,7 +48,7 @@ final class Downscale implements FilterInterface
         return $this->name;
     }
 
-    public function getMax(): array
+    public function getMax(): Size
     {
         return $this->max;
     }

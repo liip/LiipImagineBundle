@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Scale;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class ScaleFactory implements FilterFactoryInterface
 {
     const NAME = 'scale';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    public function __construct(SizeFactory $sizeFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,7 +43,7 @@ final class ScaleFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $dimensions = isset($options['dim']) ? $options['dim'] : [];
+        $dimensions = $this->sizeFactory->createFromOptions($options, 'dim');
         $to = isset($options['to']) ? (float) $options['to'] : null;
 
         return new Scale(self::NAME, $dimensions, $to);

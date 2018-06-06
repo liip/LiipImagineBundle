@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Resize;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class ResizeFactory implements FilterFactoryInterface
 {
     const NAME = 'resize';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    public function __construct(SizeFactory $sizeFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,11 +43,6 @@ final class ResizeFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $size = [];
-        if (isset($options['size']) && is_array($options['size'])) {
-            $size = $options['size'];
-        }
-
-        return new Resize(self::NAME, $size);
+        return new Resize(self::NAME, $this->sizeFactory->createFromOptions($options));
     }
 }

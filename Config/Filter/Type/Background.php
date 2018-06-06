@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Background implements FilterInterface
@@ -36,7 +37,7 @@ final class Background implements FilterInterface
     private $position;
 
     /**
-     * @var array
+     * @var Size
      */
     private $size;
 
@@ -45,14 +46,14 @@ final class Background implements FilterInterface
      * @param string|null $color
      * @param string|null $transparency
      * @param string|null $position
-     * @param array       $size
+     * @param Size        $size
      */
     public function __construct(
         string $name,
         string $color = null,
         string $transparency = null,
         string $position = null,
-        array $size = []
+        Size $size
     ) {
         $this->name = $name;
         $this->color = $color;
@@ -81,7 +82,7 @@ final class Background implements FilterInterface
         return $this->position;
     }
 
-    public function getSize(): array
+    public function getSize(): Size
     {
         return $this->size;
     }

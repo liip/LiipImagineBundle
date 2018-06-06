@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Upscale;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class UpscaleFactory implements FilterFactoryInterface
 {
     const NAME = 'upscale';
+
+    /**
+     * @var SizeFactory
+     */
+    private $sizeFactory;
+
+    public function __construct(SizeFactory $sizeFactory)
+    {
+        $this->sizeFactory = $sizeFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,7 +43,7 @@ final class UpscaleFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $min = isset($options['min']) ? $options['min'] : [];
+        $min = $this->sizeFactory->createFromOptions($options, 'min');
         $by = isset($options['by']) ? (float) $options['by'] : null;
 
         return new Upscale(self::NAME, $min, $by);

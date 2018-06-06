@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Resize implements FilterInterface
@@ -21,15 +22,11 @@ final class Resize implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Size
      */
-    private $size = [];
+    private $size;
 
-    /**
-     * @param string $name
-     * @param array  $size size parameters {width, height}
-     */
-    public function __construct(string $name, array $size)
+    public function __construct(string $name, Size $size)
     {
         $this->name = $name;
         $this->size = $size;
@@ -40,7 +37,7 @@ final class Resize implements FilterInterface
         return $this->name;
     }
 
-    public function getSize(): array
+    public function getSize(): Size
     {
         return $this->size;
     }

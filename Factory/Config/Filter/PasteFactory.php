@@ -13,11 +13,22 @@ namespace Liip\ImagineBundle\Factory\Config\Filter;
 
 use Liip\ImagineBundle\Config\Filter\Type\Paste;
 use Liip\ImagineBundle\Config\FilterInterface;
+use Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 final class PasteFactory implements FilterFactoryInterface
 {
     const NAME = 'auto_rotate';
+
+    /**
+     * @var PointFactory
+     */
+    private $pointFactory;
+
+    public function __construct(PointFactory $pointFactory)
+    {
+        $this->pointFactory = $pointFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,11 +43,6 @@ final class PasteFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $start = [];
-        if (isset($options['start'])) {
-            $start = $options['start'];
-        }
-
-        return new Paste(self::NAME, $start);
+        return new Paste(self::NAME, $this->pointFactory->createFromOptions($options, 'start'));
     }
 }

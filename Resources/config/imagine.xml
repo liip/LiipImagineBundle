@@ -33,28 +33,62 @@
     <services>
 
         <!-- Factory services -->
+        <service id="liip_imagine.factory.config.filter.argument.point" class="Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory"/>
+        <service id="liip_imagine.factory.config.filter.argument.size" class="Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory"/>
+
         <service id="liip_imagine.factory.config.stack" class="Liip\ImagineBundle\Factory\Config\StackFactory" />
         <service id="liip_imagine.factory.config.filter.auto_rotate" class="Liip\ImagineBundle\Factory\Config\Filter\AutoRotateFactory" />
-        <service id="liip_imagine.factory.config.filter.background" class="Liip\ImagineBundle\Factory\Config\Filter\BackgroundFactory" />
-        <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory" />
+        <service id="liip_imagine.factory.config.filter.background" class="Liip\ImagineBundle\Factory\Config\Filter\BackgroundFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.point"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.downscale" class="Liip\ImagineBundle\Factory\Config\Filter\DownscaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
         <service id="liip_imagine.factory.config.filter.flip" class="Liip\ImagineBundle\Factory\Config\Filter\FlipFactory" />
         <service id="liip_imagine.factory.config.filter.grayscale" class="Liip\ImagineBundle\Factory\Config\Filter\GrayscaleFactory" />
         <service id="liip_imagine.factory.config.filter.interlace" class="Liip\ImagineBundle\Factory\Config\Filter\InterlaceFactory" />
-        <service id="liip_imagine.factory.config.filter.paste" class="Liip\ImagineBundle\Factory\Config\Filter\PasteFactory" />
+        <service id="liip_imagine.factory.config.filter.paste" class="Liip\ImagineBundle\Factory\Config\Filter\PasteFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.point"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.relative_resize" class="Liip\ImagineBundle\Factory\Config\Filter\RelativeResizeFactory" />
+        <service id="liip_imagine.factory.config.filter.resize" class="Liip\ImagineBundle\Factory\Config\Filter\ResizeFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.rotate" class="Liip\ImagineBundle\Factory\Config\Filter\RotateFactory" />
+        <service id="liip_imagine.factory.config.filter.scale" class="Liip\ImagineBundle\Factory\Config\Filter\ScaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
         <service id="liip_imagine.factory.config.filter.strip" class="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" />
-        <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory" />
+        <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.upscale" class="Liip\ImagineBundle\Factory\Config\Filter\UpscaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.watermark" class="Liip\ImagineBundle\Factory\Config\Filter\WatermarkFactory" />
 
         <!-- Config services -->
         <service id="liip_imagine.config.filter_factory_collection" class="Liip\ImagineBundle\Config\FilterFactoryCollection">
             <argument type="service" id="liip_imagine.factory.config.filter.auto_rotate"/>
             <argument type="service" id="liip_imagine.factory.config.filter.background"/>
             <argument type="service" id="liip_imagine.factory.config.filter.crop"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.downscale"/>
             <argument type="service" id="liip_imagine.factory.config.filter.flip"/>
             <argument type="service" id="liip_imagine.factory.config.filter.grayscale"/>
             <argument type="service" id="liip_imagine.factory.config.filter.interlace"/>
             <argument type="service" id="liip_imagine.factory.config.filter.paste"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.relative_resize"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.resize"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.rotate"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.scale"/>
             <argument type="service" id="liip_imagine.factory.config.filter.strip"/>
             <argument type="service" id="liip_imagine.factory.config.filter.thumbnail"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.upscale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.watermark"/>
         </service>
         <service id="Liip\ImagineBundle\Config\FilterFactoryCollection" alias="liip_imagine.config.filter_factory_collection"/>
 

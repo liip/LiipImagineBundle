@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Thumbnail implements FilterInterface
@@ -21,7 +22,7 @@ final class Thumbnail implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Size
      */
     private $size;
 
@@ -42,14 +43,14 @@ final class Thumbnail implements FilterInterface
 
     /**
      * @param string      $name
-     * @param array       $size         size parameters {width, height}
+     * @param Size        $size
      * @param string|null $mode
      * @param bool|null   $allowUpscale
      * @param string|null $filter
      */
     public function __construct(
         string $name,
-        array $size,
+        Size $size,
         string $mode = null,
         bool $allowUpscale = null,
         string $filter = null
@@ -66,7 +67,7 @@ final class Thumbnail implements FilterInterface
         return $this->name;
     }
 
-    public function getSize(): ?array
+    public function getSize(): Size
     {
         return $this->size;
     }

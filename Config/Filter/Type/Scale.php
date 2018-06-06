@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
+use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
 final class Scale implements FilterInterface
@@ -21,9 +22,9 @@ final class Scale implements FilterInterface
     private $name;
 
     /**
-     * @var array
+     * @var Size
      */
-    private $dimensions = [];
+    private $dimensions;
 
     /**
      * @var float
@@ -32,10 +33,10 @@ final class Scale implements FilterInterface
 
     /**
      * @param string     $name
-     * @param array      $dimensions array containing a width and height integer
+     * @param Size       $dimensions
      * @param float|null $to         proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(string $name, array $dimensions, float $to = null)
+    public function __construct(string $name, Size $dimensions, float $to = null)
     {
         $this->name = $name;
         $this->dimensions = $dimensions;
@@ -47,7 +48,7 @@ final class Scale implements FilterInterface
         return $this->name;
     }
 
-    public function getDimensions(): array
+    public function getDimensions(): Size
     {
         return $this->dimensions;
     }
