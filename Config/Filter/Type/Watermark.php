@@ -49,34 +49,22 @@ final class Watermark implements FilterInterface
         $this->size = $size;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getImage(): string
     {
         return $this->image;
     }
 
-    /**
-     * @return string
-     */
     public function getPosition(): string
     {
         return $this->position;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getSize()
+    public function getSize(): ?float
     {
         return $this->size;
     }

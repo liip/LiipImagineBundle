@@ -61,42 +61,27 @@ final class RelativeResize implements FilterInterface
         $this->scale = $scale;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getHeighten()
+    public function getHeighten(): ?float
     {
         return $this->heighten;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getWiden()
+    public function getWiden(): ?float
     {
         return $this->widen;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getIncrease()
+    public function getIncrease(): ?float
     {
         return $this->increase;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getScale()
+    public function getScale(): ?float
     {
         return $this->scale;
     }

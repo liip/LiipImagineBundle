@@ -35,17 +35,11 @@ final class Paste implements FilterInterface
         $this->start = $start;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getStart(): array
     {
         return $this->start;

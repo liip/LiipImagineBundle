@@ -35,17 +35,11 @@ final class Resize implements FilterInterface
         $this->size = $size;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getSize(): array
     {
         return $this->size;

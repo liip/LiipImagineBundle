@@ -42,26 +42,17 @@ final class Downscale implements FilterInterface
         $this->by = $by;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getMax(): array
     {
         return $this->max;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getBy()
+    public function getBy(): ?float
     {
         return $this->by;
     }

@@ -35,17 +35,11 @@ final class Flip implements FilterInterface
         $this->axis = $axis;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getAxis(): string
     {
         return $this->axis;

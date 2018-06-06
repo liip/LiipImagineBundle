@@ -61,41 +61,26 @@ final class Background implements FilterInterface
         $this->size = $size;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getColor(): string
     {
         return $this->color;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTransparency(): string
     {
         return $this->transparency;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getPosition()
+    public function getPosition(): ?string
     {
         return $this->position;
     }
 
-    /**
-     * @return array
-     */
     public function getSize(): array
     {
         return $this->size;

@@ -35,17 +35,11 @@ final class Interlace implements FilterInterface
         $this->mode = $mode;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getMode(): string
     {
         return $this->mode;

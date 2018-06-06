@@ -42,25 +42,16 @@ final class Crop implements FilterInterface
         $this->size = $size;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getStart(): array
     {
         return $this->start;
     }
 
-    /**
-     * @return array
-     */
     public function getSize(): array
     {
         return $this->size;

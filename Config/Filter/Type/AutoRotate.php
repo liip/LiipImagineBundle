@@ -28,9 +28,6 @@ final class AutoRotate implements FilterInterface
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

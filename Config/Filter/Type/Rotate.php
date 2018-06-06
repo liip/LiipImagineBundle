@@ -34,17 +34,11 @@ final class Rotate implements FilterInterface
         $this->angle = $angle;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getAngle(): int
     {
         return $this->angle;

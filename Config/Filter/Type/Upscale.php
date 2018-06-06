@@ -42,26 +42,17 @@ final class Upscale implements FilterInterface
         $this->by = $by;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getMin(): array
     {
         return $this->min;
     }
 
-    /**
-     * @return float|null
-     */
-    public function getBy()
+    public function getBy(): ?float
     {
         return $this->by;
     }

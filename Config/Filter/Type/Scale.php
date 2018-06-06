@@ -42,26 +42,17 @@ final class Scale implements FilterInterface
         $this->to = $to;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
     public function getDimensions(): array
     {
         return $this->dimensions;
     }
 
-    /**
-     * @return float
-     */
-    public function getTo()
+    public function getTo(): ?float
     {
         return $this->to;
     }

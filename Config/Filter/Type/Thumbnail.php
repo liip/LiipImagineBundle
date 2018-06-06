@@ -61,42 +61,27 @@ final class Thumbnail implements FilterInterface
         $this->filter = $filter;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return array
-     */
-    public function getSize()
+    public function getSize(): ?array
     {
         return $this->size;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMode()
+    public function getMode(): ?string
     {
         return $this->mode;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function isAllowUpscale()
+    public function isAllowUpscale(): ?bool
     {
         return $this->allowUpscale;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFilter()
+    public function getFilter(): ?string
     {
         return $this->filter;
     }
