@@ -44,9 +44,9 @@ final class ThumbnailFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         $size = $this->sizeFactory->createFromOptions($options);
-        $mode = isset($options['mode']) ? $options['mode'] : null;
-        $allowUpscale = isset($options['allow_upscale']) ? $options['allow_upscale'] : null;
-        $filter = isset($options['filter']) ? $options['filter'] : null;
+        $mode = $options['mode'] ?? null;
+        $allowUpscale = $options['allow_upscale'] ?? null;
+        $filter = $options['filter'] ?? null;
 
         return new Thumbnail(self::NAME, $size, $mode, $allowUpscale, $filter);
     }

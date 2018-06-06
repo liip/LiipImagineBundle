@@ -43,9 +43,9 @@ final class BackgroundFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $color = isset($options['color']) ? $options['color'] : null;
-        $transparency = isset($options['transparency']) ? $options['transparency'] : null;
-        $position = isset($options['position']) ? $options['position'] : null;
+        $color = $options['color'] ?? null;
+        $transparency = $options['transparency'] ?? null;
+        $position = $options['position'] ?? null;
         $size = $this->sizeFactory->createFromOptions($options);
 
         return new Background(self::NAME, $color, $transparency, $position, $size);

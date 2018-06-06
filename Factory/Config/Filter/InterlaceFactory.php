@@ -33,10 +33,7 @@ final class InterlaceFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        $mode = ImageInterface::INTERLACE_LINE;
-        if (!empty($options['mode'])) {
-            $mode = $options['mode'];
-        }
+        $mode = $options['mode'] ?? ImageInterface::INTERLACE_LINE;
 
         return new Interlace(self::NAME, $mode);
     }
