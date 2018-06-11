@@ -11,12 +11,10 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
-use Liip\ImagineBundle\Config\FilterInterface;
-
 /**
  * @codeCoverageIgnore
  */
-final class Rotate extends FilterAbstract implements FilterInterface
+final class Rotate extends FilterAbstract
 {
     const NAME = 'rotate';
 

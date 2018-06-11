@@ -13,11 +13,5 @@ namespace Liip\ImagineBundle\Config;
 
 interface StackBuilderInterface
 {
-    /**
-     * @param string $filterSetName
-     * @param array  $filterSetData
-     *
-     * @return StackInterface
-     */
     public function build(string $filterSetName, array $filterSetData): StackInterface;
 }

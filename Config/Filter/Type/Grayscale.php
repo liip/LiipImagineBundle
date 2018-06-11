@@ -11,12 +11,10 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
-use Liip\ImagineBundle\Config\FilterInterface;
-
 /**
  * @codeCoverageIgnore
  */
-final class Grayscale extends FilterAbstract implements FilterInterface
+final class Grayscale extends FilterAbstract
 {
     const NAME = 'grayscale';
 }

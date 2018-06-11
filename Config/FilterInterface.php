@@ -20,6 +20,8 @@ namespace Liip\ImagineBundle\Config;
 interface FilterInterface
 {
     /**
+     * Filter identifier
+     *
      * @return string
      */
     public function getName(): string;

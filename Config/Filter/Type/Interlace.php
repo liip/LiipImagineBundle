@@ -11,12 +11,10 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
-use Liip\ImagineBundle\Config\FilterInterface;
-
 /**
  * @codeCoverageIgnore
  */
-final class Interlace extends FilterAbstract implements FilterInterface
+final class Interlace extends FilterAbstract
 {
     const NAME = 'interlace';
 

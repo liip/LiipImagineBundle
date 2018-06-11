@@ -37,7 +37,7 @@ final class Stack implements StackInterface
 
     /**
      * @param string            $name
-     * @param string|null       $dataLoader
+     * @param string|null       $dataLoader name of a custom data loader. Default value: filesystem (which means the standard filesystem loader is used).
      * @param int|null          $quality
      * @param FilterInterface[] $filters
      */

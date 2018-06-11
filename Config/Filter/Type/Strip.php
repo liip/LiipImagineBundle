@@ -11,12 +11,10 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
-use Liip\ImagineBundle\Config\FilterInterface;
-
 /**
  * @codeCoverageIgnore
  */
-final class Strip extends FilterAbstract implements FilterInterface
+final class Strip extends FilterAbstract
 {
     const NAME = 'strip';
 }

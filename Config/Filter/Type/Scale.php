@@ -12,12 +12,11 @@
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
-use Liip\ImagineBundle\Config\FilterInterface;
 
 /**
  * @codeCoverageIgnore
  */
-final class Scale extends FilterAbstract implements FilterInterface
+final class Scale extends FilterAbstract
 {
     const NAME = 'scale';
 

@@ -13,12 +13,11 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
-use Liip\ImagineBundle\Config\FilterInterface;
 
 /**
  * @codeCoverageIgnore
  */
-final class Crop extends FilterAbstract implements FilterInterface
+final class Crop extends FilterAbstract
 {
     const NAME = 'crop';
 

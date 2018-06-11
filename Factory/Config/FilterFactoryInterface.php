@@ -16,16 +16,9 @@ use Liip\ImagineBundle\Config\FilterInterface;
 interface FilterFactoryInterface
 {
     /**
-     * Filter name
-     *
-     * @return string
+     * Name of the filter that this factory can create
      */
     public function getName(): string;
 
-    /**
-     * @param array $options
-     *
-     * @return FilterInterface
-     */
     public function create(array $options): FilterInterface;
 }

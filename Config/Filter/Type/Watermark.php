@@ -11,12 +11,10 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Type;
 
-use Liip\ImagineBundle\Config\FilterInterface;
-
 /**
  * @codeCoverageIgnore
  */
-final class Watermark extends FilterAbstract implements FilterInterface
+final class Watermark extends FilterAbstract
 {
     const NAME = 'watermark';
 
