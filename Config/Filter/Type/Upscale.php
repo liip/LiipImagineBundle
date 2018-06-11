@@ -29,8 +29,8 @@ final class Upscale extends FilterAbstract implements FilterInterface
     private $by;
 
     /**
-     * @param Size   $min
-     * @param float  $by   sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
+     * @param Size  $min
+     * @param float $by  sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
     public function __construct(Size $min, float $by = null)
     {

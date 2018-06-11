@@ -13,7 +13,6 @@ namespace Liip\ImagineBundle\Config;
 
 interface StackInterface
 {
-
     public function getName(): string;
 
     public function getDataLoader(): ?string;
