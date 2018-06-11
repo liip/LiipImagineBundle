@@ -11,12 +11,12 @@
 
 namespace Liip\ImagineBundle\Config;
 
-use Liip\ImagineBundle\Factory\Config\StackFactory;
+use Liip\ImagineBundle\Factory\Config\StackFactoryInterface;
 
 final class StackBuilder implements StackBuilderInterface
 {
     /**
-     * @var StackFactory
+     * @var StackFactoryInterface
      */
     private $filterSetFactory;
 
@@ -26,10 +26,10 @@ final class StackBuilder implements StackBuilderInterface
     private $filterFactoryCollection;
 
     /**
-     * @param StackFactory            $filterSetFactory
+     * @param StackFactoryInterface   $filterSetFactory
      * @param FilterFactoryCollection $filterFactoryCollection
      */
-    public function __construct(StackFactory $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
+    public function __construct(StackFactoryInterface $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
     {
         $this->filterSetFactory = $filterSetFactory;
         $this->filterFactoryCollection = $filterFactoryCollection;

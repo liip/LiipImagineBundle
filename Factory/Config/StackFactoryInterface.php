@@ -11,18 +11,18 @@
 
 namespace Liip\ImagineBundle\Factory\Config;
 
+use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\Stack;
 
-/**
- * @internal
- */
-final class StackFactory implements StackFactoryInterface
+interface StackFactoryInterface
 {
     /**
-     * {@inheritdoc}
+     * @param string            $name
+     * @param string|null       $dataLoader
+     * @param int|null          $quality
+     * @param FilterInterface[] $filters
+     *
+     * @return Stack
      */
-    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters)
-    {
-        return new Stack($name, $dataLoader, $quality, $filters);
-    }
+    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters);
 }

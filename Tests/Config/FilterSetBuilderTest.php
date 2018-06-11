@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Config\StackBuilder;
 use Liip\ImagineBundle\Config\StackInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 use Liip\ImagineBundle\Factory\Config\StackFactory;
+use Liip\ImagineBundle\Factory\Config\StackFactoryInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,7 +42,7 @@ class FilterSetBuilderTest extends TestCase
 
     protected function setUp()
     {
-        $this->filterSetFactoryMock = $this->createMock(StackFactory::class);
+        $this->filterSetFactoryMock = $this->createMock(StackFactoryInterface::class);
         $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollection::class);
         $this->model = new StackBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
