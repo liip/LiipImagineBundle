@@ -20,14 +20,12 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class WatermarkFactory implements FilterFactoryInterface
 {
-    const NAME = 'watermark';
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Watermark::NAME;
     }
 
     /**
@@ -38,6 +36,6 @@ final class WatermarkFactory implements FilterFactoryInterface
         $size = $options['size'] ?? null;
         $position = isset($options['position']) ? $options['position'] : 'center';
 
-        return new Watermark(self::NAME, $options['image'], $size, $position);
+        return new Watermark($options['image'], $size, $position);
     }
 }

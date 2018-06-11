@@ -20,14 +20,12 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class FlipFactory implements FilterFactoryInterface
 {
-    const NAME = 'flip';
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Flip::NAME;
     }
 
     /**
@@ -35,6 +33,6 @@ final class FlipFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Flip(self::NAME, $options['axis']);
+        return new Flip($options['axis']);
     }
 }

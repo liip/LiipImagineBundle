@@ -22,8 +22,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class CropFactory implements FilterFactoryInterface
 {
-    const NAME = 'crop';
-
     /**
      * @var SizeFactory
      */
@@ -45,7 +43,7 @@ final class CropFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Crop::NAME;
     }
 
     /**
@@ -54,7 +52,6 @@ final class CropFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         return new Crop(
-            self::NAME,
             $this->pointFactory->createFromOptions($options, 'start'),
             $this->sizeFactory->createFromOptions($options)
         );

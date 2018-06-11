@@ -13,31 +13,18 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Interlace implements FilterInterface
+final class Interlace extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'interlace';
 
     /**
      * @var string
      */
     private $mode;
 
-    /**
-     * @param string $name
-     * @param string $mode
-     */
-    public function __construct(string $name, string $mode)
+    public function __construct(string $mode)
     {
-        $this->name = $name;
         $this->mode = $mode;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getMode(): string

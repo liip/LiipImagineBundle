@@ -20,14 +20,12 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class RelativeResizeFactory implements FilterFactoryInterface
 {
-    const NAME = 'relative_resize';
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return self::NAME;
+        return RelativeResize::NAME;
     }
 
     /**
@@ -40,6 +38,6 @@ final class RelativeResizeFactory implements FilterFactoryInterface
         $increase = $options['increase'] ?? null;
         $scale = $options['scale'] ?? null;
 
-        return new RelativeResize(self::NAME, $heighten, $widen, $increase, $scale);
+        return new RelativeResize($heighten, $widen, $increase, $scale);
     }
 }

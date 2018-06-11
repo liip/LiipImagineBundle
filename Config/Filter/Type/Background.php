@@ -14,12 +14,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Background implements FilterInterface
+final class Background extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'background';
 
     /**
      * @var string
@@ -42,29 +39,21 @@ final class Background implements FilterInterface
     private $size;
 
     /**
-     * @param string      $name
      * @param string|null $color        background color HEX value
      * @param string|null $transparency possible values 0..100
      * @param string|null $position     position of the input image on the newly created background image. Valid values: topleft, top, topright, left, center, right, bottomleft, bottom, and bottomright
      * @param Size        $size
      */
     public function __construct(
-        string $name,
         string $color = null,
         string $transparency = null,
         string $position = null,
         Size $size
     ) {
-        $this->name = $name;
         $this->color = $color;
         $this->transparency = $transparency;
         $this->position = $position;
         $this->size = $size;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getColor(): string

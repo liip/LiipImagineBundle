@@ -20,14 +20,12 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class GrayscaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'grayscale';
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Grayscale::NAME;
     }
 
     /**
@@ -35,6 +33,6 @@ final class GrayscaleFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Grayscale(self::NAME);
+        return new Grayscale();
     }
 }

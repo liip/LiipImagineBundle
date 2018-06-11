@@ -13,12 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class RelativeResize implements FilterInterface
+final class RelativeResize extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'relative_resize';
 
     /**
      * @var float
@@ -40,30 +37,16 @@ final class RelativeResize implements FilterInterface
      */
     private $scale;
 
-    /**
-     * @param string     $name
-     * @param float|null $heighten
-     * @param float|null $widen
-     * @param float|null $increase
-     * @param float|null $scale
-     */
     public function __construct(
-        string $name,
         float $heighten = null,
         float $widen = null,
         float $increase = null,
         float $scale = null
     ) {
-        $this->name = $name;
         $this->heighten = $heighten;
         $this->widen = $widen;
         $this->increase = $increase;
         $this->scale = $scale;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getHeighten(): ?float

@@ -20,14 +20,12 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class StripFactory implements FilterFactoryInterface
 {
-    const NAME = 'strip';
-
     /**
      * {@inheritdoc}
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Strip::NAME;
     }
 
     /**
@@ -35,6 +33,6 @@ final class StripFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Strip(self::NAME);
+        return new Strip();
     }
 }

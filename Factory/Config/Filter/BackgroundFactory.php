@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class BackgroundFactory implements FilterFactoryInterface
 {
-    const NAME = 'background';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class BackgroundFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Background::NAME;
     }
 
     /**
@@ -51,6 +49,6 @@ final class BackgroundFactory implements FilterFactoryInterface
         $position = $options['position'] ?? null;
         $size = $this->sizeFactory->createFromOptions($options);
 
-        return new Background(self::NAME, $color, $transparency, $position, $size);
+        return new Background($color, $transparency, $position, $size);
     }
 }

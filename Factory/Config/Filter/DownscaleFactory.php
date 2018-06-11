@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class DownscaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'downscale';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class DownscaleFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Downscale::NAME;
     }
 
     /**
@@ -49,6 +47,6 @@ final class DownscaleFactory implements FilterFactoryInterface
         $max = $this->sizeFactory->createFromOptions($options, 'max');
         $by = isset($options['by']) ? (float) $options['by'] : null;
 
-        return new Downscale(self::NAME, $max, $by);
+        return new Downscale($max, $by);
     }
 }

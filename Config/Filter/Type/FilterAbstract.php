@@ -13,22 +13,12 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Rotate extends FilterAbstract implements FilterInterface
+abstract class FilterAbstract implements FilterInterface
 {
-    const NAME = 'rotate';
+    const NAME = self::NAME;
 
-    /**
-     * @var int
-     */
-    private $angle;
-
-    public function __construct(int $angle)
+    public function getName(): string
     {
-        $this->angle = $angle;
-    }
-
-    public function getAngle(): int
-    {
-        return $this->angle;
+        return self::NAME;
     }
 }

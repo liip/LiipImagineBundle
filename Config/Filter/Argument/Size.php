@@ -23,6 +23,10 @@ final class Size
      */
     private $height;
 
+    /**
+     * To allow keeping aspect ratio, it is allowed to only specify one of width or height.
+     * It is however not allowed to specify neither dimension.
+     */
     public function __construct(int $width = null, int $height = null)
     {
         $this->width = $width;

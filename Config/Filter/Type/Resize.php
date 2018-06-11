@@ -14,27 +14,18 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Resize implements FilterInterface
+final class Resize extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'resize';
 
     /**
      * @var Size
      */
     private $size;
 
-    public function __construct(string $name, Size $size)
+    public function __construct(Size $size)
     {
-        $this->name = $name;
         $this->size = $size;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getSize(): Size

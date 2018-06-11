@@ -14,12 +14,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Thumbnail implements FilterInterface
+final class Thumbnail extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'thumbnail';
 
     /**
      * @var Size
@@ -41,30 +38,16 @@ final class Thumbnail implements FilterInterface
      */
     private $filter;
 
-    /**
-     * @param string      $name
-     * @param Size        $size
-     * @param string|null $mode
-     * @param bool|null   $allowUpscale
-     * @param string|null $filter
-     */
     public function __construct(
-        string $name,
         Size $size,
         string $mode = null,
         bool $allowUpscale = null,
         string $filter = null
     ) {
-        $this->name = $name;
         $this->size = $size;
         $this->mode = $mode;
         $this->allowUpscale = $allowUpscale;
         $this->filter = $filter;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getSize(): Size

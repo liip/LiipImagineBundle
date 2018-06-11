@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class ResizeFactory implements FilterFactoryInterface
 {
-    const NAME = 'resize';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class ResizeFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Resize::NAME;
     }
 
     /**
@@ -46,6 +44,6 @@ final class ResizeFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Resize(self::NAME, $this->sizeFactory->createFromOptions($options));
+        return new Resize($this->sizeFactory->createFromOptions($options));
     }
 }

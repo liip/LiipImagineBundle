@@ -13,20 +13,12 @@ namespace Liip\ImagineBundle\Config;
 
 interface StackInterface
 {
-    /**
-     * @return string
-     */
+
     public function getName(): string;
 
-    /**
-     * @return string|null
-     */
-    public function getDataLoader();
+    public function getDataLoader(): ?string;
 
-    /**
-     * @return int|null
-     */
-    public function getQuality();
+    public function getQuality(): ?int;
 
     /**
      * @return FilterInterface[]

@@ -13,12 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Watermark implements FilterInterface
+final class Watermark extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'watermark';
 
     /**
      * @var string
@@ -35,23 +32,11 @@ final class Watermark implements FilterInterface
      */
     private $size;
 
-    /**
-     * @param string     $name
-     * @param string     $image
-     * @param string     $position
-     * @param float|null $size
-     */
-    public function __construct(string $name, string $image, string $position, float $size = null)
+    public function __construct(string $image, string $position, float $size = null)
     {
-        $this->name = $name;
         $this->image = $image;
         $this->position = $position;
         $this->size = $size;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getImage(): string

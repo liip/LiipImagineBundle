@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class ThumbnailFactory implements FilterFactoryInterface
 {
-    const NAME = 'thumbnail';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class ThumbnailFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Thumbnail::NAME;
     }
 
     /**
@@ -51,6 +49,6 @@ final class ThumbnailFactory implements FilterFactoryInterface
         $allowUpscale = $options['allow_upscale'] ?? null;
         $filter = $options['filter'] ?? null;
 
-        return new Thumbnail(self::NAME, $size, $mode, $allowUpscale, $filter);
+        return new Thumbnail($size, $mode, $allowUpscale, $filter);
     }
 }

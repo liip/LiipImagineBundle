@@ -13,12 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Flip implements FilterInterface
+final class Flip extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'flip';
 
     /**
      * @var string
@@ -26,18 +23,11 @@ final class Flip implements FilterInterface
     private $axis;
 
     /**
-     * @param string $name
      * @param string $axis possible values are: "x", "horizontal", "y", or "vertical"
      */
-    public function __construct(string $name, string $axis)
+    public function __construct(string $axis)
     {
-        $this->name = $name;
         $this->axis = $axis;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getAxis(): string

@@ -13,23 +13,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class AutoRotate implements FilterInterface
+final class AutoRotate extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @param string $name
-     */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    const NAME = 'auto_rotate';
 }

@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class ScaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'scale';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class ScaleFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Scale::NAME;
     }
 
     /**
@@ -49,6 +47,6 @@ final class ScaleFactory implements FilterFactoryInterface
         $dimensions = $this->sizeFactory->createFromOptions($options, 'dim');
         $to = isset($options['to']) ? (float) $options['to'] : null;
 
-        return new Scale(self::NAME, $dimensions, $to);
+        return new Scale($dimensions, $to);
     }
 }

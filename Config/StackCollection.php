@@ -28,10 +28,6 @@ final class StackCollection
      */
     private $filtersConfiguration;
 
-    /**
-     * @param StackBuilderInterface $stackBuilder
-     * @param array                 $filtersConfiguration
-     */
     public function __construct(StackBuilderInterface $stackBuilder, array $filtersConfiguration = [])
     {
         $this->stackBuilder = $stackBuilder;

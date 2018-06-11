@@ -14,31 +14,18 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Paste implements FilterInterface
+final class Paste extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'auto_rotate';
 
     /**
      * @var Point
      */
     private $start;
 
-    /**
-     * @param string $name
-     * @param Point  $start
-     */
-    public function __construct(string $name, Point $start)
+    public function __construct(Point $start)
     {
-        $this->name = $name;
         $this->start = $start;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getStart(): Point

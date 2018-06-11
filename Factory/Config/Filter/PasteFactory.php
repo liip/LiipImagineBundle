@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class PasteFactory implements FilterFactoryInterface
 {
-    const NAME = 'auto_rotate';
-
     /**
      * @var PointFactory
      */
@@ -38,7 +36,7 @@ final class PasteFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Paste::NAME;
     }
 
     /**
@@ -46,6 +44,6 @@ final class PasteFactory implements FilterFactoryInterface
      */
     public function create(array $options): FilterInterface
     {
-        return new Paste(self::NAME, $this->pointFactory->createFromOptions($options, 'start'));
+        return new Paste($this->pointFactory->createFromOptions($options, 'start'));
     }
 }

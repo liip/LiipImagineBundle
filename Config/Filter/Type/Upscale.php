@@ -14,12 +14,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Upscale implements FilterInterface
+final class Upscale extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'upscale';
 
     /**
      * @var Size
@@ -32,20 +29,13 @@ final class Upscale implements FilterInterface
     private $by;
 
     /**
-     * @param string $name
      * @param Size   $min
      * @param float  $by   sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(string $name, Size $min, float $by = null)
+    public function __construct(Size $min, float $by = null)
     {
-        $this->name = $name;
         $this->min = $min;
         $this->by = $by;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getMin(): Size

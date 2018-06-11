@@ -15,12 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
-final class Crop implements FilterInterface
+final class Crop extends FilterAbstract implements FilterInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    const NAME = 'crop';
 
     /**
      * @var Point
@@ -32,16 +29,10 @@ final class Crop implements FilterInterface
      */
     private $size;
 
-    public function __construct(string $name, Point $startPoint, Size $size)
+    public function __construct(Point $startPoint, Size $size)
     {
-        $this->name = $name;
         $this->startPoint = $startPoint;
         $this->size = $size;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
     public function getStartPoint(): Point

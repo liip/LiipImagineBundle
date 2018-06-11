@@ -21,8 +21,6 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class UpscaleFactory implements FilterFactoryInterface
 {
-    const NAME = 'upscale';
-
     /**
      * @var SizeFactory
      */
@@ -38,7 +36,7 @@ final class UpscaleFactory implements FilterFactoryInterface
      */
     public function getName(): string
     {
-        return self::NAME;
+        return Upscale::NAME;
     }
 
     /**
@@ -49,6 +47,6 @@ final class UpscaleFactory implements FilterFactoryInterface
         $min = $this->sizeFactory->createFromOptions($options, 'min');
         $by = isset($options['by']) ? (float) $options['by'] : null;
 
-        return new Upscale(self::NAME, $min, $by);
+        return new Upscale($min, $by);
     }
 }
