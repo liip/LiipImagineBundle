@@ -25,22 +25,12 @@ final class StackBuilder implements StackBuilderInterface
      */
     private $filterFactoryCollection;
 
-    /**
-     * @param StackFactoryInterface   $filterSetFactory
-     * @param FilterFactoryCollection $filterFactoryCollection
-     */
     public function __construct(StackFactoryInterface $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
     {
         $this->filterSetFactory = $filterSetFactory;
         $this->filterFactoryCollection = $filterFactoryCollection;
     }
 
-    /**
-     * @param string $filterSetName
-     * @param array  $filterSetData
-     *
-     * @return StackInterface
-     */
     public function build(string $filterSetName, array $filterSetData): StackInterface
     {
         $filters = [];

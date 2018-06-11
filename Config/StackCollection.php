@@ -13,9 +13,6 @@ namespace Liip\ImagineBundle\Config;
 
 final class StackCollection
 {
-    /**
-     * @var array
-     */
     private $filterSets = [];
 
     /**
