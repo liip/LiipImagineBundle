@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\AutoRotate;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class AutoRotateFactory implements FilterFactoryInterface
 {
     const NAME = 'auto_rotate';

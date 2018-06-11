@@ -16,6 +16,9 @@ use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class ScaleFactory implements FilterFactoryInterface
 {
     const NAME = 'scale';

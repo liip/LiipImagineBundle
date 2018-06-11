@@ -16,6 +16,9 @@ use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class UpscaleFactory implements FilterFactoryInterface
 {
     const NAME = 'upscale';

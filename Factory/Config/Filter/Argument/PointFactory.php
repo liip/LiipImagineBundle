@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Factory\Config\Filter\Argument;
 use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 
+/**
+ * @internal
+ */
 final class PointFactory
 {
     public function create($x = null, $y = null): Point

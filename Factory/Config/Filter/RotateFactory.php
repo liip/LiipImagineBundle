@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Rotate;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class RotateFactory implements FilterFactoryInterface
 {
     const NAME = 'rotate';

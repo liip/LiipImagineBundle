@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Watermark;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class WatermarkFactory implements FilterFactoryInterface
 {
     const NAME = 'watermark';

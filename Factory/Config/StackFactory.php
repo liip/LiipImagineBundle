@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Factory\Config;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Config\Stack;
 
+/**
+ * @internal
+ */
 class StackFactory
 {
     /**

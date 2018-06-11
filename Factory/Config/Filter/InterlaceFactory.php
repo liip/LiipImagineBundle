@@ -16,6 +16,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Interlace;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class InterlaceFactory implements FilterFactoryInterface
 {
     const NAME = 'interlace';

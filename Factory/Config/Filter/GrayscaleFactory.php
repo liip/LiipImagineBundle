@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Grayscale;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class GrayscaleFactory implements FilterFactoryInterface
 {
     const NAME = 'grayscale';

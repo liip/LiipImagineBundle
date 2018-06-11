@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Flip;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class FlipFactory implements FilterFactoryInterface
 {
     const NAME = 'flip';

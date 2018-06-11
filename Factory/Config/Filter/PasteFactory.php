@@ -16,6 +16,9 @@ use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class PasteFactory implements FilterFactoryInterface
 {
     const NAME = 'auto_rotate';

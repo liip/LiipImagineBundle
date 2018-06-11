@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\Strip;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class StripFactory implements FilterFactoryInterface
 {
     const NAME = 'strip';

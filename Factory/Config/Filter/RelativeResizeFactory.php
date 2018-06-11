@@ -15,6 +15,9 @@ use Liip\ImagineBundle\Config\Filter\Type\RelativeResize;
 use Liip\ImagineBundle\Config\FilterInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class RelativeResizeFactory implements FilterFactoryInterface
 {
     const NAME = 'relative_resize';

@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Factory\Config\Filter\Argument;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 
+/**
+ * @internal
+ */
 final class SizeFactory
 {
     public function create(int $width = null, int $height = null): Size

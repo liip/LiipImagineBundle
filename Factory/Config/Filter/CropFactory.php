@@ -17,6 +17,9 @@ use Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory;
 use Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
+/**
+ * @internal
+ */
 final class CropFactory implements FilterFactoryInterface
 {
     const NAME = 'crop';
