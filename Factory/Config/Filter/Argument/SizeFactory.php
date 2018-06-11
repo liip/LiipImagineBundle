@@ -16,6 +16,7 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
 
 /**
  * @internal
+ * @codeCoverageIgnore
  */
 final class SizeFactory
 {

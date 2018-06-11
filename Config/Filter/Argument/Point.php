@@ -11,6 +11,9 @@
 
 namespace Liip\ImagineBundle\Config\Filter\Argument;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Point
 {
     /**

@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Size;
 use Liip\ImagineBundle\Config\FilterInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Resize extends FilterAbstract implements FilterInterface
 {
     const NAME = 'resize';

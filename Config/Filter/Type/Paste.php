@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 use Liip\ImagineBundle\Config\Filter\Argument\Point;
 use Liip\ImagineBundle\Config\FilterInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Paste extends FilterAbstract implements FilterInterface
 {
     const NAME = 'auto_rotate';

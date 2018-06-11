@@ -13,6 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class RelativeResize extends FilterAbstract implements FilterInterface
 {
     const NAME = 'relative_resize';

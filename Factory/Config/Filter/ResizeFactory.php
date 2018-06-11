@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 
 /**
  * @internal
+ * @codeCoverageIgnore
  */
 final class ResizeFactory implements FilterFactoryInterface
 {

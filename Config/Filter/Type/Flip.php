@@ -13,6 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class Flip extends FilterAbstract implements FilterInterface
 {
     const NAME = 'flip';

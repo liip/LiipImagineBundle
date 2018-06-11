@@ -13,6 +13,9 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
 
 use Liip\ImagineBundle\Config\FilterInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class FilterAbstract implements FilterInterface
 {
     const NAME = self::NAME;
