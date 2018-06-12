@@ -18,33 +18,33 @@ final class StackBuilder implements StackBuilderInterface
     /**
      * @var StackFactoryInterface
      */
-    private $filterSetFactory;
+    private $stackFactory;
 
     /**
      * @var FilterFactoryCollection
      */
     private $filterFactoryCollection;
 
-    public function __construct(StackFactoryInterface $filterSetFactory, FilterFactoryCollection $filterFactoryCollection)
+    public function __construct(StackFactoryInterface $stackFactory, FilterFactoryCollection $filterFactoryCollection)
     {
-        $this->filterSetFactory = $filterSetFactory;
+        $this->stackFactory = $stackFactory;
         $this->filterFactoryCollection = $filterFactoryCollection;
     }
 
-    public function build(string $filterSetName, array $filterSetData): StackInterface
+    public function build(string $stackName, array $stackData): StackInterface
     {
         $filters = [];
-        if (!empty($filterSetData['filters'])) {
-            foreach ($filterSetData['filters'] as $filterName => $filterData) {
+        if (!empty($stackData['filters'])) {
+            foreach ($stackData['filters'] as $filterName => $filterData) {
                 $filterFactory = $this->filterFactoryCollection->getFilterFactoryByName($filterName);
                 $filters[] = $filterFactory->create($filterData);
             }
         }
 
-        return $this->filterSetFactory->create(
-            $filterSetName,
-            $filterSetData['data_loader'],
-            $filterSetData['quality'],
+        return $this->stackFactory->create(
+            $stackName,
+            $stackData['data_loader'],
+            $stackData['quality'],
             $filters
         );
     }

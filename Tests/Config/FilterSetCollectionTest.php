@@ -35,7 +35,7 @@ class FilterSetCollectionTest extends TestCase
             ->will($this->returnValue($filterSetMock));
 
         $model = new StackCollection($stackBuilderMock, [$filterSetName => $filterSetData]);
-        $this->assertSame([$filterSetMock], $model->getFilterSets());
-        $this->assertSame([$filterSetMock], $model->getFilterSets());
+        $this->assertSame([$filterSetMock], $model->getStacks());
+        $this->assertSame([$filterSetMock], $model->getStacks());
     }
 }

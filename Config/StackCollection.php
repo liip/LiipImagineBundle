@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Config;
 
 final class StackCollection
 {
-    private $filterSets = [];
+    private $stacks = [];
 
     /**
      * @var StackBuilderInterface
@@ -34,16 +34,16 @@ final class StackCollection
     /**
      * @return StackInterface[]
      */
-    public function getFilterSets()
+    public function getStacks()
     {
-        if (!empty($this->filterSets)) {
-            return $this->filterSets;
+        if (!empty($this->stacks)) {
+            return $this->stacks;
         }
 
         foreach ($this->filtersConfiguration as $filterSetName => $filterSetData) {
-            $this->filterSets[] = $this->stackBuilder->build($filterSetName, $filterSetData);
+            $this->stacks[] = $this->stackBuilder->build($filterSetName, $filterSetData);
         }
 
-        return $this->filterSets;
+        return $this->stacks;
     }
 }
