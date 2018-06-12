@@ -18,10 +18,11 @@ use Liip\ImagineBundle\Config\FilterInterface;
  */
 abstract class FilterAbstract implements FilterInterface
 {
-    const NAME = self::NAME;
-
     public function getName(): string
     {
-        return self::NAME;
+        if (!defined('static::NAME')) {
+            throw new \Exception('Constant NAME is not defined on subclass ' . get_class($this));
+        }
+        return static::NAME;
     }
 }
