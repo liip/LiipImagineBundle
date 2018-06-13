@@ -58,12 +58,12 @@ final class Background extends FilterAbstract
         $this->size = $size;
     }
 
-    public function getColor(): string
+    public function getColor(): ?string
     {
         return $this->color;
     }
 
-    public function getTransparency(): string
+    public function getTransparency(): ?string
     {
         return $this->transparency;
     }
