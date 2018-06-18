@@ -35,8 +35,12 @@ final class WatermarkFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         $size = $options['size'] ?? null;
+        if (null !== $size) {
+            $size = (float) $size;
+        }
+
         $position = isset($options['position']) ? $options['position'] : 'center';
 
-        return new Watermark($options['image'], $size, $position);
+        return new Watermark($options['image'], $position, $size);
     }
 }
