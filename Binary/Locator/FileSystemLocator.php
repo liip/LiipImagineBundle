@@ -60,7 +60,7 @@ class FileSystemLocator implements LocatorInterface
      */
     protected function generateAbsolutePath(string $root, string $path): ?string
     {
-        if (false !== $absolute = realpath($root.DIRECTORY_SEPARATOR.$path)) {
+        if (false !== $absolute = realpath($root.\DIRECTORY_SEPARATOR.$path)) {
             return $absolute;
         }
 

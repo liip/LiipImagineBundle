@@ -127,7 +127,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         }
 
         return array_map(function ($path) {
-            return $path.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'public';
+            return $path.\DIRECTORY_SEPARATOR.'Resources'.\DIRECTORY_SEPARATOR.'public';
         }, $paths);
     }
 
