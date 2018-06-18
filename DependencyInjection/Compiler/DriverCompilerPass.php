@@ -22,8 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class DriverCompilerPass extends AbstractCompilerPass
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         $liipImagineDriver = $container->getParameter('liip_imagine.driver_service');

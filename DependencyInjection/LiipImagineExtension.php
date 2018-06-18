@@ -18,7 +18,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class LiipImagineExtension extends Extension
@@ -81,7 +80,7 @@ class LiipImagineExtension extends Extension
             $loader->load('enqueue.xml');
         }
 
-        $container->setParameter('liip_imagine.driver_service', 'liip_imagine.' . $config['driver']);
+        $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
