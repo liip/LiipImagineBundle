@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle;
 
 use Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Liip\ImagineBundle\Async\Topics;
+use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
@@ -38,6 +39,7 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new DriverCompilerPass());
         $container->addCompilerPass(new LoadersCompilerPass());
         $container->addCompilerPass(new FiltersCompilerPass());
         $container->addCompilerPass(new PostProcessorsCompilerPass());
