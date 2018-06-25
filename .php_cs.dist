@@ -32,6 +32,7 @@ return Config::create()
         'array_syntax' => [
             'syntax' => 'short'
         ],
+        'native_constant_invocation' => [ "PHP_SAPI", "PHP_VERSION_ID" ],
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
         'escape_implicit_backslashes' => true,
