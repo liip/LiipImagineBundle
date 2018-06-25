@@ -33,7 +33,7 @@ return Config::create()
             'syntax' => 'short'
         ],
         'native_constant_invocation' => [
-            'include' => [ "PHP_SAPI", "PHP_VERSION_ID" ],
+            'fix_built_in' => false,
         ],
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
