@@ -262,6 +262,10 @@
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
 
+        <service id="liip_imagine.binary.loader.prototype.chain" class="Liip\ImagineBundle\Binary\Loader\ChainLoader" abstract="true">
+            <argument><!-- will be injected by ChainLoaderFactory --></argument>
+        </service>
+
         <!-- Data loader locators -->
 
         <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false" shared="false">

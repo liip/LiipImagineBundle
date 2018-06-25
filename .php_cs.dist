@@ -32,6 +32,9 @@ return Config::create()
         'array_syntax' => [
             'syntax' => 'short'
         ],
+        'native_constant_invocation' => [
+            'fix_built_in' => false,
+        ],
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
         'escape_implicit_backslashes' => true,

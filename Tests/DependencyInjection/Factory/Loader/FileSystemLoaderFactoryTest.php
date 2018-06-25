@@ -22,22 +22,18 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory
  */
 class FileSystemLoaderFactoryTest extends FactoryTestCase
 {
     public function testImplementsLoaderFactoryInterface()
     {
-        $rc = new \ReflectionClass(FileSystemLoaderFactory::class);
-
-        $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
+        $this->assertInstanceOf(LoaderFactoryInterface::class, new FileSystemLoaderFactory());
     }
 
     public function testCouldBeConstructedWithoutAnyArguments()
     {
-        $loader = new FileSystemLoaderFactory();
-
-        $this->assertInstanceOf(FileSystemLoaderFactory::class, $loader);
+        $this->assertInstanceOf(FileSystemLoaderFactory::class, new FileSystemLoaderFactory());
     }
 
     public function testReturnExpectedName()
