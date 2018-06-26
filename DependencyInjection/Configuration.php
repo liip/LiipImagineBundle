@@ -104,14 +104,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->fixXmlConfig('filter_set', 'filter_sets')
             ->children()
-                ->scalarNode('driver')->defaultValue('gd')
-                    ->validate()
-                        ->ifTrue(function ($v) {
-                            return !in_array($v, ['gd', 'imagick', 'gmagick'], true);
-                        })
-                        ->thenInvalid('Invalid imagine driver specified: %s')
-                    ->end()
-                ->end()
+                ->scalarNode('driver')->defaultValue('gd')->end()
                 ->scalarNode('cache')->defaultValue('default')->end()
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
                 ->scalarNode('data_loader')->defaultValue('default')->end()

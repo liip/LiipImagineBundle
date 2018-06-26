@@ -83,11 +83,23 @@
 
         <service id="liip_imagine" alias="liip_imagine.gd" />
 
-        <service id="liip_imagine.gd" class="Imagine\Gd\Imagine" public="false" />
+        <service id="liip_imagine.gd" class="Imagine\Gd\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
-        <service id="liip_imagine.imagick" class="Imagine\Imagick\Imagine" public="false" />
+        <service id="liip_imagine.imagick" class="Imagine\Imagick\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
-        <service id="liip_imagine.gmagick" class="Imagine\Gmagick\Imagine" public="false" />
+        <service id="liip_imagine.gmagick" class="Imagine\Gmagick\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
         <!--  Templating helpers and extensions -->
 
