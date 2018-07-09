@@ -69,6 +69,9 @@ class LiipImagineExtension extends Extension
             $configs
         );
 
+        $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
+        $container->setParameter('liip_imagine.loaders', $config['loaders']);
+
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
