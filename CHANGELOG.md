@@ -6,6 +6,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
 
+## [2.1.0](https://github.com/liip/LiipImagineBundle/tree/2.1.0) (2018-07-10)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.1.0)
 
 - added bypassing of loaders and resolvers configuration [\#1110](https://github.com/liip/LiipImagineBundle/pull/1110) ([maximgubar](https://github.com/maximgubar))
