@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Imagine\Cache;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use Liip\ImagineBundle\Events\CacheStoreEvent;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\ImagineEvents;
@@ -215,7 +216,16 @@ class CacheManager
      */
     public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
     {
+
+        $preEvent = new CacheStoreEvent($binary, $path, $filter, $resolver);
+        $this->dispatcher->dispatch(ImagineEvents::PRE_STORE, $preEvent);
+
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
+
+        $postEvent = new CacheStoreEvent($preEvent->getBinary(), $preEvent->getPath(), $preEvent->getFilter(), $preEvent->getResolver());
+        $this->dispatcher->dispatch(ImagineEvents::POST_STORE, $postEvent);
+
+
     }
 
     /**

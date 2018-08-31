@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Metadata\MetadataBag;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
@@ -152,6 +153,14 @@ abstract class AbstractTest extends TestCase
     protected function createEventDispatcherInterfaceMock()
     {
         return $this->createObjectMock(EventDispatcherInterface::class);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|BinaryInterface
+     */
+    protected function createBinaryInterfaceMock()
+    {
+        return $this->createObjectMock(BinaryInterface::class);
     }
 
     /**

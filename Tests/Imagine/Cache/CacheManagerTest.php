@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use Liip\ImagineBundle\Events\CacheStoreEvent;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
@@ -690,6 +691,46 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->addResolver('default', $this->createCacheResolverInterfaceMock());
 
         $this->assertSame('changed_url', $cacheManager->resolve('cats.jpg', 'thumbnail'));
+    }
+
+    public function testShouldDispatchCachePreStoreEvent()
+    {
+        $binary = $this->createBinaryInterfaceMock();
+        $dispatcher = $this->createEventDispatcherInterfaceMock();
+        $dispatcher
+            ->expects($this->at(0))
+            ->method('dispatch')
+            ->with(ImagineEvents::PRE_STORE, new CacheStoreEvent($binary, 'cats.jpg', 'thumbnail'));
+
+        $cacheManager = new CacheManager(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterInterfaceMock(),
+            new Signer('secret'),
+            $dispatcher
+        );
+
+        $cacheManager->addResolver('default', $this->createCacheResolverInterfaceMock());
+        $cacheManager->store($binary, 'cats.jpg', 'thumbnail');
+    }
+
+    public function testShouldDispatchCachePostStoreEvent()
+    {
+        $binary = $this->createBinaryInterfaceMock();
+        $dispatcher = $this->createEventDispatcherInterfaceMock();
+        $dispatcher
+            ->expects($this->at(1))
+            ->method('dispatch')
+            ->with(ImagineEvents::POST_STORE, new CacheStoreEvent($binary, 'cats.jpg', 'thumbnail'));
+
+        $cacheManager = new CacheManager(
+            $this->createFilterConfigurationMock(),
+            $this->createRouterInterfaceMock(),
+            new Signer('secret'),
+            $dispatcher
+        );
+
+        $cacheManager->addResolver('default', $this->createCacheResolverInterfaceMock());
+        $cacheManager->store($binary, 'cats.jpg', 'thumbnail');
     }
 
     /**

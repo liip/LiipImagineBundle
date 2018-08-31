@@ -22,4 +22,14 @@ interface ImagineEvents
      * @Event("Liip\ImagineBundle\Events\CacheResolveEvent")
      */
     const POST_RESOLVE = 'liip_imagine.post_resolve';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\CacheStoreEvent")
+     */
+    const PRE_STORE = 'liip_imagine.pre_store';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\CacheStoreEvent")
+     */
+    const POST_STORE = 'liip_imagine.post_store';
 }
