@@ -58,6 +58,14 @@ class ImageType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getBlockPrefix()
+    {
+        return 'liip_imagine_image';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return FileType::class;
