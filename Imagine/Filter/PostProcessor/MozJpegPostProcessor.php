@@ -73,7 +73,7 @@ class MozJpegPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
+        if (!\in_array($type, ['image/jpeg', 'image/jpg'], true)) {
             return $binary;
         }
 

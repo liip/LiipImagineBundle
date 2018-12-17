@@ -163,7 +163,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
         } else {
             $jpg = file_get_contents(__DIR__.'/../../../Fixtures/assets/pixel_1x1_orientation_at_0x30.jpg');
             // The byte with orientation is at offset 0x30 for this image
-            $jpg[0x30] = chr((int) $exifValue);
+            $jpg[0x30] = \chr((int) $exifValue);
 
             $image
                 ->expects($this->once())

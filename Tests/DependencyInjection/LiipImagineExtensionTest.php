@@ -201,7 +201,7 @@ EOF;
         };
 
         $implodeArrayElements = function (array $a): string {
-            return sprintf('[%s]:%d', implode(',', $a), count($a));
+            return sprintf('[%s]:%d', implode(',', $a), \count($a));
         };
 
         $expectedArguments = $castArrayElementsToString($arguments);

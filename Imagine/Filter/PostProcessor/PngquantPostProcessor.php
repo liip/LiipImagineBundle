@@ -71,7 +71,7 @@ class PngquantPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/png'], true)) {
+        if (!\in_array($type, ['image/png'], true)) {
             return $binary;
         }
 
@@ -89,7 +89,7 @@ class PngquantPostProcessor implements PostProcessorInterface
         $proc->run();
 
         // 98 and 99 are "quality too low" to compress current current image which, while isn't ideal, is not a failure
-        if (!in_array($proc->getExitCode(), [0, 98, 99], true)) {
+        if (!\in_array($proc->getExitCode(), [0, 98, 99], true)) {
             throw new ProcessFailedException($proc);
         }
 

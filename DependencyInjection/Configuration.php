@@ -77,7 +77,7 @@ class Configuration implements ConfigurationInterface
                         $v['loaders'] = [];
                     }
 
-                    if (false === is_array($v['loaders'])) {
+                    if (false === \is_array($v['loaders'])) {
                         throw new \LogicException('Loaders has to be array');
                     }
 
@@ -89,7 +89,7 @@ class Configuration implements ConfigurationInterface
                         $v['resolvers'] = [];
                     }
 
-                    if (false === is_array($v['resolvers'])) {
+                    if (false === \is_array($v['resolvers'])) {
                         throw new \LogicException('Resolvers has to be array');
                     }
 

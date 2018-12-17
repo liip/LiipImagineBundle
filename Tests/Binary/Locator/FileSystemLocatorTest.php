@@ -70,7 +70,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
         ];
 
         return array_map(function ($params) use ($prepend) {
-            return [[$prepend[mt_rand(0, count($prepend) - 1)], $params[0]], $params[1]];
+            return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }
 

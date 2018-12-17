@@ -104,6 +104,6 @@ class AutoRotateFilterLoader implements LoaderInterface
      */
     private function isFlipped($orientation)
     {
-        return in_array((int) $orientation, [2, 4, 5, 7], true);
+        return \in_array((int) $orientation, [2, 4, 5, 7], true);
     }
 }

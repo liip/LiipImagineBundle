@@ -72,7 +72,7 @@ class OptiPngPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/png'], true)) {
+        if (!\in_array($type, ['image/png'], true)) {
             return $binary;
         }
 

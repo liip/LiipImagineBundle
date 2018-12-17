@@ -95,7 +95,7 @@ class FileSystemLoaderTest extends TestCase
         ];
 
         return array_map(function ($parameters) use ($pathsPrepended) {
-            return [[$pathsPrepended[mt_rand(0, count($pathsPrepended) - 1)], $parameters[0]], $parameters[1]];
+            return [[$pathsPrepended[mt_rand(0, \count($pathsPrepended) - 1)], $parameters[0]], $parameters[1]];
         }, static::provideLoadCases());
     }
 
@@ -197,7 +197,7 @@ class FileSystemLoaderTest extends TestCase
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $locator ? $locator : $this->getFileSystemLocator(count($roots) ? $roots : $this->getDefaultDataRoots())
+            null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }
 
