@@ -31,8 +31,8 @@ It is based on `filesystem transport`_.
     # app/config/config.yml
 
     enqueue:
-        transport:
-            default: 'file://%kernel.root_dir%/../var/queues'
+        default:
+            transport: 'file://%kernel.root_dir%/../var/queues'
         client: ~
 
 Step 2: Configure LiipImagineBundle
@@ -79,7 +79,7 @@ You can force cache to be recreated and in this case the cached image is removed
      * @var ContainerInterface $container
      * @var ProducerInterface $producer
      */
-    $producer = $container->get('enqueue.producer');
+    $producer = $container->get(ProducerInterface::class);
 
     // resolve all caches
     $producer->sendCommand(Commands::RESOLVE_CACHE, new ResolveCache('the/path/img.png'));

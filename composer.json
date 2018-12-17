@@ -35,7 +35,7 @@
         "aws/aws-sdk-php": "^2.4",
         "doctrine/cache": "^1.1",
         "doctrine/orm": "^2.3",
-        "enqueue/enqueue-bundle": "^0.7|^0.8",
+        "enqueue/enqueue-bundle": "^0.9",
         "friendsofphp/php-cs-fixer": "^2.10",
         "league/flysystem": "^1.0",
         "psr/log": "^1.0",
