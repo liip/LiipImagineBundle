@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
@@ -124,7 +125,7 @@ class WebPathResolver implements ResolverInterface
      */
     protected function getFilePath($path, $filter)
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+        return $this->webRoot.'/'.$this->getFullPath($path, $filter);
     }
 
     /**
@@ -132,10 +133,7 @@ class WebPathResolver implements ResolverInterface
      */
     protected function getFileUrl($path, $filter)
     {
-        // crude way of sanitizing URL scheme ("protocol") part
-        $path = str_replace('://', '---', $path);
-
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        return PathHelper::filePathToUrlPath($this->getFullPath($path, $filter));
     }
 
     /**
@@ -164,5 +162,13 @@ class WebPathResolver implements ResolverInterface
             $port,
             $baseUrl
         );
+    }
+
+    private function getFullPath($path, $filter)
+    {
+        // crude way of sanitizing URL scheme ("protocol") part
+        $path = str_replace('://', '---', $path);
+
+        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
 }
