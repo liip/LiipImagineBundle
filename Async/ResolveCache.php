@@ -22,7 +22,7 @@ class ResolveCache implements \JsonSerializable
     private $path;
 
     /**
-     * @var array|null|\string[]
+     * @var array|\string[]|null
      */
     private $filters;
 
@@ -52,7 +52,7 @@ class ResolveCache implements \JsonSerializable
     }
 
     /**
-     * @return null|\string[]
+     * @return \string[]|null
      */
     public function getFilters()
     {
@@ -88,7 +88,7 @@ class ResolveCache implements \JsonSerializable
             throw new LogicException('The message does not contain "path" but it is required.');
         }
 
-        if (!(null === $data['filters'] || is_array($data['filters']))) {
+        if (!(null === $data['filters'] || \is_array($data['filters']))) {
             throw new LogicException('The message filters could be either null or array.');
         }
 

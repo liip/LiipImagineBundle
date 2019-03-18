@@ -226,10 +226,10 @@ class CacheManager
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());
-        } elseif (!is_array($filters)) {
+        } elseif (!\is_array($filters)) {
             $filters = [$filters];
         }
-        if (!is_array($paths)) {
+        if (!\is_array($paths)) {
             $paths = [$paths];
         }
 

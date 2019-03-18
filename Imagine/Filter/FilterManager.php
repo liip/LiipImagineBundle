@@ -221,7 +221,7 @@ class FilterManager
             return isset($this->loaders[$name]);
         }, ARRAY_FILTER_USE_KEY);
 
-        if (count($filters) !== count($sanitized)) {
+        if (\count($filters) !== \count($sanitized)) {
             throw new \InvalidArgumentException(sprintf('Could not find filter(s): %s', implode(', ', array_map(function (string $name): string {
                 return sprintf('"%s"', $name);
             }, array_diff(array_keys($filters), array_keys($sanitized))))));
@@ -241,7 +241,7 @@ class FilterManager
             return isset($this->postProcessors[$name]);
         }, ARRAY_FILTER_USE_KEY);
 
-        if (count($processors) !== count($sanitized)) {
+        if (\count($processors) !== \count($sanitized)) {
             throw new \InvalidArgumentException(sprintf('Could not find post processor(s): %s', implode(', ', array_map(function (string $name): string {
                 return sprintf('"%s"', $name);
             }, array_diff(array_keys($processors), array_keys($sanitized))))));

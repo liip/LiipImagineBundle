@@ -23,7 +23,7 @@ class ResolversCompilerPass extends AbstractCompilerPass
     {
         $tags = $container->findTaggedServiceIds('liip_imagine.cache.resolver');
 
-        if (count($tags) > 0 && $container->hasDefinition('liip_imagine.cache.manager')) {
+        if (\count($tags) > 0 && $container->hasDefinition('liip_imagine.cache.manager')) {
             $manager = $container->getDefinition('liip_imagine.cache.manager');
 
             foreach ($tags as $id => $tag) {

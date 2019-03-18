@@ -27,7 +27,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $locator = $this->getFileSystemLoaderLocator('bundles_all');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
-        $this->assertTrue(count($roots) >= 2);
+        $this->assertTrue(\count($roots) >= 2);
         $this->assertStringEndsWith('FooBundle/Resources/public', $roots['LiipFooBundle']);
         $this->assertStringEndsWith('BarBundle/Resources/public', $roots['LiipBarBundle']);
 
@@ -42,7 +42,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $locator = $this->getFileSystemLoaderLocator('bundles_only_foo');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
-        $this->assertTrue(count($roots) >= 1);
+        $this->assertTrue(\count($roots) >= 1);
         $this->assertStringEndsWith('FooBundle/Resources/public', $roots['LiipFooBundle']);
 
         $this->assertFooBundleResourcesExist($locator);
@@ -55,7 +55,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $locator = $this->getFileSystemLoaderLocator('bundles_only_bar');
         $roots = $this->getPrivateProperty($locator, 'roots');
 
-        $this->assertTrue(count($roots) >= 1);
+        $this->assertTrue(\count($roots) >= 1);
         $this->assertStringEndsWith('BarBundle/Resources/public', $roots['LiipBarBundle']);
 
         $this->assertBarBundleResourcesExist($locator, true);

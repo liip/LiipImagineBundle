@@ -28,7 +28,7 @@ class ThumbnailFilterLoader implements LoaderInterface
         }
 
         if (!empty($options['filter'])) {
-            $filter = constant('Imagine\Image\ImageInterface::FILTER_'.mb_strtoupper($options['filter']));
+            $filter = \constant('Imagine\Image\ImageInterface::FILTER_'.mb_strtoupper($options['filter']));
         }
         if (empty($filter)) {
             $filter = ImageInterface::FILTER_UNDEFINED;

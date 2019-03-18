@@ -105,7 +105,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $resourcePaths = [];
 
         foreach ($this->getBundleResourcePaths($container) as $name => $path) {
-            if (('whitelist' === $config['access_control_type']) === in_array($name, $config['access_control_list'], true) && is_dir($path)) {
+            if (('whitelist' === $config['access_control_type']) === \in_array($name, $config['access_control_list'], true) && is_dir($path)) {
                 $resourcePaths[$name] = $path;
             }
         }
@@ -159,7 +159,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                 throw new InvalidArgumentException(sprintf('Unable to resolve bundle "%s" while auto-registering bundle resource paths.', $c), null, $exception);
             }
 
-            $paths[$r->getShortName()] = dirname($r->getFileName());
+            $paths[$r->getShortName()] = \dirname($r->getFileName());
         }
 
         return $paths;
