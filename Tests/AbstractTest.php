@@ -254,7 +254,7 @@ abstract class AbstractTest extends TestCase
     {
         $builder = $this->getMockBuilder($object);
 
-        if (count($methods) > 0) {
+        if (\count($methods) > 0) {
             $builder->setMethods($methods);
         }
 
@@ -264,7 +264,7 @@ abstract class AbstractTest extends TestCase
             $builder->disableOriginalConstructor();
         }
 
-        if (count($constructorParams) > 0) {
+        if (\count($constructorParams) > 0) {
             $builder->setConstructorArgs($constructorParams);
         }
 

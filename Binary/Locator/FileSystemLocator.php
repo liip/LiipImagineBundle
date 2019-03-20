@@ -131,7 +131,7 @@ class FileSystemLocator implements LocatorInterface
             return 0 === mb_strpos($path, $root);
         });
 
-        if (0 === count($roots)) {
+        if (0 === \count($roots)) {
             throw new NotLoadableException(
                 sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"', $path, implode(':', $this->roots))
             );

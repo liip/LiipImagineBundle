@@ -23,7 +23,7 @@ class LoadersCompilerPass extends AbstractCompilerPass
     {
         $tags = $container->findTaggedServiceIds('liip_imagine.binary.loader');
 
-        if (count($tags) > 0 && $container->hasDefinition('liip_imagine.data.manager')) {
+        if (\count($tags) > 0 && $container->hasDefinition('liip_imagine.data.manager')) {
             $manager = $container->getDefinition('liip_imagine.data.manager');
 
             foreach ($tags as $id => $tag) {

@@ -13,6 +13,7 @@ env:
     - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
+    - SYMFONY_PHPUNIT_VERSION="6.5"
     - PHPCSFIXER_ENABLED="false"
     - COVERALLS_ENABLED="false"
 
@@ -31,7 +32,6 @@ matrix:
       env:
         - SYMFONY_VERSION=4.0.*
         - COMPOSER_FLAGS="--prefer-lowest"
-        - DEPENDENCIES="symfony/phpunit-bridge:^4"
     - php: 7.2
     - php: 7.2
       env: SYMFONY_VERSION=3.4.*
