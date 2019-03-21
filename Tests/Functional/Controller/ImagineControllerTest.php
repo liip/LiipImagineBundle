@@ -182,7 +182,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());
-        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo%20bar.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
     }

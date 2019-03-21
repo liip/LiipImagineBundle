@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Symfony\Component\Routing\RequestContext;
 
 class NoCacheWebPathResolver implements ResolverInterface
@@ -45,7 +46,7 @@ class NoCacheWebPathResolver implements ResolverInterface
         return sprintf('%s://%s/%s',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
-            ltrim($path, '/')
+            ltrim(PathHelper::filePathToUrlPath($path), '/')
         );
     }
 
