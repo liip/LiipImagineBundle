@@ -125,24 +125,7 @@ Dynamic filters
 ---------------
 
 It is possible to dynamically modify the configuration that will be applied
-to the image, by passing configuration as third parameter to ``applyFilter``.
-
-First you need to set some aliases in your ``services.yaml`` so enable
-autowiring:
-
-.. code-block:: yaml
-
-    # config/services.yaml
-    
-    services:
-        Liip\ImagineBundle\Imagine\Cache\CacheManager:
-            alias: liip_imagine.cache.manager
-        Liip\ImagineBundle\Imagine\Data\DataManager:
-            alias: liip_imagine.data.manager
-        Liip\ImagineBundle\Imagine\Filter\FilterManager:
-            alias: liip_imagine.filter.manager
-
-Then you can use it in any service:
+to the image, by passing configuration as third parameter to ``applyFilter``:
 
 .. code-block:: php
 
