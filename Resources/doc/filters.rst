@@ -124,39 +124,50 @@ You can now reference and use your custom filter when defining filter sets in yo
 Dynamic filters
 ---------------
 
-With a custom controller action it is possible to dynamically modify the
-configuration that will be applied to the image. Inside the controller you can
-access ``FilterManager`` instance, pass configuration as third parameter of
-``applyFilter`` method (for example based on information associated with the
-image or whatever other logic you might want).
-
-A simple example showing how to change the filter configuration dynamically.
+It is possible to dynamically modify the configuration that will be applied
+to the image, by passing configuration as third parameter to ``applyFilter``:
 
 .. code-block:: php
 
-    public function filterAction($path, $filter)
+    namespace App\Service;
+
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\HttpFoundation\RedirectResponse;
+    use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+    use Liip\ImagineBundle\Imagine\Data\DataManager;
+    use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+
+    class ImageService
     {
-        if (!$this->cacheManager->isStored($path, $filter)) {
-            $binary = $this->dataManager->find($filter, $path);
+        private $cacheManager;
+        private $dataManager;
+        private $filterManager;
 
-            $filteredBinary = $this->filterManager->applyFilter($binary, $filter, [
-                'filters' => [
-                    'thumbnail' => [
-                        'size' => [300, 100]
-                    ]
-                ]
-            ]);
-
-            $this->cacheManager->store($filteredBinary, $path, $filter);
+        public function __construct(CacheManager $cacheManager, DataManager $dataManager, FilterManager $filterManager) {
+            $this->cacheManager  = $cacheManager;
+            $this->dataManager   = $dataManager;
+            $this->filterManager = $filterManager;
         }
 
-        return new RedirectResponse($this->cacheManager->resolve($path, $filter), Response::HTTP_MOVED_PERMANENTLY);
+        public function filter(int $width, int $height) {
+            $filter = '...'; // Name of the `filter_set` in `config/packages/liip_imagine.yaml`
+            $path = '...'; // Path of the image, relative to `/public/`
+            
+            if (!$this->cacheManager->isStored($path, $filter)) {
+                $binary = $this->dataManager->find($filter, $path);
+
+                $filteredBinary = $this->filterManager->applyFilter($binary, $filter, [
+                    'filters' => [
+                        'thumbnail' => [
+                            'size' => [$width, $height]
+                        ]
+                    ]
+                ]);
+
+                $this->cacheManager->store($filteredBinary, $path, $filter);
+            }
+            return new RedirectResponse($this->cacheManager->resolve($path, $filter), Response::HTTP_MOVED_PERMANENTLY);
+        }
     }
-
-.. tip::
-
-    The constant ``Response::HTTP_MOVED_PERMANENTLY`` was introduced in Symfony 2.4.
-    Developers using older versions of Symfony, please replace the constant by ``301``.
-
 
 .. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
