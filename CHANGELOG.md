@@ -5,6 +5,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
+- __\[Dependency Injection\]__ Add aliases for data and filter manager ([fpaterno](https://github.com/fpaterno))
 
 ## [2.1.0](https://github.com/liip/LiipImagineBundle/tree/2.1.0) (2018-07-10)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.1.0)

@@ -76,19 +76,19 @@ class OptiPngPostProcessor implements PostProcessorInterface
             return $binary;
         }
 
-        $tempDir = array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
+        $tempDir = \array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
         if (false === $input = tempnam($tempDir, 'imagine_optipng')) {
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
         $processArguments = [$this->optipngBin];
 
-        $level = array_key_exists('level', $options) ? $options['level'] : $this->level;
+        $level = \array_key_exists('level', $options) ? $options['level'] : $this->level;
         if (null !== $level) {
             $processArguments[] = sprintf('--o%d', $level);
         }
 
-        $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
+        $stripAll = \array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
             $processArguments[] = '--strip=all';
         }

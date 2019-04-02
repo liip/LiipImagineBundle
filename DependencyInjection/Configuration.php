@@ -45,8 +45,10 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('liip_imagine', 'array');
+        $treeBuilder = new TreeBuilder('liip_imagine');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('liip_imagine');
 
         $resolversPrototypeNode = $rootNode
             ->children()
@@ -81,7 +83,7 @@ class Configuration implements ConfigurationInterface
                         throw new \LogicException('Loaders has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['loaders'])) {
+                    if (false === \array_key_exists('default', $v['loaders'])) {
                         $v['loaders']['default'] = ['filesystem' => null];
                     }
 
@@ -93,7 +95,7 @@ class Configuration implements ConfigurationInterface
                         throw new \LogicException('Resolvers has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['resolvers'])) {
+                    if (false === \array_key_exists('default', $v['resolvers'])) {
                         $v['resolvers']['default'] = ['web_path' => null];
                     }
 

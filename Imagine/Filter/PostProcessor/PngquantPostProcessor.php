@@ -78,7 +78,7 @@ class PngquantPostProcessor implements PostProcessorInterface
         $processArguments = [$this->pngquantBin];
 
         // Specify quality.
-        $tranformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
+        $tranformQuality = \array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
         $processArguments[] = '--quality';
         $processArguments[] = $tranformQuality;
 

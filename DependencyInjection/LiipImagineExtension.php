@@ -14,6 +14,8 @@ namespace Liip\ImagineBundle\DependencyInjection;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -87,6 +89,8 @@ class LiipImagineExtension extends Extension
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
+        $container->setAlias(DataManager::class, new Alias('liip_imagine.data.manager', false));
+        $container->setAlias(FilterManager::class, new Alias('liip_imagine.filter.manager', false));
 
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
