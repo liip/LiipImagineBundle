@@ -1,0 +1,221 @@
+<?php
+
+namespace Liip\ImagineBundle\Imagine\Cache;
+
+use Liip\ImagineBundle\Imagine\Cache\Warmer\WarmerInterface;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+
+/**
+ * Class CacheWarmer
+ * 
+ * @author Konstantin Tjuterev <kostik.lv@gmail.com>
+ */
+class CacheWarmer
+{
+
+    /**
+     * @var WarmerInterface[]
+     */
+    protected $warmers = array();
+
+    /**
+     * Chunk size to query warmer in one step
+     *
+     * @var int
+     */
+    protected $chunkSize = 100;
+
+    /**
+     * @var CacheManager
+     */
+    protected $cacheManager;
+
+    /**
+     * @var DataManager
+     */
+    protected $dataManager;
+
+    /**
+     * @var FilterManager
+     */
+    protected $filterManager;
+
+    /**
+     * @var callable
+     */
+    protected $loggerClosure;
+
+    public function __construct(DataManager $dataManager, FilterManager $filterManager)
+    {
+        $this->dataManager = $dataManager;
+        $this->filterManager = $filterManager;
+    }
+
+    /**
+     * @param int $chunkSize
+     *
+     * @return CacheWarmer
+     */
+    public function setChunkSize($chunkSize)
+    {
+        $this->chunkSize = $chunkSize;
+
+        return $this;
+    }
+
+    /**
+     * Sets logger closure - a callable which will be passed verbose messages
+     *
+     * @param callable $loggerClosure
+     *
+     * @return CacheWarmer
+     */
+    public function setLoggerClosure($loggerClosure)
+    {
+        $this->loggerClosure = $loggerClosure;
+
+        return $this;
+    }
+
+    /**
+     * @param \Liip\ImagineBundle\Imagine\Cache\CacheManager $cacheManager
+     *
+     * @return CacheWarmer
+     */
+    public function setCacheManager($cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+
+        return $this;
+    }
+
+    public function addWarmer($name, WarmerInterface $warmer)
+    {
+        $this->warmers[$name] = $warmer;
+    }
+
+    /**
+     * @param bool       $force           If set to true, cache is warmed up for paths already stored in cached (regenerate thumbs)
+     * @param null|array $selectedWarmers An optional array of warmers to process, if null - all warmers will be processed
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function warm($force = false, $selectedWarmers = null)
+    {
+        $filtersByWarmer = $this->getFiltersByWarmers();
+        if (!$filtersByWarmer) {
+            $this->log(sprintf('No warmes are configured - add some as `warmers` param in your filter sets'));
+            return;
+        }
+
+        foreach ($filtersByWarmer as $warmerName => $filters) {
+            $last = 0;
+            if (isset($selectedWarmers) && !empty($selectedWarmers) && !in_array($warmerName, $selectedWarmers)) {
+                $this->log(
+                    sprintf(
+                        'Skipping warmer %s as it\'s not listed in selected warmers: [%s]',
+                        $warmerName,
+                        join(', ', $selectedWarmers)
+                    )
+                );
+                continue;
+            }
+            if (!isset($this->warmers[$warmerName])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Could not find warmer "%s"', $warmerName
+                ));
+            }
+
+            $this->log(sprintf('Processing warmer "%s"', $warmerName));
+            $warmer = $this->warmers[$warmerName];
+            while ($paths = $warmer->getPaths($last, $this->chunkSize)) {
+                $this->log(
+                    sprintf(
+                        'Processing chunk %d - %d for warmer "%s"',
+                        $last,
+                        $last + $this->chunkSize,
+                        $warmerName
+                    )
+                );
+                $this->warmPaths($paths, $filters, $force);
+                $warmer->setWarmed($paths);
+                $last += $this->chunkSize;
+            }
+            $this->log(sprintf('Finished processing warmer "%s"', $warmerName));
+        }
+    }
+
+    public function clearWarmed($paths, $filters)
+    {
+        $filtersByWarmer = $this->getFiltersByWarmers();
+        foreach ($filtersByWarmer as $warmerName => $warmerFilters) {
+            if (array_intersect($filters, $warmerFilters)) {
+                if (!isset($this->warmers[$warmerName])) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Could not find warmer "%s"', $warmerName
+                    ));
+                }
+                $warmer = $this->warmers[$warmerName];
+                $warmer->clearWarmed($paths);
+            }
+        }
+    }
+
+    protected function getFiltersByWarmers()
+    {
+        $all = $this->filterManager->getFilterConfiguration()->all();
+        $warmers = array();
+        foreach ($all as $filterSet => $config) {
+            if (isset($config['warmers']) && $config['warmers']) {
+                foreach ($config['warmers'] as $warmer) {
+                    if (!isset($warmers[$warmer])) {
+                        $warmers[$warmer] = array($filterSet);
+                    } else {
+                        $warmers[$warmer][] = $filterSet;
+                    }
+                }
+            }
+        }
+
+        return $warmers;
+    }
+
+    protected function warmPaths($paths, $filters, $force)
+    {
+        foreach ($paths as $pathData) {
+            $aPath = $pathData['path'];
+            $binaries = array();
+            foreach ($filters as $filter) {
+                $this->log(sprintf('Warming up path "%s" for filter "%s"', $aPath, $filter));
+
+                if ($force || !$this->cacheManager->isStored($aPath, $filter)) {
+                    // this is to avoid loading binary with the same loader for multiple filters
+                    $loader = $this->dataManager->getLoader($filter);
+                    $hash = spl_object_hash($loader);
+                    if (!isset($binaries[$hash])) {
+                        // if NotLoadable is thrown - it will just bubble up
+                        // everything returned by Warmer should be loadable
+                        $binaries[$hash] =  $this->dataManager->find($filter, $aPath);
+                    }
+
+                    $this->cacheManager->store(
+                        $this->filterManager->applyFilter($binaries[$hash], $filter),
+                        $aPath,
+                        $filter
+                    );
+                }
+            }
+        }
+    }
+
+    protected function log($message, $type = 'info')
+    {
+        if (is_callable($this->loggerClosure)) {
+            $loggerClosure = $this->loggerClosure;
+            $loggerClosure($message, $type);
+        }
+    }
+}
+ 

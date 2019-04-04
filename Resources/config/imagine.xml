@@ -126,6 +126,9 @@
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
+            <call method="setCacheWarmer">
+                <argument type="service" id="liip_imagine.cache.warmer"/>
+            </call>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="Liip\ImagineBundle\Imagine\Filter\FilterConfiguration">
@@ -383,5 +386,14 @@
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
 
+        <!-- Cache warmer -->
+
+        <service id="liip_imagine.cache.warmer" class="Liip\ImagineBundle\Imagine\Cache\CacheWarmer">
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <call method="setCacheManager">
+                <argument type="service" id="liip_imagine.cache.manager"/>
+            </call>
+        </service>
     </services>
 </container>
