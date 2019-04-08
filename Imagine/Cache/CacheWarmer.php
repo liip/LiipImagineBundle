@@ -8,7 +8,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 
 /**
  * Class CacheWarmer
- * 
+ *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
 class CacheWarmer
@@ -111,7 +111,6 @@ class CacheWarmer
         }
 
         foreach ($filtersByWarmer as $warmerName => $filters) {
-            $last = 0;
             if (isset($selectedWarmers) && !empty($selectedWarmers) && !in_array($warmerName, $selectedWarmers)) {
                 $this->log(
                     sprintf(
@@ -129,19 +128,20 @@ class CacheWarmer
             }
 
             $this->log(sprintf('Processing warmer "%s"', $warmerName));
+            $start = 0;
             $warmer = $this->warmers[$warmerName];
-            while ($paths = $warmer->getPaths($last, $this->chunkSize)) {
+            while ($paths = $warmer->getPaths($start, $this->chunkSize)) {
                 $this->log(
                     sprintf(
                         'Processing chunk %d - %d for warmer "%s"',
-                        $last,
-                        $last + $this->chunkSize,
+                        $start,
+                        $start + $this->chunkSize,
                         $warmerName
                     )
                 );
-                $this->warmPaths($paths, $filters, $force);
-                $warmer->setWarmed($paths);
-                $last += $this->chunkSize;
+                $warmedPaths = $this->warmPaths($paths, $filters, $force);
+                $warmer->setWarmed($warmedPaths);
+                $start += count($paths) - count($warmedPaths);
             }
             $this->log(sprintf('Finished processing warmer "%s"', $warmerName));
         }
@@ -182,32 +182,56 @@ class CacheWarmer
         return $warmers;
     }
 
+    /**
+     * @param array $paths
+     * @param array $filters
+     * @param bool  $force
+     *
+     * @return array
+     */
     protected function warmPaths($paths, $filters, $force)
     {
+        $successfulWarmedPaths = [];
         foreach ($paths as $pathData) {
             $aPath = $pathData['path'];
             $binaries = array();
             foreach ($filters as $filter) {
                 $this->log(sprintf('Warming up path "%s" for filter "%s"', $aPath, $filter));
 
-                if ($force || !$this->cacheManager->isStored($aPath, $filter)) {
+                $isStored = $this->cacheManager->isStored($aPath, $filter);
+                if ($force || !$isStored) {
                     // this is to avoid loading binary with the same loader for multiple filters
-                    $loader = $this->dataManager->getLoader($filter);
-                    $hash = spl_object_hash($loader);
-                    if (!isset($binaries[$hash])) {
-                        // if NotLoadable is thrown - it will just bubble up
-                        // everything returned by Warmer should be loadable
-                        $binaries[$hash] =  $this->dataManager->find($filter, $aPath);
-                    }
+                    $loader   = $this->dataManager->getLoader($filter);
+                    $isStored = false;
 
-                    $this->cacheManager->store(
-                        $this->filterManager->applyFilter($binaries[$hash], $filter),
-                        $aPath,
-                        $filter
-                    );
+                    try {
+                        $hash = spl_object_hash($loader);
+                        if (!isset($binaries[$hash])) {
+                            // if NotLoadable is thrown - it will just bubble up
+                            // everything returned by Warmer should be loadable
+                            $binaries[$hash] = $this->dataManager->find($filter, $aPath);
+                        }
+                        $this->cacheManager->store(
+                            $this->filterManager->applyFilter($binaries[$hash], $filter),
+                            $aPath,
+                            $filter
+                        );
+
+                        $isStored = true;
+                    } catch (\RuntimeException $e) {
+                        $message = sprintf('Unable to warm cache for filter "%s", due to - "%s"',
+                            $filter, $e->getMessage());
+                        $this->log($message, 'error');
+                    }
+                }
+
+                if ($isStored) {
+                    $successfulWarmedPaths[] = $pathData;
                 }
             }
         }
+
+        return $successfulWarmedPaths;
     }
 
     protected function log($message, $type = 'info')
@@ -218,4 +242,3 @@ class CacheWarmer
         }
     }
 }
- 
