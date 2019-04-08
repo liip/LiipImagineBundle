@@ -142,7 +142,7 @@ class Configuration implements ConfigurationInterface
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
                                     ->useAttributeAsKey('name')
-                                    ->prototype('variable')
+                                    ->prototype('variable')->end()
                                 ->end()
                             ->end()
                             ->arrayNode('warmers')
