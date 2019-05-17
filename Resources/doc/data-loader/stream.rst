@@ -63,5 +63,5 @@ The following example will configure the resolver as default.
 
 .. _`StreamWrapper configuration`: https://github.com/KnpLabs/KnpGaufretteBundle#stream-wrapper
 .. _`Gaufrette`: https://github.com/KnpLabs/Gaufrette
-.. _`Gaufrette README`: https://github.com/KnpLabs/Gaufrette/blob/master/README.markdown
+.. _`Gaufrette README`: https://github.com/KnpLabs/Gaufrette/blob/master/README.md
 .. _`KnpGaufretteBundle`: https://github.com/KnpLabs/KnpGaufretteBundle
