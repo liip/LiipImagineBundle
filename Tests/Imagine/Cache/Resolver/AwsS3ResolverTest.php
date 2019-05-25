@@ -86,7 +86,7 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->store($binary, 'thumb/foobar.jpg', 'thumb');
@@ -120,7 +120,7 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('doesObjectExist')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
@@ -134,7 +134,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, [])
-            ->will($this->returnValue('http://images.example.com/some-folder/path.jpg'));
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
@@ -168,7 +168,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('deleteObject')
@@ -176,7 +176,7 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/some-folder/path.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
@@ -189,7 +189,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->at(0))
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('deleteObject')
@@ -197,12 +197,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(2))
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('deleteObject')
@@ -210,7 +210,7 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -226,7 +226,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->at(0))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterOne/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('deleteObject')
@@ -234,12 +234,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterOne/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(2))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('deleteObject')
@@ -247,12 +247,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterOne/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(4))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(5))
             ->method('deleteObject')
@@ -260,12 +260,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterTwo/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(6))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(7))
             ->method('deleteObject')
@@ -273,7 +273,7 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterTwo/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -289,7 +289,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $s3
             ->expects($this->never())
             ->method('deleteObject');
@@ -305,7 +305,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('deleteObject')

@@ -42,7 +42,7 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
 
         $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
@@ -60,7 +60,7 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
         $resolver
             ->expects($this->never())
             ->method('isStored');
@@ -80,7 +80,7 @@ class CacheResolverTest extends AbstractTest
         $resolver
             ->expects($this->exactly(2))
             ->method('isStored')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
@@ -112,11 +112,11 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue('/the/expected/browser'));
+            ->willReturn('/the/expected/browser');
 
         $cache = $this->getMockBuilder(Cache::class)->getMock();
         $cache
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('save');
 
         $cacheResolver = new CacheResolver($cache, $resolver);
@@ -131,7 +131,7 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
         $resolver
             ->expects($this->once())
             ->method('remove');
@@ -160,7 +160,7 @@ class CacheResolverTest extends AbstractTest
         $resolver
             ->expects($this->exactly(4))
             ->method('resolve')
-            ->will($this->returnValue('aCachePath'));
+            ->willReturn('aCachePath');
         $resolver
             ->expects($this->once())
             ->method('remove');

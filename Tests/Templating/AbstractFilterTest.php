@@ -39,7 +39,7 @@ abstract class AbstractFilterTest extends AbstractTest
             ->expects($this->once())
             ->method('getBrowserPath')
             ->with($expectedInputPath, $expectedFilter)
-            ->will($this->returnValue($expectedCachePath));
+            ->willReturn($expectedCachePath);
 
         $this->assertSame($expectedCachePath, $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter));
     }
