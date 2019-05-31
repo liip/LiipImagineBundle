@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Events;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CacheResolveEvent extends Event
 {
