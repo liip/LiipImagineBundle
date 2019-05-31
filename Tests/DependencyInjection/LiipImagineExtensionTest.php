@@ -19,8 +19,6 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -69,7 +67,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
         $this->assertSame('value1', $variable1, sprintf('%s parameter is correct', $variable1));
     }
-
 
     protected function createEmptyConfiguration()
     {

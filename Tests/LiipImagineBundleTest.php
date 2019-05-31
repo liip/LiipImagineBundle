@@ -44,7 +44,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
             ->expects($this->at(1))
             ->method('addCompilerPass')
@@ -61,7 +61,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
             ->expects($this->at(2))
             ->method('addCompilerPass')
@@ -78,7 +78,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
             ->expects($this->at(3))
             ->method('addCompilerPass')
@@ -95,7 +95,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($this->createLiipImagineExtensionMock()));
+            ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
             ->expects($this->at(4))
             ->method('addCompilerPass')
@@ -118,7 +118,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -137,7 +137,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -156,7 +156,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -174,7 +174,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
     }
@@ -192,7 +192,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -211,7 +211,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -230,7 +230,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
-            ->will($this->returnValue($extensionMock));
+            ->willReturn($extensionMock);
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);

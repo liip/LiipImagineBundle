@@ -76,8 +76,6 @@ class StreamLoaderFactoryTest extends TestCase
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('stream');
 
-
-
         $resolver = new StreamLoaderFactory();
         $resolver->addConfiguration($rootNode);
 
@@ -93,7 +91,6 @@ class StreamLoaderFactoryTest extends TestCase
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('stream');
-
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -118,7 +115,6 @@ class StreamLoaderFactoryTest extends TestCase
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('stream');
-
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);

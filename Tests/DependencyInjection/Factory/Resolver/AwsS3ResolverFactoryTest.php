@@ -301,7 +301,6 @@ class AwsS3ResolverFactoryTest extends TestCase
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
 
-
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
 
@@ -317,7 +316,6 @@ class AwsS3ResolverFactoryTest extends TestCase
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
-
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -338,8 +336,6 @@ class AwsS3ResolverFactoryTest extends TestCase
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
-
-
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -370,12 +366,10 @@ class AwsS3ResolverFactoryTest extends TestCase
         $expectedAcl = 'theAcl';
         $expectedCachePrefix = 'theCachePrefix';
 
-
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
-
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -414,13 +408,10 @@ class AwsS3ResolverFactoryTest extends TestCase
     {
         $expectedAcl = 'public-read';
 
-
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
-
-
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -465,13 +456,10 @@ class AwsS3ResolverFactoryTest extends TestCase
         $expectedAcl = 'theAcl';
         $expectedCachePrefix = 'theCachePrefix';
 
-
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('aws_s3');
-
-
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);

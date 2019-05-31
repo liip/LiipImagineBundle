@@ -194,6 +194,7 @@ class FileSystemLoaderTest extends TestCase
     private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
     {
         $mimetype = new MimeTypes();
+
         return new FileSystemLoader(
             $mimetype,
             null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())

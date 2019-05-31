@@ -118,8 +118,8 @@ class DataManager
         if (!$binary instanceof BinaryInterface) {
             $mimeType = $this->mimeTypeGuesser->guess($binary);
 
-            if(!$mimeType) {
-              throw new \LogicException(sprintf('The mime type of image %s was not guessed.', $path));
+            if (!$mimeType) {
+                throw new \LogicException(sprintf('The mime type of image %s was not guessed.', $path));
             }
 
             $binary = new Binary(

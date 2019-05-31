@@ -28,24 +28,25 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
         $this->mimeTypeGuesser = $mimeTypeGuesser;
     }
 
-    public function getExtensions(string $mimeType): array {
-      return $this->mimeTypeGuesser->getExtensions($mimeType);
+    public function getExtensions(string $mimeType): array
+    {
+        return $this->mimeTypeGuesser->getExtensions($mimeType);
     }
 
-    public function guessMimeType(string $path): ?string {
-      return $this->mimeTypeGuesser->guessMimeType($path);
+    public function guessMimeType(string $path): ?string
+    {
+        return $this->mimeTypeGuesser->guessMimeType($path);
     }
 
-
-    public function getMimeTypes(string $ext): array {
-      return $this->mimeTypeGuesser->getMimeTypes($ext);
+    public function getMimeTypes(string $ext): array
+    {
+        return $this->mimeTypeGuesser->getMimeTypes($ext);
     }
 
-    public function isGuesserSupported(): bool {
-      return $this->mimeTypeGuesser->isGuesserSupported();
+    public function isGuesserSupported(): bool
+    {
+        return $this->mimeTypeGuesser->isGuesserSupported();
     }
-
-
 
     /**
      * {@inheritdoc}

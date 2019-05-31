@@ -15,9 +15,9 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
+use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Mime\MimeTypes;
-use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 
 /**
  * @requires PHP 5.4
@@ -45,6 +45,7 @@ class FlysystemLoaderTest extends AbstractTest
     public function getFlysystemLoader()
     {
         $mimetypes = new SimpleMimeTypeGuesser(new MimeTypes());
+
         return new FlysystemLoader($mimetypes, $this->flyFilesystem);
     }
 

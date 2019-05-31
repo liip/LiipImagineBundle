@@ -85,7 +85,6 @@ class FlysystemLoaderFactoryTest extends TestCase
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('flysystem');
 
-
         $resolver = new FlysystemLoaderFactory();
         $resolver->addConfiguration($rootNode);
 
@@ -100,7 +99,6 @@ class FlysystemLoaderFactoryTest extends TestCase
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('flysystem');
-
 
         $loader = new FlysystemLoaderFactory();
         $loader->addConfiguration($rootNode);

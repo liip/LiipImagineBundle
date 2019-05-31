@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\Binary\Loader;
 use League\Flysystem\FilesystemInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypesInterface;
 
 class FlysystemLoader implements LoaderInterface

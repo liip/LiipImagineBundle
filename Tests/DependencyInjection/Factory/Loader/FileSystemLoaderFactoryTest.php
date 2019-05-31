@@ -267,7 +267,6 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('filesystem');
 
-
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
 
@@ -285,13 +284,10 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
     {
         $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
-
         $treeBuilder = new TreeBuilder('filesystem');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('filesystem');
-
-
 
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -308,12 +304,10 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
     {
         $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
-
         $treeBuilder = new TreeBuilder('filesystem');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('filesystem');
-
 
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);

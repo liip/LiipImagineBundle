@@ -107,8 +107,7 @@ class ChainLoaderTest extends TestCase
      */
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
-
-        $mimeTypes =  new MimeTypes();
+        $mimeTypes = new MimeTypes();
         $this->expectException(NotLoadableException::class);
         $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
@@ -146,7 +145,7 @@ class ChainLoaderTest extends TestCase
      */
     private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
     {
-        $mimeTypes =  new MimeTypes();
+        $mimeTypes = new MimeTypes();
         if (null === $loaders) {
             $loaders = [
                 'foo' => new FileSystemLoader(

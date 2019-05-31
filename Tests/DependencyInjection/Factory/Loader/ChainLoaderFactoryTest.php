@@ -67,8 +67,6 @@ class ChainLoaderFactoryTest extends FactoryTestCase
             ? $treeBuilder->getRootNode()
             : $treeBuilder->root('chain');
 
-
-
         $loader = new ChainLoaderFactory();
         $loader->addConfiguration($rootNode);
 

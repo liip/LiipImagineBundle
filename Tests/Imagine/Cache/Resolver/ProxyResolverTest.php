@@ -46,7 +46,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
@@ -62,7 +62,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
@@ -78,7 +78,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png');
 
         $this->resolver = new ProxyResolver($this->primaryResolver, [
             'https://s3-eu-west-1.amazonaws.com/s3-cache.example.com' => 'http://images.example.com',
@@ -98,7 +98,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $this->resolver = new ProxyResolver($this->primaryResolver, [
             'regexp/http:\/\/.*?\//' => 'http://bar.com/',
@@ -118,7 +118,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('isStored')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->resolver->isStored($expectedPath, $expectedFilter));
     }

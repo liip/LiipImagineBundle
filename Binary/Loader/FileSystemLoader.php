@@ -22,15 +22,14 @@ class FileSystemLoader implements LoaderInterface
      */
     protected $mimeTypeGuesser;
 
-
     /**
      * @var LocatorInterface
      */
     protected $locator;
 
     /**
-     * @param MimeTypeGuesserInterface  $mimeGuesser
-     * @param LocatorInterface          $locator
+     * @param MimeTypeGuesserInterface $mimeGuesser
+     * @param LocatorInterface         $locator
      */
     public function __construct(
         MimeTypesInterface $mimeGuesser,

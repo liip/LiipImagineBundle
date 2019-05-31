@@ -33,17 +33,17 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => null,
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
-            ->will($this->returnValue('image/png'));
+            ->willReturn('image/png');
 
         $dataManager = new DataManager($mimeTypeGuesser, $config, 'default');
         $dataManager->addLoader('default', $loader);
@@ -64,17 +64,17 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => 'the_loader',
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
-            ->will($this->returnValue('image/png'));
+            ->willReturn('image/png');
 
         $dataManager = new DataManager($mimeTypeGuesser, $config);
         $dataManager->addLoader('the_loader', $loader);
@@ -98,17 +98,17 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => 'the_loader',
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $dataManager = new DataManager($mimeTypeGuesser, $config);
         $dataManager->addLoader('the_loader', $loader);
@@ -125,24 +125,24 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('find')
             ->with('cats.jpeg')
-            ->will($this->returnValue('content'));
+            ->willReturn('content');
 
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => 'the_loader',
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
-            ->will($this->returnValue('text/plain'));
+            ->willReturn('text/plain');
 
         $dataManager = new DataManager($mimeTypeGuesser, $config);
         $dataManager->addLoader('the_loader', $loader);
@@ -159,18 +159,18 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('find')
             ->with('cats.jpeg')
-            ->will($this->returnValue(new Binary('content', null)));
+            ->willReturn(new Binary('content', null));
 
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => 'the_loader',
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
@@ -194,18 +194,18 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('find')
             ->with('cats.jpeg')
-            ->will($this->returnValue($binary));
+            ->willReturn($binary);
 
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => 'the_loader',
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
@@ -227,11 +227,11 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => null,
-            ]));
+            ]);
 
         $dataManager = new DataManager($this->createMimeTypeGuesserInterfaceMock(), $config);
         $dataManager->find('thumbnail', 'cats.jpeg');
@@ -246,25 +246,25 @@ class DataManagerTest extends AbstractTest
         $loader
             ->expects($this->once())
             ->method('find')
-            ->will($this->returnValue($expectedContent));
+            ->willReturn($expectedContent);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
-            ->will($this->returnValue($expectedMimeType));
+            ->willReturn($expectedMimeType);
 
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => null,
-            ]));
+            ]);
 
         $dataManager = new DataManager($mimeTypeGuesser, $config, 'default');
         $dataManager->addLoader('default', $loader);
@@ -286,32 +286,31 @@ class DataManagerTest extends AbstractTest
         $loader
             ->expects($this->once())
             ->method('find')
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($content)
-            ->will($this->returnValue($mimeType));
-
+            ->willReturn($mimeType);
 
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('getExtensions')
             ->with($mimeType)
-            ->will($this->returnValue([$expectedFormat]));
+            ->willReturn([$expectedFormat]);
 
         $config = $this->createFilterConfigurationMock();
         $config
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'size' => [180, 180],
                 'mode' => 'outbound',
                 'data_loader' => null,
-            ]));
+            ]);
 
         $dataManager = new DataManager($mimeTypeGuesser, $config, 'default');
         $dataManager->addLoader('default', $loader);
@@ -331,9 +330,9 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'default_image' => null,
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
@@ -359,9 +358,9 @@ class DataManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'default_image' => $defaultFilterImage,
-            ]));
+            ]);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
