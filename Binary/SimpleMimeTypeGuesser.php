@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Binary;
 
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface as SymfonyMimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface;
 
 class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
 {
@@ -40,7 +40,7 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
         try {
             file_put_contents($tmpFile, $binary);
 
-            $mimeType = $this->mimeTypeGuesser->guess($tmpFile);
+            $mimeType = $this->mimeTypeGuesser->guessMimeType($tmpFile);
 
             unlink($tmpFile);
 

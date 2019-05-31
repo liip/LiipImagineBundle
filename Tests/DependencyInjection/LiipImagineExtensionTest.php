@@ -70,33 +70,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertSame('value1', $variable1, sprintf('%s parameter is correct', $variable1));
     }
 
-    public static function provideFactoryData()
-    {
-        return [
-            [
-                'liip_imagine.mime_type_guesser',
-                [MimeTypeGuesser::class, 'getInstance'],
-            ],
-            [
-                'liip_imagine.extension_guesser',
-                [ExtensionGuesser::class, 'getInstance'],
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider provideFactoryData
-     *
-     * @param string $service
-     * @param string $factory
-     */
-    public function testFactoriesConfiguration($service, $factory)
-    {
-        $this->createEmptyConfiguration();
-        $definition = $this->containerBuilder->getDefinition($service);
-
-        $this->assertSame($factory, $definition->getFactory());
-    }
 
     protected function createEmptyConfiguration()
     {

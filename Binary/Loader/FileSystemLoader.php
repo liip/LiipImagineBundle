@@ -30,7 +30,6 @@ class FileSystemLoader implements LoaderInterface
 
     /**
      * @param MimeTypeGuesserInterface  $mimeGuesser
-     * @param ExtensionGuesserInterface $extensionGuesser
      * @param LocatorInterface          $locator
      */
     public function __construct(
@@ -49,6 +48,6 @@ class FileSystemLoader implements LoaderInterface
         $path = $this->locator->locate($path);
         $mime = $this->mimeTypeGuesser->guessMimeType($path);
 
-        return new FileBinary($path, $mime, $this->mimeTypeGuesser->getExtensions($mime));
+        return new FileBinary($path, $mime, $this->mimeTypeGuesser->getExtensions($mime)[0] ?? null);
     }
 }

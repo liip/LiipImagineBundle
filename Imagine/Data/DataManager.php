@@ -16,7 +16,6 @@ use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 class DataManager
 {
@@ -24,11 +23,6 @@ class DataManager
      * @var MimeTypeGuesserInterface
      */
     protected $mimeTypeGuesser;
-
-    /**
-     * @var ExtensionGuesserInterface
-     */
-    protected $extensionGuesser;
 
     /**
      * @var FilterConfiguration
@@ -59,7 +53,6 @@ class DataManager
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
-        ExtensionGuesserInterface $extensionGuesser,
         FilterConfiguration $filterConfig,
         $defaultLoader = null,
         $globalDefaultImage = null
@@ -67,7 +60,6 @@ class DataManager
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
-        $this->extensionGuesser = $extensionGuesser;
         $this->globalDefaultImage = $globalDefaultImage;
     }
 
@@ -124,12 +116,12 @@ class DataManager
 
         $binary = $loader->find($path);
         if (!$binary instanceof BinaryInterface) {
-            $mimeType = $this->mimeTypeGuesser->guess($binary);
+            $mimeType = $this->mimeTypeGuesser->guessMimeType($binary);
 
             $binary = new Binary(
                 $binary,
                 $mimeType,
-                $this->extensionGuesser->guess($mimeType)
+                $this->extensionGuesser->getExtensions($mimeType)[0] ?? null
             );
         }
 

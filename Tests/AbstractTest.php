@@ -15,7 +15,6 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
-use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
@@ -28,7 +27,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 abstract class AbstractTest extends TestCase
@@ -199,7 +197,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function createMimeTypeGuesserInterfaceMock()
     {
-        return $this->createObjectMock(MimeTypeGuesserInterface::class);
+        return $this->createObjectMock(MimeTypesInterface::class);
     }
 
     /**
