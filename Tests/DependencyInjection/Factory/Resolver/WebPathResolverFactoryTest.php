@@ -72,8 +72,12 @@ class WebPathResolverFactoryTest extends TestCase
         $expectedWebPath = 'theWebPath';
         $expectedCachePrefix = 'theCachePrefix';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('web_path', 'array');
+        $treeBuilder = new TreeBuilder('web_path');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('web_path');
+
+
 
         $resolver = new WebPathResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -94,8 +98,12 @@ class WebPathResolverFactoryTest extends TestCase
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('web_path', 'array');
+
+        $treeBuilder = new TreeBuilder('web_path');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('web_path');
+
 
         $resolver = new WebPathResolverFactory();
         $resolver->addConfiguration($rootNode);

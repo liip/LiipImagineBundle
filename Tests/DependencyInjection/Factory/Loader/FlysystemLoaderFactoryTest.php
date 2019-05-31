@@ -80,8 +80,11 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child node "filesystem_service" at path "flysystem" must be configured.');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
+
 
         $resolver = new FlysystemLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -93,8 +96,11 @@ class FlysystemLoaderFactoryTest extends TestCase
     {
         $expectedService = 'theService';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
+
 
         $loader = new FlysystemLoaderFactory();
         $loader->addConfiguration($rootNode);

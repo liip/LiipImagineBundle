@@ -86,8 +86,12 @@ class FlysystemResolverFactoryTest extends TestCase
         $expectedFlysystemService = 'flyfilesystemservice';
         $expectedVisibility = 'public';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
+
 
         $resolver = new FlysystemResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -118,8 +122,12 @@ class FlysystemResolverFactoryTest extends TestCase
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
+
 
         $resolver = new FlysystemResolverFactory();
         $resolver->addConfiguration($rootNode);

@@ -27,7 +27,7 @@ class FilterExtensionTest extends AbstractFilterTest
 
     public function testInstanceOfTwigFilter()
     {
-        $this->assertInstanceOf(\Twig_Extension::class, $this->createTemplatingMock());
+        $this->assertInstanceOf(Twig\Extension\AbstractExtension::class, $this->createTemplatingMock());
     }
 
     /**
@@ -37,7 +37,7 @@ class FilterExtensionTest extends AbstractFilterTest
      */
     protected function createTemplatingMock(CacheManager $manager = null)
     {
-        if (!class_exists(\Twig_Extension::class)) {
+        if (!class_exists(Twig\Extension\AbstractExtension::class)) {
             $this->markTestSkipped('Requires the twig/twig package.');
         }
 
