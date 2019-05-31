@@ -13,8 +13,7 @@ namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Model\FileBinary;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 class FileSystemLoader implements LoaderInterface
 {
@@ -23,10 +22,6 @@ class FileSystemLoader implements LoaderInterface
      */
     protected $mimeTypeGuesser;
 
-    /**
-     * @var ExtensionGuesserInterface
-     */
-    protected $extensionGuesser;
 
     /**
      * @var LocatorInterface
@@ -39,12 +34,10 @@ class FileSystemLoader implements LoaderInterface
      * @param LocatorInterface          $locator
      */
     public function __construct(
-        MimeTypeGuesserInterface $mimeGuesser,
-        ExtensionGuesserInterface $extensionGuesser,
+        MimeTypesInterface $mimeGuesser,
         LocatorInterface $locator
     ) {
         $this->mimeTypeGuesser = $mimeGuesser;
-        $this->extensionGuesser = $extensionGuesser;
         $this->locator = $locator;
     }
 
@@ -54,8 +47,8 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         $path = $this->locator->locate($path);
-        $mime = $this->mimeTypeGuesser->guess($path);
+        $mime = $this->mimeTypeGuesser->guessMimeType($path);
 
-        return new FileBinary($path, $mime, $this->extensionGuesser->guess($mime));
+        return new FileBinary($path, $mime, $this->mimeTypeGuesser->getExtensions($mime));
     }
 }

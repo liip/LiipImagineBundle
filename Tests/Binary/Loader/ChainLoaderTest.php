@@ -18,8 +18,7 @@ use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
@@ -108,20 +107,20 @@ class ChainLoaderTest extends TestCase
      */
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
+
+        $mimeTypes =  new MimeTypes();
         $this->expectException(NotLoadableException::class);
         $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
         $this->getChainLoader([], [
             'foo' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+                $mimeTypes,
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../'),
                 ])
             ),
             'bar' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+                $mimeTypes,
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../../'),
                 ])
@@ -147,11 +146,11 @@ class ChainLoaderTest extends TestCase
      */
     private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
     {
+        $mimeTypes =  new MimeTypes();
         if (null === $loaders) {
             $loaders = [
                 'foo' => new FileSystemLoader(
-                    MimeTypeGuesser::getInstance(),
-                    ExtensionGuesser::getInstance(),
+                    $mimeTypes,
                     $this->getFileSystemLocator($paths ?: [__DIR__])
                 ),
             ];

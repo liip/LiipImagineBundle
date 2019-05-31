@@ -17,8 +17,7 @@ use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
@@ -194,9 +193,9 @@ class FileSystemLoaderTest extends TestCase
      */
     private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
     {
+        $mimetype = new MimeTypes();
         return new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
+            $mimetype,
             null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }

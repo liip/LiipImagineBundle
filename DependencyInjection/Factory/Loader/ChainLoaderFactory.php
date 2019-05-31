@@ -25,7 +25,8 @@ class ChainLoaderFactory extends AbstractLoaderFactory
         $definition = $this->getChildLoaderDefinition();
         $definition->replaceArgument(0, $this->createLoaderReferences($config['loaders']));
 
-        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+        $r = $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+        return $r;
     }
 
     /**

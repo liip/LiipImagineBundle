@@ -28,7 +28,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
 
         $definition = $this->getChildLoaderDefinition();
-        $definition->replaceArgument(2, $locatorDefinition);
+        $definition->replaceArgument(1, $locatorDefinition);
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }

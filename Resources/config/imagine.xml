@@ -260,7 +260,6 @@
 
         <service id="liip_imagine.binary.loader.prototype.filesystem" class="Liip\ImagineBundle\Binary\Loader\FileSystemLoader">
             <argument type="service" id="liip_imagine.mime_type_guesser" />
-            <argument type="service" id="liip_imagine.extension_guesser" />
             <argument><!-- will be injected by FileSystemLoaderFactory --></argument>
         </service>
 
@@ -338,8 +337,7 @@
 
         <!-- Guessers -->
 
-        <service id="liip_imagine.mime_type_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface">
-            <factory class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser" method="getInstance" />
+        <service id="liip_imagine.mime_type_guesser" class="Symfony\Component\Mime\MimeTypes">
         </service>
 
         <service id="liip_imagine.extension_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface">
