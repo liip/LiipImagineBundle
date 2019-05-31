@@ -22,7 +22,7 @@ class AbstractSetupWebTestCase extends AbstractWebTestCase
     /**
      * @var Client
      */
-    protected $client;
+    protected static $client;
 
     /**
      * @var Filesystem
@@ -43,8 +43,8 @@ class AbstractSetupWebTestCase extends AbstractWebTestCase
     {
         parent::setUp();
 
-        $this->client = $this->createClient();
-        $this->client->catchExceptions(false);
+        self::$client = $this->createClient();
+        self::$client->catchExceptions(false);
         $this->webRoot = sprintf('%s/public', self::$kernel->getContainer()->getParameter('kernel.root_dir'));
         $this->cacheRoot = $this->webRoot.'/media/cache';
         $this->filesystem = new Filesystem();
