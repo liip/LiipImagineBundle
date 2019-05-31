@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Templating;
 
-class FilterExtension extends Twig\Extension\AbstractExtension
+class FilterExtension extends \Twig\Extension\AbstractExtension
 {
     use FilterTrait;
 
