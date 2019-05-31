@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RouterInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 
 abstract class AbstractTest extends TestCase
 {
@@ -197,7 +198,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function createMimeTypeGuesserInterfaceMock()
     {
-        return $this->createObjectMock(MimeTypesInterface::class);
+        return $this->createObjectMock(MimeTypeGuesserInterface::class);
     }
 
     /**

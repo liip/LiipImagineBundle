@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\Tests\Templating\Helper;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\Helper\FilterHelper;
 use Liip\ImagineBundle\Tests\Templating\AbstractFilterTest;
-use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * @covers \Liip\ImagineBundle\Templating\FilterTrait
@@ -24,7 +23,7 @@ class FilterHelperTest extends AbstractFilterTest
 {
     public function testInstanceOfSymfonyHelper()
     {
-        $this->assertInstanceOf(Helper::class, $this->createTemplatingMock());
+        $this->assertInstanceOf(FilterHelper::class, $this->createTemplatingMock());
     }
 
     /**

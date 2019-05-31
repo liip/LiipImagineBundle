@@ -12,9 +12,8 @@
 namespace Liip\ImagineBundle\Templating\Helper;
 
 use Liip\ImagineBundle\Templating\FilterTrait;
-use Symfony\Component\Templating\Helper\Helper;
 
-class FilterHelper extends Helper
+class FilterHelper
 {
     use FilterTrait;
 }

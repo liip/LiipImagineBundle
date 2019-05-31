@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Binary;
 
-interface MimeTypeGuesserInterface
+interface MimeTypeGuesserInterface extends \Symfony\Component\Mime\MimeTypesInterface
 {
     /**
      * @param string $binary The image binary
