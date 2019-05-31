@@ -195,12 +195,12 @@ class CacheManager
         }
 
         $preEvent = new CacheResolveEvent($path, $filter);
-        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
+        $this->dispatcher->dispatch($preEvent, ImagineEvents::PRE_RESOLVE);
 
         $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
-        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
+        $this->dispatcher->dispatch($postEvent, ImagineEvents::POST_RESOLVE);
 
         return $postEvent->getUrl();
     }

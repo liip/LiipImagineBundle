@@ -31,9 +31,9 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
 
-        $response = $this->client->getResponse();
+        $response = self::$client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());
@@ -49,9 +49,9 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
             'anImageContent'
         );
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
 
-        $response = $this->client->getResponse();
+        $response = self::$client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());
@@ -65,7 +65,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
         $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
             'filters' => [
                 'thumbnail' => ['size' => [50, 50]],
             ],
@@ -78,7 +78,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
             'filters' => 'some-string',
             '_hash' => 'hash',
         ]));
@@ -89,14 +89,14 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
     public function testInvalidFilterShouldThrowNotFoundHttpException()
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
-        $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
+        self::$client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
     }
 
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
@@ -121,9 +121,9 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
 
-        $this->client->request('GET', $url);
+        self::$client->request('GET', $url);
 
-        $response = $this->client->getResponse();
+        $response = self::$client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());
@@ -156,9 +156,9 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
             'anImageContent'
         );
 
-        $this->client->request('GET', $url);
+        self::$client->request('GET', $url);
 
-        $response = $this->client->getResponse();
+        $response = self::$client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());
@@ -176,9 +176,9 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         // we are calling url with encoded file name as it will be called by browser
         $urlEncodedFileName = 'foo+bar';
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
+        self::$client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
 
-        $response = $this->client->getResponse();
+        $response = self::$client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());

@@ -547,7 +547,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(ImagineEvents::PRE_RESOLVE, new CacheResolveEvent('cats.jpg', 'thumbnail'));
+            ->with(new CacheResolveEvent('cats.jpg', 'thumbnail'), ImagineEvents::PRE_RESOLVE);
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -566,7 +566,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(ImagineEvents::POST_RESOLVE, new CacheResolveEvent('cats.jpg', 'thumbnail'));
+            ->with(new CacheResolveEvent('cats.jpg', 'thumbnail'), ImagineEvents::POST_RESOLVE);
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -585,8 +585,8 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
-            ->will($this->returnCallback(function ($name, $event) {
+            ->with($this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::PRE_RESOLVE)
+            ->will($this->returnCallback(function ($event, $name) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
             }));
@@ -614,7 +614,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->will($this->returnCallback(function ($name, $event) {
+            ->will($this->returnCallback(function ($event, $name) {
                 $event->setFilter('thumbnail');
             }));
 
@@ -643,8 +643,8 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(ImagineEvents::PRE_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
-            ->will($this->returnCallback(function ($name, $event) {
+            ->with($this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::PRE_RESOLVE)
+            ->will($this->returnCallback(function ($event, $name) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
             }));
@@ -652,12 +652,15 @@ class CacheManagerTest extends AbstractTest
             ->expects($this->at(1))
             ->method('dispatch')
             ->with(
-                ImagineEvents::POST_RESOLVE,
+
                 $this->logicalAnd(
                     $this->isInstanceOf(CacheResolveEvent::class),
                     $this->attributeEqualTo('path', 'changed_path'),
                     $this->attributeEqualTo('filter', 'changed_filter')
-            ));
+                  ),
+              ImagineEvents::POST_RESOLVE);
+                
+
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -676,8 +679,8 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(ImagineEvents::POST_RESOLVE, $this->isInstanceOf(CacheResolveEvent::class))
-            ->will($this->returnCallback(function ($name, $event) {
+            ->with($this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::POST_RESOLVE)
+            ->will($this->returnCallback(function ($event, $name) {
                 $event->setUrl('changed_url');
             }));
 
