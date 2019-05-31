@@ -26,7 +26,6 @@
         "symfony/framework-bundle": "^3.4|^4.0",
         "symfony/options-resolver": "^3.4|^4.0",
         "symfony/process": "^3.4|^4.0",
-        "symfony/templating": "^3.4|^4.0",
         "symfony/translation": "^3.4|^4.0"
     },
     "require-dev": {
