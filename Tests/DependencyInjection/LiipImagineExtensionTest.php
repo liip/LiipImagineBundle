@@ -106,7 +106,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load([[]], $this->containerBuilder);
 
-        $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
+        $this->assertInstanceOf(ContainerBuilder::class, $this->containerBuilder);
     }
 
     protected function createFullConfiguration()
@@ -121,7 +121,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->addResolverFactory(new WebPathResolverFactory());
         $loader->load([$this->getFullConfig()], $this->containerBuilder);
 
-        $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
+        $this->assertInstanceOf(ContainerBuilder::class, $this->containerBuilder);
     }
 
     protected function getFullConfig()

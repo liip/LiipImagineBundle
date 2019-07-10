@@ -169,7 +169,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
                 ->expects($this->once())
                 ->method('get')
                 ->with('jpg')
-                ->will($this->returnValue($jpg));
+                ->willReturn($jpg);
         }
 
         // Checks that rotate is called with $expectCallRotateValue, or not called at all if $expectCallRotateValue is null.

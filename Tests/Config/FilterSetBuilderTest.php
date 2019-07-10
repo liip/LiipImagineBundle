@@ -59,7 +59,7 @@ class FilterSetBuilderTest extends TestCase
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
             ->with($name, $dataLoader, $quality, $filters)
-            ->will($this->returnValue($filterSetMock));
+            ->willReturn($filterSetMock);
 
         $this->filterFactoryCollectionMock->expects($this->never())
             ->method('getFilterFactoryByName');
@@ -91,16 +91,16 @@ class FilterSetBuilderTest extends TestCase
         $filterFactoryMock->expects($this->once())
             ->method('create')
             ->with($filterData)
-            ->will($this->returnValue($filterMock));
+            ->willReturn($filterMock);
 
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($filterSetMock));
+            ->willReturn($filterSetMock);
 
         $this->filterFactoryCollectionMock->expects($this->once())
             ->method('getFilterFactoryByName')
             ->with($filterCode)
-            ->will($this->returnValue($filterFactoryMock));
+            ->willReturn($filterFactoryMock);
 
         $filterSet = $this->model->build($name, [
             'data_loader' => $dataLoader,
