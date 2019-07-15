@@ -167,8 +167,11 @@ class WebPathResolver implements ResolverInterface
     private function getFullPath($path, $filter)
     {
         // crude way of sanitizing URL scheme ("protocol") part
-        $path = str_replace('://', '---', $path);
+        $path = str_replace('://', '---', ltrim($path, '/'));
+        $cachePrefix = trim($this->cachePrefix, '/');
 
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        return $cachePrefix
+            ? sprintf('%s/%s/%s', $cachePrefix, $filter, $path)
+            : sprintf('%s/%s', $filter, $path);
     }
 }
