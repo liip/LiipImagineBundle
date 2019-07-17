@@ -105,8 +105,8 @@ class FlysystemResolver implements ResolverInterface
     {
         return sprintf(
             '%s/%s',
-            $this->webRoot,
-            $this->getFileUrl($path, $filter)
+            rtrim($this->webRoot, '/'),
+            ltrim($this->getFileUrl($path, $filter), '/')
         );
     }
 
