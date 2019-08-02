@@ -13,6 +13,9 @@ namespace Liip\ImagineBundle\Utility\Framework;
 
 use Symfony\Component\HttpKernel\Kernel;
 
+/**
+ * @internal
+ */
 class SymfonyFramework
 {
     /**

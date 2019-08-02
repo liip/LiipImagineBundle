@@ -58,6 +58,49 @@ Thumbnail Options
     thumbnail size.
 
 
+.. _filter-fixed:
+
+Fixed size
+----------
+
+The built-in ``fixed`` filter performs thumbnail transformations (which includes scaling
+and potentially cropping operations). This filter exposed a number of `fixed options`_
+which may be used to configure its behavior. Unlike the ``thumbnail`` filter, the
+``fixed`` filter supports upscale and you always get a fixed-size image.
+
+Example configuration:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        filter_sets:
+
+            # name our filter set "my_fixed_filter"
+            my_fixed_filter:
+                filters:
+
+                    # use and setup the "fixed" filter
+                    fixed:
+
+                        # set the fixed size to "120x90" pixels
+                        width: 120
+                        height: 90
+
+
+Fixed Options
+~~~~~~~~~~~~~
+
+:strong:`width:` ``int``
+    Sets the "desired width" which initiates a proportional scale operation that up- or
+    down-scales until the image width matches this value.
+
+:strong:`height:` ``int``
+    Sets the "desired height" which initiates a proportional scale operation that up- or
+    down-scales until the image height matches this value.
+
+
 .. _filter-crop:
 
 Cropping Images
