@@ -100,7 +100,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
      * @param string           $expectedContents
      * @param string|null      $message
      */
-    private function assertLocatedFileContentsStartsWith(LocatorInterface $locator, $filePath, $expectedContents, $message = null)
+    private function assertLocatedFileContentsStartsWith(LocatorInterface $locator, $filePath, $expectedContents, $message = '')
     {
         $this->assertStringStartsWith($expectedContents, file_get_contents($locator->locate($filePath)), $message);
     }
