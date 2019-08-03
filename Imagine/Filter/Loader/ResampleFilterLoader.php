@@ -15,9 +15,9 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\LoadFilterException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 class ResampleFilterLoader implements LoaderInterface
 {
@@ -42,7 +42,7 @@ class ResampleFilterLoader implements LoaderInterface
      *
      * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $options = $this->resolveOptions($options);
         $tmpFile = $this->getTemporaryFile($options['temp_dir']);
@@ -94,11 +94,11 @@ class ResampleFilterLoader implements LoaderInterface
      */
     private function getImagineSaveOptions(array $options)
     {
-        $saveOptions = array(
+        $saveOptions = [
             'resolution-units' => $options['unit'],
             'resolution-x' => $options['x'],
             'resolution-y' => $options['y'],
-        );
+        ];
 
         if (isset($options['filter'])) {
             $saveOptions['resampling-filter'] = $options['filter'];
@@ -116,25 +116,25 @@ class ResampleFilterLoader implements LoaderInterface
     {
         $resolver = new OptionsResolver();
 
-        $resolver->setRequired(array('x', 'y', 'unit', 'temp_dir'));
-        $resolver->setDefined(array('filter'));
+        $resolver->setRequired(['x', 'y', 'unit', 'temp_dir']);
+        $resolver->setDefined(['filter']);
         $resolver->setDefault('temp_dir', sys_get_temp_dir());
         $resolver->setDefault('filter', 'UNDEFINED');
 
-        $resolver->setAllowedTypes('x', array('int', 'float'));
-        $resolver->setAllowedTypes('y', array('int', 'float'));
-        $resolver->setAllowedTypes('temp_dir', array('string'));
-        $resolver->setAllowedTypes('filter', array('string'));
+        $resolver->setAllowedTypes('x', ['int', 'float']);
+        $resolver->setAllowedTypes('y', ['int', 'float']);
+        $resolver->setAllowedTypes('temp_dir', ['string']);
+        $resolver->setAllowedTypes('filter', ['string']);
 
-        $resolver->setAllowedValues('unit', array(
+        $resolver->setAllowedValues('unit', [
             ImageInterface::RESOLUTION_PIXELSPERINCH,
             ImageInterface::RESOLUTION_PIXELSPERCENTIMETER,
-        ));
+        ]);
 
         $resolver->setNormalizer('filter', function (Options $options, $value) {
-            foreach (array('\Imagine\Image\ImageInterface::FILTER_%s', '\Imagine\Image\ImageInterface::%s', '%s') as $format) {
-                if (defined($constant = sprintf($format, strtoupper($value))) || defined($constant = sprintf($format, $value))) {
-                    return constant($constant);
+            foreach (['\Imagine\Image\ImageInterface::FILTER_%s', '\Imagine\Image\ImageInterface::%s', '%s'] as $format) {
+                if (\defined($constant = sprintf($format, mb_strtoupper($value))) || \defined($constant = sprintf($format, $value))) {
+                    return \constant($constant);
                 }
             }
 

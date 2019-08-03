@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Kernel;
 /**
  * @internal
  */
-class SymfonyFramework
+final class SymfonyFramework
 {
     /**
      * @return string

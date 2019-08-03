@@ -68,7 +68,7 @@ class ChainLoader implements LoaderInterface
         return vsprintf('Source image not resolvable "%s" using "%s" %d loaders (internal exceptions: %s).', [
             $path,
             implode(', ', $loaders),
-            count($loaders),
+            \count($loaders),
             implode(', ', $exceptions),
         ]);
     }

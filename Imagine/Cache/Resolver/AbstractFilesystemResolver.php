@@ -165,7 +165,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     protected function makeFolder($dir)
     {
         if (!is_dir($dir)) {
-            $parent = dirname($dir);
+            $parent = \dirname($dir);
             try {
                 $this->makeFolder($parent);
                 $this->filesystem->mkdir($dir);

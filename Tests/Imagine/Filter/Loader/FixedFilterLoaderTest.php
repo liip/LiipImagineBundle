@@ -70,7 +70,7 @@ class FixedFilterLoaderTest extends AbstractTest
             ->with($origin, $expected)
             ->willReturn($image);
 
-        $options = array();
+        $options = [];
         $options['width'] = $width;
         $options['height'] = $height;
 
@@ -82,11 +82,11 @@ class FixedFilterLoaderTest extends AbstractTest
      */
     public function heightWidthProvider()
     {
-        return array(
-            array(200, 129, new Box(200, 129)),
-            array(50, 50, new Box(50, 50)),
-            array(1, 30, new Box(1, 30)),
-            array(1280, 720, new Box(1280, 720)),
-        );
+        return [
+            [200, 129, new Box(200, 129)],
+            [50, 50, new Box(50, 50)],
+            [1, 30, new Box(1, 30)],
+            [1280, 720, new Box(1280, 720)],
+        ];
     }
 }

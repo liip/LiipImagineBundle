@@ -39,7 +39,7 @@ class StreamLoader implements LoaderInterface
     {
         $this->wrapperPrefix = $wrapperPrefix;
 
-        if ($context && !is_resource($context)) {
+        if ($context && !\is_resource($context)) {
             throw new \InvalidArgumentException('The given context is no valid resource.');
         }
 

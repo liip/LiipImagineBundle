@@ -32,7 +32,7 @@ class MozJpegPostProcessor implements PostProcessorInterface
     protected $mozjpegBin;
 
     /**
-     * @var null|int Quality factor
+     * @var int|null Quality factor
      */
     protected $quality;
 
@@ -73,7 +73,7 @@ class MozJpegPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
+        if (!\in_array($type, ['image/jpeg', 'image/jpg'], true)) {
             return $binary;
         }
 
@@ -83,7 +83,7 @@ class MozJpegPostProcessor implements PostProcessorInterface
         $processArguments[] = '-quant-table';
         $processArguments[] = 2;
 
-        $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
+        $transformQuality = \array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
         if (null !== $transformQuality) {
             $processArguments[] = '-quality';
             $processArguments[] = $transformQuality;

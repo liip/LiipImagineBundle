@@ -122,28 +122,28 @@ class JpegOptimPostProcessor implements PostProcessorInterface
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
         $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
+        if (!\in_array($type, ['image/jpeg', 'image/jpg'], true)) {
             return $binary;
         }
 
-        $tempDir = array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
+        $tempDir = \array_key_exists('temp_dir', $options) ? $options['temp_dir'] : $this->tempDir;
         if (false === $input = tempnam($tempDir, 'imagine_jpegoptim')) {
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', $tempDir));
         }
 
         $processArguments = [$this->jpegoptimBin];
 
-        $stripAll = array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
+        $stripAll = \array_key_exists('strip_all', $options) ? $options['strip_all'] : $this->stripAll;
         if ($stripAll) {
             $processArguments[] = '--strip-all';
         }
 
-        $max = array_key_exists('max', $options) ? $options['max'] : $this->max;
+        $max = \array_key_exists('max', $options) ? $options['max'] : $this->max;
         if ($max) {
             $processArguments[] = '--max='.$max;
         }
 
-        $progressive = array_key_exists('progressive', $options) ? $options['progressive'] : $this->progressive;
+        $progressive = \array_key_exists('progressive', $options) ? $options['progressive'] : $this->progressive;
         if ($progressive) {
             $processArguments[] = '--all-progressive';
         } else {

@@ -43,7 +43,7 @@ class WebPathResolverTest extends TestCase
         $this->filesystem = new Filesystem();
         $this->basePath = sys_get_temp_dir().'/aWebRoot';
         $this->existingFile = $this->basePath.'/aCachePrefix/aFilter/existingPath';
-        $this->filesystem->mkdir(dirname($this->existingFile));
+        $this->filesystem->mkdir(\dirname($this->existingFile));
         $this->filesystem->touch($this->existingFile);
     }
 
