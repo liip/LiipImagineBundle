@@ -31,7 +31,6 @@ matrix:
       env:
         - SYMFONY_VERSION=4.0.*
         - COMPOSER_FLAGS="--prefer-lowest"
-        - DEPENDENCIES="symfony/phpunit-bridge:^4"
     - php: 7.2
     - php: 7.2
       env: SYMFONY_VERSION=3.4.*
@@ -39,7 +38,7 @@ matrix:
       env: SYMFONY_VERSION=4.0.*
     - php: 7.2
       env:
-        - DEPENDENCIES="symfony/phpunit-bridge:^4"
+        - DEPENDENCIES="symfony/phpunit-bridge:^4.2"
         - COMPOSER_UPDATE_FLAGS="--no-dev"
     - php: 7.2
       env:
