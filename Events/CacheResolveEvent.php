@@ -41,7 +41,7 @@ class CacheResolveEvent extends Event
      *
      * @param string      $path
      * @param string      $filter
-     * @param null|string $url
+     * @param string|null $url
      */
     public function __construct($path, $filter, $url = null)
     {

@@ -32,7 +32,7 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => [
                         'size' => [180, 180],
@@ -40,7 +40,7 @@ class FilterManagerTest extends AbstractTest
                     ],
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $binary = new Binary('aContent', 'image/png', 'png');
 
@@ -70,32 +70,32 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedFilteredContent));
+            ->willReturn($expectedFilteredContent);
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -127,31 +127,31 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -184,32 +184,32 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'format' => $expectedFormat,
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -241,24 +241,24 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
@@ -270,7 +270,7 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -304,39 +304,39 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'format' => 'jpg',
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedContent));
+            ->willReturn($expectedContent);
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
-            ->will($this->returnValue($expectedMimeType));
+            ->willReturn($expectedMimeType);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -368,33 +368,33 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'quality' => $expectedQuality,
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -423,32 +423,32 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -488,31 +488,31 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [],
-            ]));
+            ]);
 
         $image = $this->getImageInterfaceMock();
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagine = $this->createImagineInterfaceMock();
         $imagine
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbMergedConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,
@@ -566,21 +566,21 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedFilteredContent));
+            ->willReturn($expectedFilteredContent);
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -616,20 +616,20 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -666,20 +666,20 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -716,13 +716,13 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
@@ -734,7 +734,7 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -772,27 +772,27 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($expectedContent));
+            ->willReturn($expectedContent);
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
-            ->will($this->returnValue($expectedMimeType));
+            ->willReturn($expectedMimeType);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -830,20 +830,20 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -880,20 +880,20 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
-            ->will($this->returnValue('aFilteredContent'));
+            ->willReturn('aFilteredContent');
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $this->createFilterConfigurationMock(),
@@ -928,14 +928,14 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [
                     'foo' => [],
                 ],
-            ]));
+            ]);
 
         $thumbConfig = [
             'size' => [180, 180],
@@ -946,21 +946,21 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($originalContent));
+            ->willReturn($originalContent);
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $processedBinary = new Binary($expectedPostProcessedContent, 'image/png', 'png');
 
@@ -969,7 +969,7 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->once())
             ->method('process')
             ->with($binary)
-            ->will($this->returnValue($processedBinary));
+            ->willReturn($processedBinary);
 
         $filterManager = new FilterManager(
             $config,
@@ -1002,14 +1002,14 @@ class FilterManagerTest extends AbstractTest
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with('thumbnail')
-            ->will($this->returnValue([
+            ->willReturn([
                 'filters' => [
                     'thumbnail' => $thumbConfig,
                 ],
                 'post_processors' => [
                     'foo' => [],
                 ],
-            ]));
+            ]);
 
         $thumbConfig = [
             'size' => [180, 180],
@@ -1020,21 +1020,21 @@ class FilterManagerTest extends AbstractTest
         $image
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($originalContent));
+            ->willReturn($originalContent);
 
         $imagineMock = $this->createImagineInterfaceMock();
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $loader = $this->createFilterLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('load')
             ->with($this->identicalTo($image), $thumbConfig)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
             $config,

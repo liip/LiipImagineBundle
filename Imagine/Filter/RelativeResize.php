@@ -35,7 +35,7 @@ class RelativeResize implements FilterInterface
      */
     public function __construct($method, $parameter)
     {
-        if (!in_array($method, ['heighten', 'increase', 'scale', 'widen'], true)) {
+        if (!\in_array($method, ['heighten', 'increase', 'scale', 'widen'], true)) {
             throw new InvalidArgumentException(sprintf('Unsupported method: ', $method));
         }
 
@@ -48,6 +48,6 @@ class RelativeResize implements FilterInterface
      */
     public function apply(ImageInterface $image)
     {
-        return $image->resize(call_user_func([$image->getSize(), $this->method], $this->parameter));
+        return $image->resize(\call_user_func([$image->getSize(), $this->method], $this->parameter));
     }
 }

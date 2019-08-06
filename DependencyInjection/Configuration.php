@@ -77,11 +77,11 @@ class Configuration implements ConfigurationInterface
                         $v['loaders'] = [];
                     }
 
-                    if (false === is_array($v['loaders'])) {
+                    if (false === \is_array($v['loaders'])) {
                         throw new \LogicException('Loaders has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['loaders'])) {
+                    if (false === \array_key_exists('default', $v['loaders'])) {
                         $v['loaders']['default'] = ['filesystem' => null];
                     }
 
@@ -89,11 +89,11 @@ class Configuration implements ConfigurationInterface
                         $v['resolvers'] = [];
                     }
 
-                    if (false === is_array($v['resolvers'])) {
+                    if (false === \is_array($v['resolvers'])) {
                         throw new \LogicException('Resolvers has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['resolvers'])) {
+                    if (false === \array_key_exists('default', $v['resolvers'])) {
                         $v['resolvers']['default'] = ['web_path' => null];
                     }
 
@@ -107,7 +107,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !in_array($v, ['gd', 'imagick', 'gmagick'], true);
+                            return !\in_array($v, ['gd', 'imagick', 'gmagick'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
