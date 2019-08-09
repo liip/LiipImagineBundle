@@ -122,7 +122,7 @@ class FlysystemResolver implements ResolverInterface
         $this->flysystem->put(
             $this->getFilePath($path, $filter),
             $binary->getContent(),
-            ['visibility' => $this->visibility]
+            ['visibility' => $this->visibility, 'mimetype' => $binary->getMimeType()]
         );
     }
 
