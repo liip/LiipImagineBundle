@@ -94,7 +94,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param Definition  $definition
      * @param string|null $message
      */
-    protected function assertDefinitionMethodCallsNone(Definition $definition, $message = null)
+    protected function assertDefinitionMethodCallsNone(Definition $definition, $message = '')
     {
         $this->assertDefinitionMethodCallCount(0, $definition, $message);
     }
@@ -104,7 +104,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param Definition  $definition
      * @param string|null $message
      */
-    protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = null)
+    protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = '')
     {
         $this->assertCount($expect, $definition->getMethodCalls(), $message);
     }
