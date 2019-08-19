@@ -41,7 +41,7 @@ return Config::create()
         'explicit_indirect_variable' => true,
         'final_internal_class' => true,
         'fopen_flags' => [
-            'b_mode' => false
+            'b_mode' => true
         ],
         'header_comment' => [
             'header' => $header,
