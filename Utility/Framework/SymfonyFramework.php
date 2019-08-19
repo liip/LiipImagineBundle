@@ -13,7 +13,10 @@ namespace Liip\ImagineBundle\Utility\Framework;
 
 use Symfony\Component\HttpKernel\Kernel;
 
-class SymfonyFramework
+/**
+ * @internal
+ */
+final class SymfonyFramework
 {
     /**
      * @return string

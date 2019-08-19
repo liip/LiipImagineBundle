@@ -32,9 +32,8 @@ class StreamLoaderTest extends AbstractTest
     {
         $loader = new StreamLoader('file://');
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
@@ -42,9 +41,8 @@ class StreamLoaderTest extends AbstractTest
     {
         $loader = new StreamLoader('file://', stream_context_create());
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
