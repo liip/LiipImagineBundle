@@ -12,10 +12,14 @@
 namespace Liip\ImagineBundle\Tests\Async;
 
 use Enqueue\Bundle\EnqueueBundle;
+use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Client\ProducerInterface;
+use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
 use Enqueue\Null\NullContext;
 use Enqueue\Null\NullMessage;
+use Interop\Queue\Message;
+use Interop\Queue\Processor;
 use Liip\ImagineBundle\Async\CacheResolved;
 use Liip\ImagineBundle\Async\Commands;
 use Liip\ImagineBundle\Async\ResolveCacheProcessor;
@@ -39,23 +43,23 @@ class ResolveCacheProcessorTest extends AbstractTest
 
     public function testShouldImplementProcessorInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Async\ResolveCacheProcessor');
+        $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
-        $this->assertTrue($rc->implementsInterface('Interop\Queue\PsrProcessor'));
+        $this->assertTrue($rc->implementsInterface(Processor::class));
     }
 
     public function testShouldImplementCommandSubscriberInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Async\ResolveCacheProcessor');
+        $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
-        $this->assertTrue($rc->implementsInterface('Enqueue\Client\CommandSubscriberInterface'));
+        $this->assertTrue($rc->implementsInterface(CommandSubscriberInterface::class));
     }
 
     public function testShouldImplementQueueSubscriberInterface()
     {
-        $rc = new \ReflectionClass('Liip\ImagineBundle\Async\ResolveCacheProcessor');
+        $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
-        $this->assertTrue($rc->implementsInterface('Enqueue\Consumption\QueueSubscriberInterface'));
+        $this->assertTrue($rc->implementsInterface(QueueSubscriberInterface::class));
     }
 
     public function testShouldSubscribeToExpectedCommand()
@@ -64,9 +68,9 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $this->assertInternalType('array', $command);
         $this->assertSame([
-            'processorName' => Commands::RESOLVE_CACHE,
-            'queueName' => Commands::RESOLVE_CACHE,
-            'queueNameHardcoded' => true,
+            'command' => Commands::RESOLVE_CACHE,
+            'queue' => Commands::RESOLVE_CACHE,
+            'prefix_queue' => false,
             'exclusive' => true,
         ], $command);
     }
@@ -121,8 +125,8 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
-        $this->assertInstanceOf('Interop\Queue\PsrMessage', $result->getReply());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertInstanceOf(Message::class, $result->getReply());
         $this->assertSame(
             [
                 'status' => false,
@@ -452,8 +456,8 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
-        $this->assertInstanceOf('Interop\Queue\PsrMessage', $result->getReply());
+        $this->assertInstanceOf(Result::class, $result);
+        $this->assertInstanceOf(Message::class, $result->getReply());
         $this->assertSame(
             [
                 'status' => true,

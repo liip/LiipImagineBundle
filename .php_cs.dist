@@ -40,6 +40,9 @@ return Config::create()
         'escape_implicit_backslashes' => true,
         'explicit_indirect_variable' => true,
         'final_internal_class' => true,
+        'fopen_flags' => [
+            'b_mode' => true
+        ],
         'header_comment' => [
             'header' => $header,
             'separate' => 'both'

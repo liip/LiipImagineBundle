@@ -61,7 +61,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->willReturn(fopen('data://text/plain,foo', 'r'));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
@@ -88,7 +88,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->willReturn(fopen('data://text/plain,foo', 'r'));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
