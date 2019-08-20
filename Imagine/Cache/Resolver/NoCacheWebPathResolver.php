@@ -43,9 +43,18 @@ class NoCacheWebPathResolver implements ResolverInterface
      */
     public function resolve($path, $filter)
     {
-        return sprintf('%s://%s/%s',
+        $port = '';
+        if ('https' === $this->requestContext->getScheme() && 443 !== $this->requestContext->getHttpsPort()) {
+            $port = ":{$this->requestContext->getHttpsPort()}";
+        }
+        if ('http' === $this->requestContext->getScheme() && 80 !== $this->requestContext->getHttpPort()) {
+            $port = ":{$this->requestContext->getHttpPort()}";
+        }
+
+        return sprintf('%s://%s%s/%s',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
+            $port,
             ltrim(PathHelper::filePathToUrlPath($path), '/')
         );
     }
