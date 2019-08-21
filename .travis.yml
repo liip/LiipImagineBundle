@@ -78,6 +78,8 @@ before_install:
   - if [[ "$COVERALLS_ENABLED" == "true" ]]; then
       travis_retry composer require --dev satooshi/php-coveralls:^2.0 --no-update $COMPOSER_FLAGS;
     fi
+  - pecl channel-update pecl.php.net
+  - yes | pecl install imagick
 
 install:
   - travis_retry composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS
