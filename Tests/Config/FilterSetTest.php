@@ -31,14 +31,20 @@ class FilterSetTest extends TestCase
     public function testSetFiltersWithValidFilterSuccess()
     {
         $filterMock = $this->createMock(FilterInterface::class);
-        $this->buildFilterSet([$filterMock]);
+        $stack = $this->buildFilterSet([$filterMock]);
+
+        $this->assertInstanceOf(Stack::class, $stack);
+        $this->assertSame('filter_name', $stack->getName());
+        $this->assertSame('data_loader', $stack->getDataLoader());
+        $this->assertSame(42, $stack->getQuality());
+        $this->assertSame([$filterMock], $stack->getFilters());
     }
 
     /**
      * @param array $filters
      */
-    private function buildFilterSet(array $filters)
+    private function buildFilterSet(array $filters): Stack
     {
-        new Stack('filter_name', 'data_loader', 42, $filters);
+        return new Stack('filter_name', 'data_loader', 42, $filters);
     }
 }
