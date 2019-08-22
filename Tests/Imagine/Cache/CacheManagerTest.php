@@ -19,6 +19,7 @@ use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
@@ -545,17 +546,13 @@ class CacheManagerTest extends AbstractTest
     public function testShouldDispatchCachePreResolveEvent()
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
-        $arguments = [new CacheResolveEvent('cats.jpg', 'thumbnail'), ImagineEvents::PRE_RESOLVE];
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
-
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(...$arguments);
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
+                new CacheResolveEvent('cats.jpg', 'thumbnail'),
+                ImagineEvents::PRE_RESOLVE
+            ]));
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -570,18 +567,14 @@ class CacheManagerTest extends AbstractTest
 
     public function testShouldDispatchCachePostResolveEvent()
     {
-        $arguments = [new CacheResolveEvent('cats.jpg', 'thumbnail'), ImagineEvents::POST_RESOLVE];
-
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
-
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(...$arguments);
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
+                new CacheResolveEvent('cats.jpg', 'thumbnail'),
+                ImagineEvents::POST_RESOLVE
+            ]));
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -596,27 +589,18 @@ class CacheManagerTest extends AbstractTest
 
     public function testShouldAllowToPassChangedDataFromPreResolveEventToResolver()
     {
-        $arguments = [$this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::PRE_RESOLVE];
-
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
-
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(...$arguments)
-            ->willReturnCallback(function ($event, $name) use ($dispatcher) {
-                if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-                    $name->setPath('changed_path');
-                    $name->setFilter('changed_filter');
-                }  else {
-                    $event->setPath('changed_path');
-                    $event->setFilter('changed_filter');
-                }
-            });
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
+                $this->isInstanceOf(CacheResolveEvent::class),
+                ImagineEvents::PRE_RESOLVE
+            ]))
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+                $event->setPath('changed_path');
+                $event->setFilter('changed_filter');
+            }));
 
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
@@ -638,18 +622,12 @@ class CacheManagerTest extends AbstractTest
     public function testShouldAllowToGetResolverByFilterChangedInPreResolveEvent()
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->willReturnCallback(function ($event, $name) use ($dispatcher) {
-                if ($dispatcher instanceof ContractsEventDispatcherInterface) {
-                    $event->setFilter('thumbnail');
-                }  else {
-                    $name->setFilter('thumbnail');
-                    ;
-                }
-            });
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+                $event->setFilter('thumbnail');
+            }));
 
         $cacheManager = $this
             ->getMockBuilder(CacheManager::class)
@@ -672,42 +650,27 @@ class CacheManagerTest extends AbstractTest
 
     public function testShouldAllowToPassChangedDataFromPreResolveEventToPostResolveEvent()
     {
-        $arguments = [$this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::PRE_RESOLVE];
-
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
-
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->with(...$arguments)
-            ->willReturnCallback(function ($event, $name) use ($dispatcher) {
-                if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-                    $name->setPath('changed_path');
-                    $name->setFilter('changed_filter');
-                }  else {
-                    $event->setPath('changed_path');
-                    $event->setFilter('changed_filter');
-                }
-            });
-
-        $arguments = [$this->logicalAnd(
-            $this->isInstanceOf(CacheResolveEvent::class),
-            $this->attributeEqualTo('path', 'changed_path'),
-            $this->attributeEqualTo('filter', 'changed_filter')
-        ), ImagineEvents::POST_RESOLVE];
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
+                $this->isInstanceOf(CacheResolveEvent::class),
+                ImagineEvents::PRE_RESOLVE
+            ]))
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+                $event->setPath('changed_path');
+                $event->setFilter('changed_filter');
+            }));
 
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(...$arguments);
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [$this->logicalAnd(
+                $this->isInstanceOf(CacheResolveEvent::class),
+                $this->attributeEqualTo('path', 'changed_path'),
+                $this->attributeEqualTo('filter', 'changed_filter')
+            ), ImagineEvents::POST_RESOLVE]));
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -722,25 +685,17 @@ class CacheManagerTest extends AbstractTest
 
     public function testShouldReturnUrlChangedInPostResolveEvent()
     {
-        $arguments = [$this->isInstanceOf(CacheResolveEvent::class), ImagineEvents::POST_RESOLVE];
-
         $dispatcher = $this->createEventDispatcherInterfaceMock();
-
-        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-            $arguments = [$arguments[1], $arguments[0]];
-        }
-
         $dispatcher
             ->expects($this->at(1))
             ->method('dispatch')
-            ->with(...$arguments)
-            ->willReturnCallback(function ($event, $name) use ($dispatcher) {
-                if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
-                    $name->setUrl('changed_url');
-                }  else {
-                    $event->setUrl('changed_url');
-                }
-            });
+            ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
+                $this->isInstanceOf(CacheResolveEvent::class),
+                ImagineEvents::POST_RESOLVE
+            ]))
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+                $event->setUrl('changed_url');
+            }));
 
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
@@ -761,5 +716,39 @@ class CacheManagerTest extends AbstractTest
         return $resolver = $this
             ->getMockBuilder(CacheManagerAwareResolver::class)
             ->getMock();
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param EventDispatcherInterface $dispatcher
+     * @param callable $callable
+     * @return callable
+     */
+    private function getDispatcherCallbackWithBC(EventDispatcherInterface $dispatcher, callable $callable): callable
+    {
+        return function ($event, $name) use ($dispatcher, $callable) {
+            if ($dispatcher instanceof ContractsEventDispatcherInterface) {
+                $callable($event, $name);
+            } else {
+                $callable($name, $event);
+            }
+        };
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param EventDispatcherInterface $dispatcher
+     * @param array $arguments
+     * @return array
+     */
+    private function getDispatcherArgumentsWithBC(EventDispatcherInterface $dispatcher, array $arguments): array
+    {
+        if (!$dispatcher instanceof ContractsEventDispatcherInterface) {
+            $arguments = [$arguments[1], $arguments[0]];
+        }
+
+        return $arguments;
     }
 }
