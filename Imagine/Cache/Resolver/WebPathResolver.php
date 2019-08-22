@@ -69,8 +69,8 @@ class WebPathResolver implements ResolverInterface
     public function resolve($path, $filter)
     {
         return sprintf('%s/%s',
-            $this->getBaseUrl(),
-            $this->getFileUrl($path, $filter)
+            rtrim($this->getBaseUrl(), '/'),
+            ltrim($this->getFileUrl($path, $filter), '/')
         );
     }
 
