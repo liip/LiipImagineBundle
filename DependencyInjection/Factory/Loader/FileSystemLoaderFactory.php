@@ -26,6 +26,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     {
         $locatorDefinition = new ChildDefinition(sprintf('liip_imagine.binary.locator.%s', $config['locator']));
         $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+        $locatorDefinition->replaceArgument(1, $config['allow_unresolvable_data_roots']);
 
         $definition = $this->getChildLoaderDefinition();
         $definition->replaceArgument(2, $locatorDefinition);
@@ -66,6 +67,9 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                     ->prototype('scalar')
                         ->cannotBeEmpty()
                     ->end()
+                ->end()
+                ->booleanNode('allow_unresolvable_data_roots')
+                    ->defaultFalse()
                 ->end()
                 ->arrayNode('bundle_resources')
                     ->addDefaultsIfNotSet()
