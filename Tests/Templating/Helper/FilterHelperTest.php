@@ -19,6 +19,8 @@ use Symfony\Component\Templating\Helper\Helper;
 /**
  * @covers \Liip\ImagineBundle\Templating\FilterTrait
  * @covers \Liip\ImagineBundle\Templating\Helper\FilterHelper
+ *
+ * @group legacy
  */
 class FilterHelperTest extends AbstractFilterTest
 {

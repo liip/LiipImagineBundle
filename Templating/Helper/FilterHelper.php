@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Templating\Helper;
 
+@trigger_error('The '.FilterHelper::class.' class is deprecated since version 2.2 and will be removed in 3.0; use Twig instead.', E_USER_DEPRECATED);
+
 use Liip\ImagineBundle\Templating\FilterTrait;
 use Symfony\Component\Templating\Helper\Helper;
 
