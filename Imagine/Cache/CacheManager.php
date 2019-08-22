@@ -20,6 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class CacheManager
 {
@@ -195,14 +196,29 @@ class CacheManager
         }
 
         $preEvent = new CacheResolveEvent($path, $filter);
-        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
+        $this->dispatchWithBC($preEvent, ImagineEvents::PRE_RESOLVE);
 
         $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
-        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
+        $this->dispatchWithBC($postEvent, ImagineEvents::POST_RESOLVE);
 
         return $postEvent->getUrl();
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param CacheResolveEvent $event
+     * @param string $eventName
+     */
+    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    {
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
+        }
     }
 
     /**
