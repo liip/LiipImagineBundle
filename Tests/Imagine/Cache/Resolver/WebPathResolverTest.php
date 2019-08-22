@@ -207,6 +207,26 @@ class WebPathResolverTest extends TestCase
         );
     }
 
+    public function testResolveWithPrefixCacheEmpty()
+    {
+        $requestContext = new RequestContext();
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('thehost');
+        $requestContext->setBaseUrl('/theBasePath/app.php');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $requestContext,
+            '/aWebRoot',
+            ''
+        );
+
+        $this->assertSame(
+            'theschema://thehost/theBasePath/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
+        );
+    }
+
     public function testComposeSchemaHostAndBasePathWithDirsOnlyAndFileUrlOnResolve()
     {
         $requestContext = new RequestContext();
