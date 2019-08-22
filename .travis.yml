@@ -7,7 +7,7 @@ cache:
 
 env:
   global:
-    - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+    - SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
     - SYMFONY_PHPUNIT_VERSION="6.5"

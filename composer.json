@@ -43,7 +43,7 @@
         "symfony/console": "^3.4|^4.2",
         "symfony/dependency-injection": "^3.4|^4.2",
         "symfony/form": "^3.4|^4.2",
-        "symfony/phpunit-bridge": "^4.2",
+        "symfony/phpunit-bridge": "^4.3",
         "symfony/validator": "^3.4|^4.2",
         "symfony/yaml": "^3.4|^4.2",
         "twig/twig": "^1.12|^2.0"
