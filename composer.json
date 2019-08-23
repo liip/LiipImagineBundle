@@ -64,8 +64,6 @@
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
         "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "config": {
         "sort-packages": true
     },
