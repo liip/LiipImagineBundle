@@ -186,6 +186,14 @@ EOF;
         );
     }
 
+    public function testTemplatingFilterExtensionIsDeprecated()
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
+    }
+
     public static function provideFactoryData()
     {
         return [
@@ -324,5 +332,13 @@ EOF;
             $implodeArrayElements($providedArguments),
             $implodeArrayElements($expectedArguments),
         ]));
+    }
+
+    private function assertDefinitionIsDeprecated(string $id, string $message)
+    {
+        $definition = $this->containerBuilder->getDefinition($id);
+
+        $this->assertTrue($definition->isDeprecated());
+        $this->assertSame($message, $definition->getDeprecationMessage($id));
     }
 }
