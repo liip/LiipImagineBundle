@@ -38,4 +38,8 @@
         <ini name="intl.error_level" value="0" />
         <ini name="memory_limit" value="-1" />
     </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
 </phpunit>
