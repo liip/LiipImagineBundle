@@ -95,10 +95,6 @@ class Configuration implements ConfigurationInterface
                         throw new \LogicException('Resolvers has to be array');
                     }
 
-                    if (false === \array_key_exists('default', $v['resolvers'])) {
-                        $v['resolvers']['default'] = ['web_path' => null];
-                    }
-
                     return $v;
                 })
             ->end();
