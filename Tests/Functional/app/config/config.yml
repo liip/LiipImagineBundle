@@ -14,9 +14,6 @@ framework:
     translator:     ~
     test:           ~
 
-    templating:
-        engines: [ 'php' ]
-
     session:
         storage_id: session.storage.mock_file
 
