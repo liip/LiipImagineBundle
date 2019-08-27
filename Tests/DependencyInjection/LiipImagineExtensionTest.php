@@ -222,6 +222,22 @@ EOF;
         $this->assertSame($factory, $definition->getFactory());
     }
 
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled()
+    {
+        $this->createConfiguration([
+            'templating' => true,
+        ]);
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled()
+    {
+        $this->createConfiguration([
+            'templating' => false,
+        ]);
+        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
     protected function createEmptyConfiguration(): void
     {
         $this->createConfiguration([]);
@@ -229,10 +245,6 @@ EOF;
 
     protected function createFullConfiguration(): void
     {
-        if (!class_exists(Parser::class)) {
-            $this->markTestSkipped('Requires the symfony/yaml package.');
-        }
-
         $this->createConfiguration($this->getFullConfig());
     }
 
@@ -309,6 +321,14 @@ EOF;
     private function assertHasDefinition($id)
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
+    }
+
+    /**
+     * @param string $id
+     */
+    private function assertHasNotDefinition($id)
+    {
+        $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
     }
 
     /**
