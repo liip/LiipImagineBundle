@@ -106,28 +106,39 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertSame($factory, $definition->getFactory());
     }
 
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled()
+    {
+        $this->createConfiguration([
+            'templating' => true,
+        ]);
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled()
+    {
+        $this->createConfiguration([
+            'templating' => false,
+        ]);
+        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
     protected function createEmptyConfiguration()
     {
-        $this->containerBuilder = new ContainerBuilder();
-        $loader = new LiipImagineExtension();
-        $loader->addLoaderFactory(new FileSystemLoaderFactory());
-        $loader->addResolverFactory(new WebPathResolverFactory());
-        $loader->load([[]], $this->containerBuilder);
-
-        $this->assertInstanceOf(ContainerBuilder::class, $this->containerBuilder);
+        $this->createConfiguration([]);
     }
 
     protected function createFullConfiguration()
     {
-        if (!class_exists(Parser::class)) {
-            $this->markTestSkipped('Requires the symfony/yaml package.');
-        }
+        $this->createConfiguration($this->getFullConfig());
+    }
 
+    protected function createConfiguration(array $config)
+    {
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
         $loader->addResolverFactory(new WebPathResolverFactory());
-        $loader->load([$this->getFullConfig()], $this->containerBuilder);
+        $loader->load([$config], $this->containerBuilder);
 
         $this->assertInstanceOf(ContainerBuilder::class, $this->containerBuilder);
     }
@@ -196,6 +207,14 @@ EOF;
     private function assertHasDefinition($id)
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
+    }
+
+    /**
+     * @param string $id
+     */
+    private function assertHasNotDefinition($id)
+    {
+        $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
     }
 
     /**
