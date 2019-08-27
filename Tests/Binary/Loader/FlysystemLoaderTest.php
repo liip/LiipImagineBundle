@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @requires PHP 5.4
@@ -43,7 +44,9 @@ class FlysystemLoaderTest extends AbstractTest
      */
     public function getFlysystemLoader()
     {
-        return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
+        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
+
+        return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
     }
 
     public function testShouldImplementLoaderInterface()

@@ -29,6 +29,13 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $locatorDefinition->replaceArgument(1, $config['allow_unresolvable_data_roots']);
 
         $definition = $this->getChildLoaderDefinition();
+
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $definition->replaceArgument(0, $mimeTypes);
+            $definition->replaceArgument(1, $mimeTypes);
+        }
+
         $definition->replaceArgument(2, $locatorDefinition);
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);

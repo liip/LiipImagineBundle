@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Data;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Data\DataManager
@@ -296,11 +297,20 @@ class DataManagerTest extends AbstractTest
             ->willReturn($mimeType);
 
         $extensionGuesser = $this->createExtensionGuesserInterfaceMock();
-        $extensionGuesser
-            ->expects($this->once())
-            ->method('guess')
-            ->with($mimeType)
-            ->willReturn($expectedFormat);
+
+        if ($extensionGuesser instanceof MimeTypesInterface) {
+            $extensionGuesser
+                ->expects($this->once())
+                ->method('getExtensions')
+                ->with($mimeType)
+                ->willReturn([$expectedFormat]);
+        } else {
+            $extensionGuesser
+                ->expects($this->once())
+                ->method('guess')
+                ->with($mimeType)
+                ->willReturn($expectedFormat);
+        }
 
         $config = $this->createFilterConfigurationMock();
         $config

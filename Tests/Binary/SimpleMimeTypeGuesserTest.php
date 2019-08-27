@@ -15,6 +15,8 @@ use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
@@ -65,6 +67,10 @@ class SimpleMimeTypeGuesserTest extends TestCase
      */
     private function getSimpleMimeTypeGuesser()
     {
+        if (interface_exists(SymfonyMimeTypeGuesserInterface::class)) {
+            return new SimpleMimeTypeGuesser(MimeTypes::getDefault());
+        }
+
         return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
     }
 }

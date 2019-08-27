@@ -19,8 +19,11 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 class LiipImagineExtension extends Extension
 {
@@ -71,6 +74,13 @@ class LiipImagineExtension extends Extension
             $configs
         );
 
+        if (interface_exists(MimeTypeGuesserInterface::class)) {
+            $mimeTypes = new Definition(MimeTypes::class);
+            $mimeTypes->setFactory([MimeTypes::class, 'getDefault']);
+
+            $container->setDefinition('liip_imagine.mime_types', $mimeTypes);
+        }
+
         $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
         $container->setParameter('liip_imagine.loaders', $config['loaders']);
 
@@ -106,6 +116,15 @@ class LiipImagineExtension extends Extension
             $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
             ['@LiipImagine/Form/form_div_layout.html.twig']
         ));
+
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $container->getDefinition('liip_imagine.binary.mime_type_guesser')
+                ->replaceArgument(0, $mimeTypes);
+
+            $container->getDefinition('liip_imagine.data.manager')
+                ->replaceArgument(1, $mimeTypes);
+        }
     }
 
     /**
