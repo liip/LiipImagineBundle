@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Data;
 
+use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -21,6 +22,17 @@ use Symfony\Component\Mime\MimeTypesInterface;
  */
 class DataManagerTest extends AbstractTest
 {
+    public function testThrowsIfConstructedWithWrongTypeArguments()
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+
+        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
+        $config = $this->createFilterConfigurationMock();
+
+        new DataManager($mimeTypeGuesser, 'foo', $config, 'default');
+    }
+
     public function testUseDefaultLoaderUsedIfNoneSet()
     {
         $loader = $this->createBinaryLoaderInterfaceMock();

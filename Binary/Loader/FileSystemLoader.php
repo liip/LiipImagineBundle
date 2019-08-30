@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface as DeprecatedExtensionGuesserInterface;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface as DeprecatedMimeTypeGuesserInterface;
@@ -45,6 +46,14 @@ class FileSystemLoader implements LoaderInterface
         $extensionGuesser,
         LocatorInterface $locator
     ) {
+        if (!$mimeGuesser instanceof MimeTypeGuesserInterface && !$mimeGuesser instanceof DeprecatedMimeTypeGuesserInterface) {
+            throw new InvalidArgumentException('$mimeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
+        }
+
+        if (!$extensionGuesser instanceof MimeTypesInterface && !$extensionGuesser instanceof DeprecatedExtensionGuesserInterface) {
+            throw new InvalidArgumentException('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+        }
+
         if (interface_exists(MimeTypeGuesserInterface::class) && $mimeGuesser instanceof DeprecatedMimeTypeGuesserInterface) {
             @trigger_error(sprintf('Passing a %s to "%s()" is deprecated since Symfony 4.3, pass a "%s" instead.', DeprecatedMimeTypeGuesserInterface::class, __METHOD__, MimeTypeGuesserInterface::class), E_USER_DEPRECATED);
         }

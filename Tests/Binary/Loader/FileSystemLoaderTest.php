@@ -34,6 +34,44 @@ class FileSystemLoaderTest extends TestCase
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
+    /**
+     * @dataProvider provideMultipleWrongArgumentsConstructorCases
+     *
+     * @param $expectedMessage
+     * @param $mimeGuesser
+     * @param $extensionGuesser
+     */
+    public function testThrowsIfConstructedWithWrongTypeArguments($expectedMessage, $mimeGuesser, $extensionGuesser)
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        new FileSystemLoader(
+            $mimeGuesser,
+            $extensionGuesser,
+            $this->getFileSystemLocator( $this->getDefaultDataRoots())
+        );
+    }
+
+    /**
+     * @return string[][]
+     */
+    public static function provideMultipleWrongArgumentsConstructorCases()
+    {
+        return [
+            [
+                '$mimeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface',
+                'foo',
+                'bar'
+            ],
+            [
+                '$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface',
+                MimeTypeGuesser::getInstance(),
+                'bar'
+            ],
+        ];
+    }
+
     public function testImplementsLoaderInterface()
     {
         $this->assertInstanceOf(LoaderInterface::class, $this->getFileSystemLoader());
