@@ -59,17 +59,6 @@ class LiipImagineExtensionTest extends AbstractTest
         );
     }
 
-    public function testCustomRouteRequirements()
-    {
-        $this->createFullConfiguration();
-        $param = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
-
-        $this->assertTrue(isset($param['small']['filters']['route']['requirements']));
-
-        $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
-        $this->assertSame('value1', $variable1, sprintf('%s parameter is correct', $variable1));
-    }
-
     public static function provideFactoryData()
     {
         return [
@@ -133,8 +122,6 @@ filter_sets:
     small:
         filters:
             thumbnail: { size: [100, ~], mode: inset }
-            route:
-                requirements: { variable1: 'value1' }
         quality: 80
     medium_small_cropped:
         filters:
