@@ -25,6 +25,18 @@ The default configuration for the bundle looks like this:
         cache:                default
         data_loader:          default
         default_image:        null
+        default_filter_set_settings:
+            quality:              100
+            jpeg_quality:         ~
+            png_compression_level:  ~
+            png_compression_filter: ~
+            animated:             false
+            format:               ~
+            cache:                ~
+            data_loader:          ~
+            default_image:        null
+            filters: []
+            post_processors: []
         controller:
             filter_action:         liip_imagine.controller:filterAction
             filter_runtime_action: liip_imagine.controller:filterRuntimeAction
@@ -64,6 +76,9 @@ There are several configuration options available:
       loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
+* ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in
+``filter_sets``. These values will be overriden if they are specified in the each set. In case of ``filters`` and
+``post_processors``, the specified values will be merged with the default ones.
 * ``filter_sets`` - specify the filter sets that you want to define and use.
 
 Each filter set that you specify has the following options:

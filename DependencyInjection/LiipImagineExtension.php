@@ -96,7 +96,9 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.default_image', $config['default_image']);
 
-        $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
+        $filterSets = $this->createFilterSets($config['default_filter_set_settings'], $config['filter_sets']);
+
+        $container->setParameter('liip_imagine.filter_sets', $filterSets);
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
@@ -106,6 +108,13 @@ class LiipImagineExtension extends Extension
             $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
             ['@LiipImagine/Form/form_div_layout.html.twig']
         ));
+    }
+
+    private function createFilterSets(array $defaultFilterSets, array $filterSets): array
+    {
+        return array_map(function (array $filterSet) use ($defaultFilterSets) {
+            return array_replace_recursive($defaultFilterSets, $filterSet);
+        }, $filterSets);
     }
 
     /**
