@@ -57,8 +57,8 @@ class MozJpegPostProcessor extends AbstractPostProcessor
         return $this;
     }
 
-    /**
-     * @inheritDoc
+    /*
+     * @throws ProcessFailedException
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
@@ -79,9 +79,9 @@ class MozJpegPostProcessor extends AbstractPostProcessor
     }
 
     /**
-     * @param array $options
+     * @param string[] $options
      *
-     * @return array
+     * @return string[]
      */
     private function getProcessArguments(array $options = []): array
     {

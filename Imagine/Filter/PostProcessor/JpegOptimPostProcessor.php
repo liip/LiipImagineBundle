@@ -103,8 +103,8 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
         return $this;
     }
 
-    /**
-     * @inheritDoc
+    /*
+     * @throws ProcessFailedException
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
@@ -132,9 +132,9 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
     }
 
     /**
-     * @param array $options
+     * @param string[] $options
      *
-     * @return array
+     * @return string[]
      */
     private function getProcessArguments(array $options = []): array
     {

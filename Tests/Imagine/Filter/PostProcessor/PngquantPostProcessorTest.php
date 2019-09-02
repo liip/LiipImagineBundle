@@ -26,7 +26,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      *
      * @expectedDeprecation The %s::setQuality() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
-    public function testDeprecatedSetQualityMethod()
+    public function testDeprecatedSetQualityMethod(): void
     {
         $this->getPostProcessorInstance()->setQuality(50);
     }
@@ -36,7 +36,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      *
      * @expectedDeprecation Passing the "quality" option as a string was deprecated in %s and will be removed in %s. Instead, pass wither an integer representing the max value or an array representing the minimum and maximum values.
      */
-    public function testQualityOptionDeprecation()
+    public function testQualityOptionDeprecation(): void
     {
         $this->getProcessArguments(['quality' => '0-100']);
     }
@@ -45,7 +45,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "quality" option cannot have a greater minimum value value than maximum quality value
      */
-    public function testQualityOptionThrowsOnLargerMinThanMaxValue()
+    public function testQualityOptionThrowsOnLargerMinThanMaxValue(): void
     {
         $this->getProcessArguments(['quality' => [75, 25]]);
     }
@@ -54,7 +54,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "quality" option value(s) must be an int between 0 and 100
      */
-    public function testQualityOptionThrowsOnOutOfScopeMaxInt()
+    public function testQualityOptionThrowsOnOutOfScopeMaxInt(): void
     {
         $this->getProcessArguments(['quality' => [25, 1000]]);
     }
@@ -63,7 +63,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "quality" option value(s) must be an int between 0 and 100
      */
-    public function testQualityOptionThrowsOnOutOfScopeMinInt()
+    public function testQualityOptionThrowsOnOutOfScopeMinInt(): void
     {
         $this->getProcessArguments(['quality' => [-1000, 25]]);
     }
@@ -72,7 +72,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "speed" option must be an int between 1 and 11
      */
-    public function testSpeedOptionThrowsOnOutOfScopeInt()
+    public function testSpeedOptionThrowsOnOutOfScopeInt(): void
     {
         $this->getProcessArguments(['speed' => 15]);
     }
@@ -81,15 +81,12 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "dithering" option must be a float between 0 and 1 or a bool
      */
-    public function testDitheringOptionThrowsOnOutOfScopeInt()
+    public function testDitheringOptionThrowsOnOutOfScopeInt(): void
     {
         $this->getProcessArguments(['dithering' => 2]);
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessArgumentsData()
+    public static function provideProcessArgumentsData(): array
     {
         $data = [
             [[], ['80-100']],
@@ -115,15 +112,12 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessArgumentsData
      */
-    public function testProcessArguments(array $options, array $expected)
+    public function testProcessArguments(array $options, array $expected): void
     {
         $this->assertSame($expected, $this->getProcessArguments($options));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessData()
+    public static function provideProcessData(): array
     {
         $file = 'stdio-file-content-string';
         $data = [
@@ -148,12 +142,8 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @param string $content
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcess($content, array $options, $expected)
+    public function testProcess(string $content, array $options, string $expected): void
     {
         $file = sys_get_temp_dir().'/test.png';
         file_put_contents($file, $content);
@@ -171,17 +161,14 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
      * @dataProvider provideProcessData
      *
      * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
-     *
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcessError($content, array $options, $expected)
+    public function testProcessError(string $content, array $options, string $expected): void
     {
         $process = $this->getPostProcessorInstance([static::getPostProcessAsStdInErrorExecutable()]);
         $process->process(new Binary('content', 'image/png', 'png'), $options);
     }
 
-    public function testProcessWithNonSupportedMimeType()
+    public function testProcessWithNonSupportedMimeType(): void
     {
         $binary = $this->getBinaryInterfaceMock();
 
@@ -193,12 +180,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return PngquantPostProcessor
-     */
-    protected function getPostProcessorInstance(array $parameters = [])
+    protected function getPostProcessorInstance(array $parameters = []): PngquantPostProcessor
     {
         return new PngquantPostProcessor($parameters[0] ?? static::getPostProcessAsStdInExecutable());
     }

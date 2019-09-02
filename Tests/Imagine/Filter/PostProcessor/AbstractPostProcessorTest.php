@@ -12,16 +12,18 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor
  */
 class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    public function testIsBinaryOfType()
+    public function testIsBinaryOfType(): void
     {
         $binary = $this->getBinaryInterfaceMock();
 
@@ -47,7 +49,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertTrue($m->invoke($processor, $binary));
     }
 
-    public function testCreateProcess()
+    public function testCreateProcess(): void
     {
         $optionTimeout = 120.0;
         $optionWorkDir = getcwd();
@@ -67,10 +69,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertSame($optionEnvVars, $this->getProtectedReflectionPropertyVisible($b, 'env')->getValue($b));
     }
 
-    /**
-     * @return array[]
-     */
-    public static function provideWriteTemporaryFileData()
+    public static function provideWriteTemporaryFileData(): array
     {
         $find = new Finder();
         $data = [];
@@ -87,14 +86,8 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideWriteTemporaryFileData
-     *
-     * @param string $content
-     * @param string $mimeType
-     * @param string $format
-     * @param string $prefix
-     * @param array  $options
      */
-    public function testWriteTemporaryFile($content, $mimeType, $format, $prefix, array $options)
+    public function testWriteTemporaryFile(string $content, string $mimeType, string $format, string $prefix, array $options): void
     {
         $writer = $this->getProtectedReflectionMethodVisible($processor = $this->getPostProcessorInstance(), 'writeTemporaryFile');
 
@@ -120,10 +113,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
         }
     }
 
-    /**
-     * @return array[]
-     */
-    public static function provideIsValidReturnData()
+    public static function provideIsValidReturnData(): array
     {
         return [
             [[], [], true],
@@ -140,15 +130,11 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideIsValidReturnData
-     *
-     * @param array $validReturns
-     * @param array $errorString
-     * @param bool  $expected
      */
-    public function testIsValidReturn(array $validReturns, array $errorString, $expected)
+    public function testIsValidReturn(array $validReturns, array $errorString, bool $expected): void
     {
         $process = $this
-            ->getMockBuilder('\Symfony\Component\Process\Process')
+            ->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,19 +155,14 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertSame($expected, $result);
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|AbstractPostProcessor
-     */
-    protected function getPostProcessorInstance(array $parameters = [])
+    protected function getPostProcessorInstance(array $parameters = []): PostProcessorInterface
     {
         if (count($parameters) === 0) {
             $parameters = [static::getPostProcessAsStdInExecutable()];
         }
 
         return $this
-            ->getMockBuilder('\Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor')
+            ->getMockBuilder(AbstractPostProcessor::class)
             ->setConstructorArgs($parameters)
             ->getMockForAbstractClass();
     }

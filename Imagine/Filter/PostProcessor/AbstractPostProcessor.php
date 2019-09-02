@@ -35,23 +35,13 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
      */
     private $filesystem;
 
-    /**
-     * @param string      $executablePath
-     * @param string|null $temporaryRootPath
-     */
-    public function __construct($executablePath, $temporaryRootPath = null)
+    public function __construct(string $executablePath, string $temporaryRootPath = null)
     {
         $this->executablePath = $executablePath;
         $this->temporaryRootPath = $temporaryRootPath;
         $this->filesystem = new Filesystem();
     }
 
-    /**
-     * @param array $arguments
-     * @param array $options
-     *
-     * @return Process
-     */
     protected function createProcess(array $arguments = [], array $options = []): Process
     {
         $process = new Process($arguments);
@@ -75,45 +65,22 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
         return $process;
     }
 
-    /**
-     * @param BinaryInterface $binary
-     *
-     * @return bool
-     */
     protected function isBinaryTypeJpgImage(BinaryInterface $binary): bool
     {
         return $this->isBinaryTypeMatch($binary, ['image/jpeg', 'image/jpg']);
     }
 
-    /**
-     * @param BinaryInterface $binary
-     *
-     * @return bool
-     */
     protected function isBinaryTypePngImage(BinaryInterface $binary): bool
     {
         return $this->isBinaryTypeMatch($binary, ['image/png']);
     }
 
-    /**
-     * @param BinaryInterface $binary
-     * @param string[]        $types
-     *
-     * @return bool
-     */
     protected function isBinaryTypeMatch(BinaryInterface $binary, array $types): bool
     {
         return in_array($binary->getMimeType(), $types, true);
     }
 
-    /**
-     * @param BinaryInterface $binary
-     * @param array           $options
-     * @param null            $prefix
-     *
-     * @return string
-     */
-    protected function writeTemporaryFile(BinaryInterface $binary, array $options = [], $prefix = null): string
+    protected function writeTemporaryFile(BinaryInterface $binary, array $options = [], string $prefix = null): string
     {
         $temporary = $this->acquireTemporaryFilePath($options, $prefix);
 
@@ -126,13 +93,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
         return $temporary;
     }
 
-    /**
-     * @param array  $options
-     * @param string $prefix
-     *
-     * @return string
-     */
-    protected function acquireTemporaryFilePath(array $options, $prefix = null): string
+    protected function acquireTemporaryFilePath(array $options, string $prefix = null): string
     {
         $root = $options['temp_dir'] ?? $this->temporaryRootPath ?: sys_get_temp_dir();
 
@@ -152,19 +113,16 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
     }
 
     /**
-     * @param Process $process
-     * @param array   $validReturns
-     * @param array   $errorStrings
-     *
-     * @return bool
+     * @param int[] $validReturns
+     * @param string[] $errors
      */
-    protected function isSuccessfulProcess(Process $process, array $validReturns = [0], array $errorStrings = ['ERROR']): bool
+    protected function isSuccessfulProcess(Process $process, array $validReturns = [0], array $errors = ['ERROR']): bool
     {
-        if (count($validReturns) > 0 && !in_array($process->getExitCode(), $validReturns)) {
+        if (count($validReturns) > 0 && !in_array($process->getExitCode(), $validReturns, true)) {
             return false;
         }
 
-        foreach ($errorStrings as $string) {
+        foreach ($errors as $string) {
             if (false !== strpos($process->getOutput(), $string)) {
                 return false;
             }
@@ -173,10 +131,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
         return true;
     }
 
-    /**
-     * @param string $method
-     */
-    protected function triggerSetterMethodDeprecation($method): void
+    protected function triggerSetterMethodDeprecation(string $method): void
     {
         @trigger_error(sprintf('The %s() method was deprecated in 2.2 and will be removed in 3.0. You must '
             .'setup the class state via its __construct() method. You can still pass filter-specific options to the '.

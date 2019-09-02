@@ -25,7 +25,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      * @group legacy
      * @expectedDeprecation The %s::setMax() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
-    public function testDeprecatedSetMaxMethod()
+    public function testDeprecatedSetMaxMethod(): void
     {
         $this->getPostProcessorInstance()->setMax(50);
     }
@@ -34,7 +34,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      * @group legacy
      * @expectedDeprecation The %s::setProgressive() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
-    public function testDeprecatedSetProgressiveMethod()
+    public function testDeprecatedSetProgressiveMethod(): void
     {
         $this->getPostProcessorInstance()->setProgressive(50);
     }
@@ -43,7 +43,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      * @group legacy
      * @expectedDeprecation The %s::setStripAll() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
-    public function testDeprecatedSetStripAllMethod()
+    public function testDeprecatedSetStripAllMethod(): void
     {
         $this->getPostProcessorInstance()->setStripAll(50);
     }
@@ -52,7 +52,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "quality" option must be an int between 0 and 100
      */
-    public function testInvalidLevelOption()
+    public function testInvalidLevelOption(): void
     {
         $this->getProcessArguments(['quality' => 1000]);
     }
@@ -64,7 +64,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedExceptionMessage the "max" and "quality" options cannot both be set
      * @expectedDeprecation The "max" option was deprecated in %s and will be removed in %s. Instead, use the "quality" option.
      */
-    public function testOptionThrowsWhenBothMaxAndQualityAreSet()
+    public function testOptionThrowsWhenBothMaxAndQualityAreSet(): void
     {
         $this->getProcessArguments(['max' => 50, 'quality' => 50]);
     }
@@ -74,15 +74,12 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
      *
      * @expectedDeprecation The "max" option was deprecated in %s and will be removed in %s. Instead, use the "quality" option.
      */
-    public function testInvalidStripDeprecationMessage()
+    public function testInvalidStripDeprecationMessage(): void
     {
         $this->assertContains('--max=50', $this->getProcessArguments(['max' => 50]));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessArgumentsData()
+    public static function provideProcessArgumentsData(): array
     {
         $data = [
             [[], ['--strip-all', '--all-progressive']],
@@ -103,12 +100,12 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessArgumentsData
      */
-    public function testProcessArguments(array $options, array $expected)
+    public function testProcessArguments(array $options, array $expected): void
     {
         $this->assertSame($expected, $this->getProcessArguments($options));
     }
 
-    public function testProcessWithNonSupportedMimeType()
+    public function testProcessWithNonSupportedMimeType(): void
     {
         $binary = $this->getBinaryInterfaceMock();
 
@@ -117,13 +114,10 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
             ->method('getMimeType')
             ->willReturn('application/x-php');
 
-        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
+        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessData()
+    public static function provideProcessData(): array
     {
         $file = file_get_contents(__FILE__);
         $data = [
@@ -144,12 +138,8 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @param string $content
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcess($content, array $options, $expected)
+    public function testProcess(string $content, array $options, string $expected): void
     {
         $file = sys_get_temp_dir().'/test.jpeg';
         file_put_contents($file, $content);
@@ -165,24 +155,15 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
      * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
-     *
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcessError($content, array $options, $expected)
+    public function testProcessError(string $content, array $options, string $expected): void
     {
         $process = $this->getPostProcessorInstance([static::getPostProcessAsFileFailingExecutable()]);
         $process->process(new Binary('content', 'image/jpeg', 'jpeg'), $options);
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return JpegOptimPostProcessor
-     */
-    protected function getPostProcessorInstance(array $parameters = [])
+    protected function getPostProcessorInstance(array $parameters = []): JpegOptimPostProcessor
     {
         return new JpegOptimPostProcessor($parameters[0] ?? static::getPostProcessAsFileExecutable());
     }

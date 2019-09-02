@@ -19,10 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
  */
 class InvalidOptionExceptionTest extends TestCase
 {
-    /**
-     * @return array[]
-     */
-    public static function provideExceptionMessageData()
+    public static function provideExceptionMessageData(): array
     {
         return [
             ['a foobar message', [], ''],
@@ -36,12 +33,8 @@ class InvalidOptionExceptionTest extends TestCase
 
     /**
      * @dataProvider provideExceptionMessageData
-     *
-     * @param string $message
-     * @param array  $options
-     * @param string $optionsText
      */
-    public function testExceptionMessage($message, array $options, $optionsText)
+    public function testExceptionMessage(string $message, array $options, string $optionsText): void
     {
         $exception = new InvalidOptionException($message, $options);
 

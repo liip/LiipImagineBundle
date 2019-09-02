@@ -25,7 +25,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "level" option must be an int between 0 and 7
      */
-    public function testInvalidLevelOption()
+    public function testInvalidLevelOption(): void
     {
         $this->getProcessArguments(['level' => 100]);
     }
@@ -34,7 +34,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
      * @expectedExceptionMessage the "interlace_type" option must be either 0 or 1
      */
-    public function testInvalidInterlaceOption()
+    public function testInvalidInterlaceOption(): void
     {
         $this->getProcessArguments(['interlace_type' => 10]);
     }
@@ -46,7 +46,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
      * @expectedExceptionMessage the "strip" and "strip_all" options cannot both be set
      * @expectedDeprecation The "strip_all" option was deprecated in %s and will be removed in %s. Instead, use the "strip" option.
      */
-    public function testInvalidStripOptionAndDeprecation()
+    public function testInvalidStripOptionAndDeprecation(): void
     {
         $this->getProcessArguments(['strip_all' => true, 'strip' => 'all']);
     }
@@ -56,7 +56,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
      *
      * @expectedDeprecation The "strip_all" option was deprecated in %s and will be removed in %s. Instead, use the "strip" option.
      */
-    public function testInvalidStripDeprecationMessage()
+    public function testInvalidStripDeprecationMessage(): void
     {
         $arguments = $this->getProcessArguments(['strip_all' => true]);
 
@@ -64,10 +64,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertSame('-strip', array_pop($arguments));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideSetupProcessBuilderData()
+    public static function provideSetupProcessBuilderData(): array
     {
         $data = [
             [[], ['-o7', '-strip', 'all']],
@@ -102,15 +99,12 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideSetupProcessBuilderData
      */
-    public function testSetupProcessBuilder(array $options, array $expected)
+    public function testSetupProcessBuilder(array $options, array $expected): void
     {
         $this->assertSame($expected, $this->getProcessArguments($options));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessData()
+    public static function provideProcessData(): array
     {
         $file = file_get_contents(__FILE__);
         $data = [
@@ -135,12 +129,8 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @param string $content
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcess($content, array $options, $expected)
+    public function testProcess(string $content, array $options, string $expected)
     {
         $file = sys_get_temp_dir().'/test.png';
         file_put_contents($file, $content);
@@ -158,17 +148,14 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
      * @dataProvider provideProcessData
      *
      * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
-     *
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcessError($content, array $options, $expected)
+    public function testProcessError(string $content, array $options, string $expected): void
     {
         $process = $this->getPostProcessorInstance([static::getPostProcessAsFileFailingExecutable()]);
         $process->process(new Binary('content', 'image/png', 'png'), $options);
     }
 
-    public function testProcessWithNonSupportedMimeType()
+    public function testProcessWithNonSupportedMimeType(): void
     {
         $binary = $this->getBinaryInterfaceMock();
 
@@ -177,15 +164,10 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
             ->method('getMimeType')
             ->willReturn('application/x-php');
 
-        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
+        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary));
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return OptiPngPostProcessor
-     */
-    protected function getPostProcessorInstance(array $parameters = [])
+    protected function getPostProcessorInstance(array $parameters = []): OptiPngPostProcessor
     {
         return new OptiPngPostProcessor($parameters[0] ?? static::getPostProcessAsFileExecutable());
     }

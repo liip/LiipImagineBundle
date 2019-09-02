@@ -46,8 +46,8 @@ class OptiPngPostProcessor extends AbstractPostProcessor
         $this->strip = $strip;
     }
 
-    /**
-     * @inheritDoc
+    /*
+     * @throws ProcessFailedException
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
@@ -75,9 +75,9 @@ class OptiPngPostProcessor extends AbstractPostProcessor
     }
 
     /**
-     * @param array $options
+     * @param string[] $options
      *
-     * @return array
+     * @return string[]
      */
     private function getProcessArguments(array $options = []): array
     {

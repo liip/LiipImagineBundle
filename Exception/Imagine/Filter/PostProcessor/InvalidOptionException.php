@@ -15,22 +15,13 @@ use Liip\ImagineBundle\Exception\ExceptionInterface;
 
 class InvalidOptionException extends \RuntimeException implements ExceptionInterface
 {
-    /**
-     * @param string $message
-     * @param array  $options
-     */
-    public function __construct($message, array $options = [])
+    public function __construct(string $message, array $options = [])
     {
         parent::__construct(sprintf('Invalid post-processor configuration provided (%s) with options %s.',
             $message, $this->stringifyOptions($options)));
     }
 
-    /**
-     * @param array $options
-     *
-     * @return string
-     */
-    private function stringifyOptions(array $options = [])
+    private function stringifyOptions(array $options = []): string
     {
         if (count($options) === 0) {
             return '[]';
@@ -47,10 +38,8 @@ class InvalidOptionException extends \RuntimeException implements ExceptionInter
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
-    private function stringifyOptionValue($value)
+    private function stringifyOptionValue($value): string
     {
         if (is_scalar($value)) {
             return $value;

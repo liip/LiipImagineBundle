@@ -26,15 +26,12 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
      *
      * @expectedDeprecation The %s::setQuality() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
-    public function testDeprecatedSetQualityMethod()
+    public function testDeprecatedSetQualityMethod(): void
     {
         $this->getPostProcessorInstance()->setQuality(50);
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessArgumentsData()
+    public static function provideProcessArgumentsData(): array
     {
         $data = [
             [[], ['-quant-table', 2, '-optimise']],
@@ -55,15 +52,12 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessArgumentsData
      */
-    public function testProcessArguments(array $options, array $expected)
+    public function testProcessArguments(array $options, array $expected): void
     {
         $this->assertSame($expected, $this->getProcessArguments($options));
     }
 
-    /**
-     * @return mixed[]
-     */
-    public static function provideProcessData()
+    public static function provideProcessData(): array
     {
         $file = 'stdio-file-content-string';
         $data = [
@@ -84,12 +78,8 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @param string $content
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcess($content, array $options, $expected)
+    public function testProcess(string $content, array $options, string $expected): void
     {
         $file = sys_get_temp_dir().'/test.jpeg';
         file_put_contents($file, $content);
@@ -107,17 +97,14 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
      * @dataProvider provideProcessData
      *
      * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
-     *
-     * @param array  $options
-     * @param string $expected
      */
-    public function testProcessError($content, array $options, $expected)
+    public function testProcessError(string $content, array $options, string $expected): void
     {
         $process = $this->getPostProcessorInstance([static::getPostProcessAsStdInErrorExecutable()]);
         $process->process(new Binary('content', 'image/jpeg', 'jpeg'), $options);
     }
 
-    public function testProcessWithNonSupportedMimeType()
+    public function testProcessWithNonSupportedMimeType(): void
     {
         $binary = $this->getBinaryInterfaceMock();
 
@@ -126,15 +113,10 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
             ->method('getMimeType')
             ->willReturn('application/x-php');
 
-        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
+        $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary));
     }
 
-    /**
-     * @param array $parameters
-     *
-     * @return MozJpegPostProcessor
-     */
-    protected function getPostProcessorInstance(array $parameters = [])
+    protected function getPostProcessorInstance(array $parameters = []): MozJpegPostProcessor
     {
         return new MozJpegPostProcessor($parameters[0] ?? static::getPostProcessAsStdinExecutable());
     }
