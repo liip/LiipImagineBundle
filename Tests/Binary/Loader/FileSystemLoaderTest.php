@@ -19,6 +19,8 @@ use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
@@ -30,6 +32,44 @@ class FileSystemLoaderTest extends TestCase
         $loader = $this->getFileSystemLoader();
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
+    }
+
+    /**
+     * @dataProvider provideMultipleWrongArgumentsConstructorCases
+     *
+     * @param $expectedMessage
+     * @param $mimeGuesser
+     * @param $extensionGuesser
+     */
+    public function testThrowsIfConstructedWithWrongTypeArguments($expectedMessage, $mimeGuesser, $extensionGuesser)
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
+
+        new FileSystemLoader(
+            $mimeGuesser,
+            $extensionGuesser,
+            $this->getFileSystemLocator( $this->getDefaultDataRoots())
+        );
+    }
+
+    /**
+     * @return string[][]
+     */
+    public static function provideMultipleWrongArgumentsConstructorCases()
+    {
+        return [
+            [
+                '$mimeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface',
+                'foo',
+                'bar'
+            ],
+            [
+                '$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface',
+                MimeTypeGuesser::getInstance(),
+                'bar'
+            ],
+        ];
     }
 
     public function testImplementsLoaderInterface()
@@ -194,6 +234,16 @@ class FileSystemLoaderTest extends TestCase
      */
     private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
     {
+        if (interface_exists(MimeTypeGuesserInterface::class)) {
+            $mimeTypes = MimeTypes::getDefault();
+
+            return new FileSystemLoader(
+                $mimeTypes,
+                $mimeTypes,
+                null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
+            );
+        }
+
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),

@@ -15,11 +15,14 @@ use Liip\ImagineBundle\Binary\Loader\ChainLoader;
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
+use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
@@ -112,16 +115,12 @@ class ChainLoaderTest extends TestCase
         $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
         $this->getChainLoader([], [
-            'foo' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+            'foo' => $this->createFileSystemLoader(
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../'),
                 ])
             ),
-            'bar' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+            'bar' => $this->createFileSystemLoader(
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../../'),
                 ])
@@ -149,11 +148,7 @@ class ChainLoaderTest extends TestCase
     {
         if (null === $loaders) {
             $loaders = [
-                'foo' => new FileSystemLoader(
-                    MimeTypeGuesser::getInstance(),
-                    ExtensionGuesser::getInstance(),
-                    $this->getFileSystemLocator($paths ?: [__DIR__])
-                ),
+                'foo' => $this->createFileSystemLoader($this->getFileSystemLocator($paths ?: [__DIR__])),
             ];
         }
 
@@ -168,5 +163,24 @@ class ChainLoaderTest extends TestCase
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
+    }
+
+    private function createFileSystemLoader(LocatorInterface $locator): FileSystemLoader
+    {
+        if (interface_exists(MimeTypeGuesserInterface::class)) {
+            $mimeTypes = MimeTypes::getDefault();
+
+            return new FileSystemLoader(
+                $mimeTypes,
+                $mimeTypes,
+                $locator
+            );
+        }
+
+        return new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            $locator
+        );
     }
 }
