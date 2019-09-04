@@ -97,6 +97,10 @@ class LiipImagineExtension extends Extension
 
         $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
 
+        $container
+            ->getDefinition('liip_imagine.controller.config')
+            ->replaceArgument(0, $config['controller']['redirect_response_code']);
+
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
         $container->setAlias(DataManager::class, new Alias('liip_imagine.data.manager', false));

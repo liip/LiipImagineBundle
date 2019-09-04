@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection;
 
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
@@ -123,6 +124,14 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('filter_action')->defaultValue(sprintf('%s::filterAction', ImagineController::class))->end()
                         ->scalarNode('filter_runtime_action')->defaultValue(sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
+                        ->integerNode('redirect_response_code')->defaultValue(301)
+                            ->validate()
+                                ->ifTrue(function ($redirectResponseCode) {
+                                    return !\in_array($redirectResponseCode, ControllerConfig::REDIRECT_RESPONSE_CODES, true);
+                                })
+                                ->thenInvalid('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).')
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('filter_sets')

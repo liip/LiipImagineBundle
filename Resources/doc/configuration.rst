@@ -26,8 +26,9 @@ The default configuration for the bundle looks like this:
         data_loader:          default
         default_image:        null
         controller:
-            filter_action:         liip_imagine.controller:filterAction
-            filter_runtime_action: liip_imagine.controller:filterRuntimeAction
+            filter_action:          liip_imagine.controller:filterAction
+            filter_runtime_action:  liip_imagine.controller:filterRuntimeAction
+            redirect_response_code: 301
         filter_sets:
 
             # Prototype
@@ -62,6 +63,8 @@ There are several configuration options available:
       Default value: ``liip_imagine.controller:filterAction``
     * ``filter_runtime_action`` - name of the controller action to use in the route
       loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
+    * ``redirect_response_code`` - The HTTP redirect response code to return from the imagine controller,
+      one of ``201``, ``301``, ``302``, ``303``, ``307``, or ``308``. Default value: ``301``
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``filter_sets`` - specify the filter sets that you want to define and use.

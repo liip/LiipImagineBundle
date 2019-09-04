@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Controller;
 
 use Imagine\Exception\RuntimeException;
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
@@ -41,15 +42,29 @@ class ImagineController
     private $signer;
 
     /**
-     * @param FilterService   $filterService
-     * @param DataManager     $dataManager
-     * @param SignerInterface $signer
+     * @var ControllerConfig
      */
-    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer)
+    private $controllerConfig;
+
+    /**
+     * @param FilterService         $filterService
+     * @param DataManager           $dataManager
+     * @param SignerInterface       $signer
+     * @param ControllerConfig|null $controllerConfig
+     */
+    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer, ?ControllerConfig $controllerConfig = null)
     {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
+
+        if (null === $controllerConfig) {
+            @trigger_error(sprintf(
+                'Instantiating "%s" without a forth argument of type "%s" is deprecated since 2.2.0 and will be required in 3.0.', self::class, ControllerConfig::class
+            ), E_USER_DEPRECATED);
+        }
+
+        $this->controllerConfig = $controllerConfig ?? new ControllerConfig(301);
     }
 
     /**
@@ -73,19 +88,9 @@ class ImagineController
         $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
 
-        try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImage($path, $filter, $resolver), 301);
-        } catch (NotLoadableException $e) {
-            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
-                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
-            }
-
-            throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
-        } catch (NonExistingFilterException $e) {
-            throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
-        } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
-        }
+        return $this->createRedirectResponse(function () use ($path, $filter, $resolver) {
+            return $this->filterService->getUrlOfFilteredImage($path, $filter, $resolver);
+        }, $path, $filter);
     }
 
     /**
@@ -109,6 +114,7 @@ class ImagineController
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
         $resolver = $request->get('resolver');
+        $path = PathHelper::urlPathToFilePath($path);
         $runtimeConfig = $request->query->get('filters', []);
 
         if (!\is_array($runtimeConfig)) {
@@ -124,18 +130,29 @@ class ImagineController
             ));
         }
 
+        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver) {
+            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver);
+        }, $path, $filter, $hash);
+    }
+
+    private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
+    {
         try {
-            return new RedirectResponse($this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver), 301);
-        } catch (NotLoadableException $e) {
+            return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
+        } catch (NotLoadableException $exception) {
             if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
             }
 
             throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
-        } catch (NonExistingFilterException $e) {
+        } catch (NonExistingFilterException $exception) {
             throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
-        } catch (RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $hash.'/'.$path, $filter, $e->getMessage()), 0, $e);
+        } catch (RuntimeException $exception) {
+            throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [
+                $hash ? sprintf('%s/%s', $hash, $path) : $path,
+                $filter,
+                $exception->getMessage(),
+            ]), 0, $exception);
         }
     }
 }
