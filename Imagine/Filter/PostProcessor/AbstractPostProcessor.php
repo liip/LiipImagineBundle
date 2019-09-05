@@ -15,7 +15,6 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 abstract class AbstractPostProcessor implements PostProcessorInterface
@@ -113,7 +112,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
     }
 
     /**
-     * @param int[] $validReturns
+     * @param int[]    $validReturns
      * @param string[] $errors
      */
     protected function isSuccessfulProcess(Process $process, array $validReturns = [0], array $errors = ['ERROR']): bool

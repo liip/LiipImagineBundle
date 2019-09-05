@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor
@@ -95,11 +96,11 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function testProcessError(string $content, array $options, string $expected): void
     {
+        $this->expectException(ProcessFailedException::class);
+
         $process = $this->getPostProcessorInstance([static::getPostProcessAsStdInErrorExecutable()]);
         $process->process(new Binary('content', 'image/jpeg', 'jpeg'), $options);
     }

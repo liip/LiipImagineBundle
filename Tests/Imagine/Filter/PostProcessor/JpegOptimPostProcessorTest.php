@@ -11,9 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor
@@ -48,24 +50,24 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
         $this->getPostProcessorInstance()->setStripAll(50);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "quality" option must be an int between 0 and 100
-     */
     public function testInvalidLevelOption(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "quality" option must be an int between 0 and 100');
+
         $this->getProcessArguments(['quality' => 1000]);
     }
 
     /**
      * @group legacy
      *
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "max" and "quality" options cannot both be set
      * @expectedDeprecation The "max" option was deprecated in %s and will be removed in %s. Instead, use the "quality" option.
      */
     public function testOptionThrowsWhenBothMaxAndQualityAreSet(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "max" and "quality" options cannot both be set');
+
         $this->getProcessArguments(['max' => 50, 'quality' => 50]);
     }
 
@@ -155,10 +157,11 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function testProcessError(string $content, array $options, string $expected): void
     {
+        $this->expectException(ProcessFailedException::class);
+
         $process = $this->getPostProcessorInstance([static::getPostProcessAsFileFailingExecutable()]);
         $process->process(new Binary('content', 'image/jpeg', 'jpeg'), $options);
     }

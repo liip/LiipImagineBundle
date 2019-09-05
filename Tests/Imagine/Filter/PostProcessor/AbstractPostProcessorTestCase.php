@@ -11,13 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
-use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Tests\AbstractTest;
 
 abstract class AbstractPostProcessorTestCase extends AbstractTest
 {
-    abstract protected function getPostProcessorInstance(array $parameters = []);
-
     public static function getPostProcessAsFileExecutable(): string
     {
         return realpath(__DIR__.'/../../../Fixtures/bin/post-process-as-file.bash');
@@ -37,6 +35,8 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
     {
         return realpath(__DIR__.'/../../../Fixtures/bin/post-process-as-stdin-error.bash');
     }
+
+    abstract protected function getPostProcessorInstance(array $parameters = []);
 
     protected function getBinaryInterfaceMock(): BinaryInterface
     {

@@ -11,9 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor
@@ -41,48 +43,43 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
         $this->getProcessArguments(['quality' => '0-100']);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "quality" option cannot have a greater minimum value value than maximum quality value
-     */
     public function testQualityOptionThrowsOnLargerMinThanMaxValue(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "quality" option cannot have a greater minimum value value than maximum quality value');
+
         $this->getProcessArguments(['quality' => [75, 25]]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "quality" option value(s) must be an int between 0 and 100
-     */
     public function testQualityOptionThrowsOnOutOfScopeMaxInt(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "quality" option value(s) must be an int between 0 and 100');
+
         $this->getProcessArguments(['quality' => [25, 1000]]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "quality" option value(s) must be an int between 0 and 100
-     */
     public function testQualityOptionThrowsOnOutOfScopeMinInt(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "quality" option value(s) must be an int between 0 and 100');
+
         $this->getProcessArguments(['quality' => [-1000, 25]]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "speed" option must be an int between 1 and 11
-     */
     public function testSpeedOptionThrowsOnOutOfScopeInt(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "speed" option must be an int between 1 and 11');
+
         $this->getProcessArguments(['speed' => 15]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "dithering" option must be a float between 0 and 1 or a bool
-     */
     public function testDitheringOptionThrowsOnOutOfScopeInt(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "dithering" option must be a float between 0 and 1 or a bool');
+
         $this->getProcessArguments(['dithering' => 2]);
     }
 
@@ -159,11 +156,11 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function testProcessError(string $content, array $options, string $expected): void
     {
+        $this->expectException(ProcessFailedException::class);
+
         $process = $this->getPostProcessorInstance([static::getPostProcessAsStdInErrorExecutable()]);
         $process->process(new Binary('content', 'image/png', 'png'), $options);
     }

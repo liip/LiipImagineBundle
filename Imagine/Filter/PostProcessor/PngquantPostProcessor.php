@@ -92,8 +92,8 @@ class PngquantPostProcessor extends AbstractPostProcessor
 
         if ($quality = $options['quality'] ?? $this->quality) {
             if (is_string($quality) && false !== strpos($quality, '-')) {
-                @trigger_error(sprintf('Passing the "quality" option as a string was deprecated in 2.2 and ' .
-                    'will be removed in 3.0. Instead, pass wither an integer representing the max value or an array ' .
+                @trigger_error(sprintf('Passing the "quality" option as a string was deprecated in 2.2 and '.
+                    'will be removed in 3.0. Instead, pass wither an integer representing the max value or an array '.
                     'representing the minimum and maximum values.'), E_USER_DEPRECATED);
 
                 $quality = array_map(function ($q) {
@@ -113,7 +113,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
                 throw new InvalidOptionException('the "quality" option cannot have a greater minimum value value than maximum quality value', $options);
             }
 
-            if (!in_array($quality[0], range(0, 100)) || !in_array($quality[1], range(0, 100))) {
+            if (!in_array($quality[0], range(0, 100), true) || !in_array($quality[1], range(0, 100), true)) {
                 throw new InvalidOptionException('the "quality" option value(s) must be an int between 0 and 100', $options);
             }
 
@@ -122,7 +122,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
         }
 
         if (isset($options['speed'])) {
-            if (!in_array($options['speed'], range(1, 11))) {
+            if (!in_array($options['speed'], range(1, 11), true)) {
                 throw new InvalidOptionException('the "speed" option must be an int between 1 and 11', $options);
             }
 

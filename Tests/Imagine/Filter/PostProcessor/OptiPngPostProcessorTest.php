@@ -11,9 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor
@@ -21,33 +23,32 @@ use Liip\ImagineBundle\Model\FileBinary;
  */
 class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "level" option must be an int between 0 and 7
-     */
     public function testInvalidLevelOption(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "level" option must be an int between 0 and 7');
+
         $this->getProcessArguments(['level' => 100]);
     }
 
-    /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "interlace_type" option must be either 0 or 1
-     */
     public function testInvalidInterlaceOption(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "interlace_type" option must be either 0 or 1');
+
         $this->getProcessArguments(['interlace_type' => 10]);
     }
 
     /**
      * @group legacy
      *
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
-     * @expectedExceptionMessage the "strip" and "strip_all" options cannot both be set
      * @expectedDeprecation The "strip_all" option was deprecated in %s and will be removed in %s. Instead, use the "strip" option.
      */
     public function testInvalidStripOptionAndDeprecation(): void
     {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('the "strip" and "strip_all" options cannot both be set');
+
         $this->getProcessArguments(['strip_all' => true, 'strip' => 'all']);
     }
 
@@ -146,11 +147,11 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @dataProvider provideProcessData
-     *
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function testProcessError(string $content, array $options, string $expected): void
     {
+        $this->expectException(ProcessFailedException::class);
+
         $process = $this->getPostProcessorInstance([static::getPostProcessAsFileFailingExecutable()]);
         $process->process(new Binary('content', 'image/png', 'png'), $options);
     }
