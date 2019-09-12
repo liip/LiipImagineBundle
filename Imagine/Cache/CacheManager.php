@@ -292,7 +292,7 @@ class CacheManager
      * BC Layer for Symfony < 4.3
      *
      * @param CacheResolveEvent $event
-     * @param string            $eventName
+     * @param string $eventName
      */
     private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
     {
