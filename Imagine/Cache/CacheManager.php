@@ -138,10 +138,11 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
+     * @param string $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null)
+    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $params = [
             'path' => ltrim($path, '/'),
@@ -153,12 +154,12 @@ class CacheManager
         }
 
         if (empty($runtimeConfig)) {
-            $filterUrl = $this->router->generate('liip_imagine_filter', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter', $params, $referenceType);
         } else {
             $params['filters'] = $runtimeConfig;
             $params['hash'] = $this->signer->sign($path, $runtimeConfig);
 
-            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, $referenceType);
         }
 
         return $filterUrl;
@@ -204,21 +205,6 @@ class CacheManager
         $this->dispatchWithBC($postEvent, ImagineEvents::POST_RESOLVE);
 
         return $postEvent->getUrl();
-    }
-
-    /**
-     * BC Layer for Symfony < 4.3
-     *
-     * @param CacheResolveEvent $event
-     * @param string $eventName
-     */
-    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
-    {
-        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->dispatcher->dispatch($event, $eventName);
-        } else {
-            $this->dispatcher->dispatch($eventName, $event);
-        }
     }
 
     /**
@@ -300,5 +286,20 @@ class CacheManager
         }
 
         return $this->resolvers[$resolverName];
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param CacheResolveEvent $event
+     * @param string            $eventName
+     */
+    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    {
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
+        }
     }
 }
