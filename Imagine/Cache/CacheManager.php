@@ -208,6 +208,21 @@ class CacheManager
     }
 
     /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param CacheResolveEvent $event
+     * @param string $eventName
+     */
+    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    {
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
+        }
+    }
+
+    /**
      * @see ResolverInterface::store
      *
      * @param BinaryInterface $binary
@@ -286,20 +301,5 @@ class CacheManager
         }
 
         return $this->resolvers[$resolverName];
-    }
-
-    /**
-     * BC Layer for Symfony < 4.3
-     *
-     * @param CacheResolveEvent $event
-     * @param string $eventName
-     */
-    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
-    {
-        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->dispatcher->dispatch($event, $eventName);
-        } else {
-            $this->dispatcher->dispatch($eventName, $event);
-        }
     }
 }
