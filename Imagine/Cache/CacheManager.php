@@ -138,7 +138,7 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
-     * @param string $referenceType The type of reference to be generated (one of the constants)
+     * @param int    $referenceType The type of reference to be generated (one of the constants)
      *
      * @return string
      */
