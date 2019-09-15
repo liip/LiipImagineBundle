@@ -20,7 +20,7 @@ use Symfony\Component\Console\Terminal;
 /**
  * @internal
  */
-final class ImagineStyle implements ImagineStyleInterface
+final class ImagineStyle
 {
     /**
      * @var SymfonyStyle
@@ -38,96 +38,73 @@ final class ImagineStyle implements ImagineStyleInterface
         $this->decoration = $decoration;
     }
 
-    public function text(string $string, array $replacements = []): ImagineStyleInterface
+    public function text(string $string, array $replacements = []): self
     {
         $this->io->write($this->compileString($string, $replacements));
 
         return $this;
     }
 
-    public function line(string $string, array $replacements = []): ImagineStyleInterface
+    public function line(string $string, array $replacements = []): self
     {
         $this->io->writeln($this->compileString($string, $replacements));
 
         return $this;
     }
 
-    public function newline(int $count = 1): ImagineStyleInterface
+    public function newline(int $count = 1): self
     {
         $this->io->newLine($count);
 
         return $this;
     }
 
-    public function space(int $count = 1): ImagineStyleInterface
-    {
-        return $this->text(str_repeat(' ', $count));
-    }
-
-    public function separator(string $character = null, int $width = null, string $fg = null, bool $newline = true): ImagineStyleInterface
-    {
-        if (null === $width) {
-            $width = (new Terminal())->getWidth();
-        }
-
-        $this->text('<fg=%2$s;>%1$s</>', [str_repeat($character ?: '-', $width), $fg ?: 'default']);
-
-        if ($newline) {
-            $this->newline();
-        }
-
-        return $this;
-    }
-
-    public function status(string $status, string $fg = null, string $bg = null): ImagineStyleInterface
+    public function status(string $status, string $fg = null): self
     {
         return $this->text(
-            sprintf('<fg=%2$s;bg=%3$s>(</><fg=%2$s;bg=%3$s;options=bold>%1$s</><fg=%2$s;bg=%3$s>)</>', $status, $fg ?: 'default', $bg ?: 'default')
+            sprintf('<fg=%2$s>(</><fg=%2$s;options=bold>%1$s</><fg=%2$s>)</>', $status, $fg ?: 'default')
         );
     }
 
-    public function group(string $item, string $group, string $fg = null, string $bg = null): ImagineStyleInterface
+    public function group(string $item, string $group, string $fg = null): self
     {
-        return $this->text(
-            sprintf('<fg=%3$s;bg=%4$s;options=bold>%1$s[</><fg=%3$s;bg=%4$s>%2$s</><fg=%3$s;bg=%4$s;options=bold>]</>', $item, $group, $fg ?: 'default', $bg ?: 'default')
+        $this->text(
+            sprintf('<fg=%3$s;options=bold>%1$s[</><fg=%3$s>%2$s</><fg=%3$s;options=bold>]</>', $item, $group, $fg ?: 'default')
         );
+
+        return $this->space();
     }
 
-    public function title(string $title, string $type = null, string $fg = null, string $bg = null): ImagineStyleInterface
+    public function title(string $title, string $type = null): self
     {
         if (!$this->decoration) {
             return $this->plainTitle($title, $type);
         }
 
-        return $this->block($title, $type, $fg ?: 'white', $bg ?: 'magenta');
+        return $this->block($title, $type, 'white', 'cyan');
     }
 
-    public function smallBlock(string $string, string $type, string $fg = null, string $bg = null, string $prefix = null): ImagineStyleInterface
-    {
-        return $this->block($string, $type, $fg, $bg, $prefix, false);
-    }
-
-    public function largeBlock(string $string, string $type, string $fg = null, string $bg = null, string $prefix = null): ImagineStyleInterface
-    {
-        return $this->block($string, $type, $fg, $bg, $prefix, true);
-    }
-
-    public function okayBlock(string $string, array $replacements = []): ImagineStyleInterface
+    public function okayBlock(string $string, array $replacements = []): self
     {
         return $this->largeBlock($this->compileString(strip_tags($string), $replacements), 'OKAY', 'black', 'green', '-');
     }
 
-    public function noteBlock(string $string, array $replacements = []): ImagineStyleInterface
-    {
-        return $this->largeBlock($this->compileString(strip_tags($string), $replacements), 'NOTE', 'yellow', 'black', '/');
-    }
-
-    public function critBlock(string $string, array $replacements = []): ImagineStyleInterface
+    public function critBlock(string $string, array $replacements = []): self
     {
         return $this->largeBlock($this->compileString(strip_tags($string), $replacements), 'ERROR', 'white', 'red', '#');
     }
 
-    private function plainTitle(string $title, string $type = null): ImagineStyleInterface
+    private function largeBlock(string $string, string $type, string $fg = null, string $bg = null, string $prefix = null): self
+    {
+        return $this->block($string, $type, $fg, $bg, $prefix, true);
+    }
+
+    private function space(int $count = 1): self
+    {
+        return $this->text(str_repeat(' ', $count));
+    }
+
+    private function plainTitle(string $title, string $type = null): self
     {
         $this->newline();
 
@@ -140,7 +117,7 @@ final class ImagineStyle implements ImagineStyleInterface
         return $this->newline();
     }
 
-    private function block(string $string, string $type = null, string $fg = null, string $bg = null, string $prefix = null, bool $padding = true): ImagineStyleInterface
+    private function block(string $string, string $type = null, string $fg = null, string $bg = null, string $prefix = null, bool $padding = true): self
     {
         if (!$this->decoration) {
             return $this->plainBlock($string, $type);
@@ -151,7 +128,7 @@ final class ImagineStyle implements ImagineStyleInterface
         return $this;
     }
 
-    private function plainBlock(string $string, string $type): ImagineStyleInterface
+    private function plainBlock(string $string, string $type): self
     {
         return $this
             ->newline()

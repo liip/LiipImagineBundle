@@ -18,7 +18,6 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\BufferedOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Terminal;
 
 /**
  * @covers \Liip\ImagineBundle\Component\Console\Style\ImagineStyle
@@ -97,47 +96,18 @@ class ImagineStyleTest extends AbstractTest
     }
 
     /**
-     * @dataProvider provideSeparatorData
-     */
-    public function testSeparator(string $character, int $width = null, string $color = null): void
-    {
-        $style = $this->createImagineStyle($output = $this->createBufferedOutput());
-        $style->separator($character, $width, $color);
-
-        if (null === $width) {
-            $width = (new Terminal())->getWidth();
-        }
-
-        $this->assertContains(sprintf('<fg=%s;>%s</>', $color ?: 'default', str_repeat($character, $width)), $output->getBuffer());
-    }
-
-    public static function provideSeparatorData(): Generator
-    {
-        $widths = [null, 20, 40, 80, 160, 320, 640];
-        $separators = ['-', '~', '==', '___', '--{{ <a-complex-separator> }}--'];
-
-        foreach (static::getConsoleColors() as $color) {
-            foreach ($widths as $width) {
-                foreach ($separators as $chars) {
-                    yield [$chars, $width, $color];
-                }
-            }
-        }
-    }
-
-    /**
      * @dataProvider provideTitleData
      */
-    public function testTitle(string $title, string $type = null, string $fg = null, string $bg = null, bool $decoration): void
+    public function testTitle(string $title, string $type = null, bool $decoration): void
     {
         $style = $this->createImagineStyle($output = $this->createBufferedOutput(), $decoration);
-        $style->title($title, $type, $fg, $bg);
+        $style->title($title, $type);
 
         if ($decoration) {
             if ($type) {
-                $expected = sprintf('<fg=%s;bg=%s> [%s] %s', $fg ?: 'white', $bg ?: 'magenta', $type, $title);
+                $expected = sprintf('<fg=%s;bg=%s> [%s] %s', 'white', 'cyan', $type, $title);
             } else {
-                $expected = sprintf('<fg=%s;bg=%s> %s', $fg ?: 'white', $bg ?: 'magenta', $title);
+                $expected = sprintf('<fg=%s;bg=%s> %s', 'white', 'cyan', $title);
             }
         } else {
             if ($type) {
@@ -157,11 +127,9 @@ class ImagineStyleTest extends AbstractTest
             'A Type' => 'Title with type context',
         ];
 
-        foreach (static::getConsoleColors() as $color) {
-            foreach ($titles as $type => $title) {
-                yield [$title, is_string($type) ? $type : null, $color, $color, true];
-                yield [$title, is_string($type) ? $type : null, $color, $color, false];
-            }
+        foreach ($titles as $type => $title) {
+            yield [$title, is_string($type) ? $type : null, true];
+            yield [$title, is_string($type) ? $type : null, false];
         }
     }
 
@@ -187,7 +155,6 @@ class ImagineStyleTest extends AbstractTest
     {
         $types = [
             'okay' => ['<fg=black;bg=green> - [OKAY] %s', '[OKAY] %s'],
-            'note' => ['<fg=yellow;bg=black> / [NOTE] %s', '[NOTE] %s'],
             'crit' => ['<fg=white;bg=red> # [ERROR] %s', '[ERROR] %s'],
         ];
 
@@ -202,68 +169,6 @@ class ImagineStyleTest extends AbstractTest
                 yield [$type, $expectations[0], $format, $replacements, true];
                 yield [$type, $expectations[1], $format, $replacements, false];
             }
-        }
-    }
-
-    /**
-     * @dataProvider provideBlockSizesData
-     */
-    public function testBlockSizes(string $type, string $expectedFormat, string $string, array $environment, bool $decoration): void
-    {
-        $blockMethod = sprintf('%sBlock', $type);
-        $style = $this->createImagineStyle($output = $this->createBufferedOutput(), $decoration);
-
-        if (!is_callable([$style, $blockMethod])) {
-            static::fail(sprintf('Required method "%s" for "%s" block type is not callable!', $blockMethod, $type));
-        }
-
-        $style->{$blockMethod}($string, ...$environment);
-        $expected = sprintf($expectedFormat, $environment[1], $environment[2], $environment[3], $environment[0], $string);
-
-        $this->assertContains($expected, $output->getBuffer());
-    }
-
-    public static function provideBlockSizesData(): Generator
-    {
-        $sizes = [
-            'small' => '<fg=%s;bg=%s> %s [%s] %s',
-            'large' => '<fg=%s;bg=%s> %s [%s] %s',
-        ];
-
-        $strings = [
-            'This is a block, right? (But which one is it?)',
-            'A short block!',
-        ];
-
-        $environments = [
-            ['TYPE', 'white', 'blue', 'PREFIX', true],
-            ['ERROR', 'black', 'red', 'ERR', true],
-        ];
-
-        foreach ($sizes as $type => $format) {
-            foreach ($strings as $string) {
-                foreach ($environments as $environment) {
-                    yield [$type, $format, $string, $environment, true];
-                }
-            }
-        }
-    }
-
-    /**
-     * @dataProvider provideSpaceData
-     */
-    public function testSpace(int $count): void
-    {
-        $style = $this->createImagineStyle($output = $this->createBufferedOutput());
-        $style->space($count);
-
-        $this->assertContains(str_repeat(' ', $count), $output->getBuffer());
-    }
-
-    public static function provideSpaceData(): Generator
-    {
-        for ($spaces = 1; $spaces < 200; $spaces += 50) {
-            yield [$spaces];
         }
     }
 

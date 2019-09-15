@@ -95,7 +95,6 @@ EOF
         }
 
         $this->io->group($image, $filter, 'blue');
-        $this->io->space();
 
         if ($this->cacheManager->isStored($image, $filter)) {
             $this->cacheManager->remove($image, $filter);

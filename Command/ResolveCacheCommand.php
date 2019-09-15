@@ -43,13 +43,13 @@ class ResolveCacheCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Resolve cache entries for the given paths and filters.')
+            ->setDescription('Warms up the cache for the specified image sources with all or specified filters applied, and prints the list of cache files.')
             ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
-                'Image file path(s) to run resolution on.')
+                'Image file path(s) for which to generate the cached images.')
             ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Filter(s) to use for image resolution; if none explicitly passed, use all filters.')
             ->addOption('force', 'F', InputOption::VALUE_NONE,
-                'Force re-resolution of image, regardless of whether it has been previously cached.')
+                'Force generating the image and writing the cache, regardless of whether a cached version already exists.')
             ->addOption('no-colors', 'C', InputOption::VALUE_NONE,
                 'Write only un-styled text output; remove any colors, styling, etc.')
             ->addOption('as-script', 'S', InputOption::VALUE_NONE,
@@ -109,14 +109,13 @@ EOF
         }
 
         $this->io->group($image, $filter, 'blue');
-        $this->io->space();
 
         try {
             if ($forced || !$this->cacheManager->isStored($image, $filter)) {
                 $this->cacheManager->store($this->filterManager->applyFilter($this->dataManager->find($filter, $image), $filter), $image, $filter);
                 $this->io->status('resolved', 'green');
             } else {
-                $this->io->status('cached', 'yellow');
+                $this->io->status('cached', 'white');
             }
 
             $this->io->line(sprintf(' %s', $this->cacheManager->resolve($image, $filter)));
