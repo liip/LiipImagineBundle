@@ -138,11 +138,11 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
-     * @param int    $referenceType The type of reference to be generated (one of the constants)
+     * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         $params = [
             'path' => ltrim($path, '/'),
