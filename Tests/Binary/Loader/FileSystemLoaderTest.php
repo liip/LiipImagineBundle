@@ -66,7 +66,7 @@ class FileSystemLoaderTest extends TestCase
             ],
             [
                 '$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface',
-                MimeTypeGuesser::getInstance(),
+                class_exists(MimeTypes::class) ? MimeTypes::getDefault() : MimeTypeGuesser::getInstance(),
                 'bar'
             ],
         ];
