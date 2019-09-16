@@ -138,10 +138,11 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
+     * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null)
+    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         $params = [
             'path' => ltrim($path, '/'),
@@ -153,12 +154,12 @@ class CacheManager
         }
 
         if (empty($runtimeConfig)) {
-            $filterUrl = $this->router->generate('liip_imagine_filter', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter', $params, $referenceType);
         } else {
             $params['filters'] = $runtimeConfig;
             $params['hash'] = $this->signer->sign($path, $runtimeConfig);
 
-            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, $referenceType);
         }
 
         return $filterUrl;
