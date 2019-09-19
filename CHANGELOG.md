@@ -5,6 +5,15 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
+- Allow unresolvable data roots for filesystem locator ([robfrawley](https://github.com/robfrawley))
+- Add "fixed-size" filter implementation ([peter-gribanov](https://github.com/peter-gribanov))
+- Only use actual path without any query parameters from the url ([TiMESPLiNTER](https://github.com/TiMESPLiNTER))
+- Add missing ImageType::getBlockPrefix() method ([EmmanuelVella](https://github.com/EmmanuelVella))
+- Replace app/console with bin/console ([welcoMattic](https://github.com/welcoMattic))
+- Fix Symfony 4.2 Deprecation Warnings ([hjanuschka](https://github.com/hjanuschka))
+- Fix special characters encoding in URL path ([dbalabka](https://github.com/dbalabka))
+- Update imagine/imagine dependency to 1.1 ([maximgubar](https://github.com/maximgubar))
+- Only use actual path without any query parameters from the url ([maximgubar](https://github.com/maximgubar))
 - __\[Dependency Injection\]__ Add aliases for data and filter manager ([fpaterno](https://github.com/fpaterno))
 
 ## [2.1.0](https://github.com/liip/LiipImagineBundle/tree/2.1.0) (2018-07-10)
