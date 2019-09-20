@@ -222,6 +222,16 @@ EOF;
         $this->assertSame($factory, $definition->getFactory());
     }
 
+    protected function createEmptyConfiguration(): void
+    {
+        $this->createConfiguration([]);
+    }
+
+    protected function createFullConfiguration(): void
+    {
+        $this->createConfiguration($this->getFullConfig());
+    }
+
     /**
      * @group legacy
      * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
@@ -240,16 +250,6 @@ EOF;
             'templating' => false,
         ]);
         $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
-    }
-
-    protected function createEmptyConfiguration(): void
-    {
-        $this->createConfiguration([]);
-    }
-
-    protected function createFullConfiguration(): void
-    {
-        $this->createConfiguration($this->getFullConfig());
     }
 
     protected function createConfiguration(array $configuration): void
