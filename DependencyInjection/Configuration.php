@@ -199,6 +199,18 @@ class Configuration implements ConfigurationInterface
                 ->defaultFalse()
                 ->info('Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ.')
             ->end()
+            ->booleanNode('templating')
+                ->defaultTrue()
+                ->info('Enables integration with symfony/templating component')
+                ->validate()
+                    ->ifTrue()
+                    ->then(function ($v) {
+                        @trigger_error('Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.', E_USER_DEPRECATED);
+
+                        return $v;
+                    })
+                ->end()
+            ->end()
         ->end();
 
         return $treeBuilder;

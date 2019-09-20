@@ -95,6 +95,10 @@ class LiipImagineExtension extends Extension
             $loader->load('enqueue.xml');
         }
 
+        if ($config['templating']) {
+            $loader->load('templating.xml');
+        }
+
         $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
 
         $container

@@ -186,6 +186,14 @@ EOF;
         );
     }
 
+    public function testTemplatingFilterExtensionIsDeprecated()
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
+    }
+
     public static function provideFactoryData()
     {
         return [
@@ -221,11 +229,27 @@ EOF;
 
     protected function createFullConfiguration(): void
     {
-        if (!class_exists(Parser::class)) {
-            $this->markTestSkipped('Requires the symfony/yaml package.');
-        }
-
         $this->createConfiguration($this->getFullConfig());
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
+     */
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled()
+    {
+        $this->createConfiguration([
+            'templating' => true,
+        ]);
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled()
+    {
+        $this->createConfiguration([
+            'templating' => false,
+        ]);
+        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
     }
 
     protected function createConfiguration(array $configuration): void
@@ -304,6 +328,14 @@ EOF;
     }
 
     /**
+     * @param string $id
+     */
+    private function assertHasNotDefinition($id)
+    {
+        $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
+    }
+
+    /**
      * @param Definition $definition
      * @param array      $arguments
      */
@@ -324,5 +356,13 @@ EOF;
             $implodeArrayElements($providedArguments),
             $implodeArrayElements($expectedArguments),
         ]));
+    }
+
+    private function assertDefinitionIsDeprecated(string $id, string $message)
+    {
+        $definition = $this->containerBuilder->getDefinition($id);
+
+        $this->assertTrue($definition->isDeprecated());
+        $this->assertSame($message, $definition->getDeprecationMessage($id));
     }
 }

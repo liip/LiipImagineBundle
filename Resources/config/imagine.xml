@@ -187,11 +187,6 @@
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
-        <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
-            <tag name="templating.helper" alias="imagine" />
-            <argument type="service" id="liip_imagine.cache.manager" />
-        </service>
-
         <!-- Filter loaders -->
 
         <service id="liip_imagine.filter.loader.relative_resize" class="Liip\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader">
