@@ -144,6 +144,10 @@ class FilterService
     {
         $binary = $this->dataManager->find($filter, $path);
 
+        if ($this->isSvg($binary)) {
+            return $binary;
+        }
+
         try {
             return $this->filterManager->applyFilter($binary, $filter, [
                 'filters' => $runtimeFilters,
@@ -155,5 +159,15 @@ class FilterService
 
             throw $e;
         }
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     *
+     * @return bool
+     */
+    protected function isSvg(BinaryInterface $binary)
+    {
+        return $binary->getMimeType() == 'image/svg+xml';
     }
 }
