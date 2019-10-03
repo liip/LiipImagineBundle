@@ -221,6 +221,10 @@ class FilterService
     {
         $binary = $this->dataManager->find($filter, $filterPathContainer->getSource());
 
+        if ($this->isSvg($binary)) {
+            return $binary;
+        }
+
         try {
             return $this->filterManager->applyFilter($binary, $filter, $filterPathContainer->getOptions());
         } catch (NonExistingFilterException $e) {
@@ -233,5 +237,15 @@ class FilterService
 
             throw $e;
         }
+    }
+
+    /**
+     * @param BinaryInterface $binary
+     *
+     * @return bool
+     */
+    protected function isSvg(BinaryInterface $binary)
+    {
+        return $binary->getMimeType() == 'image/svg+xml';
     }
 }
