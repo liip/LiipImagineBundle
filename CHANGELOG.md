@@ -4,7 +4,7 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
-## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
+## [2.2.0](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2019-10-04)
 - Allow unresolvable data roots for filesystem locator ([robfrawley](https://github.com/robfrawley))
 - Add "fixed-size" filter implementation ([peter-gribanov](https://github.com/peter-gribanov))
 - Only use actual path without any query parameters from the url ([TiMESPLiNTER](https://github.com/TiMESPLiNTER))
