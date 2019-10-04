@@ -263,6 +263,10 @@
             <tag name="liip_imagine.filter.loader" loader="resample" />
         </service>
 
+        <service id="liip_imagine.filter.loader.fixed" class="Liip\ImagineBundle\Imagine\Filter\Loader\FixedFilterLoader" public="true">
+            <tag name="liip_imagine.filter.loader" loader="fixed" />
+        </service>
+
         <!-- Data loaders -->
 
         <service id="liip_imagine.binary.loader.prototype.filesystem" class="Liip\ImagineBundle\Binary\Loader\FileSystemLoader">
