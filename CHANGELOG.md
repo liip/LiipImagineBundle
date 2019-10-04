@@ -15,6 +15,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Update imagine/imagine dependency to 1.1 ([maximgubar](https://github.com/maximgubar))
 - Only use actual path without any query parameters from the url ([maximgubar](https://github.com/maximgubar))
 - __\[Dependency Injection\]__ Add aliases for data and filter manager ([fpaterno](https://github.com/fpaterno))
+- Use Autorotate Filter from Imagine library ([franmomu](https://github.com/franmomu))
 
 ## [2.1.0](https://github.com/liip/LiipImagineBundle/tree/2.1.0) (2018-07-10)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.1.0)
