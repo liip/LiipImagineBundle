@@ -5,6 +5,8 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
 ## [2.2.0](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2019-10-04)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.1.0...2.2.0)
+
 - Allow unresolvable data roots for filesystem locator ([robfrawley](https://github.com/robfrawley))
 - Add "fixed-size" filter implementation ([peter-gribanov](https://github.com/peter-gribanov))
 - Only use actual path without any query parameters from the url ([TiMESPLiNTER](https://github.com/TiMESPLiNTER))
