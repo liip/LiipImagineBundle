@@ -5,15 +5,17 @@
 
     <services>
 
-        <service id="liip_imagine.command.remove_cache_command" class="Liip\ImagineBundle\Command\RemoveCacheCommand" public="true">
-            <argument type="service" id="liip_imagine.cache.manager"/>
-            <tag name="console.command" command="liip:imagine:cache:remove" />
+        <service id="liip_imagine.command.cache_remove" class="Liip\ImagineBundle\Command\RemoveCacheCommand">
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <tag name="console.command" command="liip:imagine:cache:remove" alias="imagine:del" />
         </service>
 
-        <service id="liip_imagine.command.resolve_cache_command" class="Liip\ImagineBundle\Command\ResolveCacheCommand" public="true">
-            <argument type="service" id="liip_imagine.filter.manager"/>
-            <argument type="service" id="liip_imagine.service.filter"/>
-            <tag name="console.command" command="liip:imagine:cache:resolve" />
+        <service id="liip_imagine.command.cache_resolve" class="Liip\ImagineBundle\Command\ResolveCacheCommand">
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <tag name="console.command" command="liip:imagine:cache:resolve" alias="imagine:get" />
         </service>
 
     </services>

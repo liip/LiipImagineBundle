@@ -20,6 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class CacheManager
 {
@@ -137,10 +138,11 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param array  $runtimeConfig
      * @param string $resolver
+     * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null)
+    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         $params = [
             'path' => ltrim($path, '/'),
@@ -152,12 +154,12 @@ class CacheManager
         }
 
         if (empty($runtimeConfig)) {
-            $filterUrl = $this->router->generate('liip_imagine_filter', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter', $params, $referenceType);
         } else {
             $params['filters'] = $runtimeConfig;
             $params['hash'] = $this->signer->sign($path, $runtimeConfig);
 
-            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, UrlGeneratorInterface::ABSOLUTE_URL);
+            $filterUrl = $this->router->generate('liip_imagine_filter_runtime', $params, $referenceType);
         }
 
         return $filterUrl;
@@ -195,14 +197,29 @@ class CacheManager
         }
 
         $preEvent = new CacheResolveEvent($path, $filter);
-        $this->dispatcher->dispatch(ImagineEvents::PRE_RESOLVE, $preEvent);
+        $this->dispatchWithBC($preEvent, ImagineEvents::PRE_RESOLVE);
 
         $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
-        $this->dispatcher->dispatch(ImagineEvents::POST_RESOLVE, $postEvent);
+        $this->dispatchWithBC($postEvent, ImagineEvents::POST_RESOLVE);
 
         return $postEvent->getUrl();
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     *
+     * @param CacheResolveEvent $event
+     * @param string $eventName
+     */
+    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    {
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
+        }
     }
 
     /**
@@ -226,10 +243,10 @@ class CacheManager
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());
-        } elseif (!is_array($filters)) {
+        } elseif (!\is_array($filters)) {
             $filters = [$filters];
         }
-        if (!is_array($paths)) {
+        if (!\is_array($paths)) {
             $paths = [$paths];
         }
 

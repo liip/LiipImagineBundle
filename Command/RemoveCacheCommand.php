@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Command;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,56 +21,88 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RemoveCacheCommand extends Command
 {
-    /* @var CacheManager cacheManager */
-    private $cacheManager;
+    protected static $defaultName = 'liip:imagine:cache:remove';
 
-    public function __construct(CacheManager $cacheManager)
+    use CacheCommandTrait;
+
+    public function __construct(CacheManager $cacheManager, FilterManager $filterManager)
     {
-        $this->cacheManager = $cacheManager;
+        parent::__construct();
 
-        parent::__construct('liip:imagine:cache:remove');
+        $this->cacheManager = $cacheManager;
+        $this->filterManager = $filterManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Remove cache for given paths and set of filters.')
-            ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Image paths')
-            ->addOption(
-                'filters',
-                'f',
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Filters list'
-            )
+            ->setDescription('Remove cache entries for given paths and filters.')
+            ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
+                'Image file path(s) to run resolution on.')
+            ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                'Filter(s) to use for image remove; if none explicitly passed, use all filters.')
+            ->addOption('no-colors', 'C', InputOption::VALUE_NONE,
+                'Write only un-styled text output; remove any colors, styling, etc.')
+            ->addOption('as-script', 'S', InputOption::VALUE_NONE,
+                'Write only machine-readable output; silenced verbose reporting and implies --no-colors.')
             ->setHelp(<<<'EOF'
-The <info>%command.name%</info> command removes cache by specified parameters.
+The <comment>%command.name%</comment> command removes the passed image(s) cache entry for the 
+resolved filter(s), outputting results using the following basic format:
+  <info>image.ext[filter] (removed|skipped|failure)[: (image-path|exception-message)]</>
 
-Paths should be separated by spaces:
-<info>php app/console %command.name% path1 path2</info>
-All cache for a given `paths` will be lost.
+<comment># bin/console %command.name% --filter=thumb1 foo.ext bar.ext</comment>
+Remove cache for <options=bold>both</> <comment>foo.ext</comment> and <comment>bar.ext</comment> images for <options=bold>one</> filter (<comment>thumb1</comment>), outputting:
+  <info>- foo.ext[thumb1] removed</>
+  <info>- bar.ext[thumb1] removed</>
 
-If you use --filters parameter:
-<info>php app/console %command.name% --filters=thumb1 --filters=thumb2</info>
-All cache for a given filters will be lost.
+<comment># bin/console %command.name% --filter=thumb1 --filter=thumb3 foo.ext</comment>
+Remove cache for <comment>foo.ext</comment> image using <options=bold>two</> filters (<comment>thumb1</comment> and <comment>thumb3</comment>), outputting:
+  <info>- foo.ext[thumb1] removed</>
+  <info>- foo.ext[thumb3] removed</>
 
-You can combine these parameters:
-<info>php app/console %command.name% path1 path2 --filters=thumb1 --filters=thumb2</info>
+<comment># bin/console %command.name% foo.ext</comment>
+Remove cache for <comment>foo.ext</comment> image using <options=bold>all</> filters (as none were specified), outputting:
+  <info>- foo.ext[thumb1] removed</>
+  <info>- foo.ext[thumb2] removed</>
+  <info>- foo.ext[thumb3] removed</>
 
-<info>php app/console %command.name%</info>
-Cache for all paths and filters will be lost when executing this command without parameters.
 EOF
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $paths = $input->getArgument('paths');
-        $filters = $input->getOption('filters');
+        $this->setupOutputStyle($input, $output);
+        $this->outputCommandHeader();
 
-        if (empty($filters)) {
-            $filters = null;
+        [$images, $filters] = $this->resolveInputFiltersAndPaths($input);
+
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->runCacheImageRemove($i, $f);
+            }
         }
 
-        $this->cacheManager->remove($paths, $filters);
+        $this->outputCommandResult($images, $filters, 'removal');
+
+        return $this->getResultCode();
+    }
+
+    private function runCacheImageRemove(string $image, string $filter): void
+    {
+        if (!$this->outputMachineReadable) {
+            $this->io->text(' - ');
+        }
+
+        $this->io->group($image, $filter, 'blue');
+
+        if ($this->cacheManager->isStored($image, $filter)) {
+            $this->cacheManager->remove($image, $filter);
+            $this->io->status('removed', 'green');
+        } else {
+            $this->io->status('skipped', 'yellow');
+        }
+
+        $this->io->newline();
     }
 }

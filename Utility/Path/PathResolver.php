@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Utility\Path;
 
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
+
 class PathResolver implements PathResolverInterface
 {
     /**
@@ -40,27 +42,32 @@ class PathResolver implements PathResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getFilePath($path, $filter)
+    public function getFilePath($path, $filter): string
     {
-        return $this->webRoot.'/'.$this->getFileUrl($path, $filter);
+        return $this->webRoot.'/'.$this->getFullPath($path, $filter);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFileUrl($path, $filter)
+    public function getFileUrl($path, $filter): string
+    {
+        return PathHelper::filePathToUrlPath($this->getFullPath($path, $filter));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheRoot(): string
+    {
+        return $this->cacheRoot;
+    }
+
+    private function getFullPath($path, $filter): string
     {
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
 
         return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheRoot()
-    {
-        return $this->cacheRoot;
     }
 }

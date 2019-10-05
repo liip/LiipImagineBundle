@@ -21,9 +21,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @requires PHP 5.4
- *
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory
  */
 class FlysystemLoaderFactoryTest extends TestCase
 {
@@ -82,8 +80,10 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child node "filesystem_service" at path "flysystem" must be configured.');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
 
         $resolver = new FlysystemLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -95,8 +95,10 @@ class FlysystemLoaderFactoryTest extends TestCase
     {
         $expectedService = 'theService';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flysystem', 'array');
+        $treeBuilder = new TreeBuilder('flysystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('flysystem');
 
         $loader = new FlysystemLoaderFactory();
         $loader->addConfiguration($rootNode);

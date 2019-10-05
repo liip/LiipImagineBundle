@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 /**
  * mozjpeg post-processor, for noticably better jpeg compression.
@@ -24,84 +23,84 @@ use Symfony\Component\Process\Process;
  *
  * @author Alex Wilson <a@ax.gy>
  */
-class MozJpegPostProcessor implements PostProcessorInterface
+class MozJpegPostProcessor extends AbstractPostProcessor
 {
     /**
-     * @var string Path to the mozjpeg cjpeg binary
-     */
-    protected $mozjpegBin;
-
-    /**
-     * @var null|int Quality factor
+     * @var int|null Quality factor
      */
     protected $quality;
 
     /**
-     * Constructor.
-     *
-     * @param string   $mozjpegBin Path to the mozjpeg cjpeg binary
-     * @param int|null $quality    Quality factor
+     * @param string   $executablePath Path to the mozjpeg cjpeg binary
+     * @param int|null $quality        Quality factor
      */
-    public function __construct(
-        $mozjpegBin = '/opt/mozjpeg/bin/cjpeg',
-        $quality = null
-    ) {
-        $this->mozjpegBin = $mozjpegBin;
-        $this->setQuality($quality);
+    public function __construct($executablePath = '/opt/mozjpeg/bin/cjpeg', $quality = null)
+    {
+        parent::__construct($executablePath);
+
+        $this->quality = $quality;
     }
 
     /**
+     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
+     *             class's constructor to set the property state.
+     *
      * @param int $quality
      *
      * @return MozJpegPostProcessor
      */
     public function setQuality($quality)
     {
+        $this->triggerSetterMethodDeprecation(__METHOD__);
         $this->quality = $quality;
 
         return $this;
     }
 
-    /**
-     * @param BinaryInterface $binary
-     * @param array           $options
-     *
+    /*
      * @throws ProcessFailedException
-     *
-     * @return BinaryInterface
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        $type = mb_strtolower($binary->getMimeType());
-        if (!in_array($type, ['image/jpeg', 'image/jpg'], true)) {
+        if (!$this->isBinaryTypeJpgImage($binary)) {
             return $binary;
         }
 
-        $processArguments = [$this->mozjpegBin];
+        $arguments = $this->getProcessArguments($options);
+        $process = $this->createProcess($arguments, $options);
+        $process->setInput($binary->getContent());
+        $process->run();
 
-        // Places emphasis on DC
-        $processArguments[] = '-quant-table';
-        $processArguments[] = 2;
-
-        $transformQuality = array_key_exists('quality', $options) ? $options['quality'] : $this->quality;
-        if (null !== $transformQuality) {
-            $processArguments[] = '-quality';
-            $processArguments[] = $transformQuality;
+        if (!$this->isSuccessfulProcess($process)) {
+            throw new ProcessFailedException($process);
         }
 
-        $processArguments[] = '-optimise';
+        return new Binary($process->getOutput(), $binary->getMimeType(), $binary->getFormat());
+    }
 
-        // Favor stdin/stdout so we don't waste time creating a new file.
-        $proc = new Process($processArguments);
-        $proc->setInput($binary->getContent());
-        $proc->run();
+    /**
+     * @param string[] $options
+     *
+     * @return string[]
+     */
+    private function getProcessArguments(array $options = []): array
+    {
+        $arguments = [$this->executablePath];
 
-        if (false !== mb_strpos($proc->getOutput(), 'ERROR') || 0 !== $proc->getExitCode()) {
-            throw new ProcessFailedException($proc);
+        if ($quantTable = $options['quant_table'] ?? 2) {
+            $arguments[] = '-quant-table';
+            $arguments[] = $quantTable;
         }
 
-        $result = new Binary($proc->getOutput(), $binary->getMimeType(), $binary->getFormat());
+        if ($options['optimise'] ?? true) {
+            $arguments[] = '-optimise';
+        }
 
-        return $result;
+        if (null !== $quality = $options['quality'] ?? $this->quality) {
+            $arguments[] = '-quality';
+            $arguments[] = $quality;
+        }
+
+        return $arguments;
     }
 }

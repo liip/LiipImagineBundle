@@ -55,19 +55,19 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
             ->with('/foo/bar')
-            ->will($this->returnValue(1337));
+            ->willReturn(1337);
 
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with(null, 1337)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar'));
     }
@@ -79,24 +79,24 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['/foo/bar.png', 1337],
                 ['/foo/bar', 4711],
-            ]));
+            ]);
 
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [null, 1337, null],
                 [null, 4711, $image],
-            ]));
+            ]);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
     }
@@ -109,7 +109,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
             ->with('/foo/bar')
-            ->will($this->returnValue(1337));
+            ->willReturn(1337);
 
         $this->loader
             ->expects($this->never())
@@ -119,7 +119,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with(null, 1337)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->loader->find('/foo/bar');
     }

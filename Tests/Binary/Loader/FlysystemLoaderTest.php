@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @requires PHP 5.4
@@ -43,7 +44,9 @@ class FlysystemLoaderTest extends AbstractTest
      */
     public function getFlysystemLoader()
     {
-        return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
+        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
+
+        return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
     }
 
     public function testShouldImplementLoaderInterface()
@@ -51,13 +54,23 @@ class FlysystemLoaderTest extends AbstractTest
         $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
     }
 
+    public function testThrowsIfConstructedWithWrongTypeArguments()
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+
+        new FlysystemLoader(
+            'foo',
+            $this->flyFilesystem
+        );
+    }
+
     public function testReturnImageContentOnFind()
     {
         $loader = $this->getFlysystemLoader();
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find('assets/cats.jpeg')->getContent()
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find('assets/cats.jpeg')->getContent()
         );
     }
 

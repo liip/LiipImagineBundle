@@ -16,6 +16,7 @@ use Imagine\Image\ImagineInterface;
 use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
@@ -29,6 +30,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 abstract class AbstractTest extends TestCase
@@ -207,7 +209,11 @@ abstract class AbstractTest extends TestCase
      */
     protected function createExtensionGuesserInterfaceMock()
     {
-        return $this->createObjectMock(ExtensionGuesserInterface::class);
+        if (!interface_exists(MimeTypesInterface::class)) {
+            return $this->createObjectMock(ExtensionGuesserInterface::class);
+        }
+
+        return $this->createObjectMock(MimeTypesInterface::class);
     }
 
     /**
@@ -242,6 +248,11 @@ abstract class AbstractTest extends TestCase
         return $this->createObjectMock(DataManager::class, [], false);
     }
 
+    protected function createControllerConfigInstance(int $redirectResponseCode = null): ControllerConfig
+    {
+        return new ControllerConfig($redirectResponseCode ?? 301);
+    }
+
     /**
      * @param string   $object
      * @param string[] $methods
@@ -254,7 +265,7 @@ abstract class AbstractTest extends TestCase
     {
         $builder = $this->getMockBuilder($object);
 
-        if (count($methods) > 0) {
+        if (\count($methods) > 0) {
             $builder->setMethods($methods);
         }
 
@@ -264,7 +275,7 @@ abstract class AbstractTest extends TestCase
             $builder->disableOriginalConstructor();
         }
 
-        if (count($constructorParams) > 0) {
+        if (\count($constructorParams) > 0) {
             $builder->setConstructorArgs($constructorParams);
         }
 

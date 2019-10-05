@@ -45,7 +45,7 @@ class WebPathResolverTest extends TestCase
         $this->filesystem = new Filesystem();
         $this->basePath = sys_get_temp_dir().'/aWebRoot';
         $this->existingFile = $this->basePath.'/aCachePrefix/aFilter/existingPath';
-        $this->filesystem->mkdir(dirname($this->existingFile));
+        $this->filesystem->mkdir(\dirname($this->existingFile));
         $this->filesystem->touch($this->existingFile);
     }
 
@@ -167,6 +167,27 @@ class WebPathResolverTest extends TestCase
         $this->assertSame(
             'theschema://thehost/theBasePath/aCachePrefix/aFilter/aPath',
             $resolver->resolve($path, $filter)
+        );
+    }
+
+    public function testResolveWithPrefixCacheEmpty()
+    {
+        $requestContext = new RequestContext();
+        $requestContext->setScheme('theSchema');
+        $requestContext->setHost('thehost');
+        $requestContext->setBaseUrl('/theBasePath/app.php');
+
+        $pathResolver = new PathResolver('/aWebRoot', '');
+
+        $resolver = new WebPathResolver(
+            $this->createFilesystemMock(),
+            $pathResolver,
+            $requestContext
+        );
+
+        $this->assertSame(
+            'theschema://thehost/theBasePath/aFilter/aPath',
+            $resolver->resolve('aPath', 'aFilter')
         );
     }
 

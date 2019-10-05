@@ -26,26 +26,26 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 abstract class AbstractWebPathResolverTest extends TestCase
 {
-    public function testImplementsResolverFactoryInterface()
+    public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass($this->getClassName());
 
         $this->assertTrue($rc->implementsInterface(ResolverFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = $this->createResolver();
 
         $this->assertInstanceOf($this->getClassName(), $loader);
     }
 
-    public function testAbstractWebPathResolverFactoryImplementation()
+    public function testAbstractWebPathResolverFactoryImplementation(): void
     {
         $this->assertTrue(is_a($this->getClassName(), AbstractWebPathResolverFactory::class, true));
     }
 
-    public function testCreateResolverDefinitionOnCreate()
+    public function testCreateResolverDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -71,7 +71,7 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $utilPathResolverReference = $resolverDefinition->getArgument(1);
         $this->assertInstanceOf(Reference::class, $utilPathResolverReference);
 
-        $utilPathResolverServiceId = $utilPathResolverReference->__toString();
+        $utilPathResolverServiceId = (string) $utilPathResolverReference;
         $this->assertSame('liip_imagine.util.resolver.path', $utilPathResolverServiceId);
         $this->assertTrue($container->hasDefinition($utilPathResolverServiceId));
 
@@ -83,13 +83,15 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $this->assertSame('theCachePrefix', $utilPathResolverDefinition->getArgument(1));
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedWebPath = 'theWebPath';
         $expectedCachePrefix = 'theCachePrefix';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('test_resolver_name', 'array');
+        $treeBuilder = new TreeBuilder('test_resolver_name');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('test_resolver_name');
 
         $resolver = $this->createResolver();
         $resolver->addConfiguration($rootNode);
@@ -111,10 +113,12 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $this->assertSame($expectedCachePrefix, $config['cache_prefix']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('test_resolver_name', 'array');
+        $treeBuilder = new TreeBuilder('test_resolver_name');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('test_resolver_name');
 
         $resolver = $this->createResolver();
         $resolver->addConfiguration($rootNode);
@@ -133,13 +137,7 @@ abstract class AbstractWebPathResolverTest extends TestCase
         $this->assertSame('media/cache', $config['cache_prefix']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

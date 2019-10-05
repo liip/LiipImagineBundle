@@ -19,15 +19,15 @@
     },
     "require": {
         "php": "^7.1",
-        "imagine/Imagine": "^0.7.1,<0.8",
-        "symfony/asset": "^3.4|^4.0",
-        "symfony/filesystem": "^3.4|^4.0",
-        "symfony/finder": "^3.4|^4.0",
-        "symfony/framework-bundle": "^3.4|^4.0",
-        "symfony/options-resolver": "^3.4|^4.0",
-        "symfony/process": "^3.4|^4.0",
-        "symfony/templating": "^3.4|^4.0",
-        "symfony/translation": "^3.4|^4.0"
+        "imagine/imagine": "^0.7.1|^1.1",
+        "symfony/asset": "^3.4|^4.2",
+        "symfony/filesystem": "^3.4|^4.2",
+        "symfony/finder": "^3.4|^4.2",
+        "symfony/framework-bundle": "^3.4|^4.2",
+        "symfony/options-resolver": "^3.4|^4.2",
+        "symfony/process": "^3.4|^4.2",
+        "symfony/templating": "^3.4|^4.2",
+        "symfony/translation": "^3.4|^4.2"
     },
     "require-dev": {
         "ext-gd": "*",
@@ -35,18 +35,18 @@
         "aws/aws-sdk-php": "^2.4",
         "doctrine/cache": "^1.1",
         "doctrine/orm": "^2.3",
-        "enqueue/enqueue-bundle": "^0.7|^0.8",
+        "enqueue/enqueue-bundle": "^0.9",
         "friendsofphp/php-cs-fixer": "^2.10",
         "league/flysystem": "^1.0",
         "psr/log": "^1.0",
-        "symfony/browser-kit": "^3.4|^4.0",
-        "symfony/console": "^3.4|^4.0",
-        "symfony/dependency-injection": "^3.4|^4.0",
-        "symfony/form": "^3.4|^4.0",
-        "symfony/phpunit-bridge": "^3.4|^4.0",
-        "symfony/validator": "^3.4|^4.0",
-        "symfony/yaml": "^3.4|^4.0",
-        "twig/twig": "^1.12|^2.0"
+        "symfony/browser-kit": "^3.4|^4.2",
+        "symfony/console": "^3.4|^4.2",
+        "symfony/dependency-injection": "^3.4|^4.2",
+        "symfony/form": "^3.4|^4.2",
+        "symfony/phpunit-bridge": "^4.3",
+        "symfony/validator": "^3.4|^4.2",
+        "symfony/yaml": "^3.4|^4.2",
+        "twig/twig": "^1.34|^2.4"
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
@@ -59,19 +59,18 @@
         "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
         "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
-        "enqueue/enqueue-bundle": "^0.7 add if you like to process images in background",
+        "enqueue/enqueue-bundle": "^0.9 add if you like to process images in background",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
         "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "config": {
         "sort-packages": true
     },
     "extra": {
         "branch-alias": {
-            "dev-1.0": "1.7-dev"
+            "dev-1.0": "1.7-dev",
+            "dev-master": "2.x-dev"
         }
     }
 }

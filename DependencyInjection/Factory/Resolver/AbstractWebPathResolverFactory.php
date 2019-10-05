@@ -52,17 +52,16 @@ abstract class AbstractWebPathResolverFactory extends AbstractResolverFactory
      */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
-        $builder->children()
-            ->scalarNode('web_root')
-            ->defaultValue(
-                SymfonyFramework::getContainerResolvableRootWebPath()
-            )
-            ->cannotBeEmpty()
-            ->end()
-            ->scalarNode('cache_prefix')
-            ->defaultValue('media/cache')
-            ->cannotBeEmpty()
-            ->end()
+        $builder
+            ->children()
+                ->scalarNode('web_root')
+                    ->defaultValue(SymfonyFramework::getContainerResolvableRootWebPath())
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('cache_prefix')
+                    ->defaultValue('media/cache')
+                    ->cannotBeEmpty()
+                ->end()
             ->end();
     }
 }

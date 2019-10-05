@@ -20,12 +20,12 @@ use PHPUnit\Framework\TestCase;
  */
 class PathResolverTest extends TestCase
 {
-    public function testForInterfaceImplementation()
+    public function testForInterfaceImplementation(): void
     {
         $this->assertTrue(is_a(PathResolver::class, PathResolverInterface::class, true));
     }
 
-    public function testPropertiesForSameConstructorArguments()
+    public function testPropertiesForSameConstructorArguments(): void
     {
         $webRootDir = 'aWebRootDir';
         $cachePrefix = 'aCachePrefix';
@@ -34,19 +34,19 @@ class PathResolverTest extends TestCase
         $this->assertAttributeSame($cachePrefix, 'cachePrefix', $pathResolver);
     }
 
-    public function testWebRootPathNormalizer()
+    public function testWebRootPathNormalizer(): void
     {
         $pathResolver = new PathResolver('aWebRootDir/');
         $this->assertAttributeSame('aWebRootDir', 'webRoot', $pathResolver);
     }
 
-    public function testCachePrefixNormalizer()
+    public function testCachePrefixNormalizer(): void
     {
         $pathResolver = new PathResolver('aWebRootDir', '/cachePrefix');
         $this->assertAttributeSame('cachePrefix', 'cachePrefix', $pathResolver);
     }
 
-    public function testForDoubleSlashReplacing()
+    public function testForDoubleSlashReplacing(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir//subRootDir',
@@ -64,7 +64,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testPathsNormalizerWithSubfolders()
+    public function testPathsNormalizerWithSubfolders(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir/subRootDir',
@@ -82,7 +82,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testCacheRootPathDirCreationWithoutInvalidSlashes()
+    public function testCacheRootPathDirCreationWithoutInvalidSlashes(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir/subRootDir',
@@ -105,7 +105,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testCacheRootPathDirCreationWithInvalidSlashes()
+    public function testCacheRootPathDirCreationWithInvalidSlashes(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir/subRootDir/',
@@ -128,7 +128,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testCacheRootPathDirCreationWithDoubledSlashes()
+    public function testCacheRootPathDirCreationWithDoubledSlashes(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir//subRootDir/',
@@ -151,7 +151,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testGetCacheRoot()
+    public function testGetCacheRoot(): void
     {
         $pathResolver = new PathResolver(
             'aWebRootDir',
@@ -163,7 +163,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testGetFileUrlWithSchemePath()
+    public function testGetFileUrlWithSchemePath(): void
     {
         $path = 'https://path-to-no-where';
         $filter = 'aFilter';
@@ -175,7 +175,7 @@ class PathResolverTest extends TestCase
         $this->assertSame(sprintf('%s/%s/https---path-to-no-where', $cachePrefix, $filter), $actualFileUrl);
     }
 
-    public function testGetFileUrlPathTrim()
+    public function testGetFileUrlPathTrim(): void
     {
         $path = '/path-to-no-where';
         $filter = 'aFilter';
@@ -187,7 +187,7 @@ class PathResolverTest extends TestCase
         $this->assertSame(sprintf('%s/%s/path-to-no-where', $cachePrefix, $filter), $actualFileUrl);
     }
 
-    public function testGetFilePathWithSchemePath()
+    public function testGetFilePathWithSchemePath(): void
     {
         $path = 'https://path-to-no-where';
         $filter = 'aFilter';
@@ -203,7 +203,7 @@ class PathResolverTest extends TestCase
         );
     }
 
-    public function testGetFilePathWithPathTrim()
+    public function testGetFilePathWithPathTrim(): void
     {
         $path = '/path-to-no-where';
         $filter = 'aFilter';

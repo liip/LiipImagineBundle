@@ -23,7 +23,7 @@ To add this post-processor to the filter set created in the
                 post_processors:
                     pngquant: { quality: "75-85" }
 
-This configuration sets a quality factor range of 75 to 80 for the resulting image binary.
+This configuration sets a quality factor range of 75 to 85 for the resulting image binary.
 
 .. note::
 
@@ -41,12 +41,22 @@ This configuration sets a quality factor range of 75 to 80 for the resulting ima
 Options
 -------
 
-:strong:`quality:` ``int``
-    Sets the image optimization factor.
+:strong:`quality:` ``int|int[]``
+    When set to an ``int`` this sets the maximum image quality level. When set to an ``int[]`` (such as ``[60,80]``) the
+    first array ``int`` is used to define the lowest acceptable quality level and the second to define the maximum quality
+    level (in this mode, the executable will use the least amount of colors required to meet or exceed the maximum quality,
+    but if the conversion results in a quality below the minimum quality the converted file will be discarded and the
+    original one used instead).
 
+:strong:`speed:` ``int``
+    The speed/quality trade-off value to use. Valid values: ``1`` (slowest/best) through ``11`` (fastest/worst).
+
+:string:`dithering:` ``bool|float``
+    When set to ``false`` the Floyd-Steinberg dithering algorithm is completely disabled. Otherwise, when a ``float``,
+    the dithering level is set.
 
 Parameters
 ----------
 
 :strong:`liip_imagine.pngquant.binary:` ``string``
-    Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pnquant``.
+    Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pngquant``.

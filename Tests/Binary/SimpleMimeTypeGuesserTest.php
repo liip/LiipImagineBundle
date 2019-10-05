@@ -15,6 +15,8 @@ use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
@@ -26,6 +28,14 @@ class SimpleMimeTypeGuesserTest extends TestCase
         $guesser = $this->getSimpleMimeTypeGuesser();
 
         $this->assertInstanceOf(SimpleMimeTypeGuesser::class, $guesser);
+    }
+
+    public function testThrowsIfConstructedWithWrongTypeArguments()
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$mimeTypeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
+
+        new SimpleMimeTypeGuesser('foo');
     }
 
     public function testImplementsMimeTypeGuesserInterface()
@@ -65,6 +75,10 @@ class SimpleMimeTypeGuesserTest extends TestCase
      */
     private function getSimpleMimeTypeGuesser()
     {
+        if (interface_exists(SymfonyMimeTypeGuesserInterface::class)) {
+            return new SimpleMimeTypeGuesser(MimeTypes::getDefault());
+        }
+
         return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
     }
 }

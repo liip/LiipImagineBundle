@@ -1,104 +1,93 @@
 language: php
-
 sudo: false
-
 cache:
-
   directories:
     - $HOME/.composer/cache
+    - $HOME/symfony-bridge/.phpunit
 
 env:
-
   global:
-    - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+    - SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
-    - PHPCSFIXER_ENABLED="false"
+    - SYMFONY_PHPUNIT_VERSION="6.5"
     - COVERALLS_ENABLED="false"
+    - STABILITY=stable
 
 matrix:
-
   fast_finish: true
-
   include:
+    - php: '7.1'
+    - php: '7.2'
 
-    - php: 7.1
-    - php: 7.1
+    # Enable code coverage with the latest supported PHP version
+    - php: '7.3'
       env:
-        - PHPUNIT_ENABLED="false"
-        - PHPCSFIXER_ENABLED="true"
-    - php: 7.1
+        - COVERALLS_ENABLED="true"
+        - PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
+
+    # Minimum supported dependencies with the latest and oldest supported PHP versions
+    - php: '7.1'
       env:
-        - SYMFONY_VERSION=4.0.*
         - COMPOSER_FLAGS="--prefer-lowest"
-        - DEPENDENCIES="symfony/phpunit-bridge:^4"
-    - php: 7.2
-    - php: 7.2
-      env: SYMFONY_VERSION=3.4.*
-    - php: 7.2
-      env: SYMFONY_VERSION=4.0.*
-    - php: 7.2
+    - php: '7.3'
       env:
-        - DEPENDENCIES="symfony/phpunit-bridge:^4"
-        - COMPOSER_UPDATE_FLAGS="--no-dev"
-    - php: 7.2
-      env:
-        - COVERALLS_ENABLED="true"
-        - PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
-    - php: 7.2
-      env:
-        - SYMFONY_VERSION=dev-master
-        - STABILITY=dev
-    - php: nightly
-      env:
-        - SYMFONY_VERSION=4.0.*
-        - COMPOSER_FLAGS="--ignore-platform-reqs"
+        - COMPOSER_FLAGS="--prefer-lowest"
 
+    # Test each supported Symfony version with lowest supported PHP version
+    - php: '7.1'
+      env:
+        - SYMFONY_VERSION=3.4.*
+    - php: '7.1'
+      env:
+        - SYMFONY_VERSION=4.2.*
+    - php: '7.1'
+      env:
+        - SYMFONY_VERSION=4.3.*
+
+    # Test upcoming Symfony versions with lowest supported PHP version and dev dependencies
+    - php: '7.1'
+      env:
+        - STABILITY=dev
+        - SYMFONY_VERSION=4.4.*
+
+    # Test upcoming PHP versions with dev dependencies
+    - php: '7.4snapshot'
+      env:
+        - STABILITY=dev
+        - COMPOSER_FLAGS="--ignore-platform-reqs --prefer-stable"
   allow_failures:
-
     - env:
-        - COVERALLS_ENABLED="true"
-        - PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
-    - env:
-        - SYMFONY_VERSION=dev-master
         - STABILITY=dev
-    - php: nightly
-
+        - COMPOSER_FLAGS="--ignore-platform-reqs --prefer-stable"
+    - env:
+        - STABILITY=dev
+        - SYMFONY_VERSION=4.4.*
 
 before_install:
-
   - if [[ "$SYMFONY_VERSION" != "" ]]; then
-      travis_retry composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update $COMPOSER_FLAGS;
+      travis_retry composer global require "symfony/flex:^1.4";
+      composer config extra.symfony.require $SYMFONY_VERSION;
     fi
-  - if [[ "$DEPENDENCIES" != "" ]]; then
-      travis_retry composer require $DEPENDENCIES --no-update $COMPOSER_FLAGS;
-    fi
-  - if [[ "$STABILITY" != "" ]]; then
+  - if [[ "$STABILITY" != "stable" ]]; then
       travis_retry composer config minimum-stability $STABILITY;
     fi
   - if [[ "$COVERALLS_ENABLED" != "true" ]]; then
       phpenv config-rm xdebug.ini || true;
     fi
   - if [[ "$COVERALLS_ENABLED" == "true" ]]; then
-      travis_retry composer require --dev satooshi/php-coveralls:^2.0@dev --no-update $COMPOSER_FLAGS;
+      travis_retry composer require --dev satooshi/php-coveralls:^2.0 --no-update $COMPOSER_FLAGS;
     fi
+  - pecl channel-update pecl.php.net
+  - yes | pecl install imagick
 
 install:
-
-  - travis_retry composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS $COMPOSER_UPDATE_FLAGS
+  - travis_retry composer update --prefer-dist --no-interaction --no-suggest --no-progress --ansi $COMPOSER_FLAGS
   - ./vendor/bin/simple-phpunit install
 
-script:
-
-  - if [[ "$PHPUNIT_ENABLED" == "true" ]]; then
-      ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS;
-    fi
-  - if [[ "$PHPCSFIXER_ENABLED" == "true" ]]; then
-      vendor/bin/php-cs-fixer --dry-run --diff -vvv fix;
-    fi
+script: ./vendor/bin/simple-phpunit $PHPUNIT_FLAGS
 
 after_success:
-
   - if [[ "$PHPUNIT_ENABLED" == "true" && "$COVERALLS_ENABLED" == "true" ]]; then
       ./vendor/bin/php-coveralls -vvv --config .coveralls.yml;
     fi;

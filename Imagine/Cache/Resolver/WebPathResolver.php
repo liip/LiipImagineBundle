@@ -40,8 +40,8 @@ class WebPathResolver extends AbstractWebPathResolver
     {
         return sprintf(
             '%s/%s',
-            $this->getBaseUrl(),
-            $this->getPathResolver()->getFileUrl($path, $filter)
+            rtrim($this->getBaseUrl(), '/'),
+            ltrim($this->getPathResolver()->getFileUrl($path, $filter), '/')
         );
     }
 

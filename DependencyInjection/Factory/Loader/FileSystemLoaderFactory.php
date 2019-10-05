@@ -26,8 +26,16 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     {
         $locatorDefinition = new ChildDefinition(sprintf('liip_imagine.binary.locator.%s', $config['locator']));
         $locatorDefinition->replaceArgument(0, $this->resolveDataRoots($config['data_root'], $config['bundle_resources'], $container));
+        $locatorDefinition->replaceArgument(1, $config['allow_unresolvable_data_roots']);
 
         $definition = $this->getChildLoaderDefinition();
+
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $definition->replaceArgument(0, $mimeTypes);
+            $definition->replaceArgument(1, $mimeTypes);
+        }
+
         $definition->replaceArgument(2, $locatorDefinition);
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
@@ -67,6 +75,9 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                         ->cannotBeEmpty()
                     ->end()
                 ->end()
+                ->booleanNode('allow_unresolvable_data_roots')
+                    ->defaultFalse()
+                ->end()
                 ->arrayNode('bundle_resources')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -105,7 +116,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         $resourcePaths = [];
 
         foreach ($this->getBundleResourcePaths($container) as $name => $path) {
-            if (('whitelist' === $config['access_control_type']) === in_array($name, $config['access_control_list'], true) && is_dir($path)) {
+            if (('whitelist' === $config['access_control_type']) === \in_array($name, $config['access_control_list'], true) && is_dir($path)) {
                 $resourcePaths[$name] = $path;
             }
         }
@@ -159,7 +170,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                 throw new InvalidArgumentException(sprintf('Unable to resolve bundle "%s" while auto-registering bundle resource paths.', $c), null, $exception);
             }
 
-            $paths[$r->getShortName()] = dirname($r->getFileName());
+            $paths[$r->getShortName()] = \dirname($r->getFileName());
         }
 
         return $paths;

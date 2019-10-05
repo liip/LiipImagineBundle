@@ -53,7 +53,7 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
      */
     protected function isExifExtensionLoaded(): bool
     {
-        return extension_loaded('exif');
+        return \extension_loaded('exif');
     }
 
     /**

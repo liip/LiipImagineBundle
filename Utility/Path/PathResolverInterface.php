@@ -16,21 +16,14 @@ interface PathResolverInterface
     /**
      * @param string $path
      * @param string $filter
-     *
-     * @return string
      */
-    public function getFilePath($path, $filter);
+    public function getFilePath($path, $filter): string;
 
     /**
      * @param string $path
      * @param string $filter
-     *
-     * @return string
      */
-    public function getFileUrl($path, $filter);
+    public function getFileUrl($path, $filter): string;
 
-    /**
-     * @return string
-     */
-    public function getCacheRoot();
+    public function getCacheRoot(): string;
 }

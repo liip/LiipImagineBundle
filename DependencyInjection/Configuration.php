@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection;
 
+use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
@@ -45,8 +46,10 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('liip_imagine', 'array');
+        $treeBuilder = new TreeBuilder('liip_imagine');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('liip_imagine');
 
         $resolversPrototypeNode = $rootNode
             ->children()
@@ -77,11 +80,11 @@ class Configuration implements ConfigurationInterface
                         $v['loaders'] = [];
                     }
 
-                    if (false === is_array($v['loaders'])) {
+                    if (false === \is_array($v['loaders'])) {
                         throw new \LogicException('Loaders has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['loaders'])) {
+                    if (false === \array_key_exists('default', $v['loaders'])) {
                         $v['loaders']['default'] = ['filesystem' => null];
                     }
 
@@ -89,11 +92,11 @@ class Configuration implements ConfigurationInterface
                         $v['resolvers'] = [];
                     }
 
-                    if (false === is_array($v['resolvers'])) {
+                    if (false === \is_array($v['resolvers'])) {
                         throw new \LogicException('Resolvers has to be array');
                     }
 
-                    if (false === array_key_exists('default', $v['resolvers'])) {
+                    if (false === \array_key_exists('default', $v['resolvers'])) {
                         $v['resolvers']['default'] = ['web_path' => null];
                     }
 
@@ -107,7 +110,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !in_array($v, ['gd', 'imagick', 'gmagick'], true);
+                            return !\in_array($v, ['gd', 'imagick', 'gmagick'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
@@ -116,11 +119,48 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache_base_path')->defaultValue('')->end()
                 ->scalarNode('data_loader')->defaultValue('default')->end()
                 ->scalarNode('default_image')->defaultNull()->end()
+                ->arrayNode('default_filter_set_settings')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('quality')->defaultValue(100)->end()
+                        ->scalarNode('jpeg_quality')->defaultNull()->end()
+                        ->scalarNode('png_compression_level')->defaultNull()->end()
+                        ->scalarNode('png_compression_filter')->defaultNull()->end()
+                        ->scalarNode('format')->defaultNull()->end()
+                        ->booleanNode('animated')->defaultFalse()->end()
+                        ->scalarNode('cache')->defaultNull()->end()
+                        ->scalarNode('data_loader')->defaultNull()->end()
+                        ->scalarNode('default_image')->defaultNull()->end()
+                        ->arrayNode('filters')
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('post_processors')
+                            ->defaultValue([])
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('controller')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('filter_action')->defaultValue(sprintf('%s::filterAction', ImagineController::class))->end()
                         ->scalarNode('filter_runtime_action')->defaultValue(sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
+                        ->integerNode('redirect_response_code')->defaultValue(301)
+                            ->validate()
+                                ->ifTrue(function ($redirectResponseCode) {
+                                    return !\in_array($redirectResponseCode, ControllerConfig::REDIRECT_RESPONSE_CODES, true);
+                                })
+                                ->thenInvalid('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).')
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('filter_sets')
@@ -128,15 +168,15 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->fixXmlConfig('filter', 'filters')
                         ->children()
-                            ->scalarNode('quality')->defaultValue(100)->end()
-                            ->scalarNode('jpeg_quality')->defaultNull()->end()
-                            ->scalarNode('png_compression_level')->defaultNull()->end()
-                            ->scalarNode('png_compression_filter')->defaultNull()->end()
-                            ->scalarNode('format')->defaultNull()->end()
-                            ->booleanNode('animated')->defaultFalse()->end()
-                            ->scalarNode('cache')->defaultNull()->end()
-                            ->scalarNode('data_loader')->defaultNull()->end()
-                            ->scalarNode('default_image')->defaultNull()->end()
+                            ->scalarNode('quality')->end()
+                            ->scalarNode('jpeg_quality')->end()
+                            ->scalarNode('png_compression_level')->end()
+                            ->scalarNode('png_compression_filter')->end()
+                            ->scalarNode('format')->end()
+                            ->booleanNode('animated')->end()
+                            ->scalarNode('cache')->end()
+                            ->scalarNode('data_loader')->end()
+                            ->scalarNode('default_image')->end()
                             ->arrayNode('filters')
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
@@ -158,6 +198,18 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('enqueue')
                 ->defaultFalse()
                 ->info('Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ.')
+            ->end()
+            ->booleanNode('templating')
+                ->defaultTrue()
+                ->info('Enables integration with symfony/templating component')
+                ->validate()
+                    ->ifTrue()
+                    ->then(function ($v) {
+                        @trigger_error('Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.', E_USER_DEPRECATED);
+
+                        return $v;
+                    })
+                ->end()
             ->end()
         ->end();
 

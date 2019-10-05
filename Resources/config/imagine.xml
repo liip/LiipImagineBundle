@@ -32,6 +32,78 @@
 
     <services>
 
+        <!-- Factory services -->
+        <service id="liip_imagine.factory.config.filter.argument.point" class="Liip\ImagineBundle\Factory\Config\Filter\Argument\PointFactory"/>
+        <service id="liip_imagine.factory.config.filter.argument.size" class="Liip\ImagineBundle\Factory\Config\Filter\Argument\SizeFactory"/>
+
+        <service id="liip_imagine.factory.config.stack" class="Liip\ImagineBundle\Factory\Config\StackFactory" />
+        <service id="liip_imagine.factory.config.filter.auto_rotate" class="Liip\ImagineBundle\Factory\Config\Filter\AutoRotateFactory" />
+        <service id="liip_imagine.factory.config.filter.background" class="Liip\ImagineBundle\Factory\Config\Filter\BackgroundFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.crop" class="Liip\ImagineBundle\Factory\Config\Filter\CropFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.point"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.downscale" class="Liip\ImagineBundle\Factory\Config\Filter\DownscaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.flip" class="Liip\ImagineBundle\Factory\Config\Filter\FlipFactory" />
+        <service id="liip_imagine.factory.config.filter.grayscale" class="Liip\ImagineBundle\Factory\Config\Filter\GrayscaleFactory" />
+        <service id="liip_imagine.factory.config.filter.interlace" class="Liip\ImagineBundle\Factory\Config\Filter\InterlaceFactory" />
+        <service id="liip_imagine.factory.config.filter.paste" class="Liip\ImagineBundle\Factory\Config\Filter\PasteFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.point"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.relative_resize" class="Liip\ImagineBundle\Factory\Config\Filter\RelativeResizeFactory" />
+        <service id="liip_imagine.factory.config.filter.resize" class="Liip\ImagineBundle\Factory\Config\Filter\ResizeFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.rotate" class="Liip\ImagineBundle\Factory\Config\Filter\RotateFactory" />
+        <service id="liip_imagine.factory.config.filter.scale" class="Liip\ImagineBundle\Factory\Config\Filter\ScaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.strip" class="Liip\ImagineBundle\Factory\Config\Filter\StripFactory" />
+        <service id="liip_imagine.factory.config.filter.thumbnail" class="Liip\ImagineBundle\Factory\Config\Filter\ThumbnailFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.upscale" class="Liip\ImagineBundle\Factory\Config\Filter\UpscaleFactory">
+            <argument type="service" id="liip_imagine.factory.config.filter.argument.size"/>
+        </service>
+        <service id="liip_imagine.factory.config.filter.watermark" class="Liip\ImagineBundle\Factory\Config\Filter\WatermarkFactory" />
+
+        <!-- Config services -->
+        <service id="liip_imagine.config.filter_factory_collection" class="Liip\ImagineBundle\Config\FilterFactoryCollection">
+            <argument type="service" id="liip_imagine.factory.config.filter.auto_rotate"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.background"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.crop"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.downscale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.flip"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.grayscale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.interlace"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.paste"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.relative_resize"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.resize"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.rotate"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.scale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.strip"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.thumbnail"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.upscale"/>
+            <argument type="service" id="liip_imagine.factory.config.filter.watermark"/>
+        </service>
+        <service id="Liip\ImagineBundle\Config\FilterFactoryCollection" alias="liip_imagine.config.filter_factory_collection"/>
+
+        <service id="liip_imagine.config.stack_builder" class="Liip\ImagineBundle\Config\StackBuilder">
+            <argument type="service" id="liip_imagine.factory.config.stack" />
+            <argument type="service" id="liip_imagine.config.filter_factory_collection" />
+        </service>
+        <service id="Liip\ImagineBundle\Config\StackBuilder" alias="liip_imagine.config.stack_builder"/>
+
+        <service id="liip_imagine.config.stack_collection" class="Liip\ImagineBundle\Config\StackCollection" public="true">
+            <argument type="service" id="liip_imagine.config.stack_builder" />
+            <argument>%liip_imagine.filter_sets%</argument>
+        </service>
+        <service id="Liip\ImagineBundle\Config\StackCollection" alias="liip_imagine.config.stack_collection"/>
+
         <!-- Utility services -->
 
         <service id="liip_imagine.filter.manager" class="Liip\ImagineBundle\Imagine\Filter\FilterManager" public="true">
@@ -72,12 +144,19 @@
             <argument><!-- will be injected by dynamically --></argument>
         </service>
 
+        <!-- Config -->
+
+        <service id="liip_imagine.controller.config" class="Liip\ImagineBundle\Config\Controller\ControllerConfig" public="false">
+            <argument><!-- will be injected by LiipImagineExtension --></argument>
+        </service>
+
         <!-- Controller -->
 
         <service id="Liip\ImagineBundle\Controller\ImagineController" public="true">
             <argument type="service" id="liip_imagine.service.filter" />
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
+            <argument type="service" id="liip_imagine.controller.config" />
         </service>
 
         <service id="liip_imagine.controller" alias="Liip\ImagineBundle\Controller\ImagineController" public="true" />
@@ -88,21 +167,28 @@
 
         <service id="liip_imagine" alias="liip_imagine.gd" />
 
-        <service id="liip_imagine.gd" class="Imagine\Gd\Imagine" public="false" />
+        <service id="liip_imagine.gd" class="Imagine\Gd\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
-        <service id="liip_imagine.imagick" class="Imagine\Imagick\Imagine" public="false" />
+        <service id="liip_imagine.imagick" class="Imagine\Imagick\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
-        <service id="liip_imagine.gmagick" class="Imagine\Gmagick\Imagine" public="false" />
+        <service id="liip_imagine.gmagick" class="Imagine\Gmagick\Imagine" public="false">
+            <call method="setMetadataReader">
+                <argument type="service" id="liip_imagine.meta_data.reader" />
+            </call>
+        </service>
 
         <!--  Templating helpers and extensions -->
 
         <service id="liip_imagine.templating.filter_extension" class="Liip\ImagineBundle\Templating\FilterExtension" public="false">
             <tag name="twig.extension" />
-            <argument type="service" id="liip_imagine.cache.manager" />
-        </service>
-
-        <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
-            <tag name="templating.helper" alias="imagine" />
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
@@ -177,6 +263,11 @@
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
 
+        <service id="liip_imagine.filter.loader.resample" class="Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader" public="true">
+            <argument type="service" id="liip_imagine" />
+            <tag name="liip_imagine.filter.loader" loader="resample" />
+        </service>
+
         <!-- Data loaders -->
 
         <service id="liip_imagine.binary.loader.prototype.filesystem" class="Liip\ImagineBundle\Binary\Loader\FileSystemLoader">
@@ -195,14 +286,20 @@
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
 
+        <service id="liip_imagine.binary.loader.prototype.chain" class="Liip\ImagineBundle\Binary\Loader\ChainLoader" abstract="true">
+            <argument><!-- will be injected by ChainLoaderFactory --></argument>
+        </service>
+
         <!-- Data loader locators -->
 
         <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false" shared="false">
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 
         <service id="liip_imagine.binary.locator.filesystem_insecure" class="Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator" public="false" shared="false">
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>

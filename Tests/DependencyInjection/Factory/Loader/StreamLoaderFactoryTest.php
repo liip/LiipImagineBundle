@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory
  */
 class StreamLoaderFactoryTest extends TestCase
 {
@@ -71,8 +71,10 @@ class StreamLoaderFactoryTest extends TestCase
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child node "wrapper" at path "stream" must be configured.');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $resolver = new StreamLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -85,8 +87,10 @@ class StreamLoaderFactoryTest extends TestCase
         $expectedWrapper = 'theWrapper';
         $expectedContext = 'theContext';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -107,8 +111,10 @@ class StreamLoaderFactoryTest extends TestCase
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);

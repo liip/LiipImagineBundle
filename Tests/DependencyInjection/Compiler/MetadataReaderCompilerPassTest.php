@@ -30,7 +30,7 @@ class MetadataReaderCompilerPassTest extends TestCase
 
         $pass = new MetadataReaderCompilerPass();
         $pass->process($container);
-        $this->assertInstanceOf(extension_loaded('exif') ? $metadataExifClass : $metadataDefaultClass, $container->get($metadataServiceId));
+        $this->assertInstanceOf(\extension_loaded('exif') ? $metadataExifClass : $metadataDefaultClass, $container->get($metadataServiceId));
     }
 
     public function testProcessWithoutExtExifAddsDefaultReader()

@@ -70,7 +70,7 @@ class FlysystemResolverTest extends AbstractTest
         $fs
             ->expects($this->once())
             ->method('put')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
 
@@ -83,7 +83,7 @@ class FlysystemResolverTest extends AbstractTest
         $fs
             ->expects($this->once())
             ->method('has')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
 
@@ -102,6 +102,16 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
+    public function testResolveWithPrefixCacheEmpty()
+    {
+        $resolver = new FlysystemResolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com', '');
+
+        $this->assertSame(
+            'http://images.example.com/thumb/some-folder/path.jpg',
+            $resolver->resolve('/some-folder/path.jpg', 'thumb')
+        );
+    }
+
     public function testRemoveCacheForPathAndFilterOnRemove()
     {
         $fs = $this->createFlySystemMock();
@@ -109,12 +119,12 @@ class FlysystemResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('has')
             ->with('media/cache/thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->once())
             ->method('delete')
             ->with('media/cache/thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
@@ -127,22 +137,22 @@ class FlysystemResolverTest extends AbstractTest
             ->expects($this->at(0))
             ->method('has')
             ->with('media/cache/thumb/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(1))
             ->method('delete')
             ->with('media/cache/thumb/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(2))
             ->method('has')
             ->with('media/cache/thumb/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(3))
             ->method('delete')
             ->with('media/cache/thumb/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -158,42 +168,42 @@ class FlysystemResolverTest extends AbstractTest
             ->expects($this->at(0))
             ->method('has')
             ->with('media/cache/filterOne/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(1))
             ->method('delete')
             ->with('media/cache/filterOne/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(2))
             ->method('has')
             ->with('media/cache/filterTwo/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(3))
             ->method('delete')
             ->with('media/cache/filterTwo/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(4))
             ->method('has')
             ->with('media/cache/filterOne/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(5))
             ->method('delete')
             ->with('media/cache/filterOne/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(6))
             ->method('has')
             ->with('media/cache/filterTwo/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $fs
             ->expects($this->at(7))
             ->method('delete')
             ->with('media/cache/filterTwo/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -209,7 +219,7 @@ class FlysystemResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('has')
             ->with('media/cache/thumb/some-folder/path.jpg')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $fs
             ->expects($this->never())
             ->method('delete');

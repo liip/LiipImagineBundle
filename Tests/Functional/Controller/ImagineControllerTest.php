@@ -36,7 +36,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -54,7 +54,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -126,7 +126,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
@@ -161,7 +161,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
@@ -181,8 +181,8 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
-        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo%20bar.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
     }

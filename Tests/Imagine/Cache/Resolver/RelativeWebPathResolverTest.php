@@ -17,12 +17,13 @@ use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Utility\Path\PathResolver;
 use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\RelativeWebPathResolver
  */
-class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
+class RelativeWebPathResolverTest extends TestCase
 {
     /**
      * @var MockObject|Filesystem
@@ -50,12 +51,12 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->basePath = sys_get_temp_dir().'/aWebRoot';
     }
 
-    public function testImplementsResolverInterface()
+    public function testImplementsResolverInterface(): void
     {
         $this->assertInstanceOf(ResolverInterface::class, $this->relativeWebPathResolver);
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $path = 'aPath';
         $filter = 'aFilter';
@@ -72,13 +73,13 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(sprintf('/%s', $fileUrl), $actualFileUrl);
     }
 
-    public function testOnSameConstructorArguments()
+    public function testOnSameConstructorArguments(): void
     {
         $this->assertAttributeSame($this->filesystem, 'filesystem', $this->relativeWebPathResolver);
         $this->assertAttributeSame($this->pathResolverUtil, 'pathResolver', $this->relativeWebPathResolver);
     }
 
-    public function testFileIsStored()
+    public function testFileIsStored(): void
     {
         $existingFile = $this->basePath.'/aCachePrefix/aFilter/existingPath';
         $filesystem = new Filesystem();
@@ -95,7 +96,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $filesystem->remove($this->basePath);
     }
 
-    public function testFileIsNotStored()
+    public function testFileIsNotStored(): void
     {
         $existingFile = $this->basePath.'/aCachePrefix/aFilter/existingPath';
         $filesystem = new Filesystem();
@@ -112,7 +113,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $filesystem->remove($this->basePath);
     }
 
-    public function testStore()
+    public function testStore(): void
     {
         $path = 'aPath';
         $filter = 'aFilter';
@@ -135,7 +136,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->relativeWebPathResolver->store($binary, $path, $filter);
     }
 
-    public function testRemoveWithEmptyInputArrays()
+    public function testRemoveWithEmptyInputArrays(): void
     {
         $this->filesystem
             ->expects($this->exactly(0))
@@ -144,7 +145,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->relativeWebPathResolver->remove([], []);
     }
 
-    public function testRemoveWithEmptyPathsArrayAndSingleFilter()
+    public function testRemoveWithEmptyPathsArrayAndSingleFilter(): void
     {
         $filter = 'aFilter';
         $cacheRoot = '/root/cacheFolder';
@@ -168,7 +169,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->relativeWebPathResolver->remove([], [$filter]);
     }
 
-    public function testRemoveWithEmptyPathsArrayAndMultipleFilters()
+    public function testRemoveWithEmptyPathsArrayAndMultipleFilters(): void
     {
         $filterOne = 'aFilterOne';
         $filterTwo = 'aFilterTwo';
@@ -194,7 +195,7 @@ class RelativeWebPathResolverTest extends \PHPUnit\Framework\TestCase
         $this->relativeWebPathResolver->remove([], [$filterOne, $filterTwo]);
     }
 
-    public function testRemoveWithMultiplePathaAndFilters()
+    public function testRemoveWithMultiplePathaAndFilters(): void
     {
         $filterOne = 'aFilterOne';
         $filterTwo = 'aFilterTwo';

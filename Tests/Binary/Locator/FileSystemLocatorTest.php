@@ -19,6 +19,21 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
  */
 class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
 {
+    public function testAllowInvalidPaths()
+    {
+        $locator = new FileSystemLocator(['/does/not/exist/foo', '/does/not/exist/bar', $temp = sys_get_temp_dir()], true);
+        $roots = (new \ReflectionObject($locator))->getProperty('roots');
+        $roots->setAccessible(true);
+        $array = [
+            '',
+            '',
+            realpath($temp),
+        ];
+        unset($array[0], $array[1]);
+
+        $this->assertSame($array, $roots->getValue($locator));
+    }
+
     public function testThrowsIfPathHasSymbolicLinksPointOutsideRoot()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
@@ -70,7 +85,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
         ];
 
         return array_map(function ($params) use ($prepend) {
-            return [[$prepend[mt_rand(0, count($prepend) - 1)], $params[0]], $params[1]];
+            return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }
 

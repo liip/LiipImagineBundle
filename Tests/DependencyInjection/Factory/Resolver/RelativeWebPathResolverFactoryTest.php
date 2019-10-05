@@ -19,7 +19,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInter
  */
 class RelativeWebPathResolverFactoryTest extends AbstractWebPathResolverTest
 {
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $resolver = new RelativeWebPathResolverFactory();
 

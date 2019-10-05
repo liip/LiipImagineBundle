@@ -14,9 +14,6 @@ framework:
     translator:     ~
     test:           ~
 
-    templating:
-        engines: [ 'php' ]
-
     session:
         storage_id: session.storage.mock_file
 
@@ -24,6 +21,10 @@ framework:
         resource: "%kernel.root_dir%/config/routing.yml"
 
 liip_imagine:
+
+    controller:
+
+        redirect_response_code: 302
 
     loaders:
 
@@ -38,6 +39,14 @@ liip_imagine:
         bar:
             filesystem:
                 data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
+
+        baz:
+            chain:
+                loaders:
+                    - foo
+                    - bar
+                    - default
+                    - bundles_all
 
         bundles_all:
             filesystem:

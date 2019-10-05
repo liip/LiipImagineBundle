@@ -12,7 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Functional\Command;
 
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -20,20 +20,109 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class AbstractCommandTestCase extends AbstractSetupWebTestCase
 {
-    /**
-     * @param Command $command
-     * @param array   $arguments
-     * @param array   $options
-     *
-     * @return string
-     */
-    protected function executeConsole(Command $command, array $arguments = [], array $options = [])
+    protected function executeConsole(string $commandName, array $arguments = [], &$return = null): string
     {
-        $options = array_replace(['--env' => 'test'], $options);
+        $application = new Application($this->createClient()->getKernel());
+        $command = $application->find($commandName);
+
+        $arguments = array_replace(['command' => $command->getName()], $arguments);
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute($arguments, $options);
+        $return = $commandTester->execute($arguments, ['--env' => 'test']);
 
         return $commandTester->getDisplay();
+    }
+
+    /**
+     * @param string[] $images
+     * @param string[] $filters
+     */
+    protected function assertImagesNotExist(array $images, array $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->assertFileNotExists(sprintf('%s/%s/%s', $this->cacheRoot, $f, $i));
+            }
+        }
+    }
+
+    /**
+     * @param string[] $images
+     * @param string[] $filters
+     */
+    protected function assertImagesExist($images, $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->assertFileExists(sprintf('%s/%s/%s', $this->cacheRoot, $f, $i));
+            }
+        }
+    }
+
+    protected function assertOutputContainsResolvedImages($output, array $images, array $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->assertOutputContainsImage($output, $i, $f, 'resolved');
+            }
+        }
+    }
+
+    protected function assertOutputContainsCachedImages($output, array $images, array $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->assertOutputContainsImage($output, $i, $f, 'cached');
+            }
+        }
+    }
+
+    protected function assertOutputContainsFailedImages($output, array $images, array $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->assertContains(sprintf('%s[%s] (failed)', $i, $f), $output);
+            }
+        }
+    }
+
+    protected function assertOutputContainsImage($output, $image, $filter, $type): void
+    {
+        $expected = vsprintf('%s[%s] (%s) http://localhost/media/cache/%s/%s', [
+            $image,
+            $filter,
+            $type,
+            $filter,
+            $image,
+        ]);
+        $this->assertContains($expected, $output);
+    }
+
+    /**
+     * @param string[] $images
+     * @param string[] $filters
+     */
+    protected function delResolvedImages(array $images, array $filters): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                if (file_exists($f = sprintf('%s/%s/%s', $this->cacheRoot, $f, $i))) {
+                    @unlink($f);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string[] $images
+     * @param string[] $filters
+     */
+    protected function putResolvedImages(array $images, array $filters, string $content = 'anImageContent'): void
+    {
+        foreach ($images as $i) {
+            foreach ($filters as $f) {
+                $this->filesystem->dumpFile(sprintf('%s/%s/%s', $this->cacheRoot, $f, $i), $content);
+            }
+        }
     }
 }

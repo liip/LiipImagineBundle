@@ -14,12 +14,16 @@ namespace Liip\ImagineBundle\DependencyInjection;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 class LiipImagineExtension extends Extension
 {
@@ -70,6 +74,16 @@ class LiipImagineExtension extends Extension
             $configs
         );
 
+        if (interface_exists(MimeTypeGuesserInterface::class)) {
+            $mimeTypes = new Definition(MimeTypes::class);
+            $mimeTypes->setFactory([MimeTypes::class, 'getDefault']);
+
+            $container->setDefinition('liip_imagine.mime_types', $mimeTypes);
+        }
+
+        $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
+        $container->setParameter('liip_imagine.loaders', $config['loaders']);
+
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
@@ -81,18 +95,28 @@ class LiipImagineExtension extends Extension
             $loader->load('enqueue.xml');
         }
 
-        $container->getDefinition('liip_imagine.'.$config['driver'])->addMethodCall('setMetadataReader', [
-            new Reference('liip_imagine.meta_data.reader'),
-        ]);
+        if ($config['templating']) {
+            $loader->load('templating.xml');
+        }
+
+        $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
+
+        $container
+            ->getDefinition('liip_imagine.controller.config')
+            ->replaceArgument(0, $config['controller']['redirect_response_code']);
 
         $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
+        $container->setAlias(DataManager::class, new Alias('liip_imagine.data.manager', false));
+        $container->setAlias(FilterManager::class, new Alias('liip_imagine.filter.manager', false));
 
         $container->setParameter('liip_imagine.cache.resolver.default', $config['cache']);
 
         $container->setParameter('liip_imagine.default_image', $config['default_image']);
 
-        $container->setParameter('liip_imagine.filter_sets', $config['filter_sets']);
+        $filterSets = $this->createFilterSets($config['default_filter_set_settings'], $config['filter_sets']);
+
+        $container->setParameter('liip_imagine.filter_sets', $filterSets);
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
 
         $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
@@ -102,6 +126,22 @@ class LiipImagineExtension extends Extension
             $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
             ['@LiipImagine/Form/form_div_layout.html.twig']
         ));
+
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $container->getDefinition('liip_imagine.binary.mime_type_guesser')
+                ->replaceArgument(0, $mimeTypes);
+
+            $container->getDefinition('liip_imagine.data.manager')
+                ->replaceArgument(1, $mimeTypes);
+        }
+    }
+
+    private function createFilterSets(array $defaultFilterSets, array $filterSets): array
+    {
+        return array_map(function (array $filterSet) use ($defaultFilterSets) {
+            return array_replace_recursive($defaultFilterSets, $filterSet);
+        }, $filterSets);
     }
 
     /**

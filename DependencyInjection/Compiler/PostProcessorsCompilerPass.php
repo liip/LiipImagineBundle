@@ -28,7 +28,7 @@ class PostProcessorsCompilerPass extends AbstractCompilerPass
     {
         $tags = $container->findTaggedServiceIds('liip_imagine.filter.post_processor');
 
-        if (count($tags) > 0 && $container->hasDefinition('liip_imagine.filter.manager')) {
+        if (\count($tags) > 0 && $container->hasDefinition('liip_imagine.filter.manager')) {
             $manager = $container->getDefinition('liip_imagine.filter.manager');
 
             foreach ($tags as $id => $tag) {

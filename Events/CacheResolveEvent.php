@@ -12,8 +12,22 @@
 namespace Liip\ImagineBundle\Events;
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event as ContractsEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
-class CacheResolveEvent extends Event
+if (is_subclass_of(EventDispatcherInterface::class, ContractsEventDispatcherInterface::class)) {
+    abstract class BCEvent extends ContractsEvent
+    {
+    }
+}
+else {
+    abstract class BCEvent extends Event
+    {
+    }
+}
+
+class CacheResolveEvent extends BCEvent
 {
     /**
      * Resource path.
@@ -41,7 +55,7 @@ class CacheResolveEvent extends Event
      *
      * @param string      $path
      * @param string      $filter
-     * @param null|string $url
+     * @param string|null $url
      */
     public function __construct($path, $filter, $url = null)
     {

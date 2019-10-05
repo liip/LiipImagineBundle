@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
+ * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  * Interface for PostProcessors - handlers which can operate on binaries prepared in FilterManager.
  */
 interface PostProcessorInterface
