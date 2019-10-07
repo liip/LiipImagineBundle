@@ -11,19 +11,19 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\RelativeWebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
-use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory<extended>
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\RelativeWebPathResolverFactory
  */
-class WebPathResolverFactoryTest extends AbstractWebPathResolverTest
+class RelativeWebPathResolverFactoryTest extends AbstractWebPathResolverTest
 {
     public function testReturnExpectedName(): void
     {
-        $resolver = new WebPathResolverFactory();
+        $resolver = new RelativeWebPathResolverFactory();
 
-        $this->assertSame('web_path', $resolver->getName());
+        $this->assertSame('relative_web_path', $resolver->getName());
     }
 
     /**
@@ -31,6 +31,6 @@ class WebPathResolverFactoryTest extends AbstractWebPathResolverTest
      */
     protected function getClassName()
     {
-        return WebPathResolverFactory::class;
+        return RelativeWebPathResolverFactory::class;
     }
 }

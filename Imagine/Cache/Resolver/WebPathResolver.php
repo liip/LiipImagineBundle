@@ -11,56 +11,26 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
+use Liip\ImagineBundle\Utility\Path\PathResolverInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
-class WebPathResolver implements ResolverInterface
+class WebPathResolver extends AbstractWebPathResolver
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    private $requestContext;
 
     /**
-     * @var RequestContext
-     */
-    protected $requestContext;
-
-    /**
-     * @var string
-     */
-    protected $webRoot;
-
-    /**
-     * @var string
-     */
-    protected $cachePrefix;
-
-    /**
-     * @var string
-     */
-    protected $cacheRoot;
-
-    /**
-     * @param Filesystem     $filesystem
-     * @param RequestContext $requestContext
-     * @param string         $webRootDir
-     * @param string         $cachePrefix
+     * @param Filesystem            $filesystem
+     * @param PathResolverInterface $pathResolver
+     * @param RequestContext        $requestContext
      */
     public function __construct(
         Filesystem $filesystem,
-        RequestContext $requestContext,
-        $webRootDir,
-        $cachePrefix = 'media/cache'
+        PathResolverInterface $pathResolver,
+        RequestContext $requestContext
     ) {
-        $this->filesystem = $filesystem;
+        parent::__construct($filesystem, $pathResolver);
         $this->requestContext = $requestContext;
-
-        $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
-        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
-        $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
     }
 
     /**
@@ -68,72 +38,11 @@ class WebPathResolver implements ResolverInterface
      */
     public function resolve($path, $filter)
     {
-        return sprintf('%s/%s',
+        return sprintf(
+            '%s/%s',
             rtrim($this->getBaseUrl(), '/'),
-            ltrim($this->getFileUrl($path, $filter), '/')
+            ltrim($this->getPathResolver()->getFileUrl($path, $filter), '/')
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
-    {
-        return is_file($this->getFilePath($path, $filter));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $path, $filter)
-    {
-        $this->filesystem->dumpFile(
-            $this->getFilePath($path, $filter),
-            $binary->getContent()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
-    {
-        if (empty($paths) && empty($filters)) {
-            return;
-        }
-
-        if (empty($paths)) {
-            $filtersCacheDir = [];
-            foreach ($filters as $filter) {
-                $filtersCacheDir[] = $this->cacheRoot.'/'.$filter;
-            }
-
-            $this->filesystem->remove($filtersCacheDir);
-
-            return;
-        }
-
-        foreach ($paths as $path) {
-            foreach ($filters as $filter) {
-                $this->filesystem->remove($this->getFilePath($path, $filter));
-            }
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFilePath($path, $filter)
-    {
-        return $this->webRoot.'/'.$this->getFullPath($path, $filter);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFileUrl($path, $filter)
-    {
-        return PathHelper::filePathToUrlPath($this->getFullPath($path, $filter));
     }
 
     /**
@@ -156,19 +65,12 @@ class WebPathResolver implements ResolverInterface
         }
         $baseUrl = rtrim($baseUrl, '/\\');
 
-        return sprintf('%s://%s%s%s',
+        return sprintf(
+            '%s://%s%s%s',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
             $port,
             $baseUrl
         );
-    }
-
-    private function getFullPath($path, $filter)
-    {
-        // crude way of sanitizing URL scheme ("protocol") part
-        $path = str_replace('://', '---', $path);
-
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
 }

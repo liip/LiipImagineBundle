@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
+namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-class WebPathResolverFactory extends AbstractWebPathResolverFactory
+class RelativeWebPathResolver extends AbstractWebPathResolver
 {
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function resolve($path, $filter)
     {
-        return 'web_path';
+        return sprintf('/%s', $this->getPathResolver()->getFileUrl($path, $filter));
     }
 }
