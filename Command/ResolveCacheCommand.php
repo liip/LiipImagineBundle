@@ -44,7 +44,7 @@ class ResolveCacheCommand extends Command
     {
         $this
             ->setDescription('Warms up the cache for the specified image sources with all or specified filters applied, and prints the list of cache files.')
-            ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
+            ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
                 'Image file path(s) for which to generate the cached images.')
             ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Filter(s) to use for image resolution; if none explicitly passed, use all filters.')

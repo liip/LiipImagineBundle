@@ -142,6 +142,20 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
         $this->delResolvedImages($images, $filters);
     }
 
+    public function testShouldRemoveAllImagesAndFilters(): void
+    {
+        $images = [];
+        $filters = [];
+
+        $output = $this->executeRemoveCacheCommand($images, $filters);
+
+        $filtersDefined = ['thumbnail_web_path', 'thumbnail_default'];
+
+        $this->assertOutputContainsSummary($output, $images, $filtersDefined);
+
+        $this->delResolvedImages($images, $filters);
+    }
+
     protected function assertOutputContainsSkippedImages($output, array $images, array $filters): void
     {
         foreach ($images as $i) {
@@ -166,9 +180,18 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertStringContainsString(sprintf('Completed %d removal', (\count($images) * \count($filters)) - $failures), $output);
-        $this->assertStringContainsString(sprintf('%d image', \count($images)), $output);
-        $this->assertStringContainsString(sprintf('%d filter', \count($filters)), $output);
+        $imagesSize = count($images);
+        $filtersSize = count($filters);
+
+        $totalSize = 0 === $imagesSize ? $filtersSize : ($imagesSize * $filtersSize) - $failures;
+        $this->assertStringContainsString(sprintf('Completed %d removal', $totalSize), $output);
+
+        if (0 !== $imagesSize) {
+            $this->assertStringContainsString(sprintf('%d image', $imagesSize), $output);
+        }
+
+        $this->assertStringContainsString(sprintf('%d filter', $filtersSize), $output);
+
         if (0 !== $failures) {
             $this->assertStringContainsString(sprintf('%d failure', $failures), $output);
         }
@@ -195,7 +218,7 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     private function executeRemoveCacheCommand(array $paths, array $filters = [], array $additionalOptions = [], int &$return = null): string
     {
-        $options = array_merge(['path' => $paths], $additionalOptions);
+        $options = array_merge(['paths' => $paths], $additionalOptions);
 
         if (0 < \count($filters)) {
             $options['--filter'] = $filters;

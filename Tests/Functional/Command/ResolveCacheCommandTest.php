@@ -221,7 +221,7 @@ class ResolveCacheCommandTest extends AbstractCommandTestCase
      */
     private function executeResolveCacheCommand(array $paths, array $filters = [], array $additionalOptions = [], int &$return = null): string
     {
-        $options = array_merge(['path' => $paths], $additionalOptions);
+        $options = array_merge(['paths' => $paths], $additionalOptions);
 
         if (0 < \count($filters)) {
             $options['--filter'] = $filters;
