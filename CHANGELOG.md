@@ -15,7 +15,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Fix Symfony 4.2 Deprecation Warnings ([hjanuschka](https://github.com/hjanuschka))
 - Fix special characters encoding in URL path ([dbalabka](https://github.com/dbalabka))
 - Update imagine/imagine dependency to 1.1 ([maximgubar](https://github.com/maximgubar))
-- Only use actual path without any query parameters from the url ([maximgubar](https://github.com/maximgubar))
+- __\[BC BREAK\]__ Only use actual path ([parse_url's](https://www.php.net/manual/en/function.parse-url.php) PHP_URL_PATH) without any query parameters from the url ([maximgubar](https://github.com/maximgubar))
 - __\[Dependency Injection\]__ Add aliases for data and filter manager ([fpaterno](https://github.com/fpaterno))
 - Use Autorotate Filter from Imagine library ([franmomu](https://github.com/franmomu))
 - Fix Mime deprecations for Symfony 4 ([franmomu](https://github.com/franmomu))
