@@ -22,7 +22,8 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
 {
     protected function executeConsole(string $commandName, array $arguments = [], &$return = null): string
     {
-        $application = new Application($this->createClient()->getKernel());
+        $kernel = static::createKernel();
+        $application = new Application($kernel);
         $command = $application->find($commandName);
 
         $arguments = array_replace(['command' => $command->getName()], $arguments);
@@ -81,7 +82,7 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
     {
         foreach ($images as $i) {
             foreach ($filters as $f) {
-                $this->assertContains(sprintf('%s[%s] (failed)', $i, $f), $output);
+                $this->assertStringContainsString(sprintf('%s[%s] (failed)', $i, $f), $output);
             }
         }
     }
@@ -95,7 +96,7 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
             $filter,
             $image,
         ]);
-        $this->assertContains($expected, $output);
+        $this->assertStringContainsString($expected, $output);
     }
 
     /**

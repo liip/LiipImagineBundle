@@ -146,7 +146,7 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
     {
         foreach ($images as $i) {
             foreach ($filters as $f) {
-                $this->assertContains(sprintf('%s[%s] (skipped)', $i, $f), $output);
+                $this->assertStringContainsString(sprintf('%s[%s] (skipped)', $i, $f), $output);
             }
         }
     }
@@ -155,7 +155,7 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
     {
         foreach ($images as $i) {
             foreach ($filters as $f) {
-                $this->assertContains(sprintf('%s[%s] (removed)', $i, $f), $output);
+                $this->assertStringContainsString(sprintf('%s[%s] (removed)', $i, $f), $output);
             }
         }
     }
@@ -166,11 +166,11 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertContains(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
-        $this->assertContains(sprintf('%d image', count($images)), $output);
-        $this->assertContains(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringContainsString(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
+        $this->assertStringContainsString(sprintf('%d image', count($images)), $output);
+        $this->assertStringContainsString(sprintf('%d filter', count($filters)), $output);
         if (0 !== $failures) {
-            $this->assertContains(sprintf('%d failure', $failures), $output);
+            $this->assertStringContainsString(sprintf('%d failure', $failures), $output);
         }
     }
 
@@ -180,11 +180,11 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputNotContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertNotContains(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
-        $this->assertNotContains(sprintf('%d image', count($images)), $output);
-        $this->assertNotContains(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringNotContainsString(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
+        $this->assertStringNotContainsString(sprintf('%d image', count($images)), $output);
+        $this->assertStringNotContainsString(sprintf('%d filter', count($filters)), $output);
         if (0 !== $failures) {
-            $this->assertNotContains(sprintf('%d failure', $failures), $output);
+            $this->assertStringNotContainsString(sprintf('%d failure', $failures), $output);
         }
     }
 

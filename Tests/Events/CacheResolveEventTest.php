@@ -27,7 +27,7 @@ class CacheResolveEventTest extends TestCase
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
 
-        $this->assertAttributeSame('default_path', 'path', $event);
+        $this->assertSame('default_path', $event->getPath());
     }
 
     public function testShouldAllowSetPathByMethod()
@@ -35,7 +35,7 @@ class CacheResolveEventTest extends TestCase
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setPath('new_path');
 
-        $this->assertAttributeSame('new_path', 'path', $event);
+        $this->assertSame('new_path', $event->getPath());
     }
 
     public function testShouldAllowGetPathWhichWasSetInConstruct()
@@ -57,7 +57,7 @@ class CacheResolveEventTest extends TestCase
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
 
-        $this->assertAttributeSame('default_filter', 'filter', $event);
+        $this->assertSame('default_filter', $event->getFilter());
     }
 
     public function testShouldAllowSetFilterByMethod()
@@ -65,7 +65,7 @@ class CacheResolveEventTest extends TestCase
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setFilter('new_filter');
 
-        $this->assertAttributeSame('new_filter', 'filter', $event);
+        $this->assertSame('new_filter', $event->getFilter());
     }
 
     public function testShouldAllowGetFilterWhichWasSetInConstruct()
@@ -87,7 +87,7 @@ class CacheResolveEventTest extends TestCase
     {
         $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
 
-        $this->assertAttributeSame('default_url', 'url', $event);
+        $this->assertSame('default_url', $event->getUrl());
     }
 
     public function testShouldAllowSetUrlByMethod()
@@ -95,7 +95,7 @@ class CacheResolveEventTest extends TestCase
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setUrl('new_url');
 
-        $this->assertAttributeSame('new_url', 'url', $event);
+        $this->assertSame('new_url', $event->getUrl());
     }
 
     public function testShouldAllowGetUrlWhichWasSetInConstruct()

@@ -172,14 +172,14 @@ class ResolveCacheCommandTest extends AbstractCommandTestCase
 
         $output = $this->executeResolveCacheCommand($images, $filters, ['--as-script' => false]);
 
-        $this->assertContains('liip/imagine-bundle', $output);
+        $this->assertStringContainsString('liip/imagine-bundle', $output);
         $this->assertOutputContainsFailedImages($output, $images, $filters);
         $this->assertOutputContainsSummary($output, $images, $filters, 2);
 
         $output = $this->executeResolveCacheCommand($images, $filters, ['--as-script' => true]);
 
         $this->assertImagesNotExist($images, $filters);
-        $this->assertNotContains('liip/imagine-bundle', $output);
+        $this->assertStringNotContainsString('liip/imagine-bundle', $output);
         $this->assertOutputContainsFailedImages($output, $images, $filters);
         $this->assertOutputNotContainsSummary($output, $images, $filters, 2);
 
@@ -192,11 +192,11 @@ class ResolveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertContains(sprintf('Completed %d resolution', (count($images) * count($filters)) - $failures), $output);
-        $this->assertContains(sprintf('%d image', count($images)), $output);
-        $this->assertContains(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringContainsString(sprintf('Completed %d resolution', (count($images) * count($filters)) - $failures), $output);
+        $this->assertStringContainsString(sprintf('%d image', count($images)), $output);
+        $this->assertStringContainsString(sprintf('%d filter', count($filters)), $output);
         if (0 !== $failures) {
-            $this->assertContains(sprintf('%d failure', $failures), $output);
+            $this->assertStringContainsString(sprintf('%d failure', $failures), $output);
         }
     }
 
@@ -206,11 +206,11 @@ class ResolveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputNotContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertNotContains(sprintf('Completed %d resolution', (count($images) * count($filters)) - $failures), $output);
-        $this->assertNotContains(sprintf('%d image', count($images)), $output);
-        $this->assertNotContains(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringNotContainsString(sprintf('Completed %d resolution', (count($images) * count($filters)) - $failures), $output);
+        $this->assertStringNotContainsString(sprintf('%d image', count($images)), $output);
+        $this->assertStringNotContainsString(sprintf('%d filter', count($filters)), $output);
         if (0 !== $failures) {
-            $this->assertNotContains(sprintf('%d failure', $failures), $output);
+            $this->assertStringNotContainsString(sprintf('%d failure', $failures), $output);
         }
     }
 

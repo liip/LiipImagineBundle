@@ -32,7 +32,7 @@ class ImagineStyleTest extends AbstractTest
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->text($format, $replacements);
 
-        $this->assertContains(vsprintf($format, $replacements), $output->getBuffer());
+        $this->assertStringContainsString(vsprintf($format, $replacements), $output->getBuffer());
     }
 
     public static function provideTextData(): Generator
@@ -51,7 +51,7 @@ class ImagineStyleTest extends AbstractTest
         $style = $this->createImagineStyle($output = $this->createBufferedOutput(), false);
         $style->text($format, $replacements);
 
-        $this->assertContains(strip_tags(vsprintf($format, $replacements)), $output->getBuffer());
+        $this->assertStringContainsString(strip_tags(vsprintf($format, $replacements)), $output->getBuffer());
     }
 
     public static function provideTextWithoutDecorationData(): Generator
@@ -67,7 +67,7 @@ class ImagineStyleTest extends AbstractTest
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->line($format, $replacements);
 
-        $this->assertContains(vsprintf($format, $replacements).PHP_EOL, $output->getBuffer());
+        $this->assertStringContainsString(vsprintf($format, $replacements).PHP_EOL, $output->getBuffer());
     }
 
     public static function provideLineData(): Generator
@@ -85,7 +85,7 @@ class ImagineStyleTest extends AbstractTest
         $style->newline($newlineCount);
         $style->text($separator);
 
-        $this->assertContains(sprintf('%1$s%2$s%1$s', $separator, str_repeat(PHP_EOL, $newlineCount)), $output->getBuffer());
+        $this->assertStringContainsString(sprintf('%1$s%2$s%1$s', $separator, str_repeat(PHP_EOL, $newlineCount)), $output->getBuffer());
     }
 
     public static function provideNewlineData(): Generator
@@ -117,7 +117,7 @@ class ImagineStyleTest extends AbstractTest
             }
         }
 
-        $this->assertContains($expected, $output->getBuffer());
+        $this->assertStringContainsString($expected, $output->getBuffer());
     }
 
     public static function provideTitleData(): Generator
@@ -148,7 +148,7 @@ class ImagineStyleTest extends AbstractTest
         $style->{$blockMethod}($format, $replacements);
         $compiled = vsprintf(strip_tags($format), $replacements);
 
-        $this->assertContains(sprintf($expectedFormat, $compiled), $output->getBuffer());
+        $this->assertStringContainsString(sprintf($expectedFormat, $compiled), $output->getBuffer());
     }
 
     public static function provideBlockTypesData(): Generator
@@ -178,11 +178,11 @@ class ImagineStyleTest extends AbstractTest
     public function testStatus(string $status, string $fg = null, string $bg = null): void
     {
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
-        $style->status($status, $fg, $bg);
+        $style->status($status, $fg);
 
-        $this->assertContains($fg ?: 'default', $output->getBuffer());
-        $this->assertContains($bg ?: 'default', $output->getBuffer());
-        $this->assertContains(sprintf('(%s)', $status), strip_tags($output->getBuffer()));
+        $this->assertStringContainsString($fg ?: 'default', $output->getBuffer());
+        $this->assertStringContainsString($bg ?: 'default', $output->getBuffer());
+        $this->assertStringContainsString(sprintf('(%s)', $status), strip_tags($output->getBuffer()));
     }
 
     public static function provideStatusData(): Generator
@@ -204,9 +204,9 @@ class ImagineStyleTest extends AbstractTest
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->group($item, $group, $fg, $bg);
 
-        $this->assertContains($fg ?: 'default', $output->getBuffer());
-        $this->assertContains($bg ?: 'default', $output->getBuffer());
-        $this->assertContains(sprintf('%s[%s]', $item, $group), strip_tags($output->getBuffer()));
+        $this->assertStringContainsString($fg ?: 'default', $output->getBuffer());
+        $this->assertStringContainsString($bg ?: 'default', $output->getBuffer());
+        $this->assertStringContainsString(sprintf('%s[%s]', $item, $group), strip_tags($output->getBuffer()));
     }
 
     public static function provideGroupData(): Generator

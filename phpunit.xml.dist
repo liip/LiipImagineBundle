@@ -2,12 +2,11 @@
 
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.0/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/7.5/phpunit.xsd"
         colors="true"
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
-        syntaxCheck="true"
         forceCoversAnnotation="true"
         bootstrap="./Tests/bootstrap.php">
 

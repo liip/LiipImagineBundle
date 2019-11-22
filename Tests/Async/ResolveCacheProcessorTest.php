@@ -41,32 +41,32 @@ class ResolveCacheProcessorTest extends AbstractTest
         }
     }
 
-    public function testShouldImplementProcessorInterface()
+    public function testShouldImplementProcessorInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(Processor::class));
     }
 
-    public function testShouldImplementCommandSubscriberInterface()
+    public function testShouldImplementCommandSubscriberInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(CommandSubscriberInterface::class));
     }
 
-    public function testShouldImplementQueueSubscriberInterface()
+    public function testShouldImplementQueueSubscriberInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(QueueSubscriberInterface::class));
     }
 
-    public function testShouldSubscribeToExpectedCommand()
+    public function testShouldSubscribeToExpectedCommand(): void
     {
         $command = ResolveCacheProcessor::getSubscribedCommand();
 
-        $this->assertInternalType('array', $command);
+        $this->assertIsArray($command);
         $this->assertSame([
             'command' => Commands::RESOLVE_CACHE,
             'queue' => Commands::RESOLVE_CACHE,
@@ -75,15 +75,15 @@ class ResolveCacheProcessorTest extends AbstractTest
         ], $command);
     }
 
-    public function testShouldSubscribeToExpectedQueue()
+    public function testShouldSubscribeToExpectedQueue(): void
     {
         $queues = ResolveCacheProcessor::getSubscribedQueues();
 
-        $this->assertInternalType('array', $queues);
+        $this->assertIsArray($queues);
         $this->assertSame(['liip_imagine_resolve_cache'], $queues);
     }
 
-    public function testCouldBeConstructedWithExpectedArguments()
+    public function testCouldBeConstructedWithExpectedArguments(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -94,7 +94,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertInstanceOf(ResolveCacheProcessor::class, $processor);
     }
 
-    public function testShouldRejectMessagesWithInvalidJsonBody()
+    public function testShouldRejectMessagesWithInvalidJsonBody(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),

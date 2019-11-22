@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -77,7 +78,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param \PHPUnit_Framework_MockObject_MockObject $container
      * @param mixed[]                                  ...$expectedArguments
      */
-    protected function expectContainerLogMethodCalledOnce(\PHPUnit_Framework_MockObject_MockObject $container, ...$expectedArguments): void
+    protected function expectContainerLogMethodCalledOnce(MockObject $container, ...$expectedArguments): void
     {
         $expectation = $container
             ->expects($this->once())

@@ -12,7 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Exception\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException
@@ -38,7 +38,7 @@ class InvalidOptionExceptionTest extends TestCase
     {
         $exception = new InvalidOptionException($message, $options);
 
-        $this->assertContains(sprintf('(%s)', $message), $exception->getMessage());
-        $this->assertContains(sprintf('[%s]', $optionsText), $exception->getMessage());
+        $this->assertStringContainsString(sprintf('(%s)', $message), $exception->getMessage());
+        $this->assertStringContainsString(sprintf('[%s]', $optionsText), $exception->getMessage());
     }
 }

@@ -45,7 +45,7 @@ class FilterConfigurationTest extends AbstractTest
 
         $filters = $filterConfiguration->all();
 
-        $this->assertInternalType('array', $filters);
+        $this->assertIsArray($filters);
 
         $this->assertArrayHasKey('foo', $filters);
         $this->assertSame(['fooConfig'], $filters['foo']);
@@ -90,7 +90,7 @@ class FilterConfigurationTest extends AbstractTest
             'thumbnail' => [],
         ]);
 
-        $this->assertInternalType('array', $filterConfiguration->get('profile_photo'));
-        $this->assertInternalType('array', $filterConfiguration->get('thumbnail'));
+        $this->assertIsArray($filterConfiguration->get('profile_photo'));
+        $this->assertIsArray($filterConfiguration->get('thumbnail'));
     }
 }

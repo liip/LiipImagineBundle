@@ -658,7 +658,7 @@ class CacheManagerTest extends AbstractTest
                 $this->isInstanceOf(CacheResolveEvent::class),
                 ImagineEvents::PRE_RESOLVE
             ]))
-            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function (CacheResolveEvent $event) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
             }));

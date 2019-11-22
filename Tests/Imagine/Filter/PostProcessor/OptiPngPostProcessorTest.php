@@ -139,8 +139,8 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
         $process = $this->getPostProcessorInstance();
         $result = $process->process(new FileBinary($file, 'image/png', 'png'), $options);
 
-        $this->assertContains($expected, $result->getContent());
-        $this->assertContains($content, $result->getContent());
+        $this->assertStringContainsString($expected, $result->getContent());
+        $this->assertStringContainsString($content, $result->getContent());
 
         @unlink($file);
     }
