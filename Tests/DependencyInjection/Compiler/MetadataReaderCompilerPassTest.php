@@ -103,11 +103,9 @@ class MetadataReaderCompilerPassTest extends TestCase
     }
 
     /**
-     * @param bool $isExifExtensionLoaded
-     *
      * @return MockObject|MetadataReaderCompilerPass
      */
-    private function getMetadataReaderCompilerPass($isExifExtensionLoaded)
+    private function getMetadataReaderCompilerPass(bool $isExifExtensionLoaded)
     {
         $mock = $this->getMockBuilder(MetadataReaderCompilerPass::class)
             ->setMethods(['isExifExtensionLoaded'])

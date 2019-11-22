@@ -598,7 +598,7 @@ class CacheManagerTest extends AbstractTest
                 $this->isInstanceOf(CacheResolveEvent::class),
                 ImagineEvents::PRE_RESOLVE,
             ]))
-            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event) {
                 $event->setPath('changed_path');
                 $event->setFilter('changed_filter');
             }));
@@ -626,7 +626,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher
             ->expects($this->at(0))
             ->method('dispatch')
-            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event) {
                 $event->setFilter('thumbnail');
             }));
 
@@ -669,8 +669,9 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [$this->logicalAnd(
                 $this->isInstanceOf(CacheResolveEvent::class),
-                $this->attributeEqualTo('path', 'changed_path'),
-                $this->attributeEqualTo('filter', 'changed_filter')
+                $this->callback(function (CacheResolveEvent $event) {
+                   return $event->getFilter() === 'changed_filter' && $event->getPath() === 'changed_path';
+                })
             ), ImagineEvents::POST_RESOLVE]));
 
         $cacheManager = new CacheManager(
@@ -694,7 +695,7 @@ class CacheManagerTest extends AbstractTest
                 $this->isInstanceOf(CacheResolveEvent::class),
                 ImagineEvents::POST_RESOLVE,
             ]))
-            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
+            ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event) {
                 $event->setUrl('changed_url');
             }));
 
@@ -714,7 +715,7 @@ class CacheManagerTest extends AbstractTest
      */
     private function createCacheManagerAwareResolverMock()
     {
-        return $resolver = $this
+        return $this
             ->getMockBuilder(CacheManagerAwareResolver::class)
             ->getMock();
     }

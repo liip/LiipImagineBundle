@@ -74,7 +74,7 @@ class FixedFilterLoaderTest extends AbstractTest
         $options['width'] = $width;
         $options['height'] = $height;
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
     /**

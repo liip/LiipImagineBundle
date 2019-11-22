@@ -72,7 +72,7 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->assertSame('liip_imagine.binary.loader.prototype.flysystem', $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);
-        $this->assertSame('flyfilesystemservice', "$reference");
+        $this->assertSame('flyfilesystemservice', (string) $reference);
     }
 
     public function testThrowIfFileSystemServiceNotSetOnAddConfiguration()

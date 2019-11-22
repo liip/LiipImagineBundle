@@ -183,24 +183,18 @@ class ResampleFilterLoaderTest extends AbstractTest
         $this->createResampleFilterLoaderInstance()->load($image, ['x' => 120, 'y' => 120, 'unit' => 'ppi']);
     }
 
-    /**
-     * @param ImagineInterface $imagine
-     *
-     * @return ResampleFilterLoader
-     */
-    private function createResampleFilterLoaderInstance(ImagineInterface $imagine = null)
+    private function createResampleFilterLoaderInstance(ImagineInterface $imagine = null): ResampleFilterLoader
     {
         return new ResampleFilterLoader($imagine ?: $this->createImagineInterfaceMock());
     }
 
-    /**
-     * @return string
-     */
-    private static function getSupportedDriver()
+    private static function getSupportedDriver(): string
     {
         if (class_exists(\Imagick::class)) {
             return 'imagick';
-        } elseif (class_exists(\Gmagick::class)) {
+        }
+
+        if (class_exists(\Gmagick::class)) {
             return 'gmagick';
         }
 
@@ -222,13 +216,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         }
     }
 
-    /**
-     * @param string $driver
-     * @param string $file
-     *
-     * @return float[]
-     */
-    private function getImageResolution($driver, $file)
+    private function getImageResolution(string $driver, string $file): array
     {
         switch ($driver) {
             case 'imagick':

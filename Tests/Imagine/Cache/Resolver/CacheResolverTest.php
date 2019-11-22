@@ -191,10 +191,8 @@ class CacheResolverTest extends AbstractTest
      * version, it may or may not be there depending on doctrine-cache
      * version. There's no point in checking it anyway since it's a detail
      * of doctrine cache implementation.
-     *
-     * @return array
      */
-    private function getCacheEntries(ArrayCache $cache)
+    private function getCacheEntries(ArrayCache $cache): array
     {
         $cacheEntries = $this->readAttribute($cache, 'data');
         unset($cacheEntries['DoctrineNamespaceCacheKey[]']);

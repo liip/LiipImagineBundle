@@ -52,7 +52,6 @@ class ResolveCacheTest extends TestCase
     {
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":null,"force":false}');
 
-        $this->assertInstanceOf(ResolveCache::class, $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertNull($message->getFilters());
         $this->assertFalse($message->isForce());
@@ -62,7 +61,6 @@ class ResolveCacheTest extends TestCase
     {
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":["fooFilter","barFilter"],"force":false}');
 
-        $this->assertInstanceOf(ResolveCache::class, $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());
         $this->assertFalse($message->isForce());
@@ -72,7 +70,6 @@ class ResolveCacheTest extends TestCase
     {
         $message = ResolveCache::jsonDeserialize('{"path":"thePath","filters":["fooFilter","barFilter"],"force":true}');
 
-        $this->assertInstanceOf(ResolveCache::class, $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());
         $this->assertTrue($message->isForce());
@@ -82,7 +79,6 @@ class ResolveCacheTest extends TestCase
     {
         $message = ResolveCache::jsonDeserialize('{"path":"thePath"}');
 
-        $this->assertInstanceOf(ResolveCache::class, $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertNull($message->getFilters());
         $this->assertFalse($message->isForce());

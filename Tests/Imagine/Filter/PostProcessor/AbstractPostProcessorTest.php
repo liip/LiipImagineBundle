@@ -139,12 +139,10 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
             ->getMock();
 
         $process
-            ->expects($this->any())
             ->method('getExitCode')
             ->willReturn(0);
 
         $process
-            ->expects($this->any())
             ->method('getOutput')
             ->willReturn('foo bar baz');
 

@@ -301,41 +301,27 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertAlias($value, $key)
+    private function assertAlias(string $value, string $key): void
     {
         $this->assertSame($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertParameter($value, $key)
+    private function assertParameter(string $value, string $key): void
     {
         $this->assertSame($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasDefinition($id)
+    private function assertHasDefinition(string $id): void
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasNotDefinition($id)
+    private function assertHasNotDefinition(string $id): void
     {
         $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
     }
 
-    private function assertDICConstructorArguments(Definition $definition, array $arguments)
+    private function assertDICConstructorArguments(Definition $definition, array $arguments): void
     {
         $castArrayElementsToString = function (array $a): array {
             return array_map(function ($v) { return (string) $v; }, $a);
@@ -354,7 +340,7 @@ EOF;
         ]));
     }
 
-    private function assertDefinitionIsDeprecated(string $id, string $message)
+    private function assertDefinitionIsDeprecated(string $id, string $message): void
     {
         $definition = $this->containerBuilder->getDefinition($id);
 

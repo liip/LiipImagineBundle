@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Tests\Functional;
 
 use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Client;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {
@@ -22,7 +22,7 @@ abstract class AbstractWebTestCase extends WebTestCase
      */
     public static function createClient(array $options = [], array $server = [])
     {
-        if (!class_exists(Client::class)) {
+        if (!class_exists(AbstractBrowser::class)) {
             self::markTestSkipped('Requires the symfony/browser-kit package.');
         }
 

@@ -210,10 +210,8 @@ class FileSystemLoaderTest extends TestCase
 
     /**
      * @param string[] $roots
-     *
-     * @return FileSystemLocator
      */
-    private function getFileSystemLocator(array $roots)
+    private function getFileSystemLocator(array $roots): FileSystemLocator
     {
         return new FileSystemLocator($roots);
     }
@@ -221,15 +219,12 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @return string[]
      */
-    private function getDefaultDataRoots()
+    private function getDefaultDataRoots(): array
     {
         return [__DIR__];
     }
 
-    /**
-     * @return FileSystemLoader
-     */
-    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
+    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null): FileSystemLoader
     {
         if (interface_exists(MimeTypeGuesserInterface::class)) {
             $mimeTypes = MimeTypes::getDefault();
@@ -237,22 +232,18 @@ class FileSystemLoaderTest extends TestCase
             return new FileSystemLoader(
                 $mimeTypes,
                 $mimeTypes,
-                null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
+                $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
             );
         }
 
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
+            $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }
 
-    /**
-     * @param FileBinary|mixed $return
-     * @param string|null      $message
-     */
-    private function assertValidLoaderFindReturn($return, string $message = ''): void
+    private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);

@@ -70,10 +70,7 @@ class SimpleMimeTypeGuesserTest extends TestCase
         $this->assertSame($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
     }
 
-    /**
-     * @return SimpleMimeTypeGuesser
-     */
-    private function getSimpleMimeTypeGuesser()
+    private function getSimpleMimeTypeGuesser(): SimpleMimeTypeGuesser
     {
         if (interface_exists(SymfonyMimeTypeGuesserInterface::class)) {
             return new SimpleMimeTypeGuesser(MimeTypes::getDefault());

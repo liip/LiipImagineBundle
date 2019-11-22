@@ -218,9 +218,8 @@ class ResolveCacheCommandTest extends AbstractCommandTestCase
      * @param string[] $paths
      * @param string[] $filters
      * @param string[] $additionalOptions
-     * @param int      $return
      */
-    private function executeResolveCacheCommand(array $paths, array $filters = [], array $additionalOptions = [], &$return = null): string
+    private function executeResolveCacheCommand(array $paths, array $filters = [], array $additionalOptions = [], int &$return = null): string
     {
         $options = array_merge(['path' => $paths], $additionalOptions);
 

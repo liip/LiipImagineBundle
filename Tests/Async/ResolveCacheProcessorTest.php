@@ -480,10 +480,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         return $this->createMock(ProducerInterface::class);
     }
 
-    /**
-     * @return Binary
-     */
-    private function createDummyBinary()
+    private function createDummyBinary(): Binary
     {
         return new Binary('theContent', 'image/png', 'png');
     }

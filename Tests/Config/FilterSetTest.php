@@ -33,7 +33,6 @@ class FilterSetTest extends TestCase
         $filterMock = $this->createMock(FilterInterface::class);
         $stack = $this->buildFilterSet([$filterMock]);
 
-        $this->assertInstanceOf(Stack::class, $stack);
         $this->assertSame('filter_name', $stack->getName());
         $this->assertSame('data_loader', $stack->getDataLoader());
         $this->assertSame(42, $stack->getQuality());

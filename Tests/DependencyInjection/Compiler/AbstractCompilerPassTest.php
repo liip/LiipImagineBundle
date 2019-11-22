@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testCompilerLogging()
+    public function testCompilerLogging(): void
     {
         $pass = $this->createAbstractCompilerPassMock();
 

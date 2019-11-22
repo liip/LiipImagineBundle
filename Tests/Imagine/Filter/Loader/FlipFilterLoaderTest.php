@@ -82,10 +82,7 @@ class FlipFilterLoaderTest extends AbstractTest
         ]);
     }
 
-    /**
-     * @return FlipFilterLoader
-     */
-    private function createFlipFilterLoaderInstance()
+    private function createFlipFilterLoaderInstance(): FlipFilterLoader
     {
         return new FlipFilterLoader();
     }

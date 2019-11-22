@@ -144,11 +144,7 @@ class ChainLoaderTest extends TestCase
         return new ChainLoader($loaders);
     }
 
-    /**
-     * @param FileBinary|mixed $return
-     * @param string|null      $message
-     */
-    private function assertValidLoaderFindReturn($return, string $message = ''): void
+    private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
