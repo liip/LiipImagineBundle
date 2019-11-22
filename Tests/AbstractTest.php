@@ -238,7 +238,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function createFilterServiceMock()
     {
-        return $this->createObjectMock('\Liip\ImagineBundle\Service\FilterService');
+        return $this->createObjectMock(FilterService::class);
     }
 
     /**

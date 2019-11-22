@@ -119,6 +119,6 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
 
     protected function getPostProcessorInstance(array $parameters = []): MozJpegPostProcessor
     {
-        return new MozJpegPostProcessor($parameters[0] ?? static::getPostProcessAsStdinExecutable());
+        return new MozJpegPostProcessor($parameters[0] ?? static::getPostProcessAsStdInExecutable());
     }
 }

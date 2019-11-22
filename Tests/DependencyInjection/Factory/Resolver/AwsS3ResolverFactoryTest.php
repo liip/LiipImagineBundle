@@ -19,6 +19,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Aws\S3\S3Client;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
@@ -96,7 +97,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.client'));
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertSame('Aws\S3\S3Client', $clientDefinition->getClass());
+        $this->assertSame(S3Client::class, $clientDefinition->getClass());
         $this->assertSame(['theClientConfigKey' => 'theClientConfigVal'], $clientDefinition->getArgument(0));
     }
 
@@ -117,7 +118,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         ]);
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertSame(['Aws\S3\S3Client', 'factory'], $clientDefinition->getFactory());
+        $this->assertSame([S3Client::class, 'factory'], $clientDefinition->getFactory());
     }
 
     public function testWrapResolverWithProxyOnCreateWithoutCache()

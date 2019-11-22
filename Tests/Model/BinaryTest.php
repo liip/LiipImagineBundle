@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Model;
 
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Model\Binary
@@ -23,7 +24,7 @@ class BinaryTest extends TestCase
     {
         $rc = new \ReflectionClass(Binary::class);
 
-        $this->assertTrue($rc->implementsInterface('\Liip\ImagineBundle\Binary\BinaryInterface'));
+        $this->assertTrue($rc->implementsInterface(BinaryInterface::class));
     }
 
     public function testAllowGetContentSetInConstructor()

@@ -18,6 +18,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory
@@ -56,7 +57,7 @@ class ChainLoaderFactoryTest extends FactoryTestCase
         $this->assertSame('liip_imagine.binary.loader.prototype.chain', $loaderDefinition->getParent());
 
         foreach ($loaderDefinition->getArgument(0) as $reference) {
-            $this->assertInstanceOf('\Symfony\Component\DependencyInjection\Reference', $reference);
+            $this->assertInstanceOf(Reference::class, $reference);
         }
     }
 

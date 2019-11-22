@@ -200,9 +200,9 @@ class ResampleFilterLoaderTest extends AbstractTest
      */
     private static function getSupportedDriver()
     {
-        if (class_exists('\Imagick')) {
+        if (class_exists(\Imagick::class)) {
             return 'imagick';
-        } elseif (class_exists('\Gmagick')) {
+        } elseif (class_exists(\Gmagick::class)) {
             return 'gmagick';
         }
 

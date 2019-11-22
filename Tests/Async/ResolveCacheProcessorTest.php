@@ -107,7 +107,7 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::REJECT, $result->getStatus());
         $this->assertStringStartsWith('The malformed json given.', $result->getReason());
     }
@@ -149,7 +149,7 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::REJECT, (string) $result);
         $this->assertSame('The message does not contain "path" but it is required.', $result->getReason());
     }
@@ -319,7 +319,7 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 
@@ -349,7 +349,7 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 
@@ -377,7 +377,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $producerMock
             ->expects($this->once())
             ->method('sendEvent')
-            ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
+            ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf(CacheResolved::class))
         ->willReturnCallback(function ($topic, CacheResolved $message) {
             $this->assertSame('theImagePath', $message->getPath());
             $this->assertSame([
@@ -398,7 +398,7 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 

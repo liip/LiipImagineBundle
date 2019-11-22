@@ -44,7 +44,7 @@ class CacheResolvedTest extends TestCase
     {
         $message = CacheResolved::jsonDeserialize('{"path":"thePath","uris":{"fooFilter":"http:\/\/example.com\/fooFilter\/thePath","barFilter":"http:\/\/example.com\/barFilter\/thePath"}}');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Async\CacheResolved', $message);
+        $this->assertInstanceOf(CacheResolved::class, $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame([
             'fooFilter' => 'http://example.com/fooFilter/thePath',

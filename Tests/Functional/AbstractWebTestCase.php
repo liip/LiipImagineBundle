@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
+use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {
@@ -35,7 +36,7 @@ abstract class AbstractWebTestCase extends WebTestCase
     {
         require_once __DIR__.'/app/AppKernel.php';
 
-        return 'Liip\ImagineBundle\Tests\Functional\app\AppKernel';
+        return AppKernel::class;
     }
 
     /**
