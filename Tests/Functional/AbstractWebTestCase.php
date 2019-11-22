@@ -11,9 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Functional;
 
+use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Client;
-use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {

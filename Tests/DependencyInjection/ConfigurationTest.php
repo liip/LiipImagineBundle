@@ -428,9 +428,6 @@ class ConfigurationTest extends TestCase
     }
 
     /**
-     * @param ConfigurationInterface $configuration
-     * @param array                  $configs
-     *
      * @return array
      */
     protected function processConfiguration(ConfigurationInterface $configuration, array $configs)

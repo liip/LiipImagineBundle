@@ -128,8 +128,8 @@ class ImagineStyleTest extends AbstractTest
         ];
 
         foreach ($titles as $type => $title) {
-            yield [$title, is_string($type) ? $type : null, true];
-            yield [$title, is_string($type) ? $type : null, false];
+            yield [$title, \is_string($type) ? $type : null, true];
+            yield [$title, \is_string($type) ? $type : null, false];
         }
     }
 
@@ -141,7 +141,7 @@ class ImagineStyleTest extends AbstractTest
         $blockMethod = sprintf('%sBlock', $type);
         $style = $this->createImagineStyle($output = $this->createBufferedOutput(), $decoration);
 
-        if (!is_callable([$style, $blockMethod])) {
+        if (!\is_callable([$style, $blockMethod])) {
             static::fail(sprintf('Required method "%s" for "%s" block type is not callable!', $blockMethod, $type));
         }
 

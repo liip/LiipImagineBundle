@@ -11,8 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
-use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 use Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader;
+use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader

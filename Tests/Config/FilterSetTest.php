@@ -40,9 +40,6 @@ class FilterSetTest extends TestCase
         $this->assertSame([$filterMock], $stack->getFilters());
     }
 
-    /**
-     * @param array $filters
-     */
     private function buildFilterSet(array $filters): Stack
     {
         return new Stack('filter_name', 'data_loader', 42, $filters);

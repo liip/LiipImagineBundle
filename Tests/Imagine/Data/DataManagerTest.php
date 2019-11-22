@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Data;
 
-use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;

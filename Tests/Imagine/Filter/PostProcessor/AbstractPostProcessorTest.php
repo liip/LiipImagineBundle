@@ -157,7 +157,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 
     protected function getPostProcessorInstance(array $parameters = []): PostProcessorInterface
     {
-        if (0 === count($parameters)) {
+        if (0 === \count($parameters)) {
             $parameters = [static::getPostProcessAsStdInExecutable()];
         }
 

@@ -11,9 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Model;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit\Framework\TestCase;
-use Liip\ImagineBundle\Binary\BinaryInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Model\Binary

@@ -17,9 +17,6 @@ use Symfony\Component\DependencyInjection\Definition;
 
 abstract class FactoryTestCase extends TestCase
 {
-    /**
-     * @param Definition $definition
-     */
     protected function assertInstanceOfChildDefinition(Definition $definition)
     {
         $this->assertInstanceOf(ChildDefinition::class, $definition);

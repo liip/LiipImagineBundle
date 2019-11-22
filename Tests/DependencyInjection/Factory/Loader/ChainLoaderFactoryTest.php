@@ -84,12 +84,6 @@ class ChainLoaderFactoryTest extends FactoryTestCase
         $this->assertSame(['foo', 'bar'], $config['loaders']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
     private function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         return (new Processor())->process($treeBuilder->buildTree(), $configs);

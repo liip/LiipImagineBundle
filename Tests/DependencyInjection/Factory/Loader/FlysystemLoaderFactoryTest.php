@@ -114,9 +114,6 @@ class FlysystemLoaderFactoryTest extends TestCase
     }
 
     /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
      * @return array
      */
     protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)

@@ -74,8 +74,7 @@ class MetadataReaderCompilerPassTest extends TestCase
     }
 
     /**
-     * @param \ReflectionClass $r
-     * @param string           $p
+     * @param string $p
      *
      * @return string
      */

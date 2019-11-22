@@ -31,8 +31,6 @@ class ChainLoaderTest extends AbstractWebTestCase
     }
 
     /**
-     * @param string $name
-     *
      * @return ChainLoader|object
      */
     private function getLoader(string $name): ChainLoader

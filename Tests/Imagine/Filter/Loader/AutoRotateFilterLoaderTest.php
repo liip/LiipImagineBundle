@@ -25,10 +25,8 @@ class AutoRotateFilterLoaderTest extends AbstractTest
 
         $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
-            ->method('metadata')
-        ;
+            ->method('metadata');
 
         $loader->load($image);
-
     }
 }

@@ -89,8 +89,6 @@ class ResampleFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @param array $options
-     *
      * @dataProvider provideOptionsData
      */
     public function testOptions(array $options)

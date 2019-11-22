@@ -45,8 +45,6 @@ abstract class AbstractFilterTest extends AbstractTest
     }
 
     /**
-     * @param CacheManager|null $manager
-     *
      * @return FilterExtension|FilterHelper
      */
     abstract protected function createTemplatingMock(CacheManager $manager = null);

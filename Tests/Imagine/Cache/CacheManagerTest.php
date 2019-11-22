@@ -552,7 +552,7 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
                 new CacheResolveEvent('cats.jpg', 'thumbnail'),
-                ImagineEvents::PRE_RESOLVE
+                ImagineEvents::PRE_RESOLVE,
             ]));
 
         $cacheManager = new CacheManager(
@@ -574,7 +574,7 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
                 new CacheResolveEvent('cats.jpg', 'thumbnail'),
-                ImagineEvents::POST_RESOLVE
+                ImagineEvents::POST_RESOLVE,
             ]));
 
         $cacheManager = new CacheManager(
@@ -596,7 +596,7 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
                 $this->isInstanceOf(CacheResolveEvent::class),
-                ImagineEvents::PRE_RESOLVE
+                ImagineEvents::PRE_RESOLVE,
             ]))
             ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
                 $event->setPath('changed_path');
@@ -657,7 +657,7 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
                 $this->isInstanceOf(CacheResolveEvent::class),
-                ImagineEvents::PRE_RESOLVE
+                ImagineEvents::PRE_RESOLVE,
             ]))
             ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function (CacheResolveEvent $event) {
                 $event->setPath('changed_path');
@@ -692,7 +692,7 @@ class CacheManagerTest extends AbstractTest
             ->method('dispatch')
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [
                 $this->isInstanceOf(CacheResolveEvent::class),
-                ImagineEvents::POST_RESOLVE
+                ImagineEvents::POST_RESOLVE,
             ]))
             ->willReturnCallback($this->getDispatcherCallbackWithBC($dispatcher, function ($event, $name) {
                 $event->setUrl('changed_url');
@@ -721,10 +721,6 @@ class CacheManagerTest extends AbstractTest
 
     /**
      * BC Layer for Symfony < 4.3
-     *
-     * @param EventDispatcherInterface $dispatcher
-     * @param callable $callable
-     * @return callable
      */
     private function getDispatcherCallbackWithBC(EventDispatcherInterface $dispatcher, callable $callable): callable
     {
@@ -739,10 +735,6 @@ class CacheManagerTest extends AbstractTest
 
     /**
      * BC Layer for Symfony < 4.3
-     *
-     * @param EventDispatcherInterface $dispatcher
-     * @param array $arguments
-     * @return array
      */
     private function getDispatcherArgumentsWithBC(EventDispatcherInterface $dispatcher, array $arguments): array
     {

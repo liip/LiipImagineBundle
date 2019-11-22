@@ -166,9 +166,9 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertStringContainsString(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
-        $this->assertStringContainsString(sprintf('%d image', count($images)), $output);
-        $this->assertStringContainsString(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringContainsString(sprintf('Completed %d removal', (\count($images) * \count($filters)) - $failures), $output);
+        $this->assertStringContainsString(sprintf('%d image', \count($images)), $output);
+        $this->assertStringContainsString(sprintf('%d filter', \count($filters)), $output);
         if (0 !== $failures) {
             $this->assertStringContainsString(sprintf('%d failure', $failures), $output);
         }
@@ -180,9 +180,9 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputNotContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $this->assertStringNotContainsString(sprintf('Completed %d removal', (count($images) * count($filters)) - $failures), $output);
-        $this->assertStringNotContainsString(sprintf('%d image', count($images)), $output);
-        $this->assertStringNotContainsString(sprintf('%d filter', count($filters)), $output);
+        $this->assertStringNotContainsString(sprintf('Completed %d removal', (\count($images) * \count($filters)) - $failures), $output);
+        $this->assertStringNotContainsString(sprintf('%d image', \count($images)), $output);
+        $this->assertStringNotContainsString(sprintf('%d filter', \count($filters)), $output);
         if (0 !== $failures) {
             $this->assertStringNotContainsString(sprintf('%d failure', $failures), $output);
         }
@@ -197,7 +197,7 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
     {
         $options = array_merge(['path' => $paths], $additionalOptions);
 
-        if (0 < count($filters)) {
+        if (0 < \count($filters)) {
             $options['--filter'] = $filters;
         }
 

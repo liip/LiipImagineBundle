@@ -19,8 +19,8 @@ use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
@@ -49,7 +49,7 @@ class FileSystemLoaderTest extends TestCase
         new FileSystemLoader(
             $mimeGuesser,
             $extensionGuesser,
-            $this->getFileSystemLocator( $this->getDefaultDataRoots())
+            $this->getFileSystemLocator($this->getDefaultDataRoots())
         );
     }
 
@@ -62,12 +62,12 @@ class FileSystemLoaderTest extends TestCase
             [
                 '$mimeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface',
                 'foo',
-                'bar'
+                'bar',
             ],
             [
                 '$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface',
                 class_exists(MimeTypes::class) ? MimeTypes::getDefault() : MimeTypeGuesser::getInstance(),
-                'bar'
+                'bar',
             ],
         ];
     }
@@ -227,9 +227,6 @@ class FileSystemLoaderTest extends TestCase
     }
 
     /**
-     * @param array                 $roots
-     * @param LocatorInterface|null $locator
-     *
      * @return FileSystemLoader
      */
     private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)

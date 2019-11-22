@@ -192,8 +192,6 @@ class CacheResolverTest extends AbstractTest
      * version. There's no point in checking it anyway since it's a detail
      * of doctrine cache implementation.
      *
-     * @param ArrayCache $cache
-     *
      * @return array
      */
     private function getCacheEntries(ArrayCache $cache)

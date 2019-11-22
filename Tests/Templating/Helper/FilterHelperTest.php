@@ -30,8 +30,6 @@ class FilterHelperTest extends AbstractFilterTest
     }
 
     /**
-     * @param CacheManager|null $manager
-     *
      * @return FilterHelper
      */
     protected function createTemplatingMock(CacheManager $manager = null)

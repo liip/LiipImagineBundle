@@ -23,8 +23,6 @@ use Symfony\Component\DependencyInjection\Definition;
 class AbstractCompilerPassTestCase extends AbstractTest
 {
     /**
-     * @param array $tags
-     *
      * @return Definition
      */
     protected function createDefinition(array $tags = [])
@@ -75,8 +73,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param MockObject $container
-     * @param mixed[]                                  ...$expectedArguments
+     * @param mixed[] ...$expectedArguments
      */
     protected function expectContainerLogMethodCalledOnce(MockObject $container, ...$expectedArguments): void
     {
@@ -92,7 +89,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param Definition  $definition
      * @param string|null $message
      */
     protected function assertDefinitionMethodCallsNone(Definition $definition, $message = '')
@@ -102,7 +98,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
 
     /**
      * @param int         $expect
-     * @param Definition  $definition
      * @param string|null $message
      */
     protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = '')
@@ -111,7 +106,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param AbstractCompilerPass $pass
      * @param Definition[]|array[] $definitions
      */
     protected function assertContainerLogMethodCalledForCompilerPass(AbstractCompilerPass $pass, array $definitions): void
@@ -123,10 +117,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param string $definition
-     * @param string $manager
-     * @param array  $tags
-     *
      * @return Definition[]|array[]
      */
     protected function getCompilerPassContainerDefinitions(string $definition, string $manager, array $tags): array
