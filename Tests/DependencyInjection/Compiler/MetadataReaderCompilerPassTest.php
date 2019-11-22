@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -105,7 +106,7 @@ class MetadataReaderCompilerPassTest extends TestCase
     /**
      * @param bool $isExifExtensionLoaded
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|MetadataReaderCompilerPass
+     * @return MockObject|MetadataReaderCompilerPass
      */
     private function getMetadataReaderCompilerPass($isExifExtensionLoaded)
     {

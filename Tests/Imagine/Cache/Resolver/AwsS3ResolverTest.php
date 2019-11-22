@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
@@ -374,7 +375,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Model
+     * @return MockObject|Model
      */
     protected function getS3ResponseMock()
     {
@@ -382,7 +383,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Aws\S3\S3Client
+     * @return MockObject|\Aws\S3\S3Client
      */
     protected function getS3ClientMock()
     {

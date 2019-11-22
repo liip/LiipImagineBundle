@@ -16,6 +16,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\FilterManager
@@ -1059,7 +1060,7 @@ class FilterManagerTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
+     * @return MockObject|LoaderInterface
      */
     protected function createFilterLoaderInterfaceMock()
     {

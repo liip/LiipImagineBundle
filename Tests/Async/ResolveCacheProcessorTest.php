@@ -28,6 +28,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Async\ResolveCacheProcessor
@@ -472,7 +473,7 @@ class ResolveCacheProcessorTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ProducerInterface
+     * @return MockObject|ProducerInterface
      */
     private function createProducerMock()
     {

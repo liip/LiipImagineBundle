@@ -24,6 +24,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFac
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -237,7 +238,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder
+     * @return MockObject|ContainerBuilder
      */
     protected function createContainerBuilderMock()
     {
@@ -245,7 +246,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LiipImagineExtension
+     * @return MockObject|LiipImagineExtension
      */
     protected function createLiipImagineExtensionMock()
     {

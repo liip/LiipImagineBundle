@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
@@ -495,7 +496,7 @@ class WebPathResolverTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Filesystem
+     * @return MockObject|Filesystem
      */
     protected function createFilesystemMock()
     {

@@ -58,7 +58,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param string[]     $methods
      * @param Definition[] $definitions
      *
-     * @return ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ContainerBuilder|MockObject
      */
     protected function createContainerBuilderMock(array $methods = [], array $definitions = [])
     {
@@ -75,7 +75,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $container
+     * @param MockObject $container
      * @param mixed[]                                  ...$expectedArguments
      */
     protected function expectContainerLogMethodCalledOnce(MockObject $container, ...$expectedArguments): void

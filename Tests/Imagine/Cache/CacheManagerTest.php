@@ -19,6 +19,7 @@ use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
@@ -709,7 +710,7 @@ class CacheManagerTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @return MockObject|ResolverInterface
      */
     private function createCacheManagerAwareResolverMock()
     {

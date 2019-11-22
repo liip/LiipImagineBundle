@@ -15,6 +15,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
@@ -321,7 +322,7 @@ class AmazonS3ResolverTest extends AbstractTest
     /**
      * @param bool $ok
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\CFResponse
+     * @return MockObject|\CFResponse
      */
     protected function createCFResponseMock($ok = true)
     {
@@ -335,7 +336,7 @@ class AmazonS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\AmazonS3
+     * @return MockObject|\AmazonS3
      */
     protected function createAmazonS3Mock()
     {

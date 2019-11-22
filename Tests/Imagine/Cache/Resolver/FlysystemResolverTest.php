@@ -16,6 +16,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Routing\RequestContext;
 
 /**
@@ -262,7 +263,7 @@ class FlysystemResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Filesystem
+     * @return MockObject|Filesystem
      */
     protected function createFlySystemMock()
     {

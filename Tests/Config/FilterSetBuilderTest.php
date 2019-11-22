@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Config\StackInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 use Liip\ImagineBundle\Factory\Config\StackFactory;
 use Liip\ImagineBundle\Factory\Config\StackFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,12 +27,12 @@ use PHPUnit\Framework\TestCase;
 class FilterSetBuilderTest extends TestCase
 {
     /**
-     * @var StackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StackFactory|MockObject
      */
     private $filterSetFactoryMock;
 
     /**
-     * @var FilterFactoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactoryCollection|MockObject
      */
     private $filterFactoryCollectionMock;
 

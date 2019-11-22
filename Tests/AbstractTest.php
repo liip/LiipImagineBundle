@@ -102,7 +102,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
+     * @return MockObject|CacheManager
      */
     protected function createCacheManagerMock()
     {
@@ -118,7 +118,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterConfiguration
+     * @return MockObject|FilterConfiguration
      */
     protected function createFilterConfigurationMock()
     {
@@ -126,7 +126,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SignerInterface
+     * @return MockObject|SignerInterface
      */
     protected function createSignerInterfaceMock()
     {
@@ -134,7 +134,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     * @return MockObject|RouterInterface
      */
     protected function createRouterInterfaceMock()
     {
@@ -142,7 +142,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @return MockObject|ResolverInterface
      */
     protected function createCacheResolverInterfaceMock()
     {
@@ -150,7 +150,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @return MockObject|EventDispatcherInterface
      */
     protected function createEventDispatcherInterfaceMock()
     {
@@ -158,7 +158,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ImageInterface
+     * @return MockObject|ImageInterface
      */
     protected function getImageInterfaceMock()
     {
@@ -166,7 +166,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|MetadataBag
+     * @return MockObject|MetadataBag
      */
     protected function getMetadataBagMock()
     {
@@ -174,7 +174,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ImagineInterface
+     * @return MockObject|ImagineInterface
      */
     protected function createImagineInterfaceMock()
     {
@@ -182,7 +182,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @return MockObject|LoggerInterface
      */
     protected function createLoggerInterfaceMock()
     {
@@ -190,7 +190,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
+     * @return MockObject|LoaderInterface
      */
     protected function createBinaryLoaderInterfaceMock()
     {
@@ -198,7 +198,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|MimeTypeGuesserInterface
+     * @return MockObject|MimeTypeGuesserInterface
      */
     protected function createMimeTypeGuesserInterfaceMock()
     {
@@ -206,7 +206,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionGuesserInterface
+     * @return MockObject|ExtensionGuesserInterface
      */
     protected function createExtensionGuesserInterfaceMock()
     {
@@ -218,7 +218,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PostProcessorInterface
+     * @return MockObject|PostProcessorInterface
      */
     protected function createPostProcessorInterfaceMock()
     {
@@ -226,7 +226,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @return MockObject|FilterManager
      */
     protected function createFilterManagerMock()
     {
@@ -234,7 +234,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterService
+     * @return MockObject|FilterService
      */
     protected function createFilterServiceMock()
     {
@@ -242,7 +242,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DataManager
+     * @return MockObject|DataManager
      */
     protected function createDataManagerMock()
     {
@@ -260,7 +260,7 @@ abstract class AbstractTest extends TestCase
      * @param bool     $constructorInvoke
      * @param mixed[]  $constructorParams
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function createObjectMock($object, array $methods = [], $constructorInvoke = false, array $constructorParams = [])
     {

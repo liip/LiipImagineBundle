@@ -15,6 +15,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
@@ -22,7 +23,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 class ProxyResolverTest extends AbstractTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $primaryResolver;
 
