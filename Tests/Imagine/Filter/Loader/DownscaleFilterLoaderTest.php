@@ -28,7 +28,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
      * @param Box $resultSize
      * @param Box $initialSize
      */
-    public function testDontScaleUp($resultSize, $initialSize)
+    public function testDontScaleUp($resultSize, $initialSize): void
     {
         $this->assertLessThanOrEqual($initialSize->getHeight(), $resultSize->getHeight());
         $this->assertLessThanOrEqual($initialSize->getWidth(), $resultSize->getWidth());
@@ -39,7 +39,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
      *
      * @param Box $resultSize
      */
-    public function testFitBoundingBox($resultSize)
+    public function testFitBoundingBox($resultSize): void
     {
         $this->assertLessThanOrEqual(100, $resultSize->getHeight());
         $this->assertLessThanOrEqual(90, $resultSize->getWidth());

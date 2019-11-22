@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class MetadataReaderCompilerPassTest extends TestCase
 {
-    public function testProcessBasedOnExtensionsInEnvironment()
+    public function testProcessBasedOnExtensionsInEnvironment(): void
     {
         [$metadataServiceId, $metadataExifClass, $metadataDefaultClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -34,7 +34,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf(\extension_loaded('exif') ? $metadataExifClass : $metadataDefaultClass, $container->get($metadataServiceId));
     }
 
-    public function testProcessWithoutExtExifAddsDefaultReader()
+    public function testProcessWithoutExtExifAddsDefaultReader(): void
     {
         [$metadataServiceId, $metadataExifClass, $metadataDefaultClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -47,7 +47,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf($metadataDefaultClass, $container->get($metadataServiceId));
     }
 
-    public function testProcessWithExtExifKeepsExifReader()
+    public function testProcessWithExtExifKeepsExifReader(): void
     {
         [$metadataServiceId, $metadataExifClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -60,7 +60,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf($metadataExifClass, $container->get($metadataServiceId));
     }
 
-    public function testDoesNotOverrideCustomReaderWhenExifNotAvailable()
+    public function testDoesNotOverrideCustomReaderWhenExifNotAvailable(): void
     {
         [$metadataServiceId] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -73,12 +73,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf('stdClass', $container->get($metadataServiceId));
     }
 
-    /**
-     * @param string $p
-     *
-     * @return string
-     */
-    private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, $p)
+    private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, string $p): string
     {
         $property = $r->getProperty($p);
         $property->setAccessible(true);
@@ -91,7 +86,7 @@ class MetadataReaderCompilerPassTest extends TestCase
      *
      * @return mixed[]
      */
-    private static function getReaderParamAndDefaultAndExifValues()
+    private static function getReaderParamAndDefaultAndExifValues(): array
     {
         $r = new \ReflectionClass(MetadataReaderCompilerPass::class);
 

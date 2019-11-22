@@ -34,15 +34,11 @@ class PasteFilterLoaderTest extends AbstractTest
     const DUMMY_IMAGE_HEIGHT = 600;
 
     /**
-     * @param int   $x
-     * @param int   $y
-     * @param Point $expected
-     *
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader::load
      *
      * @dataProvider pasteProvider
      */
-    public function testLoad($x, $y, $expected)
+    public function testLoad(int $x, int $y, Point $expected): void
     {
         $mockImageSize = new Box(
             self::DUMMY_IMAGE_WIDTH,
@@ -69,10 +65,7 @@ class PasteFilterLoaderTest extends AbstractTest
         $loader->load($image, $options);
     }
 
-    /**
-     * @returns array Array containing coordinates to paste.
-     */
-    public function pasteProvider()
+    public function pasteProvider(): array
     {
         return [
             [200, 129, new Point(200, 129)],

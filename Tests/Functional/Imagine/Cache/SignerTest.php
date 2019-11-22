@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class SignerTest extends AbstractWebTestCase
 {
-    public function testGetAsService()
+    public function testGetAsService(): void
     {
         $this->createClient();
 

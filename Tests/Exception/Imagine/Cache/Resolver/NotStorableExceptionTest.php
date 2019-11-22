@@ -20,14 +20,14 @@ use PHPUnit\Framework\TestCase;
  */
 class NotStorableExceptionTest extends TestCase
 {
-    public function testSubClassOfRuntimeException()
+    public function testSubClassOfRuntimeException(): void
     {
         $e = new NotStorableException();
 
         $this->assertInstanceOf(\RuntimeException::class, $e);
     }
 
-    public function testImplementsExceptionInterface()
+    public function testImplementsExceptionInterface(): void
     {
         $e = new NotStorableException();
 

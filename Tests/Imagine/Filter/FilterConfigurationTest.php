@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class FilterConfigurationTest extends AbstractTest
 {
-    public function testSetAndGetFilter()
+    public function testSetAndGetFilter(): void
     {
         $config = [
             'filters' => [
@@ -37,7 +37,7 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertSame($config, $filterConfiguration->get('profile_photo'));
     }
 
-    public function testReturnAllFilters()
+    public function testReturnAllFilters(): void
     {
         $filterConfiguration = new FilterConfiguration();
         $filterConfiguration->set('foo', ['fooConfig']);
@@ -54,7 +54,7 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertSame(['barConfig'], $filters['bar']);
     }
 
-    public function testGetUndefinedFilter()
+    public function testGetUndefinedFilter(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Could not find configuration for a filter: thumbnail');
@@ -63,7 +63,7 @@ class FilterConfigurationTest extends AbstractTest
         $filterConfiguration->get('thumbnail');
     }
 
-    public function testShouldGetSameConfigSetBefore()
+    public function testShouldGetSameConfigSetBefore(): void
     {
         $config = [
             'quality' => 85,
@@ -83,7 +83,7 @@ class FilterConfigurationTest extends AbstractTest
         $this->assertSame($config, $filterConfiguration->get('profile_photo'));
     }
 
-    public function testGetConfigSetViaConstructor()
+    public function testGetConfigSetViaConstructor(): void
     {
         $filterConfiguration = new FilterConfiguration([
             'profile_photo' => [],

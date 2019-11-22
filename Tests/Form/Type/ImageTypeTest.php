@@ -31,14 +31,14 @@ class ImageTypeTest extends AbstractTest
         }
     }
 
-    public function testGetParent()
+    public function testGetParent(): void
     {
         $type = new ImageType();
 
         $this->assertSame(FileType::class, $type->getParent());
     }
 
-    public function testConfigureOptions()
+    public function testConfigureOptions(): void
     {
         $resolver = new OptionsResolver();
         $type = new ImageType();
@@ -54,7 +54,7 @@ class ImageTypeTest extends AbstractTest
         $this->assertTrue($resolver->isDefined('link_attr'));
     }
 
-    public function testBuildView()
+    public function testBuildView(): void
     {
         $options = [
             'image_path' => 'foo',

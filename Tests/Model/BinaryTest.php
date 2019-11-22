@@ -20,28 +20,28 @@ use PHPUnit\Framework\TestCase;
  */
 class BinaryTest extends TestCase
 {
-    public function testImplementsBinaryInterface()
+    public function testImplementsBinaryInterface(): void
     {
         $rc = new \ReflectionClass(Binary::class);
 
         $this->assertTrue($rc->implementsInterface(BinaryInterface::class));
     }
 
-    public function testAllowGetContentSetInConstructor()
+    public function testAllowGetContentSetInConstructor(): void
     {
         $image = new Binary('theContent', 'image/png', 'png');
 
         $this->assertSame('theContent', $image->getContent());
     }
 
-    public function testAllowGetMimeTypeSetInConstructor()
+    public function testAllowGetMimeTypeSetInConstructor(): void
     {
         $image = new Binary('aContent', 'image/png', 'png');
 
         $this->assertSame('image/png', $image->getMimeType());
     }
 
-    public function testAllowGetFormatSetInConstructor()
+    public function testAllowGetFormatSetInConstructor(): void
     {
         $image = new Binary('aContent', 'image/png', 'png');
 

@@ -33,14 +33,14 @@ class FlysystemResolverTest extends AbstractTest
         }
     }
 
-    public function testImplementsResolverInterface()
+    public function testImplementsResolverInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemResolver::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
-    public function testResolveUriForFilter()
+    public function testResolveUriForFilter(): void
     {
         $resolver = new FlysystemResolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com');
 
@@ -50,7 +50,7 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
-    public function testRemoveObjectsForFilter()
+    public function testRemoveObjectsForFilter(): void
     {
         $expectedFilter = 'theFilter';
         $fs = $this->createFlySystemMock();
@@ -63,7 +63,7 @@ class FlysystemResolverTest extends AbstractTest
         $resolver->remove([], [$expectedFilter]);
     }
 
-    public function testCreateObjectInAdapter()
+    public function testCreateObjectInAdapter(): void
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
@@ -78,7 +78,7 @@ class FlysystemResolverTest extends AbstractTest
         $this->assertNull($resolver->store($binary, 'thumb/foobar.jpg', 'thumb'));
     }
 
-    public function testIsStoredChecksObjectExistence()
+    public function testIsStoredChecksObjectExistence(): void
     {
         $fs = $this->createFlySystemMock();
         $fs
@@ -91,7 +91,7 @@ class FlysystemResolverTest extends AbstractTest
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
 
-    public function testReturnResolvedImageUrlOnResolve()
+    public function testReturnResolvedImageUrlOnResolve(): void
     {
         $fs = $this->createFlySystemMock();
 
@@ -103,7 +103,7 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
-    public function testResolveWithPrefixCacheEmpty()
+    public function testResolveWithPrefixCacheEmpty(): void
     {
         $resolver = new FlysystemResolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com', '');
 
@@ -113,7 +113,7 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
-    public function testRemoveCacheForPathAndFilterOnRemove()
+    public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
         $fs = $this->createFlySystemMock();
         $fs
@@ -131,7 +131,7 @@ class FlysystemResolverTest extends AbstractTest
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
         $fs = $this->createFlySystemMock();
         $fs
@@ -162,7 +162,7 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
-    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
         $fs = $this->createFlySystemMock();
         $fs
@@ -213,7 +213,7 @@ class FlysystemResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove()
+    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove(): void
     {
         $fs = $this->createFlySystemMock();
         $fs
@@ -229,7 +229,7 @@ class FlysystemResolverTest extends AbstractTest
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testRemoveCacheForFilterOnRemove()
+    public function testRemoveCacheForFilterOnRemove(): void
     {
         $expectedFilter = 'theFilter';
 
@@ -243,7 +243,7 @@ class FlysystemResolverTest extends AbstractTest
         $resolver->remove([], [$expectedFilter]);
     }
 
-    public function testRemoveCacheForSomeFiltersOnRemove()
+    public function testRemoveCacheForSomeFiltersOnRemove(): void
     {
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';

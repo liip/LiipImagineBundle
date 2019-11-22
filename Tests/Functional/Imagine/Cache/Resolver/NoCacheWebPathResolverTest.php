@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class NoCacheWebPathResolverTest extends AbstractWebTestCase
 {
-    public function testCouldBeGetFromContainer()
+    public function testCouldBeGetFromContainer(): void
     {
         $this->createClient();
 

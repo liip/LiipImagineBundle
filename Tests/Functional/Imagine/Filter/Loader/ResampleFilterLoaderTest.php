@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class ResampleFilterLoaderTest extends AbstractWebTestCase
 {
-    public function testContainerHasService()
+    public function testContainerHasService(): void
     {
         $this->createClient();
 

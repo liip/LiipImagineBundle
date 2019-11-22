@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FileSystemLoaderTest extends AbstractWebTestCase
 {
-    public function testMultipleLoadersHaveDifferentLocatorInstances()
+    public function testMultipleLoadersHaveDifferentLocatorInstances(): void
     {
         static::createClient();
 

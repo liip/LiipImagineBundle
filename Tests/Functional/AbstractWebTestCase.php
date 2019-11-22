@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Tests\Functional;
 
 use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\AbstractBrowser;
+use Symfony\Component\BrowserKit\Client;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {
@@ -22,7 +22,7 @@ abstract class AbstractWebTestCase extends WebTestCase
      */
     public static function createClient(array $options = [], array $server = [])
     {
-        if (!class_exists(AbstractBrowser::class)) {
+        if (!class_exists(Client::class)) {
             self::markTestSkipped('Requires the symfony/browser-kit package.');
         }
 
@@ -40,32 +40,27 @@ abstract class AbstractWebTestCase extends WebTestCase
     }
 
     /**
-     * @param string $name
-     *
      * @return object
      */
-    protected function getService($name)
+    protected function getService(string $name)
     {
         return static::$kernel->getContainer()->get($name);
     }
 
     /**
-     * @param string $name
-     *
      * @return mixed
      */
-    protected function getParameter($name)
+    protected function getParameter(string $name)
     {
         return static::$kernel->getContainer()->getParameter($name);
     }
 
     /**
      * @param object $object
-     * @param string $name
      *
      * @return mixed
      */
-    protected function getPrivateProperty($object, $name)
+    protected function getPrivateProperty($object, string $name)
     {
         $r = new \ReflectionObject($object);
 

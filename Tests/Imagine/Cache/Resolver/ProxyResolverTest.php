@@ -38,7 +38,7 @@ class ProxyResolverTest extends AbstractTest
         $this->resolver = new ProxyResolver($this->primaryResolver, ['http://images.example.com']);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -54,7 +54,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlEvenSchemesDiffersOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlEvenSchemesDiffersOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -70,7 +70,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlWithMatchReplaceOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlWithMatchReplaceOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -90,7 +90,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlWithRegExpOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlWithRegExpOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -110,7 +110,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://bar.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndReturnedValueOnIsStored()
+    public function testProxyCallAndReturnedValueOnIsStored(): void
     {
         $expectedPath = 'thePath';
         $expectedFilter = 'theFilter';
@@ -124,7 +124,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertTrue($this->resolver->isStored($expectedPath, $expectedFilter));
     }
 
-    public function testProxyCallOnStore()
+    public function testProxyCallOnStore(): void
     {
         $expectedPath = 'thePath';
         $expectedFilter = 'theFilter';
@@ -138,7 +138,7 @@ class ProxyResolverTest extends AbstractTest
         $this->resolver->store($expectedBinary, $expectedPath, $expectedFilter);
     }
 
-    public function testProxyCallOnRemove()
+    public function testProxyCallOnRemove(): void
     {
         $expectedPaths = ['thePath'];
         $expectedFilters = ['theFilter'];

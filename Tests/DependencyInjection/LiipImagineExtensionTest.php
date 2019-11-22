@@ -34,7 +34,7 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     protected $containerBuilder;
 
-    public function testUserLoadThrowsExceptionUnlessDriverIsValid()
+    public function testUserLoadThrowsExceptionUnlessDriverIsValid(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
@@ -42,7 +42,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->load([['driver' => 'foo']], new ContainerBuilder());
     }
 
-    public function testLoadFilterSetsDefaults()
+    public function testLoadFilterSetsDefaults(): void
     {
         $this->createConfigurationWithOneEmptyFilterSet();
         $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
@@ -63,7 +63,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertNull($emptyFilterSet['default_image']);
     }
 
-    public function testLoadFilterSetsWithDefaults()
+    public function testLoadFilterSetsWithDefaults(): void
     {
         $this->createConfigurationWithDefaultsFilterSets();
         $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
@@ -111,7 +111,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertArrayHasKey('mozjpeg', $filterSet2['post_processors']);
     }
 
-    public function testLoadWithDefaults()
+    public function testLoadWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -129,7 +129,7 @@ class LiipImagineExtensionTest extends AbstractTest
         );
     }
 
-    public function testTemplatingFilterExtensionIsDeprecated()
+    public function testTemplatingFilterExtensionIsDeprecated(): void
     {
         $this->createEmptyConfiguration();
 
@@ -137,7 +137,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
     }
 
-    public static function provideFactoryData()
+    public static function provideFactoryData(): array
     {
         return [
             [
@@ -157,7 +157,7 @@ class LiipImagineExtensionTest extends AbstractTest
      * @param string $service
      * @param string $factory
      */
-    public function testFactoriesConfiguration($service, $factory)
+    public function testFactoriesConfiguration($service, $factory): void
     {
         $this->createEmptyConfiguration();
         $definition = $this->containerBuilder->getDefinition($service);
@@ -169,7 +169,7 @@ class LiipImagineExtensionTest extends AbstractTest
      * @group legacy
      * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
      */
-    public function testHelperIsRegisteredWhenTemplatingIsEnabled()
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled(): void
     {
         $this->createConfiguration([
             'templating' => true,
@@ -177,7 +177,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertHasDefinition('liip_imagine.templating.filter_helper');
     }
 
-    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled()
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled(): void
     {
         $this->createConfiguration([
             'templating' => false,
@@ -185,7 +185,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
     }
 
-    protected function createConfigurationWithDefaultsFilterSets()
+    protected function createConfigurationWithDefaultsFilterSets(): void
     {
         if (!class_exists(Parser::class)) {
             $this->markTestSkipped('Requires the symfony/yaml package.');
@@ -194,7 +194,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->createConfiguration($this->getConfigurationWithDefaultsFilterSets());
     }
 
-    protected function createConfigurationWithOneEmptyFilterSet()
+    protected function createConfigurationWithOneEmptyFilterSet(): void
     {
         if (!class_exists(Parser::class)) {
             $this->markTestSkipped('Requires the symfony/yaml package.');

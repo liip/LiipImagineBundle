@@ -27,7 +27,7 @@ class CacheResolvedTest extends TestCase
         }
     }
 
-    public function testCouldBeJsonSerialized()
+    public function testCouldBeJsonSerialized(): void
     {
         $message = new CacheResolved('thePath', [
             'fooFilter' => 'http://example.com/fooFilter/thePath',
@@ -40,7 +40,7 @@ class CacheResolvedTest extends TestCase
         );
     }
 
-    public function testCouldBeJsonDeSerialized()
+    public function testCouldBeJsonDeSerialized(): void
     {
         $message = CacheResolved::jsonDeserialize('{"path":"thePath","uris":{"fooFilter":"http:\/\/example.com\/fooFilter\/thePath","barFilter":"http:\/\/example.com\/barFilter\/thePath"}}');
 

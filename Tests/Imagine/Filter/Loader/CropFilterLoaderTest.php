@@ -31,7 +31,7 @@ class CropFilterLoaderTest extends AbstractTest
      *
      * @dataProvider cropDataProvider
      */
-    public function testLoad($coordinates, $area)
+    public function testLoad(array $coordinates, array $area): void
     {
         $x = $coordinates[0];
         $y = $coordinates[1];
@@ -57,7 +57,7 @@ class CropFilterLoaderTest extends AbstractTest
     /**
      * @returns array Array containing coordinate and width/height pairs.
      */
-    public function cropDataProvider()
+    public function cropDataProvider(): array
     {
         return [
             [[140, 130], [200, 129]],

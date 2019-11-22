@@ -22,10 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class AbstractCompilerPassTestCase extends AbstractTest
 {
-    /**
-     * @return Definition
-     */
-    protected function createDefinition(array $tags = [])
+    protected function createDefinition(array $tags = []): Definition
     {
         $definition = new Definition();
 
@@ -38,10 +35,8 @@ class AbstractCompilerPassTestCase extends AbstractTest
 
     /**
      * @param Definition[] $definitions
-     *
-     * @return ContainerBuilder
      */
-    protected function createContainerBuilder(array $definitions = [])
+    protected function createContainerBuilder(array $definitions = []): ContainerBuilder
     {
         $container = new ContainerBuilder();
 
@@ -88,19 +83,12 @@ class AbstractCompilerPassTestCase extends AbstractTest
         }
     }
 
-    /**
-     * @param string|null $message
-     */
-    protected function assertDefinitionMethodCallsNone(Definition $definition, $message = '')
+    protected function assertDefinitionMethodCallsNone(Definition $definition, string $message = ''): void
     {
         $this->assertDefinitionMethodCallCount(0, $definition, $message);
     }
 
-    /**
-     * @param int         $expect
-     * @param string|null $message
-     */
-    protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = '')
+    protected function assertDefinitionMethodCallCount(int $expect, Definition $definition, string $message = ''): void
     {
         $this->assertCount($expect, $definition->getMethodCalls(), $message);
     }

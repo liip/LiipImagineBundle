@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterSetTest extends TestCase
 {
-    public function testSetFiltersWithInvalidFilterThrowsException()
+    public function testSetFiltersWithInvalidFilterThrowsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unknown filter provided.');
@@ -28,7 +28,7 @@ class FilterSetTest extends TestCase
         $this->buildFilterSet(['not_a_filter']);
     }
 
-    public function testSetFiltersWithValidFilterSuccess()
+    public function testSetFiltersWithValidFilterSuccess(): void
     {
         $filterMock = $this->createMock(FilterInterface::class);
         $stack = $this->buildFilterSet([$filterMock]);

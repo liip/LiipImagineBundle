@@ -29,7 +29,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEvent
  */
 class CacheManagerTest extends AbstractTest
 {
-    public function testAddCacheManagerAwareResolver()
+    public function testAddCacheManagerAwareResolver(): void
     {
         $cacheManager = new CacheManager($this->createFilterConfigurationMock(), $this->createRouterInterfaceMock(), new Signer('secret'), $this->createEventDispatcherInterfaceMock());
 
@@ -42,7 +42,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->addResolver('thumbnail', $resolver);
     }
 
-    public function testGetBrowserPathWithoutResolver()
+    public function testGetBrowserPathWithoutResolver(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->expectExceptionMessage('Could not find resolver "default" for "thumbnail" filter type');
@@ -62,7 +62,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail');
     }
 
-    public function testGetRuntimePath()
+    public function testGetRuntimePath(): void
     {
         $config = $this->createFilterConfigurationMock();
         $cacheManager = new CacheManager($config, $this->createRouterInterfaceMock(), new Signer('secret'), $this->createEventDispatcherInterfaceMock());
@@ -76,7 +76,7 @@ class CacheManagerTest extends AbstractTest
         $this->assertSame('rc/ILfTutxX/image.jpg', $rcPath);
     }
 
-    public function testDefaultResolverUsedIfNoneSetOnGetBrowserPath()
+    public function testDefaultResolverUsedIfNoneSetOnGetBrowserPath(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
@@ -114,7 +114,7 @@ class CacheManagerTest extends AbstractTest
         $this->assertSame('http://a/path/to/an/image.png', $actualBrowserPath);
     }
 
-    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPath()
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPath(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
@@ -151,7 +151,7 @@ class CacheManagerTest extends AbstractTest
         $this->assertSame('/media/cache/thumbnail/cats.jpeg', $actualBrowserPath);
     }
 
-    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPathWithRuntimeConfig()
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPathWithRuntimeConfig(): void
     {
         $runtimeConfig = [
             'thumbnail' => [
@@ -199,7 +199,7 @@ class CacheManagerTest extends AbstractTest
      *
      * @param string $path
      */
-    public function testResolveInvalidPath($path)
+    public function testResolveInvalidPath($path): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
@@ -213,7 +213,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve($path, 'thumbnail');
     }
 
-    public function testThrowsIfConcreteResolverNotExists()
+    public function testThrowsIfConcreteResolverNotExists(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         $this->expectExceptionMessage('Could not find resolver "default" for "thumbnail" filter type');
@@ -228,7 +228,7 @@ class CacheManagerTest extends AbstractTest
         $this->assertFalse($cacheManager->resolve('cats.jpeg', 'thumbnail'));
     }
 
-    public function testFallbackToDefaultResolver()
+    public function testFallbackToDefaultResolver(): void
     {
         $binary = new Binary('aContent', 'image/png', 'png');
 
@@ -276,7 +276,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove('/thumbs/cats.jpeg', 'thumbnail');
     }
 
-    public function testGenerateUrl()
+    public function testGenerateUrl(): void
     {
         $path = 'thePath';
         $expectedUrl = 'theUrl';
@@ -308,7 +308,7 @@ class CacheManagerTest extends AbstractTest
         );
     }
 
-    public function testRemoveCacheForPathAndFilterOnRemove()
+    public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
         $expectedPath = 'thePath';
         $expectedFilter = 'theFilter';
@@ -334,7 +334,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove($expectedPath, $expectedFilter);
     }
 
-    public function testRemoveCacheForPathAndSomeFiltersOnRemove()
+    public function testRemoveCacheForPathAndSomeFiltersOnRemove(): void
     {
         $expectedPath = 'thePath';
         $expectedFilterOne = 'theFilterOne';
@@ -368,7 +368,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove($expectedPath, [$expectedFilterOne, $expectedFilterTwo]);
     }
 
-    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
         $expectedPathOne = 'thePathOne';
         $expectedPathTwo = 'thePathTwo';
@@ -398,7 +398,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove([$expectedPathOne, $expectedPathTwo], $expectedFilter);
     }
 
-    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
         $expectedPathOne = 'thePath';
         $expectedPathTwo = 'thePath';
@@ -436,7 +436,7 @@ class CacheManagerTest extends AbstractTest
         );
     }
 
-    public function testRemoveCacheForAllFiltersOnRemove()
+    public function testRemoveCacheForAllFiltersOnRemove(): void
     {
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
@@ -476,7 +476,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove();
     }
 
-    public function testRemoveCacheForPathAndAllFiltersOnRemove()
+    public function testRemoveCacheForPathAndAllFiltersOnRemove(): void
     {
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
@@ -517,7 +517,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove($expectedPath);
     }
 
-    public function testAggregateFiltersByResolverOnRemove()
+    public function testAggregateFiltersByResolverOnRemove(): void
     {
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
@@ -544,7 +544,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove(null, [$expectedFilterOne, $expectedFilterTwo]);
     }
 
-    public function testShouldDispatchCachePreResolveEvent()
+    public function testShouldDispatchCachePreResolveEvent(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher
@@ -566,7 +566,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
-    public function testShouldDispatchCachePostResolveEvent()
+    public function testShouldDispatchCachePostResolveEvent(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher
@@ -588,7 +588,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
-    public function testShouldAllowToPassChangedDataFromPreResolveEventToResolver()
+    public function testShouldAllowToPassChangedDataFromPreResolveEventToResolver(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher
@@ -620,7 +620,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
-    public function testShouldAllowToGetResolverByFilterChangedInPreResolveEvent()
+    public function testShouldAllowToGetResolverByFilterChangedInPreResolveEvent(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher
@@ -649,7 +649,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'default');
     }
 
-    public function testShouldAllowToPassChangedDataFromPreResolveEventToPostResolveEvent()
+    public function testShouldAllowToPassChangedDataFromPreResolveEventToPostResolveEvent(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher
@@ -670,7 +670,7 @@ class CacheManagerTest extends AbstractTest
             ->with(...$this->getDispatcherArgumentsWithBC($dispatcher, [$this->logicalAnd(
                 $this->isInstanceOf(CacheResolveEvent::class),
                 $this->callback(function (CacheResolveEvent $event) {
-                   return $event->getFilter() === 'changed_filter' && $event->getPath() === 'changed_path';
+                    return 'changed_filter' === $event->getFilter() && 'changed_path' === $event->getPath();
                 })
             ), ImagineEvents::POST_RESOLVE]));
 
@@ -685,7 +685,7 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
-    public function testShouldReturnUrlChangedInPostResolveEvent()
+    public function testShouldReturnUrlChangedInPostResolveEvent(): void
     {
         $dispatcher = $this->createEventDispatcherInterfaceMock();
         $dispatcher

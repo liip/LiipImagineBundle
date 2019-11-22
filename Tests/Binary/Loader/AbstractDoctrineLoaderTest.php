@@ -48,7 +48,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testFindWithValidObjectFirstHit()
+    public function testFindWithValidObjectFirstHit(): void
     {
         $image = new \stdClass();
 
@@ -73,7 +73,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->assertSame('foo', $this->loader->find('/foo/bar'));
     }
 
-    public function testFindWithValidObjectSecondHit()
+    public function testFindWithValidObjectSecondHit(): void
     {
         $image = new \stdClass();
 
@@ -102,7 +102,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
     }
 
-    public function testFindWithInvalidObject()
+    public function testFindWithInvalidObject(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
 

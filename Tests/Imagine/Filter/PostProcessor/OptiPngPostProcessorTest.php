@@ -131,7 +131,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessData
      */
-    public function testProcess(string $content, array $options, string $expected)
+    public function testProcess(string $content, array $options, string $expected): void
     {
         $file = sys_get_temp_dir().'/test.png';
         file_put_contents($file, $content);

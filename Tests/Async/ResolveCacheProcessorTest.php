@@ -113,7 +113,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertStringStartsWith('The malformed json given.', $result->getReason());
     }
 
-    public function testShouldSendFailedReplyOnException()
+    public function testShouldSendFailedReplyOnException(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -137,7 +137,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         );
     }
 
-    public function testShouldRejectMessagesWithoutPass()
+    public function testShouldRejectMessagesWithoutPass(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -155,7 +155,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame('The message does not contain "path" but it is required.', $result->getReason());
     }
 
-    public function testShouldCreateFilteredImage()
+    public function testShouldCreateFilteredImage(): void
     {
         $filterName = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -188,7 +188,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldCreateOneImagePerFilter()
+    public function testShouldCreateOneImagePerFilter(): void
     {
         $filterName1 = 'fooFilter';
         $filterName2 = 'barFilter';
@@ -226,7 +226,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldOnlyCreateImageForRequestedFilter()
+    public function testShouldOnlyCreateImageForRequestedFilter(): void
     {
         $relevantFilter = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -256,7 +256,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldCreateOneImagePerRequestedFilter()
+    public function testShouldCreateOneImagePerRequestedFilter(): void
     {
         $relevantFilter1 = 'fooFilter';
         $relevantFilter2 = 'fooFilter';
@@ -290,7 +290,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldBurstCacheWhenResolvingForced()
+    public function testShouldBurstCacheWhenResolvingForced(): void
     {
         $filterName = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -324,7 +324,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldNotBurstCacheWhenResolvingNotForced()
+    public function testShouldNotBurstCacheWhenResolvingNotForced(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -354,7 +354,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldSendMessageOnSuccessResolve()
+    public function testShouldSendMessageOnSuccessResolve(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -403,7 +403,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldReturnReplyOnSuccessResolve()
+    public function testShouldReturnReplyOnSuccessResolve(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock

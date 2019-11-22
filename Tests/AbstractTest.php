@@ -78,7 +78,7 @@ abstract class AbstractTest extends TestCase
     /**
      * @return string[]
      */
-    public function invalidPathProvider()
+    public function invalidPathProvider(): array
     {
         return [
             [$this->fixturesPath.'/assets/../../foobar.png'],
@@ -87,10 +87,7 @@ abstract class AbstractTest extends TestCase
         ];
     }
 
-    /**
-     * @return FilterConfiguration
-     */
-    protected function createFilterConfiguration()
+    protected function createFilterConfiguration(): FilterConfiguration
     {
         $config = new FilterConfiguration();
         $config->set('thumbnail', [
@@ -255,14 +252,10 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @param string   $object
      * @param string[] $methods
-     * @param bool     $constructorInvoke
      * @param mixed[]  $constructorParams
-     *
-     * @return MockObject
      */
-    protected function createObjectMock($object, array $methods = [], $constructorInvoke = false, array $constructorParams = [])
+    protected function createObjectMock(string $object, array $methods = [], bool $constructorInvoke = false, array $constructorParams = []): MockObject
     {
         $builder = $this->getMockBuilder($object);
 
@@ -285,11 +278,8 @@ abstract class AbstractTest extends TestCase
 
     /**
      * @param object $object
-     * @param string $name
-     *
-     * @return \ReflectionMethod
      */
-    protected function getVisibilityRestrictedMethod($object, $name)
+    protected function getVisibilityRestrictedMethod($object, string $name): \ReflectionMethod
     {
         $r = new \ReflectionObject($object);
 

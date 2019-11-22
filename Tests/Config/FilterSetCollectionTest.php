@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterSetCollectionTest extends TestCase
 {
-    public function testGetFilterSets()
+    public function testGetFilterSets(): void
     {
         $filterSetName = 'foo';
         $filterSetData = ['bar'];

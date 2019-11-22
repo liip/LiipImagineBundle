@@ -48,7 +48,7 @@ class FilterSetBuilderTest extends TestCase
         $this->model = new StackBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
 
-    public function testBuildWithEmptyFilters()
+    public function testBuildWithEmptyFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';
@@ -73,7 +73,7 @@ class FilterSetBuilderTest extends TestCase
         $this->assertSame($filterSetMock, $filterSet);
     }
 
-    public function testBuildWithFilters()
+    public function testBuildWithFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';

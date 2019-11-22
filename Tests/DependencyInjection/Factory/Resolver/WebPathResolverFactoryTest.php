@@ -25,28 +25,28 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class WebPathResolverFactoryTest extends TestCase
 {
-    public function testImplementsResolverFactoryInterface()
+    public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(WebPathResolverFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = new WebPathResolverFactory();
 
         $this->assertInstanceOf(WebPathResolverFactory::class, $loader);
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $resolver = new WebPathResolverFactory();
 
         $this->assertSame('web_path', $resolver->getName());
     }
 
-    public function testCreateResolverDefinitionOnCreate()
+    public function testCreateResolverDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -67,7 +67,7 @@ class WebPathResolverFactoryTest extends TestCase
         $this->assertSame('theCachePrefix', $resolverDefinition->getArgument(3));
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedWebPath = 'theWebPath';
         $expectedCachePrefix = 'theCachePrefix';
@@ -94,7 +94,7 @@ class WebPathResolverFactoryTest extends TestCase
         $this->assertSame($expectedCachePrefix, $config['cache_prefix']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $treeBuilder = new TreeBuilder('web_path');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
@@ -115,10 +115,7 @@ class WebPathResolverFactoryTest extends TestCase
         $this->assertSame('media/cache', $config['cache_prefix']);
     }
 
-    /**
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

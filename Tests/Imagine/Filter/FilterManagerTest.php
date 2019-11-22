@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class FilterManagerTest extends AbstractTest
 {
-    public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter()
+    public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find filter(s): "thumbnail"');
@@ -54,7 +54,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager->applyFilter($binary, 'thumbnail');
     }
 
-    public function testReturnFilteredBinaryWithExpectedContentOnApplyFilter()
+    public function testReturnFilteredBinaryWithExpectedContentOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedFilteredContent = 'theFilteredContent';
@@ -111,7 +111,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFilteredContent, $filteredBinary->getContent());
     }
 
-    public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApplyFilter()
+    public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedFormat = 'png';
@@ -167,7 +167,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFormat, $filteredBinary->getFormat());
     }
 
-    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApplyFilter()
+    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $originalFormat = 'png';
@@ -225,7 +225,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFormat, $filteredBinary->getFormat());
     }
 
-    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApplyFilter()
+    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedMimeType = 'image/png';
@@ -286,7 +286,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedMimeType, $filteredBinary->getMimeType());
     }
 
-    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApplyFilter()
+    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $originalMimeType = 'image/png';
@@ -352,7 +352,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedMimeType, $filteredBinary->getMimeType());
     }
 
-    public function testAltersQualityOnApplyFilter()
+    public function testAltersQualityOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedQuality = 80;
@@ -407,7 +407,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf(Binary::class, $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
-    public function testAlters100QualityIfNotSetOnApplyFilter()
+    public function testAlters100QualityIfNotSetOnApplyFilter(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedQuality = 100;
@@ -461,7 +461,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf(Binary::class, $filterManager->applyFilter($binary, 'thumbnail'));
     }
 
-    public function testMergeRuntimeConfigWithOneFromFilterConfigurationOnApplyFilter()
+    public function testMergeRuntimeConfigWithOneFromFilterConfigurationOnApplyFilter(): void
     {
         $binary = new Binary('aContent', 'image/png', 'png');
 
@@ -528,7 +528,7 @@ class FilterManagerTest extends AbstractTest
         );
     }
 
-    public function testThrowsIfNoLoadersAddedForFilterOnApply()
+    public function testThrowsIfNoLoadersAddedForFilterOnApply(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find filter(s): "thumbnail"');
@@ -551,7 +551,7 @@ class FilterManagerTest extends AbstractTest
         ]);
     }
 
-    public function testReturnFilteredBinaryWithExpectedContentOnApply()
+    public function testReturnFilteredBinaryWithExpectedContentOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedFilteredContent = 'theFilteredContent';
@@ -601,7 +601,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFilteredContent, $filteredBinary->getContent());
     }
 
-    public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApply()
+    public function testReturnFilteredBinaryWithFormatOfOriginalBinaryOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedFormat = 'png';
@@ -650,7 +650,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFormat, $filteredBinary->getFormat());
     }
 
-    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApply()
+    public function testReturnFilteredBinaryWithCustomFormatIfSetOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $originalFormat = 'png';
@@ -701,7 +701,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedFormat, $filteredBinary->getFormat());
     }
 
-    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApply()
+    public function testReturnFilteredBinaryWithMimeTypeOfOriginalBinaryOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedMimeType = 'image/png';
@@ -755,7 +755,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedMimeType, $filteredBinary->getMimeType());
     }
 
-    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApply()
+    public function testReturnFilteredBinaryWithMimeTypeOfCustomFormatIfSetOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $originalMimeType = 'image/png';
@@ -814,7 +814,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedMimeType, $filteredBinary->getMimeType());
     }
 
-    public function testAltersQualityOnApply()
+    public function testAltersQualityOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedQuality = 80;
@@ -864,7 +864,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf(Binary::class, $filteredBinary);
     }
 
-    public function testAlters100QualityIfNotSetOnApply()
+    public function testAlters100QualityIfNotSetOnApply(): void
     {
         $originalContent = 'aOriginalContent';
         $expectedQuality = 100;
@@ -913,7 +913,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertInstanceOf(Binary::class, $filteredBinary);
     }
 
-    public function testApplyPostProcessor()
+    public function testApplyPostProcessor(): void
     {
         $originalContent = 'aContent';
         $expectedPostProcessedContent = 'postProcessedContent';
@@ -985,7 +985,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($expectedPostProcessedContent, $filteredBinary->getContent());
     }
 
-    public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter()
+    public function testThrowsIfNoPostProcessorAddedForFilterOnApplyFilter(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find post processor(s): "foo"');
@@ -1047,7 +1047,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager->applyFilter($binary, 'thumbnail');
     }
 
-    public function testApplyPostProcessorsWhenNotDefined()
+    public function testApplyPostProcessorsWhenNotDefined(): void
     {
         $binary = $this->getMockBuilder(BinaryInterface::class)->getMock();
         $filterManager = new FilterManager(

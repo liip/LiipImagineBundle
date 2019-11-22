@@ -23,14 +23,14 @@ use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface
  */
 class SimpleMimeTypeGuesserTest extends TestCase
 {
-    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
+    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument(): void
     {
         $guesser = $this->getSimpleMimeTypeGuesser();
 
         $this->assertInstanceOf(SimpleMimeTypeGuesser::class, $guesser);
     }
 
-    public function testThrowsIfConstructedWithWrongTypeArguments()
+    public function testThrowsIfConstructedWithWrongTypeArguments(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('$mimeTypeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
@@ -38,7 +38,7 @@ class SimpleMimeTypeGuesserTest extends TestCase
         new SimpleMimeTypeGuesser('foo');
     }
 
-    public function testImplementsMimeTypeGuesserInterface()
+    public function testImplementsMimeTypeGuesserInterface(): void
     {
         $this->assertInstanceOf(MimeTypeGuesserInterface::class, $this->getSimpleMimeTypeGuesser());
     }
@@ -46,7 +46,7 @@ class SimpleMimeTypeGuesserTest extends TestCase
     /**
      * @return array[]
      */
-    public static function provideImageData()
+    public static function provideImageData(): array
     {
         return [
             'gif' => [__DIR__.'/../Fixtures/assets/cats.gif', 'image/gif'],
@@ -65,7 +65,7 @@ class SimpleMimeTypeGuesserTest extends TestCase
      *
      * @throws \Exception
      */
-    public function testGuessMimeType($fileName, $mimeType)
+    public function testGuessMimeType($fileName, $mimeType): void
     {
         $this->assertSame($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
     }

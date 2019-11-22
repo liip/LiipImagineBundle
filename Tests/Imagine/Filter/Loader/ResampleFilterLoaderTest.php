@@ -28,7 +28,7 @@ class ResampleFilterLoaderTest extends AbstractTest
      * @param string $imgPath
      * @param float  $resolution
      */
-    public function testResample($imgPath, $resolution)
+    public function testResample($imgPath, $resolution): void
     {
         $imgType = static::getSupportedDriver();
         $tmpPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.sprintf('liip-imagine-bundle-test-%s-%d.%s', md5($imgPath), time(), pathinfo($imgPath, PATHINFO_EXTENSION));
@@ -50,7 +50,7 @@ class ResampleFilterLoaderTest extends AbstractTest
     /**
      * @return array[]
      */
-    public static function provideResampleData()
+    public static function provideResampleData(): array
     {
         $paths = [
             realpath(__DIR__.'/../../../Fixtures/assets/cats.png'),
@@ -73,10 +73,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    public static function provideOptionsData()
+    public static function provideOptionsData(): array
     {
         return [
             [['x' => 500, 'y' => 500, 'unit' => 'ppi']],
@@ -91,7 +88,7 @@ class ResampleFilterLoaderTest extends AbstractTest
     /**
      * @dataProvider provideOptionsData
      */
-    public function testOptions(array $options)
+    public function testOptions(array $options): void
     {
         $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
@@ -106,10 +103,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $this->createResampleFilterLoaderInstance($imagine)->load($image, $options);
     }
 
-    /**
-     * @return array
-     */
-    public static function provideInvalidOptionsData()
+    public static function provideInvalidOptionsData(): array
     {
         return [
             [[]],
@@ -134,7 +128,7 @@ class ResampleFilterLoaderTest extends AbstractTest
     /**
      * @dataProvider provideInvalidOptionsData
      */
-    public function testThrowsOnInvalidOptions(array $options)
+    public function testThrowsOnInvalidOptions(array $options): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid option(s) passed to Liip\\ImagineBundle\\Imagine\\Filter\\Loader\\ResampleFilterLoader::load().');
@@ -143,7 +137,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $loader->load($this->getImageInterfaceMock(), $options);
     }
 
-    public function testThrowsOnInvalidFilterOption()
+    public function testThrowsOnInvalidFilterOption(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid value for "filter" option: must be a valid constant resolvable using one of formats "\\Imagine\\Image\\ImageInterface::FILTER_%s", "\\Imagine\\Image\\ImageInterface::%s", or "%s".');
@@ -157,7 +151,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         ]);
     }
 
-    public function testThrowsOnInvalidTemporaryPathOption()
+    public function testThrowsOnInvalidTemporaryPathOption(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessageRegExp('{Unable to create temporary file in ".+" base path.}');
@@ -171,7 +165,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         ]);
     }
 
-    public function testThrowsOnSaveOrOpenError()
+    public function testThrowsOnSaveOrOpenError(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Filter\LoadFilterException::class);
 

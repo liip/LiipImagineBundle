@@ -24,15 +24,12 @@ use Symfony\Component\Templating\Helper\Helper;
  */
 class FilterHelperTest extends AbstractFilterTest
 {
-    public function testInstanceOfSymfonyHelper()
+    public function testInstanceOfSymfonyHelper(): void
     {
         $this->assertInstanceOf(Helper::class, $this->createTemplatingMock());
     }
 
-    /**
-     * @return FilterHelper
-     */
-    protected function createTemplatingMock(CacheManager $manager = null)
+    protected function createTemplatingMock(CacheManager $manager = null): FilterHelper
     {
         $mock = new FilterHelper($manager ?: $this->createCacheManagerMock());
 
