@@ -23,7 +23,7 @@ EOM;
 }
 
 namespace Symfony\Component\ExpressionLanguage {
-    if (interface_exists('Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface')) {
+    if (interface_exists(ExpressionFunctionProviderInterface::class)) {
         return;
     }
 

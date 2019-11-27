@@ -34,28 +34,28 @@ class FlysystemLoaderFactoryTest extends TestCase
         }
     }
 
-    public function testImplementsLoaderFactoryInterface()
+    public function testImplementsLoaderFactoryInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemLoaderFactory::class);
 
         $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = new FlysystemLoaderFactory();
 
         $this->assertInstanceOf(FlysystemLoaderFactory::class, $loader);
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $loader = new FlysystemLoaderFactory();
 
         $this->assertSame('flysystem', $loader->getName());
     }
 
-    public function testCreateLoaderDefinitionOnCreate()
+    public function testCreateLoaderDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -72,10 +72,10 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->assertSame('liip_imagine.binary.loader.prototype.flysystem', $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);
-        $this->assertSame('flyfilesystemservice', "$reference");
+        $this->assertSame('flyfilesystemservice', (string) $reference);
     }
 
-    public function testThrowIfFileSystemServiceNotSetOnAddConfiguration()
+    public function testThrowIfFileSystemServiceNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
         $this->expectExceptionMessage('The child node "filesystem_service" at path "flysystem" must be configured.');
@@ -91,7 +91,7 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->processConfigTree($treeBuilder, []);
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedService = 'theService';
 
@@ -113,13 +113,7 @@ class FlysystemLoaderFactoryTest extends TestCase
         $this->assertSame($expectedService, $config['filesystem_service']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

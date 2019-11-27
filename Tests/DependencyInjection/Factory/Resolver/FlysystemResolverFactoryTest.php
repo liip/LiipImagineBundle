@@ -34,28 +34,28 @@ class FlysystemResolverFactoryTest extends TestCase
         }
     }
 
-    public function testImplementsResolverFactoryInterface()
+    public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemResolverFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = new FlysystemResolverFactory();
 
         $this->assertInstanceOf(FlysystemResolverFactory::class, $loader);
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $resolver = new FlysystemResolverFactory();
 
         $this->assertSame('flysystem', $resolver->getName());
     }
 
-    public function testCreateResolverDefinitionOnCreate()
+    public function testCreateResolverDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -79,7 +79,7 @@ class FlysystemResolverFactoryTest extends TestCase
         $this->assertSame('public', $resolverDefinition->getArgument(4));
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedRootUrl = 'http://images.example.com';
         $expectedCachePrefix = 'theCachePrefix';
@@ -116,7 +116,7 @@ class FlysystemResolverFactoryTest extends TestCase
         $this->assertSame($expectedVisibility, $config['visibility']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
@@ -133,13 +133,7 @@ class FlysystemResolverFactoryTest extends TestCase
         ]);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

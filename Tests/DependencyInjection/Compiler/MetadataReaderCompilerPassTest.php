@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class MetadataReaderCompilerPassTest extends TestCase
 {
-    public function testProcessBasedOnExtensionsInEnvironment()
+    public function testProcessBasedOnExtensionsInEnvironment(): void
     {
         [$metadataServiceId, $metadataExifClass, $metadataDefaultClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -33,7 +34,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf(\extension_loaded('exif') ? $metadataExifClass : $metadataDefaultClass, $container->get($metadataServiceId));
     }
 
-    public function testProcessWithoutExtExifAddsDefaultReader()
+    public function testProcessWithoutExtExifAddsDefaultReader(): void
     {
         [$metadataServiceId, $metadataExifClass, $metadataDefaultClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -46,7 +47,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf($metadataDefaultClass, $container->get($metadataServiceId));
     }
 
-    public function testProcessWithExtExifKeepsExifReader()
+    public function testProcessWithExtExifKeepsExifReader(): void
     {
         [$metadataServiceId, $metadataExifClass] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -59,7 +60,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf($metadataExifClass, $container->get($metadataServiceId));
     }
 
-    public function testDoesNotOverrideCustomReaderWhenExifNotAvailable()
+    public function testDoesNotOverrideCustomReaderWhenExifNotAvailable(): void
     {
         [$metadataServiceId] = static::getReaderParamAndDefaultAndExifValues();
 
@@ -72,13 +73,7 @@ class MetadataReaderCompilerPassTest extends TestCase
         $this->assertInstanceOf('stdClass', $container->get($metadataServiceId));
     }
 
-    /**
-     * @param \ReflectionClass $r
-     * @param string           $p
-     *
-     * @return string
-     */
-    private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, $p)
+    private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, string $p): string
     {
         $property = $r->getProperty($p);
         $property->setAccessible(true);
@@ -91,7 +86,7 @@ class MetadataReaderCompilerPassTest extends TestCase
      *
      * @return mixed[]
      */
-    private static function getReaderParamAndDefaultAndExifValues()
+    private static function getReaderParamAndDefaultAndExifValues(): array
     {
         $r = new \ReflectionClass(MetadataReaderCompilerPass::class);
 
@@ -103,11 +98,9 @@ class MetadataReaderCompilerPassTest extends TestCase
     }
 
     /**
-     * @param bool $isExifExtensionLoaded
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|MetadataReaderCompilerPass
+     * @return MockObject|MetadataReaderCompilerPass
      */
-    private function getMetadataReaderCompilerPass($isExifExtensionLoaded)
+    private function getMetadataReaderCompilerPass(bool $isExifExtensionLoaded)
     {
         $mock = $this->getMockBuilder(MetadataReaderCompilerPass::class)
             ->setMethods(['isExifExtensionLoaded'])

@@ -39,22 +39,19 @@ class FlysystemLoaderTest extends AbstractTest
         $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
     }
 
-    /**
-     * @return FlysystemLoader
-     */
-    public function getFlysystemLoader()
+    public function getFlysystemLoader(): FlysystemLoader
     {
         $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
 
         return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
     }
 
-    public function testShouldImplementLoaderInterface()
+    public function testShouldImplementLoaderInterface(): void
     {
         $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
     }
 
-    public function testThrowsIfConstructedWithWrongTypeArguments()
+    public function testThrowsIfConstructedWithWrongTypeArguments(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
@@ -65,7 +62,7 @@ class FlysystemLoaderTest extends AbstractTest
         );
     }
 
-    public function testReturnImageContentOnFind()
+    public function testReturnImageContentOnFind(): void
     {
         $loader = $this->getFlysystemLoader();
 
@@ -74,7 +71,7 @@ class FlysystemLoaderTest extends AbstractTest
         );
     }
 
-    public function testThrowsIfInvalidPathGivenOnFind()
+    public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessageRegExp('{Source image .+ not found}');

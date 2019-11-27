@@ -10,7 +10,7 @@ env:
     - SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
-    - SYMFONY_PHPUNIT_VERSION="6.5"
+    - SYMFONY_PHPUNIT_VERSION="7.5"
     - COVERALLS_ENABLED="false"
     - STABILITY=stable
 

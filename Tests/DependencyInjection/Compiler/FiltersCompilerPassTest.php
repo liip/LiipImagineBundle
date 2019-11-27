@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class FiltersCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         [$d, $m] = $this->getFiltersCompilerPassContainerDefinitions();
 
@@ -32,7 +32,7 @@ class FiltersCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertDefinitionMethodCallCount(1, $m);
     }
 
-    public function testProcessLogging()
+    public function testProcessLogging(): void
     {
         $this->assertContainerLogMethodCalledForCompilerPass(
             new FiltersCompilerPass(),

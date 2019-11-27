@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
+use Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -18,11 +19,11 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FlipFilterLoaderTest extends AbstractWebTestCase
 {
-    public function testCouldBeGetFromContainerAsService()
+    public function testCouldBeGetFromContainerAsService(): void
     {
         $this->createClient();
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader',
+            FlipFilterLoader::class,
             self::$kernel->getContainer()->get('liip_imagine.filter.loader.flip')
         );
     }

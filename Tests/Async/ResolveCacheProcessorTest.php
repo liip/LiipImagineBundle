@@ -28,6 +28,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Async\ResolveCacheProcessor
@@ -41,32 +42,32 @@ class ResolveCacheProcessorTest extends AbstractTest
         }
     }
 
-    public function testShouldImplementProcessorInterface()
+    public function testShouldImplementProcessorInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(Processor::class));
     }
 
-    public function testShouldImplementCommandSubscriberInterface()
+    public function testShouldImplementCommandSubscriberInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(CommandSubscriberInterface::class));
     }
 
-    public function testShouldImplementQueueSubscriberInterface()
+    public function testShouldImplementQueueSubscriberInterface(): void
     {
         $rc = new \ReflectionClass(ResolveCacheProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(QueueSubscriberInterface::class));
     }
 
-    public function testShouldSubscribeToExpectedCommand()
+    public function testShouldSubscribeToExpectedCommand(): void
     {
         $command = ResolveCacheProcessor::getSubscribedCommand();
 
-        $this->assertInternalType('array', $command);
+        $this->assertIsArray($command);
         $this->assertSame([
             'command' => Commands::RESOLVE_CACHE,
             'queue' => Commands::RESOLVE_CACHE,
@@ -75,15 +76,15 @@ class ResolveCacheProcessorTest extends AbstractTest
         ], $command);
     }
 
-    public function testShouldSubscribeToExpectedQueue()
+    public function testShouldSubscribeToExpectedQueue(): void
     {
         $queues = ResolveCacheProcessor::getSubscribedQueues();
 
-        $this->assertInternalType('array', $queues);
+        $this->assertIsArray($queues);
         $this->assertSame(['liip_imagine_resolve_cache'], $queues);
     }
 
-    public function testCouldBeConstructedWithExpectedArguments()
+    public function testCouldBeConstructedWithExpectedArguments(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -94,7 +95,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertInstanceOf(ResolveCacheProcessor::class, $processor);
     }
 
-    public function testShouldRejectMessagesWithInvalidJsonBody()
+    public function testShouldRejectMessagesWithInvalidJsonBody(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -107,12 +108,12 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::REJECT, $result->getStatus());
         $this->assertStringStartsWith('The malformed json given.', $result->getReason());
     }
 
-    public function testShouldSendFailedReplyOnException()
+    public function testShouldSendFailedReplyOnException(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -136,7 +137,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         );
     }
 
-    public function testShouldRejectMessagesWithoutPass()
+    public function testShouldRejectMessagesWithoutPass(): void
     {
         $processor = new ResolveCacheProcessor(
             $this->createFilterManagerMock(),
@@ -149,12 +150,12 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::REJECT, (string) $result);
         $this->assertSame('The message does not contain "path" but it is required.', $result->getReason());
     }
 
-    public function testShouldCreateFilteredImage()
+    public function testShouldCreateFilteredImage(): void
     {
         $filterName = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -187,7 +188,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldCreateOneImagePerFilter()
+    public function testShouldCreateOneImagePerFilter(): void
     {
         $filterName1 = 'fooFilter';
         $filterName2 = 'barFilter';
@@ -225,7 +226,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldOnlyCreateImageForRequestedFilter()
+    public function testShouldOnlyCreateImageForRequestedFilter(): void
     {
         $relevantFilter = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -255,7 +256,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldCreateOneImagePerRequestedFilter()
+    public function testShouldCreateOneImagePerRequestedFilter(): void
     {
         $relevantFilter1 = 'fooFilter';
         $relevantFilter2 = 'fooFilter';
@@ -289,7 +290,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldBurstCacheWhenResolvingForced()
+    public function testShouldBurstCacheWhenResolvingForced(): void
     {
         $filterName = 'fooFilter';
         $imagePath = 'theImagePath';
@@ -319,11 +320,11 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldNotBurstCacheWhenResolvingNotForced()
+    public function testShouldNotBurstCacheWhenResolvingNotForced(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -349,11 +350,11 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldSendMessageOnSuccessResolve()
+    public function testShouldSendMessageOnSuccessResolve(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -377,7 +378,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $producerMock
             ->expects($this->once())
             ->method('sendEvent')
-            ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf('Liip\ImagineBundle\Async\CacheResolved'))
+            ->with(Topics::CACHE_RESOLVED, $this->isInstanceOf(CacheResolved::class))
         ->willReturnCallback(function ($topic, CacheResolved $message) {
             $this->assertSame('theImagePath', $message->getPath());
             $this->assertSame([
@@ -398,11 +399,11 @@ class ResolveCacheProcessorTest extends AbstractTest
 
         $result = $processor->process($message, new NullContext());
 
-        $this->assertInstanceOf('Enqueue\Consumption\Result', $result);
+        $this->assertInstanceOf(Result::class, $result);
         $this->assertSame(Result::ACK, (string) $result);
     }
 
-    public function testShouldReturnReplyOnSuccessResolve()
+    public function testShouldReturnReplyOnSuccessResolve(): void
     {
         $filterManagerMock = $this->createFilterManagerMock();
         $filterManagerMock
@@ -472,17 +473,14 @@ class ResolveCacheProcessorTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ProducerInterface
+     * @return MockObject|ProducerInterface
      */
     private function createProducerMock()
     {
         return $this->createMock(ProducerInterface::class);
     }
 
-    /**
-     * @return Binary
-     */
-    private function createDummyBinary()
+    private function createDummyBinary(): Binary
     {
         return new Binary('theContent', 'image/png', 'png');
     }

@@ -46,7 +46,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     /**
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      */
-    public function testItShouldPreserveRatio()
+    public function testItShouldPreserveRatio(): void
     {
         $loader = new ScaleFilterLoader();
         $image = $this->getImageInterfaceMock();
@@ -71,7 +71,7 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @param int[] $dimensions
      * @param Box   $expected
      */
-    public function testItShouldUseDimensions($dimensions, $expected)
+    public function testItShouldUseDimensions($dimensions, $expected): void
     {
         $loader = new ScaleFilterLoader();
 
@@ -91,7 +91,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     /**
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load
      */
-    public function itShouldThrowInvalidArgumentException()
+    public function itShouldThrowInvalidArgumentException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -99,10 +99,7 @@ class ScaleFilterLoaderTest extends AbstractTest
         $scale->load($this->getImageInterfaceMock(), []);
     }
 
-    /**
-     * @returns array Array containing coordinate and width/height pairs.
-     */
-    public function dimensionsDataProvider()
+    public function dimensionsDataProvider(): array
     {
         return [
             [[150, 150], new Box(125, 150)],
@@ -117,7 +114,7 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @param int[] $dimensions
      * @param Box   $expected
      */
-    public function testShouldScale($dimensions, $expected)
+    public function testShouldScale($dimensions, $expected): void
     {
         $loader = new UpscaleFilterLoader();
         $image = $this->getUpscaleMockImage();
@@ -133,10 +130,7 @@ class ScaleFilterLoaderTest extends AbstractTest
         $loader->load($image, $options);
     }
 
-    /**
-     * @returns array Array containing coordinate and width/height pairs.
-     */
-    public function minScaleDataProvider()
+    public function minScaleDataProvider(): array
     {
         return [
             [[1000, 600], new Box(1000, 667)],
@@ -150,7 +144,7 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @param int[] $dimensions
      * @param Box   $expected
      */
-    public function testShouldNotScale($dimensions, $expected)
+    public function testShouldNotScale($dimensions, $expected): void
     {
         $loader = new UpscaleFilterLoader();
         $image = $this->getUpscaleMockImage();
@@ -166,10 +160,7 @@ class ScaleFilterLoaderTest extends AbstractTest
         $loader->load($image, $options);
     }
 
-    /**
-     * @returns array Array containing coordinate and width/height pairs.
-     */
-    public function minNotScaleDataProvider()
+    public function minNotScaleDataProvider(): array
     {
         return [
             [[300, 200], new Box(600, 400)],

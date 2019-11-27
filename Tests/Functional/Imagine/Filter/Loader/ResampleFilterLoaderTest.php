@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional\Imagine\Filter\Loader;
 
+use Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 
 /**
@@ -18,12 +19,12 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class ResampleFilterLoaderTest extends AbstractWebTestCase
 {
-    public function testContainerHasService()
+    public function testContainerHasService(): void
     {
         $this->createClient();
 
         $this->assertInstanceOf(
-            '\Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader',
+            ResampleFilterLoader::class,
             self::$kernel->getContainer()->get('liip_imagine.filter.loader.resample')
         );
     }

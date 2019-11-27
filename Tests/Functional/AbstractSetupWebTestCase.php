@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class AbstractSetupWebTestCase extends AbstractWebTestCase
 {
     /**
-     * @var Client
+     * @var KernelBrowser
      */
     protected $client;
 

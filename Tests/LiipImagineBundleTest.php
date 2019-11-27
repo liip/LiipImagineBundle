@@ -24,6 +24,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFac
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -32,12 +33,12 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class LiipImagineBundleTest extends AbstractTest
 {
-    public function testSubClassOfBundle()
+    public function testSubClassOfBundle(): void
     {
         $this->assertInstanceOf(Bundle::class, new LiipImagineBundle());
     }
 
-    public function testAddLoadersCompilerPassOnBuild()
+    public function testAddLoadersCompilerPassOnBuild(): void
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -54,7 +55,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddFiltersCompilerPassOnBuild()
+    public function testAddFiltersCompilerPassOnBuild(): void
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -71,7 +72,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddPostProcessorsCompilerPassOnBuild()
+    public function testAddPostProcessorsCompilerPassOnBuild(): void
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -88,7 +89,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddResolversCompilerPassOnBuild()
+    public function testAddResolversCompilerPassOnBuild(): void
     {
         $containerMock = $this->createContainerBuilderMock();
         $containerMock
@@ -105,7 +106,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddWebPathResolverFactoryOnBuild()
+    public function testAddWebPathResolverFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -124,7 +125,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddAwsS3ResolverFactoryOnBuild()
+    public function testAddAwsS3ResolverFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -143,7 +144,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddFlysystemResolverFactoryOnBuild()
+    public function testAddFlysystemResolverFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -162,7 +163,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddChainLoaderFactoryOnBuild()
+    public function testAddChainLoaderFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -179,7 +180,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddStreamLoaderFactoryOnBuild()
+    public function testAddStreamLoaderFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -198,7 +199,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddFilesystemLoaderFactoryOnBuild()
+    public function testAddFilesystemLoaderFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -217,7 +218,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle->build($containerMock);
     }
 
-    public function testAddFlysystemLoaderFactoryOnBuild()
+    public function testAddFlysystemLoaderFactoryOnBuild(): void
     {
         $extensionMock = $this->createLiipImagineExtensionMock();
         $extensionMock
@@ -237,7 +238,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder
+     * @return MockObject|ContainerBuilder
      */
     protected function createContainerBuilderMock()
     {
@@ -245,7 +246,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LiipImagineExtension
+     * @return MockObject|LiipImagineExtension
      */
     protected function createLiipImagineExtensionMock()
     {

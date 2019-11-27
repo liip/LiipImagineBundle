@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Data;
 
-use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -22,7 +21,7 @@ use Symfony\Component\Mime\MimeTypesInterface;
  */
 class DataManagerTest extends AbstractTest
 {
-    public function testThrowsIfConstructedWithWrongTypeArguments()
+    public function testThrowsIfConstructedWithWrongTypeArguments(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
@@ -33,7 +32,7 @@ class DataManagerTest extends AbstractTest
         new DataManager($mimeTypeGuesser, 'foo', $config, 'default');
     }
 
-    public function testUseDefaultLoaderUsedIfNoneSet()
+    public function testUseDefaultLoaderUsedIfNoneSet(): void
     {
         $loader = $this->createBinaryLoaderInterfaceMock();
         $loader
@@ -64,7 +63,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testUseLoaderRegisteredForFilterOnFind()
+    public function testUseLoaderRegisteredForFilterOnFind(): void
     {
         $loader = $this->createBinaryLoaderInterfaceMock();
         $loader
@@ -95,7 +94,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testThrowsIfMimeTypeWasNotGuessedOnFind()
+    public function testThrowsIfMimeTypeWasNotGuessedOnFind(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The mime type of image cats.jpeg was not guessed');
@@ -128,7 +127,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testThrowsIfMimeTypeNotImageOneOnFind()
+    public function testThrowsIfMimeTypeNotImageOneOnFind(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The mime type of image cats.jpeg must be image/xxx got text/plain');
@@ -162,7 +161,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testThrowsIfLoaderReturnBinaryWithEmtptyMimeTypeOnFind()
+    public function testThrowsIfLoaderReturnBinaryWithEmtptyMimeTypeOnFind(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The mime type of image cats.jpeg was not guessed');
@@ -195,7 +194,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testThrowsIfLoaderReturnBinaryWithMimeTypeNotImageOneOnFind()
+    public function testThrowsIfLoaderReturnBinaryWithMimeTypeNotImageOneOnFind(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('The mime type of image cats.jpeg must be image/xxx got text/plain');
@@ -230,7 +229,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testThrowIfLoaderNotRegisteredForGivenFilterOnFind()
+    public function testThrowIfLoaderNotRegisteredForGivenFilterOnFind(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find data loader "" for "thumbnail" filter type');
@@ -250,7 +249,7 @@ class DataManagerTest extends AbstractTest
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 
-    public function testShouldReturnBinaryWithLoaderContentAndGuessedMimeTypeOnFind()
+    public function testShouldReturnBinaryWithLoaderContentAndGuessedMimeTypeOnFind(): void
     {
         $expectedContent = 'theImageBinaryContent';
         $expectedMimeType = 'image/png';
@@ -289,7 +288,7 @@ class DataManagerTest extends AbstractTest
         $this->assertSame($expectedMimeType, $binary->getMimeType());
     }
 
-    public function testShouldReturnBinaryWithLoaderContentAndGuessedFormatOnFind()
+    public function testShouldReturnBinaryWithLoaderContentAndGuessedFormatOnFind(): void
     {
         $content = 'theImageBinaryContent';
         $mimeType = 'image/png';
@@ -344,7 +343,7 @@ class DataManagerTest extends AbstractTest
         $this->assertSame($expectedFormat, $binary->getFormat());
     }
 
-    public function testUseDefaultGlobalImageUsedIfImageNotFound()
+    public function testUseDefaultGlobalImageUsedIfImageNotFound(): void
     {
         $loader = $this->createBinaryLoaderInterfaceMock();
 
@@ -370,7 +369,7 @@ class DataManagerTest extends AbstractTest
         $this->assertSame($defaultImage, $defaultGlobalImage);
     }
 
-    public function testUseDefaultFilterImageUsedIfImageNotFound()
+    public function testUseDefaultFilterImageUsedIfImageNotFound(): void
     {
         $loader = $this->createBinaryLoaderInterfaceMock();
 

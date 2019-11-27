@@ -21,22 +21,17 @@ use Twig\Extension\AbstractExtension;
  */
 class FilterExtensionTest extends AbstractFilterTest
 {
-    public function testAddsFilterMethodToFiltersList()
+    public function testAddsFilterMethodToFiltersList(): void
     {
         $this->assertCount(1, $this->createTemplatingMock()->getFilters());
     }
 
-    public function testInstanceOfTwigFilter()
+    public function testInstanceOfTwigFilter(): void
     {
         $this->assertInstanceOf(AbstractExtension::class, $this->createTemplatingMock());
     }
 
-    /**
-     * @param CacheManager|null $manager
-     *
-     * @return FilterExtension
-     */
-    protected function createTemplatingMock(CacheManager $manager = null)
+    protected function createTemplatingMock(CacheManager $manager = null): FilterExtension
     {
         if (!class_exists(AbstractExtension::class)) {
             $this->markTestSkipped('Requires the twig/twig package.');

@@ -25,6 +25,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Service\FilterService;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -77,7 +78,7 @@ abstract class AbstractTest extends TestCase
     /**
      * @return string[]
      */
-    public function invalidPathProvider()
+    public function invalidPathProvider(): array
     {
         return [
             [$this->fixturesPath.'/assets/../../foobar.png'],
@@ -86,10 +87,7 @@ abstract class AbstractTest extends TestCase
         ];
     }
 
-    /**
-     * @return FilterConfiguration
-     */
-    protected function createFilterConfiguration()
+    protected function createFilterConfiguration(): FilterConfiguration
     {
         $config = new FilterConfiguration();
         $config->set('thumbnail', [
@@ -101,7 +99,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|CacheManager
+     * @return MockObject|CacheManager
      */
     protected function createCacheManagerMock()
     {
@@ -117,7 +115,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterConfiguration
+     * @return MockObject|FilterConfiguration
      */
     protected function createFilterConfigurationMock()
     {
@@ -125,7 +123,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SignerInterface
+     * @return MockObject|SignerInterface
      */
     protected function createSignerInterfaceMock()
     {
@@ -133,7 +131,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     * @return MockObject|RouterInterface
      */
     protected function createRouterInterfaceMock()
     {
@@ -141,7 +139,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @return MockObject|ResolverInterface
      */
     protected function createCacheResolverInterfaceMock()
     {
@@ -149,7 +147,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @return MockObject|EventDispatcherInterface
      */
     protected function createEventDispatcherInterfaceMock()
     {
@@ -157,7 +155,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ImageInterface
+     * @return MockObject|ImageInterface
      */
     protected function getImageInterfaceMock()
     {
@@ -165,7 +163,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|MetadataBag
+     * @return MockObject|MetadataBag
      */
     protected function getMetadataBagMock()
     {
@@ -173,7 +171,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ImagineInterface
+     * @return MockObject|ImagineInterface
      */
     protected function createImagineInterfaceMock()
     {
@@ -181,7 +179,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @return MockObject|LoggerInterface
      */
     protected function createLoggerInterfaceMock()
     {
@@ -189,7 +187,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|LoaderInterface
+     * @return MockObject|LoaderInterface
      */
     protected function createBinaryLoaderInterfaceMock()
     {
@@ -197,7 +195,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|MimeTypeGuesserInterface
+     * @return MockObject|MimeTypeGuesserInterface
      */
     protected function createMimeTypeGuesserInterfaceMock()
     {
@@ -205,7 +203,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ExtensionGuesserInterface
+     * @return MockObject|ExtensionGuesserInterface
      */
     protected function createExtensionGuesserInterfaceMock()
     {
@@ -217,7 +215,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PostProcessorInterface
+     * @return MockObject|PostProcessorInterface
      */
     protected function createPostProcessorInterfaceMock()
     {
@@ -225,7 +223,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterManager
+     * @return MockObject|FilterManager
      */
     protected function createFilterManagerMock()
     {
@@ -233,15 +231,15 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FilterService
+     * @return MockObject|FilterService
      */
     protected function createFilterServiceMock()
     {
-        return $this->createObjectMock('\Liip\ImagineBundle\Service\FilterService');
+        return $this->createObjectMock(FilterService::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|DataManager
+     * @return MockObject|DataManager
      */
     protected function createDataManagerMock()
     {
@@ -254,14 +252,10 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @param string   $object
      * @param string[] $methods
-     * @param bool     $constructorInvoke
      * @param mixed[]  $constructorParams
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createObjectMock($object, array $methods = [], $constructorInvoke = false, array $constructorParams = [])
+    protected function createObjectMock(string $object, array $methods = [], bool $constructorInvoke = false, array $constructorParams = []): MockObject
     {
         $builder = $this->getMockBuilder($object);
 
@@ -284,11 +278,8 @@ abstract class AbstractTest extends TestCase
 
     /**
      * @param object $object
-     * @param string $name
-     *
-     * @return \ReflectionMethod
      */
-    protected function getVisibilityRestrictedMethod($object, $name)
+    protected function getVisibilityRestrictedMethod($object, string $name): \ReflectionMethod
     {
         $r = new \ReflectionObject($object);
 

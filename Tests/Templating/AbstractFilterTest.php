@@ -18,17 +18,17 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 
 abstract class AbstractFilterTest extends AbstractTest
 {
-    public function testCanBeConstructed()
+    public function testCanBeConstructed(): void
     {
         $this->createTemplatingMock();
     }
 
-    public function testInvokeGetNameMethod()
+    public function testInvokeGetNameMethod(): void
     {
         $this->assertSame('liip_imagine', $this->createTemplatingMock()->getName());
     }
 
-    public function testInvokeFilterMethod()
+    public function testInvokeFilterMethod(): void
     {
         $expectedFilter = 'thumbnail';
         $expectedInputPath = 'thePathToTheImage';
@@ -45,8 +45,6 @@ abstract class AbstractFilterTest extends AbstractTest
     }
 
     /**
-     * @param CacheManager|null $manager
-     *
      * @return FilterExtension|FilterHelper
      */
     abstract protected function createTemplatingMock(CacheManager $manager = null);

@@ -48,11 +48,11 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
     protected function assertTemporaryFile(string $content, string $file, string $context, array $options = []): void
     {
         $this->assertFileExists($file);
-        $this->assertContains($context, $file);
+        $this->assertStringContainsString($context, $file);
         $this->assertSame($content, file_get_contents($file));
 
         if (isset($options['temp_dir'])) {
-            $this->assertContains($options['temp_dir'], $file);
+            $this->assertStringContainsString($options['temp_dir'], $file);
         }
     }
 

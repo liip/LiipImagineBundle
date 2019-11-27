@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Binary\Loader;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,12 +23,12 @@ use PHPUnit\Framework\TestCase;
 class AbstractDoctrineLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectRepository
+     * @var MockObject|ObjectRepository
      */
     private $om;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractDoctrineLoader
+     * @var MockObject|AbstractDoctrineLoader
      */
     private $loader;
 
@@ -47,7 +48,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testFindWithValidObjectFirstHit()
+    public function testFindWithValidObjectFirstHit(): void
     {
         $image = new \stdClass();
 
@@ -72,7 +73,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->assertSame('foo', $this->loader->find('/foo/bar'));
     }
 
-    public function testFindWithValidObjectSecondHit()
+    public function testFindWithValidObjectSecondHit(): void
     {
         $image = new \stdClass();
 
@@ -101,7 +102,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
     }
 
-    public function testFindWithInvalidObject()
+    public function testFindWithInvalidObject(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
 

@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Config\StackInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 use Liip\ImagineBundle\Factory\Config\StackFactory;
 use Liip\ImagineBundle\Factory\Config\StackFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,12 +27,12 @@ use PHPUnit\Framework\TestCase;
 class FilterSetBuilderTest extends TestCase
 {
     /**
-     * @var StackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StackFactory|MockObject
      */
     private $filterSetFactoryMock;
 
     /**
-     * @var FilterFactoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactoryCollection|MockObject
      */
     private $filterFactoryCollectionMock;
 
@@ -47,7 +48,7 @@ class FilterSetBuilderTest extends TestCase
         $this->model = new StackBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
 
-    public function testBuildWithEmptyFilters()
+    public function testBuildWithEmptyFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';
@@ -72,7 +73,7 @@ class FilterSetBuilderTest extends TestCase
         $this->assertSame($filterSetMock, $filterSet);
     }
 
-    public function testBuildWithFilters()
+    public function testBuildWithFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';

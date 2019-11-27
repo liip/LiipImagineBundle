@@ -25,7 +25,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class GrayscaleFilterLoaderTest extends AbstractTest
 {
-    public function testLoadGrayscale()
+    public function testLoadGrayscale(): void
     {
         $loader = new GrayscaleFilterLoader();
         $palette = new RGB();

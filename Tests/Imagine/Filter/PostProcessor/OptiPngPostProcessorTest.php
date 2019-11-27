@@ -131,7 +131,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessData
      */
-    public function testProcess(string $content, array $options, string $expected)
+    public function testProcess(string $content, array $options, string $expected): void
     {
         $file = sys_get_temp_dir().'/test.png';
         file_put_contents($file, $content);
@@ -139,8 +139,8 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
         $process = $this->getPostProcessorInstance();
         $result = $process->process(new FileBinary($file, 'image/png', 'png'), $options);
 
-        $this->assertContains($expected, $result->getContent());
-        $this->assertContains($content, $result->getContent());
+        $this->assertStringContainsString($expected, $result->getContent());
+        $this->assertStringContainsString($content, $result->getContent());
 
         @unlink($file);
     }

@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class ImagineControllerTest extends AbstractSetupWebTestCase
 {
-    public function testCouldBeGetFromContainer()
+    public function testCouldBeGetFromContainer(): void
     {
         $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
     }
 
-    public function testShouldResolvePopulatingCacheFirst()
+    public function testShouldResolvePopulatingCacheFirst(): void
     {
         //guard
         $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
@@ -42,7 +42,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
-    public function testShouldResolveFromCache()
+    public function testShouldResolveFromCache(): void
     {
         $this->filesystem->dumpFile(
             $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
@@ -60,7 +60,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
-    public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
+    public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
         $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
@@ -73,7 +73,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         ]));
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray()
+    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
@@ -84,7 +84,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         ]));
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
+    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
@@ -92,14 +92,14 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
-    public function testInvalidFilterShouldThrowNotFoundHttpException()
+    public function testInvalidFilterShouldThrowNotFoundHttpException(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
         $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
     }
 
-    public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
+    public function testShouldResolveWithCustomFiltersPopulatingCacheFirst(): void
     {
         /** @var Signer $signer */
         $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
@@ -132,7 +132,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
     }
 
-    public function testShouldResolveWithCustomFiltersFromCache()
+    public function testShouldResolveWithCustomFiltersFromCache(): void
     {
         /** @var Signer $signer */
         $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
@@ -167,7 +167,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
     }
 
-    public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces()
+    public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces(): void
     {
         $this->filesystem->dumpFile(
             $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg',

@@ -21,28 +21,28 @@ use Symfony\Component\Routing\RequestContext;
  */
 class NoCacheWebPathResolverTest extends AbstractTest
 {
-    public function testCouldBeConstructedWithRequestContextAsArgument()
+    public function testCouldBeConstructedWithRequestContextAsArgument(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext());
 
         $this->assertInstanceOf(NoCacheWebPathResolver::class, $resolver);
     }
 
-    public function testComposeSchemaHostAndPathOnResolve()
+    public function testComposeSchemaHostAndPathOnResolve(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext('', 'GET', 'thehost', 'theSchema'));
 
         $this->assertSame('theschema://thehost/aPath', $resolver->resolve('aPath', 'aFilter'));
     }
 
-    public function testDoNothingOnStore()
+    public function testDoNothingOnStore(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext());
 
         $this->assertNull($resolver->store(new Binary('aContent', 'image/jpeg', 'jpg'), 'a/path', 'aFilter'));
     }
 
-    public function testDoNothingForPathAndFilterOnRemove()
+    public function testDoNothingForPathAndFilterOnRemove(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext());
         $resolver->remove(['a/path'], ['aFilter']);
@@ -50,7 +50,7 @@ class NoCacheWebPathResolverTest extends AbstractTest
         $this->assertInstanceOf(NoCacheWebPathResolver::class, $resolver);
     }
 
-    public function testDoNothingForSomePathsAndSomeFiltersOnRemove()
+    public function testDoNothingForSomePathsAndSomeFiltersOnRemove(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext());
         $resolver->remove(['foo', 'bar'], ['foo', 'bar']);
@@ -58,7 +58,7 @@ class NoCacheWebPathResolverTest extends AbstractTest
         $this->assertInstanceOf(NoCacheWebPathResolver::class, $resolver);
     }
 
-    public function testDoNothingForEmptyPathAndEmptyFilterOnRemove()
+    public function testDoNothingForEmptyPathAndEmptyFilterOnRemove(): void
     {
         $resolver = new NoCacheWebPathResolver(new RequestContext());
         $resolver->remove([], []);

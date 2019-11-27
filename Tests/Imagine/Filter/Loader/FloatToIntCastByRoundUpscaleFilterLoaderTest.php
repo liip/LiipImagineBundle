@@ -24,7 +24,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class FloatToIntCastByRoundUpscaleFilterLoaderTest extends AbstractTest
 {
-    public function testLoad()
+    public function testLoad(): void
     {
         $loader = new UpscaleFilterLoader();
         $imagine = new Imagine();

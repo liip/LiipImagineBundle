@@ -21,8 +21,8 @@ use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
@@ -71,9 +71,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideLoadCases
-     *
-     * @param string $root
-     * @param string $path
      */
     public function testLoad(string $root, string $path): void
     {
@@ -93,8 +90,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideInvalidPathsData
-     *
-     * @param string $path
      */
     public function testThrowsIfFileDoesNotExist(string $path): void
     {
@@ -106,8 +101,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideInvalidPathsData
-     *
-     * @param string $path
      */
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
@@ -130,8 +123,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @param string[] $paths
-     *
-     * @return FileSystemLocator
      */
     private function getFileSystemLocator(array $paths = []): FileSystemLocator
     {
@@ -141,8 +132,6 @@ class ChainLoaderTest extends TestCase
     /**
      * @param string[]           $paths
      * @param FileSystemLoader[] $loaders
-     *
-     * @return ChainLoader
      */
     private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
     {
@@ -155,11 +144,7 @@ class ChainLoaderTest extends TestCase
         return new ChainLoader($loaders);
     }
 
-    /**
-     * @param FileBinary|mixed $return
-     * @param string|null      $message
-     */
-    private function assertValidLoaderFindReturn($return, string $message = ''): void
+    private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);

@@ -20,7 +20,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FileSystemLocatorTest extends AbstractWebTestCase
 {
-    public function testBundleResourcesOnAllLoader()
+    public function testBundleResourcesOnAllLoader(): void
     {
         static::createClient();
 
@@ -35,7 +35,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertBarBundleResourcesExist($locator);
     }
 
-    public function testBundleResourcesOnFooLoader()
+    public function testBundleResourcesOnFooLoader(): void
     {
         static::createClient();
 
@@ -48,7 +48,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertFooBundleResourcesExist($locator);
     }
 
-    public function testBundleResourcesOnBarLoader()
+    public function testBundleResourcesOnBarLoader(): void
     {
         static::createClient();
 
@@ -61,20 +61,12 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertBarBundleResourcesExist($locator, true);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return FileSystemLocator
-     */
-    private function getFileSystemLoaderLocator($name)
+    private function getFileSystemLoaderLocator(string $name): FileSystemLocator
     {
         return $this->getPrivateProperty($this->getService(sprintf('liip_imagine.binary.loader.%s', $name)), 'locator');
     }
 
-    /**
-     * @param LocatorInterface $locator
-     */
-    private function assertFooBundleResourcesExist(LocatorInterface $locator)
+    private function assertFooBundleResourcesExist(LocatorInterface $locator): void
     {
         $this->assertLocatedFileContentsStartsWith($locator, 'file.ext', 'Fixtures/FooBundle');
         $this->assertLocatedFileContentsStartsWith($locator, '@LiipFooBundle:file.ext', 'Fixtures/FooBundle');
@@ -82,11 +74,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertLocatedFileContentsStartsWith($locator, '@LiipFooBundle:foo-bundle-file.ext', 'Fixtures/FooBundle');
     }
 
-    /**
-     * @param LocatorInterface $locator
-     * @param bool             $only
-     */
-    private function assertBarBundleResourcesExist(LocatorInterface $locator, $only = false)
+    private function assertBarBundleResourcesExist(LocatorInterface $locator, bool $only = false): void
     {
         $this->assertLocatedFileContentsStartsWith($locator, 'file.ext', $only ? 'Fixtures/BarBundle' : 'Fixtures/FooBundle');
         $this->assertLocatedFileContentsStartsWith($locator, '@LiipBarBundle:file.ext', 'Fixtures/BarBundle');
@@ -94,13 +82,7 @@ class FileSystemLocatorTest extends AbstractWebTestCase
         $this->assertLocatedFileContentsStartsWith($locator, '@LiipBarBundle:bar-bundle-file.ext', 'Fixtures/BarBundle');
     }
 
-    /**
-     * @param LocatorInterface $locator
-     * @param string           $filePath
-     * @param string           $expectedContents
-     * @param string|null      $message
-     */
-    private function assertLocatedFileContentsStartsWith(LocatorInterface $locator, $filePath, $expectedContents, $message = '')
+    private function assertLocatedFileContentsStartsWith(LocatorInterface $locator, string $filePath, string $expectedContents, $message = ''): void
     {
         $this->assertStringStartsWith($expectedContents, file_get_contents($locator->locate($filePath)), $message);
     }

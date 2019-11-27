@@ -19,15 +19,15 @@ use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\FileSystemLoader
  */
 class FileSystemLoaderTest extends TestCase
 {
-    public function testConstruction()
+    public function testConstruction(): void
     {
         $loader = $this->getFileSystemLoader();
 
@@ -41,7 +41,7 @@ class FileSystemLoaderTest extends TestCase
      * @param $mimeGuesser
      * @param $extensionGuesser
      */
-    public function testThrowsIfConstructedWithWrongTypeArguments($expectedMessage, $mimeGuesser, $extensionGuesser)
+    public function testThrowsIfConstructedWithWrongTypeArguments($expectedMessage, $mimeGuesser, $extensionGuesser): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
@@ -49,30 +49,30 @@ class FileSystemLoaderTest extends TestCase
         new FileSystemLoader(
             $mimeGuesser,
             $extensionGuesser,
-            $this->getFileSystemLocator( $this->getDefaultDataRoots())
+            $this->getFileSystemLocator($this->getDefaultDataRoots())
         );
     }
 
     /**
      * @return string[][]
      */
-    public static function provideMultipleWrongArgumentsConstructorCases()
+    public static function provideMultipleWrongArgumentsConstructorCases(): array
     {
         return [
             [
                 '$mimeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface',
                 'foo',
-                'bar'
+                'bar',
             ],
             [
                 '$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface',
                 class_exists(MimeTypes::class) ? MimeTypes::getDefault() : MimeTypeGuesser::getInstance(),
-                'bar'
+                'bar',
             ],
         ];
     }
 
-    public function testImplementsLoaderInterface()
+    public function testImplementsLoaderInterface(): void
     {
         $this->assertInstanceOf(LoaderInterface::class, $this->getFileSystemLoader());
     }
@@ -80,7 +80,7 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @return array[]
      */
-    public static function provideLoadCases()
+    public static function provideLoadCases(): array
     {
         $file = pathinfo(__FILE__, PATHINFO_BASENAME);
 
@@ -114,11 +114,8 @@ class FileSystemLoaderTest extends TestCase
 
     /**
      * @dataProvider provideLoadCases
-     *
-     * @param string $root
-     * @param string $path
      */
-    public function testLoad($root, $path)
+    public function testLoad(string $root, string $path): void
     {
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader([$root])->find($path));
     }
@@ -126,7 +123,7 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @return string[][]
      */
-    public static function provideMultipleRootLoadCases()
+    public static function provideMultipleRootLoadCases(): array
     {
         $pathsPrepended = [
             realpath(__DIR__.'/../'),
@@ -143,21 +140,20 @@ class FileSystemLoaderTest extends TestCase
      * @dataProvider provideMultipleRootLoadCases
      *
      * @param string[] $roots
-     * @param string   $path
      */
-    public function testMultipleRootLoadCases($roots, $path)
+    public function testMultipleRootLoadCases(array $roots, string $path): void
     {
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader($roots)->find($path));
     }
 
-    public function testAllowsEmptyRootPath()
+    public function testAllowsEmptyRootPath(): void
     {
         $loader = $this->getFileSystemLoader([]);
 
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
-    public function testThrowsIfRootPathDoesNotExist()
+    public function testThrowsIfRootPathDoesNotExist(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Root image path not resolvable');
@@ -170,7 +166,7 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @return array[]
      */
-    public function provideOutsideRootPathsData()
+    public function provideOutsideRootPathsData(): array
     {
         return [
             ['../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'],
@@ -183,7 +179,7 @@ class FileSystemLoaderTest extends TestCase
      *
      * @param string $path
      */
-    public function testThrowsIfRealPathOutsideRootPath($path)
+    public function testThrowsIfRealPathOutsideRootPath($path): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessage('Source image invalid');
@@ -193,12 +189,12 @@ class FileSystemLoaderTest extends TestCase
         $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
-    public function testPathWithDoublePeriodBackStep()
+    public function testPathWithDoublePeriodBackStep(): void
     {
         $this->assertValidLoaderFindReturn($this->getFileSystemLoader()->find('/../../Binary/Loader/'.pathinfo(__FILE__, PATHINFO_BASENAME)));
     }
 
-    public function testThrowsIfFileDoesNotExist()
+    public function testThrowsIfFileDoesNotExist(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessage('Source image not resolvable');
@@ -210,10 +206,8 @@ class FileSystemLoaderTest extends TestCase
 
     /**
      * @param string[] $roots
-     *
-     * @return FileSystemLocator
      */
-    private function getFileSystemLocator(array $roots)
+    private function getFileSystemLocator(array $roots): FileSystemLocator
     {
         return new FileSystemLocator($roots);
     }
@@ -221,18 +215,12 @@ class FileSystemLoaderTest extends TestCase
     /**
      * @return string[]
      */
-    private function getDefaultDataRoots()
+    private function getDefaultDataRoots(): array
     {
         return [__DIR__];
     }
 
-    /**
-     * @param array                 $roots
-     * @param LocatorInterface|null $locator
-     *
-     * @return FileSystemLoader
-     */
-    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null)
+    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null): FileSystemLoader
     {
         if (interface_exists(MimeTypeGuesserInterface::class)) {
             $mimeTypes = MimeTypes::getDefault();
@@ -240,22 +228,18 @@ class FileSystemLoaderTest extends TestCase
             return new FileSystemLoader(
                 $mimeTypes,
                 $mimeTypes,
-                null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
+                $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
             );
         }
 
         return new FileSystemLoader(
             MimeTypeGuesser::getInstance(),
             ExtensionGuesser::getInstance(),
-            null !== $locator ? $locator : $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
+            $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }
 
-    /**
-     * @param FileBinary|mixed $return
-     * @param string|null      $message
-     */
-    private function assertValidLoaderFindReturn($return, string $message = ''): void
+    private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);

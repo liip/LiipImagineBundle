@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FileSystemLoaderTest extends AbstractWebTestCase
 {
-    public function testMultipleLoadersHaveDifferentLocatorInstances()
+    public function testMultipleLoadersHaveDifferentLocatorInstances(): void
     {
         static::createClient();
 
@@ -41,11 +41,9 @@ class FileSystemLoaderTest extends AbstractWebTestCase
     }
 
     /**
-     * @param string $name
-     *
      * @return FileSystemLoader|object
      */
-    private function getLoader($name)
+    private function getLoader(string $name)
     {
         return $this->getService(sprintf('liip_imagine.binary.loader.%s', $name));
     }

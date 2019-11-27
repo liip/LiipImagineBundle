@@ -32,15 +32,11 @@ class FixedFilterLoaderTest extends AbstractTest
     const DUMMY_IMAGE_HEIGHT = 600;
 
     /**
-     * @param int $width
-     * @param int $height
-     * @param Box $expected
-     *
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\FixedFilterLoader::load
      *
      * @dataProvider heightWidthProvider
      */
-    public function testLoad($width, $height, $expected)
+    public function testLoad(int $width, int $height, Box $expected): void
     {
         $loader = new FixedFilterLoader();
 
@@ -74,13 +70,10 @@ class FixedFilterLoaderTest extends AbstractTest
         $options['width'] = $width;
         $options['height'] = $height;
 
-        $result = $loader->load($image, $options);
+        $loader->load($image, $options);
     }
 
-    /**
-     * @returns array Array containing width/height pairs and an expected size.
-     */
-    public function heightWidthProvider()
+    public function heightWidthProvider(): array
     {
         return [
             [200, 129, new Box(200, 129)],

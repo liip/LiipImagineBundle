@@ -139,12 +139,10 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
             ->getMock();
 
         $process
-            ->expects($this->any())
             ->method('getExitCode')
             ->willReturn(0);
 
         $process
-            ->expects($this->any())
             ->method('getOutput')
             ->willReturn('foo bar baz');
 
@@ -157,7 +155,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 
     protected function getPostProcessorInstance(array $parameters = []): PostProcessorInterface
     {
-        if (0 === count($parameters)) {
+        if (0 === \count($parameters)) {
             $parameters = [static::getPostProcessAsStdInExecutable()];
         }
 

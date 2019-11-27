@@ -20,42 +20,42 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class SignerTest extends AbstractTest
 {
-    public function testImplementsSignerInterface()
+    public function testImplementsSignerInterface(): void
     {
         $rc = new \ReflectionClass(Signer::class);
 
         $this->assertTrue($rc->implementsInterface(SignerInterface::class));
     }
 
-    public function testCouldBeConstructedWithSecret()
+    public function testCouldBeConstructedWithSecret(): void
     {
         $signer = new Signer('aSecret');
 
         $this->assertInstanceOf(Signer::class, $signer);
     }
 
-    public function testShouldReturnShortHashOnSign()
+    public function testShouldReturnShortHashOnSign(): void
     {
         $singer = new Signer('aSecret');
 
         $this->assertSame(8, mb_strlen($singer->sign('aPath')));
     }
 
-    public function testShouldSingAndSuccessfullyCheckPathWithoutRuntimeConfig()
+    public function testShouldSingAndSuccessfullyCheckPathWithoutRuntimeConfig(): void
     {
         $singer = new Signer('aSecret');
 
         $this->assertTrue($singer->check($singer->sign('aPath'), 'aPath'));
     }
 
-    public function testShouldSingAndSuccessfullyCheckPathWithRuntimeConfig()
+    public function testShouldSingAndSuccessfullyCheckPathWithRuntimeConfig(): void
     {
         $singer = new Signer('aSecret');
 
         $this->assertTrue($singer->check($singer->sign('aPath', ['aConfig']), 'aPath', ['aConfig']));
     }
 
-    public function testShouldConvertRecursivelyToStringAllRuntimeConfigParameters()
+    public function testShouldConvertRecursivelyToStringAllRuntimeConfigParameters(): void
     {
         $singer = new Signer('aSecret');
 

@@ -34,7 +34,7 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     protected $containerBuilder;
 
-    public function testUserLoadThrowsExceptionUnlessDriverIsValid()
+    public function testUserLoadThrowsExceptionUnlessDriverIsValid(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
@@ -42,7 +42,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->load([['driver' => 'foo']], new ContainerBuilder());
     }
 
-    public function testLoadFilterSetsDefaults()
+    public function testLoadFilterSetsDefaults(): void
     {
         $this->createConfigurationWithOneEmptyFilterSet();
         $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
@@ -63,7 +63,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertNull($emptyFilterSet['default_image']);
     }
 
-    public function testLoadFilterSetsWithDefaults()
+    public function testLoadFilterSetsWithDefaults(): void
     {
         $this->createConfigurationWithDefaultsFilterSets();
         $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
@@ -111,7 +111,81 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertArrayHasKey('mozjpeg', $filterSet2['post_processors']);
     }
 
-    protected function createConfigurationWithDefaultsFilterSets()
+    public function testLoadWithDefaults(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertParameter('default', 'liip_imagine.cache.resolver.default');
+        $this->assertAlias('liip_imagine.gd', 'liip_imagine');
+        $this->assertHasDefinition('liip_imagine.controller');
+        $this->assertDICConstructorArguments(
+            $this->containerBuilder->getDefinition(ImagineController::class),
+            [
+                new Reference('liip_imagine.service.filter'),
+                new Reference('liip_imagine.data.manager'),
+                new Reference('liip_imagine.cache.signer'),
+                new Reference('liip_imagine.controller.config'),
+            ]
+        );
+    }
+
+    public function testTemplatingFilterExtensionIsDeprecated(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
+    }
+
+    public static function provideFactoryData(): array
+    {
+        return [
+            [
+                'liip_imagine.mime_type_guesser',
+                [MimeTypeGuesser::class, 'getInstance'],
+            ],
+            [
+                'liip_imagine.extension_guesser',
+                [ExtensionGuesser::class, 'getInstance'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideFactoryData
+     *
+     * @param string $service
+     * @param string $factory
+     */
+    public function testFactoriesConfiguration($service, $factory): void
+    {
+        $this->createEmptyConfiguration();
+        $definition = $this->containerBuilder->getDefinition($service);
+
+        $this->assertSame($factory, $definition->getFactory());
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
+     */
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled(): void
+    {
+        $this->createConfiguration([
+            'templating' => true,
+        ]);
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled(): void
+    {
+        $this->createConfiguration([
+            'templating' => false,
+        ]);
+        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    protected function createConfigurationWithDefaultsFilterSets(): void
     {
         if (!class_exists(Parser::class)) {
             $this->markTestSkipped('Requires the symfony/yaml package.');
@@ -120,7 +194,7 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->createConfiguration($this->getConfigurationWithDefaultsFilterSets());
     }
 
-    protected function createConfigurationWithOneEmptyFilterSet()
+    protected function createConfigurationWithOneEmptyFilterSet(): void
     {
         if (!class_exists(Parser::class)) {
             $this->markTestSkipped('Requires the symfony/yaml package.');
@@ -168,60 +242,6 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    public function testLoadWithDefaults()
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertParameter('default', 'liip_imagine.cache.resolver.default');
-        $this->assertAlias('liip_imagine.gd', 'liip_imagine');
-        $this->assertHasDefinition('liip_imagine.controller');
-        $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition(ImagineController::class),
-            [
-                new Reference('liip_imagine.service.filter'),
-                new Reference('liip_imagine.data.manager'),
-                new Reference('liip_imagine.cache.signer'),
-                new Reference('liip_imagine.controller.config'),
-            ]
-        );
-    }
-
-    public function testTemplatingFilterExtensionIsDeprecated()
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
-        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
-    }
-
-    public static function provideFactoryData()
-    {
-        return [
-            [
-                'liip_imagine.mime_type_guesser',
-                [MimeTypeGuesser::class, 'getInstance'],
-            ],
-            [
-                'liip_imagine.extension_guesser',
-                [ExtensionGuesser::class, 'getInstance'],
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider provideFactoryData
-     *
-     * @param string $service
-     * @param string $factory
-     */
-    public function testFactoriesConfiguration($service, $factory)
-    {
-        $this->createEmptyConfiguration();
-        $definition = $this->containerBuilder->getDefinition($service);
-
-        $this->assertSame($factory, $definition->getFactory());
-    }
-
     protected function createEmptyConfiguration(): void
     {
         $this->createConfiguration([]);
@@ -230,26 +250,6 @@ EOF;
     protected function createFullConfiguration(): void
     {
         $this->createConfiguration($this->getFullConfig());
-    }
-
-    /**
-     * @group legacy
-     * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
-     */
-    public function testHelperIsRegisteredWhenTemplatingIsEnabled()
-    {
-        $this->createConfiguration([
-            'templating' => true,
-        ]);
-        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
-    }
-
-    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled()
-    {
-        $this->createConfiguration([
-            'templating' => false,
-        ]);
-        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
     }
 
     protected function createConfiguration(array $configuration): void
@@ -301,45 +301,27 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertAlias($value, $key)
+    private function assertAlias(string $value, string $key): void
     {
         $this->assertSame($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertParameter($value, $key)
+    private function assertParameter(string $value, string $key): void
     {
         $this->assertSame($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasDefinition($id)
+    private function assertHasDefinition(string $id): void
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasNotDefinition($id)
+    private function assertHasNotDefinition(string $id): void
     {
         $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
     }
 
-    /**
-     * @param Definition $definition
-     * @param array      $arguments
-     */
-    private function assertDICConstructorArguments(Definition $definition, array $arguments)
+    private function assertDICConstructorArguments(Definition $definition, array $arguments): void
     {
         $castArrayElementsToString = function (array $a): array {
             return array_map(function ($v) { return (string) $v; }, $a);
@@ -358,7 +340,7 @@ EOF;
         ]));
     }
 
-    private function assertDefinitionIsDeprecated(string $id, string $message)
+    private function assertDefinitionIsDeprecated(string $id, string $message): void
     {
         $definition = $this->containerBuilder->getDefinition($id);
 
