@@ -60,7 +60,7 @@ trait CacheCommandTrait
     private function resolveInputFiltersAndPaths(InputInterface $input): array
     {
         return [
-            $input->getArgument('path'),
+            $input->getArgument('paths'),
             $this->normalizeFilterList($input->getOption('filter')),
         ];
     }
@@ -100,20 +100,29 @@ trait CacheCommandTrait
             $wordPluralizer = function (int $count, string $singular) {
                 return 1 === $count ? $singular : sprintf('%ss', $singular);
             };
-            $rootTextFormat = 'Completed %d %s (%d %s, %d %s)';
+
             $imagePathsSize = count($images);
             $filterSetsSize = count($filters);
-            $allActionsSize = ($filterSetsSize * $imagePathsSize) - $this->failures;
+            $allActionsSize = 0 === $imagePathsSize ? $filterSetsSize : ($filterSetsSize * $imagePathsSize) - $this->failures;
             $allActionsWord = $wordPluralizer($allActionsSize, $singularAction);
 
-            $rootTextOutput = vsprintf($rootTextFormat, [
-                $allActionsSize,
-                $allActionsWord,
-                $imagePathsSize,
-                $wordPluralizer($imagePathsSize, 'image'),
-                $filterSetsSize,
-                $wordPluralizer($filterSetsSize, 'filter'),
-            ]);
+            $rootTextOutput = sprintf('Completed %d %s', $allActionsSize, $allActionsWord);
+
+            $detailTextFormat = '%d %s';
+
+            $detailTextsOutput = [];
+
+            if (0 !== $imagePathsSize) {
+                $detailTextsOutput[] = sprintf($detailTextFormat, $imagePathsSize, $wordPluralizer($imagePathsSize, 'image'));
+            }
+
+            if (0 !== $filterSetsSize) {
+                $detailTextsOutput[] = sprintf($detailTextFormat, $filterSetsSize, $wordPluralizer($filterSetsSize, 'filter'));
+            }
+
+            if (!empty($detailTextsOutput)) {
+                $rootTextOutput = sprintf('%s (%s)', $rootTextOutput, implode(', ', $detailTextsOutput));
+            }
 
             if ($this->failures) {
                 $this->io->critBlock(sprintf('%s %%s', $rootTextOutput), [

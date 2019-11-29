@@ -37,7 +37,7 @@ class RemoveCacheCommand extends Command
     {
         $this
             ->setDescription('Remove cache entries for given paths and filters.')
-            ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
+            ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
                 'Image file path(s) to run resolution on.')
             ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Filter(s) to use for image remove; if none explicitly passed, use all filters.')
@@ -77,9 +77,13 @@ EOF
 
         [$images, $filters] = $this->resolveInputFiltersAndPaths($input);
 
-        foreach ($images as $i) {
-            foreach ($filters as $f) {
-                $this->runCacheImageRemove($i, $f);
+        if (empty($images)) {
+            $this->cacheManager->remove(null, $filters);
+        } else {
+            foreach ($images as $i) {
+                foreach ($filters as $f) {
+                    $this->runCacheImageRemove($i, $f);
+                }
             }
         }
 
