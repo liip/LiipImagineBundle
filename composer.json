@@ -20,14 +20,12 @@
     "require": {
         "php": "^7.1",
         "imagine/imagine": "^0.7.1|^1.1",
-        "symfony/asset": "^3.4|^4.2",
         "symfony/filesystem": "^3.4|^4.2",
         "symfony/finder": "^3.4|^4.2",
         "symfony/framework-bundle": "^3.4|^4.2",
         "symfony/options-resolver": "^3.4|^4.2",
         "symfony/process": "^3.4|^4.2",
-        "symfony/templating": "^3.4|^4.2",
-        "symfony/translation": "^3.4|^4.2"
+        "symfony/templating": "^3.4|^4.2"
     },
     "require-dev": {
         "ext-gd": "*",
