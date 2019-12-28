@@ -31,7 +31,7 @@ class WatermarkFilterLoader implements LoaderInterface
     public function __construct(ImagineInterface $imagine, $rootPath)
     {
         $this->imagine = $imagine;
-        $this->rootPath = $rootPath;
+        $this->rootPath = $rootPath . '/app';
     }
 
     /**
