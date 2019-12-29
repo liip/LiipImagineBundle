@@ -26,12 +26,12 @@ class WatermarkFilterLoader implements LoaderInterface
     /**
      * @var string
      */
-    protected $rootPath;
+    protected $projectDir;
 
-    public function __construct(ImagineInterface $imagine, $rootPath)
+    public function __construct(ImagineInterface $imagine, $projectDir)
     {
         $this->imagine = $imagine;
-        $this->rootPath = $rootPath . '/app';
+        $this->projectDir = $projectDir;
     }
 
     /**
@@ -53,7 +53,17 @@ class WatermarkFilterLoader implements LoaderInterface
             $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
-        $watermark = $this->imagine->open($this->rootPath.'/'.$options['image']);
+        $file = $this->projectDir . '/' . $options['image'];
+
+        if (!file_exists($file) {
+            @trigger_error(
+                'The ' . $file . ' does not exists, change the path based on kernel.project_dir parameter',
+                E_USER_DEPRECATED
+            );
+            $file = $this->projectDir . '/app/' . $options['image'];
+        }
+
+        $watermark = $this->imagine->open($file);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();

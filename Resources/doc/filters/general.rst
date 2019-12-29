@@ -184,7 +184,7 @@ Example configuration:
                     # use and setup the "watermark" filter
                     watermark:
 
-                        # path to the watermark file (prepended with "%kernel.root_dir%")
+                        # path to the watermark file (prepended with "%kernel.project_dir%")
                         image: Resources/data/watermark.png
 
                         # size of the water mark relative to the input image
@@ -199,7 +199,7 @@ Watermark Options
 
 :strong:`image:` ``string``
     Sets the location of the watermark image. The value of this option is prepended
-    with the resolved value of the ``%kernel.root_dir%`` parameter.
+    with the resolved value of the ``%kernel.project_dir%`` parameter.
 
 :strong:`size:` ``float``
     Sets the size of the watermark as a relative ration, relative to the original
