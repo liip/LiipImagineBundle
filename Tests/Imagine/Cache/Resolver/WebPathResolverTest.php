@@ -502,4 +502,18 @@ class WebPathResolverTest extends TestCase
     {
         return $this->getMockBuilder(Filesystem::class)->getMock();
     }
+
+    /**
+     * Method was added because it is deprecated in PHPUnit 8
+     */
+    public static function assertAttributeSame($expected, string $actualAttributeName, $actualClassOrObject, string $message = ''): void
+    {
+        $reflector = new \ReflectionObject($actualClassOrObject);
+        $attribute = $reflector->getProperty($actualAttributeName);
+        $attribute->setAccessible(true);
+        $actual = $attribute->getValue($actualClassOrObject);
+        $attribute->setAccessible(false);
+
+        self::assertSame($expected, $actual, $message);
+    }
 }

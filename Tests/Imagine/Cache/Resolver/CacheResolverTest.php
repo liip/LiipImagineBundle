@@ -194,7 +194,12 @@ class CacheResolverTest extends AbstractTest
      */
     private function getCacheEntries(ArrayCache $cache): array
     {
-        $cacheEntries = $this->readAttribute($cache, 'data');
+        $reflector = new \ReflectionObject($cache);
+        $attribute = $reflector->getProperty('data');
+        $attribute->setAccessible(true);
+        $cacheEntries = $attribute->getValue($cache);
+        $attribute->setAccessible(false);
+
         unset($cacheEntries['DoctrineNamespaceCacheKey[]']);
 
         return $cacheEntries;
