@@ -48,7 +48,7 @@ class PasteFilterLoader implements LoaderInterface
 
         $file = $this->projectDir . '/' . $options['image'];
 
-        if (!file_exists($file) {
+        if (!file_exists($file)) {
             @trigger_error(
                 'The ' . $file . ' does not exists, change the path based on kernel.project_dir parameter',
                 E_USER_DEPRECATED
