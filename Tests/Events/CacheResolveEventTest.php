@@ -19,10 +19,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheResolveEventTest extends TestCase
 {
-    protected function setUp()
-    {
-    }
-
     public function testShouldAllowSetPathInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');

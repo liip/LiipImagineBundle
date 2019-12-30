@@ -39,7 +39,7 @@ class WebPathResolverTest extends TestCase
      */
     private $existingFile;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filesystem = new Filesystem();
         $this->basePath = sys_get_temp_dir().'/aWebRoot';
@@ -48,7 +48,7 @@ class WebPathResolverTest extends TestCase
         $this->filesystem->touch($this->existingFile);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->filesystem->remove($this->basePath);
     }

@@ -51,7 +51,7 @@ abstract class AbstractTest extends TestCase
      */
     protected $temporaryPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixturesPath = realpath(__DIR__.DIRECTORY_SEPARATOR.'Fixtures');
         $this->temporaryPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'liip_imagine_test';
@@ -64,7 +64,7 @@ abstract class AbstractTest extends TestCase
         $this->filesystem->mkdir($this->temporaryPath);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (!$this->filesystem) {
             return;
