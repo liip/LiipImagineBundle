@@ -21,7 +21,7 @@
         "php": "^7.1",
         "imagine/imagine": "^0.7.1|^1.1",
         "symfony/asset": "^3.4|^4.3|^5.0",
-        "symfony/filesystem": "^3.4|^3|^5.0",
+        "symfony/filesystem": "^3.4|^4.3|^5.0",
         "symfony/finder": "^3.4|^4.3|^5.0",
         "symfony/framework-bundle": "^3.4|^4.3|^5.0",
         "symfony/options-resolver": "^3.4|^4.3|^5.0",
