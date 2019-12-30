@@ -8,6 +8,12 @@ given release.
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
 
+- The `watermark` and `paste` filters were deprecated and will immediately
+  *not* work in Symfony 5.0 or higher. Use `watermark_image` and `paste_image`
+  instead. The corresponding services - `liip_imagine.filter.loader.paste`
+  and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
+  as such. These are both unavailable in Symfony 5.0.
+
 ## [2.2.0](https://github.com/liip/LiipImagineBundle/blob/2.2.0/CHANGELOG.md#unreleased)
 
 *Released on* 2019-04-10 *and assigned* [`2.2.0`](https://github.com/liip/LiipImagineBundle/releases/tag/2.2.0) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.2.0)\).*

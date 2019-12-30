@@ -209,14 +209,6 @@
             <tag name="liip_imagine.filter.loader" loader="grayscale" />
         </service>
 
-        <!-- deprecated -->
-        <service id="liip_imagine.filter.loader.paste" class="Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader">
-            <tag name="liip_imagine.filter.loader" loader="paste" />
-            <deprecated>The "%service_id%" service is deprecated In LiipImagineBundle 2.3 and will not work in Symfony 5.0. Use the paste_image filter instead.</deprecated>
-            <argument type="service" id="liip_imagine" />
-            <argument>%kernel.root_dir%</argument>
-        </service>
-
         <service id="liip_imagine.filter.loader.paste_image" class="Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader">
             <tag name="liip_imagine.filter.loader" loader="paste_image" />
             <argument type="service" id="liip_imagine" />
@@ -224,14 +216,20 @@
         </service>
 
         <!-- deprecated -->
-        <service id="liip_imagine.filter.loader.watermark_image" class="Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader">
-            <tag name="liip_imagine.filter.loader" loader="watermark" />
-            <deprecated>The "%service_id%" service is deprecated In LiipImagineBundle 2.3 and will not work in Symfony 5.0. Use the watermark_image filter instead.</deprecated>
+        <!-- not officially deprecated because they are still injected and appear "used" -->
+        <service id="liip_imagine.filter.loader.paste" class="Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="paste" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.root_dir%</argument>
         </service>
-
         <service id="liip_imagine.filter.loader.watermark" class="Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="watermark" />
+            <argument type="service" id="liip_imagine" />
+            <argument>%kernel.root_dir%</argument>
+        </service>
+        <!-- end deprecated -->
+
+        <service id="liip_imagine.filter.loader.watermark_image" class="Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader">
             <tag name="liip_imagine.filter.loader" loader="watermark_image" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.project_dir%</argument>

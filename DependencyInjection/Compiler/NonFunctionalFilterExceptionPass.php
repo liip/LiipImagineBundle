@@ -15,22 +15,39 @@ class NonFunctionalFilterExceptionPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        // only needed if kernel.root_dir is no longer present
-        if ($container->hasParameter('kernel.root_dir')) {
-            return;
-        }
+        $canFiltersStillFunction = $container->hasParameter('kernel.root_dir');
+        $throwWarning = function(string $filterName) use ($canFiltersStillFunction) {
+            $message = sprintf(
+                'The "%s" filter %s in Symfony 5.0. Please use "%s_image" and adapt the "image" option to be relative to the "%%kernel.project_dir%%" instead of "%%kernel.root_dir%%".',
+                $filterName,
+                $canFiltersStillFunction ? 'is deprecated and will not work' : 'no longer works',
+                $filterName
+            );
+
+            if ($canFiltersStillFunction) {
+                @trigger_error($message, E_USER_DEPRECATED);
+            } else {
+                throw new \InvalidArgumentException($message);
+            }
+        };
 
         $filterSets = $container->getParameter('liip_imagine.filter_sets');
         foreach ($filterSets as $filterSet) {
             foreach ($filterSet['filters'] as $filterName => $filter) {
-                if ($filter === 'paste') {
-                    throw new \InvalidArgumentException(sprintf('The "paste" filter no longer works in Symfony 5.0. Please use "paste_image" and adapt the "image" to be relative to the "%kernel.project_dir%" instead of "%kernel.root_dir%".'));
+                if ($filterName === 'paste') {
+                    $throwWarning('paste');
                 }
 
-                if ($filter === 'watermark') {
-                    throw new \InvalidArgumentException(sprintf('The "paste" filter no longer works in Symfony 5.0. Please use "paste_image" and adapt the "image" to be relative to the "%kernel.project_dir%" instead of "%kernel.root_dir%".'));
+                if ($filterName === 'watermark') {
+                    $throwWarning('watermark');
                 }
             }
+        }
+
+        // remove the definitions entirely if kernel.root_dir does not exist
+        if (!$canFiltersStillFunction) {
+            $container->removeDefinition('liip_imagine.filter.loader.watermark');
+            $container->removeDefinition('liip_imagine.filter.loader.paste');
         }
     }
 }
