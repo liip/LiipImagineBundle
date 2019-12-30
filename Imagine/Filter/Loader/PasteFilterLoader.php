@@ -46,17 +46,7 @@ class PasteFilterLoader implements LoaderInterface
         $x = isset($options['start'][0]) ? $options['start'][0] : null;
         $y = isset($options['start'][1]) ? $options['start'][1] : null;
 
-        $file = $this->projectDir . '/' . $options['image'];
-
-        if (!file_exists($file)) {
-            @trigger_error(
-                'The ' . $file . ' does not exists, change the path based on kernel.project_dir parameter',
-                E_USER_DEPRECATED
-            );
-            $file = $this->projectDir . '/app/' . $options['image'];
-        }
-
-        $destImage = $this->imagine->open($file);
+        $destImage = $this->imagine->open($this->projectDir.'/'.$options['image']);
 
         return $image->paste($destImage, new Point($x, $y));
     }

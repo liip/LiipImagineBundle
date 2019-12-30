@@ -53,17 +53,7 @@ class WatermarkFilterLoader implements LoaderInterface
             $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
-        $file = $this->projectDir . '/' . $options['image'];
-
-        if (!file_exists($file)) {
-            @trigger_error(
-                'The ' . $file . ' does not exists, change the path based on kernel.project_dir parameter',
-                E_USER_DEPRECATED
-            );
-            $file = $this->projectDir . '/app/' . $options['image'];
-        }
-
-        $watermark = $this->imagine->open($file);
+        $watermark = $this->imagine->open($this->projectDir.'/'.$options['image']);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();
