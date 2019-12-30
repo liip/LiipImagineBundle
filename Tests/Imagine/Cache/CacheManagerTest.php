@@ -731,6 +731,8 @@ class CacheManagerTest extends AbstractTest
             } else {
                 $callable($name, $event);
             }
+
+            return $event;
         };
     }
 
