@@ -53,11 +53,6 @@ Thumbnail Options
     Sets the generated thumbnail size as an integer array containing the dimensions
     as width and height values.
 
-:strong:`allow_upscale:` ``bool``
-    Toggles allowing image up-scaling when the image is smaller than the desired
-    thumbnail size.
-
-
 .. _filter-fixed:
 
 Fixed size
