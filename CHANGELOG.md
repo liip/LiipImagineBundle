@@ -8,7 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.2.0...2.3.0)
 
 **Merged pull requests:**
-
+- Upgrading to Symfony5 [\#1257](https://github.com/liip/LiipImagineBundle/pull/1256) ([weaverryan](https://github.com/weaverryan))
 - Remove non-functional allow\_upscale reference [\#1257](https://github.com/liip/LiipImagineBundle/pull/1257) ([Yopai](https://github.com/Yopai))
 - Remove unused packages [\#1251](https://github.com/liip/LiipImagineBundle/pull/1251) ([franmomu](https://github.com/franmomu))
 - Fixing bug where apply tag was used but allowed non-supported Twig versions [\#1249](https://github.com/liip/LiipImagineBundle/pull/1249) ([weaverryan](https://github.com/weaverryan))
