@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
@@ -38,6 +39,23 @@ class LiipImagineBundleTest extends AbstractTest
         $this->assertInstanceOf(Bundle::class, new LiipImagineBundle());
     }
 
+    public function testAddNonFunctionalFilterExceptionPassOnBuild(): void
+    {
+        $containerMock = $this->createContainerBuilderMock();
+        $containerMock
+            ->expects($this->atLeastOnce())
+            ->method('getExtension')
+            ->with('liip_imagine')
+            ->willReturn($this->createLiipImagineExtensionMock());
+        $containerMock
+            ->expects($this->at(0))
+            ->method('addCompilerPass')
+            ->with($this->isInstanceOf(NonFunctionalFilterExceptionPass::class));
+
+        $bundle = new LiipImagineBundle();
+        $bundle->build($containerMock);
+    }
+
     public function testAddLoadersCompilerPassOnBuild(): void
     {
         $containerMock = $this->createContainerBuilderMock();
@@ -47,7 +65,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->with('liip_imagine')
             ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('addCompilerPass')
             ->with($this->isInstanceOf(LoadersCompilerPass::class));
 
@@ -64,7 +82,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->with('liip_imagine')
             ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
-            ->expects($this->at(2))
+            ->expects($this->at(3))
             ->method('addCompilerPass')
             ->with($this->isInstanceOf(FiltersCompilerPass::class));
 
@@ -81,7 +99,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->with('liip_imagine')
             ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
-            ->expects($this->at(3))
+            ->expects($this->at(4))
             ->method('addCompilerPass')
             ->with($this->isInstanceOf(PostProcessorsCompilerPass::class));
 
@@ -98,7 +116,7 @@ class LiipImagineBundleTest extends AbstractTest
             ->with('liip_imagine')
             ->willReturn($this->createLiipImagineExtensionMock());
         $containerMock
-            ->expects($this->at(4))
+            ->expects($this->at(5))
             ->method('addCompilerPass')
             ->with($this->isInstanceOf(ResolversCompilerPass::class));
 
