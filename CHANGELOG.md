@@ -8,6 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.2.0...2.3.0)
 
 **Merged pull requests:**
+- Upgrading to Symfony5 [\#1246](https://github.com/liip/LiipImagineBundle/pull/1246) ([michellesanver](https://github.com/michellesanver))
 - Upgrading to Symfony5 [\#1257](https://github.com/liip/LiipImagineBundle/pull/1256) ([weaverryan](https://github.com/weaverryan))
 - Eliminate root_dir usage [\#1255](https://github.com/liip/LiipImagineBundle/pull/1255) ([Guite](https://github.com/guite))
 - Remove non-functional allow\_upscale reference [\#1257](https://github.com/liip/LiipImagineBundle/pull/1257) ([Yopai](https://github.com/Yopai))
