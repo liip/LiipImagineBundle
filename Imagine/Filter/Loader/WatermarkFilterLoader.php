@@ -26,12 +26,12 @@ class WatermarkFilterLoader implements LoaderInterface
     /**
      * @var string
      */
-    protected $rootPath;
+    protected $projectDir;
 
-    public function __construct(ImagineInterface $imagine, $rootPath)
+    public function __construct(ImagineInterface $imagine, $projectDir)
     {
         $this->imagine = $imagine;
-        $this->rootPath = $rootPath;
+        $this->projectDir = $projectDir;
     }
 
     /**
@@ -53,7 +53,7 @@ class WatermarkFilterLoader implements LoaderInterface
             $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
-        $watermark = $this->imagine->open($this->rootPath.'/'.$options['image']);
+        $watermark = $this->imagine->open($this->projectDir.'/'.$options['image']);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();

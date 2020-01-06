@@ -17,6 +17,7 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
@@ -39,6 +40,7 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new NonFunctionalFilterExceptionPass());
         $container->addCompilerPass(new DriverCompilerPass());
         $container->addCompilerPass(new LoadersCompilerPass());
         $container->addCompilerPass(new FiltersCompilerPass());

@@ -35,7 +35,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ResolveCacheProcessorTest extends AbstractTest
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!class_exists(EnqueueBundle::class)) {
             self::markTestSkipped('The tests are run without enqueue integration. Skip them');

@@ -26,7 +26,7 @@ class CacheResolverTest extends AbstractTest
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(ArrayCache::class)) {
             $this->markTestSkipped('Requires the doctrine/cache package.');
@@ -194,7 +194,12 @@ class CacheResolverTest extends AbstractTest
      */
     private function getCacheEntries(ArrayCache $cache): array
     {
-        $cacheEntries = $this->readAttribute($cache, 'data');
+        $reflector = new \ReflectionObject($cache);
+        $attribute = $reflector->getProperty('data');
+        $attribute->setAccessible(true);
+        $cacheEntries = $attribute->getValue($cache);
+        $attribute->setAccessible(false);
+
         unset($cacheEntries['DoctrineNamespaceCacheKey[]']);
 
         return $cacheEntries;

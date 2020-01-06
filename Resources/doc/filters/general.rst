@@ -163,7 +163,7 @@ Example configuration:
 Watermark
 ---------
 
-The built-in ``watermark`` filter adds a watermark to an existing image
+The built-in ``watermark_image`` filter adds a watermark to an existing image
 (which includes creating and merging image operations). This
 filter exposes a number of `watermark options`_ which may be used
 to configure its behavior.
@@ -181,11 +181,11 @@ Example configuration:
             my_watermark_filter:
                 filters:
 
-                    # use and setup the "watermark" filter
-                    watermark:
+                    # use and setup the "watermark_image" filter
+                    watermark_image:
 
-                        # path to the watermark file (prepended with "%kernel.root_dir%")
-                        image: Resources/data/watermark.png
+                        # path to the watermark file (prepended with "%kernel.project_dir%")
+                        image: assets/watermark.png
 
                         # size of the water mark relative to the input image
                         size: 0.5
@@ -199,7 +199,7 @@ Watermark Options
 
 :strong:`image:` ``string``
     Sets the location of the watermark image. The value of this option is prepended
-    with the resolved value of the ``%kernel.root_dir%`` parameter.
+    with the resolved value of the ``%kernel.project_dir%`` parameter.
 
 :strong:`size:` ``float``
     Sets the size of the watermark as a relative ration, relative to the original

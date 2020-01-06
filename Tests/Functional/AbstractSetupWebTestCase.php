@@ -39,7 +39,7 @@ class AbstractSetupWebTestCase extends AbstractWebTestCase
      */
     protected $cacheRoot;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

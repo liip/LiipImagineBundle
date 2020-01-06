@@ -24,7 +24,7 @@ use Symfony\Component\Routing\RequestContext;
  */
 class FlysystemResolverTest extends AbstractTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

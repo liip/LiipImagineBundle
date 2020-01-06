@@ -28,7 +28,7 @@ class FlysystemLoaderTest extends AbstractTest
 {
     private $flyFilesystem;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
