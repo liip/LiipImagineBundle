@@ -40,13 +40,13 @@ class LiipImagineBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new NonFunctionalFilterExceptionPass());
         $container->addCompilerPass(new DriverCompilerPass());
         $container->addCompilerPass(new LoadersCompilerPass());
         $container->addCompilerPass(new FiltersCompilerPass());
         $container->addCompilerPass(new PostProcessorsCompilerPass());
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
-        $container->addCompilerPass(new NonFunctionalFilterExceptionPass());
 
         if (class_exists(AddTopicMetaPass::class)) {
             $container->addCompilerPass(AddTopicMetaPass::create()
