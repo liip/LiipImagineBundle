@@ -24,7 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ImageTypeTest extends AbstractTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(AbstractType::class)) {
             $this->markTestSkipped('Requires the symfony/form package.');

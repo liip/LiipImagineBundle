@@ -41,7 +41,7 @@ class FilterSetBuilderTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filterSetFactoryMock = $this->createMock(StackFactoryInterface::class);
         $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollection::class);
