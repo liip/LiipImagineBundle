@@ -144,9 +144,9 @@ class ImagineController
                 return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
             }
 
-            throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
+            throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path), $exception);
         } catch (NonExistingFilterException $exception) {
-            throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
+            throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter), $exception);
         } catch (RuntimeException $exception) {
             throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [
                 $hash ? sprintf('%s/%s', $hash, $path) : $path,
