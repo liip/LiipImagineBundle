@@ -12,7 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Templating;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Templating\FilterExtension;
+use Liip\ImagineBundle\Templating\FilterRuntime;
 use Liip\ImagineBundle\Templating\Helper\FilterHelper;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -45,7 +45,7 @@ abstract class AbstractFilterTest extends AbstractTest
     }
 
     /**
-     * @return FilterExtension|FilterHelper
+     * @return FilterRuntime|FilterHelper
      */
     abstract protected function createTemplatingMock(CacheManager $manager = null);
 }

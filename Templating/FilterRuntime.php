@@ -11,18 +11,9 @@
 
 namespace Liip\ImagineBundle\Templating;
 
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class FilterExtension extends AbstractExtension
+class FilterRuntime implements RuntimeExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getFilters()
-    {
-        return [
-            new TwigFilter('imagine_filter', [FilterRuntime::class, 'filter']),
-        ];
-    }
+    use FilterTrait;
 }

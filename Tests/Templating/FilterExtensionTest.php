@@ -11,33 +11,27 @@
 
 namespace Liip\ImagineBundle\Tests\Templating;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\FilterExtension;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Twig\Extension\AbstractExtension;
 
 /**
- * @covers \Liip\ImagineBundle\Templating\FilterTrait
  * @covers \Liip\ImagineBundle\Templating\FilterExtension
  */
-class FilterExtensionTest extends AbstractFilterTest
+class FilterExtensionTest extends AbstractTest
 {
     public function testAddsFilterMethodToFiltersList(): void
     {
         $this->assertCount(1, $this->createTemplatingMock()->getFilters());
     }
 
-    public function testInstanceOfTwigFilter(): void
-    {
-        $this->assertInstanceOf(AbstractExtension::class, $this->createTemplatingMock());
-    }
-
-    protected function createTemplatingMock(CacheManager $manager = null): FilterExtension
+    protected function createTemplatingMock(): FilterExtension
     {
         if (!class_exists(AbstractExtension::class)) {
             $this->markTestSkipped('Requires the twig/twig package.');
         }
 
-        $mock = new FilterExtension($manager ?: $this->createCacheManagerMock());
+        $mock = new FilterExtension();
 
         $this->assertInstanceOf(FilterExtension::class, $mock);
 
