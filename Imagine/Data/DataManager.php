@@ -15,6 +15,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Exception\LogicException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface as DeprecatedExtensionGuesserInterface;
@@ -124,7 +125,7 @@ class DataManager
      * @param string $filter
      * @param string $path
      *
-     * @throws \LogicException
+     * @throws LogicException
      *
      * @return BinaryInterface
      */
@@ -145,11 +146,11 @@ class DataManager
         }
 
         if (null === $binary->getMimeType()) {
-            throw new \LogicException(sprintf('The mime type of image %s was not guessed.', $path));
+            throw new LogicException(sprintf('The mime type of image %s was not guessed.', $path));
         }
 
         if (0 !== mb_strpos($binary->getMimeType(), 'image/')) {
-            throw new \LogicException(sprintf('The mime type of image %s must be image/xxx got %s.', $path, $binary->getMimeType()));
+            throw new LogicException(sprintf('The mime type of image %s must be image/xxx got %s.', $path, $binary->getMimeType()));
         }
 
         return $binary;
