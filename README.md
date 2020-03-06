@@ -268,7 +268,7 @@ You can resolve an image URL using the console command
 relative image paths (which must be separated by a space).
 
 ```bash
-$ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
+$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
 ```
 
 Additionally, you can use the ``--filters`` option to specify which filter
@@ -276,7 +276,7 @@ you want to resolve for (if the ``--filters`` option is omitted, all
 available filters will be resolved).
 
 ```bash
-$ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filters=my_thumb
+$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filter=my_thumb
 ```
 
 
