@@ -24,7 +24,7 @@ suite against various PHP versions and checks that proper code style standards a
 ## Report Bug
 
 If you believe you have encountered a *behavioral bug*, *documentation error*, or *other
-issue*, first search for an [existing issue][issue-list], and if one does't already exist,
+issue*, first search for an [existing issue][issue-list], and if one doesn't already exist,
 then proceed to [create a new issue][issue-make]. If you have the available time and the
 required skill set, we appreciate those who offer fixes themselves via
 [pull requests][pr-list], as well.

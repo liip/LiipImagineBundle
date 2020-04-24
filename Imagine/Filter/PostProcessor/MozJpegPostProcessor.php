@@ -16,7 +16,7 @@ use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
- * mozjpeg post-processor, for noticably better jpeg compression.
+ * mozjpeg post-processor, for noticeably better jpeg compression.
  *
  * @see http://calendar.perfplanet.com/2014/mozjpeg-3-0/
  * @see https://mozjpeg.codelove.de/binaries.html
