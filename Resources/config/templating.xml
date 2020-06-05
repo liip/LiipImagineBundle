@@ -7,7 +7,7 @@
         <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
             <tag name="templating.helper" alias="imagine" />
             <argument type="service" id="liip_imagine.cache.manager" />
-            <deprecated>The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.</deprecated>
+            <!-- deprecated service, deprecation is set in the container extension -->
         </service>
     </services>
 </container>

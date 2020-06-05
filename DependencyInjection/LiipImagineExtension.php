@@ -135,6 +135,23 @@ class LiipImagineExtension extends Extension
             $container->getDefinition('liip_imagine.data.manager')
                 ->replaceArgument(1, $mimeTypes);
         }
+
+        if ($container->hasDefinition('liip_imagine.templating.filter_helper')) {
+            $filterHelper = $container->getDefinition('liip_imagine.templating.filter_helper');
+
+            if (method_exists(Definition::class, 'getDeprecation')) {
+                $filterHelper->setDeprecated(
+                    'liip/imagine-bundle',
+                    '2.2',
+                    'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.'
+                );
+            } else {
+                $filterHelper->setDeprecated(
+                    true,
+                    'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.'
+                );
+            }
+        }
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array

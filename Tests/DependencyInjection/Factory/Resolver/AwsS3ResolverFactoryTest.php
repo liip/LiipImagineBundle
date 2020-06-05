@@ -331,7 +331,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowClientConfigNotArrayOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('Invalid type for path "aws_s3.client_config". Expected array, but got string');
+        $this->expectExceptionMessageRegExp('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
