@@ -24,6 +24,7 @@
         "symfony/filesystem": "^3.4|^4.3|^5.0",
         "symfony/finder": "^3.4|^4.3|^5.0",
         "symfony/framework-bundle": "^3.4|^4.3|^5.0",
+        "symfony/mime": "^4.3|^5.0",
         "symfony/options-resolver": "^3.4|^4.3|^5.0",
         "symfony/process": "^3.4|^4.3|^5.0",
         "symfony/templating": "^3.4|^4.3|^5.0",

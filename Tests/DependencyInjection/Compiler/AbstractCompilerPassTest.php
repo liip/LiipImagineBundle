@@ -27,7 +27,7 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
         $replace = ['entry', 2];
         $expects = vsprintf('[liip/imagine-bundle] '.$message, $replace);
 
-        $container = $this->createContainerBuilderMock();
+        $container = $this->createContainerBuilderMock(['__construct']);
         $this->expectContainerLogMethodCalledOnce($container, $pass, $expects);
 
         $log = $this->getVisibilityRestrictedMethod($pass, 'log');

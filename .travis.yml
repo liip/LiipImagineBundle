@@ -46,6 +46,10 @@ matrix:
       env:
         - SYMFONY_VERSION=5.0.*
 
+    - php: '7.2.9'
+      env:
+        - SYMFONY_VERSION=5.1.*
+
     # Remember to test upcoming Symfony versions below with lowest supported PHP version and dev dependencies
 
     # Test upcoming PHP versions with dev dependencies

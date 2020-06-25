@@ -135,6 +135,8 @@ class LiipImagineExtension extends Extension
             $container->getDefinition('liip_imagine.data.manager')
                 ->replaceArgument(1, $mimeTypes);
         }
+
+        $this->deprecationTemplatingFilterHelper($container);
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
@@ -171,6 +173,22 @@ class LiipImagineExtension extends Extension
     {
         foreach ($configurations as $name => $conf) {
             $factories[key($conf)]->create($container, $name, $conf[key($conf)]);
+        }
+    }
+
+    private function deprecationTemplatingFilterHelper(ContainerBuilder $container): void
+    {
+        if (!$container->hasDefinition('liip_imagine.templating.filter_helper')) {
+            return;
+        }
+
+        $message = 'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.';
+        $definition = $container->getDefinition('liip_imagine.templating.filter_helper');
+
+        if (method_exists(Definition::class, 'getDeprecation')) {
+            $definition->setDeprecated('liip/imagine-bundle', '2.2', $message);
+        } else {
+            $definition->setDeprecated(true, $message);
         }
     }
 }
