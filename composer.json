@@ -28,7 +28,8 @@
         "symfony/options-resolver": "^3.4|^4.3|^5.0",
         "symfony/process": "^3.4|^4.3|^5.0",
         "symfony/templating": "^3.4|^4.3|^5.0",
-        "symfony/translation": "^3.4|^4.3|^5.0"
+        "symfony/translation": "^3.4|^4.3|^5.0",
+        "twig/twig": "^1.40|^2.9|^3.0"
     },
     "require-dev": {
         "ext-gd": "*",
@@ -46,8 +47,7 @@
         "symfony/form": "^3.4|^4.3|^5.0",
         "symfony/phpunit-bridge": "^4.3|^5.0",
         "symfony/validator": "^3.4|^4.3|^5.0",
-        "symfony/yaml": "^3.4|^4.3|^5.0",
-        "twig/twig": "^1.34|^2.4|^3.0"
+        "symfony/yaml": "^3.4|^4.3|^5.0"
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
@@ -62,8 +62,7 @@
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
         "enqueue/enqueue-bundle": "^0.9 add if you like to process images in background",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
-        "monolog/monolog": "A psr/log compatible logger is required to enable logging",
-        "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
+        "monolog/monolog": "A psr/log compatible logger is required to enable logging"
     },
     "config": {
         "sort-packages": true
