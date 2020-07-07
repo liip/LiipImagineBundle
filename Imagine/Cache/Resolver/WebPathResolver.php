@@ -168,6 +168,8 @@ class WebPathResolver implements ResolverInterface
     {
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
+        // We also wish to remove any query Parameter
+        $path = preg_replace('/\\?.*/', '', $path);
 
         return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
