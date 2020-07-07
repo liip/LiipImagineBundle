@@ -100,22 +100,23 @@ class CacheManager
      * @param string $filter
      * @param array  $runtimeConfig
      * @param string $resolver
+     * @param int    $referenceType
      *
      * @return string
      */
-    public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null)
+    public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
             return $this->isStored($rcPath, $filter, $resolver) ?
                 $this->resolve($rcPath, $filter, $resolver) :
-                $this->generateUrl($path, $filter, $runtimeConfig, $resolver);
+                $this->generateUrl($path, $filter, $runtimeConfig, $resolver, $referenceType);
         }
 
         return $this->isStored($path, $filter, $resolver) ?
             $this->resolve($path, $filter, $resolver) :
-            $this->generateUrl($path, $filter, [], $resolver);
+            $this->generateUrl($path, $filter, [], $resolver, $referenceType);
     }
 
     /**
