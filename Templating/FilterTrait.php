@@ -43,7 +43,7 @@ trait FilterTrait
     public function filter($path, $filter, array $config = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         // We only wish to remove the query parameters
-        return $this->cache->getBrowserPath(preg_replace('/\\?.*/', '', $path), $filter, $config, $resolver, $referenceType);
+        return $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
     }
 
     /**
