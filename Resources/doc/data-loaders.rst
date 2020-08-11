@@ -98,7 +98,7 @@ To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
         <!-- app/config/services.xml -->
 
         <service id="imagine.data.loader.my_custom" class="AppBundle\Imagine\Binary\Loader\MyCustomDataLoader">
-            <tag name="liip_imagine.data.loader" loader="my_custom_data_loader" />
+            <tag name="liip_imagine.binary.loader" loader="my_custom_data_loader" />
             <argument type="service" id="liip_imagine" />
             <argument type="parameter" id="liip_imagine.formats" />
         </service>
