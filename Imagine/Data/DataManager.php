@@ -149,7 +149,7 @@ class DataManager
             throw new LogicException(sprintf('The mime type of image %s was not guessed.', $path));
         }
 
-        if (0 !== mb_strpos($binary->getMimeType(), 'image/') && $binary->getMimeType() <> 'application/pdf') {
+        if (0 !== mb_strpos($binary->getMimeType(), 'image/') && $binary->getMimeType() !== 'application/pdf') {
             throw new LogicException(sprintf('The mime type of image %s must be image/xxx or application/pdf, got %s.', $path, $binary->getMimeType()));
         }
 
