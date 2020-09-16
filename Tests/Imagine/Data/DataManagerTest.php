@@ -130,7 +130,7 @@ class DataManagerTest extends AbstractTest
     public function testThrowsIfMimeTypeNotImageOneOnFind(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The mime type of image cats.jpeg must be image/xxx got text/plain');
+        $this->expectExceptionMessage('The mime type of file cats.jpeg must be image/xxx or application/pdf, got text/plain');
 
         $loader = $this->createBinaryLoaderInterfaceMock();
         $loader
@@ -197,7 +197,7 @@ class DataManagerTest extends AbstractTest
     public function testThrowsIfLoaderReturnBinaryWithMimeTypeNotImageOneOnFind(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The mime type of image cats.jpeg must be image/xxx got text/plain');
+        $this->expectExceptionMessage('The mime type of file cats.jpeg must be image/xxx or application/pdf, got text/plain');
 
         $binary = new Binary('content', 'text/plain');
 
