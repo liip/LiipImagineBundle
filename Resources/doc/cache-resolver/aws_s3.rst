@@ -136,8 +136,8 @@ You have to set up the services required:
             factory: [Aws\S3\S3Client, factory]
             arguments:
                 -
-                    credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
-                    region: %amazon.s3.region%
+                    credentials: { key: "%amazon.s3.key%", secret: "%amazon.s3.secret%" }
+                    region: "%amazon.s3.region%"
                     version: "%amazon.s3.version%"
 
 
