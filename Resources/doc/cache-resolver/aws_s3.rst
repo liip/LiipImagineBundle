@@ -92,13 +92,12 @@ While creating the resolver through a factory using the configuration above does
 it can sometimes be neccessary to create the resolver as a service.
 
 .. tip::
-    For example, this is required if you do not want
-    to connect to S3 using hardcoded AWS credentials, but instead your code will run on an AWS EC2 instance with
-    an assumed IAM role for AWS API authentication. In this case, simply setting up the resolver through a
-    factory configuration block and leaving out the `credentials` block won't cut it. Instead, you need to
-    set up the resolver as a service as shown below, passing an S3Client - this way, the resolver will talk
-    to the AWS API via the S3Client, and the S3Client can be configured without explicit credentials, in which
-    case it will resolve to using the assumed role attached to the EC2 instance.
+    For example, this is required if you do not want to hard code AWS credentials for your resolver, but
+    instead make it use the `Default Credential Provider Chain`_ within AWS (for example, because you are
+    running this on an EC2 instance which is already attached to an IAM role with the required permissions).
+    In this case, simply setting up the resolver through a factory configuration block and leaving out
+    the credentials block won't cut it. Instead, you need to set up the resolver as a service as shown
+    below, passing an S3Client.
 
 You have to set up the services required:
 
@@ -316,3 +315,4 @@ You can also use the constructor of the resolver to directly inject multiple opt
 .. _`Composer`: https://getcomposer.org/
 .. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
+.. _`Default Credential Provider Chain`: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html
