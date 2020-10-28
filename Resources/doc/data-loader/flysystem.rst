@@ -10,7 +10,7 @@ layer.
 Dependencies
 ------------
 
-This cache resolver has a soft dependency on `OneupFlysystemBundle`_, which
+This data loader has a soft dependency on `OneupFlysystemBundle`_, which
 can be installed by executing the following command in your project directory:
 
 .. code-block:: bash
