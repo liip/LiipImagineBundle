@@ -86,8 +86,7 @@ Each filter set that you specify has the following options:
   Default value: empty array.
 * ``format`` - hardcodes the output format (which means that the requested format
   is ignored).
-* ``animated`` - support for resizing animated gif (currently not supported by
-  Imagine (PR pending))
+* ``animated`` - support for resizing animated gif (Currently only works with 'imagick' driver)
 
 
 .. _`PHP Manual`: http://php.net/imagepng
