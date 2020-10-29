@@ -70,6 +70,21 @@ class WatermarkFilterLoader implements LoaderInterface
             $watermarkSize = $watermark->getSize();
         }
 
+        if ('multiple' === $options['position']) {
+            // we loop over the coordinates of the image to apply the watermark as much as possible
+            $pasteX = 0;
+            while ($pasteX < $size->getWidth()) {
+                $pasteY = 0;
+                while ($pasteY < $size->getHeight()) {
+                    $image->paste($watermark, new Point($pasteX, $pasteY));
+                    $pasteY += $watermarkSize->getHeight();
+                }
+                $pasteX += $watermarkSize->getWidth();
+            }
+
+            return $image;
+        }
+
         switch ($options['position']) {
             case 'topleft':
                 $x = 0;
