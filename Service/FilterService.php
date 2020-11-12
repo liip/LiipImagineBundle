@@ -98,12 +98,15 @@ class FilterService
             $resolver
         );
 
-        // add webp in new location
-        $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
-        $this->cacheManager->store($filteredWebpBinary, $path.'.webp', $filter, $resolver);
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            // add webp in new location
+            $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
+            $this->cacheManager->store($filteredWebpBinary, $path.'.webp', $filter, $resolver);
 
-        if ($webp) {
-            return $this->cacheManager->resolve($path.'.webp', $filter, $resolver);
+            if ($webp) {
+                return $this->cacheManager->resolve($path.'.webp', $filter, $resolver);
+            }
         }
 
         return $this->cacheManager->resolve($path, $filter, $resolver);
