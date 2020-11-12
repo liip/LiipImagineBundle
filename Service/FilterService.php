@@ -191,9 +191,20 @@ class FilterService
      */
     private function createFilteredWebpBinary($path, $filter, array $runtimeFilters = [])
     {
-        return $this->createFilteredBinary($path, $filter, [
-            'quality' => 100,
-            'format' => 'webp',
-        ] + $runtimeFilters);
+        $binary = $this->dataManager->find($filter, $path);
+
+        try {
+            return $this->filterManager->applyFilter($binary, $filter, [
+                'quality' => 100,
+                'format' => 'webp',
+                'filters' => $runtimeFilters,
+            ]);
+        } catch (NonExistingFilterException $e) {
+            $message = sprintf('Could not locate filter "%s" for path "%s". Message was "%s"', $filter, $path, $e->getMessage());
+
+            $this->logger->debug($message);
+
+            throw $e;
+        }
     }
 }
