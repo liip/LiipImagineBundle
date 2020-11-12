@@ -76,10 +76,11 @@ class FilterService
      * @param string $path
      * @param string $filter
      * @param string $resolver
+     * @param bool   $webp
      *
      * @return string
      */
-    public function getUrlOfFilteredImage($path, $filter, $resolver = null)
+    public function getUrlOfFilteredImage($path, $filter, $resolver = null, $webp = false)
     {
         if ($this->cacheManager->isStored($path, $filter, $resolver)) {
             return $this->cacheManager->resolve($path, $filter, $resolver);
@@ -97,6 +98,14 @@ class FilterService
             $resolver
         );
 
+        // add webp in new location
+        $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
+        $this->cacheManager->store($filteredWebpBinary, $path.'.webp', $filter, $resolver);
+
+        if ($webp) {
+            return $this->cacheManager->resolve($path.'.webp', $filter, $resolver);
+        }
+
         return $this->cacheManager->resolve($path, $filter, $resolver);
     }
 
@@ -105,11 +114,17 @@ class FilterService
      * @param string      $filter
      * @param array       $runtimeFilters
      * @param string|null $resolver
+     * @param bool        $webp
      *
      * @return string
      */
-    public function getUrlOfFilteredImageWithRuntimeFilters($path, $filter, array $runtimeFilters = [], $resolver = null)
-    {
+    public function getUrlOfFilteredImageWithRuntimeFilters(
+        $path,
+        $filter,
+        array $runtimeFilters = [],
+        $resolver = null,
+        $webp = false
+    ) {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         if ($this->cacheManager->isStored($runtimePath, $filter, $resolver)) {
             return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
@@ -127,6 +142,14 @@ class FilterService
             $filter,
             $resolver
         );
+
+        // add webp in new location
+        $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
+        $this->cacheManager->store($filteredWebpBinary, $runtimePath.'.webp', $filter, $resolver);
+
+        if ($webp) {
+            return $this->cacheManager->resolve($runtimePath.'.webp', $filter, $resolver);
+        }
 
         return $this->cacheManager->resolve($runtimePath, $filter, $resolver);
     }
@@ -155,5 +178,22 @@ class FilterService
 
             throw $e;
         }
+    }
+
+    /**
+     * @param string $path
+     * @param string $filter
+     * @param array  $runtimeFilters
+     *
+     * @throws NonExistingFilterException
+     *
+     * @return BinaryInterface
+     */
+    private function createFilteredWebpBinary($path, $filter, array $runtimeFilters = [])
+    {
+        return $this->createFilteredBinary($path, $filter, [
+            'quality' => 100,
+            'format' => 'webp',
+        ] + $runtimeFilters);
     }
 }
