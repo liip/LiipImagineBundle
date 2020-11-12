@@ -40,6 +40,37 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+        }
+    }
+
+    public function testShouldResolvePopulatingCacheFirstWebP(): void
+    {
+        //guard
+        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
+            // Accept from Google Chrome 86
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp', $response->getTargetUrl());
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+        } else {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        }
+
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
     public function testShouldResolveFromCache(): void
@@ -130,6 +161,54 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        }
+    }
+
+    public function testShouldResolveWithCustomFiltersPopulatingCacheFirstWebP(): void
+    {
+        /** @var Signer $signer */
+        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
+
+        $params = [
+            'filters' => [
+                'thumbnail' => ['size' => [50, 50]],
+            ],
+        ];
+
+        $path = 'images/cats.jpeg';
+
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
+
+        //guard
+        $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
+
+        $this->client->request('GET', $url, [], [], [
+            // Accept from Google Chrome 86
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertSame('http://localhost/media/cache/'.$expectedCachePath.'.webp', $response->getTargetUrl());
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        } else {
+            $this->assertSame('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
+        }
+
+        $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
     }
 
     public function testShouldResolveWithCustomFiltersFromCache(): void
@@ -165,6 +244,11 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        }
     }
 
     public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces(): void
@@ -185,5 +269,10 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo%20bar.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
+
+        // PHP compiled with WebP support
+        if (function_exists('imagewebp')) {
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
+        }
     }
 }
