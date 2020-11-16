@@ -21,6 +21,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class ImagineControllerTest extends AbstractSetupWebTestCase
 {
+    /**
+     * PHP compiled with WebP support.
+     *
+     * @var bool
+     */
+    private $webp_generate;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->webp_generate = function_exists('imagewebp');
+        self::$kernel->getContainer()->setParameter('liip_imagine.webp.generate', $this->webp_generate);
+    }
+
     public function testCouldBeGetFromContainer(): void
     {
         $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
@@ -42,7 +56,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
         }
     }
@@ -63,7 +77,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame(302, $response->getStatusCode());
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp', $response->getTargetUrl());
             $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
         } else {
@@ -163,7 +177,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
         }
     }
@@ -201,7 +215,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame(302, $response->getStatusCode());
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertSame('http://localhost/media/cache/'.$expectedCachePath.'.webp', $response->getTargetUrl());
             $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
         } else {
@@ -246,7 +260,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
         }
     }
@@ -271,7 +285,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
 
         // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
         }
     }

@@ -42,20 +42,36 @@ class FilterService
     private $logger;
 
     /**
+     * @var bool
+     */
+    private $webpGenerate;
+
+    /**
+     * @var int
+     */
+    private $webpQuality;
+
+    /**
      * @param DataManager     $dataManager
      * @param FilterManager   $filterManager
      * @param CacheManager    $cacheManager
+     * @param bool            $webpGenerate
+     * @param int             $webpQuality
      * @param LoggerInterface $logger
      */
     public function __construct(
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
+        $webpGenerate,
+        $webpQuality,
         LoggerInterface $logger = null
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
+        $this->webpGenerate = $webpGenerate;
+        $this->webpQuality = $webpQuality;
         $this->logger = $logger ?: new NullLogger();
     }
 
@@ -98,8 +114,7 @@ class FilterService
             $resolver
         );
 
-        // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webpGenerate) {
             // add webp in new location
             $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
             $this->cacheManager->store($filteredWebpBinary, $path.'.webp', $filter, $resolver);
@@ -146,8 +161,7 @@ class FilterService
             $resolver
         );
 
-        // PHP compiled with WebP support
-        if (function_exists('imagewebp')) {
+        if ($this->webpGenerate) {
             // add webp in new location
             $filteredWebpBinary = $this->createFilteredWebpBinary($path, $filter);
             $this->cacheManager->store($filteredWebpBinary, $runtimePath.'.webp', $filter, $resolver);
@@ -201,7 +215,7 @@ class FilterService
 
         try {
             return $this->filterManager->applyFilter($binary, $filter, [
-                'quality' => 100,
+                'quality' => $this->webpQuality,
                 'format' => 'webp',
                 'filters' => $runtimeFilters,
             ]);

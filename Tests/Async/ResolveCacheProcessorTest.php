@@ -443,6 +443,8 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterService = new FilterService(
             $dataManagerMock,
             $filterManagerMock,
+            false,
+            100,
             $cacheManagerMock
         );
 
