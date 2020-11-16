@@ -443,9 +443,9 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterService = new FilterService(
             $dataManagerMock,
             $filterManagerMock,
+            $cacheManagerMock,
             false,
-            100,
-            $cacheManagerMock
+            100
         );
 
         $processor = new ResolveCacheProcessor(

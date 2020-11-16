@@ -32,7 +32,16 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     {
         parent::setUp();
         $this->webp_generate = function_exists('imagewebp');
-        self::$kernel->getContainer()->setParameter('liip_imagine.webp.generate', $this->webp_generate);
+
+        // We turn on generation through reflection, since only in runtime we can determine whether the WebP is
+        // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
+        // not supported.
+        if ($this->webp_generate) {
+            $filterService = self::$kernel->getContainer()->get('liip_imagine.service.filter');
+            $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
+            $webpGenerate->setAccessible(true);
+            $webpGenerate->setValue(true);
+        }
     }
 
     public function testCouldBeGetFromContainer(): void
