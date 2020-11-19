@@ -52,8 +52,12 @@ class ImagineController
      * @param SignerInterface       $signer
      * @param ControllerConfig|null $controllerConfig
      */
-    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer, ?ControllerConfig $controllerConfig = null)
-    {
+    public function __construct(
+        FilterService $filterService,
+        DataManager $dataManager,
+        SignerInterface $signer,
+        ?ControllerConfig $controllerConfig = null
+    ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
@@ -180,7 +184,7 @@ class ImagineController
      *
      * @return bool
      */
-    private function isSupportWebp(Request $request)
+    private function isSupportWebp(Request $request): bool
     {
         return false !== stripos($request->headers->get('accept', ''), 'image/webp');
     }
