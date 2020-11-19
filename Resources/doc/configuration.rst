@@ -41,6 +41,9 @@ The default configuration for the bundle looks like this:
             filter_action:          liip_imagine.controller:filterAction
             filter_runtime_action:  liip_imagine.controller:filterRuntimeAction
             redirect_response_code: 301
+        webp:
+            generate: false
+            quality: 100
         filter_sets:
 
             # Prototype
@@ -77,6 +80,9 @@ There are several configuration options available:
       loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
     * ``redirect_response_code`` - The HTTP redirect response code to return from the imagine controller,
       one of ``201``, ``301``, ``302``, ``303``, ``307``, or ``308``. Default value: ``301``
+* ``webp``
+    * ``generate`` - enabling the generation a copy of the image in the WebP format.
+    * ``quality`` - override the quality from filter option.
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in

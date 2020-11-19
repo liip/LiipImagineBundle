@@ -211,3 +211,45 @@ path to get its resolved location.
 
     /** @var string */
     $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+
+WebP image format
+~~~~~~~~~~~~~~~~~
+
+The WebP format better optimizes the quality and size of the compressed image
+compared to JPEG and PNG. Google strongly recommends using this format. You can
+set it as the default format for all images.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        default_filter_set_settings:
+            format: webp
+
+However, not all browsers support the WebP format, and for compatibility with
+all browsers it is recommended to return images in their original format for
+those browsers that do not support WebP. This means that you need to store 2
+versions of the image. One in WebP format and the other in original format.
+**Remember that this almost doubles the amount of used space on the server for
+storing filtered images.**
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        # configure webp
+        webp:
+            generate: true
+            quality: 100
+
+        # example filter
+        filter_sets:
+            thumbnail_web_path:
+                filters:
+                    thumbnail: { size: [223, 223], mode: inset }
+
+If browser supports WebP, the request ``https://localhost/media/cache/resolve/thumbnail_web_path/images/cats.jpeg``
+will be redirected to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp``
+otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg``
