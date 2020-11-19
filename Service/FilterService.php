@@ -16,7 +16,6 @@ use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Imagine\Filter\FilterPathContainer;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 

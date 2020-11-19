@@ -10,7 +10,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Liip\ImagineBundle\Imagine\Filter;
+namespace Liip\ImagineBundle\Service;
 
 final class FilterPathContainer
 {
