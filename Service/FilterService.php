@@ -99,13 +99,15 @@ class FilterService
      * @param string      $path
      * @param string      $filter
      * @param string|null $resolver
-     * @param bool        $webp
+     * @param bool        $webpSupported
      *
      * @return string
      */
-    public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webp = false)
+    public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webpSupported = false)
     {
-        return $this->getUrlOfFilteredImageByContainer(new FilterPathContainer($path), $filter, $resolver, $webp);
+        $basePathContainer = new FilterPathContainer($path);
+
+        return $this->getUrlOfFilteredImageByContainer($basePathContainer, $filter, $resolver, $webpSupported);
     }
 
     /**
@@ -113,7 +115,7 @@ class FilterService
      * @param string      $filter
      * @param array       $runtimeFilters
      * @param string|null $resolver
-     * @param bool        $webp
+     * @param bool        $webpSupported
      *
      * @return string
      */
@@ -122,21 +124,21 @@ class FilterService
         $filter,
         array $runtimeFilters = [],
         $resolver = null,
-        bool $webp = false
+        bool $webpSupported = false
     ) {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         $basePathContainer = new FilterPathContainer($path, $runtimePath, [
             'filters' => $runtimeFilters,
         ]);
 
-        return $this->getUrlOfFilteredImageByContainer($basePathContainer, $filter, $resolver, $webp);
+        return $this->getUrlOfFilteredImageByContainer($basePathContainer, $filter, $resolver, $webpSupported);
     }
 
     /**
      * @param FilterPathContainer $basePathContainer
      * @param string              $filter
      * @param string|null         $resolver
-     * @param bool                $webp
+     * @param bool                $webpSupported
      *
      * @return string
      */
@@ -144,7 +146,7 @@ class FilterService
         FilterPathContainer $basePathContainer,
         string $filter,
         ?string $resolver = null,
-        bool $webp = false
+        bool $webpSupported = false
     ): string {
         $filterPathContainers = [$basePathContainer];
 
@@ -164,7 +166,7 @@ class FilterService
             }
         }
 
-        if ($webp && isset($webpPathContainer)) {
+        if ($webpSupported && isset($webpPathContainer)) {
             return $this->cacheManager->resolve($webpPathContainer->getTarget(), $filter, $resolver);
         }
 
