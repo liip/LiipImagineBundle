@@ -139,7 +139,9 @@ class LiipImagineExtension extends Extension
         $this->deprecationTemplatingFilterHelper($container);
 
         $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
-        $container->setParameter('liip_imagine.webp.quality', $config['webp']['quality']);
+        $webpOptions = $config['webp'];
+        unset($webpOptions['generate']);
+        $container->setParameter('liip_imagine.webp.options', $webpOptions);
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array

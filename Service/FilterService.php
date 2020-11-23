@@ -47,16 +47,16 @@ class FilterService
     private $webpGenerate;
 
     /**
-     * @var int
+     * @var array
      */
-    private $webpQuality;
+    private $webpOptions;
 
     /**
      * @param DataManager          $dataManager
      * @param FilterManager        $filterManager
      * @param CacheManager         $cacheManager
      * @param bool                 $webpGenerate
-     * @param int                  $webpQuality
+     * @param array                $webpOptions
      * @param LoggerInterface|null $logger
      */
     public function __construct(
@@ -64,14 +64,14 @@ class FilterService
         FilterManager $filterManager,
         CacheManager $cacheManager,
         bool $webpGenerate,
-        int $webpQuality,
+        array $webpOptions,
         ?LoggerInterface $logger = null
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
         $this->webpGenerate = $webpGenerate;
-        $this->webpQuality = $webpQuality;
+        $this->webpOptions = $webpOptions;
         $this->logger = $logger ?: new NullLogger();
     }
 
@@ -85,7 +85,7 @@ class FilterService
         $filterPathContainers = [$basePathContainer];
 
         if ($this->webpGenerate) {
-            $filterPathContainers[] = $basePathContainer->createWebp($this->webpQuality);
+            $filterPathContainers[] = $basePathContainer->createWebp($this->webpOptions);
         }
 
         foreach ($filterPathContainers as $filterPathContainer) {
@@ -151,7 +151,7 @@ class FilterService
         $filterPathContainers = [$basePathContainer];
 
         if ($this->webpGenerate) {
-            $webpPathContainer = $basePathContainer->createWebp($this->webpQuality);
+            $webpPathContainer = $basePathContainer->createWebp($this->webpOptions);
             $filterPathContainers[] = $webpPathContainer;
         }
 

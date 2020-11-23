@@ -42,19 +42,18 @@ final class FilterPathContainer
     }
 
     /**
-     * @param int $quality
+     * @param array $options
      *
      * @return self
      */
-    public function createWebp(int $quality): self
+    public function createWebp(array $options): self
     {
         return new self(
             $this->source,
             $this->target.'.webp',
             [
-                'quality' => $quality,
                 'format' => 'webp',
-            ] + $this->options
+            ] + $options + $this->options
         );
     }
 

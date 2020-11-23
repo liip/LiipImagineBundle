@@ -42,8 +42,11 @@ The default configuration for the bundle looks like this:
             filter_runtime_action:  liip_imagine.controller:filterRuntimeAction
             redirect_response_code: 301
         webp:
-            generate: false
-            quality: 100
+            generate:    false
+            quality:     100
+            cache:       ~
+            data_loader: ~
+            post_processors: []
         filter_sets:
 
             # Prototype

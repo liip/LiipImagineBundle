@@ -445,7 +445,7 @@ class ResolveCacheProcessorTest extends AbstractTest
             $filterManagerMock,
             $cacheManagerMock,
             false,
-            100
+            []
         );
 
         $processor = new ResolveCacheProcessor(

@@ -227,7 +227,7 @@ set it as the default format for all images.
         default_filter_set_settings:
             format: webp
 
-However, not all browsers support the WebP format, and for compatibility with
+However, not all `browsers support the WebP format`_, and for compatibility with
 all browsers it is recommended to return images in their original format for
 those browsers that do not support WebP. This means that you need to store 2
 versions of the image. One in WebP format and the other in original format.
@@ -242,7 +242,6 @@ storing filtered images.**
         # configure webp
         webp:
             generate: true
-            quality: 100
 
         # example filter
         filter_sets:
@@ -253,3 +252,5 @@ storing filtered images.**
 If browser supports WebP, the request ``https://localhost/media/cache/resolve/thumbnail_web_path/images/cats.jpeg``
 will be redirected to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp``
 otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg``
+
+.. _`browsers support the WebP format`: https://caniuse.com/webp
