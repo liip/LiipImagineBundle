@@ -86,6 +86,12 @@ There are several configuration options available:
 * ``webp``
     * ``generate`` - enabling the generation a copy of the image in the WebP format.
     * ``quality`` - override the quality from filter option.
+    * ``cache`` - default cache resolver. Default value: ``web_path`` (which means
+      the standard web_path resolver is used)
+    * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
+      (which means the standard filesystem loader is used).
+    * ``post_processors`` - sets post-processors to be applied on filtered image
+      (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in
