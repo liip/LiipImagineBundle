@@ -97,7 +97,7 @@ class ImagineController
                 $path,
                 $filter,
                 $resolver,
-                $this->isSupportWebp($request)
+                $this->isWebpSupported($request)
             );
         }, $path, $filter);
     }
@@ -145,7 +145,7 @@ class ImagineController
                 $filter,
                 $runtimeConfig,
                 $resolver,
-                $this->isSupportWebp($request)
+                $this->isWebpSupported($request)
             );
         }, $path, $filter, $hash);
     }
@@ -184,7 +184,7 @@ class ImagineController
      *
      * @return bool
      */
-    private function isSupportWebp(Request $request): bool
+    private function isWebpSupported(Request $request): bool
     {
         return false !== stripos($request->headers->get('accept', ''), 'image/webp');
     }
