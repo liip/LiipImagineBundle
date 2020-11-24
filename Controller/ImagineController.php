@@ -52,8 +52,12 @@ class ImagineController
      * @param SignerInterface       $signer
      * @param ControllerConfig|null $controllerConfig
      */
-    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer, ?ControllerConfig $controllerConfig = null)
-    {
+    public function __construct(
+        FilterService $filterService,
+        DataManager $dataManager,
+        SignerInterface $signer,
+        ?ControllerConfig $controllerConfig = null
+    ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
@@ -88,8 +92,13 @@ class ImagineController
         $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
 
-        return $this->createRedirectResponse(function () use ($path, $filter, $resolver) {
-            return $this->filterService->getUrlOfFilteredImage($path, $filter, $resolver);
+        return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
+            return $this->filterService->getUrlOfFilteredImage(
+                $path,
+                $filter,
+                $resolver,
+                $this->isWebpSupported($request)
+            );
         }, $path, $filter);
     }
 
@@ -130,11 +139,25 @@ class ImagineController
             ));
         }
 
-        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver) {
-            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver);
+        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver, $request) {
+            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters(
+                $path,
+                $filter,
+                $runtimeConfig,
+                $resolver,
+                $this->isWebpSupported($request)
+            );
         }, $path, $filter, $hash);
     }
 
+    /**
+     * @param \Closure    $url
+     * @param string      $path
+     * @param string      $filter
+     * @param string|null $hash
+     *
+     * @return RedirectResponse
+     */
     private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
     {
         try {
@@ -154,5 +177,15 @@ class ImagineController
                 $exception->getMessage(),
             ]), 0, $exception);
         }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function isWebpSupported(Request $request): bool
+    {
+        return false !== stripos($request->headers->get('accept', ''), 'image/webp');
     }
 }

@@ -136,6 +136,8 @@
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument>%liip_imagine.webp.generate%</argument>
+            <argument>%liip_imagine.webp.options%</argument>
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 

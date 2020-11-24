@@ -213,6 +213,34 @@ class Configuration implements ConfigurationInterface
             ->end()
         ->end();
 
+        $rootNode
+            ->children()
+                ->arrayNode('webp')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('generate')
+                            ->defaultFalse()
+                            ->validate()
+                                ->ifTrue(function ($v) {
+                                    return !$v || function_exists('imagewebp');
+                                })
+                                ->thenInvalid('Your PHP version is compiled without WebP support.')
+                            ->end()
+                        ->end()
+                        ->integerNode('quality')->defaultValue(100)->end()
+                        ->scalarNode('cache')->defaultNull()->end()
+                        ->scalarNode('data_loader')->defaultNull()->end()
+                        ->arrayNode('post_processors')
+                            ->defaultValue([])
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 
