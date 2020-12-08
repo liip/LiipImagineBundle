@@ -198,19 +198,21 @@ you would run:
 
     $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
 
-Often, you need to perform this operation in a controller. Assuming your
-controller inherits from the base Symfony controller, you can take advantage
-of the inherited ``get`` method to request the ``liip_imagine.cache.manager``
-service, from which you can call ``getBrowserPath`` on a relative image
-path to get its resolved location.
+Often, you need to perform this operation in a controller.
+
+You can access the ``CacheManager`` simply by type hinting it in your controller method: the service
+``liip_imagine.cache.manager`` will be automatically injected and you will be able to call
+``getBrowserPath`` on a relative image path to get its resolved location.
 
 .. code-block:: php
 
-    /** @var CacheManager */
-    $imagineCacheManager = $this->get('liip_imagine.cache.manager');
-
-    /** @var string */
-    $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    public function yourControllerMethod(\Liip\ImagineBundle\Imagine\Cache\CacheManager imagineCacheManager)
+    {
+        /** @var string */
+        $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    
+        // ...
+    }
 
 WebP image format
 ~~~~~~~~~~~~~~~~~
