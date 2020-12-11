@@ -206,12 +206,21 @@ You can access the ``CacheManager`` simply by type hinting it in your controller
 
 .. code-block:: php
 
-    public function yourControllerMethod(\Liip\ImagineBundle\Imagine\Cache\CacheManager imagineCacheManager)
-    {
-        /** @var string */
-        $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    <?php
     
-        // ...
+    namespace App\Controller;
+    
+    use \Liip\ImagineBundle\Imagine\Cache\CacheManager;
+
+    class YourController
+    {
+        public function yourControllerMethod(\Liip\ImagineBundle\Imagine\Cache\CacheManager imagineCacheManager)
+        {
+            /** @var string */
+            $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    
+            // ...
+        }
     }
 
 WebP image format
