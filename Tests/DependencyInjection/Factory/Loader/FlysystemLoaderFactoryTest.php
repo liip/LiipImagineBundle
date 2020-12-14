@@ -78,7 +78,7 @@ class FlysystemLoaderFactoryTest extends TestCase
     public function testThrowIfFileSystemServiceNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "filesystem_service" at path "flysystem" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('flysystem');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')

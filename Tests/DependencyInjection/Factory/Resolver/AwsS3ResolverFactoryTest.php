@@ -295,7 +295,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowBucketNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "bucket" at path "aws_s3" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
@@ -311,7 +311,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowClientConfigNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "client_config" at path "aws_s3" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')

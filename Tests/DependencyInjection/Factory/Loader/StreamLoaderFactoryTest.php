@@ -69,7 +69,7 @@ class StreamLoaderFactoryTest extends TestCase
     public function testThrowIfWrapperNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "wrapper" at path "stream" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('stream');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
