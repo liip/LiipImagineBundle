@@ -214,7 +214,7 @@ You can access the ``CacheManager`` simply by type hinting it in your controller
 
     class YourController
     {
-        public function yourControllerMethod(\Liip\ImagineBundle\Imagine\Cache\CacheManager imagineCacheManager)
+        public function yourControllerMethod(CacheManager $imagineCacheManager)
         {
             /** @var string */
             $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
