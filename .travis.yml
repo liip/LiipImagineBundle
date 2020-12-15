@@ -10,7 +10,6 @@ env:
     - SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
     - PHPUNIT_FLAGS="-v"
     - PHPUNIT_ENABLED="true"
-    - SYMFONY_PHPUNIT_VERSION="7.5"
     - COVERALLS_ENABLED="false"
     - STABILITY=stable
 
@@ -24,6 +23,7 @@ matrix:
     - php: '7.3'
       env:
         - COVERALLS_ENABLED="true"
+        - XDEBUG_MODE=coverage
         - PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
 
     # Minimum supported dependencies with the latest and oldest supported PHP versions
@@ -32,6 +32,7 @@ matrix:
         - COMPOSER_FLAGS="--prefer-lowest"
     - php: '7.3'
       env:
+        - SYMFONY_PHPUNIT_VERSION="7.5"
         - COMPOSER_FLAGS="--prefer-lowest"
 
     # Test each supported Symfony version with lowest supported PHP version
