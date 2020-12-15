@@ -32,6 +32,10 @@ abstract class AbstractWebTestCase extends WebTestCase
      */
     protected function getService(string $name)
     {
+        if (property_exists($this, 'container')) {
+            return static::$container->get($name);
+        }
+
         return static::$kernel->getContainer()->get($name);
     }
 
@@ -40,6 +44,10 @@ abstract class AbstractWebTestCase extends WebTestCase
      */
     protected function getParameter(string $name)
     {
+        if (property_exists($this, 'container')) {
+            return static::$container->getParameter($name);
+        }
+
         return static::$kernel->getContainer()->getParameter($name);
     }
 
