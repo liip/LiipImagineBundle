@@ -23,6 +23,7 @@ matrix:
     - php: '7.3'
       env:
         - COVERALLS_ENABLED="true"
+        - XDEBUG_MODE=coverage
         - PHPUNIT_FLAGS="-v --coverage-text --coverage-clover var/build/clover.xml"
 
     # Minimum supported dependencies with the latest and oldest supported PHP versions
