@@ -1,0 +1,44 @@
+name: LiipImagineBundle CI
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  phpunit:
+    name: "PHPUnit (PHP ${{ matrix.php }})"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: gd, imagick
+          ini-values: disable_functions=imagewebp
+
+      - name: Update project dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          dependency-versions: highest
+
+      - name: Cache PHPUnit
+        uses: actions/cache@v2
+        with:
+          path: vendor/bin/.phpunit
+          key: ${{ runner.os }}-phpunit-${{ matrix.php }}
+
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit install
+
+      - name: Run PHPUnit tests
+        env:
+          SYMFONY_DEPRECATIONS_HELPER: max[self]=0
+        run: vendor/bin/simple-phpunit -v
