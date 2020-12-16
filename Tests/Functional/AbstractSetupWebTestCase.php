@@ -45,7 +45,7 @@ class AbstractSetupWebTestCase extends AbstractWebTestCase
 
         $this->client = $this->createClient();
         $this->client->catchExceptions(false);
-        $this->webRoot = sprintf('%s/public', self::$kernel->getContainer()->getParameter('kernel.root_dir'));
+        $this->webRoot = sprintf('%s/public', self::$kernel->getContainer()->getParameter('kernel.project_dir'));
         $this->cacheRoot = $this->webRoot.'/media/cache';
         $this->filesystem = new Filesystem();
         $this->filesystem->remove($this->cacheRoot);

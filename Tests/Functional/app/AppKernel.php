@@ -47,6 +47,11 @@ class AppKernel extends Kernel
         return sys_get_temp_dir().'/liip_imagine_test/cache/logs';
     }
 
+    public function getProjectDir()
+    {
+        return __DIR__;
+    }
+
     /**
      * @throws \Exception
      */
