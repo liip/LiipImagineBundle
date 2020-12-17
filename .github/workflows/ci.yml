@@ -6,12 +6,21 @@ on:
 
 jobs:
   phpunit:
-    name: "PHPUnit (PHP ${{ matrix.php }})"
+    name: "PHPUnit (PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies)"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         php: ['7.1', '7.2', '7.3', '7.4']
+        dependencies: [highest]
+        include:
+          # Minimum supported dependencies with the oldest supported PHP version
+          - php: '7.1'
+            dependencies: lowest
+
+          # Minimum supported dependencies with the latest supported PHP version
+          - php: '7.4'
+            dependencies: lowest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,7 +36,7 @@ jobs:
       - name: Update project dependencies
         uses: ramsey/composer-install@v1
         with:
-          dependency-versions: highest
+          dependency-versions: ${{ matrix.dependencies }}
 
       - name: Cache PHPUnit
         uses: actions/cache@v2
