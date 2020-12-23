@@ -222,7 +222,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultFalse()
                             ->validate()
                                 ->ifTrue(function ($v) {
-                                    return !$v || function_exists('imagewebp');
+                                    return $v && !function_exists('imagewebp');
                                 })
                                 ->thenInvalid('Your PHP version is compiled without WebP support.')
                             ->end()
