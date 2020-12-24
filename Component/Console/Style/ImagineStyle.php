@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Terminal;
+use ValueError;
 
 /**
  * @internal
@@ -146,8 +147,11 @@ final class ImagineStyle
             return $format;
         }
 
-        if (false !== $compiled = @vsprintf($format, $replacements)) {
-            return $compiled;
+        try {
+            if (false !== $compiled = @vsprintf($format, $replacements)) {
+                return $compiled;
+            }
+        } catch (ValueError $error) {
         }
 
         throw new InvalidArgumentException(
