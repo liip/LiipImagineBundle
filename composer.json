@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^7.1|^8.0",
-        "imagine/imagine": "^1.1",
+        "imagine/imagine": "^1.2.4",
         "symfony/filesystem": "^3.4|^4.3|^5.0",
         "symfony/finder": "^3.4|^4.3|^5.0",
         "symfony/framework-bundle": "^3.4.23|^4.3|^5.0",
@@ -27,7 +27,7 @@
         "symfony/options-resolver": "^3.4|^4.3|^5.0",
         "symfony/process": "^3.4|^4.3|^5.0",
         "symfony/templating": "^3.4|^4.3|^5.0",
-        "twig/twig": "^1.40|^2.9|^3.0"
+        "twig/twig": "^1.44|^2.9|^3.0"
     },
     "require-dev": {
         "ext-gd": "*",
