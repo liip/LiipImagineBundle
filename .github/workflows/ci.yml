@@ -59,6 +59,10 @@ jobs:
           composer global require --no-interaction --no-progress symfony/flex:^1.11
           composer config extra.symfony.require ${{ matrix.symfony }}
 
+      - name: Remove EnqueueBundle
+        if: matrix.php == '8.0'
+        run: composer remove --dev enqueue/enqueue-bundle
+
       - name: Update project dependencies
         uses: ramsey/composer-install@v1
         with:
