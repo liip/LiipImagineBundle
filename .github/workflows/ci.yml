@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.1', '7.2', '7.3', '7.4']
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
         dependencies: [highest]
         symfony: ['*']
         include:
@@ -21,7 +21,7 @@ jobs:
             symfony: '*'
 
           # Minimum supported dependencies with the latest supported PHP version
-          - php: '7.4'
+          - php: '8.0'
             dependencies: lowest
             symfony: '*'
 
