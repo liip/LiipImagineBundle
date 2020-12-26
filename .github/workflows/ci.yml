@@ -62,7 +62,7 @@ jobs:
       # TODO: remove this step when enqueue supports PHP 8, see https://github.com/php-enqueue/enqueue-dev/issues/1108
       - name: Remove EnqueueBundle
         if: matrix.php == '8.0'
-        run: composer remove --dev enqueue/enqueue-bundle
+        run: composer remove --dev --no-update enqueue/enqueue-bundle
 
       - name: Update project dependencies
         uses: ramsey/composer-install@v1
