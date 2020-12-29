@@ -218,15 +218,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('webp')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->booleanNode('generate')
-                            ->defaultFalse()
-                            ->validate()
-                                ->ifTrue(function ($v) {
-                                    return $v && !function_exists('imagewebp');
-                                })
-                                ->thenInvalid('Your PHP version is compiled without WebP support.')
-                            ->end()
-                        ->end()
+                        ->booleanNode('generate')->defaultFalse()->end()
                         ->integerNode('quality')->defaultValue(100)->end()
                         ->scalarNode('cache')->defaultNull()->end()
                         ->scalarNode('data_loader')->defaultNull()->end()
