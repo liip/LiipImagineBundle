@@ -45,11 +45,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Configure coverage driver
+        id: coverage
+        run: echo ::set-output name=driver::$([ "${{ matrix.php }}" = "7.1" ] && echo "xdebug" || echo "pcov")
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
+          coverage: ${{ steps.coverage.outputs.driver }}
           extensions: gd, imagick
           ini-values: disable_functions=imagewebp
 
