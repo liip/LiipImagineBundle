@@ -55,22 +55,30 @@ class CacheManager
     protected $defaultResolver;
 
     /**
+     * @var bool
+     */
+    private $webpGenerate;
+
+    /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
      * @param string $defaultResolver
+     * @param bool   $webpGenerate
      */
     public function __construct(
         FilterConfiguration $filterConfig,
         RouterInterface $router,
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
-        $defaultResolver = null
+        $defaultResolver = null,
+        $webpGenerate = false
     ) {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
         $this->signer = $signer;
         $this->dispatcher = $dispatcher;
         $this->defaultResolver = $defaultResolver ?: 'default';
+        $this->webpGenerate = $webpGenerate;
     }
 
     /**
@@ -103,12 +111,12 @@ class CacheManager
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
-            return $this->isStored($rcPath, $filter, $resolver) ?
+            return !$this->webpGenerate && $this->isStored($rcPath, $filter, $resolver) ?
                 $this->resolve($rcPath, $filter, $resolver) :
                 $this->generateUrl($path, $filter, $runtimeConfig, $resolver, $referenceType);
         }
 
-        return $this->isStored($path, $filter, $resolver) ?
+        return !$this->webpGenerate && $this->isStored($path, $filter, $resolver) ?
             $this->resolve($path, $filter, $resolver) :
             $this->generateUrl($path, $filter, [], $resolver, $referenceType);
     }
