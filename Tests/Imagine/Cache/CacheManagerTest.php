@@ -133,6 +133,42 @@ class CacheManagerTest extends AbstractTest
         $this->assertSame('http://a/path/to/an/image.png', $actualBrowserPath);
     }
 
+    public function testDefaultResolverUsedIfNoneSetOnGetBrowserPathWithWebPGenerate(): void
+    {
+        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver
+            ->expects($this->never())
+            ->method('isStored');
+        $resolver
+            ->expects($this->never())
+            ->method('resolve');
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->never())
+            ->method('get');
+
+        $router = $this->createRouterInterfaceMock();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn('/media/cache/thumbnail/cats.jpeg');
+
+        $cacheManager = new CacheManager(
+            $config,
+            $router,
+            new Signer('secret'),
+            $this->createEventDispatcherInterfaceMock(),
+            null,
+            true
+        );
+        $cacheManager->addResolver('default', $resolver);
+
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail');
+
+        $this->assertSame('/media/cache/thumbnail/cats.jpeg', $actualBrowserPath);
+    }
+
     public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPath(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
@@ -215,6 +251,48 @@ class CacheManagerTest extends AbstractTest
             $router,
             new Signer('secret'),
             $this->createEventDispatcherInterfaceMock()
+        );
+        $cacheManager->addResolver('default', $resolver);
+
+        $actualBrowserPath = $cacheManager->getBrowserPath('cats.jpeg', 'thumbnail', $runtimeConfig);
+
+        $this->assertSame('/media/cache/thumbnail/rc/VhOzTGRB/cats.jpeg', $actualBrowserPath);
+    }
+
+    public function testFilterActionUrlGeneratedAndReturnIfResolverReturnNullOnGetBrowserPathWithRuntimeConfigWithWebPGenerate(): void
+    {
+        $runtimeConfig = [
+            'thumbnail' => [
+                'size' => [100, 100],
+            ],
+        ];
+
+        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver
+            ->expects($this->never())
+            ->method('isStored');
+        $resolver
+            ->expects($this->never())
+            ->method('resolve');
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->never())
+            ->method('get');
+
+        $router = $this->createRouterInterfaceMock();
+        $router
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn('/media/cache/thumbnail/rc/VhOzTGRB/cats.jpeg');
+
+        $cacheManager = new CacheManager(
+            $config,
+            $router,
+            new Signer('secret'),
+            $this->createEventDispatcherInterfaceMock(),
+            null,
+            true
         );
         $cacheManager->addResolver('default', $resolver);
 
