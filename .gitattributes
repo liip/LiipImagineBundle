@@ -1,6 +1,7 @@
 * text=auto
 /.travis/ export-ignore
 /.github/ export-ignore
+/.phpstan/ export-ignore
 /Tests/ export-ignore
 /.coveralls.yml export-ignore
 /.gitattributes export-ignore
@@ -9,4 +10,5 @@
 /.scrutinizer.yml export-ignore
 /.styleci.yml export-ignore
 /.travis.yml export-ignore
+/.phpstan.neon.dist export-ignore
 /.phpunit.xml.dist export-ignore
