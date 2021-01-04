@@ -34,10 +34,6 @@ class AbstractDoctrineLoaderTest extends TestCase
 
     public function setUp(): void
     {
-        if (!interface_exists(ObjectManager::class)) {
-            $this->markTestSkipped('Requires the doctrine/orm package.');
-        }
-
         $this->om = $this
             ->getMockBuilder(ObjectManager::class)
             ->getMock();
