@@ -92,6 +92,6 @@ class ResolveCache implements \JsonSerializable
             throw new LogicException('The message filters could be either null or array.');
         }
 
-        return new static($data['path'], $data['filters'], $data['force']);
+        return new self($data['path'], $data['filters'], $data['force']);
     }
 }

@@ -77,6 +77,6 @@ class CacheResolved implements \JsonSerializable
             throw new LogicException('The message uris must not be empty array.');
         }
 
-        return new static($data['path'], $data['uris']);
+        return new self($data['path'], $data['uris']);
     }
 }
