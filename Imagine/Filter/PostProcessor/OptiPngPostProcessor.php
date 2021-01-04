@@ -84,7 +84,7 @@ class OptiPngPostProcessor extends AbstractPostProcessor
         $arguments = [$this->executablePath];
 
         if (null !== $level = $options['level'] ?? $this->level) {
-            if (!in_array($level, range(0, 7), true)) {
+            if (!\in_array($level, range(0, 7), true)) {
                 throw new InvalidOptionException('the "level" option must be an int between 0 and 7', $options);
             }
 
@@ -92,8 +92,8 @@ class OptiPngPostProcessor extends AbstractPostProcessor
         }
 
         if (isset($options['strip_all'])) {
-            @trigger_error(sprintf('The "strip_all" option was deprecated in 2.2 and will be removed in 3.0. '.
-                'Instead, use the "strip" option.'), E_USER_DEPRECATED);
+            @trigger_error('The "strip_all" option was deprecated in 2.2 and will be removed in 3.0. '.
+                'Instead, use the "strip" option.', E_USER_DEPRECATED);
 
             if (isset($options['strip'])) {
                 throw new InvalidOptionException('the "strip" and "strip_all" options cannot both be set', $options);
@@ -116,7 +116,7 @@ class OptiPngPostProcessor extends AbstractPostProcessor
         }
 
         if (isset($options['interlace_type'])) {
-            if (!in_array($options['interlace_type'], range(0, 1), true)) {
+            if (!\in_array($options['interlace_type'], range(0, 1), true)) {
                 throw new InvalidOptionException('the "interlace_type" option must be either 0 or 1', $options);
             }
 

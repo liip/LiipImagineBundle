@@ -46,8 +46,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     /**
      * Constructs a filesystem based cache resolver.
-     *
-     * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
     {
@@ -62,9 +60,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->request = $request;
     }
 
-    /**
-     * @param CacheManager $cacheManager
-     */
     public function setCacheManager(CacheManager $cacheManager)
     {
         $this->cacheManager = $cacheManager;
@@ -178,7 +173,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     /**
      * Return the local filepath.
-     *
      *
      * @param string $path   The resource path to convert
      * @param string $filter The name of the imagine filter

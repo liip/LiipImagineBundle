@@ -21,9 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RemoveCacheCommand extends Command
 {
-    protected static $defaultName = 'liip:imagine:cache:remove';
-
     use CacheCommandTrait;
+    protected static $defaultName = 'liip:imagine:cache:remove';
 
     public function __construct(CacheManager $cacheManager, FilterManager $filterManager)
     {
@@ -46,7 +45,7 @@ class RemoveCacheCommand extends Command
             ->addOption('as-script', 'S', InputOption::VALUE_NONE,
                 'Write only machine-readable output; silenced verbose reporting and implies --no-colors.')
             ->setHelp(<<<'EOF'
-The <comment>%command.name%</comment> command removes the passed image(s) cache entry for the 
+The <comment>%command.name%</comment> command removes the passed image(s) cache entry for the
 resolved filter(s), outputting results using the following basic format:
   <info>image.ext[filter] (removed|skipped|failure)[: (image-path|exception-message)]</>
 

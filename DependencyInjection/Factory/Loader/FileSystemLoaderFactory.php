@@ -125,8 +125,6 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
     }
 
     /**
-     * @param ContainerBuilder $container
-     *
      * @return string[]
      */
     private function getBundleResourcePaths(ContainerBuilder $container)

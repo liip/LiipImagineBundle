@@ -49,11 +49,7 @@ class ChainLoader implements LoaderInterface
     }
 
     /**
-     * @param string       $path
      * @param \Exception[] $exceptions
-     * @param array        $loaders
-     *
-     * @return string
      */
     private static function getLoaderExceptionMessage(string $path, array $exceptions, array $loaders): string
     {

@@ -36,9 +36,7 @@ final class Stack implements StackInterface
     private $filters = [];
 
     /**
-     * @param string            $name
      * @param string|null       $dataLoader name of a custom data loader. Default value: filesystem (which means the standard filesystem loader is used).
-     * @param int|null          $quality
      * @param FilterInterface[] $filters
      */
     public function __construct(string $name, string $dataLoader = null, int $quality = null, array $filters)

@@ -28,10 +28,10 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
      */
     private $webp_generate;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->webp_generate = function_exists('imagewebp');
+        $this->webp_generate = \function_exists('imagewebp');
 
         // We turn on generation through reflection, since only in runtime we can determine whether the WebP is
         // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
@@ -77,7 +77,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
             // Accept from Google Chrome 86
-            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         ]);
 
         $response = $this->client->getResponse();
@@ -215,7 +215,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $this->client->request('GET', $url, [], [], [
             // Accept from Google Chrome 86
-            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
         ]);
 
         $response = $this->client->getResponse();

@@ -1,9 +1,16 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
-use Liip\ImagineBundle\Imagine\Filter\Loader\NonFunctionalPasteFilterLoader;
-use Liip\ImagineBundle\Imagine\Filter\Loader\NonFunctionalWatermarkFilterLoader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -16,7 +23,7 @@ class NonFunctionalFilterExceptionPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $canFiltersStillFunction = $container->hasParameter('kernel.root_dir');
-        $throwWarning = function(string $filterName) use ($canFiltersStillFunction) {
+        $throwWarning = function (string $filterName) use ($canFiltersStillFunction) {
             $message = sprintf(
                 'The "%s" filter %s in Symfony 5.0. Please use "%s_image" and adapt the "image" option to be relative to the "%%kernel.project_dir%%" instead of "%%kernel.root_dir%%".',
                 $filterName,
@@ -34,11 +41,11 @@ class NonFunctionalFilterExceptionPass implements CompilerPassInterface
         $filterSets = $container->getParameter('liip_imagine.filter_sets');
         foreach ($filterSets as $filterSet) {
             foreach ($filterSet['filters'] as $filterName => $filter) {
-                if ($filterName === 'paste') {
+                if ('paste' === $filterName) {
                     $throwWarning('paste');
                 }
 
-                if ($filterName === 'watermark') {
+                if ('watermark' === $filterName) {
                     $throwWarning('watermark');
                 }
             }

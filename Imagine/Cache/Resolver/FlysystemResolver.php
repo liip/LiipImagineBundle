@@ -56,11 +56,9 @@ class FlysystemResolver implements ResolverInterface
     /**
      * FlysystemResolver constructor.
      *
-     * @param FilesystemInterface $flysystem
-     * @param RequestContext      $requestContext
-     * @param string              $rootUrl
-     * @param string              $cachePrefix
-     * @param string              $visibility
+     * @param string $rootUrl
+     * @param string $cachePrefix
+     * @param string $visibility
      */
     public function __construct(
         FilesystemInterface $flysystem,

@@ -32,7 +32,7 @@ class AbstractDoctrineLoaderTest extends TestCase
      */
     private $loader;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (!interface_exists(ObjectManager::class)) {
             $this->markTestSkipped('Requires the doctrine/orm package.');

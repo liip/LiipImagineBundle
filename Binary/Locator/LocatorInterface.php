@@ -13,10 +13,5 @@ namespace Liip\ImagineBundle\Binary\Locator;
 
 interface LocatorInterface
 {
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
     public function locate(string $path): string;
 }

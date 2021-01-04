@@ -57,7 +57,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
             $process->setWorkingDirectory($options['process']['working_directory']);
         }
 
-        if (isset($options['process']['environment_variables']) && is_array($options['process']['environment_variables'])) {
+        if (isset($options['process']['environment_variables']) && \is_array($options['process']['environment_variables'])) {
             $process->setEnv($options['process']['environment_variables']);
         }
 
@@ -76,7 +76,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
 
     protected function isBinaryTypeMatch(BinaryInterface $binary, array $types): bool
     {
-        return in_array($binary->getMimeType(), $types, true);
+        return \in_array($binary->getMimeType(), $types, true);
     }
 
     protected function writeTemporaryFile(BinaryInterface $binary, array $options = [], string $prefix = null): string
@@ -117,12 +117,12 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
      */
     protected function isSuccessfulProcess(Process $process, array $validReturns = [0], array $errors = ['ERROR']): bool
     {
-        if (count($validReturns) > 0 && !in_array($process->getExitCode(), $validReturns, true)) {
+        if (\count($validReturns) > 0 && !\in_array($process->getExitCode(), $validReturns, true)) {
             return false;
         }
 
         foreach ($errors as $string) {
-            if (false !== strpos($process->getOutput(), $string)) {
+            if (false !== mb_strpos($process->getOutput(), $string)) {
                 return false;
             }
         }

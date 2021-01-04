@@ -22,10 +22,7 @@ interface PostProcessorInterface
     /**
      * Allows processing a BinaryInterface, with run-time options, so PostProcessors remain stateless.
      *
-     * @param BinaryInterface $binary
-     * @param array           $options Operation-specific options
-     *
-     * @return BinaryInterface
+     * @param array $options Operation-specific options
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface;
 }

@@ -180,8 +180,8 @@ class RemoveCacheCommandTest extends AbstractCommandTestCase
      */
     protected function assertOutputContainsSummary(string $output, array $images, array $filters, int $failures = 0): void
     {
-        $imagesSize = count($images);
-        $filtersSize = count($filters);
+        $imagesSize = \count($images);
+        $filtersSize = \count($filters);
 
         $totalSize = 0 === $imagesSize ? $filtersSize : ($imagesSize * $filtersSize) - $failures;
         $this->assertStringContainsString(sprintf('Completed %d removal', $totalSize), $output);

@@ -51,14 +51,6 @@ class FilterService
      */
     private $webpOptions;
 
-    /**
-     * @param DataManager          $dataManager
-     * @param FilterManager        $filterManager
-     * @param CacheManager         $cacheManager
-     * @param bool                 $webpGenerate
-     * @param array                $webpOptions
-     * @param LoggerInterface|null $logger
-     */
     public function __construct(
         DataManager $dataManager,
         FilterManager $filterManager,
@@ -99,7 +91,6 @@ class FilterService
      * @param string      $path
      * @param string      $filter
      * @param string|null $resolver
-     * @param bool        $webpSupported
      *
      * @return string
      */
@@ -113,9 +104,7 @@ class FilterService
     /**
      * @param string      $path
      * @param string      $filter
-     * @param array       $runtimeFilters
      * @param string|null $resolver
-     * @param bool        $webpSupported
      *
      * @return string
      */
@@ -134,14 +123,6 @@ class FilterService
         return $this->getUrlOfFilteredImageByContainer($basePathContainer, $filter, $resolver, $webpSupported);
     }
 
-    /**
-     * @param FilterPathContainer $basePathContainer
-     * @param string              $filter
-     * @param string|null         $resolver
-     * @param bool                $webpSupported
-     *
-     * @return string
-     */
     private function getUrlOfFilteredImageByContainer(
         FilterPathContainer $basePathContainer,
         string $filter,
@@ -174,12 +155,7 @@ class FilterService
     }
 
     /**
-     * @param FilterPathContainer $filterPathContainer
-     * @param string              $filter
-     *
      * @throws NonExistingFilterException
-     *
-     * @return BinaryInterface
      */
     private function createFilteredBinary(FilterPathContainer $filterPathContainer, string $filter): BinaryInterface
     {
