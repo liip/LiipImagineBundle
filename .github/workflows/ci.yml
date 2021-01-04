@@ -45,11 +45,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Configure coverage driver
+        id: coverage
+        run: echo ::set-output name=driver::$([ "${{ matrix.php }}" = "7.1" ] && echo "xdebug" || echo "pcov")
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
+          coverage: ${{ steps.coverage.outputs.driver }}
           extensions: gd, imagick
           ini-values: disable_functions=imagewebp
 
@@ -82,3 +86,22 @@ jobs:
         env:
           SYMFONY_DEPRECATIONS_HELPER: max[self]=0
         run: vendor/bin/simple-phpunit -v
+
+      - name: Upload coverage results to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
+        run: |
+          composer global require --no-interaction --no-progress php-coveralls/php-coveralls
+          php-coveralls -x var/build/clover.xml -o var/build/upload.json -v
+
+  coveralls-finish:
+    needs: [phpunit]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Notify Coveralls when build is finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
