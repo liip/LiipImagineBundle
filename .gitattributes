@@ -1,8 +1,12 @@
 * text=auto
 /.github/ export-ignore
+/.phpstan/ export-ignore
 /Tests/ export-ignore
 /.gitattributes export-ignore
 /.github_changelog_generator export-ignore
 /.php_cs.dist export-ignore
 /.scrutinizer.yml export-ignore
+/.styleci.yml export-ignore
+/.travis.yml export-ignore
+/.phpstan.neon.dist export-ignore
 /.phpunit.xml.dist export-ignore
