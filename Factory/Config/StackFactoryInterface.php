@@ -17,12 +17,7 @@ use Liip\ImagineBundle\Config\StackInterface;
 interface StackFactoryInterface
 {
     /**
-     * @param string            $name
-     * @param string|null       $dataLoader
-     * @param int|null          $quality
      * @param FilterInterface[] $filters
-     *
-     * @return StackInterface
      */
     public function create(string $name, string $dataLoader = null, int $quality = null, array $filters): StackInterface;
 }

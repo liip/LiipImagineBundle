@@ -26,9 +26,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FixedFilterLoader implements LoaderInterface
 {
     /**
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @return ImageInterface
      */
     public function load(ImageInterface $image, array $options = [])

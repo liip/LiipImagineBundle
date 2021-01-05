@@ -23,7 +23,7 @@ class InvalidOptionException extends \RuntimeException implements ExceptionInter
 
     private function stringifyOptions(array $options = []): string
     {
-        if (0 === count($options)) {
+        if (0 === \count($options)) {
             return '[]';
         }
 

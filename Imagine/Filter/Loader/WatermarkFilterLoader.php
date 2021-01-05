@@ -37,9 +37,6 @@ class WatermarkFilterLoader implements LoaderInterface
     /**
      * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
      *
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @return ImageInterface|static
      */
     public function load(ImageInterface $image, array $options = [])

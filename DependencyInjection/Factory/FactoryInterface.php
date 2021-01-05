@@ -17,9 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 interface FactoryInterface
 {
     /**
-     * @param ContainerBuilder $container
-     * @param string           $name
-     * @param array            $config
+     * @param string $name
      *
      * @return string The resolver service id
      */
@@ -30,8 +28,5 @@ interface FactoryInterface
      */
     public function getName();
 
-    /**
-     * @param ArrayNodeDefinition $builder
-     */
     public function addConfiguration(ArrayNodeDefinition $builder);
 }

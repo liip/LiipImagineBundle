@@ -32,9 +32,7 @@ class ResolveCache implements \JsonSerializable
     private $force;
 
     /**
-     * @param string        $path
      * @param string[]|null $filters
-     * @param bool          $force
      */
     public function __construct(string $path, array $filters = null, bool $force = false)
     {
@@ -43,9 +41,6 @@ class ResolveCache implements \JsonSerializable
         $this->force = $force;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
@@ -59,9 +54,6 @@ class ResolveCache implements \JsonSerializable
         return $this->filters;
     }
 
-    /**
-     * @return bool
-     */
     public function isForce(): bool
     {
         return $this->force;
@@ -75,11 +67,6 @@ class ResolveCache implements \JsonSerializable
         return ['path' => $this->path, 'filters' => $this->filters, 'force' => $this->force];
     }
 
-    /**
-     * @param string $json
-     *
-     * @return self
-     */
     public static function jsonDeserialize(string $json): self
     {
         $data = array_replace(['path' => null, 'filters' => null, 'force' => false], JSON::decode($json));

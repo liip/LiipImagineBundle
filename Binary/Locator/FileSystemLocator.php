@@ -23,7 +23,6 @@ class FileSystemLocator implements LocatorInterface
 
     /**
      * @param string[] $roots
-     * @param bool     $allowUnresolvable
      */
     public function __construct(array $roots = [], bool $allowUnresolvable = false)
     {
@@ -33,11 +32,7 @@ class FileSystemLocator implements LocatorInterface
     }
 
     /**
-     * @param string $path
-     *
      * @throws NotLoadableException
-     *
-     * @return string
      */
     public function locate(string $path): string
     {
@@ -49,16 +44,9 @@ class FileSystemLocator implements LocatorInterface
             return $this->sanitizeAbsolutePath($absolute);
         }
 
-        throw new NotLoadableException(sprintf('Source image not resolvable "%s" in root path(s) "%s"',
-            $path, implode(':', $this->roots)));
+        throw new NotLoadableException(sprintf('Source image not resolvable "%s" in root path(s) "%s"', $path, implode(':', $this->roots)));
     }
 
-    /**
-     * @param string $root
-     * @param string $path
-     *
-     * @return string|null
-     */
     protected function generateAbsolutePath(string $root, string $path): ?string
     {
         if (false !== $absolute = realpath($root.DIRECTORY_SEPARATOR.$path)) {
@@ -68,11 +56,6 @@ class FileSystemLocator implements LocatorInterface
         return null;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string|null
-     */
     private function locateUsingRootPathsSearch(string $path): ?string
     {
         foreach ($this->roots as $root) {
@@ -84,11 +67,6 @@ class FileSystemLocator implements LocatorInterface
         return null;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string|null
-     */
     private function locateUsingRootPlaceholder(string $path): ?string
     {
         if (0 !== mb_strpos($path, '@') || 1 !== preg_match('{^@(?<name>[^:]+):(?<path>.+)$}', $path, $match)) {
@@ -99,17 +77,11 @@ class FileSystemLocator implements LocatorInterface
             return $this->generateAbsolutePath($this->roots[$match['name']], $match['path']);
         }
 
-        throw new NotLoadableException(sprintf('Invalid root placeholder "@%s" for path "%s"',
-            $match['name'], $match['path']));
+        throw new NotLoadableException(sprintf('Invalid root placeholder "@%s" for path "%s"', $match['name'], $match['path']));
     }
 
     /**
-     * @param string $path
-     * @param bool   $allowUnresolvable
-     *
      * @throws InvalidArgumentException
-     *
-     * @return string|null
      */
     private function sanitizeRootPath(string $path, bool $allowUnresolvable): ?string
     {
@@ -125,11 +97,7 @@ class FileSystemLocator implements LocatorInterface
     }
 
     /**
-     * @param string $path
-     *
      * @throws NotLoadableException
-     *
-     * @return string
      */
     private function sanitizeAbsolutePath(string $path): string
     {
@@ -138,9 +106,7 @@ class FileSystemLocator implements LocatorInterface
         });
 
         if (0 === \count($roots)) {
-            throw new NotLoadableException(
-                sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"', $path, implode(':', $this->roots))
-            );
+            throw new NotLoadableException(sprintf('Source image invalid "%s" as it is outside of the defined root path(s) "%s"', $path, implode(':', $this->roots)));
         }
 
         if (!is_readable($path)) {

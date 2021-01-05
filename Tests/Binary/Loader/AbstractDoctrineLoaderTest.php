@@ -32,7 +32,7 @@ class AbstractDoctrineLoaderTest extends TestCase
      */
     private $loader;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->om = $this
             ->getMockBuilder(ObjectManager::class)

@@ -13,12 +13,6 @@ namespace Liip\ImagineBundle\Binary\Locator;
 
 class FileSystemInsecureLocator extends FileSystemLocator
 {
-    /**
-     * @param string $root
-     * @param string $path
-     *
-     * @return string|null
-     */
     protected function generateAbsolutePath(string $root, string $path): ?string
     {
         if (false === mb_strpos($path, '..'.DIRECTORY_SEPARATOR) &&

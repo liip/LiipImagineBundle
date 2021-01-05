@@ -33,8 +33,7 @@ class ProxyResolver implements ResolverInterface
     protected $hosts = [];
 
     /**
-     * @param ResolverInterface $resolver
-     * @param string[]          $hosts
+     * @param string[] $hosts
      */
     public function __construct(ResolverInterface $resolver, array $hosts)
     {

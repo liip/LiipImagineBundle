@@ -39,7 +39,7 @@ class WebPathResolverTest extends TestCase
      */
     private $existingFile;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filesystem = new Filesystem();
         $this->basePath = sys_get_temp_dir().'/aWebRoot';
@@ -48,7 +48,7 @@ class WebPathResolverTest extends TestCase
         $this->filesystem->touch($this->existingFile);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->filesystem->remove($this->basePath);
     }
@@ -496,14 +496,6 @@ class WebPathResolverTest extends TestCase
     }
 
     /**
-     * @return MockObject|Filesystem
-     */
-    protected function createFilesystemMock()
-    {
-        return $this->getMockBuilder(Filesystem::class)->getMock();
-    }
-
-    /**
      * Method was added because it is deprecated in PHPUnit 8
      */
     public static function assertAttributeSame($expected, string $actualAttributeName, $actualClassOrObject, string $message = ''): void
@@ -515,5 +507,13 @@ class WebPathResolverTest extends TestCase
         $attribute->setAccessible(false);
 
         self::assertSame($expected, $actual, $message);
+    }
+
+    /**
+     * @return MockObject|Filesystem
+     */
+    protected function createFilesystemMock()
+    {
+        return $this->getMockBuilder(Filesystem::class)->getMock();
     }
 }

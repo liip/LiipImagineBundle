@@ -21,10 +21,8 @@ final class ControllerConfig
 
     public function __construct(int $redirectResponseCode)
     {
-        if (!in_array($redirectResponseCode, self::REDIRECT_RESPONSE_CODES, true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).', $redirectResponseCode
-            ));
+        if (!\in_array($redirectResponseCode, self::REDIRECT_RESPONSE_CODES, true)) {
+            throw new InvalidArgumentException(sprintf('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).', $redirectResponseCode));
         }
 
         $this->redirectResponseCode = $redirectResponseCode;

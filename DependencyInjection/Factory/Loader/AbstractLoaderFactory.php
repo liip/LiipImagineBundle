@@ -31,9 +31,7 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
     }
 
     /**
-     * @param string           $name
-     * @param Definition       $definition
-     * @param ContainerBuilder $container
+     * @param string $name
      *
      * @return string
      */

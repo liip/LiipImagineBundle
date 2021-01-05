@@ -236,26 +236,16 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    /**
-     * @param ArrayNodeDefinition $resolversPrototypeNode
-     */
     private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
         $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode);
     }
 
-    /**
-     * @param ArrayNodeDefinition $resolversPrototypeNode
-     */
     private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
         $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode);
     }
 
-    /**
-     * @param array               $factories
-     * @param ArrayNodeDefinition $definition
-     */
     private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition)
     {
         foreach ($factories as $f) {

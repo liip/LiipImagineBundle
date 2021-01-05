@@ -29,8 +29,6 @@ final class FilterPathContainer
     private $options;
 
     /**
-     * @param string  $source
-     * @param string  $target
      * @param mixed[] $options
      */
     public function __construct(string $source, string $target = '', array $options = [])
@@ -40,11 +38,6 @@ final class FilterPathContainer
         $this->options = $options;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return self
-     */
     public function createWebp(array $options): self
     {
         return new self(
@@ -56,17 +49,11 @@ final class FilterPathContainer
         );
     }
 
-    /**
-     * @return string
-     */
     public function getSource(): string
     {
         return $this->source;
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): string
     {
         return $this->target;

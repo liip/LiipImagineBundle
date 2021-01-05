@@ -1,0 +1,22 @@
+name: PHP-CS-Fixer
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+          tools: cs2pr, php-cs-fixer
+
+      - name: Run PHP-CS-Fixer
+        run: php-cs-fixer fix --dry-run --format checkstyle | cs2pr
