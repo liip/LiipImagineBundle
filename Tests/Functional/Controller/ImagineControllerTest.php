@@ -285,7 +285,6 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
             'anImageContentWebP'
         );
 
-
         // we are calling url with encoded file name as it will be called by browser
         $urlEncodedFileName = 'foo+bar';
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
