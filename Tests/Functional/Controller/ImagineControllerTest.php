@@ -280,6 +280,11 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
             $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg',
             'anImageContent'
         );
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp',
+            'anImageContentWebP'
+        );
+
 
         // we are calling url with encoded file name as it will be called by browser
         $urlEncodedFileName = 'foo+bar';
