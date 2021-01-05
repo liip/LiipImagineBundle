@@ -1,4 +1,4 @@
-name: LiipImagineBundle CI
+name: PHPUnit
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   phpunit:
-    name: "PHPUnit (PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }})"
+    name: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
