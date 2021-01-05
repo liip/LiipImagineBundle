@@ -172,6 +172,6 @@ into the upstream repository is the same.
 [composer-dl]:   https://getcomposer.org/download/
 [coc-14]:        https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
 [coc-md]:        CODE_OF_CONDUCT.md
-[docs]:          https://symfony.com/doc/master/bundles/LiipImagineBundle/index.html
+[docs]:          https://symfony.com/doc/current/bundles/LiipImagineBundle/index.html
 [mongo-php]:     https://github.com/alcaeus/mongo-php-adapter
 [monolog]:       https://github.com/Seldaek/monolog
