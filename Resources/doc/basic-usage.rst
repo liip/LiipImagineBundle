@@ -266,7 +266,7 @@ otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg
 
 .. note::
 
-    Using an unsecured connection (HTTPS) on your site can cause problems with
+    Using an unsecured connection (non HTTPS) on your site can cause problems with
     caching the resolved paths for users, which can lead to the fact that users
     whose browser does not support WebP will serve a picture in WebP format.
     You can fix this problem by changing the redirect code from 301 *(Moved
