@@ -1,7 +1,6 @@
 * text=auto
 /.github/ export-ignore
 /Tests/ export-ignore
-/.coveralls.yml export-ignore
 /.gitattributes export-ignore
 /.github_changelog_generator export-ignore
 /.php_cs.dist export-ignore
