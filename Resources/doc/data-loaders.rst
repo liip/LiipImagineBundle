@@ -128,4 +128,4 @@ Alternatively, you can only set the custom data loader for just a specific filte
 
 
 .. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
-.. _`Doctrine PHPCR-ODM`: http://symfony.com/doc/master/cmf/bundles/media.html#liipimagine
+.. _`Doctrine PHPCR-ODM`: http://symfony.com/doc/current/cmf/bundles/media.html#liipimagine
