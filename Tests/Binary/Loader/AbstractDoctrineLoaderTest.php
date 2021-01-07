@@ -38,10 +38,8 @@ class AbstractDoctrineLoaderTest extends TestCase
     {
         if (interface_exists(LegacyObjectManager::class)) {
             $omClassName = LegacyObjectManager::class;
-        } elseif (interface_exists(ObjectManager::class)) {
-            $omClassName = ObjectManager::class;
         } else {
-            $this->markTestSkipped('Requires the doctrine/orm package.');
+            $omClassName = ObjectManager::class;
         }
 
         $this->om = $this
