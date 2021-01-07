@@ -29,7 +29,7 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
 
     /**
      * @param ObjectManager|LegacyObjectManager $manager
-     * @param string        $class
+     * @param string                            $class
      */
     public function __construct($manager, $class = null)
     {
