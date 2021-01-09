@@ -126,6 +126,7 @@
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
+            <argument>%liip_imagine.webp.generate%</argument>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="Liip\ImagineBundle\Imagine\Filter\FilterConfiguration">
