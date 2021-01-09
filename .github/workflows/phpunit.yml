@@ -55,7 +55,6 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: ${{ steps.coverage.outputs.driver }}
           extensions: gd, imagick
-          ini-values: disable_functions=imagewebp
 
       - name: Require Symfony version
         if: matrix.symfony != '*'
