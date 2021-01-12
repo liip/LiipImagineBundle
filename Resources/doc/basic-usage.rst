@@ -114,6 +114,11 @@ when the first page request is served. The transformed image is then cached
 for subsequent requests. The final cached image path would be similar to
 ``/media/cache/my_thumb/relative/path/to/image.jpg``.
 
+.. tip::
+
+    You can :doc:`prepare the cache in advance <commands>` and use the ``imagine_filter_cache`` filter to always
+    return a link to the final cached image.
+
 .. note::
 
     Using the ``dev`` environment you might find that images are not properly

@@ -41,7 +41,56 @@ abstract class AbstractFilterTest extends AbstractTest
             ->with($expectedInputPath, $expectedFilter)
             ->willReturn($expectedCachePath);
 
-        $this->assertSame($expectedCachePath, $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter));
+        $actualPath = $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter);
+
+        $this->assertSame($expectedCachePath, $actualPath);
+    }
+
+    public function testInvokeFilterCacheMethod(): void
+    {
+        $expectedFilter = 'thumbnail';
+        $expectedInputPath = 'thePathToTheImage';
+        $expectedCachePath = 'thePathToTheCachedImage';
+
+        $manager = $this->createCacheManagerMock();
+        $manager
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expectedInputPath, $expectedFilter)
+            ->willReturn($expectedCachePath);
+
+        $actualPath = $this->createTemplatingMock($manager)->filterCache($expectedInputPath, $expectedFilter);
+
+        $this->assertSame($expectedCachePath, $actualPath);
+    }
+
+    public function testInvokeFilterCacheMethodWithRuntimeConfig(): void
+    {
+        $expectedFilter = 'thumbnail';
+        $expectedInputPath = 'thePathToTheImage';
+        $expectedCachePath = 'thePathToTheCachedImage';
+        $expectedRuntimeConfig = [
+            'thumbnail' => [
+                'size' => [100, 100],
+            ],
+        ];
+        $expectedRuntimeConfigPath = 'thePathToTheImageWithRuntimeConfig';
+
+        $manager = $this->createCacheManagerMock();
+        $manager
+            ->expects($this->once())
+            ->method('getRuntimePath')
+            ->with($expectedInputPath, $expectedRuntimeConfig)
+            ->willReturn($expectedRuntimeConfigPath);
+        $manager
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expectedRuntimeConfigPath, $expectedFilter)
+            ->willReturn($expectedCachePath);
+
+        $actualPath = $this->createTemplatingMock($manager)->filterCache($expectedInputPath, $expectedFilter, $expectedRuntimeConfig);
+
+        $this->assertSame($expectedCachePath, $actualPath);
     }
 
     /**
