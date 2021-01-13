@@ -47,7 +47,7 @@ class FilterService
     private $webpGenerate;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $webpOptions;
 

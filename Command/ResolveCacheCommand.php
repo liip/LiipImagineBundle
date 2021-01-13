@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Command;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Service\FilterPathContainer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ResolveCacheCommand extends Command
 {
     use CacheCommandTrait;
+
     protected static $defaultName = 'liip:imagine:cache:resolve';
 
     /**
@@ -30,13 +32,30 @@ class ResolveCacheCommand extends Command
      */
     private $dataManager;
 
-    public function __construct(DataManager $dataManager, CacheManager $cacheManager, FilterManager $filterManager)
-    {
+    /**
+     * @var bool
+     */
+    private $webpGenerate;
+
+    /**
+     * @var mixed[]
+     */
+    private $webpOptions;
+
+    public function __construct(
+        DataManager $dataManager,
+        CacheManager $cacheManager,
+        FilterManager $filterManager,
+        bool $webpGenerate,
+        array $webpOptions
+    ) {
         parent::__construct();
 
         $this->dataManager = $dataManager;
         $this->cacheManager = $cacheManager;
         $this->filterManager = $filterManager;
+        $this->webpGenerate = $webpGenerate;
+        $this->webpOptions = $webpOptions;
     }
 
     protected function configure(): void
@@ -110,11 +129,23 @@ EOF
         $this->io->group($image, $filter, 'blue');
 
         try {
-            if ($forced || !$this->cacheManager->isStored($image, $filter)) {
-                $this->cacheManager->store($this->filterManager->applyFilter($this->dataManager->find($filter, $image), $filter), $image, $filter);
-                $this->io->status('resolved', 'green');
-            } else {
-                $this->io->status('cached', 'white');
+            $basePathContainer = new FilterPathContainer($image);
+            $filterPathContainers = [$basePathContainer];
+
+            if ($this->webpGenerate) {
+                $filterPathContainers[] = $basePathContainer->createWebp($this->webpOptions);
+            }
+
+            foreach ($filterPathContainers as $filterPathContainer) {
+                if ($forced || !$this->cacheManager->isStored($filterPathContainer->getTarget(), $filter)) {
+                    $binary = $this->dataManager->find($filter, $filterPathContainer->getSource());
+                    $filteredBinary = $this->filterManager->applyFilter($binary, $filter, $filterPathContainer->getOptions());
+                    $this->cacheManager->store($filteredBinary, $filterPathContainer->getTarget(), $filter);
+
+                    $this->io->status('resolved', 'green');
+                } else {
+                    $this->io->status('cached', 'white');
+                }
             }
 
             $this->io->line(sprintf(' %s', $this->cacheManager->resolve($image, $filter)));
