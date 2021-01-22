@@ -17,6 +17,7 @@ use Imagine\Image\Metadata\MetadataBag;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Cache\CacheWarmer;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
@@ -120,6 +121,14 @@ abstract class AbstractTest extends TestCase
     protected function createFilterConfigurationMock()
     {
         return $this->createObjectMock(FilterConfiguration::class);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|CacheWarmer
+     */
+    protected function createCacheWarmerMock()
+    {
+        return $this->createObjectMock(CacheWarmer::class);
     }
 
     /**
