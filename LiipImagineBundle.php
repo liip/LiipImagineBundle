@@ -49,7 +49,7 @@ class LiipImagineBundle extends Bundle
         $container->addCompilerPass(new PostProcessorsCompilerPass());
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
-        $container->addCompilerPass(new CacheWarmersCompilerPass);
+        $container->addCompilerPass(new CacheWarmersCompilerPass());
 
         if (class_exists(AddTopicMetaPass::class)) {
             $container->addCompilerPass(AddTopicMetaPass::create()

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache;
 
 use Liip\ImagineBundle\Imagine\Cache\Warmer\WarmerInterface;
@@ -13,11 +22,10 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
  */
 class CacheWarmer
 {
-
     /**
      * @var WarmerInterface[]
      */
-    protected $warmers = array();
+    protected $warmers = [];
 
     /**
      * Chunk size to query warmer in one step
@@ -97,34 +105,34 @@ class CacheWarmer
 
     /**
      * @param bool       $force           If set to true, cache is warmed up for paths already stored in cached (regenerate thumbs)
-     * @param null|array $selectedWarmers An optional array of warmers to process, if null - all warmers will be processed
+     * @param array|null $selectedWarmers An optional array of warmers to process, if null - all warmers will be processed
+     *
+     * @throws \InvalidArgumentException
      *
      * @return void
-     * @throws \InvalidArgumentException
      */
     public function warm($force = false, $selectedWarmers = null)
     {
         $filtersByWarmer = $this->getFiltersByWarmers();
         if (!$filtersByWarmer) {
-            $this->log(sprintf('No warmes are configured - add some as `warmers` param in your filter sets'));
+            $this->log('No warmes are configured - add some as `warmers` param in your filter sets');
+
             return;
         }
 
         foreach ($filtersByWarmer as $warmerName => $filters) {
-            if (isset($selectedWarmers) && !empty($selectedWarmers) && !in_array($warmerName, $selectedWarmers)) {
+            if (isset($selectedWarmers) && !empty($selectedWarmers) && !in_array($warmerName, $selectedWarmers, true)) {
                 $this->log(
                     sprintf(
                         'Skipping warmer %s as it\'s not listed in selected warmers: [%s]',
                         $warmerName,
-                        join(', ', $selectedWarmers)
+                        implode(', ', $selectedWarmers)
                     )
                 );
                 continue;
             }
             if (!isset($this->warmers[$warmerName])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Could not find warmer "%s"', $warmerName
-                ));
+                throw new \InvalidArgumentException(sprintf('Could not find warmer "%s"', $warmerName));
             }
 
             $this->log(sprintf('Processing warmer "%s"', $warmerName));
@@ -153,9 +161,7 @@ class CacheWarmer
         foreach ($filtersByWarmer as $warmerName => $warmerFilters) {
             if (array_intersect($filters, $warmerFilters)) {
                 if (!isset($this->warmers[$warmerName])) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Could not find warmer "%s"', $warmerName
-                    ));
+                    throw new \InvalidArgumentException(sprintf('Could not find warmer "%s"', $warmerName));
                 }
                 $warmer = $this->warmers[$warmerName];
                 $warmer->clearWarmed($paths);
@@ -166,12 +172,12 @@ class CacheWarmer
     protected function getFiltersByWarmers()
     {
         $all = $this->filterManager->getFilterConfiguration()->all();
-        $warmers = array();
+        $warmers = [];
         foreach ($all as $filterSet => $config) {
             if (isset($config['warmers']) && $config['warmers']) {
                 foreach ($config['warmers'] as $warmer) {
                     if (!isset($warmers[$warmer])) {
-                        $warmers[$warmer] = array($filterSet);
+                        $warmers[$warmer] = [$filterSet];
                     } else {
                         $warmers[$warmer][] = $filterSet;
                     }
@@ -194,14 +200,14 @@ class CacheWarmer
         $successfulWarmedPaths = [];
         foreach ($paths as $pathData) {
             $aPath = $pathData['path'];
-            $binaries = array();
+            $binaries = [];
             foreach ($filters as $filter) {
                 $this->log(sprintf('Warming up path "%s" for filter "%s"', $aPath, $filter));
 
                 $isStored = $this->cacheManager->isStored($aPath, $filter);
                 if ($force || !$isStored) {
                     // this is to avoid loading binary with the same loader for multiple filters
-                    $loader   = $this->dataManager->getLoader($filter);
+                    $loader = $this->dataManager->getLoader($filter);
                     $isStored = false;
 
                     try {

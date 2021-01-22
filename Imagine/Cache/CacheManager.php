@@ -55,14 +55,14 @@ class CacheManager
     protected $defaultResolver;
 
     /**
-     * @var bool
-     */
-    private $webpGenerate;
-
-    /**
      * @var CacheWarmer
      */
     protected $cacheWarmer;
+
+    /**
+     * @var bool
+     */
+    private $webpGenerate;
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
