@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class ResolversCompilerPassTest extends AbstractCompilerPassTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         [$d, $m] = $this->getResolversCompilerPassContainerDefinitions();
 
@@ -32,7 +32,7 @@ class ResolversCompilerPassTest extends AbstractCompilerPassTestCase
         $this->assertDefinitionMethodCallCount(1, $m);
     }
 
-    public function testProcessLogging()
+    public function testProcessLogging(): void
     {
         $this->assertContainerLogMethodCalledForCompilerPass(
             new ResolversCompilerPass(),

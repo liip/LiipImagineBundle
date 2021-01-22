@@ -126,6 +126,7 @@
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
+            <argument>%liip_imagine.webp.generate%</argument>
             <call method="setCacheWarmer">
                 <argument type="service" id="liip_imagine.cache.warmer"/>
             </call>
@@ -139,7 +140,15 @@
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument>%liip_imagine.webp.generate%</argument>
+            <argument>%liip_imagine.webp.options%</argument>
             <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <!-- Config -->
+
+        <service id="liip_imagine.controller.config" class="Liip\ImagineBundle\Config\Controller\ControllerConfig" public="false">
+            <argument><!-- will be injected by LiipImagineExtension --></argument>
         </service>
 
         <!-- Controller -->
@@ -148,6 +157,7 @@
             <argument type="service" id="liip_imagine.service.filter" />
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.cache.signer" />
+            <argument type="service" id="liip_imagine.controller.config" />
         </service>
 
         <service id="liip_imagine.controller" alias="Liip\ImagineBundle\Controller\ImagineController" public="true" />
@@ -183,11 +193,6 @@
             <argument type="service" id="liip_imagine.cache.manager" />
         </service>
 
-        <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
-            <tag name="templating.helper" alias="imagine" />
-            <argument type="service" id="liip_imagine.cache.manager" />
-        </service>
-
         <!-- Filter loaders -->
 
         <service id="liip_imagine.filter.loader.relative_resize" class="Liip\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader">
@@ -210,16 +215,30 @@
             <tag name="liip_imagine.filter.loader" loader="grayscale" />
         </service>
 
+        <service id="liip_imagine.filter.loader.paste_image" class="Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="paste_image" />
+            <argument type="service" id="liip_imagine" />
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <!-- deprecated -->
+        <!-- not officially deprecated because they are still injected and appear "used" -->
         <service id="liip_imagine.filter.loader.paste" class="Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader">
             <tag name="liip_imagine.filter.loader" loader="paste" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.root_dir%</argument>
         </service>
-
         <service id="liip_imagine.filter.loader.watermark" class="Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader">
             <tag name="liip_imagine.filter.loader" loader="watermark" />
             <argument type="service" id="liip_imagine" />
             <argument>%kernel.root_dir%</argument>
+        </service>
+        <!-- end deprecated -->
+
+        <service id="liip_imagine.filter.loader.watermark_image" class="Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader">
+            <tag name="liip_imagine.filter.loader" loader="watermark_image" />
+            <argument type="service" id="liip_imagine" />
+            <argument>%kernel.project_dir%</argument>
         </service>
 
         <service id="liip_imagine.filter.loader.background" class="Liip\ImagineBundle\Imagine\Filter\Loader\BackgroundFilterLoader">
@@ -259,6 +278,15 @@
             <tag name="liip_imagine.filter.loader" loader="interlace" />
         </service>
 
+        <service id="liip_imagine.filter.loader.resample" class="Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader" public="true">
+            <argument type="service" id="liip_imagine" />
+            <tag name="liip_imagine.filter.loader" loader="resample" />
+        </service>
+
+        <service id="liip_imagine.filter.loader.fixed" class="Liip\ImagineBundle\Imagine\Filter\Loader\FixedFilterLoader" public="true">
+            <tag name="liip_imagine.filter.loader" loader="fixed" />
+        </service>
+
         <!-- Data loaders -->
 
         <service id="liip_imagine.binary.loader.prototype.filesystem" class="Liip\ImagineBundle\Binary\Loader\FileSystemLoader">
@@ -285,10 +313,12 @@
 
         <service id="liip_imagine.binary.locator.filesystem" class="Liip\ImagineBundle\Binary\Locator\FileSystemLocator" public="false" shared="false">
             <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>
 
         <service id="liip_imagine.binary.locator.filesystem_insecure" class="Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator" public="false" shared="false">
+            <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <argument><!-- will be injected by FilesystemLoaderFactory --></argument>
             <tag name="liip_imagine.binary.locator" shared="false" />
         </service>

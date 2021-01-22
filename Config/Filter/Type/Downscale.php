@@ -31,8 +31,7 @@ final class Downscale extends FilterAbstract
     private $by;
 
     /**
-     * @param Size|null  $max
-     * @param float|null $by  sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
+     * @param float|null $by sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
     public function __construct(Size $max = null, float $by = null)
     {

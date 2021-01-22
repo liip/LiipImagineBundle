@@ -19,13 +19,13 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
  */
 class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
 {
-    public function testLoadsOnSymbolicLinks()
+    public function testLoadsOnSymbolicLinks(): void
     {
         $loader = $this->getFileSystemLocator($root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'));
         $this->assertStringStartsWith(realpath($root), $loader->locate('root-01/file.ext'));
     }
 
-    public function testThrowsIfPathHasDoublePeriodBackStep()
+    public function testThrowsIfPathHasDoublePeriodBackStep(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessage('Source image not resolvable');
@@ -33,7 +33,7 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         $this->getFileSystemLocator(realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'))->locate('/../root-01/file.ext');
     }
 
-    public function testRootPlaceholders()
+    public function testRootPlaceholders(): void
     {
         $root01 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
         $root02 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02');
@@ -50,7 +50,7 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
     /**
      * @return array[]
      */
-    public static function provideLoadCases()
+    public static function provideLoadCases(): array
     {
         $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
 
@@ -66,7 +66,7 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
     /**
      * @return array[]
      */
-    public static function provideMultipleRootLoadCases()
+    public static function provideMultipleRootLoadCases(): array
     {
         $prepend = [
             realpath(__DIR__.'/../'),
@@ -75,16 +75,14 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         ];
 
         return array_map(function ($params) use ($prepend) {
-            return [[$prepend[mt_rand(0, count($prepend) - 1)], $params[0]], $params[1]];
+            return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }
 
     /**
      * @param string|string[] $paths
-     *
-     * @return LocatorInterface
      */
-    protected function getFileSystemLocator($paths)
+    protected function getFileSystemLocator($paths): LocatorInterface
     {
         return new FileSystemInsecureLocator((array) $paths);
     }

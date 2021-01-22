@@ -26,7 +26,7 @@ class CacheResolverTest extends AbstractTest
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists(ArrayCache::class)) {
             $this->markTestSkipped('Requires the doctrine/cache package.');
@@ -35,14 +35,14 @@ class CacheResolverTest extends AbstractTest
         parent::setUp();
     }
 
-    public function testResolveIsSavedToCache()
+    public function testResolveIsSavedToCache(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
 
         $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
@@ -53,14 +53,14 @@ class CacheResolverTest extends AbstractTest
         $this->assertSame($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
     }
 
-    public function testNotCallInternalResolverIfCachedOnIsStored()
+    public function testNotCallInternalResolverIfCachedOnIsStored(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
         $resolver
             ->expects($this->never())
             ->method('isStored');
@@ -74,13 +74,13 @@ class CacheResolverTest extends AbstractTest
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
     }
 
-    public function testCallInternalResolverIfNotCachedOnIsStored()
+    public function testCallInternalResolverIfNotCachedOnIsStored(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->exactly(2))
             ->method('isStored')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $cacheResolver = new CacheResolver(new ArrayCache(), $resolver);
 
@@ -88,7 +88,7 @@ class CacheResolverTest extends AbstractTest
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
     }
 
-    public function testStoreIsForwardedToResolver()
+    public function testStoreIsForwardedToResolver(): void
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpg');
 
@@ -105,18 +105,18 @@ class CacheResolverTest extends AbstractTest
         $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
     }
 
-    public function testSavesToCacheIfInternalResolverReturnUrlOnResolve()
+    public function testSavesToCacheIfInternalResolverReturnUrlOnResolve(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue('/the/expected/browser'));
+            ->willReturn('/the/expected/browser');
 
         $cache = $this->getMockBuilder(Cache::class)->getMock();
         $cache
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('save');
 
         $cacheResolver = new CacheResolver($cache, $resolver);
@@ -124,14 +124,14 @@ class CacheResolverTest extends AbstractTest
         $cacheResolver->resolve($this->path, $this->filter);
     }
 
-    public function testRemoveSinglePathCacheOnRemove()
+    public function testRemoveSinglePathCacheOnRemove(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->once())
             ->method('resolve')
             ->with($this->path, $this->filter)
-            ->will($this->returnValue($this->webPath));
+            ->willReturn($this->webPath);
         $resolver
             ->expects($this->once())
             ->method('remove');
@@ -154,13 +154,13 @@ class CacheResolverTest extends AbstractTest
         $this->assertCount(0, $this->getCacheEntries($cache));
     }
 
-    public function testRemoveAllFilterCacheOnRemove()
+    public function testRemoveAllFilterCacheOnRemove(): void
     {
         $resolver = $this->createCacheResolverInterfaceMock();
         $resolver
             ->expects($this->exactly(4))
             ->method('resolve')
-            ->will($this->returnValue('aCachePath'));
+            ->willReturn('aCachePath');
         $resolver
             ->expects($this->once())
             ->method('remove');
@@ -191,14 +191,15 @@ class CacheResolverTest extends AbstractTest
      * version, it may or may not be there depending on doctrine-cache
      * version. There's no point in checking it anyway since it's a detail
      * of doctrine cache implementation.
-     *
-     * @param ArrayCache $cache
-     *
-     * @return array
      */
-    private function getCacheEntries(ArrayCache $cache)
+    private function getCacheEntries(ArrayCache $cache): array
     {
-        $cacheEntries = $this->readAttribute($cache, 'data');
+        $reflector = new \ReflectionObject($cache);
+        $attribute = $reflector->getProperty('data');
+        $attribute->setAccessible(true);
+        $cacheEntries = $attribute->getValue($cache);
+        $attribute->setAccessible(false);
+
         unset($cacheEntries['DoctrineNamespaceCacheKey[]']);
 
         return $cacheEntries;

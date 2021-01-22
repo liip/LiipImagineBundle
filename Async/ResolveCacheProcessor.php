@@ -16,13 +16,13 @@ use Enqueue\Client\ProducerInterface;
 use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
 use Enqueue\Util\JSON;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrProcessor;
+use Interop\Queue\Context;
+use Interop\Queue\Message;
+use Interop\Queue\Processor;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
 
-final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInterface, QueueSubscriberInterface
+final class ResolveCacheProcessor implements Processor, CommandSubscriberInterface, QueueSubscriberInterface
 {
     /**
      * @var FilterManager
@@ -39,11 +39,6 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
      */
     private $producer;
 
-    /**
-     * @param FilterManager     $filterManager
-     * @param FilterService     $filterService
-     * @param ProducerInterface $producer
-     */
     public function __construct(
         FilterManager $filterManager,
         FilterService $filterService,
@@ -54,10 +49,7 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
         $this->producer = $producer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function process(PsrMessage $psrMessage, PsrContext $psrContext)
+    public function process(Message $psrMessage, Context $psrContext)
     {
         try {
             $message = ResolveCache::jsonDeserialize($psrMessage->getBody());
@@ -87,22 +79,16 @@ final class ResolveCacheProcessor implements PsrProcessor, CommandSubscriberInte
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedCommand(): array
     {
         return [
-            'processorName' => Commands::RESOLVE_CACHE,
-            'queueName' => Commands::RESOLVE_CACHE,
-            'queueNameHardcoded' => true,
+            'command' => Commands::RESOLVE_CACHE,
+            'queue' => Commands::RESOLVE_CACHE,
+            'prefix_queue' => false,
             'exclusive' => true,
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedQueues(): array
     {
         return [Commands::RESOLVE_CACHE];

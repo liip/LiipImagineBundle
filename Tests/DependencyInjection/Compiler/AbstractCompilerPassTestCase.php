@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -21,12 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class AbstractCompilerPassTestCase extends AbstractTest
 {
-    /**
-     * @param array $tags
-     *
-     * @return Definition
-     */
-    protected function createDefinition(array $tags = [])
+    protected function createDefinition(array $tags = []): Definition
     {
         $definition = new Definition();
 
@@ -39,10 +35,8 @@ class AbstractCompilerPassTestCase extends AbstractTest
 
     /**
      * @param Definition[] $definitions
-     *
-     * @return ContainerBuilder
      */
-    protected function createContainerBuilder(array $definitions = [])
+    protected function createContainerBuilder(array $definitions = []): ContainerBuilder
     {
         $container = new ContainerBuilder();
 
@@ -57,7 +51,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param string[]     $methods
      * @param Definition[] $definitions
      *
-     * @return ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ContainerBuilder|MockObject
      */
     protected function createContainerBuilderMock(array $methods = [], array $definitions = [])
     {
@@ -74,10 +68,9 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $container
-     * @param mixed[]                                  ...$expectedArguments
+     * @param mixed[] ...$expectedArguments
      */
-    protected function expectContainerLogMethodCalledOnce(\PHPUnit_Framework_MockObject_MockObject $container, ...$expectedArguments): void
+    protected function expectContainerLogMethodCalledOnce(MockObject $container, ...$expectedArguments): void
     {
         $expectation = $container
             ->expects($this->once())
@@ -90,27 +83,17 @@ class AbstractCompilerPassTestCase extends AbstractTest
         }
     }
 
-    /**
-     * @param Definition  $definition
-     * @param string|null $message
-     */
-    protected function assertDefinitionMethodCallsNone(Definition $definition, $message = null)
+    protected function assertDefinitionMethodCallsNone(Definition $definition, string $message = ''): void
     {
         $this->assertDefinitionMethodCallCount(0, $definition, $message);
     }
 
-    /**
-     * @param int         $expect
-     * @param Definition  $definition
-     * @param string|null $message
-     */
-    protected function assertDefinitionMethodCallCount($expect, Definition $definition, $message = null)
+    protected function assertDefinitionMethodCallCount(int $expect, Definition $definition, string $message = ''): void
     {
         $this->assertCount($expect, $definition->getMethodCalls(), $message);
     }
 
     /**
-     * @param AbstractCompilerPass $pass
      * @param Definition[]|array[] $definitions
      */
     protected function assertContainerLogMethodCalledForCompilerPass(AbstractCompilerPass $pass, array $definitions): void
@@ -122,10 +105,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
     }
 
     /**
-     * @param string $definition
-     * @param string $manager
-     * @param array  $tags
-     *
      * @return Definition[]|array[]
      */
     protected function getCompilerPassContainerDefinitions(string $definition, string $manager, array $tags): array

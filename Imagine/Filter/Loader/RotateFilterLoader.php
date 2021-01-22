@@ -24,9 +24,6 @@ class RotateFilterLoader implements LoaderInterface
     /**
      * Loads and applies a filter on the given image.
      *
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @return ManipulatorInterface
      */
     public function load(ImageInterface $image, array $options = [])

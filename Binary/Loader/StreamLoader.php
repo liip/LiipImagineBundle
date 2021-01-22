@@ -39,7 +39,7 @@ class StreamLoader implements LoaderInterface
     {
         $this->wrapperPrefix = $wrapperPrefix;
 
-        if ($context && !is_resource($context)) {
+        if ($context && !\is_resource($context)) {
             throw new \InvalidArgumentException('The given context is no valid resource.');
         }
 
@@ -60,7 +60,7 @@ class StreamLoader implements LoaderInterface
          * The error suppression is solely to determine whether the file exists.
          * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
          */
-        if (($this->context && !$resource = @fopen($name, 'r', null, $this->context)) || !$resource = @fopen($name, 'r')) {
+        if (($this->context && !$resource = @fopen($name, 'rb', null, $this->context)) || !$resource = @fopen($name, 'rb')) {
             throw new NotLoadableException(sprintf('Source image %s not found.', $name));
         }
 

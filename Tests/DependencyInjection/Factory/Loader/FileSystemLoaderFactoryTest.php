@@ -26,30 +26,31 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class FileSystemLoaderFactoryTest extends FactoryTestCase
 {
-    public function testImplementsLoaderFactoryInterface()
+    public function testImplementsLoaderFactoryInterface(): void
     {
         $this->assertInstanceOf(LoaderFactoryInterface::class, new FileSystemLoaderFactory());
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $this->assertInstanceOf(FileSystemLoaderFactory::class, new FileSystemLoaderFactory());
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $loader = new FileSystemLoaderFactory();
 
         $this->assertSame('filesystem', $loader->getName());
     }
 
-    public function testCreateLoaderDefinitionOnCreate()
+    public function testCreateLoaderDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -66,9 +67,37 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
 
         $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(2)->getArgument(0));
+        $this->assertFalse($loaderDefinition->getArgument(2)->getArgument(1));
     }
 
-    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata()
+    public function testCreateLoaderDefinitionWithUnresolvableRoots(): void
+    {
+        $container = new ContainerBuilder();
+
+        $loader = new FileSystemLoaderFactory();
+        $loader->create($container, 'the_loader_name', [
+            'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => true,
+            'locator' => 'filesystem',
+            'bundle_resources' => [
+                'enabled' => false,
+                'access_control_type' => 'blacklist',
+                'access_control_list' => [],
+            ],
+        ]);
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.binary.loader.the_loader_name'));
+
+        $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
+
+        $this->assertInstanceOfChildDefinition($loaderDefinition);
+        $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
+
+        $this->assertSame(['theDataRoot'], $loaderDefinition->getArgument(2)->getArgument(0));
+        $this->assertTrue($loaderDefinition->getArgument(2)->getArgument(1));
+    }
+
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadata(): void
     {
         $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
@@ -86,6 +115,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -103,7 +133,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
-    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting()
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndBlacklisting(): void
     {
         $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
@@ -121,6 +151,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -139,7 +170,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
-    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting()
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingMetadataAndWhitelisting(): void
     {
         $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
@@ -157,6 +188,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -175,7 +207,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
-    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj()
+    public function testCreateLoaderDefinitionOnCreateWithBundlesEnabledUsingNamedObj(): void
     {
         $fooBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/FooBundle');
         $barBundleRootPath = realpath(__DIR__.'/../../../Functional/Fixtures/BarBundle');
@@ -189,6 +221,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -206,13 +239,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expected, $container->getDefinition('liip_imagine.binary.loader.the_loader_name')->getArgument(2)->getArgument(0));
     }
 
-    public function testAbleToCreateTwoDistinctLoaders()
+    public function testAbleToCreateTwoDistinctLoaders(): void
     {
         $container = new ContainerBuilder();
 
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'first_loader', [
             'data_root' => ['firstLoaderDataroot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -221,6 +255,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
 
         $loader->create($container, 'second_loader', [
             'data_root' => ['secondLoaderDataroot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => false,
@@ -238,7 +273,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         );
     }
 
-    public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj()
+    public function testThrowsExceptionOnCreateWithBundlesEnabledUsingInvalidNamedObj(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unable to resolve bundle "ThisBundleDoesNotExistPleaseNoOneNameTheirObjectThisInThisScopeOrTheGlobalScopeIMeanAreYouInsane" while auto-registering bundle resource paths');
@@ -251,6 +286,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $loader = new FileSystemLoaderFactory();
         $loader->create($container, 'the_loader_name', [
             'data_root' => ['theDataRoot'],
+            'allow_unresolvable_data_roots' => false,
             'locator' => 'filesystem',
             'bundle_resources' => [
                 'enabled' => true,
@@ -258,12 +294,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         ]);
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedDataRoot = ['theDataRoot'];
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('filesystem', 'array');
+        $treeBuilder = new TreeBuilder('filesystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('filesystem');
 
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -278,12 +316,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('filesystem', 'array');
+        $treeBuilder = new TreeBuilder('filesystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('filesystem');
 
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -296,12 +336,14 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
-    public function testAddAsScalarExpectingArrayNormalizationOfConfiguration()
+    public function testAddAsScalarExpectingArrayNormalizationOfConfiguration(): void
     {
         $expectedDataRoot = [SymfonyFramework::getContainerResolvableRootWebPath()];
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('filesystem', 'array');
+        $treeBuilder = new TreeBuilder('filesystem');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('filesystem');
 
         $loader = new FileSystemLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -316,13 +358,7 @@ class FileSystemLoaderFactoryTest extends FactoryTestCase
         $this->assertSame($expectedDataRoot, $config['data_root']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

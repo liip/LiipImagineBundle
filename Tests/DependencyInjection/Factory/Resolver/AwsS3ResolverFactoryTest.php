@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
+use Aws\S3\S3Client;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -25,28 +26,28 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AwsS3ResolverFactoryTest extends TestCase
 {
-    public function testImplementsResolverFactoryInterface()
+    public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(AwsS3ResolverFactory::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = new AwsS3ResolverFactory();
 
         $this->assertInstanceOf(AwsS3ResolverFactory::class, $loader);
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $resolver = new AwsS3ResolverFactory();
 
         $this->assertSame('aws_s3', $resolver->getName());
     }
 
-    public function testCreateResolverDefinitionOnCreate()
+    public function testCreateResolverDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -77,7 +78,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame(['barKey' => 'barVal'], $resolverDefinition->getArgument(4));
     }
 
-    public function testCreateS3ClientDefinitionOnCreate()
+    public function testCreateS3ClientDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -96,11 +97,11 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.client'));
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertSame('Aws\S3\S3Client', $clientDefinition->getClass());
+        $this->assertSame(S3Client::class, $clientDefinition->getClass());
         $this->assertSame(['theClientConfigKey' => 'theClientConfigVal'], $clientDefinition->getArgument(0));
     }
 
-    public function testCreateS3ClientDefinitionWithFactoryOnCreate()
+    public function testCreateS3ClientDefinitionWithFactoryOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -117,10 +118,10 @@ class AwsS3ResolverFactoryTest extends TestCase
         ]);
 
         $clientDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.client');
-        $this->assertSame(['Aws\S3\S3Client', 'factory'], $clientDefinition->getFactory());
+        $this->assertSame([S3Client::class, 'factory'], $clientDefinition->getFactory());
     }
 
-    public function testWrapResolverWithProxyOnCreateWithoutCache()
+    public function testWrapResolverWithProxyOnCreateWithoutCache(): void
     {
         $container = new ContainerBuilder();
 
@@ -154,7 +155,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame(['foo'], $resolverDefinition->getArgument(1));
     }
 
-    public function testWrapResolverWithCacheOnCreateWithoutProxy()
+    public function testWrapResolverWithCacheOnCreateWithoutProxy(): void
     {
         $container = new ContainerBuilder();
 
@@ -189,7 +190,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
     }
 
-    public function testWrapResolverWithProxyAndCacheOnCreate()
+    public function testWrapResolverWithProxyAndCacheOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -232,7 +233,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
     }
 
-    public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate()
+    public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -264,7 +265,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame(['foo' => 'bar'], $cachedResolverDefinition->getArgument(1));
     }
 
-    public function testSetCachePrefixIfDefined()
+    public function testSetCachePrefixIfDefined(): void
     {
         $container = new ContainerBuilder();
 
@@ -291,13 +292,15 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame(['theCachePrefix'], $methodCalls[0][1]);
     }
 
-    public function testThrowBucketNotSetOnAddConfiguration()
+    public function testThrowBucketNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "bucket" at path "aws_s3" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -305,13 +308,15 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->processConfigTree($treeBuilder, []);
     }
 
-    public function testThrowClientConfigNotSetOnAddConfiguration()
+    public function testThrowClientConfigNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "client_config" at path "aws_s3" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -323,13 +328,15 @@ class AwsS3ResolverFactoryTest extends TestCase
         ]);
     }
 
-    public function testThrowClientConfigNotArrayOnAddConfiguration()
+    public function testThrowClientConfigNotArrayOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('Invalid type for path "aws_s3.client_config". Expected array, but got string');
+        $this->expectExceptionMessageRegExp('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -342,7 +349,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         ]);
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedClientConfig = [
             'theKey' => 'theClientConfigVal',
@@ -360,8 +367,10 @@ class AwsS3ResolverFactoryTest extends TestCase
         $expectedAcl = 'theAcl';
         $expectedCachePrefix = 'theCachePrefix';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -396,12 +405,14 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame($expectedCachePrefix, $config['cache_prefix']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $expectedAcl = 'public-read';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -423,7 +434,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertNull($config['cache_prefix']);
     }
 
-    public function testSupportAwsV3ClientConfig()
+    public function testSupportAwsV3ClientConfig(): void
     {
         $expectedClientConfig = [
             'credentials' => [
@@ -446,8 +457,10 @@ class AwsS3ResolverFactoryTest extends TestCase
         $expectedAcl = 'theAcl';
         $expectedCachePrefix = 'theCachePrefix';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('aws_s3', 'array');
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -482,13 +495,7 @@ class AwsS3ResolverFactoryTest extends TestCase
         $this->assertSame($expectedCachePrefix, $config['cache_prefix']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

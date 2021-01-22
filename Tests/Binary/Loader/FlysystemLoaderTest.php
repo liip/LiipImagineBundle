@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @requires PHP 5.4
@@ -27,7 +28,7 @@ class FlysystemLoaderTest extends AbstractTest
 {
     private $flyFilesystem;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -38,30 +39,39 @@ class FlysystemLoaderTest extends AbstractTest
         $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
     }
 
-    /**
-     * @return FlysystemLoader
-     */
-    public function getFlysystemLoader()
+    public function getFlysystemLoader(): FlysystemLoader
     {
-        return new FlysystemLoader(ExtensionGuesser::getInstance(), $this->flyFilesystem);
+        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
+
+        return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
     }
 
-    public function testShouldImplementLoaderInterface()
+    public function testShouldImplementLoaderInterface(): void
     {
         $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
     }
 
-    public function testReturnImageContentOnFind()
+    public function testThrowsIfConstructedWithWrongTypeArguments(): void
     {
-        $loader = $this->getFlysystemLoader();
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find('assets/cats.jpeg')->getContent()
+        new FlysystemLoader(
+            'foo',
+            $this->flyFilesystem
         );
     }
 
-    public function testThrowsIfInvalidPathGivenOnFind()
+    public function testReturnImageContentOnFind(): void
+    {
+        $loader = $this->getFlysystemLoader();
+
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find('assets/cats.jpeg')->getContent()
+        );
+    }
+
+    public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessageRegExp('{Source image .+ not found}');

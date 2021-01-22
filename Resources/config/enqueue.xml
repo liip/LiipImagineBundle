@@ -7,9 +7,10 @@
         <service id="liip_imagine.async.resolve_cache_processor" class="Liip\ImagineBundle\Async\ResolveCacheProcessor" public="true">
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.service.filter" />
-            <argument type="service" id="enqueue.producer" />
+            <argument type="service" id="Enqueue\Client\ProducerInterface" />
 
-            <tag name="enqueue.client.processor" />
+            <tag name="enqueue.command_subscriber" />
+            <tag name="enqueue.transport.processor" />
         </service>
     </services>
 </container>

@@ -22,7 +22,7 @@ class ResolveCache implements \JsonSerializable
     private $path;
 
     /**
-     * @var array|null|\string[]
+     * @var array|\string[]|null
      */
     private $filters;
 
@@ -32,9 +32,7 @@ class ResolveCache implements \JsonSerializable
     private $force;
 
     /**
-     * @param string        $path
      * @param string[]|null $filters
-     * @param bool          $force
      */
     public function __construct(string $path, array $filters = null, bool $force = false)
     {
@@ -43,25 +41,19 @@ class ResolveCache implements \JsonSerializable
         $this->force = $force;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
     /**
-     * @return null|\string[]
+     * @return \string[]|null
      */
     public function getFilters()
     {
         return $this->filters;
     }
 
-    /**
-     * @return bool
-     */
     public function isForce(): bool
     {
         return $this->force;
@@ -75,11 +67,6 @@ class ResolveCache implements \JsonSerializable
         return ['path' => $this->path, 'filters' => $this->filters, 'force' => $this->force];
     }
 
-    /**
-     * @param string $json
-     *
-     * @return self
-     */
     public static function jsonDeserialize(string $json): self
     {
         $data = array_replace(['path' => null, 'filters' => null, 'force' => false], JSON::decode($json));
@@ -88,7 +75,7 @@ class ResolveCache implements \JsonSerializable
             throw new LogicException('The message does not contain "path" but it is required.');
         }
 
-        if (!(null === $data['filters'] || is_array($data['filters']))) {
+        if (!(null === $data['filters'] || \is_array($data['filters']))) {
             throw new LogicException('The message filters could be either null or array.');
         }
 

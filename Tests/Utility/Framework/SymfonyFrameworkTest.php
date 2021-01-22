@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class SymfonyFrameworkTest extends TestCase
 {
-    public function testKernelComparisonForCurrentKernel()
+    public function testKernelComparisonForCurrentKernel(): void
     {
         $major = Kernel::MAJOR_VERSION;
         $minor = Kernel::MINOR_VERSION;
@@ -29,13 +29,13 @@ class SymfonyFrameworkTest extends TestCase
         $this->assertFalse(SymfonyFramework::isKernelLessThan($major, $minor));
     }
 
-    public function testIsKernelLessThan()
+    public function testIsKernelLessThan(): void
     {
         $this->assertTrue(SymfonyFramework::isKernelLessThan(100, 100, 100));
         $this->assertFalse(SymfonyFramework::isKernelLessThan(1, 1, 1));
     }
 
-    public function testGetContainerResolvableRootWebPath()
+    public function testGetContainerResolvableRootWebPath(): void
     {
         $path = SymfonyFramework::getContainerResolvableRootWebPath();
 

@@ -43,10 +43,7 @@ class CacheResolver implements ResolverInterface
      * * index_key
      *   The name of the index key being used to save a list of created cache keys regarding one image and filter pairing.
      *
-     * @param Cache             $cache
-     * @param ResolverInterface $cacheResolver
-     * @param array             $options
-     * @param OptionsResolver   $optionsResolver
+     * @param OptionsResolver $optionsResolver
      */
     public function __construct(Cache $cache, ResolverInterface $cacheResolver, array $options = [], OptionsResolver $optionsResolver = null)
     {
@@ -212,7 +209,7 @@ class CacheResolver implements ResolverInterface
         if ($this->cache->contains($indexKey)) {
             $index = (array) $this->cache->fetch($indexKey);
 
-            if (!in_array($cacheKey, $index, true)) {
+            if (!\in_array($cacheKey, $index, true)) {
                 $index[] = $cacheKey;
             }
         } else {
@@ -236,7 +233,7 @@ class CacheResolver implements ResolverInterface
     {
         $resolver->setDefaults([
             'global_prefix' => 'liip_imagine.resolver_cache',
-            'prefix' => get_class($this->resolver),
+            'prefix' => \get_class($this->resolver),
             'index_key' => 'index',
         ]);
 

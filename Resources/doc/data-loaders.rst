@@ -98,7 +98,7 @@ To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
         <!-- app/config/services.xml -->
 
         <service id="imagine.data.loader.my_custom" class="AppBundle\Imagine\Binary\Loader\MyCustomDataLoader">
-            <tag name="liip_imagine.data.loader" loader="my_custom_data_loader" />
+            <tag name="liip_imagine.binary.loader" loader="my_custom_data_loader" />
             <argument type="service" id="liip_imagine" />
             <argument type="parameter" id="liip_imagine.formats" />
         </service>
@@ -128,4 +128,4 @@ Alternatively, you can only set the custom data loader for just a specific filte
 
 
 .. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
-.. _`Doctrine PHPCR-ODM`: http://symfony.com/doc/master/cmf/bundles/media.html#liipimagine
+.. _`Doctrine PHPCR-ODM`: http://symfony.com/doc/current/cmf/bundles/media.html#liipimagine

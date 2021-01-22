@@ -19,33 +19,14 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheResolveEventTest extends TestCase
 {
-    protected function setUp()
-    {
-    }
-
-    public function testShouldAllowSetPathInConstruct()
-    {
-        $event = new CacheResolveEvent('default_path', 'default_filter');
-
-        $this->assertAttributeSame('default_path', 'path', $event);
-    }
-
-    public function testShouldAllowSetPathByMethod()
-    {
-        $event = new CacheResolveEvent('default_path', 'default_filter');
-        $event->setPath('new_path');
-
-        $this->assertAttributeSame('new_path', 'path', $event);
-    }
-
-    public function testShouldAllowGetPathWhichWasSetInConstruct()
+    public function testShouldAllowSetPathInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
 
         $this->assertSame('default_path', $event->getPath());
     }
 
-    public function testShouldAllowGetPathWhichWasSetByMethod()
+    public function testShouldAllowSetPathByMethod(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setPath('new_path');
@@ -53,29 +34,29 @@ class CacheResolveEventTest extends TestCase
         $this->assertSame('new_path', $event->getPath());
     }
 
-    public function testShouldAllowSetFilterInConstruct()
+    public function testShouldAllowGetPathWhichWasSetInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
 
-        $this->assertAttributeSame('default_filter', 'filter', $event);
+        $this->assertSame('default_path', $event->getPath());
     }
 
-    public function testShouldAllowSetFilterByMethod()
+    public function testShouldAllowGetPathWhichWasSetByMethod(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
-        $event->setFilter('new_filter');
+        $event->setPath('new_path');
 
-        $this->assertAttributeSame('new_filter', 'filter', $event);
+        $this->assertSame('new_path', $event->getPath());
     }
 
-    public function testShouldAllowGetFilterWhichWasSetInConstruct()
+    public function testShouldAllowSetFilterInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
 
         $this->assertSame('default_filter', $event->getFilter());
     }
 
-    public function testShouldAllowGetFilterWhichWasSetByMethod()
+    public function testShouldAllowSetFilterByMethod(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setFilter('new_filter');
@@ -83,29 +64,44 @@ class CacheResolveEventTest extends TestCase
         $this->assertSame('new_filter', $event->getFilter());
     }
 
-    public function testShouldAllowSetUrlInConstruct()
-    {
-        $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
-
-        $this->assertAttributeSame('default_url', 'url', $event);
-    }
-
-    public function testShouldAllowSetUrlByMethod()
+    public function testShouldAllowGetFilterWhichWasSetInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
-        $event->setUrl('new_url');
 
-        $this->assertAttributeSame('new_url', 'url', $event);
+        $this->assertSame('default_filter', $event->getFilter());
     }
 
-    public function testShouldAllowGetUrlWhichWasSetInConstruct()
+    public function testShouldAllowGetFilterWhichWasSetByMethod(): void
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter');
+        $event->setFilter('new_filter');
+
+        $this->assertSame('new_filter', $event->getFilter());
+    }
+
+    public function testShouldAllowSetUrlInConstruct(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
 
         $this->assertSame('default_url', $event->getUrl());
     }
 
-    public function testShouldAllowGetUrlWhichWasSetByMethod()
+    public function testShouldAllowSetUrlByMethod(): void
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter');
+        $event->setUrl('new_url');
+
+        $this->assertSame('new_url', $event->getUrl());
+    }
+
+    public function testShouldAllowGetUrlWhichWasSetInConstruct(): void
+    {
+        $event = new CacheResolveEvent('default_path', 'default_filter', 'default_url');
+
+        $this->assertSame('default_url', $event->getUrl());
+    }
+
+    public function testShouldAllowGetUrlWhichWasSetByMethod(): void
     {
         $event = new CacheResolveEvent('default_path', 'default_filter');
         $event->setUrl('new_url');

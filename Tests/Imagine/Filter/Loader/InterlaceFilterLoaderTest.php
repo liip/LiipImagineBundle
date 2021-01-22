@@ -20,7 +20,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class InterlaceFilterLoaderTest extends AbstractTest
 {
-    public function testLoad()
+    public function testLoad(): void
     {
         $loader = new InterlaceFilterLoader();
 

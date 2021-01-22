@@ -15,20 +15,30 @@ use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser<extended>
  */
 class SimpleMimeTypeGuesserTest extends TestCase
 {
-    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument()
+    public function testCouldBeConstructedWithSymfonyMimeTypeGuesserAsFirstArgument(): void
     {
         $guesser = $this->getSimpleMimeTypeGuesser();
 
         $this->assertInstanceOf(SimpleMimeTypeGuesser::class, $guesser);
     }
 
-    public function testImplementsMimeTypeGuesserInterface()
+    public function testThrowsIfConstructedWithWrongTypeArguments(): void
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('$mimeTypeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
+
+        new SimpleMimeTypeGuesser('foo');
+    }
+
+    public function testImplementsMimeTypeGuesserInterface(): void
     {
         $this->assertInstanceOf(MimeTypeGuesserInterface::class, $this->getSimpleMimeTypeGuesser());
     }
@@ -36,7 +46,7 @@ class SimpleMimeTypeGuesserTest extends TestCase
     /**
      * @return array[]
      */
-    public static function provideImageData()
+    public static function provideImageData(): array
     {
         return [
             'gif' => [__DIR__.'/../Fixtures/assets/cats.gif', 'image/gif'],
@@ -55,16 +65,17 @@ class SimpleMimeTypeGuesserTest extends TestCase
      *
      * @throws \Exception
      */
-    public function testGuessMimeType($fileName, $mimeType)
+    public function testGuessMimeType($fileName, $mimeType): void
     {
         $this->assertSame($mimeType, $this->getSimpleMimeTypeGuesser()->guess(file_get_contents($fileName)));
     }
 
-    /**
-     * @return SimpleMimeTypeGuesser
-     */
-    private function getSimpleMimeTypeGuesser()
+    private function getSimpleMimeTypeGuesser(): SimpleMimeTypeGuesser
     {
+        if (interface_exists(SymfonyMimeTypeGuesserInterface::class)) {
+            return new SimpleMimeTypeGuesser(MimeTypes::getDefault());
+        }
+
         return new SimpleMimeTypeGuesser(MimeTypeGuesser::getInstance());
     }
 }

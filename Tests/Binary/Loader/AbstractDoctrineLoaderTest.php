@@ -11,9 +11,12 @@
 
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository as LegacyObjectRepository;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,23 +25,25 @@ use PHPUnit\Framework\TestCase;
 class AbstractDoctrineLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectRepository
+     * @var MockObject|ObjectRepository|LegacyObjectRepository
      */
     private $om;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractDoctrineLoader
+     * @var MockObject|AbstractDoctrineLoader
      */
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        if (!interface_exists(ObjectManager::class)) {
-            $this->markTestSkipped('Requires the doctrine/orm package.');
+        if (interface_exists(LegacyObjectManager::class)) {
+            $omClassName = LegacyObjectManager::class;
+        } else {
+            $omClassName = ObjectManager::class;
         }
 
         $this->om = $this
-            ->getMockBuilder(ObjectManager::class)
+            ->getMockBuilder($omClassName)
             ->getMock();
 
         $this->loader = $this
@@ -47,7 +52,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    public function testFindWithValidObjectFirstHit()
+    public function testFindWithValidObjectFirstHit(): void
     {
         $image = new \stdClass();
 
@@ -55,53 +60,53 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
             ->with('/foo/bar')
-            ->will($this->returnValue(1337));
+            ->willReturn(1337);
 
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with(null, 1337)
-            ->will($this->returnValue($image));
+            ->willReturn($image);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar'));
     }
 
-    public function testFindWithValidObjectSecondHit()
+    public function testFindWithValidObjectSecondHit(): void
     {
         $image = new \stdClass();
 
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['/foo/bar.png', 1337],
                 ['/foo/bar', 4711],
-            ]));
+            ]);
 
         $this->loader
             ->expects($this->atLeastOnce())
             ->method('getStreamFromImage')
             ->with($image)
-            ->will($this->returnValue(fopen('data://text/plain,foo', 'r')));
+            ->willReturn(fopen('data://text/plain,foo', 'rb'));
 
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [null, 1337, null],
                 [null, 4711, $image],
-            ]));
+            ]);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
     }
 
-    public function testFindWithInvalidObject()
+    public function testFindWithInvalidObject(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
 
@@ -109,7 +114,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('mapPathToId')
             ->with('/foo/bar')
-            ->will($this->returnValue(1337));
+            ->willReturn(1337);
 
         $this->loader
             ->expects($this->never())
@@ -119,7 +124,7 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('find')
             ->with(null, 1337)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->loader->find('/foo/bar');
     }

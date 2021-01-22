@@ -1,22 +1,22 @@
 # LiipImagineBundle
 
-|       Travis-CI        |        Style-CI         |         Coverage        |        Downloads        |         Release         |
+|         PHPUnit        |      PHP-CS-Fixer       |         Coverage        |        Downloads        |         Release         |
 |:----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:|
-| [![Travis](https://src.run/shield/liip/LiipImagineBundle/2.0/travis.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/travis) | [![Style CI](https://src.run/shield/liip/LiipImagineBundle/2.0/styleci.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/styleci) | [![Coverage](https://src.run/shield/liip/LiipImagineBundle/2.0/coveralls.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/coveralls) | [![Downloads](https://src.run/shield/liip/LiipImagineBundle/packagist_dt.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | [![Latest Stable Version](https://src.run/shield/liip/LiipImagineBundle/packagist_v.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | 
+| [![PHPUnit](https://github.com/liip/LiipImagineBundle/workflows/PHPUnit/badge.svg)](https://github.com/liip/LiipImagineBundle/actions?query=branch%3A2.x+workflow%3APHPUnit) | [![PHP-CS-Fixer](https://github.com/liip/LiipImagineBundle/workflows/PHP-CS-Fixer/badge.svg)](https://github.com/liip/LiipImagineBundle/actions?query=branch%3A2.x+workflow%3APHP-CS-Fixer) | [![Coverage](https://src.run/shield/liip/LiipImagineBundle/2.0/coveralls.svg)](https://src.run/service/liip/LiipImagineBundle/2.0/coveralls) | [![Downloads](https://src.run/shield/liip/LiipImagineBundle/packagist_dt.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) | [![Latest Stable Version](https://src.run/shield/liip/LiipImagineBundle/packagist_v.svg)](https://src.run/service/liip/LiipImagineBundle/packagist) |
 
 *This bundle provides an image manipulation abstraction toolkit for
 [Symfony](http://symfony.com/)-based projects.*
  
 ## Overview
 
-- [Filter Sets](http://symfony.com/doc/master/bundles/LiipImagineBundle/basic-usage.html):
+- [Filter Sets](http://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html):
   Using any Symfony-supported configuration language (such as YML and XML), you can create *filter set* definitions that
   specify transformation routines. These definitions include a set of
   *[filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html)* and
   *[post-processors](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors.html)*,
   as well as other optional parameters.
 
-- [Filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html):
+- [Filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html):
   Image transformations are applied using *filters*. A set of
   [build-in filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html) are provided by the bundle,
   implementing the most common transformations; examples include
@@ -27,9 +27,9 @@
   [strip](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/general.html#strip), and
   [watermark](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters/general.html#watermark).
   For more advances transformations, you can easily create your own
-  [custom filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html#filter-custom).
+  [custom filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html#filter-custom).
 
-- [Post-Processors](http://symfony.com/doc/master/bundles/LiipImagineBundle/post-processors.html):
+- [Post-Processors](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors.html):
   Modification of the resulting binary image file (created from your *filters*) are handled by *post-processors*.
   Examples include
   [JPEG Optim](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/jpeg-optim.html),
@@ -37,7 +37,7 @@
   [Opti PNG](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/png-opti.html), and
   [PNG Quant](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors/png-quant.html). Just like filters
   you can easily create your own
-  [custom post-processors](http://symfony.com/doc/master/bundles/LiipImagineBundle/post-processors.html#post-processors-custom).
+  [custom post-processors](http://symfony.com/doc/current/bundles/LiipImagineBundle/post-processors.html#post-processors-custom).
 
 
 ### Example
@@ -80,19 +80,19 @@ By participating in this project you agree to abide by its terms.
 Using this package is similar to all Symfony bundles. The following steps must 
 be performed
 
-1. [Download the Bundle](http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html#step-1-download-the-bundle)
-2. [Enable the Bundle](http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html#step-2-enable-the-bundle)
-3. [Register the Routes](http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html#step-3-register-the-bundle-s-routes)
+1. [Download the Bundle](http://symfony.com/doc/current/bundles/LiipImagineBundle/installation.html#step-1-download-the-bundle)
+2. [Enable the Bundle](http://symfony.com/doc/current/bundles/LiipImagineBundle/installation.html#step-2-enable-the-bundle)
+3. [Register the Routes](http://symfony.com/doc/current/bundles/LiipImagineBundle/installation.html#step-3-register-the-bundle-s-routes)
 
 Detailed setup instructions can be found in the 
-[installation](http://symfony.com/doc/master/bundles/LiipImagineBundle/installation.html)
+[installation](http://symfony.com/doc/current/bundles/LiipImagineBundle/installation.html)
 chapter of the documentation.
 
 
 ### Configuration
 
 Detailed information on all available configuration options can be found in the
-[configuration](http://symfony.com/doc/master/bundles/LiipImagineBundle/configuration.html)
+[configuration](http://symfony.com/doc/current/bundles/LiipImagineBundle/configuration.html)
 chapter of the documentation.
 
 
@@ -111,8 +111,8 @@ few *filters*.
 ### Create Thumbnails
 
 Before we get started, there is a small amount of configuration needed to ensure
-our [data loaders](http://symfony.com/doc/master/bundles/LiipImagineBundle/data-loaders.html)
-and [cache resolvers](http://symfony.com/doc/master/bundles/LiipImagineBundle/cache-resolvers.html)
+our [data loaders](http://symfony.com/doc/current/bundles/LiipImagineBundle/data-loaders.html)
+and [cache resolvers](http://symfony.com/doc/current/bundles/LiipImagineBundle/cache-resolvers.html)
 operate correctly. Use the following boilerplate in your configuration file.
 
 ```yml
@@ -189,7 +189,7 @@ and positioning the thumbnail at its center.
 transformations may only require a single *filter* while complex
 transformations can have an unlimited number of *filters* defined for them.*
 
-There are a number of additional [filters](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html),
+There are a number of additional [filters](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html),
 but for now you can use your newly defined ``my_thumb`` *filter set* immediately
 within a template.
 
@@ -268,15 +268,15 @@ You can resolve an image URL using the console command
 relative image paths (which must be separated by a space).
 
 ```bash
-$ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
+$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
 ```
 
-Additionally, you can use the ``--filters`` option to specify which filter
-you want to resolve for (if the ``--filters`` option is omitted, all
+Additionally, you can use the ``--filter`` option to specify which filter
+you want to resolve for (if the ``--filter`` option is omitted, all
 available filters will be resolved).
 
 ```bash
-$ php app/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filters=my_thumb
+$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filter=my_thumb
 ```
 
 
@@ -310,7 +310,7 @@ $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jp
 
 This bundle provides a set of built-in filters and you may easily
 define your own filters as well. Reference the
-[filters chapter](http://symfony.com/doc/master/bundles/LiipImagineBundle/filters.html)
+[filters chapter](http://symfony.com/doc/current/bundles/LiipImagineBundle/filters.html)
 from our documentation.
 
 
@@ -488,4 +488,4 @@ the following absolute path `/path/to/source/images/dir/logo.png` must be
 ## Documentation
 
 For more detailed information about the features of this bundle, refer to
-the [documentation](http://symfony.com/doc/master/bundles/LiipImagineBundle).
+the [documentation](http://symfony.com/doc/current/bundles/LiipImagineBundle).

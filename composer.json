@@ -18,60 +18,49 @@
         "exclude-from-classmap": [ "/Tests/" ]
     },
     "require": {
-        "php": "^7.1",
-        "imagine/Imagine": "^0.7.1,<0.8",
-        "symfony/asset": "^3.4|^4.0",
-        "symfony/filesystem": "^3.4|^4.0",
-        "symfony/finder": "^3.4|^4.0",
-        "symfony/framework-bundle": "^3.4|^4.0",
-        "symfony/options-resolver": "^3.4|^4.0",
-        "symfony/process": "^3.4|^4.0",
-        "symfony/templating": "^3.4|^4.0",
-        "symfony/translation": "^3.4|^4.0"
+        "php": "^7.1|^8.0",
+        "imagine/imagine": "^1.2.4",
+        "symfony/filesystem": "^3.4|^4.3|^5.0",
+        "symfony/finder": "^3.4|^4.3|^5.0",
+        "symfony/framework-bundle": "^3.4.23|^4.3|^5.0",
+        "symfony/mime": "^4.3|^5.0",
+        "symfony/options-resolver": "^3.4|^4.3|^5.0",
+        "symfony/process": "^3.4|^4.3|^5.0",
+        "symfony/templating": "^3.4|^4.3|^5.0",
+        "twig/twig": "^1.44|^2.9|^3.0"
     },
     "require-dev": {
         "ext-gd": "*",
         "amazonwebservices/aws-sdk-for-php": "^1.0",
         "aws/aws-sdk-php": "^2.4",
         "doctrine/cache": "^1.1",
-        "doctrine/orm": "^2.3",
-        "enqueue/enqueue-bundle": "^0.7|^0.8",
-        "friendsofphp/php-cs-fixer": "^2.10",
+        "doctrine/persistence": "^1.3|^2.0",
+        "enqueue/enqueue-bundle": "^0.9|^0.10",
         "league/flysystem": "^1.0",
         "psr/log": "^1.0",
-        "symfony/browser-kit": "^3.4|^4.0",
-        "symfony/console": "^3.4|^4.0",
-        "symfony/dependency-injection": "^3.4|^4.0",
-        "symfony/form": "^3.4|^4.0",
-        "symfony/phpunit-bridge": "^3.4|^4.0",
-        "symfony/validator": "^3.4|^4.0",
-        "symfony/yaml": "^3.4|^4.0",
-        "twig/twig": "^1.12|^2.0"
+        "symfony/browser-kit": "^3.4|^4.3|^5.0",
+        "symfony/console": "^3.4|^4.3|^5.0",
+        "symfony/dependency-injection": "^3.4|^4.3|^5.0",
+        "symfony/form": "^3.4|^4.3|^5.0",
+        "symfony/phpunit-bridge": "^5.2",
+        "symfony/validator": "^3.4|^4.3|^5.0",
+        "symfony/yaml": "^3.4|^4.3|^5.0"
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
         "ext-gd": "required to use gd driver",
         "ext-gmagick": "required to use gmagick driver",
         "ext-imagick": "required to use imagick driver",
-        "ext-mongo": "required for mongodb components on PHP <7.0",
-        "ext-mongodb": "required for mongodb components on PHP >=7.0",
-        "alcaeus/mongo-php-adapter": "required on PHP >= 7.0 to use mongo components with mongodb extension",
+        "ext-mongodb": "required for mongodb components",
+        "alcaeus/mongo-php-adapter": "required for mongodb components",
         "amazonwebservices/aws-sdk-for-php": "required to use AWS version 1 cache resolver",
         "aws/aws-sdk-php": "required to use AWS version 2/3 cache resolver",
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
-        "enqueue/enqueue-bundle": "^0.7 add if you like to process images in background",
+        "enqueue/enqueue-bundle": "^0.9 add if you like to process images in background",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
-        "monolog/monolog": "A psr/log compatible logger is required to enable logging",
-        "twig/twig": "required to use the provided Twig extension. Version 1.12 or greater needed"
+        "monolog/monolog": "A psr/log compatible logger is required to enable logging"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-1.0": "1.7-dev"
-        }
     }
 }

@@ -21,8 +21,6 @@ interface FilterInterface
 {
     /**
      * Filter identifier
-     *
-     * @return string
      */
     public function getName(): string;
 }

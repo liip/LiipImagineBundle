@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterSetCollectionTest extends TestCase
 {
-    public function testGetFilterSets()
+    public function testGetFilterSets(): void
     {
         $filterSetName = 'foo';
         $filterSetData = ['bar'];
@@ -32,7 +32,7 @@ class FilterSetCollectionTest extends TestCase
         $stackBuilderMock->expects($this->once())
             ->method('build')
             ->with($filterSetName, $filterSetData)
-            ->will($this->returnValue($filterSetMock));
+            ->willReturn($filterSetMock);
 
         $model = new StackCollection($stackBuilderMock, [$filterSetName => $filterSetData]);
         $this->assertSame([$filterSetMock], $model->getStacks());

@@ -15,11 +15,14 @@ use Liip\ImagineBundle\Binary\Loader\ChainLoader;
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
+use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
@@ -68,9 +71,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideLoadCases
-     *
-     * @param string $root
-     * @param string $path
      */
     public function testLoad(string $root, string $path): void
     {
@@ -90,8 +90,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideInvalidPathsData
-     *
-     * @param string $path
      */
     public function testThrowsIfFileDoesNotExist(string $path): void
     {
@@ -103,8 +101,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @dataProvider provideInvalidPathsData
-     *
-     * @param string $path
      */
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
@@ -112,16 +108,12 @@ class ChainLoaderTest extends TestCase
         $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
         $this->getChainLoader([], [
-            'foo' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+            'foo' => $this->createFileSystemLoader(
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../'),
                 ])
             ),
-            'bar' => new FileSystemLoader(
-                MimeTypeGuesser::getInstance(),
-                ExtensionGuesser::getInstance(),
+            'bar' => $this->createFileSystemLoader(
                 $this->getFileSystemLocator([
                     realpath(__DIR__.'/../../../'),
                 ])
@@ -131,8 +123,6 @@ class ChainLoaderTest extends TestCase
 
     /**
      * @param string[] $paths
-     *
-     * @return FileSystemLocator
      */
     private function getFileSystemLocator(array $paths = []): FileSystemLocator
     {
@@ -142,31 +132,40 @@ class ChainLoaderTest extends TestCase
     /**
      * @param string[]           $paths
      * @param FileSystemLoader[] $loaders
-     *
-     * @return ChainLoader
      */
     private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
     {
         if (null === $loaders) {
             $loaders = [
-                'foo' => new FileSystemLoader(
-                    MimeTypeGuesser::getInstance(),
-                    ExtensionGuesser::getInstance(),
-                    $this->getFileSystemLocator($paths ?: [__DIR__])
-                ),
+                'foo' => $this->createFileSystemLoader($this->getFileSystemLocator($paths ?: [__DIR__])),
             ];
         }
 
         return new ChainLoader($loaders);
     }
 
-    /**
-     * @param FileBinary|mixed $return
-     * @param string|null      $message
-     */
-    private function assertValidLoaderFindReturn($return, string $message = null): void
+    private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
     {
         $this->assertInstanceOf(FileBinary::class, $return, $message);
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
+    }
+
+    private function createFileSystemLoader(LocatorInterface $locator): FileSystemLoader
+    {
+        if (interface_exists(MimeTypeGuesserInterface::class)) {
+            $mimeTypes = MimeTypes::getDefault();
+
+            return new FileSystemLoader(
+                $mimeTypes,
+                $mimeTypes,
+                $locator
+            );
+        }
+
+        return new FileSystemLoader(
+            MimeTypeGuesser::getInstance(),
+            ExtensionGuesser::getInstance(),
+            $locator
+        );
     }
 }

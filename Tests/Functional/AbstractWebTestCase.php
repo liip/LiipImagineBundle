@@ -11,23 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\Functional;
 
+use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Client;
 
 abstract class AbstractWebTestCase extends WebTestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function createClient(array $options = [], array $server = [])
-    {
-        if (!class_exists(Client::class)) {
-            self::markTestSkipped('Requires the symfony/browser-kit package.');
-        }
-
-        return parent::createClient($options, $server);
-    }
-
     /**
      * @return string
      */
@@ -35,36 +23,39 @@ abstract class AbstractWebTestCase extends WebTestCase
     {
         require_once __DIR__.'/app/AppKernel.php';
 
-        return 'Liip\ImagineBundle\Tests\Functional\app\AppKernel';
+        return AppKernel::class;
     }
 
     /**
-     * @param string $name
-     *
      * @return object
      */
-    protected function getService($name)
+    protected function getService(string $name)
     {
+        if (property_exists($this, 'container')) {
+            return static::$container->get($name);
+        }
+
         return static::$kernel->getContainer()->get($name);
     }
 
     /**
-     * @param string $name
-     *
      * @return mixed
      */
-    protected function getParameter($name)
+    protected function getParameter(string $name)
     {
+        if (property_exists($this, 'container')) {
+            return static::$container->getParameter($name);
+        }
+
         return static::$kernel->getContainer()->getParameter($name);
     }
 
     /**
      * @param object $object
-     * @param string $name
      *
      * @return mixed
      */
-    protected function getPrivateProperty($object, $name)
+    protected function getPrivateProperty($object, string $name)
     {
         $r = new \ReflectionObject($object);
 

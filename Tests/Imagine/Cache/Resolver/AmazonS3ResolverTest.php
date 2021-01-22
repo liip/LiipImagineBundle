@@ -15,20 +15,21 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\AmazonS3Resolver
  */
 class AmazonS3ResolverTest extends AbstractTest
 {
-    public function testImplementsResolverInterface()
+    public function testImplementsResolverInterface(): void
     {
         $rc = new \ReflectionClass(AmazonS3Resolver::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
-    public function testNoDoubleSlashesInObjectUrlOnResolve()
+    public function testNoDoubleSlashesInObjectUrlOnResolve(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
@@ -40,7 +41,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testObjUrlOptionsPassedToAmazonOnResolve()
+    public function testObjUrlOptionsPassedToAmazonOnResolve(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
@@ -53,7 +54,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testThrowsAndLogIfCanNotCreateObjectOnAmazon()
+    public function testThrowsAndLogIfCanNotCreateObjectOnAmazon(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException::class);
         $this->expectExceptionMessage('The object could not be created on Amazon S3');
@@ -64,7 +65,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('create_object')
-            ->will($this->returnValue($this->createCFResponseMock(false)));
+            ->willReturn($this->createCFResponseMock(false));
 
         $logger = $this->createLoggerInterfaceMock();
         $logger
@@ -76,7 +77,7 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
-    public function testCreatedObjectOnAmazon()
+    public function testCreatedObjectOnAmazon(): void
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
@@ -84,33 +85,33 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('create_object')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
-    public function testIsStoredChecksObjectExistence()
+    public function testIsStoredChecksObjectExistence(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('if_object_exists')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
 
-    public function testReturnResolvedImageUrlOnResolve()
+    public function testReturnResolvedImageUrlOnResolve(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('get_object_url')
             ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, [])
-            ->will($this->returnValue('http://images.example.com/some-folder/path.jpg'));
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
 
@@ -120,7 +121,7 @@ class AmazonS3ResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingIfFiltersAndPathsEmptyOnRemove()
+    public function testDoNothingIfFiltersAndPathsEmptyOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
@@ -137,95 +138,95 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->remove([], []);
     }
 
-    public function testRemoveCacheForPathAndFilterOnRemove()
+    public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('if_object_exists')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('delete_object')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->at(0))
             ->method('if_object_exists')
             ->with('images.example.com', 'filter/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('delete_object')
             ->with('images.example.com', 'filter/pathOne.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
         $s3
             ->expects($this->at(2))
             ->method('if_object_exists')
             ->with('images.example.com', 'filter/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('delete_object')
             ->with('images.example.com', 'filter/pathTwo.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove(['pathOne.jpg', 'pathTwo.jpg'], ['filter']);
     }
 
-    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->at(0))
             ->method('if_object_exists')
             ->with('images.example.com', 'filterOne/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('delete_object')
             ->with('images.example.com', 'filterOne/pathOne.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
         $s3
             ->expects($this->at(2))
             ->method('if_object_exists')
             ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('delete_object')
             ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
         $s3
             ->expects($this->at(4))
             ->method('if_object_exists')
             ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(5))
             ->method('delete_object')
             ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
         $s3
             ->expects($this->at(6))
             ->method('if_object_exists')
             ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(7))
             ->method('delete_object')
             ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->will($this->returnValue($this->createCFResponseMock(true)));
+            ->willReturn($this->createCFResponseMock(true));
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -234,14 +235,14 @@ class AmazonS3ResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove()
+    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('if_object_exists')
             ->with('images.example.com', 'filter/path.jpg')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $s3
             ->expects($this->never())
             ->method('delete_object');
@@ -250,18 +251,18 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->remove(['path.jpg'], ['filter']);
     }
 
-    public function testLogIfNotDeletedForPathAndFilterOnRemove()
+    public function testLogIfNotDeletedForPathAndFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('if_object_exists')
             ->with('images.example.com', 'filter/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('delete_object')
-            ->will($this->returnValue($this->createCFResponseMock(false)));
+            ->willReturn($this->createCFResponseMock(false));
 
         $logger = $this->createLoggerInterfaceMock();
         $logger
@@ -273,40 +274,40 @@ class AmazonS3ResolverTest extends AbstractTest
         $resolver->remove(['path.jpg'], ['filter']);
     }
 
-    public function testRemoveCacheForFilterOnRemove()
+    public function testRemoveCacheForFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('delete_all_objects')
             ->with('images.example.com', '/filter/i')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove([], ['filter']);
     }
 
-    public function testRemoveCacheForSomeFiltersOnRemove()
+    public function testRemoveCacheForSomeFiltersOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('delete_all_objects')
             ->with('images.example.com', '/filterOne|filterTwo/i')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove([], ['filterOne', 'filterTwo']);
     }
 
-    public function testLogIfBatchNotDeletedForFilterOnRemove()
+    public function testLogIfBatchNotDeletedForFilterOnRemove(): void
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
             ->expects($this->once())
             ->method('delete_all_objects')
             ->with('images.example.com', '/filter/i')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $logger = $this->createLoggerInterfaceMock();
         $logger
@@ -321,7 +322,7 @@ class AmazonS3ResolverTest extends AbstractTest
     /**
      * @param bool $ok
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\CFResponse
+     * @return MockObject|\CFResponse
      */
     protected function createCFResponseMock($ok = true)
     {
@@ -329,13 +330,13 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3Response
             ->expects($this->once())
             ->method('isOK')
-            ->will($this->returnValue($ok));
+            ->willReturn($ok);
 
         return $s3Response;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\AmazonS3
+     * @return MockObject|\AmazonS3
      */
     protected function createAmazonS3Mock()
     {

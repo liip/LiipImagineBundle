@@ -23,14 +23,11 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 class ResizeFilterLoaderTest extends AbstractTest
 {
     /**
-     * @param int $width
-     * @param int $height
-     *
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader::load
      *
      * @dataProvider resizeDataProvider
      */
-    public function testLoad($width, $height)
+    public function testLoad(int $width, int $height): void
     {
         $loader = new ResizeFilterLoader();
 
@@ -46,10 +43,7 @@ class ResizeFilterLoaderTest extends AbstractTest
         $loader->load($image, $options);
     }
 
-    /**
-     * @returns array Array containing width/height pairs.
-     */
-    public function resizeDataProvider()
+    public function resizeDataProvider(): array
     {
         return [
             [140, 130],

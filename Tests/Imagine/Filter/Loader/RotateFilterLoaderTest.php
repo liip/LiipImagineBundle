@@ -21,7 +21,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class RotateFilterLoaderTest extends AbstractTest
 {
-    public function testLoadRotate0Degrees()
+    public function testLoadRotate0Degrees(): void
     {
         $loader = new RotateFilterLoader();
 
@@ -31,7 +31,7 @@ class RotateFilterLoaderTest extends AbstractTest
         $this->assertSame($image, $result);
     }
 
-    public function testLoadRotate90Degrees()
+    public function testLoadRotate90Degrees(): void
     {
         $loader = new RotateFilterLoader();
 

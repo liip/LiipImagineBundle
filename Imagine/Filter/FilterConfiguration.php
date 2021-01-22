@@ -20,9 +20,6 @@ class FilterConfiguration
      */
     protected $filters = [];
 
-    /**
-     * @param array $filters
-     */
     public function __construct(array $filters = [])
     {
         $this->filters = $filters;
@@ -39,7 +36,7 @@ class FilterConfiguration
      */
     public function get($filter)
     {
-        if (false === array_key_exists($filter, $this->filters)) {
+        if (false === \array_key_exists($filter, $this->filters)) {
             throw new NonExistingFilterException(sprintf('Could not find configuration for a filter: %s', $filter));
         }
 
@@ -50,7 +47,6 @@ class FilterConfiguration
      * Sets a configuration on the given filter.
      *
      * @param string $filter
-     * @param array  $config
      */
     public function set($filter, array $config)
     {

@@ -18,13 +18,13 @@ context for whomever ultimately implementations your request.
 
 *If you __submit__ a new feature*, ensure you provide a verbose description of your
 contribution, again making sure to completely fill out the new pull request template. Your
-pull request must pass our [Travis automated build check][travis], which runs our unit test
+pull request must pass our [GitHub Actions automated build check][gh-actions], which runs our unit test
 suite against various PHP versions and checks that proper code style standards are met.
 
 ## Report Bug
 
 If you believe you have encountered a *behavioral bug*, *documentation error*, or *other
-issue*, first search for an [existing issue][issue-list], and if one does't already exist,
+issue*, first search for an [existing issue][issue-list], and if one doesn't already exist,
 then proceed to [create a new issue][issue-make]. If you have the available time and the
 required skill set, we appreciate those who offer fixes themselves via
 [pull requests][pr-list], as well.
@@ -133,7 +133,7 @@ into the upstream repository is the same.
     git commit -a -m 'php-cs-fixer run'
     ```
 
-    *Note: Our [automated Travis builds][travis] will mark a [pull request][pr-make] failed if
+    *Note: Our [automated GitHub Actions builds][gh-actions] will mark a [pull request][pr-make] failed if
     it does not meet the required code style standards.*
 
 7. __Push to Fork/Merge Upstream:__
@@ -163,7 +163,7 @@ into the upstream repository is the same.
 [pr-make]:       https://github.com/liip/LiipImagineBundle/pull/new
 [issue-list]:    https://github.com/liip/LiipImagineBundle/issues
 [issue-make]:    https://github.com/liip/LiipImagineBundle/issues/new
-[travis]:        https://travis-ci.org/liip/LiipImagineBundle
+[gh-actions]:    https://github.com/liip/LiipImagineBundle/actions
 [rst-info]:      http://symfony.com/doc/current/contributing/documentation/format.html#restructuredtext
 [rst-make]:      https://github.com/liip/LiipImagineBundle/wiki/Building-RST-Documentation
 [php-unit]:      http://phpunit.de/
@@ -172,6 +172,6 @@ into the upstream repository is the same.
 [composer-dl]:   https://getcomposer.org/download/
 [coc-14]:        https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
 [coc-md]:        CODE_OF_CONDUCT.md
-[docs]:          https://symfony.com/doc/master/bundles/LiipImagineBundle/index.html
+[docs]:          https://symfony.com/doc/current/bundles/LiipImagineBundle/index.html
 [mongo-php]:     https://github.com/alcaeus/mongo-php-adapter
 [monolog]:       https://github.com/Seldaek/monolog

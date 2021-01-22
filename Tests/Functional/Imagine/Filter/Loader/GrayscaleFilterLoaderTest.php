@@ -21,7 +21,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class GrayscaleFilterLoaderTest extends AbstractWebTestCase
 {
-    public function testCouldBeGetFromContainerAsService()
+    public function testCouldBeGetFromContainerAsService(): void
     {
         $this->createClient();
 

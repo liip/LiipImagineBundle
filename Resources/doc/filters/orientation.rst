@@ -32,6 +32,10 @@ Example configuration:
 
     This filter should be called as early as possible to get the best results.
 
+.. caution::
+
+    This filter requires to have exif extension installed in order to work.
+
 
 .. _filter-rotate:
 

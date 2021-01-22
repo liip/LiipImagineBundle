@@ -19,20 +19,17 @@ use Symfony\Component\Templating\Helper\Helper;
 /**
  * @covers \Liip\ImagineBundle\Templating\FilterTrait
  * @covers \Liip\ImagineBundle\Templating\Helper\FilterHelper
+ *
+ * @group legacy
  */
 class FilterHelperTest extends AbstractFilterTest
 {
-    public function testInstanceOfSymfonyHelper()
+    public function testInstanceOfSymfonyHelper(): void
     {
         $this->assertInstanceOf(Helper::class, $this->createTemplatingMock());
     }
 
-    /**
-     * @param CacheManager|null $manager
-     *
-     * @return FilterHelper
-     */
-    protected function createTemplatingMock(CacheManager $manager = null)
+    protected function createTemplatingMock(CacheManager $manager = null): FilterHelper
     {
         $mock = new FilterHelper($manager ?: $this->createCacheManagerMock());
 

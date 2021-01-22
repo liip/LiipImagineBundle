@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class StreamLoaderTest extends AbstractTest
 {
-    public function testThrowsIfInvalidPathGivenOnFind()
+    public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessageRegExp('{Source image file://.+ not found.}');
@@ -28,27 +28,25 @@ class StreamLoaderTest extends AbstractTest
         $loader->find($this->temporaryPath.'/invalid.jpeg');
     }
 
-    public function testReturnImageContentOnFind()
+    public function testReturnImageContentOnFind(): void
     {
         $loader = new StreamLoader('file://');
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
-    public function testReturnImageContentWhenStreamContextProvidedOnFind()
+    public function testReturnImageContentWhenStreamContextProvidedOnFind(): void
     {
         $loader = new StreamLoader('file://', stream_context_create());
 
-        $this->assertSame(
-            file_get_contents($this->fixturesPath.'/assets/cats.jpeg'),
-            $loader->find($this->fixturesPath.'/assets/cats.jpeg')
+        $this->assertStringEqualsFile(
+            $this->fixturesPath.'/assets/cats.jpeg', $loader->find($this->fixturesPath.'/assets/cats.jpeg')
         );
     }
 
-    public function testThrowsIfInvalidResourceGivenInConstructor()
+    public function testThrowsIfInvalidResourceGivenInConstructor(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The given context is no valid resource');

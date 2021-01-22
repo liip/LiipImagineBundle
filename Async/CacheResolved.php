@@ -27,7 +27,6 @@ class CacheResolved implements \JsonSerializable
     private $uris;
 
     /**
-     * @param string        $path
      * @param string[]|null $uris
      */
     public function __construct(string $path, array $uris)
@@ -36,9 +35,6 @@ class CacheResolved implements \JsonSerializable
         $this->uris = $uris;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
@@ -60,11 +56,6 @@ class CacheResolved implements \JsonSerializable
         return ['path' => $this->path, 'uris' => $this->uris];
     }
 
-    /**
-     * @param string $json
-     *
-     * @return self
-     */
     public static function jsonDeserialize(string $json): self
     {
         $data = JSON::decode($json);

@@ -24,28 +24,28 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class StreamLoaderFactoryTest extends TestCase
 {
-    public function testImplementsLoaderFactoryInterface()
+    public function testImplementsLoaderFactoryInterface(): void
     {
         $rc = new \ReflectionClass(StreamLoaderFactory::class);
 
         $this->assertTrue($rc->implementsInterface(LoaderFactoryInterface::class));
     }
 
-    public function testCouldBeConstructedWithoutAnyArguments()
+    public function testCouldBeConstructedWithoutAnyArguments(): void
     {
         $loader = new StreamLoaderFactory();
 
         $this->assertInstanceOf(StreamLoaderFactory::class, $loader);
     }
 
-    public function testReturnExpectedName()
+    public function testReturnExpectedName(): void
     {
         $loader = new StreamLoaderFactory();
 
         $this->assertSame('stream', $loader->getName());
     }
 
-    public function testCreateLoaderDefinitionOnCreate()
+    public function testCreateLoaderDefinitionOnCreate(): void
     {
         $container = new ContainerBuilder();
 
@@ -66,13 +66,15 @@ class StreamLoaderFactoryTest extends TestCase
         $this->assertSame('theContext', $loaderDefinition->getArgument(1));
     }
 
-    public function testThrowIfWrapperNotSetOnAddConfiguration()
+    public function testThrowIfWrapperNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "wrapper" at path "stream" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $resolver = new StreamLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -80,13 +82,15 @@ class StreamLoaderFactoryTest extends TestCase
         $this->processConfigTree($treeBuilder, []);
     }
 
-    public function testProcessCorrectlyOptionsOnAddConfiguration()
+    public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
         $expectedWrapper = 'theWrapper';
         $expectedContext = 'theContext';
 
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -105,10 +109,12 @@ class StreamLoaderFactoryTest extends TestCase
         $this->assertSame($expectedContext, $config['context']);
     }
 
-    public function testAddDefaultOptionsIfNotSetOnAddConfiguration()
+    public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('stream', 'array');
+        $treeBuilder = new TreeBuilder('stream');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('stream');
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -123,13 +129,7 @@ class StreamLoaderFactoryTest extends TestCase
         $this->assertNull($config['context']);
     }
 
-    /**
-     * @param TreeBuilder $treeBuilder
-     * @param array       $configs
-     *
-     * @return array
-     */
-    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs)
+    protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
         $processor = new Processor();
 

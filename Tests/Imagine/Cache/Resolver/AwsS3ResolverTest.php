@@ -17,20 +17,21 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
  */
 class AwsS3ResolverTest extends AbstractTest
 {
-    public function testImplementsResolverInterface()
+    public function testImplementsResolverInterface(): void
     {
         $rc = new \ReflectionClass(AwsS3Resolver::class);
 
         $this->assertTrue($rc->implementsInterface(ResolverInterface::class));
     }
 
-    public function testNoDoubleSlashesInObjectUrlOnResolve()
+    public function testNoDoubleSlashesInObjectUrlOnResolve(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -42,7 +43,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testObjUrlOptionsPassedToS3ClintOnResolve()
+    public function testObjUrlOptionsPassedToS3ClintOnResolve(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -55,7 +56,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
     }
 
-    public function testLogNotCreatedObjects()
+    public function testLogNotCreatedObjects(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotStorableException::class);
         $this->expectExceptionMessage('The object could not be created on Amazon S3');
@@ -78,7 +79,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->store($binary, 'foobar.jpg', 'thumb');
     }
 
-    public function testCreateObjectOnAmazon()
+    public function testCreateObjectOnAmazon(): void
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
@@ -86,13 +87,13 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('putObject')
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->store($binary, 'thumb/foobar.jpg', 'thumb');
     }
 
-    public function testObjectOptionsPassedToS3ClintOnCreate()
+    public function testObjectOptionsPassedToS3ClintOnCreate(): void
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
@@ -114,27 +115,27 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->store($binary, 'images/foobar.jpg', 'filter');
     }
 
-    public function testIsStoredChecksObjectExistence()
+    public function testIsStoredChecksObjectExistence(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('doesObjectExist')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
 
-    public function testReturnResolvedImageUrlOnResolve()
+    public function testReturnResolvedImageUrlOnResolve(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('getObjectUrl')
             ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, [])
-            ->will($this->returnValue('http://images.example.com/some-folder/path.jpg'));
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
 
@@ -144,7 +145,7 @@ class AwsS3ResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingIfFiltersAndPathsEmptyOnRemove()
+    public function testDoNothingIfFiltersAndPathsEmptyOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
@@ -161,14 +162,14 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->remove([], []);
     }
 
-    public function testRemoveCacheForPathAndFilterOnRemove()
+    public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('deleteObject')
@@ -176,20 +177,20 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/some-folder/path.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testRemoveCacheForSomePathsAndFilterOnRemove()
+    public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->at(0))
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('deleteObject')
@@ -197,12 +198,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(2))
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('deleteObject')
@@ -210,7 +211,7 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -219,14 +220,14 @@ class AwsS3ResolverTest extends AbstractTest
         );
     }
 
-    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove()
+    public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->at(0))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterOne/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(1))
             ->method('deleteObject')
@@ -234,12 +235,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterOne/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(2))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(3))
             ->method('deleteObject')
@@ -247,12 +248,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterOne/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(4))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(5))
             ->method('deleteObject')
@@ -260,12 +261,12 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterTwo/pathOne.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
         $s3
             ->expects($this->at(6))
             ->method('doesObjectExist')
             ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->at(7))
             ->method('deleteObject')
@@ -273,7 +274,7 @@ class AwsS3ResolverTest extends AbstractTest
                 'Bucket' => 'images.example.com',
                 'Key' => 'filterTwo/pathTwo.jpg',
             ])
-            ->will($this->returnValue($this->getS3ResponseMock()));
+            ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -282,14 +283,14 @@ class AwsS3ResolverTest extends AbstractTest
         );
     }
 
-    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove()
+    public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $s3
             ->expects($this->never())
             ->method('deleteObject');
@@ -298,14 +299,14 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testCatchAndLogExceptionsForPathAndFilterOnRemove()
+    public function testCatchAndLogExceptionsForPathAndFilterOnRemove(): void
     {
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
             ->method('doesObjectExist')
             ->with('images.example.com', 'thumb/some-folder/path.jpg')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $s3
             ->expects($this->once())
             ->method('deleteObject')
@@ -321,7 +322,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
-    public function testRemoveCacheForFilterOnRemove()
+    public function testRemoveCacheForFilterOnRemove(): void
     {
         $expectedBucket = 'images.example.com';
         $expectedFilter = 'theFilter';
@@ -336,7 +337,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->remove([], [$expectedFilter]);
     }
 
-    public function testRemoveCacheForSomeFiltersOnRemove()
+    public function testRemoveCacheForSomeFiltersOnRemove(): void
     {
         $expectedBucket = 'images.example.com';
         $expectedFilterOne = 'theFilterOne';
@@ -352,7 +353,7 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver->remove([], [$expectedFilterOne, $expectedFilterTwo]);
     }
 
-    public function testCatchAndLogExceptionForFilterOnRemove()
+    public function testCatchAndLogExceptionForFilterOnRemove(): void
     {
         $expectedBucket = 'images.example.com';
         $expectedFilter = 'theFilter';
@@ -374,7 +375,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Model
+     * @return MockObject|Model
      */
     protected function getS3ResponseMock()
     {
@@ -382,7 +383,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Aws\S3\S3Client
+     * @return MockObject|\Aws\S3\S3Client
      */
     protected function getS3ClientMock()
     {

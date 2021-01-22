@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
  */
 class FilterManagerTest extends AbstractWebTestCase
 {
-    public function testCouldBeGetFromContainerAsService()
+    public function testCouldBeGetFromContainerAsService(): void
     {
         $this->createClient();
 

@@ -18,6 +18,7 @@ use Liip\ImagineBundle\Config\StackInterface;
 use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
 use Liip\ImagineBundle\Factory\Config\StackFactory;
 use Liip\ImagineBundle\Factory\Config\StackFactoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,12 +27,12 @@ use PHPUnit\Framework\TestCase;
 class FilterSetBuilderTest extends TestCase
 {
     /**
-     * @var StackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StackFactory|MockObject
      */
     private $filterSetFactoryMock;
 
     /**
-     * @var FilterFactoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactoryCollection|MockObject
      */
     private $filterFactoryCollectionMock;
 
@@ -40,14 +41,14 @@ class FilterSetBuilderTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filterSetFactoryMock = $this->createMock(StackFactoryInterface::class);
         $this->filterFactoryCollectionMock = $this->createMock(FilterFactoryCollection::class);
         $this->model = new StackBuilder($this->filterSetFactoryMock, $this->filterFactoryCollectionMock);
     }
 
-    public function testBuildWithEmptyFilters()
+    public function testBuildWithEmptyFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';
@@ -59,7 +60,7 @@ class FilterSetBuilderTest extends TestCase
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
             ->with($name, $dataLoader, $quality, $filters)
-            ->will($this->returnValue($filterSetMock));
+            ->willReturn($filterSetMock);
 
         $this->filterFactoryCollectionMock->expects($this->never())
             ->method('getFilterFactoryByName');
@@ -72,7 +73,7 @@ class FilterSetBuilderTest extends TestCase
         $this->assertSame($filterSetMock, $filterSet);
     }
 
-    public function testBuildWithFilters()
+    public function testBuildWithFilters(): void
     {
         $name = 'foo';
         $dataLoader = 'bar';
@@ -91,16 +92,16 @@ class FilterSetBuilderTest extends TestCase
         $filterFactoryMock->expects($this->once())
             ->method('create')
             ->with($filterData)
-            ->will($this->returnValue($filterMock));
+            ->willReturn($filterMock);
 
         $this->filterSetFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($filterSetMock));
+            ->willReturn($filterSetMock);
 
         $this->filterFactoryCollectionMock->expects($this->once())
             ->method('getFilterFactoryByName')
             ->with($filterCode)
-            ->will($this->returnValue($filterFactoryMock));
+            ->willReturn($filterFactoryMock);
 
         $filterSet = $this->model->build($name, [
             'data_loader' => $dataLoader,

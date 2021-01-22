@@ -26,19 +26,16 @@ class WatermarkFilterLoader implements LoaderInterface
     /**
      * @var string
      */
-    protected $rootPath;
+    protected $projectDir;
 
-    public function __construct(ImagineInterface $imagine, $rootPath)
+    public function __construct(ImagineInterface $imagine, $projectDir)
     {
         $this->imagine = $imagine;
-        $this->rootPath = $rootPath;
+        $this->projectDir = $projectDir;
     }
 
     /**
      * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     *
-     * @param ImageInterface $image
-     * @param array          $options
      *
      * @return ImageInterface|static
      */
@@ -53,7 +50,7 @@ class WatermarkFilterLoader implements LoaderInterface
             $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
-        $watermark = $this->imagine->open($this->rootPath.'/'.$options['image']);
+        $watermark = $this->imagine->open($this->projectDir.'/'.$options['image']);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();
@@ -68,6 +65,21 @@ class WatermarkFilterLoader implements LoaderInterface
 
             $watermark->resize(new Box($watermarkSize->getWidth() * $factor, $watermarkSize->getHeight() * $factor));
             $watermarkSize = $watermark->getSize();
+        }
+
+        if ('multiple' === $options['position']) {
+            // we loop over the coordinates of the image to apply the watermark as much as possible
+            $pasteX = 0;
+            while ($pasteX < $size->getWidth()) {
+                $pasteY = 0;
+                while ($pasteY < $size->getHeight()) {
+                    $image->paste($watermark, new Point($pasteX, $pasteY));
+                    $pasteY += $watermarkSize->getHeight();
+                }
+                $pasteX += $watermarkSize->getWidth();
+            }
+
+            return $image;
         }
 
         switch ($options['position']) {

@@ -34,7 +34,7 @@ class LiipImagineExtensionTest extends AbstractTest
      */
     protected $containerBuilder;
 
-    public function testUserLoadThrowsExceptionUnlessDriverIsValid()
+    public function testUserLoadThrowsExceptionUnlessDriverIsValid(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
@@ -42,7 +42,76 @@ class LiipImagineExtensionTest extends AbstractTest
         $loader->load([['driver' => 'foo']], new ContainerBuilder());
     }
 
-    public function testLoadWithDefaults()
+    public function testLoadFilterSetsDefaults(): void
+    {
+        $this->createConfigurationWithOneEmptyFilterSet();
+        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+
+        $this->assertCount(1, $filterSets);
+        $this->assertArrayHasKey('empty_filter_set', $filterSets);
+
+        $emptyFilterSet = $filterSets['empty_filter_set'];
+
+        $this->assertSame(100, $emptyFilterSet['quality']);
+        $this->assertNull($emptyFilterSet['jpeg_quality']);
+        $this->assertNull($emptyFilterSet['png_compression_level']);
+        $this->assertNull($emptyFilterSet['png_compression_filter']);
+        $this->assertNull($emptyFilterSet['format']);
+        $this->assertFalse($emptyFilterSet['animated']);
+        $this->assertNull($emptyFilterSet['cache']);
+        $this->assertNull($emptyFilterSet['data_loader']);
+        $this->assertNull($emptyFilterSet['default_image']);
+    }
+
+    public function testLoadFilterSetsWithDefaults(): void
+    {
+        $this->createConfigurationWithDefaultsFilterSets();
+        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+
+        $this->assertCount(2, $filterSets);
+        $this->assertArrayHasKey('filter_set_1', $filterSets);
+
+        $filterSet1 = $filterSets['filter_set_1'];
+
+        $this->assertSame(80, $filterSet1['jpeg_quality']);
+        $this->assertSame(90, $filterSet1['quality']);
+        $this->assertSame('my_new_loader', $filterSet1['data_loader']);
+        $this->assertArrayHasKey('filters', $filterSet1);
+        $this->assertCount(1, $filterSet1['filters']);
+        $this->assertArrayHasKey('thumbnail', $filterSet1['filters']);
+        $this->assertArrayHasKey('size', $filterSet1['filters']['thumbnail']);
+        $this->assertSame([483, 350], $filterSet1['filters']['thumbnail']['size']);
+        $this->assertArrayHasKey('mode', $filterSet1['filters']['thumbnail']);
+        $this->assertSame('outbound', $filterSet1['filters']['thumbnail']['mode']);
+        $this->assertArrayHasKey('post_processors', $filterSet1);
+        $this->assertArrayHasKey('mozjpeg', $filterSet1['post_processors']);
+
+        $filterSet2 = $filterSets['filter_set_2'];
+
+        $this->assertSame(70, $filterSet2['jpeg_quality']);
+        $this->assertSame(80, $filterSet2['quality']);
+        $this->assertSame('my_loader', $filterSet2['data_loader']);
+        $this->assertArrayHasKey('filters', $filterSet2);
+        $this->assertCount(2, $filterSet2['filters']);
+
+        $this->assertArrayHasKey('thumbnail', $filterSet2['filters']);
+        $this->assertArrayHasKey('size', $filterSet2['filters']['thumbnail']);
+        $this->assertSame([483, 350], $filterSet2['filters']['thumbnail']['size']);
+        $this->assertArrayHasKey('mode', $filterSet2['filters']['thumbnail']);
+        $this->assertSame('inset', $filterSet2['filters']['thumbnail']['mode']);
+
+        $this->assertArrayHasKey('fixed', $filterSet2['filters']);
+        $this->assertArrayHasKey('width', $filterSet2['filters']['fixed']);
+        $this->assertSame(120, $filterSet2['filters']['fixed']['width']);
+
+        $this->assertArrayHasKey('height', $filterSet2['filters']['fixed']);
+        $this->assertSame(90, $filterSet2['filters']['fixed']['height']);
+
+        $this->assertArrayHasKey('post_processors', $filterSet2);
+        $this->assertArrayHasKey('mozjpeg', $filterSet2['post_processors']);
+    }
+
+    public function testLoadWithDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -55,22 +124,20 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.service.filter'),
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
+                new Reference('liip_imagine.controller.config'),
             ]
         );
     }
 
-    public function testCustomRouteRequirements()
+    public function testTemplatingFilterExtensionIsDeprecated(): void
     {
-        $this->createFullConfiguration();
-        $param = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+        $this->createEmptyConfiguration();
 
-        $this->assertTrue(isset($param['small']['filters']['route']['requirements']));
-
-        $variable1 = $param['small']['filters']['route']['requirements']['variable1'];
-        $this->assertSame('value1', $variable1, sprintf('%s parameter is correct', $variable1));
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
+        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
     }
 
-    public static function provideFactoryData()
+    public static function provideFactoryData(): array
     {
         return [
             [
@@ -90,7 +157,7 @@ class LiipImagineExtensionTest extends AbstractTest
      * @param string $service
      * @param string $factory
      */
-    public function testFactoriesConfiguration($service, $factory)
+    public function testFactoriesConfiguration($service, $factory): void
     {
         $this->createEmptyConfiguration();
         $definition = $this->containerBuilder->getDefinition($service);
@@ -98,30 +165,102 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertSame($factory, $definition->getFactory());
     }
 
-    protected function createEmptyConfiguration()
+    /**
+     * @group legacy
+     * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
+     */
+    public function testHelperIsRegisteredWhenTemplatingIsEnabled(): void
     {
-        $this->containerBuilder = new ContainerBuilder();
-        $loader = new LiipImagineExtension();
-        $loader->addLoaderFactory(new FileSystemLoaderFactory());
-        $loader->addResolverFactory(new WebPathResolverFactory());
-        $loader->load([[]], $this->containerBuilder);
-
-        $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
+        $this->createConfiguration([
+            'templating' => true,
+        ]);
+        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
     }
 
-    protected function createFullConfiguration()
+    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled(): void
+    {
+        $this->createConfiguration([
+            'templating' => false,
+        ]);
+        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    protected function createConfigurationWithDefaultsFilterSets(): void
     {
         if (!class_exists(Parser::class)) {
             $this->markTestSkipped('Requires the symfony/yaml package.');
         }
 
+        $this->createConfiguration($this->getConfigurationWithDefaultsFilterSets());
+    }
+
+    protected function createConfigurationWithOneEmptyFilterSet(): void
+    {
+        if (!class_exists(Parser::class)) {
+            $this->markTestSkipped('Requires the symfony/yaml package.');
+        }
+
+        $this->createConfiguration($this->getConfigurationWithOneEmptyFilterSet());
+    }
+
+    protected function getConfigurationWithOneEmptyFilterSet()
+    {
+        $yaml = <<<'EOF'
+filter_sets:
+    empty_filter_set: ~
+EOF;
+        $parser = new Parser();
+
+        return $parser->parse($yaml);
+    }
+
+    protected function getConfigurationWithDefaultsFilterSets()
+    {
+        $yaml = <<<'EOF'
+default_filter_set_settings:
+    jpeg_quality: 70
+    quality: 80
+    data_loader: 'my_loader'
+    filters:
+        thumbnail: { mode: 'inset' }
+    post_processors:
+        mozjpeg: {}
+filter_sets:
+    filter_set_1:
+        jpeg_quality: 80
+        quality: 90
+        data_loader: 'my_new_loader'
+        filters:
+            thumbnail: { size: [483, 350], mode: 'outbound' }
+    filter_set_2:
+        filters:
+            thumbnail: { size: [483, 350] }
+            fixed: { width: 120, height: 90 }
+EOF;
+        $parser = new Parser();
+
+        return $parser->parse($yaml);
+    }
+
+    protected function createEmptyConfiguration(): void
+    {
+        $this->createConfiguration([]);
+    }
+
+    protected function createFullConfiguration(): void
+    {
+        $this->createConfiguration($this->getFullConfig());
+    }
+
+    protected function createConfiguration(array $configuration): void
+    {
         $this->containerBuilder = new ContainerBuilder();
         $loader = new LiipImagineExtension();
         $loader->addLoaderFactory(new FileSystemLoaderFactory());
         $loader->addResolverFactory(new WebPathResolverFactory());
-        $loader->load([$this->getFullConfig()], $this->containerBuilder);
+        $loader->load([$configuration], $this->containerBuilder);
 
-        $this->assertTrue($this->containerBuilder instanceof ContainerBuilder);
+        $this->assertInstanceOf(ContainerBuilder::class, $this->containerBuilder);
     }
 
     protected function getFullConfig()
@@ -133,8 +272,6 @@ filter_sets:
     small:
         filters:
             thumbnail: { size: [100, ~], mode: inset }
-            route:
-                requirements: { variable1: 'value1' }
         quality: 80
     medium_small_cropped:
         filters:
@@ -164,44 +301,34 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertAlias($value, $key)
+    private function assertAlias(string $value, string $key): void
     {
         $this->assertSame($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertParameter($value, $key)
+    private function assertParameter(string $value, string $key): void
     {
         $this->assertSame($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertHasDefinition($id)
+    private function assertHasDefinition(string $id): void
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
     }
 
-    /**
-     * @param Definition $definition
-     * @param array      $arguments
-     */
-    private function assertDICConstructorArguments(Definition $definition, array $arguments)
+    private function assertHasNotDefinition(string $id): void
+    {
+        $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
+    }
+
+    private function assertDICConstructorArguments(Definition $definition, array $arguments): void
     {
         $castArrayElementsToString = function (array $a): array {
             return array_map(function ($v) { return (string) $v; }, $a);
         };
 
         $implodeArrayElements = function (array $a): string {
-            return sprintf('[%s]:%d', implode(',', $a), count($a));
+            return sprintf('[%s]:%d', implode(',', $a), \count($a));
         };
 
         $expectedArguments = $castArrayElementsToString($arguments);
@@ -211,5 +338,14 @@ EOF;
             $implodeArrayElements($providedArguments),
             $implodeArrayElements($expectedArguments),
         ]));
+    }
+
+    private function assertDefinitionIsDeprecated(string $id, string $message): void
+    {
+        $definition = $this->containerBuilder->getDefinition($id);
+
+        $this->assertTrue($definition->isDeprecated());
+        $deprecation = method_exists(Definition::class, 'getDeprecation') ? $definition->getDeprecation($id)['message'] : $definition->getDeprecationMessage($id);
+        $this->assertSame($message, $deprecation);
     }
 }

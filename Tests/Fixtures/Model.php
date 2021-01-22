@@ -13,7 +13,7 @@ namespace Guzzle\Service\Resource;
 
 class Model
 {
-    public function get($key)
+    public function get($key): void
     {
     }
 }

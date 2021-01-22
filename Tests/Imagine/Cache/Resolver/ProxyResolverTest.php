@@ -15,6 +15,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
@@ -22,7 +23,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 class ProxyResolverTest extends AbstractTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $primaryResolver;
 
@@ -31,13 +32,13 @@ class ProxyResolverTest extends AbstractTest
      */
     private $resolver;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->primaryResolver = $this->createObjectMock(ResolverInterface::class);
         $this->resolver = new ProxyResolver($this->primaryResolver, ['http://images.example.com']);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -46,14 +47,14 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlEvenSchemesDiffersOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlEvenSchemesDiffersOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -62,14 +63,14 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $result = $this->resolver->resolve($expectedPath, $expectedFilter);
 
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlWithMatchReplaceOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlWithMatchReplaceOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -78,7 +79,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('https://s3-eu-west-1.amazonaws.com/s3-cache.example.com/thumbs/foo/bar/bazz.png');
 
         $this->resolver = new ProxyResolver($this->primaryResolver, [
             'https://s3-eu-west-1.amazonaws.com/s3-cache.example.com' => 'http://images.example.com',
@@ -89,7 +90,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://images.example.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndRewriteReturnedUrlWithRegExpOnResolve()
+    public function testProxyCallAndRewriteReturnedUrlWithRegExpOnResolve(): void
     {
         $expectedPath = '/foo/bar/bazz.png';
         $expectedFilter = 'test';
@@ -98,7 +99,7 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('resolve')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue('http://foo.com/thumbs/foo/bar/bazz.png'));
+            ->willReturn('http://foo.com/thumbs/foo/bar/bazz.png');
 
         $this->resolver = new ProxyResolver($this->primaryResolver, [
             'regexp/http:\/\/.*?\//' => 'http://bar.com/',
@@ -109,7 +110,7 @@ class ProxyResolverTest extends AbstractTest
         $this->assertSame('http://bar.com/thumbs/foo/bar/bazz.png', $result);
     }
 
-    public function testProxyCallAndReturnedValueOnIsStored()
+    public function testProxyCallAndReturnedValueOnIsStored(): void
     {
         $expectedPath = 'thePath';
         $expectedFilter = 'theFilter';
@@ -118,12 +119,12 @@ class ProxyResolverTest extends AbstractTest
             ->expects($this->once())
             ->method('isStored')
             ->with($expectedPath, $expectedFilter)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->resolver->isStored($expectedPath, $expectedFilter));
     }
 
-    public function testProxyCallOnStore()
+    public function testProxyCallOnStore(): void
     {
         $expectedPath = 'thePath';
         $expectedFilter = 'theFilter';
@@ -137,7 +138,7 @@ class ProxyResolverTest extends AbstractTest
         $this->resolver->store($expectedBinary, $expectedPath, $expectedFilter);
     }
 
-    public function testProxyCallOnRemove()
+    public function testProxyCallOnRemove(): void
     {
         $expectedPaths = ['thePath'];
         $expectedFilters = ['theFilter'];

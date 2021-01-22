@@ -49,11 +49,7 @@ class ChainLoader implements LoaderInterface
     }
 
     /**
-     * @param string       $path
      * @param \Exception[] $exceptions
-     * @param array        $loaders
-     *
-     * @return string
      */
     private static function getLoaderExceptionMessage(string $path, array $exceptions, array $loaders): string
     {
@@ -68,7 +64,7 @@ class ChainLoader implements LoaderInterface
         return vsprintf('Source image not resolvable "%s" using "%s" %d loaders (internal exceptions: %s).', [
             $path,
             implode(', ', $loaders),
-            count($loaders),
+            \count($loaders),
             implode(', ', $exceptions),
         ]);
     }

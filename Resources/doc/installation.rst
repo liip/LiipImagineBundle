@@ -48,6 +48,22 @@ to the bundles array of the ``registerBundles`` method in your project's
         // ...
     }
 
+If you are using Symfony 5.x, enable the bundle by adding ``new Liip\ImagineBundle\LiipImagineBundle()``
+to the bundles array of the ``return`` method in your project's
+``config/bundles.php`` file:
+
+.. code-block:: php
+    
+    <?php
+
+    return [
+    
+        // ...
+        
+        Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true]
+    ];
+
+
 
 Step 3: Register the bundle's routes
 ------------------------------------

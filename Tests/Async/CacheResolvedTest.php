@@ -20,14 +20,14 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheResolvedTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    protected function setUp(): void
     {
         if (!class_exists(EnqueueBundle::class)) {
             self::markTestSkipped('The tests are run without enqueue integration. Skip them');
         }
     }
 
-    public function testCouldBeJsonSerialized()
+    public function testCouldBeJsonSerialized(): void
     {
         $message = new CacheResolved('thePath', [
             'fooFilter' => 'http://example.com/fooFilter/thePath',
@@ -40,11 +40,10 @@ class CacheResolvedTest extends TestCase
         );
     }
 
-    public function testCouldBeJsonDeSerialized()
+    public function testCouldBeJsonDeSerialized(): void
     {
         $message = CacheResolved::jsonDeserialize('{"path":"thePath","uris":{"fooFilter":"http:\/\/example.com\/fooFilter\/thePath","barFilter":"http:\/\/example.com\/barFilter\/thePath"}}');
 
-        $this->assertInstanceOf('Liip\ImagineBundle\Async\CacheResolved', $message);
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame([
             'fooFilter' => 'http://example.com/fooFilter/thePath',

@@ -20,9 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FlipFilterLoader implements LoaderInterface
 {
     /**
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @return ImageInterface
      */
     public function load(ImageInterface $image, array $options = [])
@@ -33,8 +30,6 @@ class FlipFilterLoader implements LoaderInterface
     }
 
     /**
-     * @param array $options
-     *
      * @return array
      */
     private function sanitizeOptions(array $options)

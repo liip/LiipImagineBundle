@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -20,7 +20,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class AbstractSetupWebTestCase extends AbstractWebTestCase
 {
     /**
-     * @var Client
+     * @var KernelBrowser
      */
     protected $client;
 
@@ -39,13 +39,13 @@ class AbstractSetupWebTestCase extends AbstractWebTestCase
      */
     protected $cacheRoot;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->client = $this->createClient();
         $this->client->catchExceptions(false);
-        $this->webRoot = sprintf('%s/public', self::$kernel->getContainer()->getParameter('kernel.root_dir'));
+        $this->webRoot = sprintf('%s/public', self::$kernel->getContainer()->getParameter('kernel.project_dir'));
         $this->cacheRoot = $this->webRoot.'/media/cache';
         $this->filesystem = new Filesystem();
         $this->filesystem->remove($this->cacheRoot);

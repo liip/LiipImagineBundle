@@ -21,28 +21,82 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class ImagineControllerTest extends AbstractSetupWebTestCase
 {
-    public function testCouldBeGetFromContainer()
+    /**
+     * PHP compiled with WebP support.
+     *
+     * @var bool
+     */
+    private $webp_generate;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->webp_generate = \function_exists('imagewebp');
+
+        // We turn on generation through reflection, since only in runtime we can determine whether the WebP is
+        // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
+        // not supported.
+        if ($this->webp_generate) {
+            $filterService = self::getService('liip_imagine.service.filter');
+            $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
+            $webpGenerate->setAccessible(true);
+            $webpGenerate->setValue($filterService, true);
+        }
+    }
+
+    public function testCouldBeGetFromContainer(): void
     {
         $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
     }
 
-    public function testShouldResolvePopulatingCacheFirst()
+    public function testShouldResolvePopulatingCacheFirst(): void
     {
         //guard
-        $this->assertFileNotExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+        }
+    }
+
+    public function testShouldResolvePopulatingCacheFirstWebP(): void
+    {
+        //guard
+        $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
+            // Accept from Google Chrome 86
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp', $response->getTargetUrl());
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+        } else {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        }
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
-    public function testShouldResolveFromCache()
+    public function testShouldResolveFromCache(): void
     {
         $this->filesystem->dumpFile(
             $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
@@ -54,13 +108,45 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
     }
 
-    public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters()
+    public function testShouldResolveWebPFromCache(): void
+    {
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
+            'anImageContent'
+        );
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp',
+            'anImageContentWebP'
+        );
+
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
+            // Accept from Google Chrome 86
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp', $response->getTargetUrl());
+        } else {
+            $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        }
+
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+    }
+
+    public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
         $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
@@ -73,7 +159,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         ]));
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray()
+    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
@@ -84,7 +170,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         ]));
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists()
+    public function testShouldThrowNotFoundHttpExceptionIfFileNotExists(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
         $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
@@ -92,17 +178,17 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
-    public function testInvalidFilterShouldThrowNotFoundHttpException()
+    public function testInvalidFilterShouldThrowNotFoundHttpException(): void
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
 
         $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
     }
 
-    public function testShouldResolveWithCustomFiltersPopulatingCacheFirst()
+    public function testShouldResolveWithCustomFiltersPopulatingCacheFirst(): void
     {
         /** @var Signer $signer */
-        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
+        $signer = self::getService('liip_imagine.cache.signer');
 
         $params = [
             'filters' => [
@@ -119,23 +205,71 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
         //guard
-        $this->assertFileNotExists($this->cacheRoot.'/'.$expectedCachePath);
+        $this->assertFileDoesNotExist($this->cacheRoot.'/'.$expectedCachePath);
 
         $this->client->request('GET', $url);
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
+
+        $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        }
+    }
+
+    public function testShouldResolveWithCustomFiltersPopulatingCacheFirstWebP(): void
+    {
+        /** @var Signer $signer */
+        $signer = self::getService('liip_imagine.cache.signer');
+
+        $params = [
+            'filters' => [
+                'thumbnail' => ['size' => [50, 50]],
+            ],
+        ];
+
+        $path = 'images/cats.jpeg';
+
+        $hash = $signer->sign($path, $params['filters']);
+
+        $expectedCachePath = 'thumbnail_web_path/rc/'.$hash.'/'.$path;
+
+        $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
+
+        //guard
+        $this->assertFileDoesNotExist($this->cacheRoot.'/'.$expectedCachePath);
+
+        $this->client->request('GET', $url, [], [], [
+            // Accept from Google Chrome 86
+            'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertSame('http://localhost/media/cache/'.$expectedCachePath.'.webp', $response->getTargetUrl());
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        } else {
+            $this->assertSame('http://localhost/media/cache/'.$expectedCachePath, $response->getTargetUrl());
+        }
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
     }
 
-    public function testShouldResolveWithCustomFiltersFromCache()
+    public function testShouldResolveWithCustomFiltersFromCache(): void
     {
         /** @var Signer $signer */
-        $signer = self::$kernel->getContainer()->get('liip_imagine.cache.signer');
+        $signer = self::getService('liip_imagine.cache.signer');
 
         $params = [
             'filters' => [
@@ -161,29 +295,43 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache'.'/'.$expectedCachePath, $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath);
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertFileExists($this->cacheRoot.'/'.$expectedCachePath.'.webp');
+        }
     }
 
-    public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces()
+    public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces(): void
     {
         $this->filesystem->dumpFile(
             $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg',
             'anImageContent'
         );
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp',
+            'anImageContentWebP'
+        );
 
         // we are calling url with encoded file name as it will be called by browser
-        $urlEncodedFileName = 'foo+bar';
+        $urlEncodedFileName = 'foo%20bar';
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertSame(301, $response->getStatusCode());
-        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo bar.jpeg', $response->getTargetUrl());
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo%20bar.jpeg', $response->getTargetUrl());
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
+
+        // PHP compiled with WebP support
+        if ($this->webp_generate) {
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
+        }
     }
 }

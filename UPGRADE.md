@@ -6,6 +6,23 @@ application code or are otherwise particularly noteworthy. Reference our full
 [changelog](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md) for a complete list of all changes for a
 given release.
 
+## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
+
+- The `watermark` and `paste` filters were deprecated and will immediately
+  *not* work in Symfony 5.0 or higher. Use `watermark_image` and `paste_image`
+  instead. The corresponding services - `liip_imagine.filter.loader.paste`
+  and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
+  as such. These are both unavailable in Symfony 5.0.
+
+## [2.2.0](https://github.com/liip/LiipImagineBundle/blob/2.2.0/CHANGELOG.md#unreleased)
+
+*Released on* 2019-04-10 *and assigned* [`2.2.0`](https://github.com/liip/LiipImagineBundle/releases/tag/2.2.0) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.2.0)\).*
+- __[Deprecated]__ Constructing `FileSystemLoader`, `FlysystemLoader`, `SimpleMimeTypeGuesser` and `DataManager` with 
+`\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface` and 
+`\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface` have been deprecated for Symfony 4.3+ in 
+favor of the [new interfaces](https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#httpfoundation).
+- __[Utility]__ __[BC BREAK]__ The `SymfonyFramework` class marked as `internal` has been declared as final.
+
 ## [2.0.0](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md#191)
 
 *Released on* 2018-04-06 *and assigned* [`2.0.0`](https://github.com/liip/LiipImagineBundle/releases/tag/2.0.0) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/1.9.1...2.0.0)\).*

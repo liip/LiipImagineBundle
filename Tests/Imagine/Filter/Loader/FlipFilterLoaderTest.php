@@ -19,10 +19,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class FlipFilterLoaderTest extends AbstractTest
 {
-    /**
-     * @return array
-     */
-    public static function provideLoadWithAxisXOptionData()
+    public static function provideLoadWithAxisXOptionData(): array
     {
         return [
             ['x'],
@@ -31,11 +28,9 @@ class FlipFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @param string $axis
-     *
      * @dataProvider provideLoadWithAxisXOptionData
      */
-    public function testLoadWithAxisXOption($axis)
+    public function testLoadWithAxisXOption(string $axis): void
     {
         $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
@@ -45,10 +40,7 @@ class FlipFilterLoaderTest extends AbstractTest
         $this->createFlipFilterLoaderInstance()->load($image, ['axis' => $axis]);
     }
 
-    /**
-     * @return array
-     */
-    public static function provideLoadWithAxisYOptionData()
+    public static function provideLoadWithAxisYOptionData(): array
     {
         return [
             ['y'],
@@ -57,11 +49,9 @@ class FlipFilterLoaderTest extends AbstractTest
     }
 
     /**
-     * @param string $axis
-     *
      * @dataProvider provideLoadWithAxisYOptionData
      */
-    public function testLoadWithAxisYOption($axis)
+    public function testLoadWithAxisYOption(string $axis): void
     {
         $image = $this->getImageInterfaceMock();
         $image->expects($this->once())
@@ -71,7 +61,7 @@ class FlipFilterLoaderTest extends AbstractTest
         $this->createFlipFilterLoaderInstance()->load($image, ['axis' => $axis]);
     }
 
-    public function testThrowsOnInvalidOptions()
+    public function testThrowsOnInvalidOptions(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('The "axis" option must be set to "x", "horizontal", "y", or "vertical".');
@@ -82,10 +72,7 @@ class FlipFilterLoaderTest extends AbstractTest
         ]);
     }
 
-    /**
-     * @return FlipFilterLoader
-     */
-    private function createFlipFilterLoaderInstance()
+    private function createFlipFilterLoaderInstance(): FlipFilterLoader
     {
         return new FlipFilterLoader();
     }

@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Templating;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 trait FilterTrait
 {
@@ -20,9 +21,6 @@ trait FilterTrait
      */
     private $cache;
 
-    /**
-     * @param CacheManager $cache
-     */
     public function __construct(CacheManager $cache)
     {
         $this->cache = $cache;
@@ -33,14 +31,14 @@ trait FilterTrait
      *
      * @param string      $path
      * @param string      $filter
-     * @param array       $config
      * @param string|null $resolver
+     * @param int         $referenceType
      *
      * @return string
      */
-    public function filter($path, $filter, array $config = [], $resolver = null)
+    public function filter($path, $filter, array $config = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
-        return $this->cache->getBrowserPath($path, $filter, $config, $resolver);
+        return $this->cache->getBrowserPath(parse_url($path, PHP_URL_PATH), $filter, $config, $resolver, $referenceType);
     }
 
     /**

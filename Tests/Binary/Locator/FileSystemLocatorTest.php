@@ -19,7 +19,22 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
  */
 class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
 {
-    public function testThrowsIfPathHasSymbolicLinksPointOutsideRoot()
+    public function testAllowInvalidPaths(): void
+    {
+        $locator = new FileSystemLocator(['/does/not/exist/foo', '/does/not/exist/bar', $temp = sys_get_temp_dir()], true);
+        $roots = (new \ReflectionObject($locator))->getProperty('roots');
+        $roots->setAccessible(true);
+        $array = [
+            '',
+            '',
+            realpath($temp),
+        ];
+        unset($array[0], $array[1]);
+
+        $this->assertSame($array, $roots->getValue($locator));
+    }
+
+    public function testThrowsIfPathHasSymbolicLinksPointOutsideRoot(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
         $this->expectExceptionMessage('Source image invalid');
@@ -27,7 +42,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
         $this->getFileSystemLocator(realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'))->locate('root-01/file.ext');
     }
 
-    public function testRootPlaceholders()
+    public function testRootPlaceholders(): void
     {
         $root01 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
         $root02 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02');
@@ -44,7 +59,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
     /**
      * @return array[]
      */
-    public static function provideLoadCases()
+    public static function provideLoadCases(): array
     {
         $fileName = pathinfo(__FILE__, PATHINFO_BASENAME);
 
@@ -61,7 +76,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
     /**
      * @return array[]
      */
-    public static function provideMultipleRootLoadCases()
+    public static function provideMultipleRootLoadCases(): array
     {
         $prepend = [
             realpath(__DIR__.'/../'),
@@ -70,16 +85,14 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
         ];
 
         return array_map(function ($params) use ($prepend) {
-            return [[$prepend[mt_rand(0, count($prepend) - 1)], $params[0]], $params[1]];
+            return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }
 
     /**
      * @param string|string[] $paths
-     *
-     * @return LocatorInterface
      */
-    protected function getFileSystemLocator($paths)
+    protected function getFileSystemLocator($paths): LocatorInterface
     {
         return new FileSystemLocator((array) $paths);
     }

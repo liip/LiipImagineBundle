@@ -27,21 +27,28 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class ConfigurationTest extends TestCase
 {
-    public function testImplementsConfigurationInterface()
+    public function testImplementsConfigurationInterface(): void
     {
         $rc = new \ReflectionClass(Configuration::class);
 
         $this->assertTrue($rc->implementsInterface(ConfigurationInterface::class));
     }
 
-    public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments()
+    public function testTemplatingSupportIsEnabledByDefault(): void
+    {
+        $config = $this->processConfiguration(new Configuration([], []), []);
+
+        $this->assertTrue($config['templating']);
+    }
+
+    public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments(): void
     {
         $config = new Configuration([], []);
 
         $this->assertInstanceOf(Configuration::class, $config);
     }
 
-    public function testInjectLoaderFactoryConfig()
+    public function testInjectLoaderFactoryConfig(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -71,7 +78,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame('theValue', $config['loaders']['aLoader']['foo']['foo_option']);
     }
 
-    public function testAllowToUseLoaderFactorySeveralTimes()
+    public function testAllowToUseLoaderFactorySeveralTimes(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -104,7 +111,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('anotherLoader', $config['loaders']);
     }
 
-    public function testSetFilesystemLoaderAsDefaultLoaderIfNotDefined()
+    public function testSetFilesystemLoaderAsDefaultLoaderIfNotDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -126,7 +133,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
-    public function testSetFilesystemLoaderAsDefaultLoaderIfNull()
+    public function testSetFilesystemLoaderAsDefaultLoaderIfNull(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -147,7 +154,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
-    public function testThrowIfLoadersNotArray()
+    public function testThrowIfLoadersNotArray(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Loaders has to be array');
@@ -167,7 +174,7 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    public function testSetFilesystemLoaderAsDefaultIfLoadersSectionNotDefined()
+    public function testSetFilesystemLoaderAsDefaultIfLoadersSectionNotDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -186,7 +193,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('filesystem', $config['loaders']['default']);
     }
 
-    public function testSetWebPathResolversAsDefaultIfResolversSectionNotDefined()
+    public function testSetWebPathResolversAsDefaultIfResolversSectionNotDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -205,7 +212,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
     }
 
-    public function testShouldNotOverwriteDefaultLoaderIfDefined()
+    public function testShouldNotOverwriteDefaultLoaderIfDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -233,7 +240,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('foo', $config['loaders']['default']);
     }
 
-    public function testInjectResolverFactoryConfig()
+    public function testInjectResolverFactoryConfig(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -262,7 +269,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame('theValue', $config['resolvers']['aResolver']['bar']['bar_option']);
     }
 
-    public function testAllowToUseResolverFactorySeveralTimes()
+    public function testAllowToUseResolverFactorySeveralTimes(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -295,7 +302,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('anotherResolver', $config['resolvers']);
     }
 
-    public function testSetWebPathAsDefaultResolverIfNotDefined()
+    public function testSetWebPathAsDefaultResolverIfNotDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -316,7 +323,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
     }
 
-    public function testSetWebPathAsDefaultResolverIfNull()
+    public function testSetWebPathAsDefaultResolverIfNull(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -336,7 +343,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
     }
 
-    public function testThrowsIfResolversNotArray()
+    public function testThrowsIfResolversNotArray(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Resolvers has to be array');
@@ -359,7 +366,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('web_path', $config['resolvers']['default']);
     }
 
-    public function testShouldNotOverwriteDefaultResolverIfDefined()
+    public function testShouldNotOverwriteDefaultResolverIfDefined(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -387,7 +394,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('bar', $config['resolvers']['default']);
     }
 
-    public function testNewFilterQualitySettings()
+    public function testNewFilterQualitySettings(): void
     {
         $config = $this->processConfiguration(
             new Configuration(
@@ -420,13 +427,55 @@ class ConfigurationTest extends TestCase
         $this->assertSame(PNG_ALL_FILTERS, $config['filter_sets']['test']['png_compression_filter']);
     }
 
-    /**
-     * @param ConfigurationInterface $configuration
-     * @param array                  $configs
-     *
-     * @return array
-     */
-    protected function processConfiguration(ConfigurationInterface $configuration, array $configs)
+    public function testWebpSection(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            []
+        );
+
+        $this->assertArrayHasKey('webp', $config);
+        $this->assertArrayHasKey('generate', $config['webp']);
+        $this->assertFalse($config['webp']['generate']);
+        $this->assertArrayHasKey('quality', $config['webp']);
+        $this->assertSame(100, $config['webp']['quality']);
+        $this->assertArrayHasKey('cache', $config['webp']);
+        $this->assertNull($config['webp']['cache']);
+        $this->assertArrayHasKey('data_loader', $config['webp']);
+        $this->assertNull($config['webp']['data_loader']);
+        $this->assertArrayHasKey('post_processors', $config['webp']);
+        $this->assertSame([], $config['webp']['post_processors']);
+    }
+
+    public function testWebpEnableGenerate(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            [[
+                'webp' => [
+                    'generate' => true,
+                ],
+            ]]
+        );
+
+        $this->assertArrayHasKey('webp', $config);
+        $this->assertArrayHasKey('generate', $config['webp']);
+        $this->assertTrue($config['webp']['generate']);
+    }
+
+    protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array
     {
         $processor = new Processor();
 
@@ -440,12 +489,12 @@ class FooLoaderFactory implements LoaderFactoryInterface
     {
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'foo';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()
@@ -460,12 +509,12 @@ class BarResolverFactory implements ResolverFactoryInterface
     {
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'bar';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="liip_imagine.templating.filter_helper" class="Liip\ImagineBundle\Templating\Helper\FilterHelper">
+            <tag name="templating.helper" alias="imagine" />
+            <argument type="service" id="liip_imagine.cache.manager" />
+            <!-- deprecated service, deprecation is set in the container extension -->
+        </service>
+    </services>
+</container>
