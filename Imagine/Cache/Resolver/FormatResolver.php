@@ -1,18 +1,20 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
 
-/**
- * Class FormatCacheResolver
- *
- * @copyright 2017 IntechSystems, SIA
- * @package   Liip\ImagineBundle\Imagine\Cache\Resolver
- * @author    Mihail Savluga
- */
 class FormatResolver extends WebPathResolver
 {
     /**
@@ -21,17 +23,14 @@ class FormatResolver extends WebPathResolver
     protected $filterManager;
 
     /**
-     * @param Filesystem     $filesystem
-     * @param RequestContext $requestContext
-     * @param string         $webRootDir
-     * @param string         $cachePrefix
-     * @param FilterManager  $filterManager
+     * @param string $webRootDir
+     * @param string $cachePrefix
      */
     public function __construct(
         Filesystem $filesystem,
         RequestContext $requestContext,
         $webRootDir,
-        $cachePrefix = 'media/cache',
+        $cachePrefix,
         FilterManager $filterManager
     ) {
         parent::__construct($filesystem, $requestContext, $webRootDir, $cachePrefix);
@@ -60,14 +59,12 @@ class FormatResolver extends WebPathResolver
      *
      * @param string $path
      * @param string $filter
-     *
-     * @return mixed
      */
     protected function replaceImageFileExtension($path, $filter)
     {
         $newExtension = $this->getImageFormat($filter);
-        if (!is_null($newExtension)) {
-            $path = preg_replace('/\.[^.]+$/', '.' . $newExtension, $path);
+        if (null !== $newExtension) {
+            $path = preg_replace('/\.[^.]+$/', '.'.$newExtension, $path);
         }
 
         return $path;
@@ -77,8 +74,6 @@ class FormatResolver extends WebPathResolver
      * Returns image conversion format
      *
      * @param $filterName
-     *
-     * @return mixed
      */
     protected function getImageFormat($filterName)
     {
