@@ -146,7 +146,7 @@ abstract class AbstractTest extends TestCase
     {
         return $this->createObjectMock(ResolverInterface::class);
     }
-  
+
     /**
      * @return MockObject|CacheWarmer
      */

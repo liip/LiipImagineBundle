@@ -1,12 +1,16 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Cache\Warmer;
 
-/**
- * Interface WarmerInterface
- * 
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
- */
 interface WarmerInterface
 {
     /**
@@ -15,12 +19,12 @@ interface WarmerInterface
      * 'path' key of each element is used as a path to resolve and warm
      * all other elements are passed back to setWarmed to allow warmer to store warmed-up state of paths
      *
-     * @param int  $start Initial offset
-     * @param int  $chunk Chunk size
+     * @param int $start Initial offset
+     * @param int $chunk Chunk size
      *
      * @return array
      */
-    function getPaths($start, $chunk);
+    public function getPaths($start, $chunk);
 
     /**
      * The return value of getPaths is passed back to this method to allow saving warmed state
@@ -33,7 +37,7 @@ interface WarmerInterface
      *
      * @return void
      */
-    function setWarmed($data);
+    public function setWarmed($data);
 
     /**
      * Clears warmed-up state of path(s) or all images
@@ -42,6 +46,5 @@ interface WarmerInterface
      *
      * @return void
      */
-    function clearWarmed($paths = null);
+    public function clearWarmed($paths = null);
 }
- 
