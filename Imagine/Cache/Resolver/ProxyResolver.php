@@ -88,7 +88,8 @@ class ProxyResolver implements ResolverInterface
 
         // BC
         if (is_numeric($randKey)) {
-            $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST);
+            $port = parse_url($url, PHP_URL_PORT);
+            $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST).($port ? ':'.$port : '');
             $proxyHost = $this->hosts[$randKey];
 
             return str_replace($host, $proxyHost, $url);
