@@ -16,7 +16,7 @@ jobs:
         with:
           php-version: 7.4
           coverage: none
-          tools: cs2pr, php-cs-fixer
+          tools: php-cs-fixer
 
       - name: Run PHP-CS-Fixer
-        run: php-cs-fixer fix --dry-run --format checkstyle | cs2pr
+        run: php-cs-fixer fix --dry-run --diff --diff-format udiff
