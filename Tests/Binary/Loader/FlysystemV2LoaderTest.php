@@ -41,11 +41,6 @@ class FlysystemV2LoaderTest extends AbstractTest
         $this->flyFilesystem = new Filesystem(new LocalFilesystemAdapter($this->fixturesPath));
     }
 
-    private function getFlysystemLoader(): FlysystemV2Loader
-    {
-        return new FlysystemV2Loader(MimeTypes::getDefault(), $this->flyFilesystem);
-    }
-
     public function testShouldImplementLoaderInterface(): void
     {
         $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
@@ -69,5 +64,10 @@ class FlysystemV2LoaderTest extends AbstractTest
         $loader = $this->getFlysystemLoader();
 
         $loader->find('invalid.jpeg');
+    }
+
+    private function getFlysystemLoader(): FlysystemV2Loader
+    {
+        return new FlysystemV2Loader(MimeTypes::getDefault(), $this->flyFilesystem);
     }
 }
