@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
+use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
@@ -41,19 +42,19 @@ class FlysystemV2Loader implements LoaderInterface
      */
     public function find($path)
     {
-        if (false === $this->filesystem->fileExists($path)) {
-            throw new NotLoadableException(sprintf('Source image "%s" not found.', $path));
+        try {
+            $mimeType = $this->filesystem->mimeType($path);
+
+            $extension = $this->getExtension($mimeType);
+
+            return new Binary(
+                $this->filesystem->read($path),
+                $mimeType,
+                $extension
+            );
+        } catch (FilesystemException $exception) {
+            throw new NotLoadableException(sprintf('Source image "%s" not found.', $path), null, $exception);
         }
-
-        $mimeType = $this->filesystem->mimeType($path);
-
-        $extension = $this->getExtension($mimeType);
-
-        return new Binary(
-            $this->filesystem->read($path),
-            $mimeType,
-            $extension
-        );
     }
 
     private function getExtension(?string $mimeType): ?string
