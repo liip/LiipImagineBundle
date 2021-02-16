@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
@@ -28,8 +29,8 @@ class FlysystemResolverTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists(Filesystem::class)) {
-            $this->markTestSkipped('The league/flysystem PHP library is not available.');
+        if (!class_exists(FilesystemInterface::class)) {
+            $this->markTestSkipped('The league/flysystem:^1.0 PHP library is not available.');
         }
     }
 
