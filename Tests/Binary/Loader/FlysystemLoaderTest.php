@@ -33,7 +33,7 @@ class FlysystemLoaderTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists(FilesystemInterface::class)) {
+        if (!interface_exists(FilesystemInterface::class)) {
             $this->markTestSkipped('Requires the league/flysystem:^1.0 package.');
         }
 

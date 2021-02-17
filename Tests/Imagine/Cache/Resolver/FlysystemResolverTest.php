@@ -29,7 +29,7 @@ class FlysystemResolverTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!class_exists(FilesystemInterface::class)) {
+        if (!interface_exists(FilesystemInterface::class)) {
             $this->markTestSkipped('The league/flysystem:^1.0 PHP library is not available.');
         }
     }
