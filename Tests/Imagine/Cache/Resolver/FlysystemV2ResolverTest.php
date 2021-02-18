@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Routing\RequestContext;
 
 /**
- * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver
  */
 class FlysystemV2ResolverTest extends AbstractTest
 {
@@ -65,7 +65,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->method('deleteDirectory')
             ->with('media/cache/theFilter');
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove([], [$expectedFilter]);
     }
 
@@ -79,7 +79,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->method('write')
             ->willReturn(true);
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
 
         $this->assertNull($resolver->store($binary, 'thumb/foobar.jpg', 'thumb'));
     }
@@ -92,7 +92,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->method('fileExists')
             ->willReturn(false);
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
 
         $this->assertFalse($resolver->isStored('/some-folder/path.jpg', 'thumb'));
     }
@@ -101,7 +101,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     {
         $fs = $this->createFlySystemMock();
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
 
         $this->assertSame(
             'http://images.example.com/media/cache/thumb/some-folder/path.jpg',
@@ -111,7 +111,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testResolveWithPrefixCacheEmpty(): void
     {
-        $resolver = new FlysystemResolver(
+        $resolver = new FlysystemV2Resolver(
             $this->createFlySystemMock(),
             new RequestContext(),
             'http://images.example.com',
@@ -138,7 +138,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->with('media/cache/thumb/some-folder/path.jpg')
             ->willReturn(true);
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
@@ -166,7 +166,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->with('media/cache/thumb/pathTwo.jpg')
             ->willReturn(true);
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
             ['pathOne.jpg', 'pathTwo.jpg'],
             ['thumb']
@@ -217,7 +217,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->with('media/cache/filterTwo/pathTwo.jpg')
             ->willReturn(true);
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
             ['pathOne.jpg', 'pathTwo.jpg'],
             ['filterOne', 'filterTwo']
@@ -236,7 +236,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->expects($this->never())
             ->method('delete');
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
     }
 
@@ -250,7 +250,7 @@ class FlysystemV2ResolverTest extends AbstractTest
             ->method('deleteDirectory')
             ->with('media/cache/theFilter');
 
-        $resolver = new FlysystemResolver($fs, new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove([], [$expectedFilter]);
     }
 
