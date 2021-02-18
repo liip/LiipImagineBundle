@@ -143,7 +143,7 @@ class ImagineController
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $exception) {
             if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
-                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
+                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter), $this->controllerConfig->getRedirectResponseCode());
             }
 
             throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path), $exception);
