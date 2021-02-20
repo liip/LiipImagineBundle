@@ -21,7 +21,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * @requires PHP 7.1
+ * @requires PHP 7.2
  *
  * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader
  */
