@@ -11,21 +11,21 @@
 
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemInterface;
-use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * @requires PHP 5.4
+ * @requires PHP 7.2
  *
- * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemLoader
+ * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader
  */
-class FlysystemLoaderTest extends AbstractTest
+class FlysystemV2LoaderTest extends AbstractTest
 {
     private $flyFilesystem;
 
@@ -33,18 +33,18 @@ class FlysystemLoaderTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!interface_exists(FilesystemInterface::class)) {
-            $this->markTestSkipped('Requires the league/flysystem:^1.0 package.');
+        if (!interface_exists(FilesystemOperator::class)) {
+            $this->markTestSkipped('Requires the league/flysystem:^2.0 package.');
         }
 
-        $this->flyFilesystem = new Filesystem(new Local($this->fixturesPath));
+        $this->flyFilesystem = new Filesystem(new LocalFilesystemAdapter($this->fixturesPath));
     }
 
-    public function getFlysystemLoader(): FlysystemLoader
+    public function getFlysystemLoader(): FlysystemV2Loader
     {
         $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
 
-        return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
+        return new FlysystemV2Loader($extensionGuesser, $this->flyFilesystem);
     }
 
     public function testShouldImplementLoaderInterface(): void
@@ -57,7 +57,7 @@ class FlysystemLoaderTest extends AbstractTest
         $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
 
-        new FlysystemLoader(
+        new FlysystemV2Loader(
             'foo',
             $this->flyFilesystem
         );

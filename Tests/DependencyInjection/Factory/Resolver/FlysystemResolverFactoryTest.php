@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +29,8 @@ class FlysystemResolverFactoryTest extends TestCase
     {
         parent::setUp();
 
-        if (!class_exists(Filesystem::class)) {
-            $this->markTestSkipped('Requires the league/flysystem package.');
+        if (!interface_exists(FilesystemInterface::class)) {
+            $this->markTestSkipped('Requires the league/flysystem:^1.0 package.');
         }
     }
 
