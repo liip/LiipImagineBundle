@@ -21,6 +21,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Routing\RequestContext;
 
 /**
+ * @requires PHP 7.2
+ *
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver
  */
 class FlysystemV2ResolverTest extends AbstractTest
