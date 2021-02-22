@@ -45,7 +45,11 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testResolveUriForFilter(): void
     {
-        $resolver = new FlysystemV2Resolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com');
+        $resolver = new FlysystemV2Resolver(
+            $this->createFlySystemMock(),
+            new RequestContext(),
+            'http://images.example.com'
+        );
 
         $this->assertSame(
             'http://images.example.com/media/cache/thumb/some-folder/path.jpg',
@@ -107,7 +111,12 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testResolveWithPrefixCacheEmpty(): void
     {
-        $resolver = new FlysystemV2Resolver($this->createFlySystemMock(), new RequestContext(), 'http://images.example.com', '');
+        $resolver = new FlysystemV2Resolver(
+            $this->createFlySystemMock(),
+            new RequestContext(),
+            'http://images.example.com',
+            ''
+        );
 
         $this->assertSame(
             'http://images.example.com/thumb/some-folder/path.jpg',
@@ -265,12 +274,6 @@ class FlysystemV2ResolverTest extends AbstractTest
         return $this
             ->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'delete',
-                'deleteDirectory',
-                'fileExists',
-                'write',
-            ])
             ->getMock();
     }
 }

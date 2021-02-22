@@ -27,6 +27,7 @@ use Symfony\Component\Mime\MimeTypes;
  */
 class FlysystemV2LoaderTest extends AbstractTest
 {
+    /** @var FilesystemOperator */
     private $flyFilesystem;
 
     protected function setUp(): void
@@ -38,13 +39,6 @@ class FlysystemV2LoaderTest extends AbstractTest
         }
 
         $this->flyFilesystem = new Filesystem(new LocalFilesystemAdapter($this->fixturesPath));
-    }
-
-    public function getFlysystemLoader(): FlysystemV2Loader
-    {
-        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
-
-        return new FlysystemV2Loader($extensionGuesser, $this->flyFilesystem);
     }
 
     public function testShouldImplementLoaderInterface(): void
@@ -68,7 +62,8 @@ class FlysystemV2LoaderTest extends AbstractTest
         $loader = $this->getFlysystemLoader();
 
         $this->assertStringEqualsFile(
-            $this->fixturesPath.'/assets/cats.jpeg', $loader->find('assets/cats.jpeg')->getContent()
+            $this->fixturesPath.'/assets/cats.jpeg',
+            $loader->find('assets/cats.jpeg')->getContent()
         );
     }
 
@@ -80,5 +75,12 @@ class FlysystemV2LoaderTest extends AbstractTest
         $loader = $this->getFlysystemLoader();
 
         $loader->find('invalid.jpeg');
+    }
+
+    private function getFlysystemLoader(): FlysystemV2Loader
+    {
+        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
+
+        return new FlysystemV2Loader($extensionGuesser, $this->flyFilesystem);
     }
 }
