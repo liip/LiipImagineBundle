@@ -48,7 +48,7 @@ class FlysystemV2Resolver implements ResolverInterface
     /**
      * Flysystem specific visibility.
      *
-     * @see AdapterInterface
+     * @see Visibility
      *
      * @var string
      */
