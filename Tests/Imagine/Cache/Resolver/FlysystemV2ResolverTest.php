@@ -77,8 +77,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs = $this->createFlySystemMock();
         $fs
             ->expects($this->once())
-            ->method('write')
-            ->willReturn(true);
+            ->method('write');
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
 
@@ -136,8 +135,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->once())
             ->method('delete')
-            ->with('media/cache/thumb/some-folder/path.jpg')
-            ->willReturn(true);
+            ->with('media/cache/thumb/some-folder/path.jpg');
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
@@ -154,8 +152,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(1))
             ->method('delete')
-            ->with('media/cache/thumb/pathOne.jpg')
-            ->willReturn(true);
+            ->with('media/cache/thumb/pathOne.jpg');
         $fs
             ->expects($this->at(2))
             ->method('fileExists')
@@ -164,8 +161,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(3))
             ->method('delete')
-            ->with('media/cache/thumb/pathTwo.jpg')
-            ->willReturn(true);
+            ->with('media/cache/thumb/pathTwo.jpg');
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -185,8 +181,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(1))
             ->method('delete')
-            ->with('media/cache/filterOne/pathOne.jpg')
-            ->willReturn(true);
+            ->with('media/cache/filterOne/pathOne.jpg');
         $fs
             ->expects($this->at(2))
             ->method('fileExists')
@@ -195,8 +190,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(3))
             ->method('delete')
-            ->with('media/cache/filterTwo/pathOne.jpg')
-            ->willReturn(true);
+            ->with('media/cache/filterTwo/pathOne.jpg');
         $fs
             ->expects($this->at(4))
             ->method('fileExists')
@@ -205,8 +199,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(5))
             ->method('delete')
-            ->with('media/cache/filterOne/pathTwo.jpg')
-            ->willReturn(true);
+            ->with('media/cache/filterOne/pathTwo.jpg');
         $fs
             ->expects($this->at(6))
             ->method('fileExists')
@@ -215,8 +208,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs
             ->expects($this->at(7))
             ->method('delete')
-            ->with('media/cache/filterTwo/pathTwo.jpg')
-            ->willReturn(true);
+            ->with('media/cache/filterTwo/pathTwo.jpg');
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -230,7 +222,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs = $this->createFlySystemMock();
         $fs
             ->expects($this->once())
-            ->method('has')
+            ->method('fileExists')
             ->with('media/cache/thumb/some-folder/path.jpg')
             ->willReturn(false);
         $fs
@@ -263,11 +255,11 @@ class FlysystemV2ResolverTest extends AbstractTest
         $fs = $this->createFlySystemMock();
         $fs
             ->expects($this->at(0))
-            ->method('deleteDir')
+            ->method('deleteDirectory')
             ->with('media/cache/theFilterOne');
         $fs
             ->expects($this->at(1))
-            ->method('deleteDir')
+            ->method('deleteDirectory')
             ->with('media/cache/theFilterTwo');
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');

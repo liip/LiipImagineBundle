@@ -44,8 +44,7 @@
         "symfony/phpunit-bridge": "^5.2",
         "symfony/templating": "^3.4|^4.3|^5.0",
         "symfony/validator": "^3.4|^4.3|^5.0",
-        "symfony/yaml": "^3.4|^4.3|^5.0",
-        "friendsofphp/php-cs-fixer": "*"
+        "symfony/yaml": "^3.4|^4.3|^5.0"
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
