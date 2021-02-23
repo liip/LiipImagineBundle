@@ -13,6 +13,10 @@ given release.
   instead. The corresponding services - `liip_imagine.filter.loader.paste`
   and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
   as such. These are both unavailable in Symfony 5.0.
+- __\[Composer\]__ Allow [league/flysystem](https://github.com/thephpleague/flysystem) version 2.0.
+  You can use `league/flysystem` either v1 or v2, but if you're using v1
+  and want to upgrade to v2 you can simply run `composer require -W liip/imagine-bundle:^2.5 league/flysystem:^2.0`.
+  You should upgrade flysystem v2 related packages that you're using as well.
 
 ## [2.2.0](https://github.com/liip/LiipImagineBundle/blob/2.2.0/CHANGELOG.md#unreleased)
 
