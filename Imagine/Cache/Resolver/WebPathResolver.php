@@ -168,8 +168,25 @@ class WebPathResolver implements ResolverInterface
     {
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
-        // We also wish to remove any query Parameter
-        $path = preg_replace('/\\?.*/', '', $path);
+
+        // transliterate
+        $path = iconv('utf-8', 'us-ascii//TRANSLIT', $path);
+
+        // remove unwanted characters
+        $path = preg_replace('~[^-/.\w]+~', '', $path);
+
+        // trim
+        $path = trim($path, '-');
+
+        // remove duplicate -
+        $path = preg_replace('~-+~', '-', $path);
+
+        // lowercase
+        $path = strtolower($path);
+
+        if (empty($path)) {
+            $path = 'n-a';
+        }
 
         return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
     }
