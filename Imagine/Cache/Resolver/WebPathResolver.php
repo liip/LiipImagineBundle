@@ -182,7 +182,7 @@ class WebPathResolver implements ResolverInterface
         $path = preg_replace('~-+~', '-', $path);
 
         // lowercase
-        $path = strtolower($path);
+        $path = mb_strtolower($path);
 
         if (empty($path)) {
             $path = 'n-a';
