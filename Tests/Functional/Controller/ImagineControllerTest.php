@@ -309,29 +309,29 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces(): void
     {
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg',
+            $this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg',
             'anImageContent'
         );
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg.webp',
+            $this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg.webp',
             'anImageContentWebP'
         );
 
         // we are calling url with encoded file name as it will be called by browser
-        $urlEncodedFileName = 'foobar';
+        $urlEncodedFileName = 'foo%20bar';
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlEncodedFileName.'.jpeg');
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foobar.jpeg', $response->getTargetUrl());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo/bar.jpeg', $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg');
 
         // PHP compiled with WebP support
         if ($this->webp_generate) {
-            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg.webp');
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg.webp');
         }
     }
 }
