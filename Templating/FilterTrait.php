@@ -38,7 +38,7 @@ trait FilterTrait
      */
     public function filter($path, $filter, array $config = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
-        return $this->cache->getBrowserPath(parse_url($path, PHP_URL_PATH), $filter, $config, $resolver, $referenceType);
+        return $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
     }
 
     /**
