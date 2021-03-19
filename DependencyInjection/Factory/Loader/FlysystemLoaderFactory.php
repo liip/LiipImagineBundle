@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,7 +23,7 @@ class FlysystemLoaderFactory extends AbstractLoaderFactory
      */
     public function create(ContainerBuilder $container, $loaderName, array $config)
     {
-        $definition = $this->getChildLoaderDefinition();
+        $definition = $this->getChildLoaderDefinition($this->getChildLoaderName());
 
         if ($container->hasDefinition('liip_imagine.mime_types')) {
             $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
@@ -54,5 +55,17 @@ class FlysystemLoaderFactory extends AbstractLoaderFactory
                     ->cannotBeEmpty()
                 ->end()
             ->end();
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getChildLoaderName()
+    {
+        if (interface_exists(FilesystemOperator::class)) {
+            return 'flysystem2';
+        }
+
+        return null;
     }
 }

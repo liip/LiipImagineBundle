@@ -44,10 +44,8 @@ class WebPathResolver implements ResolverInterface
     protected $cacheRoot;
 
     /**
-     * @param Filesystem     $filesystem
-     * @param RequestContext $requestContext
-     * @param string         $webRootDir
-     * @param string         $cachePrefix
+     * @param string $webRootDir
+     * @param string $cachePrefix
      */
     public function __construct(
         Filesystem $filesystem,
@@ -180,9 +178,6 @@ class WebPathResolver implements ResolverInterface
 
         // remove duplicate -
         $path = preg_replace('~-+~', '-', $path);
-
-        // lowercase
-        $path = mb_strtolower($path);
 
         if (empty($path)) {
             $path = 'n-a';

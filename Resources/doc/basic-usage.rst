@@ -198,16 +198,86 @@ you would run:
 
     $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
 
-Often, you need to perform this operation in a controller. Assuming your
-controller inherits from the base Symfony controller, you can take advantage
-of the inherited ``get`` method to request the ``liip_imagine.cache.manager``
-service, from which you can call ``getBrowserPath`` on a relative image
-path to get its resolved location.
+Often, you need to perform this operation in a controller.
+
+You can access the ``CacheManager`` simply by type hinting it in your controller method: the service
+``liip_imagine.cache.manager`` will be automatically injected and you will be able to call
+``getBrowserPath`` on a relative image path to get its resolved location.
 
 .. code-block:: php
 
-    /** @var CacheManager */
-    $imagineCacheManager = $this->get('liip_imagine.cache.manager');
+    <?php
+    
+    namespace App\Controller;
+    
+    use \Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-    /** @var string */
-    $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    class YourController
+    {
+        public function yourControllerMethod(CacheManager $imagineCacheManager)
+        {
+            /** @var string */
+            $resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+    
+            // ...
+        }
+    }
+
+WebP image format
+~~~~~~~~~~~~~~~~~
+
+The WebP format better optimizes the quality and size of the compressed image
+compared to JPEG and PNG. Google strongly recommends using this format. You can
+set it as the default format for all images.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        default_filter_set_settings:
+            format: webp
+
+However, not all `browsers support the WebP format`_, and for compatibility with
+all browsers it is recommended to return images in their original format for
+those browsers that do not support WebP. This means that you need to store 2
+versions of the image. One in WebP format and the other in original format.
+**Remember that this almost doubles the amount of used space on the server for
+storing filtered images.**
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        # configure webp
+        webp:
+            generate: true
+
+        # example filter
+        filter_sets:
+            thumbnail_web_path:
+                filters:
+                    thumbnail: { size: [223, 223], mode: inset }
+
+If browser supports WebP, the request ``https://localhost/media/cache/resolve/thumbnail_web_path/images/cats.jpeg``
+will be redirected to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp``
+otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg``
+
+.. note::
+
+    Using an unsecured connection (non HTTPS) on your site can cause problems with
+    caching the resolved paths for users, which can lead to the fact that users
+    whose browser does not support WebP will serve a picture in WebP format.
+    You can fix this problem by changing the redirect code from 301 *(Moved
+    Permanently)* to 302 *(Moved Temporarily)*.
+
+    .. code-block:: yaml
+
+        # app/config/config.yml
+
+        liip_imagine:
+            controller:
+                redirect_response_code: 302
+
+.. _`browsers support the WebP format`: https://caniuse.com/webp

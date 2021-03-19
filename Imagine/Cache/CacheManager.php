@@ -55,33 +55,36 @@ class CacheManager
     protected $defaultResolver;
 
     /**
+     * @var bool
+     */
+    private $webpGenerate;
+
+    /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
-     * @param FilterConfiguration      $filterConfig
-     * @param RouterInterface          $router
-     * @param SignerInterface          $signer
-     * @param EventDispatcherInterface $dispatcher
-     * @param string                   $defaultResolver
+     * @param string $defaultResolver
+     * @param bool   $webpGenerate
      */
     public function __construct(
         FilterConfiguration $filterConfig,
         RouterInterface $router,
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
-        $defaultResolver = null
+        $defaultResolver = null,
+        $webpGenerate = false
     ) {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
         $this->signer = $signer;
         $this->dispatcher = $dispatcher;
         $this->defaultResolver = $defaultResolver ?: 'default';
+        $this->webpGenerate = $webpGenerate;
     }
 
     /**
      * Adds a resolver to handle cached images for the given filter.
      *
-     * @param string            $filter
-     * @param ResolverInterface $resolver
+     * @param string $filter
      */
     public function addResolver($filter, ResolverInterface $resolver)
     {
@@ -98,7 +101,6 @@ class CacheManager
      *
      * @param string $path          The path where the resolved file is expected
      * @param string $filter
-     * @param array  $runtimeConfig
      * @param string $resolver
      * @param int    $referenceType
      *
@@ -109,12 +111,12 @@ class CacheManager
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
-            return $this->isStored($rcPath, $filter, $resolver) ?
+            return !$this->webpGenerate && $this->isStored($rcPath, $filter, $resolver) ?
                 $this->resolve($rcPath, $filter, $resolver) :
                 $this->generateUrl($path, $filter, $runtimeConfig, $resolver, $referenceType);
         }
 
-        return $this->isStored($path, $filter, $resolver) ?
+        return !$this->webpGenerate && $this->isStored($path, $filter, $resolver) ?
             $this->resolve($path, $filter, $resolver) :
             $this->generateUrl($path, $filter, [], $resolver, $referenceType);
     }
@@ -123,7 +125,6 @@ class CacheManager
      * Get path to runtime config image.
      *
      * @param string $path
-     * @param array  $runtimeConfig
      *
      * @return string
      */
@@ -137,7 +138,6 @@ class CacheManager
      *
      * @param string $path          The path where the resolved file is expected
      * @param string $filter        The name of the imagine filter in effect
-     * @param array  $runtimeConfig
      * @param string $resolver
      * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      *
@@ -209,27 +209,11 @@ class CacheManager
     }
 
     /**
-     * BC Layer for Symfony < 4.3
-     *
-     * @param CacheResolveEvent $event
-     * @param string $eventName
-     */
-    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
-    {
-        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->dispatcher->dispatch($event, $eventName);
-        } else {
-            $this->dispatcher->dispatch($eventName, $event);
-        }
-    }
-
-    /**
      * @see ResolverInterface::store
      *
-     * @param BinaryInterface $binary
-     * @param string          $path
-     * @param string          $filter
-     * @param string          $resolver
+     * @param string $path
+     * @param string $filter
+     * @param string $resolver
      */
     public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
     {
@@ -294,13 +278,21 @@ class CacheManager
         }
 
         if (!isset($this->resolvers[$resolverName])) {
-            throw new \OutOfBoundsException(sprintf(
-                'Could not find resolver "%s" for "%s" filter type',
-                $resolverName,
-                $filter
-            ));
+            throw new \OutOfBoundsException(sprintf('Could not find resolver "%s" for "%s" filter type', $resolverName, $filter));
         }
 
         return $this->resolvers[$resolverName];
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3
+     */
+    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    {
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
+        }
     }
 }

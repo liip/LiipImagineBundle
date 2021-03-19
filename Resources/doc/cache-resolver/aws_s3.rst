@@ -53,7 +53,7 @@ Create Resolver from a Factory
 
     liip_imagine:
         resolvers:
-            profile_photos:
+            aws_s3_resolver:
                 aws_s3:
                     client_config:
                         credentials:
@@ -88,6 +88,17 @@ Create Resolver from a Factory
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+While creating the resolver through a factory using the configuration above does the job for most use cases,
+it can sometimes be neccessary to create the resolver as a service.
+
+.. tip::
+    For example, this is required if you do not want to hard code AWS credentials for your resolver, but
+    instead make it use the `Default Credential Provider Chain`_ within AWS (for example, because you are
+    running this on an EC2 instance which is already attached to an IAM role with the required permissions).
+    In this case, simply setting up the resolver through a factory configuration block and leaving out
+    the credentials block won't cut it. Instead, you need to set up the resolver as a service as shown
+    below, passing an S3Client.
+
 You have to set up the services required:
 
 .. code-block:: yaml
@@ -104,13 +115,13 @@ You have to set up the services required:
                     region: "%amazon.s3.region%"
                     version: "%amazon.s3.version%"
 
-        acme.imagine.cache.resolver.amazon_s3:
+        acme.imagine.cache.resolver.aws_s3_resolver:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
             arguments:
                 - "@acme.amazon_s3"
                 - "%amazon.s3.bucket%"
             tags:
-                - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
+                - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
 
 .. tip::
@@ -136,8 +147,8 @@ You have to set up the services required:
             factory: [Aws\S3\S3Client, factory]
             arguments:
                 -
-                    credentials: { key: %amazon.s3.key%, secret: %amazon.s3.secret% }
-                    region: %amazon.s3.region%
+                    credentials: { key: "%amazon.s3.key%", secret: "%amazon.s3.secret%" }
+                    region: "%amazon.s3.region%"
                     version: "%amazon.s3.version%"
 
 
@@ -145,14 +156,14 @@ Usage
 -----
 
 After configuring ``AwsS3Resolver``, you can set it as the default cache resolver
-for ``LiipImagineBundle`` using the following configuration.
+for ``LiipImagineBundle`` using the following configuration:
 
 .. code-block:: yaml
 
     # app/config/config.yml
 
     liip_imagine:
-        cache: profile_photos
+        cache: aws_s3_resolver
 
 
 Usage on a Specific Filter
@@ -169,7 +180,7 @@ filter set using the following configuration.
         filter_sets:
             cache: ~
             my_thumb:
-                cache: profile_photos
+                cache: aws_s3_resolver
                 filters:
                     # the filter list
 
@@ -191,7 +202,7 @@ current. You just need to configure them with defined options.
 
     liip_imagine:
         resolvers:
-           profile_photos:
+           aws_s3_resolver:
               aws_s3:
                   #...
                   proxies: ["http://one.domain.com", "http://two.domain.com"]
@@ -213,7 +224,7 @@ service, to alter those options you need.
     # app/config/services.yml
 
     services:
-        acme.imagine.cache.resolver.amazon_s3:
+        acme.imagine.cache.resolver.aws_s3_resolver:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
             arguments:
                 - "@acme.amazon_s3"
@@ -222,7 +233,7 @@ service, to alter those options you need.
                  # This calls $service->setGetOption('Scheme', 'https');
                  - [ setGetOption, [ Scheme, https ] ]
             tags:
-                - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
+                - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
 
 You can also use the constructor of the resolver to directly inject multiple options.
@@ -232,7 +243,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
     # app/config/services.yml
 
     services:
-        acme.imagine.cache.resolver.amazon_s3:
+        acme.imagine.cache.resolver.aws_s3_resolver:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
             arguments:
                 - "@acme.amazon_s3"
@@ -240,7 +251,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
                 - "public-read" # Aws\S3\Enum\CannedAcl::PUBLIC_READ (default)
                 - { Scheme: https }
             tags:
-                - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
+                - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
 
 Object PUT Options
@@ -269,7 +280,7 @@ service, to alter those options you need.
     # app/config/services.yml
 
     services:
-        acme.imagine.cache.resolver.amazon_s3:
+        acme.imagine.cache.resolver.aws_s3_resolver:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
             arguments:
                 - "@acme.amazon_s3"
@@ -278,7 +289,7 @@ service, to alter those options you need.
                  # This calls $service->setPutOption('CacheControl', 'max-age=86400');
                  - [ setPutOption, [ CacheControl, "max-age=86400" ] ]
             tags:
-                - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
+                - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
 
 You can also use the constructor of the resolver to directly inject multiple options.
@@ -288,7 +299,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
     # app/config/services.yml
 
     services:
-        acme.imagine.cache.resolver.amazon_s3:
+        acme.imagine.cache.resolver.aws_s3_resolver:
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
             arguments:
                 - "@acme.amazon_s3"
@@ -297,10 +308,11 @@ You can also use the constructor of the resolver to directly inject multiple opt
                 - { Scheme: https }
                 - { CacheControl: "max-age=86400" }
             tags:
-                - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
+                - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
 .. _`Composer`: https://getcomposer.org/
 .. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
+.. _`Default Credential Provider Chain`: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html

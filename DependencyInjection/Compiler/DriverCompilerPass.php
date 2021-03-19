@@ -29,9 +29,7 @@ class DriverCompilerPass extends AbstractCompilerPass
         $liipImagineDriver = $container->getParameter('liip_imagine.driver_service');
 
         if (!$container->hasDefinition($liipImagineDriver)) {
-            throw new InvalidConfigurationException(sprintf(
-                "Specified driver '%s' is not defined.", $liipImagineDriver
-            ));
+            throw new InvalidConfigurationException(sprintf("Specified driver '%s' is not defined.", $liipImagineDriver));
         }
     }
 }

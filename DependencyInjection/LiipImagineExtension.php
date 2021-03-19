@@ -37,17 +37,11 @@ class LiipImagineExtension extends Extension
      */
     private $loadersFactories = [];
 
-    /**
-     * @param ResolverFactoryInterface $resolverFactory
-     */
     public function addResolverFactory(ResolverFactoryInterface $resolverFactory)
     {
         $this->resolversFactories[$resolverFactory->getName()] = $resolverFactory;
     }
 
-    /**
-     * @param LoaderFactoryInterface $loaderFactory
-     */
     public function addLoaderFactory(LoaderFactoryInterface $loaderFactory)
     {
         $this->loadersFactories[$loaderFactory->getName()] = $loaderFactory;
@@ -63,9 +57,6 @@ class LiipImagineExtension extends Extension
 
     /**
      * @see \Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
-     *
-     * @param array            $configs
-     * @param ContainerBuilder $container
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -137,6 +128,11 @@ class LiipImagineExtension extends Extension
         }
 
         $this->deprecationTemplatingFilterHelper($container);
+
+        $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
+        $webpOptions = $config['webp'];
+        unset($webpOptions['generate']);
+        $container->setParameter('liip_imagine.webp.options', $webpOptions);
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
@@ -146,29 +142,16 @@ class LiipImagineExtension extends Extension
         }, $filterSets);
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     */
     private function loadResolvers(array $config, ContainerBuilder $container)
     {
         $this->createFactories($this->resolversFactories, $config, $container);
     }
 
-    /**
-     * @param array            $config
-     * @param ContainerBuilder $container
-     */
     private function loadLoaders(array $config, ContainerBuilder $container)
     {
         $this->createFactories($this->loadersFactories, $config, $container);
     }
 
-    /**
-     * @param array            $factories
-     * @param array            $configurations
-     * @param ContainerBuilder $container
-     */
     private function createFactories(array $factories, array $configurations, ContainerBuilder $container)
     {
         foreach ($configurations as $name => $conf) {

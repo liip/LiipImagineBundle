@@ -145,8 +145,8 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
         }
 
         if (isset($options['max'])) {
-            @trigger_error(sprintf('The "max" option was deprecated in 2.2 and will be removed in 3.0. '.
-                'Instead, use the "quality" option.'), E_USER_DEPRECATED);
+            @trigger_error('The "max" option was deprecated in 2.2 and will be removed in 3.0. '.
+                'Instead, use the "quality" option.', E_USER_DEPRECATED);
 
             if (isset($options['quality'])) {
                 throw new InvalidOptionException('the "max" and "quality" options cannot both be set', $options);
@@ -156,7 +156,7 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
         }
 
         if ($quality = $options['quality'] ?? $this->quality) {
-            if (!in_array($options['quality'], range(0, 100), true)) {
+            if (!\in_array($options['quality'], range(0, 100), true)) {
                 throw new InvalidOptionException('the "quality" option must be an int between 0 and 100', $options);
             }
 

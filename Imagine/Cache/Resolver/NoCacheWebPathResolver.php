@@ -22,9 +22,6 @@ class NoCacheWebPathResolver implements ResolverInterface
      */
     private $requestContext;
 
-    /**
-     * @param RequestContext $requestContext
-     */
     public function __construct(RequestContext $requestContext)
     {
         $this->requestContext = $requestContext;

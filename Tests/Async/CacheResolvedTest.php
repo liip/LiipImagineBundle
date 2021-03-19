@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheResolvedTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
         if (!class_exists(EnqueueBundle::class)) {
             self::markTestSkipped('The tests are run without enqueue integration. Skip them');

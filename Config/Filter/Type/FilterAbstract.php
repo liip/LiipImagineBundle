@@ -21,7 +21,7 @@ abstract class FilterAbstract implements FilterInterface
     public function getName(): string
     {
         if (!\defined('static::NAME')) {
-            throw new \Exception('Constant NAME is not defined on subclass '.\get_class($this));
+            throw new \Exception('Constant NAME is not defined on subclass '.static::class);
         }
 
         return static::NAME;

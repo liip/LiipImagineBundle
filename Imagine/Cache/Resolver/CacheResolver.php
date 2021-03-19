@@ -43,10 +43,7 @@ class CacheResolver implements ResolverInterface
      * * index_key
      *   The name of the index key being used to save a list of created cache keys regarding one image and filter pairing.
      *
-     * @param Cache             $cache
-     * @param ResolverInterface $cacheResolver
-     * @param array             $options
-     * @param OptionsResolver   $optionsResolver
+     * @param OptionsResolver $optionsResolver
      */
     public function __construct(Cache $cache, ResolverInterface $cacheResolver, array $options = [], OptionsResolver $optionsResolver = null)
     {

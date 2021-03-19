@@ -11,16 +11,17 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Config;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\Visibility;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Symfony\Component\Routing\RequestContext;
 
-class FlysystemResolver implements ResolverInterface
+class FlysystemV2Resolver implements ResolverInterface
 {
     /**
-     * @var FilesystemInterface
+     * @var FilesystemOperator
      */
     protected $flysystem;
 
@@ -47,7 +48,7 @@ class FlysystemResolver implements ResolverInterface
     /**
      * Flysystem specific visibility.
      *
-     * @see AdapterInterface
+     * @see Visibility
      *
      * @var string
      */
@@ -61,11 +62,11 @@ class FlysystemResolver implements ResolverInterface
      * @param string $visibility
      */
     public function __construct(
-        FilesystemInterface $flysystem,
+        FilesystemOperator $flysystem,
         RequestContext $requestContext,
         $rootUrl,
         $cachePrefix = 'media/cache',
-        $visibility = AdapterInterface::VISIBILITY_PUBLIC
+        $visibility = Visibility::PUBLIC
     ) {
         $this->flysystem = $flysystem;
         $this->requestContext = $requestContext;
@@ -86,7 +87,7 @@ class FlysystemResolver implements ResolverInterface
      */
     public function isStored($path, $filter)
     {
-        return $this->flysystem->has($this->getFilePath($path, $filter));
+        return $this->flysystem->fileExists($this->getFilePath($path, $filter));
     }
 
     /**
@@ -117,10 +118,10 @@ class FlysystemResolver implements ResolverInterface
      */
     public function store(BinaryInterface $binary, $path, $filter)
     {
-        $this->flysystem->put(
+        $this->flysystem->write(
             $this->getFilePath($path, $filter),
             $binary->getContent(),
-            ['visibility' => $this->visibility, 'mimetype' => $binary->getMimeType()]
+            [Config::OPTION_VISIBILITY => $this->visibility, 'mimetype' => $binary->getMimeType()]
         );
     }
 
@@ -137,7 +138,7 @@ class FlysystemResolver implements ResolverInterface
         if (empty($paths)) {
             foreach ($filters as $filter) {
                 $filterCacheDir = $this->cacheRoot.'/'.$filter;
-                $this->flysystem->deleteDir($filterCacheDir);
+                $this->flysystem->deleteDirectory($filterCacheDir);
             }
 
             return;
@@ -145,7 +146,7 @@ class FlysystemResolver implements ResolverInterface
 
         foreach ($paths as $path) {
             foreach ($filters as $filter) {
-                if ($this->flysystem->has($this->getFilePath($path, $filter))) {
+                if ($this->flysystem->fileExists($this->getFilePath($path, $filter))) {
                     $this->flysystem->delete($this->getFilePath($path, $filter));
                 }
             }

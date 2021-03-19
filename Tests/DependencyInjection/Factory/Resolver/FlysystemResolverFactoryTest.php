@@ -11,7 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -25,11 +26,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class FlysystemResolverFactoryTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        if (!class_exists(Filesystem::class)) {
+        if (!interface_exists(FilesystemInterface::class)
+            && !interface_exists(FilesystemOperator::class)
+        ) {
             $this->markTestSkipped('Requires the league/flysystem package.');
         }
     }
@@ -72,7 +75,12 @@ class FlysystemResolverFactoryTest extends TestCase
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.flysystem', $resolverDefinition->getParent());
+        if (interface_exists(FilesystemOperator::class)) {
+            $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem2';
+        } else {
+            $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem';
+        }
+        $this->assertSame($resolverName, $resolverDefinition->getParent());
 
         $this->assertSame('http://images.example.com', $resolverDefinition->getArgument(2));
         $this->assertSame('theCachePrefix', $resolverDefinition->getArgument(3));

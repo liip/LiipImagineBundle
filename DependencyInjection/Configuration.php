@@ -213,29 +213,39 @@ class Configuration implements ConfigurationInterface
             ->end()
         ->end();
 
+        $rootNode
+            ->children()
+                ->arrayNode('webp')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('generate')->defaultFalse()->end()
+                        ->integerNode('quality')->defaultValue(100)->end()
+                        ->scalarNode('cache')->defaultNull()->end()
+                        ->scalarNode('data_loader')->defaultNull()->end()
+                        ->arrayNode('post_processors')
+                            ->defaultValue([])
+                            ->useAttributeAsKey('name')
+                            ->prototype('array')
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 
-    /**
-     * @param ArrayNodeDefinition $resolversPrototypeNode
-     */
     private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
         $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode);
     }
 
-    /**
-     * @param ArrayNodeDefinition $resolversPrototypeNode
-     */
     private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
         $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode);
     }
 
-    /**
-     * @param array               $factories
-     * @param ArrayNodeDefinition $definition
-     */
     private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition)
     {
         foreach ($factories as $f) {

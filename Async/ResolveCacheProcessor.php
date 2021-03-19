@@ -39,11 +39,6 @@ final class ResolveCacheProcessor implements Processor, CommandSubscriberInterfa
      */
     private $producer;
 
-    /**
-     * @param FilterManager     $filterManager
-     * @param FilterService     $filterService
-     * @param ProducerInterface $producer
-     */
     public function __construct(
         FilterManager $filterManager,
         FilterService $filterService,

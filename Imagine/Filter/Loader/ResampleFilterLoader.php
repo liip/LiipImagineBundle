@@ -26,18 +26,12 @@ class ResampleFilterLoader implements LoaderInterface
      */
     private $imagine;
 
-    /**
-     * @param ImagineInterface $imagine
-     */
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
     }
 
     /**
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @throws LoadFilterException
      *
      * @return ImageInterface
@@ -88,8 +82,6 @@ class ResampleFilterLoader implements LoaderInterface
     }
 
     /**
-     * @param array $options
-     *
      * @return array
      */
     private function getImagineSaveOptions(array $options)
@@ -108,8 +100,6 @@ class ResampleFilterLoader implements LoaderInterface
     }
 
     /**
-     * @param array $options
-     *
      * @return array
      */
     private function resolveOptions(array $options)
@@ -138,10 +128,7 @@ class ResampleFilterLoader implements LoaderInterface
                 }
             }
 
-            throw new InvalidArgumentException(
-                'Invalid value for "filter" option: must be a valid constant resolvable using one of formats '.
-                '"\Imagine\Image\ImageInterface::FILTER_%s", "\Imagine\Image\ImageInterface::%s", or "%s".'
-            );
+            throw new InvalidArgumentException('Invalid value for "filter" option: must be a valid constant resolvable using one of formats '.'"\Imagine\Image\ImageInterface::FILTER_%s", "\Imagine\Image\ImageInterface::%s", or "%s".');
         });
 
         try {

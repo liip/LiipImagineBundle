@@ -21,9 +21,6 @@ trait FilterTrait
      */
     private $cache;
 
-    /**
-     * @param CacheManager $cache
-     */
     public function __construct(CacheManager $cache)
     {
         $this->cache = $cache;
@@ -34,7 +31,6 @@ trait FilterTrait
      *
      * @param string      $path
      * @param string      $filter
-     * @param array       $config
      * @param string|null $resolver
      * @param int         $referenceType
      *

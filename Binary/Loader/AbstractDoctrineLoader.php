@@ -11,13 +11,14 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 abstract class AbstractDoctrineLoader implements LoaderInterface
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManager|LegacyObjectManager
      */
     protected $manager;
 
@@ -27,10 +28,10 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     protected $class;
 
     /**
-     * @param ObjectManager $manager
-     * @param string        $class
+     * @param ObjectManager|LegacyObjectManager $manager
+     * @param string                            $class
      */
-    public function __construct(ObjectManager $manager, $class = null)
+    public function __construct($manager, $class = null)
     {
         $this->manager = $manager;
         $this->class = $class;

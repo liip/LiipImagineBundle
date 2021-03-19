@@ -126,6 +126,7 @@
             <argument type="service" id="liip_imagine.cache.signer" />
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
+            <argument>%liip_imagine.webp.generate%</argument>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="Liip\ImagineBundle\Imagine\Filter\FilterConfiguration">
@@ -136,6 +137,8 @@
             <argument type="service" id="liip_imagine.data.manager" />
             <argument type="service" id="liip_imagine.filter.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument>%liip_imagine.webp.generate%</argument>
+            <argument>%liip_imagine.webp.options%</argument>
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
 
@@ -299,6 +302,11 @@
             <argument><!-- will be injected by FlysystemLoaderFactory --></argument>
         </service>
 
+        <service id="liip_imagine.binary.loader.prototype.flysystem2" class="Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader" abstract="true">
+            <argument type="service" id="liip_imagine.extension_guesser" />
+            <argument><!-- will be injected by FlysystemV2LoaderFactory --></argument>
+        </service>
+
         <service id="liip_imagine.binary.loader.prototype.chain" class="Liip\ImagineBundle\Binary\Loader\ChainLoader" abstract="true">
             <argument><!-- will be injected by ChainLoaderFactory --></argument>
         </service>
@@ -340,6 +348,14 @@
         </service>
 
         <service id="liip_imagine.cache.resolver.prototype.flysystem" class="Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument type="service" id="router.request_context" />
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+        </service>
+
+        <service id="liip_imagine.cache.resolver.prototype.flysystem2" class="Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver" public="true" abstract="true">
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument type="service" id="router.request_context" />
             <argument><!-- will be injected by a ResolverFactory --></argument>
