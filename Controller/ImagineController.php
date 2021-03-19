@@ -85,7 +85,6 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
 
         return $this->createRedirectResponse(function () use ($path, $filter, $resolver) {
