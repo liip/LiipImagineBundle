@@ -309,11 +309,11 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolvePathWithSpecialCharactersAndWhiteSpaces(): void
     {
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg',
+            $this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg',
             'anImageContent'
         );
         $this->filesystem->dumpFile(
-            $this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp',
+            $this->cacheRoot.'/thumbnail_web_path/images/foobar.jpeg.webp',
             'anImageContentWebP'
         );
 
