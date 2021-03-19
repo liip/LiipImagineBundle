@@ -20,9 +20,6 @@ class FilterConfiguration
      */
     protected $filters = [];
 
-    /**
-     * @param array $filters
-     */
     public function __construct(array $filters = [])
     {
         $this->filters = $filters;
@@ -50,7 +47,6 @@ class FilterConfiguration
      * Sets a configuration on the given filter.
      *
      * @param string $filter
-     * @param array  $config
      */
     public function set($filter, array $config)
     {

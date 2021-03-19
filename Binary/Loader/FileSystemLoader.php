@@ -39,7 +39,6 @@ class FileSystemLoader implements LoaderInterface
     /**
      * @param MimeTypeGuesserInterface|DeprecatedMimeTypeGuesserInterface $mimeGuesser
      * @param MimeTypesInterface|DeprecatedExtensionGuesserInterface      $extensionGuesser
-     * @param LocatorInterface                                            $locator
      */
     public function __construct(
         $mimeGuesser,

@@ -51,7 +51,7 @@ Options
 :strong:`speed:` ``int``
     The speed/quality trade-off value to use. Valid values: ``1`` (slowest/best) through ``11`` (fastest/worst).
 
-:string:`dithering:` ``bool|float``
+:strong:`dithering:` ``bool|float``
     When set to ``false`` the Floyd-Steinberg dithering algorithm is completely disabled. Otherwise, when a ``float``,
     the dithering level is set.
 

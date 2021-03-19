@@ -32,10 +32,7 @@ final class SizeFactory
         }
 
         if (!\is_array($options[$propertyName])) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid value for %s provided, array expected.',
-                $propertyName
-            ));
+            throw new InvalidArgumentException(sprintf('Invalid value for %s provided, array expected.', $propertyName));
         }
 
         $width = $options[$propertyName][0] ?? null;

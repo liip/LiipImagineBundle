@@ -11,7 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
-use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -21,15 +22,17 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
 class FlysystemLoaderFactoryTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        if (!class_exists(Filesystem::class)) {
+        if (!interface_exists(FilesystemInterface::class)
+            && !interface_exists(FilesystemOperator::class)
+        ) {
             $this->markTestSkipped('Requires the league/flysystem package.');
         }
     }
@@ -69,7 +72,12 @@ class FlysystemLoaderFactoryTest extends TestCase
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
         $this->assertInstanceOf(ChildDefinition::class, $loaderDefinition);
-        $this->assertSame('liip_imagine.binary.loader.prototype.flysystem', $loaderDefinition->getParent());
+        if (interface_exists(FilesystemOperator::class)) {
+            $loaderName = 'liip_imagine.binary.loader.prototype.flysystem2';
+        } else {
+            $loaderName = 'liip_imagine.binary.loader.prototype.flysystem';
+        }
+        $this->assertSame($loaderName, $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);
         $this->assertSame('flyfilesystemservice', (string) $reference);
@@ -78,7 +86,7 @@ class FlysystemLoaderFactoryTest extends TestCase
     public function testThrowIfFileSystemServiceNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessage('The child node "filesystem_service" at path "flysystem" must be configured.');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('flysystem');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')

@@ -17,9 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 abstract class AbstractCompilerPass implements CompilerPassInterface
 {
     /**
-     * @param ContainerBuilder $container
-     * @param string           $message
-     * @param mixed[]          ...$replacements
+     * @param mixed[] ...$replacements
      */
     protected function log(ContainerBuilder $container, string $message, ...$replacements): void
     {

@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory
+ * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory<extended>
  */
 class ChainLoaderFactoryTest extends FactoryTestCase
 {

@@ -1,0 +1,111 @@
+name: PHPUnit
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  phpunit:
+    name: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        dependencies: [highest]
+        symfony: ['*']
+        include:
+          # Minimum supported dependencies with the oldest supported PHP version
+          - php: '7.1'
+            dependencies: lowest
+            symfony: '*'
+
+          # Minimum supported dependencies with the latest supported PHP version
+          - php: '8.0'
+            dependencies: lowest
+            symfony: '*'
+
+          # Test each supported Symfony version with lowest supported PHP version
+          - php: '7.1'
+            dependencies: highest
+            symfony: '3.4.*'
+
+          - php: '7.1'
+            dependencies: highest
+            symfony: '4.4.*'
+
+          - php: '7.2'
+            dependencies: highest
+            symfony: '5.1.*'
+
+          - php: '7.2'
+            dependencies: highest
+            symfony: '5.2.*'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure coverage driver
+        id: coverage
+        run: echo ::set-output name=driver::$([ "${{ matrix.php }}" = "7.1" ] && echo "xdebug" || echo "pcov")
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: ${{ steps.coverage.outputs.driver }}
+          extensions: gd, imagick
+
+      - name: Require Symfony version
+        if: matrix.symfony != '*'
+        run: |
+          composer global require --no-interaction --no-progress symfony/flex:^1.11
+          composer config extra.symfony.require ${{ matrix.symfony }}
+
+      # TODO: remove this step when enqueue supports PHP 8, see https://github.com/php-enqueue/enqueue-dev/issues/1108
+      - name: Remove EnqueueBundle
+        if: matrix.php == '8.0'
+        run: composer remove --dev --no-update enqueue/enqueue-bundle
+
+      - name: Update project dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      - name: Cache PHPUnit
+        uses: actions/cache@v2
+        with:
+          path: vendor/bin/.phpunit
+          key: ${{ runner.os }}-phpunit-${{ matrix.php }}
+
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit install
+
+      - name: Run PHPUnit tests
+        env:
+          SYMFONY_DEPRECATIONS_HELPER: max[self]=0
+        run: vendor/bin/simple-phpunit -v
+
+      - name: Install php-coveralls
+        run: composer global require --no-interaction --no-progress php-coveralls/php-coveralls
+
+      - name: Upload coverage results to Coveralls
+        uses: nick-invision/retry@v2
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
+        with:
+          timeout_seconds: 60
+          max_attempts: 3
+          command: php-coveralls -x var/build/clover.xml -o var/build/upload.json -v
+
+  coveralls-finish:
+    needs: [phpunit]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Notify Coveralls when build is finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true

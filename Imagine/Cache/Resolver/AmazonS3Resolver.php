@@ -58,9 +58,6 @@ class AmazonS3Resolver implements ResolverInterface
         $this->objUrlOptions = $objUrlOptions;
     }
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -205,7 +202,6 @@ class AmazonS3Resolver implements ResolverInterface
 
     /**
      * @param mixed $message
-     * @param array $context
      */
     protected function logError($message, array $context = [])
     {

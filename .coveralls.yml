@@ -1,3 +1,0 @@
-service_name   : travis-ci
-coverage_clover: var/build/clover.xml
-json_path      : var/build/upload.json

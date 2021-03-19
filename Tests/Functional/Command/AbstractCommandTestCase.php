@@ -42,7 +42,7 @@ class AbstractCommandTestCase extends AbstractSetupWebTestCase
     {
         foreach ($images as $i) {
             foreach ($filters as $f) {
-                $this->assertFileNotExists(sprintf('%s/%s/%s', $this->cacheRoot, $f, $i));
+                $this->assertFileDoesNotExist(sprintf('%s/%s/%s', $this->cacheRoot, $f, $i));
             }
         }
     }

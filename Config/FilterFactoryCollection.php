@@ -32,11 +32,7 @@ class FilterFactoryCollection
     }
 
     /**
-     * @param string $name
-     *
      * @throws NotFoundException
-     *
-     * @return FilterFactoryInterface
      */
     public function getFilterFactoryByName(string $name): FilterFactoryInterface
     {

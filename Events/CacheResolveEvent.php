@@ -20,8 +20,7 @@ if (is_subclass_of(EventDispatcherInterface::class, ContractsEventDispatcherInte
     abstract class BCEvent extends ContractsEvent
     {
     }
-}
-else {
+} else {
     abstract class BCEvent extends Event
     {
     }

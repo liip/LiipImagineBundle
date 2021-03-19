@@ -427,6 +427,54 @@ class ConfigurationTest extends TestCase
         $this->assertSame(PNG_ALL_FILTERS, $config['filter_sets']['test']['png_compression_filter']);
     }
 
+    public function testWebpSection(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            []
+        );
+
+        $this->assertArrayHasKey('webp', $config);
+        $this->assertArrayHasKey('generate', $config['webp']);
+        $this->assertFalse($config['webp']['generate']);
+        $this->assertArrayHasKey('quality', $config['webp']);
+        $this->assertSame(100, $config['webp']['quality']);
+        $this->assertArrayHasKey('cache', $config['webp']);
+        $this->assertNull($config['webp']['cache']);
+        $this->assertArrayHasKey('data_loader', $config['webp']);
+        $this->assertNull($config['webp']['data_loader']);
+        $this->assertArrayHasKey('post_processors', $config['webp']);
+        $this->assertSame([], $config['webp']['post_processors']);
+    }
+
+    public function testWebpEnableGenerate(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            [[
+                'webp' => [
+                    'generate' => true,
+                ],
+            ]]
+        );
+
+        $this->assertArrayHasKey('webp', $config);
+        $this->assertArrayHasKey('generate', $config['webp']);
+        $this->assertTrue($config['webp']['generate']);
+    }
+
     protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array
     {
         $processor = new Processor();

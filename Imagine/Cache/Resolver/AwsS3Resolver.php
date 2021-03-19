@@ -73,9 +73,6 @@ class AwsS3Resolver implements ResolverInterface
         $this->putOptions = $putOptions;
     }
 
-    /**
-     * @param LoggerInterface $logger
-     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -268,7 +265,6 @@ class AwsS3Resolver implements ResolverInterface
 
     /**
      * @param mixed $message
-     * @param array $context
      */
     protected function logError($message, array $context = [])
     {

@@ -207,8 +207,10 @@ Watermark Options
 
 :strong:`position:` ``string``
     Sets the position of the watermark on the input image. Valid values: ``topleft``,
-    ``top``, ``topright``, ``left``, ``center``, ``right``, ``bottomleft``, ``bottom``, and
-    ``bottomright``.
+    ``top``, ``topright``, ``left``, ``center``, ``right``, ``bottomleft``, ``bottom``,
+    ``bottomright`` and ``multiple``.
+
+    When using ``multiple``, the watermark is pasted onto the image as often as possible.
 
 .. caution::
 

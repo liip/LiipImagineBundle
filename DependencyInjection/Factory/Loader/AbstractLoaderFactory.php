@@ -23,17 +23,17 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
     protected static $namePrefix = 'liip_imagine.binary.loader';
 
     /**
+     * @param string|null $name
+     *
      * @return ChildDefinition
      */
-    final protected function getChildLoaderDefinition()
+    final protected function getChildLoaderDefinition($name = null)
     {
-        return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $this->getName()));
+        return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }
 
     /**
-     * @param string           $name
-     * @param Definition       $definition
-     * @param ContainerBuilder $container
+     * @param string $name
      *
      * @return string
      */

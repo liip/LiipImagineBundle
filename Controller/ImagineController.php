@@ -46,14 +46,12 @@ class ImagineController
      */
     private $controllerConfig;
 
-    /**
-     * @param FilterService         $filterService
-     * @param DataManager           $dataManager
-     * @param SignerInterface       $signer
-     * @param ControllerConfig|null $controllerConfig
-     */
-    public function __construct(FilterService $filterService, DataManager $dataManager, SignerInterface $signer, ?ControllerConfig $controllerConfig = null)
-    {
+    public function __construct(
+        FilterService $filterService,
+        DataManager $dataManager,
+        SignerInterface $signer,
+        ?ControllerConfig $controllerConfig = null
+    ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
@@ -74,9 +72,8 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param Request $request
-     * @param string  $path
-     * @param string  $filter
+     * @param string $path
+     * @param string $filter
      *
      * @throws RuntimeException
      * @throws NotFoundHttpException
@@ -88,8 +85,13 @@ class ImagineController
         $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
 
-        return $this->createRedirectResponse(function () use ($path, $filter, $resolver) {
-            return $this->filterService->getUrlOfFilteredImage($path, $filter, $resolver);
+        return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
+            return $this->filterService->getUrlOfFilteredImage(
+                $path,
+                $filter,
+                $resolver,
+                $this->isWebpSupported($request)
+            );
         }, $path, $filter);
     }
 
@@ -100,10 +102,9 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param Request $request
-     * @param string  $hash
-     * @param string  $path
-     * @param string  $filter
+     * @param string $hash
+     * @param string $path
+     * @param string $filter
      *
      * @throws RuntimeException
      * @throws BadRequestHttpException
@@ -122,16 +123,17 @@ class ImagineController
         }
 
         if (true !== $this->signer->check($hash, $path, $runtimeConfig)) {
-            throw new BadRequestHttpException(sprintf(
-                'Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s',
-                $path,
-                $filter,
-                json_encode($runtimeConfig)
-            ));
+            throw new BadRequestHttpException(sprintf('Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s', $path, $filter, json_encode($runtimeConfig)));
         }
 
-        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver) {
-            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters($path, $filter, $runtimeConfig, $resolver);
+        return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver, $request) {
+            return $this->filterService->getUrlOfFilteredImageWithRuntimeFilters(
+                $path,
+                $filter,
+                $runtimeConfig,
+                $resolver,
+                $this->isWebpSupported($request)
+            );
         }, $path, $filter, $hash);
     }
 
@@ -148,11 +150,12 @@ class ImagineController
         } catch (NonExistingFilterException $exception) {
             throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter), $exception);
         } catch (RuntimeException $exception) {
-            throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [
-                $hash ? sprintf('%s/%s', $hash, $path) : $path,
-                $filter,
-                $exception->getMessage(),
-            ]), 0, $exception);
+            throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [$hash ? sprintf('%s/%s', $hash, $path) : $path, $filter, $exception->getMessage()]), 0, $exception);
         }
+    }
+
+    private function isWebpSupported(Request $request): bool
+    {
+        return false !== mb_stripos($request->headers->get('accept', ''), 'image/webp');
     }
 }

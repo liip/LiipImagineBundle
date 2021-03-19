@@ -41,6 +41,12 @@ The default configuration for the bundle looks like this:
             filter_action:          liip_imagine.controller:filterAction
             filter_runtime_action:  liip_imagine.controller:filterRuntimeAction
             redirect_response_code: 301
+        webp:
+            generate:    false
+            quality:     100
+            cache:       ~
+            data_loader: ~
+            post_processors: []
         filter_sets:
 
             # Prototype
@@ -77,11 +83,20 @@ There are several configuration options available:
       loader for runtimeconfig images. Default value: ``liip_imagine.controller:filterRuntimeAction``
     * ``redirect_response_code`` - The HTTP redirect response code to return from the imagine controller,
       one of ``201``, ``301``, ``302``, ``303``, ``307``, or ``308``. Default value: ``301``
+* ``webp``
+    * ``generate`` - enabling the generation a copy of the image in the WebP format.
+    * ``quality`` - override the quality from filter option.
+    * ``cache`` - default cache resolver. Default value: ``web_path`` (which means
+      the standard web_path resolver is used)
+    * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
+      (which means the standard filesystem loader is used).
+    * ``post_processors`` - sets post-processors to be applied on filtered image
+      (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
 * ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
   Default value: ``gd``
 * ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in
-``filter_sets``. These values will be overridden if they are specified in the each set. In case of ``filters`` and
-``post_processors``, the specified values will be merged with the default ones.
+  ``filter_sets``. These values will be overridden if they are specified in the each set. In case of ``filters`` and
+  ``post_processors``, the specified values will be merged with the default ones.
 * ``filter_sets`` - specify the filter sets that you want to define and use.
 
 Each filter set that you specify has the following options:

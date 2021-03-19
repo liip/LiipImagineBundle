@@ -37,9 +37,6 @@ class WatermarkFilterLoader implements LoaderInterface
     /**
      * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
      *
-     * @param ImageInterface $image
-     * @param array          $options
-     *
      * @return ImageInterface|static
      */
     public function load(ImageInterface $image, array $options = [])
@@ -68,6 +65,21 @@ class WatermarkFilterLoader implements LoaderInterface
 
             $watermark->resize(new Box($watermarkSize->getWidth() * $factor, $watermarkSize->getHeight() * $factor));
             $watermarkSize = $watermark->getSize();
+        }
+
+        if ('multiple' === $options['position']) {
+            // we loop over the coordinates of the image to apply the watermark as much as possible
+            $pasteX = 0;
+            while ($pasteX < $size->getWidth()) {
+                $pasteY = 0;
+                while ($pasteY < $size->getHeight()) {
+                    $image->paste($watermark, new Point($pasteX, $pasteY));
+                    $pasteY += $watermarkSize->getHeight();
+                }
+                $pasteX += $watermarkSize->getWidth();
+            }
+
+            return $image;
         }
 
         switch ($options['position']) {

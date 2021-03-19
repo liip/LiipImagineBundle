@@ -72,11 +72,11 @@ trait CacheCommandTrait
      */
     private function normalizeFilterList(array $filters): array
     {
-        if (0 < count($filters)) {
+        if (0 < \count($filters)) {
             return $filters;
         }
 
-        if (0 < count($filters = array_keys((array) $this->filterManager->getFilterConfiguration()->all()))) {
+        if (0 < \count($filters = array_keys((array) $this->filterManager->getFilterConfiguration()->all()))) {
             return $filters;
         }
 
@@ -101,8 +101,8 @@ trait CacheCommandTrait
                 return 1 === $count ? $singular : sprintf('%ss', $singular);
             };
 
-            $imagePathsSize = count($images);
-            $filterSetsSize = count($filters);
+            $imagePathsSize = \count($images);
+            $filterSetsSize = \count($filters);
             $allActionsSize = 0 === $imagePathsSize ? $filterSetsSize : ($filterSetsSize * $imagePathsSize) - $this->failures;
             $allActionsWord = $wordPluralizer($allActionsSize, $singularAction);
 
@@ -126,7 +126,7 @@ trait CacheCommandTrait
 
             if ($this->failures) {
                 $this->io->critBlock(sprintf('%s %%s', $rootTextOutput), [
-                    sprintf('[encountered %d failures]', $this->failures)
+                    sprintf('[encountered %d failures]', $this->failures),
                 ]);
             } else {
                 $this->io->okayBlock($rootTextOutput);

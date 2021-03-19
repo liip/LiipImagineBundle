@@ -22,9 +22,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ResolveCacheCommand extends Command
 {
-    protected static $defaultName = 'liip:imagine:cache:resolve';
-
     use CacheCommandTrait;
+    protected static $defaultName = 'liip:imagine:cache:resolve';
 
     /**
      * @var DataManager

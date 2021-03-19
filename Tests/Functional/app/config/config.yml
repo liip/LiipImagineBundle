@@ -17,7 +17,7 @@ framework:
         storage_id: session.storage.mock_file
 
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: "%kernel.project_dir%/config/routing.yml"
 
 liip_imagine:
 
@@ -29,15 +29,15 @@ liip_imagine:
 
         default:
             filesystem:
-                data_root: "%kernel.root_dir%/public"
+                data_root: "%kernel.project_dir%/public"
 
         foo:
             filesystem:
-                data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-01"
+                data_root: "%kernel.project_dir%/../../Fixtures/FileSystemLocator/root-01"
 
         bar:
             filesystem:
-                data_root: "%kernel.root_dir%/../../Fixtures/FileSystemLocator/root-02"
+                data_root: "%kernel.project_dir%/../../Fixtures/FileSystemLocator/root-02"
 
         baz:
             chain:
@@ -73,7 +73,7 @@ liip_imagine:
 
         default:
             web_path:
-                web_root:     "%kernel.root_dir%/public"
+                web_root:     "%kernel.project_dir%/public"
                 cache_prefix: media/cache
 
     filter_sets:
