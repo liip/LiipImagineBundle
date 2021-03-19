@@ -179,9 +179,6 @@ class WebPathResolver implements ResolverInterface
         // remove duplicate -
         $path = preg_replace('~-+~', '-', $path);
 
-        // lowercase
-        $path = mb_strtolower($path);
-
         if (empty($path)) {
             $path = 'n-a';
         }
