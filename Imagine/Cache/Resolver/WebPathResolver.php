@@ -173,7 +173,7 @@ class WebPathResolver implements ResolverInterface
         $path = iconv('utf-8', 'us-ascii//TRANSLIT', $path);
 
         // remove unwanted characters
-        $path = preg_replace('~[^-/.\w]+~', '', $path);
+        $path = preg_replace('~[^-/.\w]+~', '/', $path);
 
         // trim
         $path = trim($path, '-');
