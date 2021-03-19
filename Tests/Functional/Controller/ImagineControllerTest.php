@@ -327,11 +327,11 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertSame(302, $response->getStatusCode());
         $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/foo/bar.jpeg', $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg');
 
         // PHP compiled with WebP support
         if ($this->webp_generate) {
-            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo/bar.jpeg.webp');
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
         }
     }
 }
