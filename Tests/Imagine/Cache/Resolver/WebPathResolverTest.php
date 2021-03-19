@@ -492,7 +492,7 @@ class WebPathResolverTest extends TestCase
 
         $result = $method->invokeArgs($resolver, ['https://some.meme.com/cute/cats.jpg', 'some_filter']);
 
-        $this->assertSame('aCachePrefix/some_filter/https---some.meme.com/cute/cats.jpg', $result);
+        $this->assertSame('aCachePrefix/some_filter/https-some.meme.com/cute/cats.jpg', $result);
     }
 
     /**
