@@ -19,10 +19,7 @@ maintained_branches: ["2.x"]
 # The location of your RST doc files, defined as a relative directory
 # If all the branches defined in the 'branches' option use the same
 # directory, then you can define it as a string
-doc_dir: "doc/"
-# However, if this location changes in any version, you must define
-# this option as a YAML mapping
-doc_dir: { "1.x": "Resources/doc/", "2.x": "Resource/doc/" }
+doc_dir: "Resources/doc/"
 
 # OPTIONAL
 # This is the branch used to read the docs by default (and it's mapped as
