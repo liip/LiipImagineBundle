@@ -69,7 +69,7 @@ Example configuration:
 Rotate Options
 ~~~~~~~~~~~~~~
 
-:strong:`degree:` ``float``
+**degree:** ``float``
     Sets the "rotation angle" that defines the degree to rotate the image. Must be a
     positive number.
 
@@ -106,7 +106,7 @@ Example configuration:
 Flip Options
 ~~~~~~~~~~~~
 
-:strong:`axis:` ``string``
+**axis:** ``string``
     Sets the "flip axis" that defines the axis on which to flip the image. Valid values:
     ``x``, ``horizontal``, ``y``, ``vertical``.
 

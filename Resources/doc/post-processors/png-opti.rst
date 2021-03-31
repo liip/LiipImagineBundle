@@ -42,51 +42,51 @@ for the resulting image binary.
 Options
 -------
 
-:strong:`level:` ``int``
+**level:** ``int``
     Sets the image optimization level. Valid values are integers between ``0`` and ``7``.
 
-:strong:`snip:` ``bool``
+**snip:** ``bool``
     When multi-images are encountered (for example, an animated image), this causes one of the images to be kept and drops
     the other ones. Depending on the input format, this may be either the first or the most relevant (e.g. the largest) image.
 
-:strong:`strip:` ``bool|string``
+**strip:** ``bool|string``
     When set to ``true``, all extra image headers, such as its comments, EXIF markers, and other metadata, will be removed.
     Equivalently, the string value ``all`` also removes all extra metadata.
 
-:strong:`preserve_attributes:` ``bool``
+**preserve_attributes:** ``bool``
     Preserve file attributes (time stamps, file access rights, etc.) where applicable/possible.
 
-:strong:`interlace_type:` ``int``
+**interlace_type:** ``int``
     Sets the interlace type used for the output file. When set to ``0``, the output image will be non-interlaced. When
     set to ``1``, the output image will be interlaced using the Adam7 method. When not set, the output will have the
     same interlace type as the original input.
 
-:strong:`no_bit_depth_reductions:` ``bool``
+**no_bit_depth_reductions:** ``bool``
     Disables any bit depth reduction optimizations.
 
-:strong:`no_color_type_reductions:` ``bool``
+**no_color_type_reductions:** ``bool``
     Disables any color type reduction optimizations.
 
-:strong:`no_palette_reductions:` ``bool``
+**no_palette_reductions:** ``bool``
     Disables any color palette reduction optimizations.
 
-:strong:`no_reductions:` ``bool``
+**no_reductions:** ``bool``
     Disables any lossless reduction optimizations, enabling ``no_bit_depth_reductions``, ``no_color_type_reductions``,
     and ``no_palette_reductions``.
 
 Parameters
 ----------
 
-:strong:`liip_imagine.optipng.stripAll:` ``bool``
+**liip_imagine.optipng.stripAll:** ``bool``
     Removes all comments, EXIF markers, and other metadata from the image binary.
 
-:strong:`liip_imagine.optipng.level:` ``int``
+**liip_imagine.optipng.level:** ``int``
     Sets the image optimization factor. Default is ``7``.
 
-:strong:`liip_imagine.optipng.binary:` ``string``
+**liip_imagine.optipng.binary:** ``string``
     Sets the location of the ``optipng`` executable. Default is ``/usr/bin/optipng``.
 
-:strong:`liip_imagine.optipng.tempDir:` ``string``
+**liip_imagine.optipng.tempDir:** ``string``
     Sets the directory to store temporary files.
 
 
