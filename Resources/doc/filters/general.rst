@@ -49,14 +49,14 @@ Example configuration:
 Background Options
 ~~~~~~~~~~~~~~~~~~
 
-:strong:`color:` ``string``
+**color:** ``string``
     Sets the background color HEX value. The default color is white (``#fff``).
 
-:strong:`size:` ``int[]``
+**size:** ``int[]``
     Sets the generated background size as an integer array containing the dimensions
     as width and height values.
 
-:strong:`position:` ``string``
+**position:** ``string``
     Sets the position of the input image on the newly created background image. Valid
     values: ``topleft``, ``top``, ``topright``, ``left``, ``center``, ``right``, ``bottomleft``,
     ``bottom``, and ``bottomright``.
@@ -122,7 +122,7 @@ Example configuration:
 Interlace Options
 ~~~~~~~~~~~~~~~~~
 
-:strong:`mode:` ``string``
+**mode:** ``string``
     Sets the interlace mode to encode the file with. Valid values: ``none``, ``line``,
     ``plane``, and ``partition``.
 
@@ -182,22 +182,22 @@ Example configuration:
 Resample Options
 ~~~~~~~~~~~~~~~~
 
-:strong:`unit:` ``string``
+**unit:** ``string``
     Sets the unit to use for pixel density, either "pixels per inch" or "pixels per centimeter".
     Valid values: ``ppi`` and ``ppc``.
 
-:strong:`x:` ``int|float``
+**x:** ``int|float``
     Sets the horizontal (x) pixel density to resample the image to.
 
-:strong:`y:` ``int|float``
+**y:** ``int|float``
     Sets the vertical (y) pixel density to resample the image to.
 
-:strong:`filter:` ``string``
+**filter:** ``string``
     Sets the optional filter to use during the resampling operation. It must be a string resolvable
     as a constant from `Imagine\Image\ImageInterface`_ (you may omit the ``FILTER_`` prefix)
     or a valid fully qualified constant. By default it is set to ``FILTER_UNDEFINED``.
 
-:strong:`tmp_dir:` ``string``
+**tmp_dir:** ``string``
     Sets the optional temporary work directory. This filter requires a temporary location to save
     out and read back in the image binary, as these operations are requires to resample an image.
     By default, it is set to the value of the `sys_get_temp_dir()`_ function.
@@ -270,15 +270,15 @@ Example configuration:
 Watermark Options
 ~~~~~~~~~~~~~~~~~
 
-:strong:`image:` ``string``
+**image:** ``string``
     Sets the location of the watermark image. The value of this option is prepended
     with the resolved value of the ``%kernel.root_dir%`` parameter.
 
-:strong:`size:` ``float``
+**size:** ``float``
     Sets the size of the watermark as a relative ration, relative to the original
     input image.
 
-:strong:`position:` ``string``
+**position:** ``string``
     Sets the position of the watermark on the input image. Valid values: ``topleft``,
     ``top``, ``topright``, ``left``, ``centerleft``,  ``center``, ``centerright``, ``right``, ``bottomleft``, ``bottom``, and
     ``bottomright``.

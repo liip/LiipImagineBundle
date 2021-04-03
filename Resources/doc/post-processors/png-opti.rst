@@ -42,26 +42,26 @@ for the resulting image binary.
 Options
 -------
 
-:strong:`strip_all:` ``bool``
+**strip_all:** ``bool``
     Removes all comments, EXIF markers, and other image metadata.
 
-:strong:`level:` ``int``
+**level:** ``int``
     Sets the image optimization factor.
 
 
 Parameters
 ----------
 
-:strong:`liip_imagine.optipng.stripAll:` ``bool``
+**liip_imagine.optipng.stripAll:** ``bool``
     Removes all comments, EXIF markers, and other metadata from the image binary.
 
-:strong:`liip_imagine.optipng.level:` ``int``
+**liip_imagine.optipng.level:** ``int``
     Sets the image optimization factor. Default is ``7``.
 
-:strong:`liip_imagine.optipng.binary:` ``string``
+**liip_imagine.optipng.binary:** ``string``
     Sets the location of the ``optipng`` executable. Default is ``/usr/bin/optipng``.
 
-:strong:`liip_imagine.optipng.tempDir:` ``string``
+**liip_imagine.optipng.tempDir:** ``string``
     Sets the directory to store temporary files.
 
 
