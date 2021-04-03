@@ -41,12 +41,12 @@ This configuration sets a quality factor range of 75 to 80 for the resulting ima
 Options
 -------
 
-:strong:`quality:` ``int``
+**quality:** ``int``
     Sets the image optimization factor.
 
 
 Parameters
 ----------
 
-:strong:`liip_imagine.pngquant.binary:` ``string``
+**liip_imagine.pngquant.binary:** ``string``
     Sets the location of the ``pnquant`` executable. Default is ``/usr/bin/pnquant``.

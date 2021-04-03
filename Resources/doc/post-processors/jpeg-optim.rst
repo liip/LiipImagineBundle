@@ -42,32 +42,32 @@ a maximum quality factor of 70 for the resulting image binary.
 Options
 -------
 
-:strong:`strip_all:` ``bool``
+**strip_all:** ``bool``
     Removes all comments, EXIF markers, and other image metadata.
 
-:strong:`max:` ``int``
+**max:** ``int``
     Sets the maximum image quality factor.
 
-:strong:`progressive:` ``bool``
+**progressive:** ``bool``
     Ensures the image uses progressive encoding.
 
 
 Parameters
 ----------
 
-:strong:`liip_imagine.jpegoptim.stripAll:` ``bool``
+**liip_imagine.jpegoptim.stripAll:** ``bool``
     Removes all comments, EXIF markers, and other metadata from the image binary.
 
-:strong:`liip_imagine.jpegoptim.max:` ``int``
+**liip_imagine.jpegoptim.max:** ``int``
     Assigns the maximum quality factor for the image binary.
 
-:strong:`liip_imagine.jpegoptim.progressive:` ``bool``
+**liip_imagine.jpegoptim.progressive:** ``bool``
     Ensures that progressive encoding is enabled for the image binary.
 
-:strong:`liip_imagine.jpegoptim.binary:` ``string``
+**liip_imagine.jpegoptim.binary:** ``string``
     Sets the location of the ``jpegoptim`` executable. Default is ``/usr/bin/jpegoptim``.
 
-:strong:`liip_imagine.jpegoptim.tempDir:` ``string``
+**liip_imagine.jpegoptim.tempDir:** ``string``
     Sets the directory to store temporary files.
 
 
