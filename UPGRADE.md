@@ -17,6 +17,10 @@ given release.
   You can use `league/flysystem` either v1 or v2, but if you're using v1
   and want to upgrade to v2 you can simply run `composer require -W liip/imagine-bundle:^2.5 league/flysystem:^2.0`.
   You should upgrade flysystem v2 related packages that you're using as well.
+- The `Liip\ImagineBundle\Imagine\Cache\Resolver` class and the corresponding
+  service prototype - `liip_imagine.cache.resolver.prototype.cache` are also
+  deprecated. Please use the new PSR-6 compatible resolver
+  `liip_imagine.cache.resolver.prototype.psr_cache` instead.
 
 ## [2.2.0](https://github.com/liip/LiipImagineBundle/blob/2.2.0/CHANGELOG.md#unreleased)
 
