@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Config\Filter\Argument\Size;
  */
 final class Upscale extends FilterAbstract
 {
-    const NAME = 'upscale';
+    public const NAME = 'upscale';
 
     /**
      * @var Size

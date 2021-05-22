@@ -82,7 +82,7 @@ for your custom post-processor.
 
     class MyCustomPostProcessor implements PostProcessorInterface
     {
-        const EXECUTABLE_PATH = '/path/to/your/executable';
+        public const EXECUTABLE_PATH = '/path/to/your/executable';
 
         /**
          * @param BinaryInterface $binary

@@ -16,5 +16,5 @@ class Commands
     /**
      * @var string
      */
-    const RESOLVE_CACHE = 'liip_imagine_resolve_cache';
+    public const RESOLVE_CACHE = 'liip_imagine_resolve_cache';
 }

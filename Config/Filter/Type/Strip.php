@@ -16,5 +16,5 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Strip extends FilterAbstract
 {
-    const NAME = 'strip';
+    public const NAME = 'strip';
 }

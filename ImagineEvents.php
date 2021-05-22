@@ -16,10 +16,10 @@ interface ImagineEvents
     /**
      * @Event("Liip\ImagineBundle\Events\CacheResolveEvent")
      */
-    const PRE_RESOLVE = 'liip_imagine.pre_resolve';
+    public const PRE_RESOLVE = 'liip_imagine.pre_resolve';
 
     /**
      * @Event("Liip\ImagineBundle\Events\CacheResolveEvent")
      */
-    const POST_RESOLVE = 'liip_imagine.post_resolve';
+    public const POST_RESOLVE = 'liip_imagine.post_resolve';
 }

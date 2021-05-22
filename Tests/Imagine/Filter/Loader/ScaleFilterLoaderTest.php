@@ -26,22 +26,22 @@ class ScaleFilterLoaderTest extends AbstractTest
     /**
      * @var int
      */
-    const DUMMY_IMAGE_WIDTH = 500;
+    public const DUMMY_IMAGE_WIDTH = 500;
 
     /**
      * @var int
      */
-    const DUMMY_IMAGE_HEIGHT = 600;
+    public const DUMMY_IMAGE_HEIGHT = 600;
 
     /**
      * @var int
      */
-    const UPSCALE_DUMMY_IMAGE_WIDTH = 600;
+    public const UPSCALE_DUMMY_IMAGE_WIDTH = 600;
 
     /**
      * @var int
      */
-    const UPSCALE_DUMMY_IMAGE_HEIGHT = 400;
+    public const UPSCALE_DUMMY_IMAGE_HEIGHT = 400;
 
     /**
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader::load

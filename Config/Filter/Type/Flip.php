@@ -16,7 +16,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Flip extends FilterAbstract
 {
-    const NAME = 'flip';
+    public const NAME = 'flip';
 
     /**
      * @var string

@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Config\Filter\Argument\Size;
  */
 final class Background extends FilterAbstract
 {
-    const NAME = 'background';
+    public const NAME = 'background';
 
     /**
      * @var string
