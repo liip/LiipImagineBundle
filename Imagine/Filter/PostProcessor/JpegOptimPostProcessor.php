@@ -156,7 +156,7 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
         }
 
         if ($quality = $options['quality'] ?? $this->quality) {
-            if (!\in_array($options['quality'], range(0, 100), true)) {
+            if (!\in_array($quality, range(0, 100), true)) {
                 throw new InvalidOptionException('the "quality" option must be an int between 0 and 100', $options);
             }
 

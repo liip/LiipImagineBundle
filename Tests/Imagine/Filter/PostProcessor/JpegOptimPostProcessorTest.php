@@ -84,16 +84,17 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
     public static function provideProcessArgumentsData(): array
     {
         $data = [
-            [[], ['--strip-all', '--all-progressive']],
-            [['strip_all' => false], ['--all-progressive']],
-            [['strip_all' => true], ['--strip-all', '--all-progressive']],
-            [['quality' => 50], ['--strip-all', '--max=50', '--all-progressive']],
-            [['progressive' => false], ['--strip-all', '--all-normal']],
-            [['progressive' => true], ['--strip-all', '--all-progressive']],
+            [[], [], ['--strip-all', '--all-progressive']],
+            [[], ['strip_all' => false], ['--all-progressive']],
+            [[], ['strip_all' => true], ['--strip-all', '--all-progressive']],
+            [[], ['quality' => 50], ['--strip-all', '--max=50', '--all-progressive']],
+            [[], ['progressive' => false], ['--strip-all', '--all-normal']],
+            [[], ['progressive' => true], ['--strip-all', '--all-progressive']],
+            [[null, true, 85], ['progressive' => true], ['--strip-all', '--max=85', '--all-progressive']],
         ];
 
         return array_map(function (array $d) {
-            array_unshift($d[1], AbstractPostProcessorTestCase::getPostProcessAsFileExecutable());
+            array_unshift($d[2], AbstractPostProcessorTestCase::getPostProcessAsFileExecutable());
 
             return $d;
         }, $data);
@@ -102,9 +103,13 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
     /**
      * @dataProvider provideProcessArgumentsData
      */
-    public function testProcessArguments(array $options, array $expected): void
+    public function testProcessArguments(array $parameters, array $options, array $expected): void
     {
-        $this->assertSame($expected, $this->getProcessArguments($options));
+        $result = $this
+            ->getProtectedReflectionMethodVisible($processor = $this->getPostProcessorInstance($parameters), 'getProcessArguments')
+            ->invokeArgs($processor, [$options]);
+
+        $this->assertSame($expected, $result);
     }
 
     public function testProcessWithNonSupportedMimeType(): void
@@ -168,6 +173,8 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     protected function getPostProcessorInstance(array $parameters = []): JpegOptimPostProcessor
     {
-        return new JpegOptimPostProcessor($parameters[0] ?? static::getPostProcessAsFileExecutable());
+        $parameters[0] = $parameters[0] ?? static::getPostProcessAsFileExecutable();
+
+        return new JpegOptimPostProcessor(...$parameters);
     }
 }
