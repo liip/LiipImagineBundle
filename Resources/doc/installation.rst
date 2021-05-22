@@ -12,7 +12,7 @@ and add it as a dependency to your project:
 
 .. code-block:: bash
 
-    $ composer require liip/imagine-bundle
+    composer require liip/imagine-bundle
 
 This command requires that `Composer`_ is installed globally, as explained in
 the `installation documentation`_ for Composer.
