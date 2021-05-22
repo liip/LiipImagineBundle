@@ -16,5 +16,5 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Grayscale extends FilterAbstract
 {
-    const NAME = 'grayscale';
+    public const NAME = 'grayscale';
 }

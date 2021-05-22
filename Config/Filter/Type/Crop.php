@@ -19,7 +19,7 @@ use Liip\ImagineBundle\Config\Filter\Argument\Size;
  */
 final class Crop extends FilterAbstract
 {
-    const NAME = 'crop';
+    public const NAME = 'crop';
 
     /**
      * @var Point

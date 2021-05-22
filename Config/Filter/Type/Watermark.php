@@ -16,7 +16,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Watermark extends FilterAbstract
 {
-    const NAME = 'watermark';
+    public const NAME = 'watermark';
 
     /**
      * @var string

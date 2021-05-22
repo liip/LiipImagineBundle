@@ -26,12 +26,12 @@ class PasteFilterLoaderTest extends AbstractTest
     /**
      * @var int
      */
-    const DUMMY_IMAGE_WIDTH = 500;
+    public const DUMMY_IMAGE_WIDTH = 500;
 
     /**
      * @var int
      */
-    const DUMMY_IMAGE_HEIGHT = 600;
+    public const DUMMY_IMAGE_HEIGHT = 600;
 
     /**
      * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader::load

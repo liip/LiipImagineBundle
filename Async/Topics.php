@@ -16,5 +16,5 @@ class Topics
     /**
      * @var string
      */
-    const CACHE_RESOLVED = 'liip_imagine_cache_resolved';
+    public const CACHE_RESOLVED = 'liip_imagine_cache_resolved';
 }

@@ -16,5 +16,5 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class AutoRotate extends FilterAbstract
 {
-    const NAME = 'auto_rotate';
+    public const NAME = 'auto_rotate';
 }
