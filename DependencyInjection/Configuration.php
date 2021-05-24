@@ -195,6 +195,26 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->scalarNode('twig_mode')
+                ->defaultValue('legacy')
+                ->info('Twig mode: none/lazy/legacy (default)')
+                ->validate()
+                    ->ifTrue(function ($v) {
+                        return !\in_array($v, ['none', 'lazy', 'legacy'], true);
+                    })
+                    ->thenInvalid('Invalid twig mode specified: %s')
+                ->end()
+                ->validate()
+                    ->ifTrue(function ($v){
+                        return 'legacy' === $v;
+                    })
+                    ->then(function ($v) {
+                        @trigger_error('Twig "legacy" mode has been deprecated and will be removed in 3.0. Use "none" or "lazy".', E_USER_DEPRECATED);
+
+                        return $v;
+                    })
+                ->end()
+            ->end()
             ->booleanNode('enqueue')
                 ->defaultFalse()
                 ->info('Enables integration with enqueue if set true. Allows resolve image caches in background by sending messages to MQ.')

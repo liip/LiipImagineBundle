@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!--  Templating helpers and extensions -->
+
+        <service id="liip_imagine.templating.filter_extension" class="Liip\ImagineBundle\Templating\FilterExtension" public="false">
+            <tag name="twig.extension" />
+            <argument type="service" id="liip_imagine.cache.manager" />
+        </service>
+
+    </services>
+</container>

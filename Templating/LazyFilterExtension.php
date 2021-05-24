@@ -11,26 +11,26 @@
 
 namespace Liip\ImagineBundle\Templating;
 
-@trigger_error('The ' . FilterExtension::class . ' class is deprecated since version 2.7 and will be removed in 3.0; use ' . LazyFilterExtension::class . ' instead.', E_USER_DEPRECATED);
-
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-/**
- * @deprecated
- */
-class FilterExtension extends AbstractExtension
+final class LazyFilterExtension extends AbstractExtension
 {
-    use FilterTrait;
-
     /**
      * {@inheritdoc}
      */
     public function getFilters()
     {
         return [
-            new TwigFilter('imagine_filter', [$this, 'filter']),
-            new TwigFilter('imagine_filter_cache', [$this, 'filterCache']),
+            new TwigFilter('imagine_filter', [FilterRuntime::class, 'filter']),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'liip_imagine_lazy';
     }
 }
