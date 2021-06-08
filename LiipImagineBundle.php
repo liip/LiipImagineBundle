@@ -16,6 +16,7 @@ use Liip\ImagineBundle\Async\Topics;
 use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Compiler\MaybeSetMimeServicesAsAliasesCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
@@ -47,6 +48,7 @@ class LiipImagineBundle extends Bundle
         $container->addCompilerPass(new PostProcessorsCompilerPass());
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
+        $container->addCompilerPass(new MaybeSetMimeServicesAsAliasesCompilerPass());
 
         if (class_exists(AddTopicMetaPass::class)) {
             $container->addCompilerPass(AddTopicMetaPass::create()
