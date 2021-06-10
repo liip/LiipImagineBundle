@@ -224,11 +224,16 @@ You can access the ``CacheManager`` simply by type hinting it in your controller
     }
 
 WebP image format
-~~~~~~~~~~~~~~~~~
+-----------------
 
 The WebP format better optimizes the quality and size of the compressed image
-compared to JPEG and PNG. Google strongly recommends using this format. You can
-set it as the default format for all images.
+compared to JPEG and PNG. Google strongly recommends using this format.
+
+WebP for all
+~~~~~~~~~~~~
+
+If you can ignore `old browsers that do not support the WebP format`_, then you
+can configure the generation of all images in the WebP format.
 
 .. code-block:: yaml
 
@@ -237,6 +242,9 @@ set it as the default format for all images.
     liip_imagine:
         default_filter_set_settings:
             format: webp
+
+Use WebP if supported
+~~~~~~~~~~~~~~~~~~~~~
 
 However, not all `browsers support the WebP format`_, and for compatibility with
 all browsers it is recommended to return images in their original format for
@@ -280,4 +288,38 @@ otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg
             controller:
                 redirect_response_code: 302
 
+Client side resolving
+~~~~~~~~~~~~~~~~~~~~~
+
+For better performance, you can use the ``<picture>`` tag to resolve a supported
+image formats on client-side in the browser. This will complicate the HTML code
+and require registering two identical filters that generate images in different
+formats.
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        filter_sets:
+            my_thumb_jpeg:
+                format: jpeg
+                quality: 80
+                filters:
+                    thumbnail: { size: [223, 223], mode: inset }
+            my_thumb_webp:
+                format: webp
+                quality: 100
+                filters:
+                    thumbnail: { size: [223, 223], mode: inset }
+
+.. code-block:: html
+
+    <picture>
+      <source srcset="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_webp') }}" type="image/webp">
+      <source srcset="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_jpeg') }}" type="image/jpeg">
+      <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_jpeg') }}" alt="Alt Text!">
+    </picture>
+
+.. _`old browsers that do not support the WebP format`: https://caniuse.com/webp
 .. _`browsers support the WebP format`: https://caniuse.com/webp
