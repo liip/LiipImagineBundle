@@ -15,7 +15,7 @@ use League\Flysystem\FilesystemInterface;
 use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
-use PHPUnit\Framework\TestCase;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory<extended>
  */
-class FlysystemLoaderFactoryTest extends TestCase
+class FlysystemLoaderFactoryTest extends AbstractTest
 {
     protected function setUp(): void
     {
@@ -86,7 +86,7 @@ class FlysystemLoaderFactoryTest extends TestCase
     public function testThrowIfFileSystemServiceNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
+        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('flysystem');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')

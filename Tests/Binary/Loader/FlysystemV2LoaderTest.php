@@ -59,7 +59,7 @@ class FlysystemV2LoaderTest extends AbstractTest
     public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageRegExp('{Source image .+ not found}');
+        $this->expectExceptionMessageMatchesBC('{Source image .+ not found}');
 
         $loader = $this->getFlysystemLoader();
 

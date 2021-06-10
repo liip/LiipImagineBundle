@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
-use PHPUnit\Framework\TestCase;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
@@ -27,7 +27,7 @@ use Symfony\Component\Mime\MimeTypes;
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
  */
-class ChainLoaderTest extends TestCase
+class ChainLoaderTest extends AbstractTest
 {
     public function testImplementsLoaderInterface(): void
     {
@@ -94,7 +94,7 @@ class ChainLoaderTest extends TestCase
     public function testThrowsIfFileDoesNotExist(string $path): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\]" 1 loaders}');
+        $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\]" 1 loaders}');
 
         $this->getChainLoader()->find($path);
     }
@@ -105,7 +105,7 @@ class ChainLoaderTest extends TestCase
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageRegExp('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
+        $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
         $this->getChainLoader([], [
             'foo' => $this->createFileSystemLoader(
