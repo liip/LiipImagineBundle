@@ -146,9 +146,9 @@ EOF
                 } else {
                     $this->io->status('cached', 'white');
                 }
-            }
 
-            $this->io->line(sprintf(' %s', $this->cacheManager->resolve($image, $filter)));
+                $this->io->line(sprintf(' %s', $this->cacheManager->resolve($filterPathContainer->getTarget(), $filter)));
+            }
         } catch (\Exception $e) {
             ++$this->failures;
 
