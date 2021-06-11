@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Service;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -305,12 +306,57 @@ final class FilterServiceTest extends TestCase
             ->withConsecutive(
                 [$binary, self::FILTER, []],
                 [$binary, self::FILTER, [
-                        'format' => 'webp',
-                    ] + self::WEBP_OPTIONS]
+                    'format' => 'webp',
+                ] + self::WEBP_OPTIONS]
             )
             ->willReturn($binary);
 
         $this->assertTrue($service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
+    }
+
+    /**
+     * @dataProvider provideWebpGeneration
+     */
+    public function testWarmsUpCacheNonExistingFilter(bool $webpGenerate): void
+    {
+        $this->expectException(NonExistingFilterException::class);
+
+        $resolver = null;
+        $binary = $this
+            ->getMockBuilder(BinaryInterface::class)
+            ->getMock();
+        $exception = new NonExistingFilterException('Filter not found');
+
+        $service = $this->createFilterService($webpGenerate);
+
+        $this->dataManager
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->with(self::FILTER, self::SOURCE_IMAGE)
+            ->willReturn($binary);
+
+        $this->filterManager
+            ->expects($this->atLeastOnce())
+            ->method('applyFilter')
+            ->withConsecutive(
+                [$binary, self::FILTER, []],
+                [$binary, self::FILTER, [
+                        'format' => 'webp',
+                    ] + self::WEBP_OPTIONS]
+            )
+            ->willThrowException($exception);
+
+        $this->logger
+            ->expects($this->atLeastOnce())
+            ->method('debug')
+            ->with(sprintf(
+                'Could not locate filter "%s" for path "%s". Message was "%s"',
+                self::FILTER,
+                self::SOURCE_IMAGE,
+                $exception->getMessage()
+            ));
+
+        $service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true);
     }
 
     /**
@@ -502,6 +548,60 @@ final class FilterServiceTest extends TestCase
             ->willReturn($binary);
 
         $this->assertSame($url, $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
+    }
+
+    /**
+     * @dataProvider provideWebpGeneration
+     */
+    public function testGetUrlOfFilteredImageNotExistingFilter(bool $webpGenerate): void
+    {
+        $this->expectException(NonExistingFilterException::class);
+
+        $resolver = null;
+        $binary = $this
+            ->getMockBuilder(BinaryInterface::class)
+            ->getMock();
+        $exception = new NonExistingFilterException('Filter not found');
+
+        $service = $this->createFilterService($webpGenerate);
+
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('isStored')
+            ->withConsecutive(
+                [self::SOURCE_IMAGE, self::FILTER, $resolver],
+                [self::WEBP_IMAGE, self::FILTER, $resolver]
+            )
+            ->willReturn(false);
+
+        $this->dataManager
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->with(self::FILTER, self::SOURCE_IMAGE)
+            ->willReturn($binary);
+
+        $this->filterManager
+            ->expects($this->atLeastOnce())
+            ->method('applyFilter')
+            ->withConsecutive(
+                [$binary, self::FILTER, []],
+                [$binary, self::FILTER, [
+                        'format' => 'webp',
+                    ] + self::WEBP_OPTIONS]
+            )
+            ->willThrowException($exception);
+
+        $this->logger
+            ->expects($this->atLeastOnce())
+            ->method('debug')
+            ->with(sprintf(
+                'Could not locate filter "%s" for path "%s". Message was "%s"',
+                self::FILTER,
+                self::SOURCE_IMAGE,
+                $exception->getMessage()
+            ));
+
+        $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver);
     }
 
     /**
@@ -734,8 +834,8 @@ final class FilterServiceTest extends TestCase
             ->withConsecutive(
                 [$binary, self::FILTER, $runtimeOptions],
                 [$binary, self::FILTER, [
-                        'format' => 'webp',
-                    ] + self::WEBP_OPTIONS + $runtimeOptions]
+                    'format' => 'webp',
+                ] + self::WEBP_OPTIONS + $runtimeOptions]
             )
             ->willReturn($binary);
 
@@ -748,6 +848,72 @@ final class FilterServiceTest extends TestCase
         );
 
         $this->assertSame($url, $result);
+    }
+
+    /**
+     * @dataProvider provideWebpGeneration
+     */
+    public function testGetUrlOfFilteredImageWithRuntimeFiltersNotExistingFilter(bool $webpGenerate): void
+    {
+        $this->expectException(NonExistingFilterException::class);
+        $resolver = null;
+        $runtimeOptions = [
+            'filters' => self::RUNTIME_FILTERS,
+        ];
+        $binary = $this
+            ->getMockBuilder(BinaryInterface::class)
+            ->getMock();
+        $exception = new NonExistingFilterException('Filter not found');
+
+        $service = $this->createFilterService($webpGenerate);
+
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('isStored')
+            ->withConsecutive(
+                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
+                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
+            )
+            ->willReturn(false);
+        $this->cacheManager
+            ->expects($this->atLeastOnce())
+            ->method('getRuntimePath')
+            ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
+            ->willReturn(self::RUNTIME_IMAGE);
+
+        $this->dataManager
+            ->expects($this->atLeastOnce())
+            ->method('find')
+            ->with(self::FILTER, self::SOURCE_IMAGE)
+            ->willReturn($binary);
+
+        $this->filterManager
+            ->expects($this->atLeastOnce())
+            ->method('applyFilter')
+            ->withConsecutive(
+                [$binary, self::FILTER, $runtimeOptions],
+                [$binary, self::FILTER, [
+                        'format' => 'webp',
+                    ] + self::WEBP_OPTIONS + $runtimeOptions]
+            )
+            ->willThrowException($exception);
+
+        $this->logger
+            ->expects($this->atLeastOnce())
+            ->method('debug')
+            ->with(sprintf(
+                'Could not locate filter "%s" for path "%s". Message was "%s"',
+                self::FILTER,
+                self::SOURCE_IMAGE,
+                $exception->getMessage()
+            ));
+
+        $service->getUrlOfFilteredImageWithRuntimeFilters(
+            self::SOURCE_IMAGE,
+            self::FILTER,
+            self::RUNTIME_FILTERS,
+            $resolver
+        );
     }
 
     private function createFilterService(bool $webpGenerate): FilterService
