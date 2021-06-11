@@ -1,5 +1,13 @@
 <?php
-declare(strict_types=1);
+
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace Liip\ImagineBundle\Tests\Service;
 
@@ -13,7 +21,7 @@ final class FilterPathContainerTest extends TestCase
 {
     public function testWithEmptyTarget(): void
     {
-        $source = 'cats.jpeg';
+        $source = 'images/cats.jpeg';
         $options = [];
 
         $container = new FilterPathContainer($source);
@@ -25,8 +33,8 @@ final class FilterPathContainerTest extends TestCase
 
     public function testCustomTarget(): void
     {
-        $source = 'cats.jpeg';
-        $target = 'cats.jpeg.webp';
+        $source = 'images/cats.jpeg';
+        $target = 'images/cats.jpeg.webp';
         $options = [
             'format' => 'webp',
         ];
@@ -94,8 +102,8 @@ final class FilterPathContainerTest extends TestCase
      */
     public function testCreateWebp(array $baseOptions, array $webpOptions, array $expectedOptions): void
     {
-        $source = 'cats.jpeg';
-        $target = 'cats.jpeg.webp';
+        $source = 'images/cats.jpeg';
+        $target = 'images/cats.jpeg.webp';
 
         $container = (new FilterPathContainer($source, '', $baseOptions))->createWebp($webpOptions);
 
