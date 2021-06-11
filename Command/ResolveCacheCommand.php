@@ -12,9 +12,8 @@
 namespace Liip\ImagineBundle\Command;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Service\FilterPathContainer;
+use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,34 +27,17 @@ class ResolveCacheCommand extends Command
     protected static $defaultName = 'liip:imagine:cache:resolve';
 
     /**
-     * @var DataManager
+     * @var FilterService
      */
-    private $dataManager;
+    private $filterService;
 
-    /**
-     * @var bool
-     */
-    private $webpGenerate;
-
-    /**
-     * @var mixed[]
-     */
-    private $webpOptions;
-
-    public function __construct(
-        DataManager $dataManager,
-        CacheManager $cacheManager,
-        FilterManager $filterManager,
-        bool $webpGenerate,
-        array $webpOptions
-    ) {
+    public function __construct(CacheManager $cacheManager, FilterManager $filterManager, FilterService $filterService)
+    {
         parent::__construct();
 
-        $this->dataManager = $dataManager;
         $this->cacheManager = $cacheManager;
         $this->filterManager = $filterManager;
-        $this->webpGenerate = $webpGenerate;
-        $this->webpOptions = $webpOptions;
+        $this->filterService = $filterService;
     }
 
     protected function configure(): void
@@ -109,9 +91,9 @@ EOF
         $forced = $input->getOption('force');
         [$images, $filters] = $this->resolveInputFiltersAndPaths($input);
 
-        foreach ($images as $i) {
-            foreach ($filters as $f) {
-                $this->runCacheImageResolve($i, $f, $forced);
+        foreach ($images as $image) {
+            foreach ($filters as $filter) {
+                $this->runCacheImageResolve($image, $filter, $forced);
             }
         }
 
@@ -129,26 +111,13 @@ EOF
         $this->io->group($image, $filter, 'blue');
 
         try {
-            $basePathContainer = new FilterPathContainer($image);
-            $filterPathContainers = [$basePathContainer];
-
-            if ($this->webpGenerate) {
-                $filterPathContainers[] = $basePathContainer->createWebp($this->webpOptions);
+            if ($this->filterService->warmsUpCache($image, $filter, null, $forced)) {
+                $this->io->status('resolved', 'green');
+            } else {
+                $this->io->status('cached', 'white');
             }
 
-            foreach ($filterPathContainers as $filterPathContainer) {
-                if ($forced || !$this->cacheManager->isStored($filterPathContainer->getTarget(), $filter)) {
-                    $binary = $this->dataManager->find($filter, $filterPathContainer->getSource());
-                    $filteredBinary = $this->filterManager->applyFilter($binary, $filter, $filterPathContainer->getOptions());
-                    $this->cacheManager->store($filteredBinary, $filterPathContainer->getTarget(), $filter);
-
-                    $this->io->status('resolved', 'green');
-                } else {
-                    $this->io->status('cached', 'white');
-                }
-
-                $this->io->line(sprintf(' %s', $this->cacheManager->resolve($filterPathContainer->getTarget(), $filter)));
-            }
+            $this->io->line(sprintf(' %s', $this->cacheManager->resolve($image, $filter)));
         } catch (\Exception $e) {
             ++$this->failures;
 

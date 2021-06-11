@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Command;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,14 +23,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RemoveCacheCommand extends Command
 {
     use CacheCommandTrait;
+
     protected static $defaultName = 'liip:imagine:cache:remove';
 
-    public function __construct(CacheManager $cacheManager, FilterManager $filterManager)
+    /**
+     * @var FilterService
+     */
+    private $filterService;
+
+    public function __construct(CacheManager $cacheManager, FilterManager $filterManager, FilterService $filterService)
     {
         parent::__construct();
 
         $this->cacheManager = $cacheManager;
         $this->filterManager = $filterManager;
+        $this->filterService = $filterService;
     }
 
     protected function configure(): void
@@ -79,9 +87,9 @@ EOF
         if (empty($images)) {
             $this->cacheManager->remove(null, $filters);
         } else {
-            foreach ($images as $i) {
-                foreach ($filters as $f) {
-                    $this->runCacheImageRemove($i, $f);
+            foreach ($images as $image) {
+                foreach ($filters as $filter) {
+                    $this->runCacheImageRemove($image, $filter);
                 }
             }
         }
@@ -99,8 +107,7 @@ EOF
 
         $this->io->group($image, $filter, 'blue');
 
-        if ($this->cacheManager->isStored($image, $filter)) {
-            $this->cacheManager->remove($image, $filter);
+        if ($this->filterService->bustCache($image, $filter)) {
             $this->io->status('removed', 'green');
         } else {
             $this->io->status('skipped', 'yellow');
