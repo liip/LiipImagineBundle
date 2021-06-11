@@ -87,6 +87,15 @@ abstract class AbstractTest extends TestCase
         ];
     }
 
+    public function expectExceptionMessageMatchesBC(string $regularExpression): void
+    {
+        if (method_exists($this, 'expectExceptionMessageMatches')) {
+            $this->expectExceptionMessageMatches($regularExpression);
+        } else {
+            $this->expectExceptionMessageRegExp($regularExpression);
+        }
+    }
+
     protected function createFilterConfiguration(): FilterConfiguration
     {
         $config = new FilterConfiguration();

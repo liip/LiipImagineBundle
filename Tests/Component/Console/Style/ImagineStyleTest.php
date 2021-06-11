@@ -226,7 +226,7 @@ class ImagineStyleTest extends AbstractTest
     public function testInvalidFormatAndReplacements(string $format, array $replacements): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('{Invalid string format "[^"]+" or replacements "[^"]+".}');
+        $this->expectExceptionMessageMatchesBC('{Invalid string format "[^"]+" or replacements "[^"]+".}');
 
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->text($format, $replacements);

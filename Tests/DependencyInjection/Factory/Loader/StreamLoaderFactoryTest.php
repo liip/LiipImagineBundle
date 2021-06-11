@@ -13,7 +13,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
-use PHPUnit\Framework\TestCase;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory<extended>
  */
-class StreamLoaderFactoryTest extends TestCase
+class StreamLoaderFactoryTest extends AbstractTest
 {
     public function testImplementsLoaderFactoryInterface(): void
     {
@@ -69,7 +69,7 @@ class StreamLoaderFactoryTest extends TestCase
     public function testThrowIfWrapperNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
+        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('stream');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
