@@ -22,10 +22,4 @@ class PathHelper
     {
         return implode('/', array_map('rawurlencode', explode('/', $path)));
     }
-
-    public static function urlPathToFilePath(string $url): string
-    {
-        // used urldecode instead of rawurlencode for BC safety to support "+" in URL
-        return urldecode($url);
-    }
 }

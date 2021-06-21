@@ -15,7 +15,6 @@ use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
-use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
@@ -82,7 +81,6 @@ class ImagineController
      */
     public function filterAction(Request $request, $path, $filter)
     {
-        $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
 
         return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
@@ -115,7 +113,6 @@ class ImagineController
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
         $resolver = $request->get('resolver');
-        $path = PathHelper::urlPathToFilePath($path);
         $runtimeConfig = $request->query->get('filters', []);
 
         if (!\is_array($runtimeConfig)) {
