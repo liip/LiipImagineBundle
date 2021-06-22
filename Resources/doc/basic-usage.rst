@@ -264,6 +264,25 @@ If browser supports WebP, the request ``https://localhost/media/cache/resolve/th
 will be redirected to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp``
 otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg``
 
+Optimize Firewall Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For most applications, requests to the filter controllers (the
+``/media/cache/resolve`` path) do not require Symfony to load the authenticated
+user data from the session. To optimize performance, you can disable the
+authentication system by defining a firewall for these controllers using the
+following code snippet:
+
+.. code-block:: yaml
+
+    # app/config/security.yml
+
+    security:
+        firewalls:
+            image_resolver:
+                pattern: ^/media/cache/resolve
+                security: false
+
 .. note::
 
     Using an unsecured connection (non HTTPS) on your site can cause problems with
