@@ -140,6 +140,6 @@ options.
                 - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
 
 
-.. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
+.. _`aws-sdk-php`: https://github.com/aws/aws-sdk-php
 .. _`Composer`: https://getcomposer.org/
 .. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
