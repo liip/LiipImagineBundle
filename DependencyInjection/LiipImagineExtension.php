@@ -20,12 +20,13 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
-class LiipImagineExtension extends Extension
+class LiipImagineExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var ResolverFactoryInterface[]
@@ -113,11 +114,6 @@ class LiipImagineExtension extends Extension
         $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
         $container->setParameter('liip_imagine.controller.filter_runtime_action', $config['controller']['filter_runtime_action']);
 
-        $container->setParameter('twig.form.resources', array_merge(
-            $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
-            ['@LiipImagine/Form/form_div_layout.html.twig']
-        ));
-
         if ($container->hasDefinition('liip_imagine.mime_types')) {
             $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
             $container->getDefinition('liip_imagine.binary.mime_type_guesser')
@@ -133,6 +129,13 @@ class LiipImagineExtension extends Extension
         $webpOptions = $config['webp'];
         unset($webpOptions['generate']);
         $container->setParameter('liip_imagine.webp.options', $webpOptions);
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        if ($container->hasExtension('twig')) {
+            $container->prependExtensionConfig('twig', ['form_themes' => ['@LiipImagine/Form/form_div_layout.html.twig']]);
+        }
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
