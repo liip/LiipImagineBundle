@@ -23,7 +23,7 @@ class FilterExtensionTest extends AbstractFilterTest
 {
     public function testAddsFilterMethodToFiltersList(): void
     {
-        $this->assertCount(1, $this->createTemplatingMock()->getFilters());
+        $this->assertCount(2, $this->createTemplatingMock()->getFilters());
     }
 
     public function testInstanceOfTwigFilter(): void

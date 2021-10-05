@@ -42,6 +42,24 @@ trait FilterTrait
     }
 
     /**
+     * Gets the cache path for the image and filter to apply.
+     */
+    public function filterCache(
+        string $path,
+        string $filter,
+        array $config = [],
+        ?string $resolver = null
+    ): string {
+        $path = parse_url($path, PHP_URL_PATH);
+
+        if (!empty($config)) {
+            $path = $this->cache->getRuntimePath($path, $config);
+        }
+
+        return $this->cache->resolve($path, $filter, $resolver);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()

@@ -25,6 +25,7 @@ class FilterExtension extends AbstractExtension
     {
         return [
             new TwigFilter('imagine_filter', [$this, 'filter']),
+            new TwigFilter('imagine_filter_cache', [$this, 'filterCache']),
         ];
     }
 }
