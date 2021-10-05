@@ -55,6 +55,11 @@ class CacheManager
     protected $defaultResolver;
 
     /**
+     * @var CacheWarmer
+     */
+    protected $cacheWarmer;
+
+    /**
      * @var bool
      */
     private $webpGenerate;
@@ -93,6 +98,18 @@ class CacheManager
         if ($resolver instanceof CacheManagerAwareInterface) {
             $resolver->setCacheManager($this);
         }
+    }
+
+    /**
+     * @param \Liip\ImagineBundle\Imagine\Cache\CacheWarmer $cacheWarmer
+     *
+     * @return CacheManager
+     */
+    public function setCacheWarmer($cacheWarmer)
+    {
+        $this->cacheWarmer = $cacheWarmer;
+
+        return $this;
     }
 
     /**
@@ -237,6 +254,8 @@ class CacheManager
 
         $paths = array_filter($paths);
         $filters = array_filter($filters);
+
+        $this->cacheWarmer->clearWarmed($paths, $filters);
 
         $mapping = new \SplObjectStorage();
         foreach ($filters as $filter) {

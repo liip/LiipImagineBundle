@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle;
 
 use Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Liip\ImagineBundle\Async\Topics;
+use Liip\ImagineBundle\DependencyInjection\Compiler\CacheWarmersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
@@ -26,6 +27,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FormatResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -47,6 +49,7 @@ class LiipImagineBundle extends Bundle
         $container->addCompilerPass(new PostProcessorsCompilerPass());
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
+        $container->addCompilerPass(new CacheWarmersCompilerPass());
 
         if (class_exists(AddTopicMetaPass::class)) {
             $container->addCompilerPass(AddTopicMetaPass::create()
@@ -65,5 +68,7 @@ class LiipImagineBundle extends Bundle
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
         $extension->addLoaderFactory(new ChainLoaderFactory());
+
+        $extension->addResolverFactory(new FormatResolverFactory());
     }
 }

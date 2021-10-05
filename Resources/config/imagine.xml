@@ -127,6 +127,9 @@
             <argument type="service" id="event_dispatcher" />
             <argument>%liip_imagine.cache.resolver.default%</argument>
             <argument>%liip_imagine.webp.generate%</argument>
+            <call method="setCacheWarmer">
+                <argument type="service" id="liip_imagine.cache.warmer"/>
+            </call>
         </service>
 
         <service id="liip_imagine.filter.configuration" class="Liip\ImagineBundle\Imagine\Filter\FilterConfiguration">
@@ -373,6 +376,14 @@
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />
         </service>
 
+        <service id="liip_imagine.cache.resolver.prototype.format" class="Liip\ImagineBundle\Imagine\Cache\Resolver\FormatResolver" public="true" abstract="true">
+            <argument type="service" id="filesystem" />
+            <argument type="service" id="router.request_context" />
+            <argument><!-- will be injected by FormatResolverFactory --></argument>
+            <argument><!-- will be injected by FormatResolverFactory --></argument>
+            <argument type="service" id="liip_imagine.filter.manager" />
+        </service>
+
         <!-- Form types -->
 
         <service id="liip_imagine.form.type.image" class="Liip\ImagineBundle\Form\Type\ImageType">
@@ -426,5 +437,14 @@
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
         </service>
 
+        <!-- Cache warmer -->
+
+        <service id="liip_imagine.cache.warmer" class="Liip\ImagineBundle\Imagine\Cache\CacheWarmer">
+            <argument type="service" id="liip_imagine.data.manager" />
+            <argument type="service" id="liip_imagine.filter.manager" />
+            <call method="setCacheManager">
+                <argument type="service" id="liip_imagine.cache.manager"/>
+            </call>
+        </service>
     </services>
 </container>
