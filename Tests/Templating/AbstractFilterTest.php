@@ -28,22 +28,32 @@ abstract class AbstractFilterTest extends AbstractTest
         $this->assertSame('liip_imagine', $this->createTemplatingMock()->getName());
     }
 
-    public function testInvokeFilterMethod(): void
+    public function provideImageNames(): iterable
+    {
+        yield 'regular' => ['image' => 'cats.jpeg', 'urlimage' => 'cats.jpeg'];
+        yield 'whitespace' => ['image' => 'white cat.jpeg', 'urlimage' => 'white%20cat.jpeg'];
+        yield 'plus' => ['image' => 'cat+plus.jpeg', 'urlimage' => 'cat%2Bplus.jpeg'];
+        yield 'questionmark' => ['image' => 'cat?question.jpeg', 'urlimage' => 'cat%3Fquestion.jpeg'];
+        yield 'hash' => ['image' => 'cat#hash.jpeg', 'urlimage' => 'cat%23hash.jpeg'];
+    }
+
+    /**
+     * @dataProvider provideImageNames
+     */
+    public function testInvokeFilterMethod($image, $urlimage): void
     {
         $expectedFilter = 'thumbnail';
-        $expectedInputPath = 'thePathToTheImage';
-        $expectedCachePath = 'thePathToTheCachedImage';
 
         $manager = $this->createCacheManagerMock();
         $manager
             ->expects($this->once())
             ->method('getBrowserPath')
-            ->with($expectedInputPath, $expectedFilter)
-            ->willReturn($expectedCachePath);
+            ->with($image, $expectedFilter)
+            ->willReturn($urlimage);
 
-        $actualPath = $this->createTemplatingMock($manager)->filter($expectedInputPath, $expectedFilter);
+        $actualPath = $this->createTemplatingMock($manager)->filter($image, $expectedFilter);
 
-        $this->assertSame($expectedCachePath, $actualPath);
+        $this->assertSame($urlimage, $actualPath);
     }
 
     public function testInvokeFilterCacheMethod(): void
