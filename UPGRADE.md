@@ -8,14 +8,18 @@ given release.
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
 
+- __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`
+  class and the corresponding service prototype - `liip_imagine.cache.resolver.prototype.cache` have been deprecated.
+  Please use the new PSR-6 compatible resolver `PsrCacheResolver` and the prototype
+ `liip_imagine.cache.resolver.prototype.psr_cache` instead.
+
 - __\[BC BREAK\]__ Symfony 5.0 did a BC break with its mime type / extension guesser. We had to adjust dependency
   injection. Usually this should not affect you, unless you overwrote `liip_imagine.mime_type_guesser` or
   `liip_imagine.extension_guesser`. If you did, please have a look at https://github.com/liip/LiipImagineBundle/pull/1379
 
-- The `watermark` and `paste` filters were deprecated and will immediately
-  *not* work in Symfony 5.0 or higher. Use `watermark_image` and `paste_image`
-  instead. The corresponding services - `liip_imagine.filter.loader.paste`
-  and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
+- __[Deprecated]__ The `watermark` and `paste` filters were deprecated and will immediately *not* work in Symfony 5.0 or
+  higher. Use `watermark_image` and `paste_image` instead. The corresponding services - the services
+  `liip_imagine.filter.loader.paste` and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
   as such. These are both unavailable in Symfony 5.0.
 
 - __\[Composer\]__ Allow [league/flysystem](https://github.com/thephpleague/flysystem) version 2.0.
