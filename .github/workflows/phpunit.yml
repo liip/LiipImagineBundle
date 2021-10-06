@@ -67,6 +67,11 @@ jobs:
         if: matrix.php == '8.0'
         run: composer remove --dev --no-update enqueue/enqueue-bundle
 
+      # Incompatible with symfony/framework-bundle v3
+      - name: Remove symfony/messenger
+        if: ${{ matrix.php == '7.1' && matrix.symfony == '3.4.*' }}
+        run: composer remove --dev --no-update symfony/messenger
+
       - name: Update project dependencies
         uses: ramsey/composer-install@v1
         with:

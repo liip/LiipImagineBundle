@@ -41,6 +41,7 @@
         "symfony/console": "^3.4|^4.3|^5.0",
         "symfony/dependency-injection": "^3.4|^4.3|^5.0",
         "symfony/form": "^3.4|^4.3|^5.0",
+        "symfony/messenger": "^4.3|^5.0",
         "symfony/phpunit-bridge": "^5.2",
         "symfony/templating": "^3.4|^4.3|^5.0",
         "symfony/validator": "^3.4|^4.3|^5.0",
@@ -59,6 +60,7 @@
         "enqueue/enqueue-bundle": "^0.9 add if you like to process images in background",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
+        "symfony/messenger": "If you like to process images in background",
         "symfony/templating": "required to use deprecated Templating component instead of Twig"
     },
     "config": {
