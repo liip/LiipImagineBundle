@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Changes the `liip_imagine.mime_type_guesser` and `liip_imagine.extension_guesser` services to be aliases of the
