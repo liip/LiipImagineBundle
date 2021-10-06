@@ -22,6 +22,9 @@ parameters:
         - Utility
         - LiipImagineBundle.php
     scanFiles:
+        - .phpstan/stubs/AdapterInterface.stub
         - .phpstan/stubs/Event.stub
         - .phpstan/stubs/ExtensionGuesserInterface.stub
+        - .phpstan/stubs/FilesystemInterface.stub
         - .phpstan/stubs/MimeTypeGuesserInterface.stub
+        - .phpstan/stubs/ReadInterface.stub

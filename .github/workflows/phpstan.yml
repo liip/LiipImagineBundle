@@ -3,6 +3,9 @@ name: PHPStan
 on:
   pull_request:
   push:
+    branches:
+      - 1.x
+      - 2.x
 
 jobs:
   phpstan:
