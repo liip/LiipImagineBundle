@@ -17,7 +17,7 @@ use Psr\Cache\CacheItemPoolInterface;
 use function str_replace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PsrCacheResolver implements ResolverInterface
+final class PsrCacheResolver implements ResolverInterface
 {
     private const RESERVED_CHARACTERS = [
         '{',
@@ -34,17 +34,17 @@ class PsrCacheResolver implements ResolverInterface
     /**
      * @var CacheItemPoolInterface
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var array
      */
-    protected $options = [];
+    private $options = [];
 
     /**
      * @var ResolverInterface
      */
-    protected $resolver;
+    private $resolver;
 
     /**
      * Constructor.
@@ -149,7 +149,7 @@ class PsrCacheResolver implements ResolverInterface
         ]);
     }
 
-    protected function removePathAndFilter($path, $filter)
+    private function removePathAndFilter($path, $filter)
     {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         $indexItem = $this->cache->getItem($indexKey);
@@ -190,7 +190,7 @@ class PsrCacheResolver implements ResolverInterface
      *
      * @return string
      */
-    protected function generateIndexKey($cacheKey)
+    private function generateIndexKey($cacheKey)
     {
         $cacheKeyStack = explode('.', $cacheKey);
 
@@ -207,7 +207,7 @@ class PsrCacheResolver implements ResolverInterface
      *
      * @return string
      */
-    protected function sanitizeCacheKeyPart($cacheKeyPart)
+    private function sanitizeCacheKeyPart($cacheKeyPart)
     {
         return str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
     }
@@ -217,7 +217,7 @@ class PsrCacheResolver implements ResolverInterface
      *
      * @return bool
      */
-    protected function saveToCache(CacheItemInterface $item)
+    private function saveToCache(CacheItemInterface $item)
     {
         $cacheKey = $item->getKey();
 
@@ -241,7 +241,7 @@ class PsrCacheResolver implements ResolverInterface
         return $this->cache->commit();
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    private function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'global_prefix' => 'liip_imagine.resolver_psr_cache',
@@ -260,7 +260,7 @@ class PsrCacheResolver implements ResolverInterface
         }
     }
 
-    protected function setDefaultOptions(OptionsResolver $resolver)
+    private function setDefaultOptions(OptionsResolver $resolver)
     {
         $this->configureOptions($resolver);
     }
