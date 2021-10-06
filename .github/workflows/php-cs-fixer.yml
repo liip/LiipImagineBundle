@@ -3,6 +3,9 @@ name: PHP-CS-Fixer
 on:
   pull_request:
   push:
+    branches:
+      - 1.x
+      - 2.x
 
 jobs:
   php-cs-fixer:
@@ -19,4 +22,4 @@ jobs:
           tools: php-cs-fixer
 
       - name: Run PHP-CS-Fixer
-        run: php-cs-fixer fix --dry-run --diff --diff-format udiff
+        run: php-cs-fixer fix --dry-run --diff

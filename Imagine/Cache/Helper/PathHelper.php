@@ -20,12 +20,14 @@ class PathHelper
 {
     public static function filePathToUrlPath(string $path): string
     {
+        // this is not exactly the same as what symfony does in UrlGenerator::doGenerate where it strtr a bunch of encodings back to unencoded
+        // however, as we need to rawurldecode anyways, it should not hurt
         return implode('/', array_map('rawurlencode', explode('/', $path)));
     }
 
     public static function urlPathToFilePath(string $url): string
     {
-        // used urldecode instead of rawurlencode for BC safety to support "+" in URL
-        return urldecode($url);
+        // revert the rawurlencode that the Symfony UrlGenerator applies to paths
+        return rawurldecode($url);
     }
 }

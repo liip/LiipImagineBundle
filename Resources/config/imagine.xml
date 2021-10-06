@@ -368,6 +368,11 @@
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
         </service>
 
+        <service id="liip_imagine.cache.resolver.prototype.psr_cache" class="Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver" public="true" abstract="true">
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+            <argument><!-- will be injected by a ResolverFactory --></argument>
+        </service>
+
         <service id="liip_imagine.cache.resolver.no_cache_web_path" class="Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver" public="true">
             <argument type="service" id="router.request_context" />
             <tag name="liip_imagine.cache.resolver" resolver="no_cache" />

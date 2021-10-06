@@ -16,7 +16,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Rotate extends FilterAbstract
 {
-    const NAME = 'rotate';
+    public const NAME = 'rotate';
 
     /**
      * @var int

@@ -16,7 +16,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class RelativeResize extends FilterAbstract
 {
-    const NAME = 'relative_resize';
+    public const NAME = 'relative_resize';
 
     /**
      * @var float

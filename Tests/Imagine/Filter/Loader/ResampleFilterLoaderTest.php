@@ -154,7 +154,7 @@ class ResampleFilterLoaderTest extends AbstractTest
     public function testThrowsOnInvalidTemporaryPathOption(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('{Unable to create temporary file in ".+" base path.}');
+        $this->expectExceptionMessageMatchesBC('{Unable to create temporary file in ".+" base path.}');
 
         $loader = $this->createResampleFilterLoaderInstance();
         $loader->load($this->getImageInterfaceMock(), [

@@ -8,19 +8,39 @@ given release.
 
 ## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
 
-- The `watermark` and `paste` filters were deprecated and will immediately
-  *not* work in Symfony 5.0 or higher. Use `watermark_image` and `paste_image`
-  instead. The corresponding services - `liip_imagine.filter.loader.paste`
-  and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
+- __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`
+  class and the corresponding service prototype - `liip_imagine.cache.resolver.prototype.cache` have been deprecated.
+  Please use the new PSR-6 compatible resolver `PsrCacheResolver` and the prototype
+ `liip_imagine.cache.resolver.prototype.psr_cache` instead.
+
+- __\[BC BREAK\]__ Symfony 5.0 did a BC break with its mime type / extension guesser. We had to adjust dependency
+  injection. Usually this should not affect you, unless you overwrote `liip_imagine.mime_type_guesser` or
+  `liip_imagine.extension_guesser`. If you did, please have a look at https://github.com/liip/LiipImagineBundle/pull/1379
+
+- __[Deprecated]__ The `watermark` and `paste` filters were deprecated and will immediately *not* work in Symfony 5.0 or
+  higher. Use `watermark_image` and `paste_image` instead. The corresponding services - the services
+  `liip_imagine.filter.loader.paste` and `liip_imagine.filter.loader.image` are *also* deprecated, but not marked
   as such. These are both unavailable in Symfony 5.0.
+
+- __\[Composer\]__ Allow [league/flysystem](https://github.com/thephpleague/flysystem) version 2.0.
+  You can use `league/flysystem` either v1 or v2, but if you're using v1
+  and want to upgrade to v2 you can simply run `composer require -W liip/imagine-bundle:^2.5 league/flysystem:^2.0`.
+  You should upgrade flysystem v2 related packages that you're using as well.
 
 ## [2.2.0](https://github.com/liip/LiipImagineBundle/blob/2.2.0/CHANGELOG.md#unreleased)
 
 *Released on* 2019-04-10 *and assigned* [`2.2.0`](https://github.com/liip/LiipImagineBundle/releases/tag/2.2.0) *tag \([view verbose changelog](https://github.com/liip/LiipImagineBundle/compare/2.0.0...2.2.0)\).*
+
+- Until this version, it was possible to pass any URL with domain to the ImagineController and, if the StreamLoader was
+  used, have your application download images from anywhere and store them locally. In 2.2.0, this security issue has
+  been fixed. If you relied on this, you need to download images to a location that can be accessed by your configured
+  loader. If everything comes from the same domain, you could use the StreamLoader with that domain configured as prefix.
+
 - __[Deprecated]__ Constructing `FileSystemLoader`, `FlysystemLoader`, `SimpleMimeTypeGuesser` and `DataManager` with 
-`\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface` and 
-`\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface` have been deprecated for Symfony 4.3+ in 
-favor of the [new interfaces](https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#httpfoundation).
+  `\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface` and
+  `\Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface` have been deprecated for Symfony 4.3+ in
+  favor of the [new interfaces](https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#httpfoundation).
+
 - __[Utility]__ __[BC BREAK]__ The `SymfonyFramework` class marked as `internal` has been declared as final.
 
 ## [2.0.0](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md#191)

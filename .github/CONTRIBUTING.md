@@ -154,7 +154,7 @@ into the upstream repository is the same.
  * [General GitHub documentation][gh-help]
  * [GitHub pull request documentation][gh-help-pr]
 
-[cs-conf]:       ../.php_cs.dist
+[cs-conf]:       ../.php-cs-fixer.dist.php
 [cs]:            http://cs.sensiolabs.org/
 [gh-help]:       https://help.github.com
 [gh-help-pr]:    https://help.github.com/send-pull-requests

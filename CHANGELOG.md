@@ -95,6 +95,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Fix special characters encoding in URL path ([dbalabka](https://github.com/dbalabka))
 - Update imagine/imagine dependency to 1.1 ([maximgubar](https://github.com/maximgubar))
 - Only use actual path without any query parameters from the url ([maximgubar](https://github.com/maximgubar))
+  See also UPGRADE.md - if you used URLs with domains to get your images, you will need to adjust.
 - __\[Dependency Injection\]__ Add aliases for data and filter manager ([fpaterno](https://github.com/fpaterno))
 - Use Autorotate Filter from Imagine library ([franmomu](https://github.com/franmomu))
 - Fix Mime deprecations for Symfony 4 ([franmomu](https://github.com/franmomu))

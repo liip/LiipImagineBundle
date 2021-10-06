@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 use Aws\S3\S3Client;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
-use PHPUnit\Framework\TestCase;
+use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory<extended>
  */
-class AwsS3ResolverFactoryTest extends TestCase
+class AwsS3ResolverFactoryTest extends AbstractTest
 {
     public function testImplementsResolverFactoryInterface(): void
     {
@@ -295,7 +295,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowBucketNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
+        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
@@ -311,7 +311,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowClientConfigNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatches('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
+        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
@@ -331,7 +331,7 @@ class AwsS3ResolverFactoryTest extends TestCase
     public function testThrowClientConfigNotArrayOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageRegExp('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
+        $this->expectExceptionMessageMatchesBC('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')

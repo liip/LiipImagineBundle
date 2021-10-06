@@ -65,7 +65,7 @@ class FlysystemResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->enumNode('visibility')
-                    ->values(['public', 'private'])
+                    ->values(['public', 'private', 'noPredefinedVisibility'])
                     ->defaultValue('public')
                 ->end()
             ->end();

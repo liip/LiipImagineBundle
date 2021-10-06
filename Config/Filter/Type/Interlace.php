@@ -16,7 +16,7 @@ namespace Liip\ImagineBundle\Config\Filter\Type;
  */
 final class Interlace extends FilterAbstract
 {
-    const NAME = 'interlace';
+    public const NAME = 'interlace';
 
     /**
      * @var string

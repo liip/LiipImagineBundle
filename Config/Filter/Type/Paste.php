@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Config\Filter\Argument\Point;
  */
 final class Paste extends FilterAbstract
 {
-    const NAME = 'paste';
+    public const NAME = 'paste';
 
     /**
      * @var Point

@@ -18,7 +18,7 @@ use Liip\ImagineBundle\Config\Filter\Argument\Size;
  */
 final class Thumbnail extends FilterAbstract
 {
-    const NAME = 'thumbnail';
+    public const NAME = 'thumbnail';
 
     /**
      * @var Size

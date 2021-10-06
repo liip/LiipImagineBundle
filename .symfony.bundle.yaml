@@ -1,0 +1,42 @@
+# This file must be called '.symfony.bundle.yaml' and
+# must be stored at the root directory of the default GitHub branch
+# Here's a real example in action:
+# https://github.com/EasyCorp/EasyAdminBundle/blob/master/.symfony.bundle.yaml
+
+# MANDATORY
+# An array with the name of the branches for which you want to publish docs
+# It doesn't have to be an exhaustive list of your repository branches, but
+# only the main repository branches (past or present)
+branches: ["1.x", "2.x"]
+
+# MANDATORY
+# A subset of the 'branches' array which lists only the branch(es) that
+# you currently maintain. We build the docs of these branch(es) frequently,
+# whereas we build the docs of the other branch(es) much less frequently
+maintained_branches: ["2.x"]
+
+# MANDATORY
+# The location of your RST doc files, defined as a relative directory
+# If all the branches defined in the 'branches' option use the same
+# directory, then you can define it as a string
+doc_dir: "Resources/doc/"
+
+# OPTIONAL
+# This is the branch used to read the docs by default (and it's mapped as
+# 'current' in the public URL to generate stable URLs for your docs).
+# It should match the branch you use to publish the stable releases.
+# This value is optional because we assign it automatically to the
+# "default branch" of your repository as returned by the GitHub API
+current_branch: "2.x"
+
+# OPTIONAL
+# This is the branch used to publish the next versions of your bundle.
+# For bundles it's common that 'current_branch' and 'dev_branch' are the same.
+# That's why we automatically assign to it the same value as 'current_branch'
+dev_branch: "2.x"
+
+# OPTIONAL
+# This is the version that future releases of your bundle will use.
+# It's used in some symfony.com labels to avoid using the generic
+# "master" or "main" labels.
+dev_branch_alias: "2.x"

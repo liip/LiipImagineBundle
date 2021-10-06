@@ -21,7 +21,7 @@ For the full copyright and license information, please view the LICENSE.md
 file that was distributed with this source code.
 HEADER;
 
-return Config::create()
+return (new Config())
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
     ->setFinder((new Finder())->in(__DIR__))
@@ -57,7 +57,7 @@ return Config::create()
             'strategy' => 'no_multi_line',
         ],
         'no_php4_constructor' => true,
-        'no_short_echo_tag' => true,
+        'echo_tag_syntax' => true,
         'no_unreachable_default_argument_value' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
@@ -85,7 +85,7 @@ return Config::create()
         'php_unit_test_class_requires_covers' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,
-        'psr4' => true,
+        'psr_autoloading' => true,
         'semicolon_after_instruction' => true,
         'strict_comparison' => true,
         'strict_param' => true,

@@ -75,7 +75,7 @@ class FlysystemLoaderTest extends AbstractTest
     public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
-        $this->expectExceptionMessageRegExp('{Source image .+ not found}');
+        $this->expectExceptionMessageMatchesBC('{Source image .+ not found}');
 
         $loader = $this->getFlysystemLoader();
 

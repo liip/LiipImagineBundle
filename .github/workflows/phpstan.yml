@@ -1,0 +1,27 @@
+name: PHPStan
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 1.x
+      - 2.x
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          coverage: none
+
+      - name: Update project dependencies
+        uses: ramsey/composer-install@v1
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyze

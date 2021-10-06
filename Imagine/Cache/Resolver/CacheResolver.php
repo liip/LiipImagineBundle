@@ -15,6 +15,7 @@ use Doctrine\Common\Cache\Cache;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/** @deprecated Deprecated in favour of the PsrCacheResolver class */
 class CacheResolver implements ResolverInterface
 {
     /**
