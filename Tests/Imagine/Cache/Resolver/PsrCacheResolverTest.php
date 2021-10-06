@@ -11,21 +11,28 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\Psr6\DoctrineProvider;
-use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver
+ * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver
  */
-class CacheResolverTest extends AbstractTest
+class PsrCacheResolverTest extends AbstractTest
 {
     protected $filter = 'thumbnail';
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
+
+    protected function setUp(): void
+    {
+        if (!class_exists(ArrayAdapter::class)) {
+            $this->markTestSkipped('Requires the symfony/cache package.');
+        }
+
+        parent::setUp();
+    }
 
     public function testResolveIsSavedToCache(): void
     {
@@ -36,7 +43,7 @@ class CacheResolverTest extends AbstractTest
             ->with($this->path, $this->filter)
             ->willReturn($this->webPath);
 
-        $cacheResolver = new CacheResolver($this->createCache(), $resolver);
+        $cacheResolver = new PsrCacheResolver(new ArrayAdapter(), $resolver);
 
         $this->assertSame($this->webPath, $cacheResolver->resolve($this->path, $this->filter));
 
@@ -57,7 +64,7 @@ class CacheResolverTest extends AbstractTest
             ->expects($this->never())
             ->method('isStored');
 
-        $cacheResolver = new CacheResolver($this->createCache(), $resolver);
+        $cacheResolver = new PsrCacheResolver(new ArrayAdapter(), $resolver);
 
         $cacheResolver->resolve($this->path, $this->filter);
 
@@ -74,7 +81,7 @@ class CacheResolverTest extends AbstractTest
             ->method('isStored')
             ->willReturn(true);
 
-        $cacheResolver = new CacheResolver($this->createCache(), $resolver);
+        $cacheResolver = new PsrCacheResolver(new ArrayAdapter(), $resolver);
 
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
         $this->assertTrue($cacheResolver->isStored($this->path, $this->filter));
@@ -90,7 +97,7 @@ class CacheResolverTest extends AbstractTest
             ->method('store')
             ->with($this->identicalTo($binary), $this->webPath, $this->filter);
 
-        $cacheResolver = new CacheResolver($this->createCache(), $resolver);
+        $cacheResolver = new PsrCacheResolver(new ArrayAdapter(), $resolver);
 
         // Call twice, as this method should not be cached.
         $this->assertNull($cacheResolver->store($binary, $this->webPath, $this->filter));
@@ -106,14 +113,13 @@ class CacheResolverTest extends AbstractTest
             ->with($this->path, $this->filter)
             ->willReturn('/the/expected/browser');
 
-        $cache = $this->getMockBuilder(Cache::class)->getMock();
-        $cache
-            ->expects($this->once())
-            ->method('save');
+        $cache = new ArrayAdapter();
 
-        $cacheResolver = new CacheResolver($cache, $resolver);
+        $cacheResolver = new PsrCacheResolver($cache, $resolver);
 
         $cacheResolver->resolve($this->path, $this->filter);
+
+        $this->assertCount(2, $cache->getValues());
     }
 
     public function testRemoveSinglePathCacheOnRemove(): void
@@ -130,7 +136,7 @@ class CacheResolverTest extends AbstractTest
 
         $cache = new ArrayAdapter();
 
-        $cacheResolver = new CacheResolver(DoctrineProvider::wrap($cache), $resolver);
+        $cacheResolver = new PsrCacheResolver($cache, $resolver);
         $cacheResolver->resolve($this->path, $this->filter);
 
         /*
@@ -138,12 +144,12 @@ class CacheResolverTest extends AbstractTest
          * - The result of one resolve execution.
          * - The index of entity.
          */
-        $this->assertCount(2, $this->getCachedValues($cache));
+        $this->assertCount(2, $cache->getValues());
 
         $cacheResolver->remove([$this->path], [$this->filter]);
 
         // Cache including index has been removed.
-        $this->assertCount(0, $this->getCachedValues($cache));
+        $this->assertCount(0, $cache->getValues());
     }
 
     public function testRemoveAllFilterCacheOnRemove(): void
@@ -159,7 +165,7 @@ class CacheResolverTest extends AbstractTest
 
         $cache = new ArrayAdapter();
 
-        $cacheResolver = new CacheResolver(DoctrineProvider::wrap($cache), $resolver);
+        $cacheResolver = new PsrCacheResolver($cache, $resolver);
         $cacheResolver->resolve('aPathFoo', 'thumbnail_233x233');
         $cacheResolver->resolve('aPathBar', 'thumbnail_233x233');
         $cacheResolver->resolve('aPathFoo', 'thumbnail_100x100');
@@ -170,23 +176,11 @@ class CacheResolverTest extends AbstractTest
          * - The result of four resolve execution.
          * - The index of two entities.
          */
-        $this->assertCount(6, $this->getCachedValues($cache));
+        $this->assertCount(6, $cache->getValues());
 
         $cacheResolver->remove([], ['thumbnail_233x233']);
 
         // Cache including index has been removed.
-        $this->assertCount(3, $this->getCachedValues($cache));
-    }
-
-    private function createCache(): Cache
-    {
-        return DoctrineProvider::wrap(new ArrayAdapter());
-    }
-
-    private function getCachedValues(ArrayAdapter $cache): array
-    {
-        $cache->deleteItem(urlencode('DoctrineNamespaceCacheKey[]'));
-
-        return $cache->getValues();
+        $this->assertCount(3, $cache->getValues());
     }
 }

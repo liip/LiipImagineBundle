@@ -11,27 +11,40 @@
 
 namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 
-use Doctrine\Common\Cache\Cache;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use function str_replace;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/** @deprecated Deprecated in favour of the PsrCacheResolver class */
-class CacheResolver implements ResolverInterface
+final class PsrCacheResolver implements ResolverInterface
 {
+    private const RESERVED_CHARACTERS = [
+        '{',
+        '}',
+        '(',
+        ')',
+        '/',
+        '\\',
+        '@',
+        ':',
+        '.',
+    ];
+
     /**
-     * @var Cache
+     * @var CacheItemPoolInterface
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @var array
      */
-    protected $options = [];
+    private $options = [];
 
     /**
      * @var ResolverInterface
      */
-    protected $resolver;
+    private $resolver;
 
     /**
      * Constructor.
@@ -46,7 +59,7 @@ class CacheResolver implements ResolverInterface
      *
      * @param OptionsResolver $optionsResolver
      */
-    public function __construct(Cache $cache, ResolverInterface $cacheResolver, array $options = [], OptionsResolver $optionsResolver = null)
+    public function __construct(CacheItemPoolInterface $cache, ResolverInterface $cacheResolver, array $options = [], OptionsResolver $optionsResolver = null)
     {
         $this->cache = $cache;
         $this->resolver = $cacheResolver;
@@ -67,7 +80,7 @@ class CacheResolver implements ResolverInterface
         $cacheKey = $this->generateCacheKey($path, $filter);
 
         return
-            $this->cache->contains($cacheKey) ||
+            $this->cache->hasItem($cacheKey) ||
             $this->resolver->isStored($path, $filter);
     }
 
@@ -77,13 +90,15 @@ class CacheResolver implements ResolverInterface
     public function resolve($path, $filter)
     {
         $key = $this->generateCacheKey($path, $filter);
-        if ($this->cache->contains($key)) {
-            return $this->cache->fetch($key);
+        $item = $this->cache->getItem($key);
+        if ($item->isHit()) {
+            return $item->get();
         }
 
         $resolved = $this->resolver->resolve($path, $filter);
 
-        $this->saveToCache($key, $resolved);
+        $item->set($resolved);
+        $this->saveToCache($item);
 
         return $resolved;
     }
@@ -134,18 +149,19 @@ class CacheResolver implements ResolverInterface
         ]);
     }
 
-    protected function removePathAndFilter($path, $filter)
+    private function removePathAndFilter($path, $filter)
     {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
-        if (!$this->cache->contains($indexKey)) {
+        $indexItem = $this->cache->getItem($indexKey);
+        if (!$indexItem->isHit()) {
             return;
         }
 
-        $index = $this->cache->fetch($indexKey);
+        $index = $indexItem->get();
 
         if (null === $path) {
             foreach ($index as $eachCacheKey) {
-                $this->cache->delete($eachCacheKey);
+                $this->cache->deleteItem($eachCacheKey);
             }
 
             $index = [];
@@ -153,14 +169,15 @@ class CacheResolver implements ResolverInterface
             $cacheKey = $this->generateCacheKey($path, $filter);
             if (false !== $indexIndex = array_search($cacheKey, $index, true)) {
                 unset($index[$indexIndex]);
-                $this->cache->delete($cacheKey);
+                $this->cache->deleteItem($cacheKey);
             }
         }
 
         if (empty($index)) {
-            $this->cache->delete($indexKey);
+            $this->cache->deleteItem($indexKey);
         } else {
-            $this->cache->save($indexKey, $index);
+            $indexItem->set($index);
+            $this->cache->save($indexItem);
         }
     }
 
@@ -173,7 +190,7 @@ class CacheResolver implements ResolverInterface
      *
      * @return string
      */
-    protected function generateIndexKey($cacheKey)
+    private function generateIndexKey($cacheKey)
     {
         $cacheKeyStack = explode('.', $cacheKey);
 
@@ -190,25 +207,25 @@ class CacheResolver implements ResolverInterface
      *
      * @return string
      */
-    protected function sanitizeCacheKeyPart($cacheKeyPart)
+    private function sanitizeCacheKeyPart($cacheKeyPart)
     {
-        return str_replace('.', '_', $cacheKeyPart);
+        return str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
     }
 
     /**
      * Save the given content to the cache and update the cache index.
      *
-     * @param string $cacheKey
-     * @param mixed  $content
-     *
      * @return bool
      */
-    protected function saveToCache($cacheKey, $content)
+    private function saveToCache(CacheItemInterface $item)
     {
+        $cacheKey = $item->getKey();
+
         // Create or update the index list containing all cache keys for a given image and filter pairing.
         $indexKey = $this->generateIndexKey($cacheKey);
-        if ($this->cache->contains($indexKey)) {
-            $index = (array) $this->cache->fetch($indexKey);
+        $indexItem = $this->cache->getItem($indexKey);
+        if ($indexItem->isHit()) {
+            $index = (array) $indexItem->get();
 
             if (!\in_array($cacheKey, $index, true)) {
                 $index[] = $cacheKey;
@@ -217,23 +234,17 @@ class CacheResolver implements ResolverInterface
             $index = [$cacheKey];
         }
 
-        /*
-         * Only save the content, if the index has been updated successfully.
-         * This is required to have a (hopefully) synchron state between cache and backend.
-         *
-         * "Hopefully" because there are caches (like Memcache) which will remove keys by themselves.
-         */
-        if ($this->cache->save($indexKey, $index)) {
-            return $this->cache->save($cacheKey, $content);
-        }
+        $indexItem->set($index);
+        $this->cache->saveDeferred($indexItem);
+        $this->cache->saveDeferred($item);
 
-        return false;
+        return $this->cache->commit();
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    private function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'global_prefix' => 'liip_imagine.resolver_cache',
+            'global_prefix' => 'liip_imagine.resolver_psr_cache',
             'prefix' => \get_class($this->resolver),
             'index_key' => 'index',
         ]);
@@ -249,7 +260,7 @@ class CacheResolver implements ResolverInterface
         }
     }
 
-    protected function setDefaultOptions(OptionsResolver $resolver)
+    private function setDefaultOptions(OptionsResolver $resolver)
     {
         $this->configureOptions($resolver);
     }
