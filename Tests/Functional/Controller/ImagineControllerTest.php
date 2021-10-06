@@ -49,24 +49,38 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
     }
 
-    public function testShouldResolvePopulatingCacheFirst(): void
+    public function provideImageNames(): iterable
+    {
+        yield 'regular' => ['image' => 'cats.jpeg', 'urlimage' => 'cats.jpeg'];
+        yield 'whitespace' => ['image' => 'white cat.jpeg', 'urlimage' => 'white%20cat.jpeg'];
+        yield 'plus' => ['image' => 'cat+plus.jpeg', 'urlimage' => 'cat%2Bplus.jpeg'];
+        yield 'questionmark' => ['image' => 'cat?question.jpeg', 'urlimage' => 'cat%3Fquestion.jpeg'];
+        yield 'hash' => ['image' => 'cat#hash.jpeg', 'urlimage' => 'cat%23hash.jpeg'];
+    }
+
+    /**
+     * @dataProvider provideImageNames
+     *
+     * @param string $image
+     */
+    public function testShouldResolvePopulatingCacheFirst($image, $urlimage): void
     {
         //guard
-        $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/'.$image);
 
-        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg');
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlimage);
 
         $response = $this->client->getResponse();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg', $response->getTargetUrl());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/'.$urlimage, $response->getTargetUrl());
 
-        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
+        $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/'.$image);
 
         // PHP compiled with WebP support
         if ($this->webp_generate) {
-            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+            $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/'.$image.'.webp');
         }
     }
 
