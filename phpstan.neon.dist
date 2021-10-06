@@ -1,0 +1,30 @@
+includes:
+    - .phpstan/baseline.neon
+parameters:
+    level: 1
+    paths:
+        - Async
+        - Binary
+        - Command
+        - Component
+        - Config
+        - Controller
+        - DependencyInjection
+        - Events
+        - Exception
+        - Factory
+        - Form
+        - Imagine
+        - Model
+        - Resources
+        - Service
+        - Templating
+        - Utility
+        - LiipImagineBundle.php
+    scanFiles:
+        - .phpstan/stubs/AdapterInterface.stub
+        - .phpstan/stubs/Event.stub
+        - .phpstan/stubs/ExtensionGuesserInterface.stub
+        - .phpstan/stubs/FilesystemInterface.stub
+        - .phpstan/stubs/MimeTypeGuesserInterface.stub
+        - .phpstan/stubs/ReadInterface.stub
