@@ -93,7 +93,7 @@ class FilterService
      *
      * @return bool Returns true if the cache is warmed up
      */
-    public function warmsUpCache(
+    public function warmUpCache(
         string $path,
         string $filter,
         ?string $resolver = null,
@@ -102,7 +102,7 @@ class FilterService
         $warmedUp = false;
 
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
-            if ($this->warmsUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver, $forced)) {
+            if ($this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver, $forced)) {
                 $warmedUp = true;
             }
         }
@@ -120,7 +120,7 @@ class FilterService
     public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webpSupported = false)
     {
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
-            $this->warmsUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
+            $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
         }
 
         return $this->resolveFilterPathContainer(new FilterPathContainer($path), $filter, $resolver, $webpSupported);
@@ -146,7 +146,7 @@ class FilterService
         ];
 
         foreach ($this->buildFilterPathContainers($path, $runtimePath, $runtimeOptions) as $filterPathContainer) {
-            $this->warmsUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
+            $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
         }
 
         return $this->resolveFilterPathContainer(
@@ -194,7 +194,7 @@ class FilterService
      *
      * @return bool Returns true if the cache is warmed up
      */
-    private function warmsUpCacheFilterPathContainer(
+    private function warmUpCacheFilterPathContainer(
         FilterPathContainer $filterPathContainer,
         string $filter,
         ?string $resolver = null,

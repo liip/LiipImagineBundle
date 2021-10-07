@@ -168,7 +168,7 @@ final class FilterServiceTest extends TestCase
             ->expects($this->never())
             ->method('applyFilter');
 
-        $this->assertFalse($service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver));
+        $this->assertFalse($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver));
     }
 
     /**
@@ -214,7 +214,7 @@ final class FilterServiceTest extends TestCase
             )
             ->willReturn($binary);
 
-        $this->assertTrue($service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
+        $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
 
     /**
@@ -265,7 +265,7 @@ final class FilterServiceTest extends TestCase
             )
             ->willReturn($binary);
 
-        $this->assertTrue($service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver));
+        $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver));
     }
 
     /**
@@ -311,7 +311,7 @@ final class FilterServiceTest extends TestCase
             )
             ->willReturn($binary);
 
-        $this->assertTrue($service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
+        $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
 
     /**
@@ -356,7 +356,7 @@ final class FilterServiceTest extends TestCase
                 $exception->getMessage()
             ));
 
-        $service->warmsUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true);
+        $service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true);
     }
 
     /**

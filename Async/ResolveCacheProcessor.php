@@ -59,7 +59,7 @@ final class ResolveCacheProcessor implements Processor, CommandSubscriberInterfa
             $results = [];
 
             foreach ($filters as $filter) {
-                $this->filterService->warmsUpCache($path, $filter, null, $message->isForce());
+                $this->filterService->warmUpCache($path, $filter, null, $message->isForce());
 
                 $results[$filter] = $this->filterService->getUrlOfFilteredImage($path, $filter);
             }

@@ -111,7 +111,7 @@ EOF
         $this->io->group($image, $filter, 'blue');
 
         try {
-            if ($this->filterService->warmsUpCache($image, $filter, null, $forced)) {
+            if ($this->filterService->warmUpCache($image, $filter, null, $forced)) {
                 $this->io->status('resolved', 'green');
             } else {
                 $this->io->status('cached', 'white');

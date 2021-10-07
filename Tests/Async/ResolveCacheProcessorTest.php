@@ -309,7 +309,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock = $this->createFilterServiceMock();
         $filterServiceMock
             ->expects($this->once())
-            ->method('warmsUpCache')
+            ->method('warmUpCache')
             ->with($imagePath, $filterName, null, $force);
 
         $processor = new ResolveCacheProcessor(
