@@ -71,7 +71,7 @@ class FilterService
      * @param string $path
      * @param string $filter
      *
-     * @return bool Returns true if the cache is busted
+     * @return bool Returns true if we removed at least one cached image
      */
     public function bustCache($path, $filter)
     {
