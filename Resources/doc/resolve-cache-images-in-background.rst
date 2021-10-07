@@ -13,14 +13,15 @@ Though there are some disadvantages:
   If there is nothing in the cache the page will contain the url to resolve controller.
   The varnish may cache the page with those links to the resolve controller.
   A browser keeps sending requests to it though there is no need for it after the first call.
+To prepare the cached images in advance, the LiipImagineBundle allows you to use a message queue to have a worker warm up the cache asynchronously. Your application has to send messages about the images as it becomes aware of them (file upload, import processes, ...) and you need to run the worker for the message queue.
 
-Messenger
+Symfony Messenger
 -------------------
 
 Step 1: Install
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
-First, we have to `install symfony/messenger`_. You have to basically use composer to install the Symfony component.
+First, `install symfony/messenger`_ with composer:
 
 .. code-block:: terminal
 
@@ -34,15 +35,15 @@ First, we have to `install symfony/messenger`_. You have to basically use compos
         messenger:
             transports:
                 # https://symfony.com/doc/current/messenger.html#transport-configuration
-                async: '%env(MESSENGER_TRANSPORT_DSN)%'
+                liip_imagine: '%env(MESSENGER_TRANSPORT_DSN)%'
                 sync: 'sync://'
 
             routing:
                 # Route your messages to the transports
-                'Liip\ImagineBundle\Message\ResolveCache': async
+                'Liip\ImagineBundle\Message\WarmupCache': liip_imagine
 
 Step 2: Configure LiipImagineBundle
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this step we instruct LiipImagineBundle to load some extra stuff required to process images in background.
 
@@ -54,32 +55,32 @@ At this step we instruct LiipImagineBundle to load some extra stuff required to 
         messenger: true
 
 Step 3: Run consumers
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Before we can start using it we need a pool of consumers (at least one) to be working in background.
 Here's how you can run it:
 
 .. code-block:: terminal
 
-    $ php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M
+    $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M
 
     # use -vv to see details about what's happening
-    $ php bin/console messenger:consume async --time-limit=3600 --memory-limit=256M -vv
+    $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M -vv
 
-Step 4: Send resolve cache message
-~~~~~~~~~~~~~~~~
+Step 4: Send warmup cache message
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You have to dispatch a message in order to process images in background.
 The message must contain the original image path (in terms of LiipImagineBundle).
-If you do not define filters the background process will resolve cache for all available filters.
-If the cache already exist the background process does recreate it by default
+If you do not define filters, the background process will warmup cache for all available filters.
+If the cache already exists, the background process does not recreate it by default.
 You can force cache to be recreated and in this case the cached image is removed and a new one replaces it.
 
 .. code-block:: php
 
     <?php
 
-    use Liip\ImagineBundle\Message\ResolveCache;
+    use Liip\ImagineBundle\Message\WarmupCache;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -87,14 +88,14 @@ You can force cache to be recreated and in this case the cached image is removed
     {
         public function index(MessageBusInterface $messageBus)
         {
-            // resolve all caches
-            $messageBus->dispatch(new ResolveCache('the/path/img.png'));
+            // warmup all caches
+            $messageBus->dispatch(new WarmupCache('the/path/img.png'));
 
-            // resolve specific cache
-            $messageBus->dispatch(new ResolveCache('the/path/img.png', ['fooFilter']));
+            // warmup specific cache
+            $messageBus->dispatch(new WarmupCache('the/path/img.png', ['fooFilter']));
 
-            // force resolve (removes the cache if exists)
-            $messageBus->dispatch(new ResolveCache('the/path/img.png', null, true));
+            // force warmup (removes the cache if exists)
+            $messageBus->dispatch(new WarmupCache('the/path/img.png', null, true));
         }
     }
 
@@ -105,7 +106,7 @@ The bundle provides a solution. It utilize messaging pattern and works on top of
 
 
 Step 1: Install EnqueueBundle
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, we have to `install EnqueueBundle`_. You have to basically use composer to install the bundle,
 register it to AppKernel and adjust settings. Here's the most simplest configuration without any extra dependencies.
@@ -121,7 +122,7 @@ It is based on `filesystem transport`_.
         client: ~
 
 Step 2: Configure LiipImagineBundle
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this step we instruct LiipImagineBundle to load some extra stuff required to process images in background.
 
@@ -133,7 +134,7 @@ At this step we instruct LiipImagineBundle to load some extra stuff required to 
         enqueue: true
 
 Step 3: Run consumers
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Before we can start using it we need a pool of consumers (at least one) to be working in background.
 Here's how you can run it:
@@ -143,12 +144,12 @@ Here's how you can run it:
     $ ./app/console enqueue:consume --setup-broker -vvv
 
 Step 4: Send resolve cache message
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You have to send a message in order to process images in background.
 The message must contain the original image path (in terms of LiipImagineBundle).
-If you do not define filters the background process will resolve cache for all available filters.
-If the cache already exist the background process does recreate it by default
+If you do not define filters, the background process will resolve cache for all available filters.
+If the cache already exists, the background process does not recreate it by default.
 You can force cache to be recreated and in this case the cached image is removed and a new one replaces it.
 
 .. code-block:: php

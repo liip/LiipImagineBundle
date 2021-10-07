@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Liip\ImagineBundle\Tests\Message;
 
-use Liip\ImagineBundle\Message\ResolveCache;
+use Liip\ImagineBundle\Message\WarmupCache;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * @covers \Liip\ImagineBundle\Message\ResolveCache
+ * @covers \Liip\ImagineBundle\Message\WarmupCache
  */
-class ResolveCacheTest extends TestCase
+class WarmupCacheTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -31,7 +31,7 @@ class ResolveCacheTest extends TestCase
 
     public function testMessageWithoutFiltersAndForce(): void
     {
-        $message = new ResolveCache('thePath');
+        $message = new WarmupCache('thePath');
 
         $this->assertSame('thePath', $message->getPath());
         $this->assertNull($message->getFilters());
@@ -40,7 +40,7 @@ class ResolveCacheTest extends TestCase
 
     public function testMessageWithFilters(): void
     {
-        $message = new ResolveCache('thePath', ['fooFilter', 'barFilter']);
+        $message = new WarmupCache('thePath', ['fooFilter', 'barFilter']);
 
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());
@@ -49,7 +49,7 @@ class ResolveCacheTest extends TestCase
 
     public function testMessageWithFiltersAndForce(): void
     {
-        $message = new ResolveCache('thePath', ['fooFilter', 'barFilter'], true);
+        $message = new WarmupCache('thePath', ['fooFilter', 'barFilter'], true);
 
         $this->assertSame('thePath', $message->getPath());
         $this->assertSame(['fooFilter', 'barFilter'], $message->getFilters());

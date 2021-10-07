@@ -15,8 +15,8 @@ namespace Liip\ImagineBundle\Tests\Message\Handler;
 
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Message\Handler\ResolveCacheHandler;
-use Liip\ImagineBundle\Message\ResolveCache;
+use Liip\ImagineBundle\Message\Handler\WarmupCacheHandler;
+use Liip\ImagineBundle\Message\WarmupCache;
 use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
 use ReflectionClass;
@@ -26,9 +26,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 /**
  * @requires PHP 7.1
  *
- * @covers \Liip\ImagineBundle\Message\Handler\ResolveCacheHandler
+ * @covers \Liip\ImagineBundle\Message\Handler\WarmupCacheHandler
  */
-class ResolveCacheHandlerTest extends AbstractWebTestCase
+class WarmupCacheHandlerTest extends AbstractWebTestCase
 {
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class ResolveCacheHandlerTest extends AbstractWebTestCase
 
     public function testShouldImplementMessageHandlerInterface(): void
     {
-        $rc = new ReflectionClass(ResolveCacheHandler::class);
+        $rc = new ReflectionClass(WarmupCacheHandler::class);
 
         $this->assertTrue($rc->implementsInterface(MessageHandlerInterface::class));
     }
@@ -48,19 +48,19 @@ class ResolveCacheHandlerTest extends AbstractWebTestCase
     {
         static::createClient();
 
-        $handler = new ResolveCacheHandler(
+        $handler = new WarmupCacheHandler(
             $this->createFilterManagerMock(),
             $this->createFilterServiceMock()
         );
 
-        $this->assertInstanceOf(ResolveCacheHandler::class, $handler);
+        $this->assertInstanceOf(WarmupCacheHandler::class, $handler);
     }
 
     public function testThrowIfMessageMissingPath(): void
     {
         static::createClient();
 
-        $handler = new ResolveCacheHandler(
+        $handler = new WarmupCacheHandler(
             $this->createFilterManagerMock(),
             $this->createFilterServiceMock()
         );
@@ -68,7 +68,7 @@ class ResolveCacheHandlerTest extends AbstractWebTestCase
         $this->expectException(NotLoadableException::class);
         $this->expectExceptionMessage('Source image not resolvable "thePath"');
 
-        $handler->__invoke(new ResolveCache('thePath', null, true));
+        $handler->__invoke(new WarmupCache('thePath', null, true));
     }
 
     /**

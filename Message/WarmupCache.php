@@ -11,8 +11,14 @@
 
 namespace Liip\ImagineBundle\Message;
 
-/** @experimental */
-class ResolveCache
+/**
+ * Message to warm up the cache for an image.
+ *
+ * Your application needs to dispatch this message when it becomes aware of a new image.
+ *
+ * @experimental
+ */
+class WarmupCache
 {
     /**
      * @var string

@@ -12,12 +12,16 @@
 namespace Liip\ImagineBundle\Message\Handler;
 
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Liip\ImagineBundle\Message\ResolveCache;
+use Liip\ImagineBundle\Message\WarmupCache;
 use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-/** @experimental */
-class ResolveCacheHandler implements MessageHandlerInterface
+/**
+ * Listen to WarmupCache messages and prepare the cache for those images.
+ *
+ * @experimental
+ */
+class WarmupCacheHandler implements MessageHandlerInterface
 {
     /** @var FilterManager */
     private $filterManager;
@@ -31,7 +35,7 @@ class ResolveCacheHandler implements MessageHandlerInterface
         $this->filterService = $filterService;
     }
 
-    public function __invoke(ResolveCache $message): void
+    public function __invoke(WarmupCache $message): void
     {
         $filters = $message->getFilters() ?: array_keys($this->filterManager->getFilterConfiguration()->all());
         $path = $message->getPath();

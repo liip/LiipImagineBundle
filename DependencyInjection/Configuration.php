@@ -201,7 +201,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('messenger')
                 ->canBeEnabled()
-                ->info('Enables integration with symfony/messenger if set true. Resolves image caches in background by sending messages to MQ.')
+                ->info('Enables integration with symfony/messenger if set true. Warmup image caches in background by sending messages to MQ.')
             ->end()
             ->booleanNode('templating')
                 ->defaultTrue()
