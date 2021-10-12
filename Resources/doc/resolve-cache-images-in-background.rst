@@ -16,7 +16,7 @@ Though there are some disadvantages:
 To prepare the cached images in advance, the LiipImagineBundle allows you to use a message queue to have a worker warm up the cache asynchronously. Your application has to send messages about the images as it becomes aware of them (file upload, import processes, ...) and you need to run the worker for the message queue.
 
 Symfony Messenger
--------------------
+-----------------
 
 Step 1: Install
 ~~~~~~~~~~~~~~~
@@ -68,7 +68,7 @@ Here's how you can run it:
     $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M -vv
 
 Step 4: Send warmup cache message
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You have to dispatch a message in order to process images in background.
 The message must contain the original image path (in terms of LiipImagineBundle).
