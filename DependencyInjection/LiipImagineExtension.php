@@ -20,9 +20,11 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
@@ -82,6 +84,10 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
         $loader->load('commands.xml');
+
+        if ($this->isConfigEnabled($container, $config['messenger'])) {
+            $this->registerMessengerConfiguration($loader);
+        }
 
         if ($config['enqueue']) {
             $loader->load('enqueue.xml');
@@ -160,6 +166,15 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         foreach ($configurations as $name => $conf) {
             $factories[key($conf)]->create($container, $name, $conf[key($conf)]);
         }
+    }
+
+    private function registerMessengerConfiguration(XmlFileLoader $loader): void
+    {
+        if (!interface_exists(MessageBusInterface::class)) {
+            throw new LogicException('Messenger support cannot be enabled as the Messenger component is not installed. Try running "composer require symfony/messenger".');
+        }
+
+        $loader->load('messenger.xml');
     }
 
     private function deprecationTemplatingFilterHelper(ContainerBuilder $container): void

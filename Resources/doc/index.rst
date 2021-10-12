@@ -46,7 +46,7 @@ usage to the architecture of bundle.
     commands
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     resolve-cache-images-in-background
 
