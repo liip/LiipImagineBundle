@@ -41,9 +41,7 @@ class WarmupCacheHandler implements MessageHandlerInterface
         $path = $message->getPath();
 
         foreach ($filters as $filter) {
-            if ($message->isForce()) {
-                $this->filterService->bustCache($path, $filter);
-            }
+            $this->filterService->warmUpCache($path, $filter, null, $message->isForce());
 
             $this->filterService->getUrlOfFilteredImage($path, $filter);
         }
