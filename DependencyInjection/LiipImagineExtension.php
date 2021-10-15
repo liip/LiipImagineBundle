@@ -85,8 +85,8 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $loader->load('imagine.xml');
         if ('lazy' === $config['twig_mode']) {
             $loader->load('imagine_twig_mode_lazy.xml');
-        } else {
-            $loader->load('imagine_twig_mode_none.xml');
+        } elseif ('legacy' === $config['twig_mode']) {
+            $loader->load('imagine_twig_mode_legacy.xml');
         }
         $loader->load('commands.xml');
 
