@@ -22,7 +22,7 @@ final class LazyFilterExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('imagine_filter', [FilterRuntime::class, 'filter']),
+            new TwigFilter('imagine_filter', [LazyFilterRuntime::class, 'filter']),
         ];
     }
 

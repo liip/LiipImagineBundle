@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class FilterRuntime implements RuntimeExtensionInterface
+class LazyFilterRuntime implements RuntimeExtensionInterface
 {
     /**
      * @var CacheManager

@@ -198,7 +198,7 @@ class Configuration implements ConfigurationInterface
             ->enumNode('twig_mode')
                 ->defaultValue('legacy')
                 ->info('Twig mode: none/lazy/legacy (default)')
-                ->values('none', 'lazy', 'legacy')
+                ->values(['none', 'lazy', 'legacy'])
                 ->validate()
                     ->ifTrue(function ($v){
                         return 'legacy' === $v;

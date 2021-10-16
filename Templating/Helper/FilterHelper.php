@@ -16,6 +16,9 @@ namespace Liip\ImagineBundle\Templating\Helper;
 use Liip\ImagineBundle\Templating\FilterTrait;
 use Symfony\Component\Templating\Helper\Helper;
 
+/**
+ * @deprecated deprecated since version 2.2 and will be removed in 3.0
+ */
 class FilterHelper extends Helper
 {
     use FilterTrait;
