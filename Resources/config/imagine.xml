@@ -183,13 +183,6 @@
             </call>
         </service>
 
-        <!--  Templating helpers and extensions -->
-
-        <service id="liip_imagine.templating.filter_extension" class="Liip\ImagineBundle\Templating\FilterExtension" public="false">
-            <tag name="twig.extension" />
-            <argument type="service" id="liip_imagine.cache.manager" />
-        </service>
-
         <!-- Filter loaders -->
 
         <service id="liip_imagine.filter.loader.relative_resize" class="Liip\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader">
