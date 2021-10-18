@@ -11,7 +11,7 @@
 
 namespace Liip\ImagineBundle\Templating;
 
-@trigger_error('The ' . FilterTrait::class . ' trait is deprecated since version 2.7 and will be removed in 3.0; use Twig instead.', E_USER_DEPRECATED);
+@trigger_error('The '.FilterTrait::class.' trait is deprecated since version 2.7 and will be removed in 3.0; use Twig instead.', E_USER_DEPRECATED);
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

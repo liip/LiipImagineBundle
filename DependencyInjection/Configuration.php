@@ -200,7 +200,7 @@ class Configuration implements ConfigurationInterface
                 ->info('Twig mode: none/lazy/legacy (default)')
                 ->values(['none', 'lazy', 'legacy'])
                 ->validate()
-                    ->ifTrue(function ($v){
+                    ->ifTrue(function ($v) {
                         return 'legacy' === $v;
                     })
                     ->then(function ($v) {
