@@ -15,7 +15,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class LazyFilterRuntime implements RuntimeExtensionInterface
+final class LazyFilterRuntime implements RuntimeExtensionInterface
 {
     /**
      * @var CacheManager
@@ -29,16 +29,39 @@ class LazyFilterRuntime implements RuntimeExtensionInterface
 
     /**
      * Gets the browser path for the image and filter to apply.
-     *
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $resolver
-     * @param int         $referenceType
-     *
-     * @return string
      */
-    public function filter($path, $filter, array $config = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    public function filter(string $path, string $filter, array $config = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
-        return $this->cache->getBrowserPath(parse_url($path, PHP_URL_PATH), $filter, $config, $resolver, $referenceType);
+        return $this->cache->getBrowserPath($this->cleanPath($path), $filter, $config, $resolver, $referenceType);
+    }
+
+    /**
+     * Gets the cache path for the image and filter to apply.
+     *
+     * This does not check whether the cached image exists or not.
+     */
+    public function filterCache(string $path, string $filter, array $config = [], ?string $resolver = null): string
+    {
+        $path = $this->cleanPath($path);
+
+        if (!empty($config)) {
+            $path = $this->cache->getRuntimePath($path, $config);
+        }
+
+        return $this->cache->resolve($path, $filter, $resolver);
+    }
+
+    private function cleanPath(string $path): string
+    {
+        $url = parse_url($path);
+        $path = $url['path'] ?? '';
+        if (array_key_exists('query', $url)) {
+            $path .= '?'.$url['query'];
+        }
+        if (array_key_exists('fragment', $url)) {
+            $path .= '#'.$url['fragment'];
+        }
+
+        return $path;
     }
 }
