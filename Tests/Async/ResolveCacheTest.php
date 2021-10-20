@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Liip\ImagineBundle\Async\ResolveCache
+ *
+ * @group legacy
  */
 class ResolveCacheTest extends TestCase
 {

@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Async;
 use Enqueue\Util\JSON;
 use Liip\ImagineBundle\Exception\LogicException;
 
+/**
+ * @deprecated Use Liip\ImagineBundle\Message\WarmupCache instead
+ */
 class CacheResolved implements \JsonSerializable
 {
     /**

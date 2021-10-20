@@ -77,9 +77,10 @@ There are several configuration options available:
   the standard web_path resolver is used)
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
   (which means the standard filesystem loader is used).
-* ``twig_mode`` - twig filter integration. ``none`` to disable, ``lazy`` to enable
-twig integration using runtime. Default value: ``legacy`` (which enable twig integration
-without runtime - deprecated and will default to ``lazy`` in 3.x)
+* ``twig_mode`` - Twig filter integration. ``none`` disables the twig filters, ``lazy`` enables
+  Twig using the Twig runtime for lazy loading. The default value is ``legacy`` and enables the
+  old Twig integration that is loaded on each request. Version 3 will drop ``legacy`` and default
+  to ``lazy``.
 * ``controller``
     * ``filter_action`` - name of the controller action to use in the route loader.
       Default value: ``liip_imagine.controller:filterAction``
