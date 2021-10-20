@@ -21,6 +21,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class LazyFilterRuntimeTest extends AbstractTest
 {
+    private const FILTER = 'thumbnail';
+    private const VERSION = 'v2';
+
     /**
      * @var LazyFilterRuntime
      */
@@ -50,44 +53,75 @@ class LazyFilterRuntimeTest extends AbstractTest
      */
     public function testInvokeFilterMethod($image, $urlimage): void
     {
-        $expectedFilter = 'thumbnail';
-
         $this->manager
             ->expects($this->once())
             ->method('getBrowserPath')
-            ->with($image, $expectedFilter)
-            ->willReturn($urlimage)
-        ;
+            ->with($image, self::FILTER)
+            ->willReturn($urlimage);
 
-        $actualPath = $this->runtime->filter($image, $expectedFilter);
+        $actualPath = $this->runtime->filter($image, self::FILTER);
 
         $this->assertSame($urlimage, $actualPath);
     }
 
+    public function testVersionHandling(): void
+    {
+        $this->runtime = new LazyFilterRuntime($this->manager, self::VERSION);
+
+        $sourcePath = 'thePathToTheImage';
+        $cachePath = 'thePathToTheCachedImage';
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($sourcePath, self::FILTER)
+            ->willReturn($cachePath);
+
+        $actualPath = $this->runtime->filter($sourcePath.'?'.self::VERSION, self::FILTER);
+
+        $this->assertSame($cachePath.'?'.self::VERSION, $actualPath);
+    }
+
+    public function testDifferentVersion(): void
+    {
+        $this->runtime = new LazyFilterRuntime($this->manager, self::VERSION);
+
+        $sourcePath = 'thePathToTheImage?v22';
+        $cachePath = 'thePathToTheCachedImage';
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($sourcePath, self::FILTER)
+            ->willReturn($cachePath);
+
+        $actualPath = $this->runtime->filter($sourcePath, self::FILTER);
+
+        $this->assertSame($cachePath.'?'.self::VERSION, $actualPath);
+    }
+
     public function testInvokeFilterCacheMethod(): void
     {
-        $expectedFilter = 'thumbnail';
         $expectedInputPath = 'thePathToTheImage';
         $expectedCachePath = 'thePathToTheCachedImage';
 
         $this->manager
             ->expects($this->once())
             ->method('resolve')
-            ->with($expectedInputPath, $expectedFilter)
+            ->with($expectedInputPath, self::FILTER)
             ->willReturn($expectedCachePath);
 
-        $actualPath = $this->runtime->filterCache($expectedInputPath, $expectedFilter);
+        $actualPath = $this->runtime->filterCache($expectedInputPath, self::FILTER);
 
         $this->assertSame($expectedCachePath, $actualPath);
     }
 
     public function testInvokeFilterCacheMethodWithRuntimeConfig(): void
     {
-        $expectedFilter = 'thumbnail';
         $expectedInputPath = 'thePathToTheImage';
         $expectedCachePath = 'thePathToTheCachedImage';
-        $expectedRuntimeConfig = [
-            'thumbnail' => [
+        $runtimeConfig = [
+            self::FILTER => [
                 'size' => [100, 100],
             ],
         ];
@@ -96,17 +130,15 @@ class LazyFilterRuntimeTest extends AbstractTest
         $this->manager
             ->expects($this->once())
             ->method('getRuntimePath')
-            ->with($expectedInputPath, $expectedRuntimeConfig)
-            ->willReturn($expectedRuntimeConfigPath)
-        ;
+            ->with($expectedInputPath, $runtimeConfig)
+            ->willReturn($expectedRuntimeConfigPath);
         $this->manager
             ->expects($this->once())
             ->method('resolve')
-            ->with($expectedRuntimeConfigPath, $expectedFilter)
-            ->willReturn($expectedCachePath)
-        ;
+            ->with($expectedRuntimeConfigPath, self::FILTER)
+            ->willReturn($expectedCachePath);
 
-        $actualPath = $this->runtime->filterCache($expectedInputPath, $expectedFilter, $expectedRuntimeConfig);
+        $actualPath = $this->runtime->filterCache($expectedInputPath, self::FILTER, $runtimeConfig);
 
         $this->assertSame($expectedCachePath, $actualPath);
     }

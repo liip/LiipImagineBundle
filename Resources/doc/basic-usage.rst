@@ -116,10 +116,17 @@ for subsequent requests. The final cached image path would be similar to
 
 .. tip::
 
-    You can prepare the cache in advance with either :doc:`the <commands>` or the
-    :doc:`message queue <resolve-cache-images-in-background>`. When you do that,
-    you can use the ``imagine_filter_cache`` filter to always return a link to
-    the final cached image.
+    You can prepare the cache in advance with either the :doc:`commands <commands>`
+    or the :doc:`message queue <resolve-cache-images-in-background>`. When you
+    do that, you can use the ``imagine_filter_cache`` filter to always return a
+    link to the final cached image.
+
+.. note::
+
+    When you use the ``asset`` function to resolve image paths and have asset
+    versioning configured, the ``imagine_filter`` tries to handle the version
+    query string. See :doc:`asset versioning <asset-versioning>` for more
+    information.
 
 .. note::
 
@@ -134,7 +141,6 @@ for subsequent requests. The final cached image path would be similar to
 
         web_profiler:
             intercept_redirects: false
-
 
 Runtime Options
 ---------------

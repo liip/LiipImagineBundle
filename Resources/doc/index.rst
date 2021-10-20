@@ -43,6 +43,7 @@ usage to the architecture of bundle.
     data-loaders
     cache-resolvers
     cache-manager
+    asset-versioning
     commands
 
 .. toctree::

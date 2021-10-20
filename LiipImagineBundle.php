@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle;
 
 use Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Liip\ImagineBundle\Async\Topics;
+use Liip\ImagineBundle\DependencyInjection\Compiler\AssetsVersionCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
@@ -29,6 +30,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -42,6 +44,7 @@ class LiipImagineBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new NonFunctionalFilterExceptionPass());
+        $container->addCompilerPass(new AssetsVersionCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DriverCompilerPass());
         $container->addCompilerPass(new LoadersCompilerPass());
         $container->addCompilerPass(new FiltersCompilerPass());

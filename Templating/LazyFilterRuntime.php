@@ -22,9 +22,17 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      */
     private $cache;
 
-    public function __construct(CacheManager $cache)
+    /**
+     * Optional version to remove from the asset filename and re-append to the URL.
+     *
+     * @var string|null
+     */
+    private $assetVersion;
+
+    public function __construct(CacheManager $cache, ?string $assetVersion = null)
     {
         $this->cache = $cache;
+        $this->assetVersion = $assetVersion;
     }
 
     /**
@@ -32,7 +40,13 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      */
     public function filter(string $path, string $filter, array $config = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
-        return $this->cache->getBrowserPath($this->cleanPath($path), $filter, $config, $resolver, $referenceType);
+        $path = $this->cleanPath($path);
+        $path = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
+        if ($this->assetVersion) {
+            $path .= '?'.$this->assetVersion;
+        }
+
+        return $path;
     }
 
     /**
@@ -43,23 +57,26 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
     public function filterCache(string $path, string $filter, array $config = [], ?string $resolver = null): string
     {
         $path = $this->cleanPath($path);
-
-        if (!empty($config)) {
+        if (\count($config)) {
             $path = $this->cache->getRuntimePath($path, $config);
         }
+        $path = $this->cache->resolve($path, $filter, $resolver);
+        if ($this->assetVersion) {
+            $path .= '?'.$this->assetVersion;
+        }
 
-        return $this->cache->resolve($path, $filter, $resolver);
+        return $path;
     }
 
     private function cleanPath(string $path): string
     {
-        $url = parse_url($path);
-        $path = $url['path'] ?? '';
-        if (array_key_exists('query', $url)) {
-            $path .= '?'.$url['query'];
+        if (!$this->assetVersion) {
+            return $path;
         }
-        if (array_key_exists('fragment', $url)) {
-            $path .= '#'.$url['fragment'];
+
+        $start = mb_strrpos($path, $this->assetVersion);
+        if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
+            return rtrim(mb_substr($path, 0, $start), '?');
         }
 
         return $path;
