@@ -32,6 +32,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Async\ResolveCacheProcessor
+ *
+ * @group legacy
  */
 class ResolveCacheProcessorTest extends AbstractTest
 {

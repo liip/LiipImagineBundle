@@ -11,6 +11,9 @@
 
 namespace Liip\ImagineBundle\Async;
 
+/**
+ * @deprecated Use Liip\ImagineBundle\Message instead
+ */
 class Commands
 {
     /**

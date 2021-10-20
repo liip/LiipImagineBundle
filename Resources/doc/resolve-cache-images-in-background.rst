@@ -1,22 +1,30 @@
 Resolve cache images in background
 ==================================
 
-By default the LiipImagineBundle processes the image on demand.
-It does in resolve controller and saves the result, does a 301 redirect to the processed static image.
-The approach has its benefits.
-The most notable is simplicity.
-Though there are some disadvantages:
+By default, the LiipImagineBundle processes images on demand. When an image is requested that has
+not yet been cached with the requested filter set, the controller applies the filters and caches
+the result. Then it redirects the client to the generated image file.
 
-* It takes huge amount of time during the first request since we have to do a lot of things.
-* The images are processed by web servers. It increases the overall load on them and may affect the site performance.
-* The resolve controller url is different from the cached image one.
-  If there is nothing in the cache the page will contain the url to resolve controller.
-  The varnish may cache the page with those links to the resolve controller.
-  A browser keeps sending requests to it though there is no need for it after the first call.
-To prepare the cached images in advance, the LiipImagineBundle allows you to use a message queue to have a worker warm up the cache asynchronously. Your application has to send messages about the images as it becomes aware of them (file upload, import processes, ...) and you need to run the worker for the message queue.
+This is simple and works without any further tooling. There are some important disadvantages however:
+
+* Applying all the filters to an images can take a lot of time and memory;
+* The images have to be processed by the web server answering web requests. This increases the load
+  on the server and may affect performance;
+* The resolve controller URL is different from the cached image URL. When the image needs to be
+  generated, the cached HTML page contains the URL to the controller. If you are caching the HTML,
+  all clients using the cache are sent to the controller and need to go through the redirect even
+  though it would be unnecessary.
+
+To prepare the cached images in advance, the LiipImagineBundle allows you to use a message queue to
+run a worker that warms up the cache asynchronously. Your application has to send messages about the
+images as it becomes aware of them (file upload, import processes, ...) and you need to run workers
+for the message queue.
 
 Symfony Messenger
 -----------------
+
+This bundle provides an integration with `Symfony Messenger`_. When enabled, it provides a message
+handler to consume warmup messages.
 
 Step 1: Install
 ~~~~~~~~~~~~~~~
@@ -45,7 +53,8 @@ First, `install symfony/messenger`_ with composer:
 Step 2: Configure LiipImagineBundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At this step we instruct LiipImagineBundle to load some extra stuff required to process images in background.
+We need to instruct LiipImagineBundle to load the message handler that consumes the warmup
+messages and prepares the cached images in a separate process not tied to web requests.
 
 .. code-block:: yaml
 
@@ -57,24 +66,29 @@ At this step we instruct LiipImagineBundle to load some extra stuff required to 
 Step 3: Run consumers
 ~~~~~~~~~~~~~~~~~~~~~
 
-Before we can start using it we need a pool of consumers (at least one) to be working in background.
-Here's how you can run it:
+We need to run at least one consumer for the messages:
 
 .. code-block:: terminal
 
     $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M
 
-    # use -vv to see details about what's happening
-    $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M -vv
+You can run the consumers on a separate machine, as long as it shares the same storage for the
+cached images. In a cloud system, you could even scale consumers based on the queue size to get
+fast processing without tying up resources that would do nothing most of the time.
 
-Step 4: Send warmup cache message
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step 4: Send WarmupCache message
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You have to dispatch a message in order to process images in background.
-The message must contain the original image path (in terms of LiipImagineBundle).
-If you do not define filters, the background process will warmup cache for all available filters.
-If the cache already exists, the background process does not recreate it by default.
-You can force cache to be recreated and in this case the cached image is removed and a new one replaces it.
+The last step is to let the message consumer know about images that it needs to cache. When we
+reference the image in a Twig template, it is too late to use the message system.
+
+Dispatch a message with the original image path (as you would use it in Twig). You may specify
+which filter sets to warm up, or leave that out to have the message consumer warm up all available
+filter sets.
+
+Existing cached images are by default not replaced. You can force cache recreation. If ``force`` is
+set, cached images are recreated. Force is useful if you replace images with new versions that have
+the same file name as before.
 
 .. code-block:: php
 
@@ -99,11 +113,12 @@ You can force cache to be recreated and in this case the cached image is removed
         }
     }
 
-Enqueue
--------------------
+Enqueue (deprecated)
+--------------------
 
-The bundle provides a solution. It utilize messaging pattern and works on top of `enqueue library`_.
+The `enqueue library`_ integration is deprecated in favor of the Symfony Messenger integration.
 
+Enqueue integration will be removed in the next major version.
 
 Step 1: Install EnqueueBundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -182,6 +197,7 @@ You can force cache to be recreated and in this case the cached image is removed
     $replyMessage = $reply->receive(20000); // wait for 20 sec
 
 
+.. _`Symfony Messenger`: https://symfony.com/doc/current/messenger.html
 .. _`install symfony/messenger`: https://symfony.com/doc/current/messenger.html#installation
 .. _`enqueue library`: https://github.com/php-enqueue/enqueue-dev
 .. _`install EnqueueBundle`: https://github.com/php-enqueue/enqueue-dev/blob/master/docs/bundle/quick_tour.md

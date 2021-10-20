@@ -22,6 +22,9 @@ use Interop\Queue\Processor;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
 
+/**
+ * @deprecated Use Liip\ImagineBundle\Message\Handler\WarmupCacheHandler instead
+ */
 final class ResolveCacheProcessor implements Processor, CommandSubscriberInterface, QueueSubscriberInterface
 {
     /**
