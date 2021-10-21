@@ -57,6 +57,11 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        if (version_compare(self::VERSION, '5.3', '>=')) {
+            $loader->load(__DIR__.'/config/symfony_5-3.yaml');
+        } else {
+            $loader->load(__DIR__.'/config/symfony_legacy.yaml');
+        }
         $loader->load(__DIR__.'/config/config.yml');
     }
 }

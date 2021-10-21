@@ -187,30 +187,25 @@ class AwsS3ResolverTest extends AbstractTest
     {
         $s3 = $this->getS3ClientMock();
         $s3
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('doesObjectExist')
-            ->with('images.example.com', 'thumb/pathOne.jpg')
+            ->withConsecutive(
+                ['images.example.com', 'thumb/pathOne.jpg'],
+                ['images.example.com', 'thumb/pathTwo.jpg']
+            )
             ->willReturn(true);
         $s3
-            ->expects($this->at(1))
             ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'thumb/pathOne.jpg',
-            ])
-            ->willReturn($this->getS3ResponseMock());
-        $s3
-            ->expects($this->at(2))
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'thumb/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(3))
-            ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'thumb/pathTwo.jpg',
-            ])
+            ->withConsecutive(
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'thumb/pathOne.jpg',
+                ],
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'thumb/pathTwo.jpg',
+                ]
+            )
             ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
@@ -224,56 +219,35 @@ class AwsS3ResolverTest extends AbstractTest
     {
         $s3 = $this->getS3ClientMock();
         $s3
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('doesObjectExist')
-            ->with('images.example.com', 'filterOne/pathOne.jpg')
+            ->withConsecutive(
+                ['images.example.com', 'filterOne/pathOne.jpg'],
+                ['images.example.com', 'filterOne/pathTwo.jpg'],
+                ['images.example.com', 'filterTwo/pathOne.jpg'],
+                ['images.example.com', 'filterTwo/pathTwo.jpg']
+            )
             ->willReturn(true);
         $s3
-            ->expects($this->at(1))
             ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'filterOne/pathOne.jpg',
-            ])
-            ->willReturn($this->getS3ResponseMock());
-        $s3
-            ->expects($this->at(2))
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(3))
-            ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'filterOne/pathTwo.jpg',
-            ])
-            ->willReturn($this->getS3ResponseMock());
-        $s3
-            ->expects($this->at(4))
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(5))
-            ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'filterTwo/pathOne.jpg',
-            ])
-            ->willReturn($this->getS3ResponseMock());
-        $s3
-            ->expects($this->at(6))
-            ->method('doesObjectExist')
-            ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(7))
-            ->method('deleteObject')
-            ->with([
-                'Bucket' => 'images.example.com',
-                'Key' => 'filterTwo/pathTwo.jpg',
-            ])
+            ->withConsecutive(
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'filterOne/pathOne.jpg',
+                ],
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'filterOne/pathTwo.jpg',
+                ],
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'filterTwo/pathOne.jpg',
+                ],
+                [
+                    'Bucket' => 'images.example.com',
+                    'Key' => 'filterTwo/pathTwo.jpg',
+                ]
+            )
             ->willReturn($this->getS3ResponseMock());
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');

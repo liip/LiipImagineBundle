@@ -160,25 +160,22 @@ class AmazonS3ResolverTest extends AbstractTest
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
-            ->expects($this->at(0))
             ->method('if_object_exists')
-            ->with('images.example.com', 'filter/pathOne.jpg')
+            ->withConsecutive(
+                ['images.example.com', 'filter/pathOne.jpg'],
+                ['images.example.com', 'filter/pathTwo.jpg']
+            )
             ->willReturn(true);
         $s3
-            ->expects($this->at(1))
             ->method('delete_object')
-            ->with('images.example.com', 'filter/pathOne.jpg')
-            ->willReturn($this->createCFResponseMock(true));
-        $s3
-            ->expects($this->at(2))
-            ->method('if_object_exists')
-            ->with('images.example.com', 'filter/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(3))
-            ->method('delete_object')
-            ->with('images.example.com', 'filter/pathTwo.jpg')
-            ->willReturn($this->createCFResponseMock(true));
+            ->withConsecutive(
+                ['images.example.com', 'filter/pathOne.jpg'],
+                ['images.example.com', 'filter/pathTwo.jpg']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->createCFResponseMock(true),
+                $this->createCFResponseMock(true)
+            );
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove(['pathOne.jpg', 'pathTwo.jpg'], ['filter']);
@@ -188,45 +185,28 @@ class AmazonS3ResolverTest extends AbstractTest
     {
         $s3 = $this->createAmazonS3Mock();
         $s3
-            ->expects($this->at(0))
             ->method('if_object_exists')
-            ->with('images.example.com', 'filterOne/pathOne.jpg')
+            ->withConsecutive(
+                ['images.example.com', 'filterOne/pathOne.jpg'],
+                ['images.example.com', 'filterOne/pathTwo.jpg'],
+                ['images.example.com', 'filterTwo/pathOne.jpg'],
+                ['images.example.com', 'filterTwo/pathTwo.jpg']
+            )
             ->willReturn(true);
         $s3
-            ->expects($this->at(1))
             ->method('delete_object')
-            ->with('images.example.com', 'filterOne/pathOne.jpg')
-            ->willReturn($this->createCFResponseMock(true));
-        $s3
-            ->expects($this->at(2))
-            ->method('if_object_exists')
-            ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(3))
-            ->method('delete_object')
-            ->with('images.example.com', 'filterOne/pathTwo.jpg')
-            ->willReturn($this->createCFResponseMock(true));
-        $s3
-            ->expects($this->at(4))
-            ->method('if_object_exists')
-            ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(5))
-            ->method('delete_object')
-            ->with('images.example.com', 'filterTwo/pathOne.jpg')
-            ->willReturn($this->createCFResponseMock(true));
-        $s3
-            ->expects($this->at(6))
-            ->method('if_object_exists')
-            ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->willReturn(true);
-        $s3
-            ->expects($this->at(7))
-            ->method('delete_object')
-            ->with('images.example.com', 'filterTwo/pathTwo.jpg')
-            ->willReturn($this->createCFResponseMock(true));
+            ->withConsecutive(
+                ['images.example.com', 'filterOne/pathOne.jpg'],
+                ['images.example.com', 'filterOne/pathTwo.jpg'],
+                ['images.example.com', 'filterTwo/pathOne.jpg'],
+                ['images.example.com', 'filterTwo/pathTwo.jpg']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->createCFResponseMock(true),
+                $this->createCFResponseMock(true),
+                $this->createCFResponseMock(true),
+                $this->createCFResponseMock(true)
+            );
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -320,11 +300,9 @@ class AmazonS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @param bool $ok
-     *
      * @return MockObject|\CFResponse
      */
-    protected function createCFResponseMock($ok = true)
+    protected function createCFResponseMock(bool $ok)
     {
         $s3Response = $this->createObjectMock(\CFResponse::class, ['isOK'], false);
         $s3Response
