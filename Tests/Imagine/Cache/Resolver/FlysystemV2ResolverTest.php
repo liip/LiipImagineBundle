@@ -145,23 +145,19 @@ class FlysystemV2ResolverTest extends AbstractTest
     {
         $fs = $this->createFlySystemMock();
         $fs
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('fileExists')
-            ->with('media/cache/thumb/pathOne.jpg')
+            ->withConsecutive(
+                ['media/cache/thumb/pathOne.jpg'],
+                ['media/cache/thumb/pathTwo.jpg']
+            )
             ->willReturn(true);
         $fs
-            ->expects($this->at(1))
             ->method('delete')
-            ->with('media/cache/thumb/pathOne.jpg');
-        $fs
-            ->expects($this->at(2))
-            ->method('fileExists')
-            ->with('media/cache/thumb/pathTwo.jpg')
-            ->willReturn(true);
-        $fs
-            ->expects($this->at(3))
-            ->method('delete')
-            ->with('media/cache/thumb/pathTwo.jpg');
+            ->withConsecutive(
+                ['media/cache/thumb/pathOne.jpg'],
+                ['media/cache/thumb/pathTwo.jpg']
+            );
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -174,41 +170,23 @@ class FlysystemV2ResolverTest extends AbstractTest
     {
         $fs = $this->createFlySystemMock();
         $fs
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('fileExists')
-            ->with('media/cache/filterOne/pathOne.jpg')
+            ->withConsecutive(
+                ['media/cache/filterOne/pathOne.jpg'],
+                ['media/cache/filterTwo/pathOne.jpg'],
+                ['media/cache/filterOne/pathTwo.jpg'],
+                ['media/cache/filterTwo/pathTwo.jpg']
+            )
             ->willReturn(true);
         $fs
-            ->expects($this->at(1))
             ->method('delete')
-            ->with('media/cache/filterOne/pathOne.jpg');
-        $fs
-            ->expects($this->at(2))
-            ->method('fileExists')
-            ->with('media/cache/filterTwo/pathOne.jpg')
-            ->willReturn(true);
-        $fs
-            ->expects($this->at(3))
-            ->method('delete')
-            ->with('media/cache/filterTwo/pathOne.jpg');
-        $fs
-            ->expects($this->at(4))
-            ->method('fileExists')
-            ->with('media/cache/filterOne/pathTwo.jpg')
-            ->willReturn(true);
-        $fs
-            ->expects($this->at(5))
-            ->method('delete')
-            ->with('media/cache/filterOne/pathTwo.jpg');
-        $fs
-            ->expects($this->at(6))
-            ->method('fileExists')
-            ->with('media/cache/filterTwo/pathTwo.jpg')
-            ->willReturn(true);
-        $fs
-            ->expects($this->at(7))
-            ->method('delete')
-            ->with('media/cache/filterTwo/pathTwo.jpg');
+            ->withConsecutive(
+                ['media/cache/filterOne/pathOne.jpg'],
+                ['media/cache/filterTwo/pathOne.jpg'],
+                ['media/cache/filterOne/pathTwo.jpg'],
+                ['media/cache/filterTwo/pathTwo.jpg']
+            );
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove(
@@ -254,13 +232,12 @@ class FlysystemV2ResolverTest extends AbstractTest
 
         $fs = $this->createFlySystemMock();
         $fs
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('deleteDirectory')
-            ->with('media/cache/theFilterOne');
-        $fs
-            ->expects($this->at(1))
-            ->method('deleteDirectory')
-            ->with('media/cache/theFilterTwo');
+            ->withConsecutive(
+                ['media/cache/theFilterOne'],
+                ['media/cache/theFilterTwo']
+            );
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove([], [$expectedFilterOne, $expectedFilterTwo]);

@@ -12,7 +12,7 @@
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Compiler;
 
 use Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass;
-use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Compiler\AbstractCompilerPass
@@ -21,29 +21,16 @@ class AbstractCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testCompilerLogging(): void
     {
-        $pass = $this->createAbstractCompilerPassMock();
+        $pass = $this->createMock(AbstractCompilerPass::class);
 
         $message = 'Compiler log %s with %d substitutions';
         $replace = ['entry', 2];
         $expects = vsprintf('[liip/imagine-bundle] '.$message, $replace);
 
-        $container = $this->createContainerBuilderMock(['__construct']);
+        $container = $this->createMock(ContainerBuilder::class);
         $this->expectContainerLogMethodCalledOnce($container, $pass, $expects);
 
         $log = $this->getVisibilityRestrictedMethod($pass, 'log');
         $log->invoke($pass, $container, $message, ...$replace);
-    }
-
-    /**
-     * @param string[] $methods
-     *
-     * @return MockObject|AbstractCompilerPass
-     */
-    private function createAbstractCompilerPassMock(array $methods = [])
-    {
-        return $this
-            ->getMockBuilder(AbstractCompilerPass::class)
-            ->setMethods($methods)
-            ->getMock();
     }
 }

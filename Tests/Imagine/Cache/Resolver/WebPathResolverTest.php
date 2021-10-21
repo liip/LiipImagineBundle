@@ -367,13 +367,12 @@ class WebPathResolverTest extends TestCase
     {
         $filesystemMock = $this->createFilesystemMock();
         $filesystemMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPathOne');
-        $filesystemMock
-            ->expects($this->at(1))
-            ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilter/aPathTwo');
+            ->withConsecutive(
+                ['/aWebRoot/aCachePrefix/aFilter/aPathOne'],
+                ['/aWebRoot/aCachePrefix/aFilter/aPathTwo']
+            );
 
         $resolver = new WebPathResolver(
             $filesystemMock,
@@ -389,21 +388,14 @@ class WebPathResolverTest extends TestCase
     {
         $filesystemMock = $this->createFilesystemMock();
         $filesystemMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathOne');
-        $filesystemMock
-            ->expects($this->at(1))
-            ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathOne');
-        $filesystemMock
-            ->expects($this->at(2))
-            ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterOne/aPathTwo');
-        $filesystemMock
-            ->expects($this->at(3))
-            ->method('remove')
-            ->with('/aWebRoot/aCachePrefix/aFilterTwo/aPathTwo');
+            ->withConsecutive(
+                ['/aWebRoot/aCachePrefix/aFilterOne/aPathOne'],
+                ['/aWebRoot/aCachePrefix/aFilterTwo/aPathOne'],
+                ['/aWebRoot/aCachePrefix/aFilterOne/aPathTwo'],
+                ['/aWebRoot/aCachePrefix/aFilterTwo/aPathTwo']
+            );
 
         $resolver = new WebPathResolver(
             $filesystemMock,

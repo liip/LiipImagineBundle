@@ -67,9 +67,6 @@ class AbstractCompilerPassTestCase extends AbstractTest
         return $container;
     }
 
-    /**
-     * @param mixed[] ...$expectedArguments
-     */
     protected function expectContainerLogMethodCalledOnce(MockObject $container, ...$expectedArguments): void
     {
         $expectation = $container
