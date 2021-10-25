@@ -16,11 +16,6 @@ by executing the following command in your project directory:
 
     $ composer require aws/aws-sdk-php
 
-.. note::
-
-    This command requires that `Composer`_ is installed globally, as explained in
-    their `installation documentation`_.
-
 Configuration
 -------------
 
@@ -141,5 +136,3 @@ options.
 
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
-.. _`Composer`: https://getcomposer.org/
-.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
