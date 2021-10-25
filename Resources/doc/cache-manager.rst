@@ -6,21 +6,21 @@ Cache Manager
 Cache Removal
 -------------
 
-CacheManager allows to remove cache in various ways.
+CacheManager allows to remove cached images.
 
-Single path and filter:
+Remove the cache for a specific image and one filter set:
 
 .. code-block:: php
 
     $cacheManager->remove($path, $filter);
 
-Single path and all filters:
+Remove the cache for a specific image in all filter sets:
 
 .. code-block:: php
 
     $cacheManager->remove($path);
 
-Some paths and some filters:
+Remove a list of images for a list of filter sets:
 
 .. code-block:: php
 
@@ -29,7 +29,7 @@ Some paths and some filters:
         ['thumbnail_233x233', 'thumbnail_100x100']
     );
 
-The whole cache.
+Clear the whole cache:
 
 .. code-block:: php
 

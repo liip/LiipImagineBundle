@@ -14,10 +14,6 @@ and add it as a dependency to your project:
 
     composer require liip/imagine-bundle
 
-This command requires that `Composer`_ is installed globally, as explained in
-the `installation documentation`_ for Composer.
-
-
 Step 2: Enable the Bundle
 -------------------------
 
@@ -84,7 +80,3 @@ routing file:
         <import resource="@LiipImagineBundle/Resources/config/routing.yaml"/>
 
 Congratulations; you are ready to rock your images!
-
-
-.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
-.. _`Composer`: https://getcomposer.org/

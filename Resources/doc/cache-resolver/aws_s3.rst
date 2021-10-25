@@ -17,13 +17,6 @@ by executing the following command in your project directory:
 
     $ composer require aws/aws-sdk-php
 
-
-.. note::
-
-    This command requires that `Composer`_ is installed globally, as explained in
-    their `installation documentation`_.
-
-
 Configuration
 -------------
 
@@ -312,7 +305,5 @@ You can also use the constructor of the resolver to directly inject multiple opt
 
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
-.. _`Composer`: https://getcomposer.org/
-.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
 .. _`Default Credential Provider Chain`: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html

@@ -32,14 +32,19 @@ without parameters:
     $ php bin/console liip:imagine:cache:remove
 
 
-Resolve Cache
+Warm up Cache
 -------------
+
+.. note::
+
+    To automate cache warming, have a look at the
+    :doc:`Symfony Messenger integration <resolve-cache-images-in-background>`.
 
 .. code-block:: bash
 
     $ php bin/console liip:imagine:cache:resolve path1 path2 --filters=thumb1
 
-Cache for the two paths will be resolved using the passed filter.
+The cache for those two paths will be warmed up for the specified filter set.
 As a result you will get:
 
 .. code-block:: text
@@ -47,7 +52,7 @@ As a result you will get:
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb1/path2
 
-You can pass few filters:
+You can specify which filter sets to warm up:
 
 .. code-block:: bash
 
@@ -60,8 +65,7 @@ As a result you will get:
     http://localhost/media/cache/thumb1/path1
     http://localhost/media/cache/thumb2/path1
 
-If you omit ``--filters`` parameter then to resolve given paths will be used
-all configured and available filters in application:
+If you omit ``--filters``, the image will be warmed up for all available filters:
 
 .. code-block:: bash
 

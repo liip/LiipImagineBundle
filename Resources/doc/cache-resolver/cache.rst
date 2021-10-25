@@ -1,8 +1,14 @@
 
 .. _cache-resolver-cache:
 
-Cache Resolver
-==============
+Cache Resolver (deprecated)
+===========================
+
+.. warning::
+
+    This cache resolver is based on the discontinued `Doctrine Cache`_ library.
+
+    It is recommended to use the :doc:`PsrCacheResolver <psr_cache>` instead.
 
 The ``CacheResolver`` cannot be used by itself. Instead, it is a "wrapper" for
 another resolver.
@@ -17,11 +23,6 @@ by executing the following command in your project directory:
 .. code-block:: bash
 
     $ composer require doctrine/cache
-
-.. note::
-
-    This command requires that `Composer`_ is installed globally, as explained in
-    their `installation documentation`_.
 
 Configuration
 -------------
@@ -110,5 +111,3 @@ filter set using the following configuration.
 
 
 .. _`Doctrine Cache`: https://github.com/doctrine/cache
-.. _`Composer`: https://getcomposer.org/
-.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md

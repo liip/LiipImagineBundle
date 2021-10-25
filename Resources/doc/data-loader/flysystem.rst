@@ -17,12 +17,6 @@ can be installed by executing the following command in your project directory:
 
     $ composer require oneup/flysystem-bundle
 
-.. note::
-
-    This command requires that `Composer`_ is installed globally, as explained in
-    their `installation documentation`_.
-
-
 Configuration
 -------------
 
@@ -56,5 +50,3 @@ Using `OneupFlysystemBundle`_, a basic configuration might look like the followi
 
 .. _`Flysystem`: https://github.com/thephpleague/flysystem
 .. _`OneupFlysystemBundle`: https://github.com/1up-lab/OneupFlysystemBundle
-.. _`Composer`: https://getcomposer.org/
-.. _`installation documentation`: https://getcomposer.org/doc/00-intro.md
