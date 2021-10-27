@@ -4,59 +4,26 @@
 Custom Data Loader
 ==================
 
-You can easily define your own, custom data loaders to allow you to retrieve you
-image data from any imaginable backend. Creating a custom data loader begins by creating
-a class that implements the ``LoaderInterface``, as shown below.
+You can write custom data loaders that retrieve image data from any imaginable
+backend. The data loader needs to implement the ``LoaderInterface``:
 
 .. code-block:: php
+
+    namespace Liip\ImagineBundle\Binary\Loader;
 
     interface LoaderInterface
     {
         public function find($path);
     }
 
-As defined in ``LoaderInterface``, the only required method is one named ``find``,
-which is provided a relative image path as its singular parameter, and
-subsequently provides an instance of ``BinaryInterface`` in return.
+The ``LoaderInterface`` defines the method ``find``, which is called with a
+relative image path and needs to return an instance of ``BinaryInterface``.
 
-The following is a template for creating your own data loader. You must provide
-the implementation for the ``find`` method to create a valid data loader.
-
-.. code-block:: php
-
-    namespace AppBundle\Imagine\Binary\Loader;
-
-    use Liip\ImagineBundle\Binary\BinaryInterface;
-    use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
-    use Liip\ImagineBundle\Model\Binary;
-
-    class MyCustomDataLoader implements LoaderInterface
-    {
-        /**
-         * @param mixed $path
-         *
-         * @return BinaryInterface
-         */
-        public function find($path)
-        {
-            $data = /** @todo: implement logic to read image data */
-            $mime = /** @todo: implement logic to determine image mime-type */
-
-            // return binary instance with data
-            return new Binary($data, $mime);
-        }
-    }
-
-Once you have defined your custom data loader, you must define it as a service and tag it
-with ``liip_imagine.binary.loader``.
-
-.. note::
-
-    For more information on the Service Container, reference the official
-    `Symfony Service Container documentation`_.
+You need to `configure a service`_ with your custom loader and tag it with
+``liip_imagine.binary.loader``.
 
 To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
-``my_custom_data_loader``, you would use the following configuration.
+``my_custom_data_loader``, you would use the following configuration:
 
 .. configuration-block::
 
@@ -107,4 +74,4 @@ Alternatively, you can only set the custom data loader for just a specific filte
                     # your filters
 
 
-.. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
+.. _`configure a service`: http://symfony.com/doc/current/book/service_container.html

@@ -27,8 +27,7 @@ Configuration
 -------------
 
 As this loader leverages any number of other configured loaders, its
-configuration is relatively simple; it supports only a ``loaders``
-option that accepts an array of other configured loader names:
+configuration consists only of the list of ``loaders`` to try in succession:
 
 .. code-block:: yaml
 

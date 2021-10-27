@@ -5,7 +5,7 @@ By default, the LiipImagineBundle processes images on demand. When an image is r
 not yet been cached with the requested filter set, the controller applies the filters and caches
 the result. Then it redirects the client to the generated image file.
 
-This is simple and works without any further tooling. There are some important disadvantages however:
+This works without any further tooling. There are some important disadvantages however:
 
 * Applying all the filters to an images can take a lot of time and memory;
 * The images have to be processed by the web server answering web requests. This increases the load
@@ -124,7 +124,7 @@ Step 1: Install EnqueueBundle
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 First, we have to `install EnqueueBundle`_. You have to basically use composer to install the bundle,
-register it to AppKernel and adjust settings. Here's the most simplest configuration without any extra dependencies.
+register it to AppKernel and adjust settings. Here's the smallest configuration without any extra dependencies.
 It is based on `filesystem transport`_.
 
 .. code-block:: yaml

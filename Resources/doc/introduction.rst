@@ -21,13 +21,13 @@ implement the ``Liip\ImagineBundle\Binary\Loader\LoaderInterface``. Those
 loaders are typically managed by the ``DataManager`` and automatically wired
 with it, using dependency injection.
 
-How a specific ``DataLoader`` retrieves the image, is up to the loader. The most
-simple way is to read a file from the local filesystem. This is implemented by
-the ``Liip\ImagineBundle\Binary\Loader\FileSystemLoader``, which is set by
-default. You could also create a random image on the fly using drawing
-utilities, or read a binary stream from any stream registered.
+How a specific ``DataLoader`` retrieves the image is up to the loader. The
+default is to read a file from the local filesystem. This is implemented by the
+``Liip\ImagineBundle\Binary\Loader\FileSystemLoader``, which is configured as
+the default loader. You could also create a random image on the fly using
+drawing utilities, or read a binary stream from any stream registered.
 
-The most important parts about those ``DataLoader``:
+The most important parts about those ``DataLoader``s:
 
 1. They ``find`` a single image based on a given identifier.
 2. They return a ready-to-use ``Imagine\Image\ImageInterface``.

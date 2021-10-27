@@ -35,9 +35,10 @@ use-cases.
 Custom filters
 --------------
 
-You can easily define your own, custom filters to perform any image
-transformation operations required. Creating a custom filter begins
-by creating a class that implements the following interface:
+You can write your own filters to perform any image transformation operations.
+Custom filters need to implement the filter ``LoaderInterface`` (not to be
+confused with the data loader interface in the
+``Liip\ImagineBundle\Binary\Loader`` namespace):
 
 .. code-block:: php
 
@@ -48,38 +49,14 @@ by creating a class that implements the following interface:
         public function load(ImageInterface $image, array $options = []);
     }
 
-As defined in ``LoaderInterface``, the only required method is one named ``load``,
-which is provided an instance of ``ImageInterface`` and an array of options, and
-subsequently provides an instance of ``ImageInterface`` in return.
+The ``LoaderInterface`` has the method ``load``, which is provided an instance
+of ``ImageInterface`` and an array of options. It must return an
+``ImageInterface``.
 
-The following is a template for creating your own filter. You must provide
-the implementation for the ``load`` method to create a valid filter.
+You need to `configure a service`_ and tag it ``liip_imagine.filter.loader``.
 
-.. code-block:: php
-
-    namespace AppBundle\Imagine\Filter\Loader;
-
-    use Imagine\Image\ImageInterface;
-    use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
-
-    class MyCustomFilter implements LoaderInterface
-    {
-        /**
-         * @param ImageInterface $image
-         * @param array          $options
-         *
-         * @return ImageInterface
-         */
-        public function load(ImageInterface $image, array $options = [])
-        {
-            /** @todo: implement */
-        }
-    }
-
-After you have finished implementing your custom filter class, it must be defined
-as a service in the Symfony Service Container and tagged with ``liip_imagine.filter.loader``.
-To register a our filter, ``AppBundle\Imagine\Filter\Loader\MyCustomFilter``, as
-``my_custom_filter``, use the following configuration.
+To register a filter ``AppBundle\Imagine\Filter\Loader\MyCustomFilter`` as
+``my_custom_filter``, use the following configuration:
 
 .. configuration-block::
 
@@ -100,11 +77,6 @@ To register a our filter, ``AppBundle\Imagine\Filter\Loader\MyCustomFilter``, as
         <service id="app.filter.my_custom_filter" class="AppBundle\Imagine\Filter\Loader\MyCustomFilter">
             <tag name="liip_imagine.filter.loader" loader="my_custom_filter" />
         </service>
-
-.. note::
-
-    For more information on the Service Container, reference the official
-    `Symfony Service Container documentation`_.
 
 You can now reference and use your custom filter when defining filter sets in your configuration:
 
@@ -170,4 +142,4 @@ to the image, by passing configuration as third parameter to ``applyFilter``:
         }
     }
 
-.. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
+.. _`configure a service`: http://symfony.com/doc/current/book/service_container.html
