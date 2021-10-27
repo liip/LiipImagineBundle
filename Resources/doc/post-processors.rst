@@ -44,10 +44,8 @@ application's assets.
 Custom processors
 -----------------
 
-Just like filters, you can easily define your own, custom post-processors to
-perform any image binary operations required. Creating a custom post-processor
-begins by creating a class that implements the ``PostProcessorInterface``
-interface, as shown below.
+You can define your own post-processors to perform any image binary operations
+required. Post-processor need to implement the ``PostProcessorInterface``:
 
 .. code-block:: php
 
@@ -133,13 +131,8 @@ for your custom post-processor.
         }
     }
 
-Once you have defined your custom post-processor, you must define it as a service and tag it
+You need to `configure a service`_ with your custom post-processor and tag it
 with ``liip_imagine.filter.post_processor``.
-
-.. note::
-
-    For more information on the Service Container, reference the official
-    `Symfony Service Container documentation`_.
 
 To register ``AppBundle\Imagine\Filter\PostProcessor\MyCustomPostProcessor`` with the name
 ``my_custom_post_processor``, you would use the following configuration.
@@ -178,4 +171,4 @@ assigned via the ``post_processor`` tag attribute above (in this example,
                     my_custom_post_processor: { }
 
 
-.. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
+.. _`configure a service`: http://symfony.com/doc/current/book/service_container.html

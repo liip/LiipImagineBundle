@@ -9,7 +9,7 @@ file (often ``app/config/config.yml``) and are comprised of a collection of
 filters, post-processors, and other optional parameters.
 
 We'll learn more about post-processors and other available parameters later,
-but for now lets focus on how to define a simple filter set comprised of a
+but for now lets focus on how to define a small filter set comprised of a
 few filters.
 
 .. _usage-create-thumbnails:
@@ -169,8 +169,8 @@ Path Resolution
 ---------------
 
 Sometimes you need to resolve the image path returned by this bundle for a
-filtered image. This can easily be achieved using Symfony's console binary
-or programmatically from within a controller or other piece of code.
+filtered image. This can be achieved using Symfony's console binary or
+programmatically from within a controller or other piece of code.
 
 
 Resolve with the Console
