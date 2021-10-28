@@ -16,8 +16,14 @@ backend. The data loader needs to implement the ``LoaderInterface``:
         public function find($path);
     }
 
-The ``LoaderInterface`` defines the method ``find``, which is called with a
-relative image path and needs to return an instance of ``BinaryInterface``.
+The ``LoaderInterface`` defines the method ``find``, which is called with the
+path to the image and needs to return an instance of ``BinaryInterface``.
+
+.. warning::
+
+    Be aware that ``$path`` can be coming from the image controller. You need
+    to sanitize this parameter in your loader to avoid exposing files outside
+    of your image collections.
 
 You need to `configure a service`_ with your custom loader and tag it with
 ``liip_imagine.binary.loader``.
@@ -60,7 +66,7 @@ loader:
     liip_imagine:
         data_loader: my_custom_data_loader
 
-Alternatively, you can only set the custom data loader for just a specific filter set:
+Alternatively, you can set the custom data loader for a specific filter set:
 
 .. code-block:: yaml
 
