@@ -4,7 +4,8 @@
 Amazon S3 Resolver
 ==================
 
-The ``AmazonS3Resolver`` resolver enables cache resolution using Amazon S3.
+The ``AmazonS3Resolver`` resolver enables cache resolution using the
+``\AmazonS3`` storage API.
 
 Dependencies
 ------------
@@ -29,6 +30,11 @@ To begin, you must assign your Amazon key, secret, and bucket to their respectiv
         amazon_s3.key:    "your-aws-key"
         amazon_s3.secret: "your-aws-secret"
         amazon_s3.bucket: "your-bucket.example.com"
+
+.. note::
+
+    To not confuse the cache resolver, use the ``bucket.domain.tld`` notation.
+    Specifying the bucket in a path (``domain.tld/bucket``) does not work.
 
 Prerequisites
 -------------
