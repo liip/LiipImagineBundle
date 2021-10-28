@@ -42,11 +42,8 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
     {
         $path = $this->cleanPath($path);
         $path = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
-        if ($this->assetVersion) {
-            $path .= '?'.$this->assetVersion;
-        }
 
-        return $path;
+        return $this->appendAssetVersion($path);
     }
 
     /**
@@ -61,11 +58,8 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
             $path = $this->cache->getRuntimePath($path, $config);
         }
         $path = $this->cache->resolve($path, $filter, $resolver);
-        if ($this->assetVersion) {
-            $path .= '?'.$this->assetVersion;
-        }
 
-        return $path;
+        return $this->appendAssetVersion($path);
     }
 
     private function cleanPath(string $path): string
@@ -80,5 +74,16 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
         }
 
         return $path;
+    }
+
+    private function appendAssetVersion(string $path): string
+    {
+        if (!$this->assetVersion) {
+            return $path;
+        }
+
+        $separator = false !== mb_strpos($path, '?') ? '&' : '?';
+
+        return $path.$separator.$this->assetVersion;
     }
 }
