@@ -41,15 +41,15 @@ Configuration
 
 There are several configuration options available:
 
-* ``web_root`` - must be the absolute path to you application's web root. This
-  is used to determine where to put generated image files, so that apache
-  will pick them up before handing the request to Symfony next time they
-  are requested. The default value ends with ``web`` for Symfony prior to
-  version ``4.0.0``.
+* ``web_root`` - must be the absolute path to you application's web root.
+  This is used to determine where to put generated image files, so that your
+  web server can pick them up instead of forwarding the request to Symfony the
+  next time they are requested. The default value is the project directory and
+  ``public`` for Symfony >= 4 and ``web`` for old Symfony versions.
   Default value: ``%kernel.project_dir%/(public|web)``
-* ``cache_prefix`` - this is also used in the path for image generation, so
-  as to not clutter your web root with cached images. For example by default,
-  the images would be written to the ``web/media/cache/`` directory.
+* ``cache_prefix`` - the relative path within the web root where the generated
+  images should be cached. This should be a folder to not clutter your web root
+  with cached images.
   Default value: ``/media/cache``
 
 
@@ -67,8 +67,8 @@ for ``LiipImagineBundle`` using the following configuration.
         cache: profile_photos
 
 
-Usage on a Specific Filter
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configure resolver on a specific Filter Set
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Alternatively, you can set ``WebPathResolver`` as the cache resolver for a specific
 filter set using the following configuration.
