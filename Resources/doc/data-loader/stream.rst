@@ -23,8 +23,8 @@ Custom
 ~~~~~~
 
 The ``Liip\ImagineBundle\Binary\Loader\StreamLoader`` allows to read images
-from any stream (http, ftp, and others…)  registered thus allowing you to serve your images from
-literally anywhere.
+from any stream (http, ftp, and others…)  registered thus allowing you to
+serve your images from literally anywhere.
 
 The example service definition shows how to use a stream wrapped by the
 `Gaufrette`_ filesystem abstraction layer. In order to have this example
@@ -50,8 +50,8 @@ If you are using the `KnpGaufretteBundle`_ you can make use of the
 Usage
 -----
 
-Now you are ready to use the ``AwsS3Resolver`` by configuring the bundle.
-The following example will configure the resolver as default.
+Now you are ready to use the stream loader. To configure it as the default
+loader, you can configure the following:
 
 .. code-block:: yaml
 
@@ -59,6 +59,16 @@ The following example will configure the resolver as default.
 
     liip_imagine:
         data_loader: stream.profile_photos
+
+.. note::
+
+    The stream should be set up to load images from a specific source and only
+    accept relative paths to that source.
+
+    We do not recommend to set this loader up in a way that it accepts an
+    absolute URL. Otherwise an attacker could make your controller load
+    arbitrary image files that are then served over your server, with all the
+    legal implications.
 
 
 .. _`StreamWrapper configuration`: https://github.com/KnpLabs/KnpGaufretteBundle#stream-wrapper
