@@ -4,7 +4,8 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
-## [2.3.1](https://github.com/liip/LiipImagineBundle/tree/HEAD) Symfony 5.1 support (2020-06-26)
+## [2.3.1](https://github.com/liip/LiipImagineBundle/tree/2.3.1) Symfony 5.1 support (2020-06-26)
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.3.0...2.3.1)
 
 **Merged pull requests:**
 - Pass catched exception to give more insight on the original problem [\#1262](https://github.com/liip/LiipImagineBundle/pull/1262) ([pyrech](https://github.com/pyrech))
@@ -15,7 +16,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Fix symfony 5.1 deprecations [\#1282](https://github.com/liip/LiipImagineBundle/pull/1282) ([mynameisbogdan](https://github.com/mynameisbogdan))
 - Clean up unused dependencies [\#1290](https://github.com/liip/LiipImagineBundle/pull/1290) ([dbu](https://github.com/dbu))
 
-## [2.3.0](https://github.com/liip/LiipImagineBundle/tree/HEAD) Symfony 5 (2020-01-04)
+## [2.3.0](https://github.com/liip/LiipImagineBundle/tree/2.3.0) Symfony 5 (2020-01-04)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.2.0...2.3.0)
 
 **Merged pull requests:**
@@ -83,7 +84,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - improve error message [\#192](https://github.com/liip/LiipImagineBundle/issues/192)
 - Resize and crop with cropping options [\#72](https://github.com/liip/LiipImagineBundle/issues/72)
 
-## [2.2.0](https://github.com/liip/LiipImagineBundle/tree/HEAD) (2019-10-04)
+## [2.2.0](https://github.com/liip/LiipImagineBundle/tree/2.2.0) (2019-10-04)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.1.0...2.2.0)
 
 - Allow unresolvable data roots for filesystem locator ([robfrawley](https://github.com/robfrawley))
