@@ -153,7 +153,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('filter_action')->defaultValue(sprintf('%s::filterAction', ImagineController::class))->end()
                         ->scalarNode('filter_runtime_action')->defaultValue(sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
-                        ->integerNode('redirect_response_code')->defaultValue(301)
+                        ->integerNode('redirect_response_code')->defaultValue(302)
                             ->validate()
                                 ->ifTrue(function ($redirectResponseCode) {
                                     return !\in_array($redirectResponseCode, ControllerConfig::REDIRECT_RESPONSE_CODES, true);
