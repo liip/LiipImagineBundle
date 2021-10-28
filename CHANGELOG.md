@@ -4,11 +4,84 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+
+## [2.7.0](https://github.com/liip/LiipImagineBundle/tree/2.7.0)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.6.1...2.7.0)
+
+- By default, redirect with 302 instead of 301 [\#1404](https://github.com/liip/LiipImagineBundle/pull/1404) ([dbu](https://github.com/dbu))
+- Create Lazy-Loaded Twig Extension [\#1376](https://github.com/liip/LiipImagineBundle/pull/1376) ([emmanuelballery](https://github.com/emmanuelballery))
+- lazy twig extension: handle asset versioning, added imagine\_filter\_cache, better test coverage [\#1397](https://github.com/liip/LiipImagineBundle/pull/1397) ([dbu](https://github.com/dbu))
+- asset versions: have & instead of second ? when image url already has a query string [\#1402](https://github.com/liip/LiipImagineBundle/pull/1402) ([dbu](https://github.com/dbu))
+- fix handling of + in image names, added some functional tests [\#1391](https://github.com/liip/LiipImagineBundle/pull/1391) ([dbu](https://github.com/dbu))
+- Allow installing doctrine/cache 2.0 [\#1395](https://github.com/liip/LiipImagineBundle/pull/1395) ([dbu](https://github.com/dbu))
+- \[Flysystem Resolver\] Allowing "noPredefinedVisibility" for the visibility config parameter [\#1389](https://github.com/liip/LiipImagineBundle/pull/1389) ([comxd](https://github.com/comxd))
+- Change registering the form theme to prepend the configuration [\#1387](https://github.com/liip/LiipImagineBundle/pull/1387) ([mbabker](https://github.com/mbabker))
+- Fix service definitions for mime and extension guessers [\#1379](https://github.com/liip/LiipImagineBundle/pull/1379) ([mbabker](https://github.com/mbabker))
+- Allow installing doctrine/cache 2.0 [\#1375](https://github.com/liip/LiipImagineBundle/pull/1375) ([alcaeus](https://github.com/alcaeus))
+- Messenger support [\#1360](https://github.com/liip/LiipImagineBundle/pull/1360) ([mynameisbogdan](https://github.com/mynameisbogdan))
+- Add Twig filter for resolve path to cache [\#1348](https://github.com/liip/LiipImagineBundle/pull/1348) ([peter-gribanov](https://github.com/peter-gribanov))
+- Add WebP client side resolving section in documentation [\#1380](https://github.com/liip/LiipImagineBundle/pull/1380) ([peter-gribanov](https://github.com/peter-gribanov))
+- Generate WebP in liip:imagine:cache:resolve CLI command and async resolve cache messages [\#1347](https://github.com/liip/LiipImagineBundle/pull/1347) ([peter-gribanov](https://github.com/peter-gribanov))
+- Add FormatExtensionResolver [\#1300](https://github.com/liip/LiipImagineBundle/pull/1300) ([ossinkine](https://github.com/ossinkine))
+- Documentation improvements [\#1396](https://github.com/liip/LiipImagineBundle/pull/1396), [\#1399](https://github.com/liip/LiipImagineBundle/pull/1399), [\#1400](https://github.com/liip/LiipImagineBundle/pull/1400), [\#1403](https://github.com/liip/LiipImagineBundle/pull/1403), [\#1401](https://github.com/liip/LiipImagineBundle/pull/1401) ([dbu](https://github.com/dbu))
+- Add doc for disabling auth on filter controllers [\#1383](https://github.com/liip/LiipImagineBundle/pull/1383) ([mbabker](https://github.com/mbabker))
+
+## [2.6.1](https://github.com/liip/LiipImagineBundle/tree/2.6.1) (2021-05-22)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.6.0...2.6.1)
+
+- php-cs-fixer 3x update [\#1377](https://github.com/liip/LiipImagineBundle/pull/1377) ([lsmith77](https://github.com/lsmith77))
+- $ should not be there [\#1373](https://github.com/liip/LiipImagineBundle/pull/1373) ([Gamesh](https://github.com/Gamesh))
+- Undefined quality key. Fixes \#1310 [\#1370](https://github.com/liip/LiipImagineBundle/pull/1370) ([phproberto](https://github.com/phproberto))
+
+## [2.6.0](https://github.com/liip/LiipImagineBundle/tree/2.6.0) (2021-03-31)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.5.0...2.6.0)
+
+- \[Doc\] Simplified the "strong" role [\#1361](https://github.com/liip/LiipImagineBundle/pull/1361) ([javiereguiluz](https://github.com/javiereguiluz))
+- Flysystem v2 support [\#1357](https://github.com/liip/LiipImagineBundle/pull/1357), [\#1359](https://github.com/liip/LiipImagineBundle/pull/1359), [\#1349](https://github.com/liip/LiipImagineBundle/pull/1349)  ([mynameisbogdan](https://github.com/mynameisbogdan)) and ([Warxcell](https://github.com/Warxcell))
+- Don't use cs2pr to report PHP-CS-Fixer suggestions [\#1355](https://github.com/liip/LiipImagineBundle/pull/1355) ([fbourigault](https://github.com/fbourigault))
+
+## [2.5.0](https://github.com/liip/LiipImagineBundle/tree/2.5.0) (2021-02-08)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.4.0...2.5.0)
+
+- Fix missing port in url parsing [\#1353](https://github.com/liip/LiipImagineBundle/pull/1353) ([dbalabka](https://github.com/dbalabka))
+- Suggest symfony/templating instead of requiring deprecated component [\#1350](https://github.com/liip/LiipImagineBundle/pull/1350) ([ossinkine](https://github.com/ossinkine))
+- Various cleanups [\#1345](https://github.com/liip/LiipImagineBundle/pull/1345) ([fbourigault](https://github.com/fbourigault))
+- Retry coveralls coverage upload [\#1344](https://github.com/liip/LiipImagineBundle/pull/1344) ([fbourigault](https://github.com/fbourigault))
+- Correct comment of unsecured connection [\#1340](https://github.com/liip/LiipImagineBundle/pull/1340) ([peter-gribanov](https://github.com/peter-gribanov))
+- Add missing sprintf placeholder [\#1339](https://github.com/liip/LiipImagineBundle/pull/1339) ([fbourigault](https://github.com/fbourigault))
+- Depend on doctrine/persistence instead of doctrine/orm [\#1337](https://github.com/liip/LiipImagineBundle/pull/1337) ([fbourigault](https://github.com/fbourigault))
+- allow to use Doctrine/Persistence:^2 [\#1305](https://github.com/liip/LiipImagineBundle/pull/1305) ([jkabat](https://github.com/jkabat))
+- Enable WebP support in tests [\#1329](https://github.com/liip/LiipImagineBundle/pull/1329) ([fbourigault](https://github.com/fbourigault))
+- Not resolve WebP in CacheManager [\#1333](https://github.com/liip/LiipImagineBundle/pull/1333) ([peter-gribanov](https://github.com/peter-gribanov))
+- Test WebP configuration [\#1326](https://github.com/liip/LiipImagineBundle/pull/1326) ([peter-gribanov](https://github.com/peter-gribanov))
+- Add note for using 302 redirect in HTTP connections for WebP [\#1334](https://github.com/liip/LiipImagineBundle/pull/1334) ([peter-gribanov](https://github.com/peter-gribanov))
+- Support PHP 8 [\#1325](https://github.com/liip/LiipImagineBundle/pull/1325) ([nicwortel](https://github.com/nicwortel))
+
+## [2.4.0](https://github.com/liip/LiipImagineBundle/tree/2.4.0) (2020-12-16)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.3.1...2.4.0)
+
+- Replace assertContains with assertStringContainsString [\#1317](https://github.com/liip/LiipImagineBundle/pull/1317) ([fbourigault](https://github.com/fbourigault))
+- Fix skipped functional tests with Symfony 5.x [\#1316](https://github.com/liip/LiipImagineBundle/pull/1316) ([fbourigault](https://github.com/fbourigault))
+- Fix tests related to a missing configuration entry [\#1315](https://github.com/liip/LiipImagineBundle/pull/1315) ([fbourigault](https://github.com/fbourigault))
+- Update basic-usage.rst [\#1311](https://github.com/liip/LiipImagineBundle/pull/1311) ([Aerendir](https://github.com/Aerendir))
+- Add WebP image conversion support [\#1307](https://github.com/liip/LiipImagineBundle/pull/1307) ([peter-gribanov](https://github.com/peter-gribanov))
+- Update aws\_s3.rst with clarifications re service setup [\#1302](https://github.com/liip/LiipImagineBundle/pull/1302) ([manuelkiessling](https://github.com/manuelkiessling))
+- Fix RST documentation compilation errors introduced at various times in past [\#1301](https://github.com/liip/LiipImagineBundle/pull/1301) ([robfrawley](https://github.com/robfrawley))
+- fix styleci config [\#1299](https://github.com/liip/LiipImagineBundle/pull/1299) ([dbu](https://github.com/dbu))
+- Allow PDF files for the thumbnail generation [\#1297](https://github.com/liip/LiipImagineBundle/pull/1297) ([ajay-gupta](https://github.com/ajay-gupta))
+- Extend WatermarkFilter with multiple option [\#1281](https://github.com/liip/LiipImagineBundle/pull/1281) ([tzemp](https://github.com/tzemp))
+- expose reference type further up following PR 1224 [\#1263](https://github.com/liip/LiipImagineBundle/pull/1263) ([uwej711](https://github.com/uwej711))
+
 ## [2.3.1](https://github.com/liip/LiipImagineBundle/tree/2.3.1) Symfony 5.1 support (2020-06-26)
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.3.0...2.3.1)
 
 **Merged pull requests:**
-- Pass catched exception to give more insight on the original problem [\#1262](https://github.com/liip/LiipImagineBundle/pull/1262) ([pyrech](https://github.com/pyrech))
+- Pass caught exception to give more insight on the original problem [\#1262](https://github.com/liip/LiipImagineBundle/pull/1262) ([pyrech](https://github.com/pyrech))
 - Don't throw top-level exceptions [\#1267](https://github.com/liip/LiipImagineBundle/pull/1267) ([mwoynarski](https://github.com/mwoynarski))
 - Fix typos in documentation [\#1278](https://github.com/liip/LiipImagineBundle/pull/1278) ([pgrimaud](https://github.com/pgrimaud))
 - Update documentation for Symfony 5.x [\#1276](https://github.com/liip/LiipImagineBundle/pull/1276) ([BlueSkunka](https://github.com/BlueSkunka))
