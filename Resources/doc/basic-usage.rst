@@ -117,9 +117,10 @@ for subsequent requests. The final cached image path would be similar to
 .. tip::
 
     You can prepare the cache in advance with either the :doc:`commands <commands>`
-    or the :doc:`message queue <resolve-cache-images-in-background>`. When you
-    do that, you can use the ``imagine_filter_cache`` filter to always return a
-    link to the final cached image.
+    or the :doc:`message queue <optimizations/resolve-cache-images-in-background>`,
+    or :doc:`handle missing files with web server configuration <optimizations/avoid-redirects>`.
+    When you do that, you can use the ``imagine_filter_cache`` filter to always
+    return a link to the final cached image.
 
 .. note::
 

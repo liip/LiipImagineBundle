@@ -38,7 +38,7 @@ Warm up Cache
 .. note::
 
     To automate cache warming, have a look at the
-    :doc:`Symfony Messenger integration <resolve-cache-images-in-background>`.
+    :doc:`Symfony Messenger integration <optimizations/resolve-cache-images-in-background>`.
 
 .. code-block:: bash
 
