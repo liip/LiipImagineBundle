@@ -130,6 +130,8 @@ class CacheManager
      */
     public function getRuntimePath($path, array $runtimeConfig)
     {
+        $path = ltrim($path, '/');
+
         return 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
     }
 
