@@ -195,19 +195,25 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->enumNode('twig_mode')
-                ->defaultValue('legacy')
-                ->info('Twig mode: none/lazy/legacy (default)')
-                ->values(['none', 'lazy', 'legacy'])
-                ->validate()
-                    ->ifTrue(function ($v) {
-                        return 'legacy' === $v;
-                    })
-                    ->then(function ($v) {
-                        @trigger_error('Twig "legacy" mode has been deprecated and will be removed in 3.0. Use "none" or "lazy".', E_USER_DEPRECATED);
+            ->arrayNode('twig')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->enumNode('mode')
+                        ->defaultValue('legacy')
+                        ->info('Twig mode: none/lazy/legacy (default)')
+                        ->values(['none', 'lazy', 'legacy'])
+                        ->validate()
+                            ->ifTrue(function ($v) {
+                                return 'legacy' === $v;
+                            })
+                            ->then(function ($v) {
+                                @trigger_error('Twig "legacy" mode has been deprecated and will be removed in 3.0. Use "none" or "lazy".', E_USER_DEPRECATED);
 
-                        return $v;
-                    })
+                                return $v;
+                            })
+                        ->end()
+                    ->end()
+                    ->scalarNode('assets_version')->defaultNull()->end()
                 ->end()
             ->end()
             ->booleanNode('enqueue')

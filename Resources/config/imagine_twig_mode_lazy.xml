@@ -13,6 +13,7 @@
         <service id="liip_imagine.templating.filter_runtime" class="Liip\ImagineBundle\Templating\LazyFilterRuntime" public="false">
             <tag name="twig.runtime" />
             <argument type="service" id="liip_imagine.cache.manager" />
+            <argument>null</argument>
         </service>
 
     </services>

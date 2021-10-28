@@ -16,6 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInter
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -83,11 +84,11 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
-        if ('lazy' === $config['twig_mode']) {
-            $loader->load('imagine_twig_mode_lazy.xml');
-        } elseif ('legacy' === $config['twig_mode']) {
-            $loader->load('imagine_twig_mode_legacy.xml');
+
+        if ('none' !== $config['twig']['mode']) {
+            $this->loadTwig($config['twig'], $loader, $container);
         }
+
         $loader->load('commands.xml');
 
         if ($this->isConfigEnabled($container, $config['messenger'])) {
@@ -196,5 +197,26 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         } else {
             $definition->setDeprecated(true, $message);
         }
+    }
+
+    private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void
+    {
+        if ('legacy' === $config['mode']) {
+            $loader->load('imagine_twig_mode_legacy.xml');
+
+            return;
+        }
+
+        if ('lazy' === $config['mode']) {
+            $loader->load('imagine_twig_mode_lazy.xml');
+            if (\array_key_exists('assets_version', $config) && null !== $config['assets_version']) {
+                $runtime = $container->getDefinition('liip_imagine.templating.filter_runtime');
+                $runtime->setArgument(1, $config['assets_version']);
+            }
+
+            return;
+        }
+
+        throw new InvalidConfigurationException('Unexpected twig mode '.$config['mode']);
     }
 }

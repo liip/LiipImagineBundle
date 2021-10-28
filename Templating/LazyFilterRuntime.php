@@ -15,30 +15,70 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class LazyFilterRuntime implements RuntimeExtensionInterface
+final class LazyFilterRuntime implements RuntimeExtensionInterface
 {
     /**
      * @var CacheManager
      */
     private $cache;
 
-    public function __construct(CacheManager $cache)
+    /**
+     * Optional version to remove from the asset filename and re-append to the URL.
+     *
+     * @var string|null
+     */
+    private $assetVersion;
+
+    public function __construct(CacheManager $cache, ?string $assetVersion = null)
     {
         $this->cache = $cache;
+        $this->assetVersion = $assetVersion;
     }
 
     /**
      * Gets the browser path for the image and filter to apply.
-     *
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $resolver
-     * @param int         $referenceType
-     *
-     * @return string
      */
-    public function filter($path, $filter, array $config = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    public function filter(string $path, string $filter, array $config = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
-        return $this->cache->getBrowserPath(parse_url($path, PHP_URL_PATH), $filter, $config, $resolver, $referenceType);
+        $path = $this->cleanPath($path);
+        $path = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
+        if ($this->assetVersion) {
+            $path .= '?'.$this->assetVersion;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Gets the cache path for the image and filter to apply.
+     *
+     * This does not check whether the cached image exists or not.
+     */
+    public function filterCache(string $path, string $filter, array $config = [], ?string $resolver = null): string
+    {
+        $path = $this->cleanPath($path);
+        if (\count($config)) {
+            $path = $this->cache->getRuntimePath($path, $config);
+        }
+        $path = $this->cache->resolve($path, $filter, $resolver);
+        if ($this->assetVersion) {
+            $path .= '?'.$this->assetVersion;
+        }
+
+        return $path;
+    }
+
+    private function cleanPath(string $path): string
+    {
+        if (!$this->assetVersion) {
+            return $path;
+        }
+
+        $start = mb_strrpos($path, $this->assetVersion);
+        if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
+            return rtrim(mb_substr($path, 0, $start), '?');
+        }
+
+        return $path;
     }
 }

@@ -25,7 +25,8 @@ The default configuration for the bundle looks like this:
         cache:                default
         data_loader:          default
         default_image:        null
-        twig_mode:            legacy
+        twig:
+            mode:             legacy
         default_filter_set_settings:
             quality:              100
             jpeg_quality:         ~
@@ -77,10 +78,13 @@ There are several configuration options available:
   the standard web_path resolver is used)
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
   (which means the standard filesystem loader is used).
-* ``twig_mode`` - Twig filter integration. ``none`` disables the twig filters, ``lazy`` enables
+* ``twig.mode`` - Twig filter integration. ``none`` disables the twig filters, ``lazy`` enables
   Twig using the Twig runtime for lazy loading. The default value is ``legacy`` and enables the
   old Twig integration that is loaded on each request. Version 3 will drop ``legacy`` and default
   to ``lazy``.
+  The twig filter automatically picks up the ``framework.assets.version`` configuration. You can
+  overwrite the version with the ``twig.assets_version`` option. See :doc:`asset-versioning` for
+  more information.
 * ``controller``
     * ``filter_action`` - name of the controller action to use in the route loader.
       Default value: ``liip_imagine.controller:filterAction``
