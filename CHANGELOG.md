@@ -9,7 +9,8 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.6.1...2.7.0)
 
-- By default, redirect with 302 instead of 301 [\#1404](https://github.com/liip/LiipImagineBundle/pull/1404) ([dbu](https://github.com/dbu))
+- The image controller now redirects with 302 instead of 301 by default [\#1404](https://github.com/liip/LiipImagineBundle/pull/1404) ([dbu](https://github.com/dbu))
+  You can configure the `controller.redirect_response_code` setting to revert to 301 if you are sure this will not cause problems with your setup.
 - Create Lazy-Loaded Twig Extension [\#1376](https://github.com/liip/LiipImagineBundle/pull/1376) ([emmanuelballery](https://github.com/emmanuelballery))
 - lazy twig extension: handle asset versioning, added imagine\_filter\_cache, better test coverage [\#1397](https://github.com/liip/LiipImagineBundle/pull/1397) ([dbu](https://github.com/dbu))
 - asset versions: have & instead of second ? when image url already has a query string [\#1402](https://github.com/liip/LiipImagineBundle/pull/1402) ([dbu](https://github.com/dbu))
