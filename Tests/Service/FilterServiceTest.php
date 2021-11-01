@@ -27,9 +27,7 @@ use Psr\Log\LoggerInterface;
 final class FilterServiceTest extends TestCase
 {
     private const SOURCE_IMAGE = '/images/cats.jpeg';
-    private const WEBP_IMAGE = '/images/cats.jpeg.webp';
     private const RUNTIME_IMAGE = '/filter_hash/images/cats.jpeg';
-    private const RUNTIME_WEBP_IMAGE = '/filter_hash/images/cats.jpeg.webp';
     private const FILTER = 'thumbnail_web_path';
     private const RUNTIME_FILTERS = [
         'thumbnail' => [
@@ -91,45 +89,39 @@ final class FilterServiceTest extends TestCase
         yield 'WebP generation disabled' => [false];
     }
 
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testBustCache(bool $webpGenerate): void
+    public function testBustCacheWebp(): void
     {
-        $service = $this->createFilterService($webpGenerate);
+        $service = $this->createFilterService(true);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->exactly(2))
             ->method('isStored')
             ->withConsecutive(
                 [self::SOURCE_IMAGE],
-                [self::WEBP_IMAGE]
+                [self::SOURCE_IMAGE.'.webp']
             )
             ->willReturn(true);
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->exactly(2))
             ->method('remove')
             ->withConsecutive(
                 [self::SOURCE_IMAGE, self::FILTER],
-                [self::WEBP_IMAGE, self::FILTER]
+                [self::SOURCE_IMAGE.'.webp', self::FILTER]
             );
 
         $this->assertTrue($service->bustCache(self::SOURCE_IMAGE, self::FILTER));
     }
 
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testNothingBustCache(bool $webpGenerate): void
+    public function testNothingBustCache(): void
     {
-        $service = $this->createFilterService($webpGenerate);
+        $service = $this->createFilterService(true);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->exactly(2))
             ->method('isStored')
             ->withConsecutive(
                 [self::SOURCE_IMAGE],
-                [self::WEBP_IMAGE]
+                [self::SOURCE_IMAGE.'.webp']
             )
             ->willReturn(false);
         $this->cacheManager
@@ -148,14 +140,7 @@ final class FilterServiceTest extends TestCase
 
         $service = $this->createFilterService($webpGenerate);
 
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(true);
+        $this->expectCacheManagerIsStored(self::SOURCE_IMAGE, $webpGenerate, true, $resolver);
         $this->cacheManager
             ->expects($this->never())
             ->method('store');
@@ -180,39 +165,15 @@ final class FilterServiceTest extends TestCase
         $binary = $this
             ->getMockBuilder(BinaryInterface::class)
             ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
 
         $service = $this->createFilterService($webpGenerate);
 
         $this->cacheManager
             ->expects($this->never())
             ->method('isStored');
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::WEBP_IMAGE, self::FILTER, $resolver]
-            );
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS]
-            )
-            ->willReturn($binary);
+        $this->expectCacheManagerStore(self::SOURCE_IMAGE, $webpGenerate, $resolver);
+        $this->expectDataManagerFind($webpGenerate, $binary);
+        $this->expectFilterManagerApplyFilter($webpGenerate, $binary);
 
         $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
@@ -226,44 +187,13 @@ final class FilterServiceTest extends TestCase
         $binary = $this
             ->getMockBuilder(BinaryInterface::class)
             ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
 
         $service = $this->createFilterService($webpGenerate);
 
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(false);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::WEBP_IMAGE, self::FILTER, $resolver]
-            );
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS]
-            )
-            ->willReturn($binary);
+        $this->expectCacheManagerIsStored(self::SOURCE_IMAGE, $webpGenerate, false, $resolver);
+        $this->expectCacheManagerStore(self::SOURCE_IMAGE, $webpGenerate, $resolver);
+        $this->expectDataManagerFind($webpGenerate, $binary);
+        $this->expectFilterManagerApplyFilter($webpGenerate, $binary);
 
         $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver));
     }
@@ -286,30 +216,9 @@ final class FilterServiceTest extends TestCase
         $this->cacheManager
             ->expects($this->never())
             ->method('isStored');
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::WEBP_IMAGE, self::FILTER, $resolver]
-            );
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS]
-            )
-            ->willReturn($binary);
+        $this->expectCacheManagerStore(self::SOURCE_IMAGE, $webpGenerate, $resolver);
+        $this->expectDataManagerFind($webpGenerate, $binary);
+        $this->expectFilterManagerApplyFilter($webpGenerate, $binary);
 
         $this->assertTrue($service->warmUpCache(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
@@ -329,25 +238,21 @@ final class FilterServiceTest extends TestCase
 
         $service = $this->createFilterService($webpGenerate);
 
+        // we stop after the exception, only one call expected even with webp
         $this->dataManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('find')
             ->with(self::FILTER, self::SOURCE_IMAGE)
             ->willReturn($binary);
 
         $this->filterManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                        'format' => 'webp',
-                    ] + self::WEBP_OPTIONS]
-            )
+            ->with($binary, self::FILTER, [])
             ->willThrowException($exception);
 
         $this->logger
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('debug')
             ->with(sprintf(
                 'Could not locate filter "%s" for path "%s". Message was "%s"',
@@ -370,70 +275,22 @@ final class FilterServiceTest extends TestCase
         $service = $this->createFilterService($webpGenerate);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(true);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('resolve')
             ->with(self::SOURCE_IMAGE, self::FILTER, $resolver)
             ->willReturn($url);
+        $this->expectCacheManagerIsStored(self::SOURCE_IMAGE, $webpGenerate, true, $resolver);
         $this->cacheManager
             ->expects($this->never())
             ->method('store');
-
         $this->dataManager
             ->expects($this->never())
             ->method('find');
-
         $this->filterManager
             ->expects($this->never())
             ->method('applyFilter');
 
         $this->assertSame($url, $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver));
-    }
-
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testGetUrlOfFilteredImageWebpSupported(bool $webpGenerate): void
-    {
-        $resolver = null;
-        $url = 'https://example.com/cache'.self::WEBP_IMAGE;
-
-        $service = $this->createFilterService($webpGenerate);
-
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(true);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('resolve')
-            ->with(self::WEBP_IMAGE, self::FILTER, $resolver)
-            ->willReturn($url);
-
-        $this->cacheManager
-            ->expects($this->never())
-            ->method('store');
-
-        $this->dataManager
-            ->expects($this->never())
-            ->method('find');
-
-        $this->filterManager
-            ->expects($this->never())
-            ->method('applyFilter');
-
-        $this->assertSame($url, $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
 
     /**
@@ -446,108 +303,21 @@ final class FilterServiceTest extends TestCase
         $binary = $this
             ->getMockBuilder(BinaryInterface::class)
             ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
 
         $service = $this->createFilterService($webpGenerate);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(false);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::WEBP_IMAGE, self::FILTER, $resolver]
-            );
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('resolve')
             ->with(self::SOURCE_IMAGE, self::FILTER, $resolver)
             ->willReturn($url);
 
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS]
-            )
-            ->willReturn($binary);
+        $this->expectCacheManagerIsStored(self::SOURCE_IMAGE, $webpGenerate, false, $resolver);
+        $this->expectCacheManagerStore(self::SOURCE_IMAGE, $webpGenerate, $resolver);
+        $this->expectDataManagerFind($webpGenerate, $binary);
+        $this->expectFilterManagerApplyFilter($webpGenerate, $binary);
 
         $this->assertSame($url, $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver));
-    }
-
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testGetUrlOfFilteredImageNotStoredWebpSupported(bool $webpGenerate): void
-    {
-        $resolver = null;
-        $url = 'https://example.com/cache'.self::WEBP_IMAGE;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-
-        $service = $this->createFilterService($webpGenerate);
-
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(false);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::WEBP_IMAGE, self::FILTER, $resolver]
-            );
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('resolve')
-            ->with(self::WEBP_IMAGE, self::FILTER, $resolver)
-            ->willReturn($url);
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS]
-            )
-            ->willReturn($binary);
-
-        $this->assertSame($url, $service->getUrlOfFilteredImage(self::SOURCE_IMAGE, self::FILTER, $resolver, true));
     }
 
     /**
@@ -566,33 +336,25 @@ final class FilterServiceTest extends TestCase
         $service = $this->createFilterService($webpGenerate);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('isStored')
-            ->withConsecutive(
-                [self::SOURCE_IMAGE, self::FILTER, $resolver],
-                [self::WEBP_IMAGE, self::FILTER, $resolver]
-            )
+            ->with(self::SOURCE_IMAGE, self::FILTER, $resolver)
             ->willReturn(false);
 
         $this->dataManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('find')
             ->with(self::FILTER, self::SOURCE_IMAGE)
             ->willReturn($binary);
 
         $this->filterManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, []],
-                [$binary, self::FILTER, [
-                        'format' => 'webp',
-                    ] + self::WEBP_OPTIONS]
-            )
+            ->with($binary, self::FILTER, [])
             ->willThrowException($exception);
 
         $this->logger
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('debug')
             ->with(sprintf(
                 'Could not locate filter "%s" for path "%s". Message was "%s"',
@@ -614,32 +376,24 @@ final class FilterServiceTest extends TestCase
 
         $service = $this->createFilterService($webpGenerate);
 
+        $this->expectCacheManagerIsStored(self::RUNTIME_IMAGE, $webpGenerate, true, $resolver);
         $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(true);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('resolve')
             ->with(self::RUNTIME_IMAGE, self::FILTER, $resolver)
             ->willReturn($url);
         $this->cacheManager
-            ->expects($this->never())
-            ->method('store');
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('getRuntimePath')
             ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
             ->willReturn(self::RUNTIME_IMAGE);
 
+        $this->cacheManager
+            ->expects($this->never())
+            ->method('store');
         $this->dataManager
             ->expects($this->never())
             ->method('find');
-
         $this->filterManager
             ->expects($this->never())
             ->method('applyFilter');
@@ -649,57 +403,6 @@ final class FilterServiceTest extends TestCase
             self::FILTER,
             self::RUNTIME_FILTERS,
             $resolver
-        );
-
-        $this->assertSame($url, $result);
-    }
-
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testGetUrlOfFilteredImageWithRuntimeFiltersWebpSupported(bool $webpGenerate): void
-    {
-        $resolver = null;
-        $url = 'https://example.com/cache'.self::RUNTIME_WEBP_IMAGE;
-
-        $service = $this->createFilterService($webpGenerate);
-
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(true);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('resolve')
-            ->with(self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver)
-            ->willReturn($url);
-        $this->cacheManager
-            ->expects($this->never())
-            ->method('store');
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('getRuntimePath')
-            ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
-            ->willReturn(self::RUNTIME_IMAGE);
-
-        $this->dataManager
-            ->expects($this->never())
-            ->method('find');
-
-        $this->filterManager
-            ->expects($this->never())
-            ->method('applyFilter');
-
-        $result = $service->getUrlOfFilteredImageWithRuntimeFilters(
-            self::SOURCE_IMAGE,
-            self::FILTER,
-            self::RUNTIME_FILTERS,
-            $resolver,
-            true
         );
 
         $this->assertSame($url, $result);
@@ -718,133 +421,29 @@ final class FilterServiceTest extends TestCase
         $binary = $this
             ->getMockBuilder(BinaryInterface::class)
             ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
 
         $service = $this->createFilterService($webpGenerate);
 
+        $this->expectCacheManagerIsStored(self::RUNTIME_IMAGE, $webpGenerate, false, $resolver);
+        $this->expectCacheManagerStore(self::RUNTIME_IMAGE, $webpGenerate, $resolver);
+        $this->expectDataManagerFind($webpGenerate, $binary);
+        $this->expectFilterManagerApplyFilter($webpGenerate, $binary, $runtimeOptions);
         $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(false);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            );
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('resolve')
             ->with(self::RUNTIME_IMAGE, self::FILTER, $resolver)
             ->willReturn($url);
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('getRuntimePath')
             ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
             ->willReturn(self::RUNTIME_IMAGE);
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, $runtimeOptions],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS + $runtimeOptions]
-            )
-            ->willReturn($binary);
 
         $result = $service->getUrlOfFilteredImageWithRuntimeFilters(
             self::SOURCE_IMAGE,
             self::FILTER,
             self::RUNTIME_FILTERS,
             $resolver
-        );
-
-        $this->assertSame($url, $result);
-    }
-
-    /**
-     * @dataProvider provideWebpGeneration
-     */
-    public function testGetUrlOfFilteredImageWithRuntimeFiltersNotStoredWebpSupported(bool $webpGenerate): void
-    {
-        $resolver = null;
-        $url = 'https://example.com/cache'.self::RUNTIME_WEBP_IMAGE;
-        $runtimeOptions = [
-            'filters' => self::RUNTIME_FILTERS,
-        ];
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-
-        $service = $this->createFilterService($webpGenerate);
-
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('isStored')
-            ->withConsecutive(
-                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            )
-            ->willReturn(false);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('store')
-            ->withConsecutive(
-                [$filteredBinary, self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [$filteredBinary, self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            );
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('resolve')
-            ->with(self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver)
-            ->willReturn($url);
-        $this->cacheManager
-            ->expects($this->atLeastOnce())
-            ->method('getRuntimePath')
-            ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
-            ->willReturn(self::RUNTIME_IMAGE);
-
-        $this->dataManager
-            ->expects($this->atLeastOnce())
-            ->method('find')
-            ->with(self::FILTER, self::SOURCE_IMAGE)
-            ->willReturn($binary);
-
-        $this->filterManager
-            ->expects($this->atLeastOnce())
-            ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, $runtimeOptions],
-                [$binary, self::FILTER, [
-                    'format' => 'webp',
-                ] + self::WEBP_OPTIONS + $runtimeOptions]
-            )
-            ->willReturn($binary);
-
-        $result = $service->getUrlOfFilteredImageWithRuntimeFilters(
-            self::SOURCE_IMAGE,
-            self::FILTER,
-            self::RUNTIME_FILTERS,
-            $resolver,
-            true
         );
 
         $this->assertSame($url, $result);
@@ -868,38 +467,30 @@ final class FilterServiceTest extends TestCase
         $service = $this->createFilterService($webpGenerate);
 
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('isStored')
-            ->withConsecutive(
-                [self::RUNTIME_IMAGE, self::FILTER, $resolver],
-                [self::RUNTIME_WEBP_IMAGE, self::FILTER, $resolver]
-            )
+            ->with(self::RUNTIME_IMAGE, self::FILTER, $resolver)
             ->willReturn(false);
         $this->cacheManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('getRuntimePath')
             ->with(self::SOURCE_IMAGE, self::RUNTIME_FILTERS)
             ->willReturn(self::RUNTIME_IMAGE);
 
         $this->dataManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('find')
             ->with(self::FILTER, self::SOURCE_IMAGE)
             ->willReturn($binary);
 
         $this->filterManager
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('applyFilter')
-            ->withConsecutive(
-                [$binary, self::FILTER, $runtimeOptions],
-                [$binary, self::FILTER, [
-                        'format' => 'webp',
-                    ] + self::WEBP_OPTIONS + $runtimeOptions]
-            )
+            ->with($binary, self::FILTER, $runtimeOptions)
             ->willThrowException($exception);
 
         $this->logger
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('debug')
             ->with(sprintf(
                 'Could not locate filter "%s" for path "%s". Message was "%s"',
@@ -926,5 +517,78 @@ final class FilterServiceTest extends TestCase
             self::WEBP_OPTIONS,
             $this->logger
         );
+    }
+
+    private function expectCacheManagerIsStored(string $image, bool $webpGenerate, bool $isStored, $resolver): void
+    {
+        if ($webpGenerate) {
+            $this->cacheManager
+                ->expects($this->exactly(2))
+                ->method('isStored')
+                ->withConsecutive(
+                    [$image, self::FILTER, $resolver],
+                    [$image.'.webp', self::FILTER, $resolver]
+                )
+                ->willReturn($isStored);
+        } else {
+            $this->cacheManager
+                ->expects($this->once())
+                ->method('isStored')
+                ->with($image, self::FILTER, $resolver)
+                ->willReturn($isStored);
+        }
+    }
+
+    private function expectCacheManagerStore(string $image, bool $webpGenerate, $resolver): void
+    {
+        $filteredBinary = $this
+            ->getMockBuilder(BinaryInterface::class)
+            ->getMock();
+
+        if ($webpGenerate) {
+            $this->cacheManager
+                ->expects($this->exactly(2))
+                ->method('store')
+                ->withConsecutive(
+                    [$filteredBinary, $image, self::FILTER, $resolver],
+                    [$filteredBinary, $image.'.webp', self::FILTER, $resolver]
+                );
+        } else {
+            $this->cacheManager
+                ->expects($this->once())
+                ->method('store')
+                ->with($filteredBinary, $image, self::FILTER, $resolver);
+        }
+    }
+
+    private function expectDataManagerFind(bool $webpGenerate, BinaryInterface $binary): void
+    {
+        $this->dataManager
+            ->expects($this->exactly($webpGenerate ? 2 : 1))
+            ->method('find')
+            ->with(self::FILTER, self::SOURCE_IMAGE)
+            ->willReturn($binary);
+    }
+
+    private function expectFilterManagerApplyFilter(bool $webpGenerate, BinaryInterface $binary, array $runtimeOptions = [])
+    {
+        if ($webpGenerate) {
+            $this->filterManager
+                ->expects($this->exactly(2))
+                ->method('applyFilter')
+                ->withConsecutive(
+                    [$binary, self::FILTER, $runtimeOptions],
+                    [$binary, self::FILTER, [
+                            'format' => 'webp',
+                        ] + self::WEBP_OPTIONS + $runtimeOptions]
+                )
+                ->willReturn($binary);
+        } else {
+            $this->filterManager
+                ->expects($this->once())
+                ->method('applyFilter')
+                ->with($binary, self::FILTER, $runtimeOptions)
+                ->willReturn($binary);
+        }
     }
 }
