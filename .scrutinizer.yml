@@ -6,7 +6,7 @@ before_commands:
 #    - "composer install --prefer-source --dev"
 
 filter:
-    excluded_paths: [vendor/*, Tests/*, bin/*]
+    excluded_paths: [vendor/*, tests/*, bin/*]
 
 tools:
     php_sim: true

@@ -8,21 +8,19 @@
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
         forceCoversAnnotation="true"
-        bootstrap="./Tests/bootstrap.php">
+        bootstrap="./tests/bootstrap.php">
 
     <testsuites>
         <testsuite name="liip/imagine-bundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
+            <directory>./src</directory>
             <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
+                <directory>./src/Resources</directory>
             </exclude>
         </whitelist>
     </filter>

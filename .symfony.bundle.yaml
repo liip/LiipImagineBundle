@@ -7,19 +7,19 @@
 # An array with the name of the branches for which you want to publish docs
 # It doesn't have to be an exhaustive list of your repository branches, but
 # only the main repository branches (past or present)
-branches: ["1.x", "2.x"]
+branches: ["1.x", "2.x", "3.x"]
 
 # MANDATORY
 # A subset of the 'branches' array which lists only the branch(es) that
 # you currently maintain. We build the docs of these branch(es) frequently,
 # whereas we build the docs of the other branch(es) much less frequently
-maintained_branches: ["2.x"]
+maintained_branches: ["2.x", "3.x"]
 
 # MANDATORY
 # The location of your RST doc files, defined as a relative directory
 # If all the branches defined in the 'branches' option use the same
 # directory, then you can define it as a string
-doc_dir: "Resources/doc/"
+doc_dir: "doc/"
 
 # OPTIONAL
 # This is the branch used to read the docs by default (and it's mapped as
@@ -33,10 +33,10 @@ current_branch: "2.x"
 # This is the branch used to publish the next versions of your bundle.
 # For bundles it's common that 'current_branch' and 'dev_branch' are the same.
 # That's why we automatically assign to it the same value as 'current_branch'
-dev_branch: "2.x"
+dev_branch: "3.x"
 
 # OPTIONAL
 # This is the version that future releases of your bundle will use.
 # It's used in some symfony.com labels to avoid using the generic
 # "master" or "main" labels.
-dev_branch_alias: "2.x"
+dev_branch_alias: "3.x"
