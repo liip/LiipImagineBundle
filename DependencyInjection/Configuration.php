@@ -43,10 +43,7 @@ class Configuration implements ConfigurationInterface
         $this->loadersFactories = $loadersFactories;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('liip_imagine');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
