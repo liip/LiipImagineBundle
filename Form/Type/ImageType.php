@@ -56,7 +56,7 @@ class ImageType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getBlockPrefix()
     {
@@ -64,7 +64,7 @@ class ImageType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getParent()
     {

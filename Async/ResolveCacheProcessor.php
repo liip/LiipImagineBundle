@@ -52,6 +52,9 @@ final class ResolveCacheProcessor implements Processor, CommandSubscriberInterfa
         $this->producer = $producer;
     }
 
+    /**
+     * @return string|object
+     */
     public function process(Message $psrMessage, Context $psrContext)
     {
         try {
