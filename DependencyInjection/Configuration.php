@@ -13,11 +13,13 @@ namespace Liip\ImagineBundle\DependencyInjection;
 
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
+use Liip\ImagineBundle\DependencyInjection\Factory\FactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class Configuration implements ConfigurationInterface
 {
@@ -41,10 +43,7 @@ class Configuration implements ConfigurationInterface
         $this->loadersFactories = $loadersFactories;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('liip_imagine');
         $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
@@ -263,18 +262,35 @@ class Configuration implements ConfigurationInterface
 
     private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
-        $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode);
+        $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode, 'resolver');
     }
 
     private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
     {
-        $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode);
+        $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode, 'loader');
     }
 
-    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition)
+    /**
+     * @param FactoryInterface[] $factories
+     */
+    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition, $type)
     {
         foreach ($factories as $f) {
             $f->addConfiguration($definition->children()->arrayNode($f->getName()));
         }
+
+        $definition->end()
+            ->validate()
+            ->ifTrue(function ($array) use ($type) {
+                foreach ($array as $name => $element) {
+                    if (!$element) {
+                        throw new InvalidConfigurationException(ucfirst($type).' "'.$name.'" must have a factory configured');
+                    }
+                }
+
+                return false;
+            })
+            ->thenInvalid('Each '.$type.' must have a factory configured')
+            ->end();
     }
 }
