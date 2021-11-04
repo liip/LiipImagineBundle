@@ -34,13 +34,6 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($rc->implementsInterface(ConfigurationInterface::class));
     }
 
-    public function testTemplatingSupportIsEnabledByDefault(): void
-    {
-        $config = $this->processConfiguration(new Configuration([], []), []);
-
-        $this->assertTrue($config['templating']);
-    }
-
     public function testCouldBeConstructedWithResolversAndLoadersFactoriesAsArguments(): void
     {
         $config = new Configuration([], []);

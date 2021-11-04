@@ -129,14 +129,6 @@ class LiipImagineExtensionTest extends AbstractTest
         );
     }
 
-    public function testTemplatingFilterExtensionIsDeprecated(): void
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
-        $this->assertDefinitionIsDeprecated('liip_imagine.templating.filter_helper', 'The "liip_imagine.templating.filter_helper" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.');
-    }
-
     public static function provideFactoryData(): array
     {
         return [
@@ -163,26 +155,6 @@ class LiipImagineExtensionTest extends AbstractTest
         $definition = $this->containerBuilder->getDefinition($service);
 
         $this->assertSame($factory, $definition->getFactory());
-    }
-
-    /**
-     * @group legacy
-     * @expectedDeprecation Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.
-     */
-    public function testHelperIsRegisteredWhenTemplatingIsEnabled(): void
-    {
-        $this->createConfiguration([
-            'templating' => true,
-        ]);
-        $this->assertHasDefinition('liip_imagine.templating.filter_helper');
-    }
-
-    public function testHelperIsNotRegisteredWhenTemplatingIsDisabled(): void
-    {
-        $this->createConfiguration([
-            'templating' => false,
-        ]);
-        $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
     }
 
     protected function createConfigurationWithDefaultsFilterSets(): void

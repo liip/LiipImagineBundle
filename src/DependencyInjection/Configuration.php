@@ -198,19 +198,9 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->enumNode('mode')
-                        ->defaultValue('legacy')
-                        ->info('Twig mode: none/lazy/legacy (default)')
-                        ->values(['none', 'lazy', 'legacy'])
-                        ->validate()
-                            ->ifTrue(function ($v) {
-                                return 'legacy' === $v;
-                            })
-                            ->then(function ($v) {
-                                @trigger_error('Twig "legacy" mode has been deprecated and will be removed in 3.0. Use "none" or "lazy".', E_USER_DEPRECATED);
-
-                                return $v;
-                            })
-                        ->end()
+                        ->defaultValue('lazy')
+                        ->info('Twig mode: none/lazy (default)')
+                        ->values(['none', 'lazy'])
                     ->end()
                     ->scalarNode('assets_version')->defaultNull()->end()
                 ->end()
@@ -222,18 +212,6 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('messenger')
                 ->canBeEnabled()
                 ->info('Enables integration with symfony/messenger if set true. Warmup image caches in background by sending messages to MQ.')
-            ->end()
-            ->booleanNode('templating')
-                ->defaultTrue()
-                ->info('Enables integration with symfony/templating component')
-                ->validate()
-                    ->ifTrue()
-                    ->then(function ($v) {
-                        @trigger_error('Symfony templating integration has been deprecated since LiipImagineBundle 2.2 and will be removed in 3.0. Use Twig and use "false" as "liip_imagine.templating" value instead.', E_USER_DEPRECATED);
-
-                        return $v;
-                    })
-                ->end()
             ->end()
         ->end();
 

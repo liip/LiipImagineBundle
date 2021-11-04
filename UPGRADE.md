@@ -8,6 +8,16 @@ given release.
 
 ## 3.0.0 (unreleased)
 
+- __[Configuration]__ __[BC BREAK]__ `twig.mode` default value now is `lazy`, the previous default value `legacy` has 
+been removed.
+ 
+- __[Configuration]__ __[BC BREAK]__ `templating` integration has been removed, use Twig instead.
+
+- __[Post Processor]__ __[BC BREAK]__ Some options have changed:
+  - jpegoptim: `max` has been removed in favor of `quality`. 
+  - pngoptim: `strip_all` has been removed in favor of `strip`. 
+  - pngquant: `quality` option only accepts an array of two integers (min and max). 
+
 ## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`
