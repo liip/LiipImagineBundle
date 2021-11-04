@@ -39,32 +39,6 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
         $this->getProcessArguments(['interlace_type' => 10]);
     }
 
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The "strip_all" option was deprecated in %s and will be removed in %s. Instead, use the "strip" option.
-     */
-    public function testInvalidStripOptionAndDeprecation(): void
-    {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('the "strip" and "strip_all" options cannot both be set');
-
-        $this->getProcessArguments(['strip_all' => true, 'strip' => 'all']);
-    }
-
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The "strip_all" option was deprecated in %s and will be removed in %s. Instead, use the "strip" option.
-     */
-    public function testInvalidStripDeprecationMessage(): void
-    {
-        $arguments = $this->getProcessArguments(['strip_all' => true]);
-
-        $this->assertSame('all', array_pop($arguments));
-        $this->assertSame('-strip', array_pop($arguments));
-    }
-
     public static function provideSetupProcessBuilderData(): array
     {
         $data = [

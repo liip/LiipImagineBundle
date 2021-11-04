@@ -55,54 +55,6 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
         $this->progressive = $progressive;
     }
 
-    /**
-     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
-     *             class's constructor to set the property state.
-     *
-     * @param int $maxQuality
-     *
-     * @return JpegOptimPostProcessor
-     */
-    public function setMax($maxQuality)
-    {
-        $this->triggerSetterMethodDeprecation(__METHOD__);
-        $this->quality = $maxQuality;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
-     *             class's constructor to set the property state.
-     *
-     * @param bool $progressive
-     *
-     * @return JpegOptimPostProcessor
-     */
-    public function setProgressive($progressive)
-    {
-        $this->triggerSetterMethodDeprecation(__METHOD__);
-        $this->progressive = $progressive;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
-     *             class's constructor to set the property state.
-     *
-     * @param bool $strip
-     *
-     * @return JpegOptimPostProcessor
-     */
-    public function setStripAll($strip)
-    {
-        $this->triggerSetterMethodDeprecation(__METHOD__);
-        $this->strip = $strip;
-
-        return $this;
-    }
-
     /*
      * @throws ProcessFailedException
      */
@@ -142,17 +94,6 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
 
         if ($options['strip_all'] ?? $this->strip) {
             $arguments[] = '--strip-all';
-        }
-
-        if (isset($options['max'])) {
-            @trigger_error('The "max" option was deprecated in 2.2 and will be removed in 3.0. '.
-                'Instead, use the "quality" option.', E_USER_DEPRECATED);
-
-            if (isset($options['quality'])) {
-                throw new InvalidOptionException('the "max" and "quality" options cannot both be set', $options);
-            }
-
-            $options['quality'] = $options['max'];
         }
 
         if ($quality = $options['quality'] ?? $this->quality) {

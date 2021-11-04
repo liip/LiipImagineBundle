@@ -43,22 +43,6 @@ class PngquantPostProcessor extends AbstractPostProcessor
         $this->quality = $quality;
     }
 
-    /**
-     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
-     *             class's constructor to set the property state.
-     *
-     * @param string $quality
-     *
-     * @return PngquantPostProcessor
-     */
-    public function setQuality($quality)
-    {
-        $this->triggerSetterMethodDeprecation(__METHOD__);
-        $this->quality = $quality;
-
-        return $this;
-    }
-
     /*
      * @throws ProcessFailedException
      */
@@ -91,16 +75,6 @@ class PngquantPostProcessor extends AbstractPostProcessor
         $arguments = [$this->executablePath];
 
         if ($quality = $options['quality'] ?? $this->quality) {
-            if (\is_string($quality) && false !== mb_strpos($quality, '-')) {
-                @trigger_error('Passing the "quality" option as a string was deprecated in 2.2 and '.
-                    'will be removed in 3.0. Instead, pass wither an integer representing the max value or an array '.
-                    'representing the minimum and maximum values.', E_USER_DEPRECATED);
-
-                $quality = array_map(function ($q) {
-                    return (int) $q;
-                }, explode('-', $quality));
-            }
-
             if (!\is_array($quality)) {
                 $quality = [0, (int) $quality];
             }

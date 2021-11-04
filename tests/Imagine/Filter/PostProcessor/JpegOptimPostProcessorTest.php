@@ -23,62 +23,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    /**
-     * @group legacy
-     * @expectedDeprecation The %s::setMax() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
-     */
-    public function testDeprecatedSetMaxMethod(): void
-    {
-        $this->getPostProcessorInstance()->setMax(50);
-    }
-
-    /**
-     * @group legacy
-     * @expectedDeprecation The %s::setProgressive() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
-     */
-    public function testDeprecatedSetProgressiveMethod(): void
-    {
-        $this->getPostProcessorInstance()->setProgressive(50);
-    }
-
-    /**
-     * @group legacy
-     * @expectedDeprecation The %s::setStripAll() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
-     */
-    public function testDeprecatedSetStripAllMethod(): void
-    {
-        $this->getPostProcessorInstance()->setStripAll(50);
-    }
-
     public function testInvalidLevelOption(): void
     {
         $this->expectException(InvalidOptionException::class);
         $this->expectExceptionMessage('the "quality" option must be an int between 0 and 100');
 
         $this->getProcessArguments(['quality' => 1000]);
-    }
-
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The "max" option was deprecated in %s and will be removed in %s. Instead, use the "quality" option.
-     */
-    public function testOptionThrowsWhenBothMaxAndQualityAreSet(): void
-    {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('the "max" and "quality" options cannot both be set');
-
-        $this->getProcessArguments(['max' => 50, 'quality' => 50]);
-    }
-
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The "max" option was deprecated in %s and will be removed in %s. Instead, use the "quality" option.
-     */
-    public function testInvalidStripDeprecationMessage(): void
-    {
-        $this->assertContains('--max=50', $this->getProcessArguments(['max' => 50]));
     }
 
     public static function provideProcessArgumentsData(): array

@@ -23,26 +23,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The %s::setQuality() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
-     */
-    public function testDeprecatedSetQualityMethod(): void
-    {
-        $this->getPostProcessorInstance()->setQuality(50);
-    }
-
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation Passing the "quality" option as a string was deprecated in %s and will be removed in %s. Instead, pass wither an integer representing the max value or an array representing the minimum and maximum values.
-     */
-    public function testQualityOptionDeprecation(): void
-    {
-        $this->getProcessArguments(['quality' => '0-100']);
-    }
-
     public function testQualityOptionThrowsOnLargerMinThanMaxValue(): void
     {
         $this->expectException(InvalidOptionException::class);
