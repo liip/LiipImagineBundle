@@ -6,7 +6,7 @@
 /composer.phar
 /phpstan.neon
 /phpunit.xml
-/Tests/Functional/app/public/media/cache
-/Tests/Functional/app/web/media/cache
+/tests/Functional/app/public/media/cache
+/tests/Functional/app/web/media/cache
 /var/
 /vendor/

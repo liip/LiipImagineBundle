@@ -169,7 +169,7 @@ class FileSystemLoaderTest extends TestCase
     public function provideOutsideRootPathsData(): array
     {
         return [
-            ['../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'],
+            ['../Loader/../../Binary/Loader/../../../src/Resources/config/routing.yaml'],
             ['../../Binary/'],
         ];
     }
@@ -185,8 +185,6 @@ class FileSystemLoaderTest extends TestCase
         $this->expectExceptionMessage('Source image invalid');
 
         $loader = $this->getFileSystemLoader()->find($path);
-
-        $this->assertInstanceOf(FileSystemLoader::class, $loader);
     }
 
     public function testPathWithDoublePeriodBackStep(): void
