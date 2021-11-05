@@ -3,10 +3,10 @@
 
 This file contains a descriptive enumeration of *important* changes that may require *manual intervention* in your
 application code or are otherwise particularly noteworthy. Reference our full
-[changelog](https://github.com/liip/LiipImagineBundle/blob/2.0/CHANGELOG.md) for a complete list of all changes for a
+[changelog](https://github.com/liip/LiipImagineBundle/blob/2.x/CHANGELOG.md) for a complete list of all changes for a
 given release.
 
-## [Unreleased](https://github.com/liip/LiipImagineBundle/tree/HEAD)
+## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`
   class and the corresponding service prototype - `liip_imagine.cache.resolver.prototype.cache` have been deprecated.
