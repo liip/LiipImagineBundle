@@ -3,8 +3,10 @@
 
 This file contains a descriptive enumeration of *important* changes that may require *manual intervention* in your
 application code or are otherwise particularly noteworthy. Reference our full
-[changelog](https://github.com/liip/LiipImagineBundle/blob/2.x/CHANGELOG.md) for a complete list of all changes for a
+[changelog](https://github.com/liip/LiipImagineBundle/blob/3.x/CHANGELOG.md) for a complete list of all changes for a
 given release.
+
+## 3.0.0 (unreleased)
 
 ## 2.3.0 - 2.7.0
 
