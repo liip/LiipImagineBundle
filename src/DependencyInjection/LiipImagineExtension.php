@@ -93,10 +93,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $this->registerMessengerConfiguration($loader);
         }
 
-        if ($config['enqueue']) {
-            $loader->load('enqueue.xml');
-        }
-
         $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
 
         $container

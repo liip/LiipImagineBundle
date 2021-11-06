@@ -10,6 +10,8 @@ given release.
 
 - __[Configuration]__ __[BC BREAK]__ `twig.mode` default value now is `lazy`, the previous default value `legacy` has 
 been removed.
+
+- __[Configuration]__ __[BC BREAK]__ Enqueue integration has been removed in favor of Symfony Messenger.
  
 - __[Configuration]__ __[BC BREAK]__ `templating` integration has been removed, use Twig instead.
 

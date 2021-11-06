@@ -3,7 +3,3 @@ parameters:
         - message: '#^Access to undefined constant static\(Liip\\ImagineBundle\\Config\\Filter\\Type\\FilterAbstract\)::NAME\.$#'
           paths:
               - ../src/Config/Filter/Type/FilterAbstract.php
-        - message: '#^Unsafe usage of new static\(\)\.$#'
-          paths:
-              - ../src/Async/CacheResolved.php
-              - ../src/Async/ResolveCache.php
