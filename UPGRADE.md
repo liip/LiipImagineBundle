@@ -22,6 +22,8 @@ been removed.
 
 - __[Cache Resolver]__ __[BC BREAK]__ `CacheResolver` has been removed in favor of `PsrCacheResolver`.
 
+- __[BC BREAK]__ Argument 4 of `ImagineController` is a mandatory instance of `ControllerConfig`
+
 ## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`
