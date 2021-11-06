@@ -20,6 +20,8 @@ been removed.
   - pngoptim: `strip_all` has been removed in favor of `strip`. 
   - pngquant: `quality` option only accepts an array of two integers (min and max). 
 
+- __[Cache Resolver]__ __[BC BREAK]__ `CacheResolver` has been removed in favor of `PsrCacheResolver`.
+
 ## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`

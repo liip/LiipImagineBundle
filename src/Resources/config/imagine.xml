@@ -335,11 +335,6 @@
             <argument><!-- will be injected by AwsS3ResolverFactory --></argument>
         </service>
 
-        <service id="liip_imagine.cache.resolver.prototype.cache" class="Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver" public="true" abstract="true">
-            <argument><!-- will be injected by a ResolverFactory --></argument>
-            <argument><!-- will be injected by a ResolverFactory --></argument>
-        </service>
-
         <service id="liip_imagine.cache.resolver.prototype.flysystem" class="Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver" public="true" abstract="true">
             <argument><!-- will be injected by a ResolverFactory --></argument>
             <argument type="service" id="router.request_context" />
