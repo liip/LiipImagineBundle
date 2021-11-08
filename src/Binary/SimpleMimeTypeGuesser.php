@@ -11,30 +11,17 @@
 
 namespace Liip\ImagineBundle\Binary;
 
-use Liip\ImagineBundle\Exception\InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface as DeprecatedSymfonyMimeTypeGuesserInterface;
-use Symfony\Component\Mime\MimeTypesInterface as SymfonyMimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
 {
     /**
-     * @var DeprecatedSymfonyMimeTypeGuesserInterface|SymfonyMimeTypeGuesserInterface
+     * @var MimeTypesInterface
      */
     protected $mimeTypeGuesser;
 
-    /**
-     * @param DeprecatedSymfonyMimeTypeGuesserInterface|SymfonyMimeTypeGuesserInterface $mimeTypeGuesser
-     */
-    public function __construct($mimeTypeGuesser)
+    public function __construct(MimeTypesInterface $mimeTypeGuesser)
     {
-        if (!$mimeTypeGuesser instanceof SymfonyMimeTypeGuesserInterface && !$mimeTypeGuesser instanceof DeprecatedSymfonyMimeTypeGuesserInterface) {
-            throw new InvalidArgumentException('$mimeTypeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
-        }
-
-        if (interface_exists((SymfonyMimeTypeGuesserInterface::class) && $mimeTypeGuesser instanceof DeprecatedSymfonyMimeTypeGuesserInterface)) {
-            @trigger_error(sprintf('Passing a %s to "%s()" is deprecated since Symfony 4.3, pass a "%s" instead.', DeprecatedSymfonyMimeTypeGuesserInterface::class, __METHOD__, SymfonyMimeTypeGuesserInterface::class), E_USER_DEPRECATED);
-        }
-
         $this->mimeTypeGuesser = $mimeTypeGuesser;
     }
 
@@ -50,7 +37,7 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
         try {
             file_put_contents($tmpFile, $binary);
 
-            $mimeType = interface_exists(SymfonyMimeTypeGuesserInterface::class) ? $this->mimeTypeGuesser->guessMimeType($tmpFile) : $this->mimeTypeGuesser->guess($tmpFile);
+            $mimeType = $this->mimeTypeGuesser->guessMimeType($tmpFile);
 
             unlink($tmpFile);
 

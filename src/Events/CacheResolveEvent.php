@@ -11,22 +11,9 @@
 
 namespace Liip\ImagineBundle\Events;
 
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\EventDispatcher\Event as ContractsEvent;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
-if (is_subclass_of(EventDispatcherInterface::class, ContractsEventDispatcherInterface::class)) {
-    abstract class BCEvent extends ContractsEvent
-    {
-    }
-} else {
-    abstract class BCEvent extends Event
-    {
-    }
-}
-
-class CacheResolveEvent extends BCEvent
+class CacheResolveEvent extends Event
 {
     /**
      * Resource path.

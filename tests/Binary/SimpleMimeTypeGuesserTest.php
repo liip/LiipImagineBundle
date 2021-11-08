@@ -30,14 +30,6 @@ class SimpleMimeTypeGuesserTest extends TestCase
         $this->assertInstanceOf(SimpleMimeTypeGuesser::class, $guesser);
     }
 
-    public function testThrowsIfConstructedWithWrongTypeArguments(): void
-    {
-        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('$mimeTypeGuesser must be an instance of Symfony\Component\Mime\MimeTypeGuesserInterface or Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface');
-
-        new SimpleMimeTypeGuesser('foo');
-    }
-
     public function testImplementsMimeTypeGuesserInterface(): void
     {
         $this->assertInstanceOf(MimeTypeGuesserInterface::class, $this->getSimpleMimeTypeGuesser());

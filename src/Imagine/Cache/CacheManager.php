@@ -16,11 +16,10 @@ use Liip\ImagineBundle\Events\CacheResolveEvent;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\ImagineEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CacheManager
 {
@@ -45,7 +44,7 @@ class CacheManager
     protected $signer;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var EventDispatcherInterface
      */
     protected $dispatcher;
 
@@ -200,12 +199,12 @@ class CacheManager
         }
 
         $preEvent = new CacheResolveEvent($path, $filter);
-        $this->dispatchWithBC($preEvent, ImagineEvents::PRE_RESOLVE);
+        $this->dispatcher->dispatch($preEvent, ImagineEvents::PRE_RESOLVE);
 
         $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
-        $this->dispatchWithBC($postEvent, ImagineEvents::POST_RESOLVE);
+        $this->dispatcher->dispatch($postEvent, ImagineEvents::POST_RESOLVE);
 
         return $postEvent->getUrl();
     }
@@ -284,17 +283,5 @@ class CacheManager
         }
 
         return $this->resolvers[$resolverName];
-    }
-
-    /**
-     * BC Layer for Symfony < 4.3
-     */
-    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
-    {
-        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->dispatcher->dispatch($event, $eventName);
-        } else {
-            $this->dispatcher->dispatch($eventName, $event);
-        }
     }
 }
