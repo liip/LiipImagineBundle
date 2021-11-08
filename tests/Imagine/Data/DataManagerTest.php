@@ -21,17 +21,6 @@ use Symfony\Component\Mime\MimeTypesInterface;
  */
 class DataManagerTest extends AbstractTest
 {
-    public function testThrowsIfConstructedWithWrongTypeArguments(): void
-    {
-        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
-
-        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
-        $config = $this->createFilterConfigurationMock();
-
-        new DataManager($mimeTypeGuesser, 'foo', $config, 'default');
-    }
-
     public function testUseDefaultLoaderUsedIfNoneSet(): void
     {
         $loader = $this->createBinaryLoaderInterfaceMock();

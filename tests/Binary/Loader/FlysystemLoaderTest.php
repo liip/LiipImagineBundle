@@ -52,17 +52,6 @@ class FlysystemLoaderTest extends AbstractTest
         $this->assertInstanceOf(LoaderInterface::class, $this->getFlysystemLoader());
     }
 
-    public function testThrowsIfConstructedWithWrongTypeArguments(): void
-    {
-        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
-        $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
-
-        new FlysystemLoader(
-            'foo',
-            $this->flyFilesystem
-        );
-    }
-
     public function testReturnImageContentOnFind(): void
     {
         $loader = $this->getFlysystemLoader();

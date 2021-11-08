@@ -19,8 +19,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -134,11 +133,11 @@ class LiipImagineExtensionTest extends AbstractTest
         return [
             [
                 'liip_imagine.mime_type_guesser',
-                [MimeTypeGuesser::class, 'getInstance'],
+                [MimeTypes::class, 'getDefault'],
             ],
             [
                 'liip_imagine.extension_guesser',
-                [ExtensionGuesser::class, 'getInstance'],
+                [MimeTypes::class, 'getDefault'],
             ],
         ];
     }

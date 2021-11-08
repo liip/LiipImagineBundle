@@ -21,14 +21,11 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
-use Symfony\Component\Mime\MimeTypes;
 
 class LiipImagineExtension extends Extension implements PrependExtensionInterface
 {
@@ -66,13 +63,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $this->getConfiguration($configs, $container),
             $configs
         );
-
-        if (interface_exists(MimeTypeGuesserInterface::class)) {
-            $mimeTypes = new Definition(MimeTypes::class);
-            $mimeTypes->setFactory([MimeTypes::class, 'getDefault']);
-
-            $container->setDefinition('liip_imagine.mime_types', $mimeTypes);
-        }
 
         $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
         $container->setParameter('liip_imagine.loaders', $config['loaders']);
@@ -115,15 +105,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $container->setParameter('liip_imagine.controller.filter_action', $config['controller']['filter_action']);
         $container->setParameter('liip_imagine.controller.filter_runtime_action', $config['controller']['filter_runtime_action']);
-
-        if ($container->hasDefinition('liip_imagine.mime_types')) {
-            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
-            $container->getDefinition('liip_imagine.binary.mime_type_guesser')
-                ->replaceArgument(0, $mimeTypes);
-
-            $container->getDefinition('liip_imagine.data.manager')
-                ->replaceArgument(1, $mimeTypes);
-        }
 
         $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
         $webpOptions = $config['webp'];

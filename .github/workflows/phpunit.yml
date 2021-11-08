@@ -34,11 +34,6 @@ jobs:
           # Test each supported Symfony version with lowest supported PHP version
           - php: '7.1'
             dependencies: highest
-            symfony: '3.4.*'
-            stability: 'stable'
-
-          - php: '7.1'
-            dependencies: highest
             symfony: '4.4.*'
             stability: 'stable'
 

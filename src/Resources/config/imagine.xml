@@ -374,12 +374,12 @@
 
         <!-- Guessers -->
 
-        <service id="liip_imagine.mime_type_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface">
-            <factory class="Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser" method="getInstance" />
+        <service id="liip_imagine.mime_type_guesser" class="Symfony\Component\Mime\MimeTypeGuesserInterface">
+            <factory class="Symfony\Component\Mime\MimeTypes" method="getDefault" />
         </service>
 
-        <service id="liip_imagine.extension_guesser" class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface">
-            <factory class="Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser" method="getInstance" />
+        <service id="liip_imagine.extension_guesser" class="Symfony\Component\Mime\MimeTypesInterface">
+            <factory class="Symfony\Component\Mime\MimeTypes" method="getDefault" />
         </service>
 
         <service id="liip_imagine.binary.mime_type_guesser" class="Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser">

@@ -25,11 +25,6 @@ class FlysystemLoaderFactory extends AbstractLoaderFactory
     {
         $definition = $this->getChildLoaderDefinition($this->getChildLoaderName());
 
-        if ($container->hasDefinition('liip_imagine.mime_types')) {
-            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
-            $definition->replaceArgument(0, $mimeTypes);
-        }
-
         $definition->replaceArgument(1, new Reference($config['filesystem_service']));
 
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);

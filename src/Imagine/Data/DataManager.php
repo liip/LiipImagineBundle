@@ -14,11 +14,9 @@ namespace Liip\ImagineBundle\Imagine\Data;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
-use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Exception\LogicException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Model\Binary;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface as DeprecatedExtensionGuesserInterface;
 use Symfony\Component\Mime\MimeTypesInterface;
 
 class DataManager
@@ -29,7 +27,7 @@ class DataManager
     protected $mimeTypeGuesser;
 
     /**
-     * @var DeprecatedExtensionGuesserInterface|MimeTypesInterface
+     * @var MimeTypesInterface
      */
     protected $extensionGuesser;
 
@@ -54,25 +52,16 @@ class DataManager
     protected $loaders = [];
 
     /**
-     * @param DeprecatedExtensionGuesserInterface|MimeTypesInterface $extensionGuesser
-     * @param string                                                 $defaultLoader
-     * @param string                                                 $globalDefaultImage
+     * @param string $defaultLoader
+     * @param string $globalDefaultImage
      */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
-        $extensionGuesser,
+        MimeTypesInterface $extensionGuesser,
         FilterConfiguration $filterConfig,
         $defaultLoader = null,
         $globalDefaultImage = null
     ) {
-        if (!$extensionGuesser instanceof MimeTypesInterface && !$extensionGuesser instanceof DeprecatedExtensionGuesserInterface) {
-            throw new InvalidArgumentException('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
-        }
-
-        if (interface_exists(MimeTypesInterface::class) && $extensionGuesser instanceof DeprecatedExtensionGuesserInterface) {
-            @trigger_error(sprintf('Passing a %s to "%s()" is deprecated since Symfony 4.3, pass a "%s" instead.', DeprecatedExtensionGuesserInterface::class, __METHOD__, MimeTypesInterface::class), E_USER_DEPRECATED);
-        }
-
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
         $this->defaultLoader = $defaultLoader;
@@ -172,10 +161,6 @@ class DataManager
 
     private function getExtension(?string $mimeType): ?string
     {
-        if ($this->extensionGuesser instanceof DeprecatedExtensionGuesserInterface) {
-            return $this->extensionGuesser->guess($mimeType);
-        }
-
         if (null === $mimeType) {
             return null;
         }
