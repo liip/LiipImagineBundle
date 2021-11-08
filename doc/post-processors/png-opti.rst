@@ -21,7 +21,7 @@ To add this post-processor to the filter set created in the
                     thumbnail: { size: [120, 90], mode: outbound }
                     background: { size: [124, 94], position: center, color: '#000' }
                 post_processors:
-                    optipng: { strip_all: true, level: 5 }
+                    optipng: { strip: true, level: 5 }
 
 This configuration enables metadata stripping, and sets a maximum optimization factor of 5
 for the resulting image binary.
@@ -77,7 +77,7 @@ Options
 Parameters
 ----------
 
-**liip_imagine.optipng.stripAll:** ``bool``
+**liip_imagine.optipng.strip:** ``bool``
     Removes all comments, EXIF markers, and other metadata from the image binary.
 
 **liip_imagine.optipng.level:** ``int``

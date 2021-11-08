@@ -52,19 +52,12 @@ class ImagineController
         FilterService $filterService,
         DataManager $dataManager,
         SignerInterface $signer,
-        ?ControllerConfig $controllerConfig = null
+        ControllerConfig $controllerConfig
     ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
-
-        if (null === $controllerConfig) {
-            @trigger_error(sprintf(
-                'Instantiating "%s" without a forth argument of type "%s" is deprecated since 2.2.0 and will be required in 3.0.', self::class, ControllerConfig::class
-            ), E_USER_DEPRECATED);
-        }
-
-        $this->controllerConfig = $controllerConfig ?? new ControllerConfig(301);
+        $this->controllerConfig = $controllerConfig;
     }
 
     /**

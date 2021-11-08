@@ -22,16 +22,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    /**
-     * @group legacy
-     *
-     * @expectedDeprecation The %s::setQuality() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
-     */
-    public function testDeprecatedSetQualityMethod(): void
-    {
-        $this->getPostProcessorInstance()->setQuality(50);
-    }
-
     public static function provideProcessArgumentsData(): array
     {
         $data = [

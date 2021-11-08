@@ -24,21 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ImagineControllerTest extends AbstractTest
 {
-    /**
-     * @group legacy
-     * @expectedDeprecation Instantiating "%s" without a forth argument of type "%s" is deprecated since 2.2.0 and will be required in 3.0.
-     */
-    public function testDeprecatedConstruction(): void
-    {
-        $controller = new ImagineController(
-            $this->createFilterServiceMock(),
-            $this->createDataManagerMock(),
-            $this->createSignerInterfaceMock()
-        );
-
-        $this->assertInstanceOf(ImagineController::class, $controller);
-    }
-
     public function testConstruction(): void
     {
         $controller = new ImagineController(

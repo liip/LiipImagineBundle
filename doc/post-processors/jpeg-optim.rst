@@ -21,7 +21,7 @@ To add this post-processor to the filter set created in the
                     thumbnail: { size: [120, 90], mode: outbound }
                     background: { size: [124, 94], position: center, color: '#000' }
                 post_processors:
-                    jpegoptim: { strip_all: true, max: 70, progressive: true }
+                    jpegoptim: { strip_all: true, quality: 70, progressive: true }
 
 This configuration enables metadata stripping and progressive JPEG encoding, and sets
 a maximum quality factor of 70 for the resulting image binary.
@@ -45,7 +45,7 @@ Options
 **strip_all:** ``bool``
     Removes all comments, EXIF markers, and other image metadata.
 
-**max:** ``int``
+**quality:** ``int``
     Sets the maximum image quality factor.
 
 **progressive:** ``bool``
@@ -58,7 +58,7 @@ Parameters
 **liip_imagine.jpegoptim.stripAll:** ``bool``
     Removes all comments, EXIF markers, and other metadata from the image binary.
 
-**liip_imagine.jpegoptim.max:** ``int``
+**liip_imagine.jpegoptim.quality:** ``int``
     Assigns the maximum quality factor for the image binary.
 
 **liip_imagine.jpegoptim.progressive:** ``bool``

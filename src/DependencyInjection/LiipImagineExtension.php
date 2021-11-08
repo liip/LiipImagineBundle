@@ -93,14 +93,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $this->registerMessengerConfiguration($loader);
         }
 
-        if ($config['enqueue']) {
-            $loader->load('enqueue.xml');
-        }
-
-        if ($config['templating']) {
-            $loader->load('templating.xml');
-        }
-
         $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
 
         $container
@@ -132,8 +124,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $container->getDefinition('liip_imagine.data.manager')
                 ->replaceArgument(1, $mimeTypes);
         }
-
-        $this->deprecationTemplatingFilterHelper($container);
 
         $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
         $webpOptions = $config['webp'];
@@ -181,30 +171,8 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $loader->load('messenger.xml');
     }
 
-    private function deprecationTemplatingFilterHelper(ContainerBuilder $container): void
-    {
-        if (!$container->hasDefinition('liip_imagine.templating.filter_helper')) {
-            return;
-        }
-
-        $message = 'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.';
-        $definition = $container->getDefinition('liip_imagine.templating.filter_helper');
-
-        if (method_exists(Definition::class, 'getDeprecation')) {
-            $definition->setDeprecated('liip/imagine-bundle', '2.2', $message);
-        } else {
-            $definition->setDeprecated(true, $message);
-        }
-    }
-
     private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void
     {
-        if ('legacy' === $config['mode']) {
-            $loader->load('imagine_twig_mode_legacy.xml');
-
-            return;
-        }
-
         if ('lazy' === $config['mode']) {
             $loader->load('imagine_twig_mode_lazy.xml');
             if (\array_key_exists('assets_version', $config) && null !== $config['assets_version']) {

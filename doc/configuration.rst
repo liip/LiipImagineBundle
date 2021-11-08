@@ -79,9 +79,7 @@ There are several configuration options available:
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
   (which means the standard filesystem loader is used).
 * ``twig.mode`` - Twig filter integration. ``none`` disables the twig filters, ``lazy`` enables
-  Twig using the Twig runtime for lazy loading. The default value is ``legacy`` and enables the
-  old Twig integration that is loaded on each request. Version 3 will drop ``legacy`` and default
-  to ``lazy``.
+  Twig using the Twig runtime for lazy loading. The default value is ``lazy``.
   The twig filter automatically picks up the ``framework.assets.version`` configuration. You can
   overwrite the version with the ``twig.assets_version`` option. See :doc:`asset-versioning` for
   more information.

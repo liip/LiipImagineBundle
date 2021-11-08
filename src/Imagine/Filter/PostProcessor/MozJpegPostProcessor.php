@@ -41,22 +41,6 @@ class MozJpegPostProcessor extends AbstractPostProcessor
         $this->quality = $quality;
     }
 
-    /**
-     * @deprecated All post-processor setters have been deprecated in 2.2 for removal in 3.0. You must only use the
-     *             class's constructor to set the property state.
-     *
-     * @param int $quality
-     *
-     * @return MozJpegPostProcessor
-     */
-    public function setQuality($quality)
-    {
-        $this->triggerSetterMethodDeprecation(__METHOD__);
-        $this->quality = $quality;
-
-        return $this;
-    }
-
     /*
      * @throws ProcessFailedException
      */

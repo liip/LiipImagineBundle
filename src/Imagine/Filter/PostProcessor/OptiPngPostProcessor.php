@@ -91,17 +91,6 @@ class OptiPngPostProcessor extends AbstractPostProcessor
             $arguments[] = sprintf('-o%d', $level);
         }
 
-        if (isset($options['strip_all'])) {
-            @trigger_error('The "strip_all" option was deprecated in 2.2 and will be removed in 3.0. '.
-                'Instead, use the "strip" option.', E_USER_DEPRECATED);
-
-            if (isset($options['strip'])) {
-                throw new InvalidOptionException('the "strip" and "strip_all" options cannot both be set', $options);
-            }
-
-            $options['strip'] = $options['strip_all'];
-        }
-
         if ($strip = $options['strip'] ?? $this->strip) {
             $arguments[] = '-strip';
             $arguments[] = true === $strip ? 'all' : $strip;

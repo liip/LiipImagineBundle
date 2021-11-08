@@ -129,11 +129,4 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
 
         return true;
     }
-
-    protected function triggerSetterMethodDeprecation(string $method): void
-    {
-        @trigger_error(sprintf('The %s() method was deprecated in 2.2 and will be removed in 3.0. You must '
-            .'setup the class state via its __construct() method. You can still pass filter-specific options to the '.
-            'process() method to overwrite behavior.', $method), E_USER_DEPRECATED);
-    }
 }
