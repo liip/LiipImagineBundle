@@ -97,7 +97,7 @@ final class PsrCacheResolver implements ResolverInterface
 
         foreach ($filters as $filter) {
             if (empty($paths)) {
-                $this->removePathAndFilter(null, $filter);
+                $this->removeFilter($filter);
             } else {
                 foreach ($paths as $path) {
                     $this->removePathAndFilter($path, $filter);
@@ -114,7 +114,7 @@ final class PsrCacheResolver implements ResolverInterface
      * @param string $path   The image path in use
      * @param string $filter The filter in use
      */
-    public function generateCacheKey(?string $path, string $filter): string
+    private function generateCacheKey(string $path, string $filter): string
     {
         return implode('.', [
             $this->sanitizeCacheKeyPart($this->options['global_prefix']),
@@ -124,7 +124,12 @@ final class PsrCacheResolver implements ResolverInterface
         ]);
     }
 
-    private function removePathAndFilter(?string $path, string $filter): void
+    private function generateCacheKeyForFilter(string $filter): string
+    {
+        return $this->generateCacheKey('', $filter);
+    }
+
+    private function removePathAndFilter(string $path, string $filter): void
     {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         $indexItem = $this->cache->getItem($indexKey);
@@ -134,18 +139,11 @@ final class PsrCacheResolver implements ResolverInterface
 
         $index = $indexItem->get();
 
-        if (null === $path) {
-            foreach ($index as $eachCacheKey) {
-                $this->cache->deleteItem($eachCacheKey);
-            }
+        $cacheKey = $this->generateCacheKey($path, $filter);
 
-            $index = [];
-        } else {
-            $cacheKey = $this->generateCacheKey($path, $filter);
-            if (false !== $indexIndex = array_search($cacheKey, $index, true)) {
-                unset($index[$indexIndex]);
-                $this->cache->deleteItem($cacheKey);
-            }
+        if (false !== $indexIndex = array_search($cacheKey, $index, true)) {
+            unset($index[$indexIndex]);
+            $this->cache->deleteItem($cacheKey);
         }
 
         if (empty($index)) {
@@ -154,6 +152,24 @@ final class PsrCacheResolver implements ResolverInterface
             $indexItem->set($index);
             $this->cache->save($indexItem);
         }
+    }
+
+    private function removeFilter(string $filter): void
+    {
+        $indexKey = $this->generateIndexKey($this->generateCacheKeyForFilter($filter));
+        $indexItem = $this->cache->getItem($indexKey);
+
+        if (!$indexItem->isHit()) {
+            return;
+        }
+
+        $index = $indexItem->get();
+
+        foreach ($index as $eachCacheKey) {
+            $this->cache->deleteItem($eachCacheKey);
+        }
+
+        $this->cache->deleteItem($indexKey);
     }
 
     /**
@@ -173,12 +189,8 @@ final class PsrCacheResolver implements ResolverInterface
         ]);
     }
 
-    private function sanitizeCacheKeyPart(?string $cacheKeyPart): string
+    private function sanitizeCacheKeyPart(string $cacheKeyPart): string
     {
-        if (null === $cacheKeyPart) {
-            return '';
-        }
-
         return str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
     }
 
