@@ -20,17 +20,12 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
  */
 class ProxyResolver implements ResolverInterface
 {
-    /**
-     * @var ResolverInterface
-     */
-    protected $resolver;
+    protected ResolverInterface $resolver;
 
     /**
      * a list of proxy hosts (picks a random one for each generation to seed browser requests among multiple hosts).
-     *
-     * @var array
      */
-    protected $hosts = [];
+    protected array $hosts = [];
 
     /**
      * @param string[] $hosts
@@ -41,44 +36,27 @@ class ProxyResolver implements ResolverInterface
         $this->hosts = $hosts;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         return $this->rewriteUrl($this->resolver->resolve($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $targetPath, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
-        return $this->resolver->store($binary, $targetPath, $filter);
+        $this->resolver->store($binary, $path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
-        return $this->resolver->remove($paths, $filters);
+        $this->resolver->remove($paths, $filters);
     }
 
-    /**
-     * @param $url
-     *
-     * @return string
-     */
-    protected function rewriteUrl($url)
+    protected function rewriteUrl(string $url): string
     {
         if (empty($this->hosts)) {
             return $url;

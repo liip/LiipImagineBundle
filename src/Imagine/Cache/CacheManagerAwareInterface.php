@@ -13,5 +13,5 @@ namespace Liip\ImagineBundle\Imagine\Cache;
 
 interface CacheManagerAwareInterface
 {
-    public function setCacheManager(CacheManager $cacheManager);
+    public function setCacheManager(CacheManager $cacheManager): void;
 }

@@ -16,15 +16,9 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
 class FormatExtensionResolver implements ResolverInterface
 {
-    /**
-     * @var ResolverInterface
-     */
-    private $resolver;
+    private ResolverInterface $resolver;
 
-    /**
-     * @var FilterConfiguration
-     */
-    private $filterConfig;
+    private FilterConfiguration $filterConfig;
 
     public function __construct(ResolverInterface $resolver, FilterConfiguration $filterConfig)
     {
@@ -35,37 +29,28 @@ class FormatExtensionResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         $path = $this->replaceExtension($path, $filter);
 
         return $this->resolver->resolve($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $targetPath, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
-        $targetPath = $this->replaceExtension($targetPath, $filter);
+        $path = $this->replaceExtension($path, $filter);
 
-        return $this->resolver->store($binary, $targetPath, $filter);
+        $this->resolver->store($binary, $path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         $path = $this->replaceExtension($path, $filter);
 
         return $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         $newPaths = [];
         foreach ($paths as $path) {
@@ -77,7 +62,7 @@ class FormatExtensionResolver implements ResolverInterface
             }
         }
 
-        return $this->resolver->remove($newPaths, $filters);
+        $this->resolver->remove($newPaths, $filters);
     }
 
     private function replaceExtension(string $path, string $filter): string

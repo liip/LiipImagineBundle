@@ -18,40 +18,21 @@ use Symfony\Component\Routing\RequestContext;
 
 class WebPathResolver implements ResolverInterface
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
-    /**
-     * @var RequestContext
-     */
-    protected $requestContext;
+    protected RequestContext $requestContext;
 
-    /**
-     * @var string
-     */
-    protected $webRoot;
+    protected string $webRoot;
 
-    /**
-     * @var string
-     */
-    protected $cachePrefix;
+    protected string $cachePrefix;
 
-    /**
-     * @var string
-     */
-    protected $cacheRoot;
+    protected string $cacheRoot;
 
-    /**
-     * @param string $webRootDir
-     * @param string $cachePrefix
-     */
     public function __construct(
         Filesystem $filesystem,
         RequestContext $requestContext,
-        $webRootDir,
-        $cachePrefix = 'media/cache'
+        string $webRootDir,
+        string $cachePrefix = 'media/cache'
     ) {
         $this->filesystem = $filesystem;
         $this->requestContext = $requestContext;
@@ -61,10 +42,7 @@ class WebPathResolver implements ResolverInterface
         $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         return sprintf('%s/%s',
             rtrim($this->getBaseUrl(), '/'),
@@ -72,18 +50,12 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return is_file($this->getFilePath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
         $this->filesystem->dumpFile(
             $this->getFilePath($path, $filter),
@@ -91,10 +63,7 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -118,26 +87,17 @@ class WebPathResolver implements ResolverInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFilePath($path, $filter)
+    protected function getFilePath(string $path, string $filter): string
     {
         return $this->webRoot.'/'.$this->getFullPath($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFileUrl($path, $filter)
+    protected function getFileUrl(string $path, string $filter): string
     {
         return PathHelper::filePathToUrlPath($this->getFullPath($path, $filter));
     }
 
-    /**
-     * @return string
-     */
-    protected function getBaseUrl()
+    protected function getBaseUrl(): string
     {
         $port = '';
         if ('https' === $this->requestContext->getScheme() && 443 !== $this->requestContext->getHttpsPort()) {
@@ -162,7 +122,7 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    private function getFullPath($path, $filter)
+    private function getFullPath(string $path, string $filter): string
     {
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);

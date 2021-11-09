@@ -37,7 +37,8 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('getObjectUrl')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg');
+            ->with('images.example.com', 'thumb/some-folder/path.jpg')
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
@@ -49,7 +50,8 @@ class AwsS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('getObjectUrl')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, ['torrent' => true]);
+            ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, ['torrent' => true])
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->setGetOption('torrent', true);

@@ -20,33 +20,29 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
 {
     /**
      * If set --strip-all will be passed to jpegoptim.
-     *
-     * @var bool
      */
-    protected $strip;
+    protected bool $strip;
 
     /**
      * If set, --max=$value will be passed to jpegoptim.
      *
      * @var int
      */
-    protected $quality;
+    protected ?int $quality;
 
     /**
      * If set to true --all-progressive will be passed to jpegoptim, otherwise --all-normal will be passed.
-     *
-     * @var bool
      */
-    protected $progressive;
+    protected bool $progressive;
 
     /**
-     * @param string $executablePath    Path to the jpegoptim binary
-     * @param bool   $strip             Strip all markers from output
-     * @param int    $quality           Set maximum image quality factor
-     * @param bool   $progressive       Force output to be progressive
-     * @param string $temporaryRootPath Directory where temporary file will be written
+     * @param string      $executablePath    Path to the jpegoptim binary
+     * @param bool        $strip             Strip all markers from output
+     * @param int|null    $quality           Set maximum image quality factor
+     * @param bool        $progressive       Force output to be progressive
+     * @param string|null $temporaryRootPath Directory where temporary file will be written
      */
-    public function __construct($executablePath = '/usr/bin/jpegoptim', $strip = true, $quality = null, $progressive = true, $temporaryRootPath = null)
+    public function __construct(string $executablePath = '/usr/bin/jpegoptim', bool $strip = true, ?int $quality = null, bool $progressive = true, ?string $temporaryRootPath = null)
     {
         parent::__construct($executablePath, $temporaryRootPath);
 

@@ -18,28 +18,17 @@ use Imagine\Image\Point;
 
 class WatermarkFilterLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
+    protected ImagineInterface $imagine;
 
-    /**
-     * @var string
-     */
-    protected $projectDir;
+    protected string $projectDir;
 
-    public function __construct(ImagineInterface $imagine, $projectDir)
+    public function __construct(ImagineInterface $imagine, string $projectDir)
     {
         $this->imagine = $imagine;
         $this->projectDir = $projectDir;
     }
 
-    /**
-     * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     *
-     * @return ImageInterface|static
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $options += [
             'size' => null,

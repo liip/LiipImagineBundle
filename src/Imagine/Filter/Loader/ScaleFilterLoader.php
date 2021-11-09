@@ -22,32 +22,20 @@ use Imagine\Image\ImageInterface;
  */
 class ScaleFilterLoader implements LoaderInterface
 {
-    /**
-     * @var string
-     */
-    protected $dimensionKey;
+    private string $dimensionKey;
 
-    /**
-     * @var string
-     */
-    protected $ratioKey;
+    private string $ratioKey;
 
-    /**
-     * @var bool
-     */
-    protected $absoluteRatio;
+    private bool $absoluteRatio;
 
-    public function __construct($dimensionKey = 'dim', $ratioKey = 'to', $absoluteRatio = true)
+    public function __construct(string $dimensionKey = 'dim', string $ratioKey = 'to', bool $absoluteRatio = true)
     {
         $this->dimensionKey = $dimensionKey;
         $this->ratioKey = $ratioKey;
         $this->absoluteRatio = $absoluteRatio;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         if (!isset($options[$this->dimensionKey]) && !isset($options[$this->ratioKey])) {
             throw new \InvalidArgumentException("Missing $this->dimensionKey or $this->ratioKey option.");
@@ -84,12 +72,12 @@ class ScaleFilterLoader implements LoaderInterface
         return $image;
     }
 
-    protected function calcAbsoluteRatio($ratio)
+    protected function calcAbsoluteRatio(float $ratio): float
     {
         return $ratio;
     }
 
-    protected function isImageProcessable($ratio)
+    protected function isImageProcessable(float $ratio): bool
     {
         return true;
     }

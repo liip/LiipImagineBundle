@@ -21,46 +21,27 @@ use Symfony\Component\Mime\MimeTypesInterface;
 
 class DataManager
 {
-    /**
-     * @var MimeTypeGuesserInterface
-     */
-    protected $mimeTypeGuesser;
+    protected MimeTypeGuesserInterface $mimeTypeGuesser;
 
-    /**
-     * @var MimeTypesInterface
-     */
-    protected $extensionGuesser;
+    protected MimeTypesInterface $extensionGuesser;
 
-    /**
-     * @var FilterConfiguration
-     */
-    protected $filterConfig;
+    protected FilterConfiguration $filterConfig;
 
-    /**
-     * @var string|null
-     */
-    protected $defaultLoader;
+    protected ?string $defaultLoader;
 
-    /**
-     * @var string|null
-     */
-    protected $globalDefaultImage;
+    protected ?string $globalDefaultImage;
 
     /**
      * @var LoaderInterface[]
      */
-    protected $loaders = [];
+    protected array $loaders = [];
 
-    /**
-     * @param string $defaultLoader
-     * @param string $globalDefaultImage
-     */
     public function __construct(
         MimeTypeGuesserInterface $mimeTypeGuesser,
         MimeTypesInterface $extensionGuesser,
         FilterConfiguration $filterConfig,
-        $defaultLoader = null,
-        $globalDefaultImage = null
+        ?string $defaultLoader = null,
+        ?string $globalDefaultImage = null
     ) {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;
@@ -71,10 +52,8 @@ class DataManager
 
     /**
      * Adds a loader to retrieve images for the given filter.
-     *
-     * @param string $filter
      */
-    public function addLoader($filter, LoaderInterface $loader)
+    public function addLoader(string $filter, LoaderInterface $loader): void
     {
         $this->loaders[$filter] = $loader;
     }
@@ -82,13 +61,9 @@ class DataManager
     /**
      * Returns a loader previously attached to the given filter.
      *
-     * @param string $filter
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return LoaderInterface
      */
-    public function getLoader($filter)
+    public function getLoader(string $filter): LoaderInterface
     {
         $config = $this->filterConfig->get($filter);
 
@@ -104,14 +79,9 @@ class DataManager
     /**
      * Retrieves an image with the given filter applied.
      *
-     * @param string $filter
-     * @param string $path
-     *
      * @throws LogicException
-     *
-     * @return BinaryInterface
      */
-    public function find($filter, $path)
+    public function find(string $filter, string $path): BinaryInterface
     {
         $loader = $this->getLoader($filter);
 
@@ -140,12 +110,8 @@ class DataManager
 
     /**
      * Get default image url with the given filter applied.
-     *
-     * @param string $filter
-     *
-     * @return string|null
      */
-    public function getDefaultImageUrl($filter)
+    public function getDefaultImageUrl(string $filter): ?string
     {
         $config = $this->filterConfig->get($filter);
 

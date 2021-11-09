@@ -17,17 +17,11 @@ use Imagine\Image\Point;
 
 class PasteFilterLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
+    private ImagineInterface $imagine;
 
-    /**
-     * @var string
-     */
-    protected $projectDir;
+    private string $projectDir;
 
-    public function __construct(ImagineInterface $imagine, $projectDir)
+    public function __construct(ImagineInterface $imagine, string $projectDir)
     {
         $this->imagine = $imagine;
         $this->projectDir = $projectDir;
@@ -35,10 +29,8 @@ class PasteFilterLoader implements LoaderInterface
 
     /**
      * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
-     *
-     * @return ImageInterface|static
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $x = isset($options['start'][0]) ? $options['start'][0] : null;
         $y = isset($options['start'][1]) ? $options['start'][1] : null;

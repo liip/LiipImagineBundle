@@ -20,25 +20,21 @@ class OptiPngPostProcessor extends AbstractPostProcessor
 {
     /**
      * If set --oN will be passed to optipng.
-     *
-     * @var int
      */
-    protected $level;
+    protected int $level;
 
     /**
      * If set --strip=all will be passed to optipng.
-     *
-     * @var bool
      */
-    protected $strip;
+    protected bool $strip;
 
     /**
-     * @param string $executablePath    Path to the optipng binary
-     * @param int    $level             Optimization level
-     * @param bool   $strip             Strip metadata objects
-     * @param string $temporaryRootPath Directory where temporary file will be written
+     * @param string      $executablePath    Path to the optipng binary
+     * @param int         $level             Optimization level
+     * @param bool        $strip             Strip metadata objects
+     * @param string|null $temporaryRootPath Directory where temporary file will be written
      */
-    public function __construct($executablePath = '/usr/bin/optipng', $level = 7, $strip = true, $temporaryRootPath = null)
+    public function __construct(string $executablePath = '/usr/bin/optipng', int $level = 7, bool $strip = true, ?string $temporaryRootPath = null)
     {
         parent::__construct($executablePath, $temporaryRootPath);
 

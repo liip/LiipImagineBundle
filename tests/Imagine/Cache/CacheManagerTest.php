@@ -352,8 +352,7 @@ class CacheManagerTest extends AbstractTest
         $resolver
             ->expects($this->once())
             ->method('remove')
-            ->with(['/thumbs/cats.jpeg'], ['thumbnail'])
-            ->willReturn(true);
+            ->with(['/thumbs/cats.jpeg'], ['thumbnail']);
 
         $config = $this->createFilterConfigurationMock();
         $config

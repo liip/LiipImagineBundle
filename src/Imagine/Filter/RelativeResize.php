@@ -22,7 +22,7 @@ use Imagine\Image\ImageInterface;
  */
 class RelativeResize implements FilterInterface
 {
-    private $method;
+    private string $method;
     private $parameter;
 
     /**
@@ -33,7 +33,7 @@ class RelativeResize implements FilterInterface
      *
      * @throws \Imagine\Exception\InvalidArgumentException
      */
-    public function __construct($method, $parameter)
+    public function __construct(string $method, $parameter)
     {
         if (!\in_array($method, ['heighten', 'increase', 'scale', 'widen'], true)) {
             throw new InvalidArgumentException(sprintf('Unsupported method: %s', $method));
@@ -43,10 +43,7 @@ class RelativeResize implements FilterInterface
         $this->parameter = $parameter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function apply(ImageInterface $image)
+    public function apply(ImageInterface $image): ImageInterface
     {
         return $image->resize(\call_user_func([$image->getSize(), $this->method], $this->parameter));
     }

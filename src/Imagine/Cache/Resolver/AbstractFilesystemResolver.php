@@ -20,29 +20,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFilesystemResolver implements ResolverInterface, CacheManagerAwareInterface
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
-    /**
-     * @var string
-     */
-    protected $basePath = '';
+    protected string $basePath = '';
 
-    /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
+    protected CacheManager $cacheManager;
 
-    /**
-     * @var int
-     */
-    protected $folderPermissions = 0777;
-    /**
-     * @var Request
-     */
-    private $request;
+    protected int $folderPermissions = 0777;
+
+    private Request $request;
 
     /**
      * Constructs a filesystem based cache resolver.
@@ -52,49 +38,35 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param Request $request
-     */
-    public function setRequest(Request $request = null)
+    public function setRequest(Request $request = null): void
     {
         $this->request = $request;
     }
 
-    public function setCacheManager(CacheManager $cacheManager)
+    public function setCacheManager(CacheManager $cacheManager): void
     {
         $this->cacheManager = $cacheManager;
     }
 
     /**
      * Set the base path to.
-     *
-     * @param $basePath
      */
-    public function setBasePath($basePath)
+    public function setBasePath(string $basePath): void
     {
         $this->basePath = $basePath;
     }
 
-    /**
-     * @param int $folderPermissions
-     */
-    public function setFolderPermissions($folderPermissions)
+    public function setFolderPermissions(int $folderPermissions): void
     {
         $this->folderPermissions = $folderPermissions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return file_exists($this->getFilePath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
         $filePath = $this->getFilePath($path, $filter);
 
@@ -105,10 +77,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         file_put_contents($filePath, $binary->getContent());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -140,10 +109,8 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     /**
      * @throws \LogicException
-     *
-     * @return Request
      */
-    protected function getRequest()
+    protected function getRequest(): Request
     {
         if (false === $this->request) {
             throw new \LogicException('The request was not injected, inject it before using resolver.');
@@ -153,11 +120,9 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     }
 
     /**
-     * @param string $dir
-     *
      * @throws \RuntimeException
      */
-    protected function makeFolder($dir)
+    protected function makeFolder(string $dir): void
     {
         if (!is_dir($dir)) {
             $parent = \dirname($dir);
@@ -178,8 +143,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      * @param string $filter The name of the imagine filter
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     *
-     * @return string
      */
-    abstract protected function getFilePath($path, $filter);
+    abstract protected function getFilePath(string $path, string $filter): string;
 }

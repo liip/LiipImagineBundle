@@ -19,22 +19,13 @@ use Symfony\Component\Process\Process;
 
 abstract class AbstractPostProcessor implements PostProcessorInterface
 {
-    /**
-     * @var string
-     */
-    protected $executablePath;
+    protected string $executablePath;
 
-    /**
-     * @var string|null
-     */
-    protected $temporaryRootPath;
+    protected ?string $temporaryRootPath;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private Filesystem $filesystem;
 
-    public function __construct(string $executablePath, string $temporaryRootPath = null)
+    public function __construct(string $executablePath, ?string $temporaryRootPath = null)
     {
         $this->executablePath = $executablePath;
         $this->temporaryRootPath = $temporaryRootPath;

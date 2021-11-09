@@ -18,10 +18,7 @@ use Imagine\Image\Point;
 
 class BackgroundFilterLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
+    protected ImagineInterface $imagine;
 
     public function __construct(ImagineInterface $imagine)
     {
@@ -31,7 +28,7 @@ class BackgroundFilterLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $background = $image->palette()->color(
             isset($options['color']) ? $options['color'] : '#fff',

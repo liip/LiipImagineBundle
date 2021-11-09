@@ -35,7 +35,8 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('get_object_url')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg');
+            ->with('images.example.com', 'thumb/some-folder/path.jpg')
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->resolve('/some-folder/path.jpg', 'thumb');
@@ -47,7 +48,8 @@ class AmazonS3ResolverTest extends AbstractTest
         $s3
             ->expects($this->once())
             ->method('get_object_url')
-            ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, ['torrent' => true]);
+            ->with('images.example.com', 'thumb/some-folder/path.jpg', 0, ['torrent' => true])
+            ->willReturn('http://images.example.com/some-folder/path.jpg');
 
         $resolver = new AmazonS3Resolver($s3, 'images.example.com');
         $resolver->setObjectUrlOption('torrent', true);
