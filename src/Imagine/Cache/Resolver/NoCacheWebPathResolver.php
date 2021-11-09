@@ -17,10 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 
 class NoCacheWebPathResolver implements ResolverInterface
 {
-    /**
-     * @var RequestContext
-     */
-    private $requestContext;
+    private RequestContext $requestContext;
 
     public function __construct(RequestContext $requestContext)
     {
@@ -30,7 +27,7 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return true;
     }
@@ -38,7 +35,7 @@ class NoCacheWebPathResolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         $port = '';
         if ('https' === $this->requestContext->getScheme() && 443 !== $this->requestContext->getHttpsPort()) {
@@ -56,17 +53,11 @@ class NoCacheWebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
     }
 }

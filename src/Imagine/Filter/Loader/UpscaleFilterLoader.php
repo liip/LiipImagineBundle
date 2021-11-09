@@ -24,12 +24,12 @@ class UpscaleFilterLoader extends ScaleFilterLoader
         parent::__construct('min', 'by', false);
     }
 
-    protected function calcAbsoluteRatio($ratio)
+    protected function calcAbsoluteRatio(float $ratio): float
     {
         return 1 + $ratio;
     }
 
-    protected function isImageProcessable($ratio)
+    protected function isImageProcessable(float $ratio): bool
     {
         return $ratio > 1;
     }

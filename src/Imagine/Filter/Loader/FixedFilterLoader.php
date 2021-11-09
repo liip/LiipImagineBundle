@@ -25,10 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FixedFilterLoader implements LoaderInterface
 {
-    /**
-     * @return ImageInterface
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $optionsResolver = new OptionsResolver();
         $optionsResolver->setRequired(['width', 'height']);

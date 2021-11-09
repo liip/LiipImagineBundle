@@ -18,13 +18,8 @@ interface ResolverInterface
 {
     /**
      * Checks whether the given path is stored within this Resolver.
-     *
-     * @param string $path
-     * @param string $filter
-     *
-     * @return bool
      */
-    public function isStored($path, $filter);
+    public function isStored(string $path, string $filter): bool;
 
     /**
      * Resolves filtered path for rendering in the browser.
@@ -36,7 +31,7 @@ interface ResolverInterface
      *
      * @return string The absolute URL of the cached image
      */
-    public function resolve($path, $filter);
+    public function resolve(string $path, string $filter): string;
 
     /**
      * Stores the content of the given binary.
@@ -45,11 +40,11 @@ interface ResolverInterface
      * @param string          $path   The path where the original file is expected to be
      * @param string          $filter The name of the imagine filter in effect
      */
-    public function store(BinaryInterface $binary, $path, $filter);
+    public function store(BinaryInterface $binary, string $path, string $filter): void;
 
     /**
      * @param string[] $paths   The paths where the original files are expected to be
      * @param string[] $filters The imagine filters in effect
      */
-    public function remove(array $paths, array $filters);
+    public function remove(array $paths, array $filters): void;
 }

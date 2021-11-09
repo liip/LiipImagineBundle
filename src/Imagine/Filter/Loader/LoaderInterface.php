@@ -17,8 +17,6 @@ interface LoaderInterface
 {
     /**
      * Loads and applies a filter on the given image.
-     *
-     * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = []);
+    public function load(ImageInterface $image, array $options = []): ImageInterface;
 }

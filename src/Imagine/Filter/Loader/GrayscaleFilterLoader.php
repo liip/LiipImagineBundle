@@ -21,10 +21,7 @@ use Imagine\Image\ImageInterface;
  */
 class GrayscaleFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $filter = new Grayscale();
 

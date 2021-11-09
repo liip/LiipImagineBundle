@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\ImageInterface;
-use Imagine\Image\ManipulatorInterface;
 
 /**
  * Loader for Imagine's basic rotate method.
@@ -21,12 +20,7 @@ use Imagine\Image\ManipulatorInterface;
  */
 class RotateFilterLoader implements LoaderInterface
 {
-    /**
-     * Loads and applies a filter on the given image.
-     *
-     * @return ManipulatorInterface
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $angle = isset($options['angle']) ? (int) $options['angle'] : 0;
 

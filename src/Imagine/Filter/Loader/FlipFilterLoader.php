@@ -19,20 +19,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FlipFilterLoader implements LoaderInterface
 {
-    /**
-     * @return ImageInterface
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $options = $this->sanitizeOptions($options);
 
         return 'x' === $options['axis'] ? $image->flipHorizontally() : $image->flipVertically();
     }
 
-    /**
-     * @return array
-     */
-    private function sanitizeOptions(array $options)
+    private function sanitizeOptions(array $options): array
     {
         $resolver = new OptionsResolver();
         $resolver->setDefault('axis', 'x');

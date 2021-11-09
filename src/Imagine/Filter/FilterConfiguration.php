@@ -15,10 +15,7 @@ use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 
 class FilterConfiguration
 {
-    /**
-     * @var array
-     */
-    protected $filters = [];
+    protected array $filters = [];
 
     public function __construct(array $filters = [])
     {
@@ -28,13 +25,9 @@ class FilterConfiguration
     /**
      * Gets a previously configured filter.
      *
-     * @param string $filter
-     *
      * @throws NonExistingFilterException
-     *
-     * @return array
      */
-    public function get($filter)
+    public function get(string $filter): array
     {
         if (false === \array_key_exists($filter, $this->filters)) {
             throw new NonExistingFilterException(sprintf('Could not find configuration for a filter: %s', $filter));
@@ -45,20 +38,16 @@ class FilterConfiguration
 
     /**
      * Sets a configuration on the given filter.
-     *
-     * @param string $filter
      */
-    public function set($filter, array $config)
+    public function set(string $filter, array $config): void
     {
         $this->filters[$filter] = $config;
     }
 
     /**
      * Get all filters.
-     *
-     * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->filters;
     }

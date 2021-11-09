@@ -17,30 +17,15 @@ use Psr\Log\LoggerInterface;
 
 class AmazonS3Resolver implements ResolverInterface
 {
-    /**
-     * @var \AmazonS3
-     */
-    protected $storage;
+    protected \AmazonS3 $storage;
 
-    /**
-     * @var string
-     */
-    protected $bucket;
+    protected string $bucket;
 
-    /**
-     * @var string
-     */
-    protected $acl;
+    protected string $acl;
 
-    /**
-     * @var array
-     */
-    protected $objUrlOptions;
+    protected array $objUrlOptions;
 
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
 
     /**
      * Constructs a cache resolver storing images on Amazon S3.
@@ -50,7 +35,7 @@ class AmazonS3Resolver implements ResolverInterface
      * @param string    $acl           The ACL to use when storing new objects. Default: owner read/write, public read
      * @param array     $objUrlOptions A list of options to be passed when retrieving the object url from Amazon S3
      */
-    public function __construct(\AmazonS3 $storage, $bucket, $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = [])
+    public function __construct(\AmazonS3 $storage, string $bucket, string $acl = \AmazonS3::ACL_PUBLIC, array $objUrlOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
@@ -58,7 +43,7 @@ class AmazonS3Resolver implements ResolverInterface
         $this->objUrlOptions = $objUrlOptions;
     }
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
@@ -66,7 +51,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return $this->objectExists($this->getObjectPath($path, $filter));
     }
@@ -74,7 +59,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
@@ -82,7 +67,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
@@ -107,7 +92,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -147,14 +132,14 @@ class AmazonS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \AmazonS3::get_object_url() for available options
-     *
      * @param string $key   The name of the option
      * @param mixed  $value The value to be set
      *
      * @return AmazonS3Resolver $this
+     *
+     * @see \AmazonS3::get_object_url() for available options
      */
-    public function setObjectUrlOption($key, $value)
+    public function setObjectUrlOption(string $key, $value): self
     {
         $this->objUrlOptions[$key] = $value;
 
@@ -169,19 +154,15 @@ class AmazonS3Resolver implements ResolverInterface
      *
      * @return string The path of the object on S3
      */
-    protected function getObjectPath($path, $filter)
+    protected function getObjectPath(string $path, string $filter): string
     {
         return str_replace('//', '/', $filter.'/'.$path);
     }
 
     /**
      * Returns the URL for an object saved on Amazon S3.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    protected function getObjectUrl($path)
+    protected function getObjectUrl(string $path): string
     {
         return $this->storage->get_object_url($this->bucket, $path, 0, $this->objUrlOptions);
     }
@@ -189,13 +170,9 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * Checks whether an object exists.
      *
-     * @param string $objectPath
-     *
      * @throws \S3_Exception
-     *
-     * @return bool
      */
-    protected function objectExists($objectPath)
+    protected function objectExists(string $objectPath): bool
     {
         return $this->storage->if_object_exists($this->bucket, $objectPath);
     }
@@ -203,7 +180,7 @@ class AmazonS3Resolver implements ResolverInterface
     /**
      * @param mixed $message
      */
-    protected function logError($message, array $context = [])
+    protected function logError($message, array $context = []): void
     {
         if ($this->logger) {
             $this->logger->error($message, $context);

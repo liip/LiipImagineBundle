@@ -18,42 +18,22 @@ use Psr\Log\LoggerInterface;
 
 class AwsS3Resolver implements ResolverInterface
 {
-    /**
-     * @var S3Client
-     */
-    protected $storage;
+    protected S3Client $storage;
 
-    /**
-     * @var string
-     */
-    protected $bucket;
+    protected string $bucket;
 
-    /**
-     * @var string
-     */
-    protected $acl;
+    protected string $acl;
 
-    /**
-     * @var array
-     */
-    protected $getOptions;
+    protected array $getOptions;
 
     /**
      * Object options added to PUT requests.
-     *
-     * @var array
      */
-    protected $putOptions;
+    protected array $putOptions;
 
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
 
-    /**
-     * @var string
-     */
-    protected $cachePrefix;
+    protected string $cachePrefix = '';
 
     /**
      * Constructs a cache resolver storing images on Amazon S3.
@@ -64,7 +44,7 @@ class AwsS3Resolver implements ResolverInterface
      * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
      * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
      */
-    public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = [], $putOptions = [])
+    public function __construct(S3Client $storage, string $bucket, string $acl = 'public-read', array $getOptions = [], $putOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
@@ -73,39 +53,27 @@ class AwsS3Resolver implements ResolverInterface
         $this->putOptions = $putOptions;
     }
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    /**
-     * @param string $cachePrefix
-     */
-    public function setCachePrefix($cachePrefix)
+    public function setCachePrefix(string $cachePrefix): void
     {
         $this->cachePrefix = $cachePrefix;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isStored($path, $filter)
+    public function isStored(string $path, string $filter): bool
     {
         return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function resolve($path, $filter)
+    public function resolve(string $path, string $filter): string
     {
         return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, string $path, string $filter): void
     {
         $objectPath = $this->getObjectPath($path, $filter);
 
@@ -134,10 +102,7 @@ class AwsS3Resolver implements ResolverInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -189,14 +154,14 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \Aws\S3\S3Client::getObjectUrl() for available options
-     *
      * @param string $key   The name of the option
      * @param mixed  $value The value to be set
      *
      * @return $this
+     *
+     * @see \Aws\S3\S3Client::getObjectUrl() for available options
      */
-    public function setGetOption($key, $value)
+    public function setGetOption(string $key, $value): self
     {
         $this->getOptions[$key] = $value;
 
@@ -208,14 +173,14 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \Aws\S3\S3Client::putObject() for available options
-     *
      * @param string $key   The name of the option
      * @param mixed  $value The value to be set
      *
      * @return $this
+     *
+     * @see \Aws\S3\S3Client::putObject() for available options
      */
-    public function setPutOption($key, $value)
+    public function setPutOption(string $key, $value): self
     {
         $this->putOptions[$key] = $value;
 
@@ -230,7 +195,7 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @return string The path of the object on S3
      */
-    protected function getObjectPath($path, $filter)
+    protected function getObjectPath(string $path, string $filter): string
     {
         $path = $this->cachePrefix
             ? sprintf('%s/%s/%s', $this->cachePrefix, $filter, $path)
@@ -241,24 +206,16 @@ class AwsS3Resolver implements ResolverInterface
 
     /**
      * Returns the URL for an object saved on Amazon S3.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    protected function getObjectUrl($path)
+    protected function getObjectUrl(string $path): string
     {
         return $this->storage->getObjectUrl($this->bucket, $path, 0, $this->getOptions);
     }
 
     /**
      * Checks whether an object exists.
-     *
-     * @param string $objectPath
-     *
-     * @return bool
      */
-    protected function objectExists($objectPath)
+    protected function objectExists(string $objectPath): bool
     {
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
     }
@@ -266,7 +223,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * @param mixed $message
      */
-    protected function logError($message, array $context = [])
+    protected function logError($message, array $context = []): void
     {
         if ($this->logger) {
             $this->logger->error($message, $context);

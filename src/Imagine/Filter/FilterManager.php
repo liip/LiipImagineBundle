@@ -22,30 +22,21 @@ use Liip\ImagineBundle\Model\Binary;
 
 class FilterManager
 {
-    /**
-     * @var FilterConfiguration
-     */
-    protected $filterConfig;
+    protected FilterConfiguration $filterConfig;
 
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
+    protected ImagineInterface $imagine;
 
-    /**
-     * @var MimeTypeGuesserInterface
-     */
-    protected $mimeTypeGuesser;
+    protected MimeTypeGuesserInterface $mimeTypeGuesser;
 
     /**
      * @var LoaderInterface[]
      */
-    protected $loaders = [];
+    protected array $loaders = [];
 
     /**
      * @var PostProcessorInterface[]
      */
-    protected $postProcessors = [];
+    protected array $postProcessors = [];
 
     public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser)
     {
@@ -111,13 +102,9 @@ class FilterManager
     /**
      * Apply the provided filter set on the given binary.
      *
-     * @param string $filter
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return BinaryInterface
      */
-    public function applyFilter(BinaryInterface $binary, $filter, array $runtimeConfig = [])
+    public function applyFilter(BinaryInterface $binary, string $filter, array $runtimeConfig = []): BinaryInterface
     {
         $config = array_replace_recursive(
             $this->getFilterConfiguration()->get($filter),

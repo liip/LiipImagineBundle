@@ -28,15 +28,14 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class PngquantPostProcessor extends AbstractPostProcessor
 {
     /**
-     * @var string Quality to pass to pngquant
+     * @var int|int[] Quality to pass to pngquant
      */
     protected $quality;
 
     /**
-     * @param string $executablePath
-     * @param array  $quality
+     * @param int|int[] $quality
      */
-    public function __construct($executablePath = '/usr/bin/pngquant', $quality = [80, 100])
+    public function __construct(string $executablePath = '/usr/bin/pngquant', $quality = [80, 100])
     {
         parent::__construct($executablePath);
 

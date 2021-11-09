@@ -23,54 +23,33 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CacheManager
 {
-    /**
-     * @var FilterConfiguration
-     */
-    protected $filterConfig;
+    protected FilterConfiguration $filterConfig;
 
-    /**
-     * @var RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
     /**
      * @var ResolverInterface[]
      */
-    protected $resolvers = [];
+    protected array $resolvers = [];
 
-    /**
-     * @var SignerInterface
-     */
-    protected $signer;
+    protected SignerInterface $signer;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
 
-    /**
-     * @var string
-     */
-    protected $defaultResolver;
+    protected string $defaultResolver;
 
-    /**
-     * @var bool
-     */
-    private $webpGenerate;
+    private bool $webpGenerate;
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
-     *
-     * @param string $defaultResolver
-     * @param bool   $webpGenerate
      */
     public function __construct(
         FilterConfiguration $filterConfig,
         RouterInterface $router,
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
-        $defaultResolver = null,
-        $webpGenerate = false
+        ?string $defaultResolver = null,
+        bool $webpGenerate = false
     ) {
         $this->filterConfig = $filterConfig;
         $this->router = $router;
@@ -82,10 +61,8 @@ class CacheManager
 
     /**
      * Adds a resolver to handle cached images for the given filter.
-     *
-     * @param string $filter
      */
-    public function addResolver($filter, ResolverInterface $resolver)
+    public function addResolver(string $filter, ResolverInterface $resolver): void
     {
         $this->resolvers[$filter] = $resolver;
 
@@ -98,14 +75,9 @@ class CacheManager
      * Gets filtered path for rendering in the browser.
      * It could be the cached one or an url of filter action.
      *
-     * @param string $path          The path where the resolved file is expected
-     * @param string $filter
-     * @param string $resolver
-     * @param int    $referenceType
-     *
-     * @return string
+     * @param string $path The path where the resolved file is expected
      */
-    public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    public function getBrowserPath(string $path, string $filter, array $runtimeConfig = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
@@ -122,12 +94,8 @@ class CacheManager
 
     /**
      * Get path to runtime config image.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    public function getRuntimePath($path, array $runtimeConfig)
+    public function getRuntimePath(string $path, array $runtimeConfig): string
     {
         $path = ltrim($path, '/');
 
@@ -139,12 +107,9 @@ class CacheManager
      *
      * @param string $path          The path where the resolved file is expected
      * @param string $filter        The name of the imagine filter in effect
-     * @param string $resolver
      * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
-     *
-     * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    public function generateUrl(string $path, string $filter, array $runtimeConfig = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         $params = [
             'path' => ltrim($path, '/'),
@@ -169,14 +134,8 @@ class CacheManager
 
     /**
      * Checks whether the path is already stored within the respective Resolver.
-     *
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
-     *
-     * @return bool
      */
-    public function isStored($path, $filter, $resolver = null)
+    public function isStored(string $path, string $filter, ?string $resolver = null): bool
     {
         return $this->getResolver($filter, $resolver)->isStored($path, $filter);
     }
@@ -184,15 +143,11 @@ class CacheManager
     /**
      * Resolves filtered path for rendering in the browser.
      *
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
-     *
      * @throws NotFoundHttpException if the path can not be resolved
      *
      * @return string The url of resolved image
      */
-    public function resolve($path, $filter, $resolver = null)
+    public function resolve(string $path, string $filter, ?string $resolver = null): string
     {
         if (false !== mb_strpos($path, '/../') || 0 === mb_strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
@@ -211,12 +166,8 @@ class CacheManager
 
     /**
      * @see ResolverInterface::store
-     *
-     * @param string $path
-     * @param string $filter
-     * @param string $resolver
      */
-    public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
+    public function store(BinaryInterface $binary, string $path, string $filter, ?string $resolver = null): void
     {
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
     }
@@ -225,7 +176,7 @@ class CacheManager
      * @param string|string[]|null $paths
      * @param string|string[]|null $filters
      */
-    public function remove($paths = null, $filters = null)
+    public function remove($paths = null, $filters = null): void
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());
@@ -260,14 +211,9 @@ class CacheManager
      *
      * In case there is no specific resolver, but a default resolver has been configured, the default will be returned.
      *
-     * @param string $filter
-     * @param string $resolver
-     *
      * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
-     *
-     * @return ResolverInterface
      */
-    protected function getResolver($filter, $resolver)
+    protected function getResolver(string $filter, ?string $resolver): ResolverInterface
     {
         // BC
         if (!$resolver) {

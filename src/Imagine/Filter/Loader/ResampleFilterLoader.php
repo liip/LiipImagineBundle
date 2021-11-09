@@ -21,10 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ResampleFilterLoader implements LoaderInterface
 {
-    /**
-     * @var ImagineInterface
-     */
-    private $imagine;
+    private ImagineInterface $imagine;
 
     public function __construct(ImagineInterface $imagine)
     {
@@ -33,10 +30,8 @@ class ResampleFilterLoader implements LoaderInterface
 
     /**
      * @throws LoadFilterException
-     *
-     * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $options = $this->resolveOptions($options);
         $tmpFile = $this->getTemporaryFile($options['temp_dir']);

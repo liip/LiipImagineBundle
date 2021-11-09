@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Image\Filter\Loader;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\DownscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -61,8 +62,10 @@ class DownscaleFilterLoaderTest extends AbstractTest
             ->willReturn($initialSize);
         $image
             ->method('resize')
-            ->willReturnCallback(function ($box) use (&$resultSize) {
+            ->willReturnCallback(function (Box $box) use ($image, &$resultSize): ImageInterface {
                 $resultSize = $box;
+
+                return $image;
             });
 
         $loader->load($image, ['max' => [100, 90]]);

@@ -17,10 +17,7 @@ use Imagine\Image\ImageInterface;
 
 class ThumbnailFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ImageInterface $image, array $options = [])
+    public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $mode = ImageInterface::THUMBNAIL_OUTBOUND;
         if (!empty($options['mode']) && 'inset' === $options['mode']) {
