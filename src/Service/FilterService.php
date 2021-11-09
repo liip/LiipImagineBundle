@@ -21,35 +21,20 @@ use Psr\Log\NullLogger;
 
 class FilterService
 {
-    /**
-     * @var DataManager
-     */
-    private $dataManager;
+    private DataManager $dataManager;
 
-    /**
-     * @var FilterManager
-     */
-    private $filterManager;
+    private FilterManager $filterManager;
 
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
+    private CacheManager $cacheManager;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private ?LoggerInterface $logger;
 
-    /**
-     * @var bool
-     */
-    private $webpGenerate;
+    private bool $webpGenerate;
 
     /**
      * @var mixed[]
      */
-    private $webpOptions;
+    private array $webpOptions;
 
     public function __construct(
         DataManager $dataManager,
@@ -68,12 +53,9 @@ class FilterService
     }
 
     /**
-     * @param string $path
-     * @param string $filter
-     *
      * @return bool Returns true if we removed at least one cached image
      */
-    public function bustCache($path, $filter)
+    public function bustCache(string $path, string $filter): bool
     {
         $busted = false;
 
@@ -110,14 +92,7 @@ class FilterService
         return $warmedUp;
     }
 
-    /**
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $resolver
-     *
-     * @return string
-     */
-    public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webpSupported = false)
+    public function getUrlOfFilteredImage(string $path, string $filter, ?string $resolver = null, bool $webpSupported = false): string
     {
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
             $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
@@ -126,20 +101,13 @@ class FilterService
         return $this->resolveFilterPathContainer(new FilterPathContainer($path), $filter, $resolver, $webpSupported);
     }
 
-    /**
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $resolver
-     *
-     * @return string
-     */
     public function getUrlOfFilteredImageWithRuntimeFilters(
-        $path,
-        $filter,
+        string $path,
+        string $filter,
         array $runtimeFilters = [],
-        $resolver = null,
+        ?string $resolver = null,
         bool $webpSupported = false
-    ) {
+    ): string {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         $runtimeOptions = [
             'filters' => $runtimeFilters,

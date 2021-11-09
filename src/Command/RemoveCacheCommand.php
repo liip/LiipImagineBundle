@@ -26,10 +26,7 @@ class RemoveCacheCommand extends Command
 
     protected static $defaultName = 'liip:imagine:cache:remove';
 
-    /**
-     * @var FilterService
-     */
-    private $filterService;
+    private FilterService $filterService;
 
     public function __construct(CacheManager $cacheManager, FilterManager $filterManager, FilterService $filterService)
     {

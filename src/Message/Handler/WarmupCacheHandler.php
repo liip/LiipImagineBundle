@@ -23,11 +23,9 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
  */
 class WarmupCacheHandler implements MessageHandlerInterface
 {
-    /** @var FilterManager */
-    private $filterManager;
+    private FilterManager $filterManager;
 
-    /** @var FilterService */
-    private $filterService;
+    private FilterService $filterService;
 
     public function __construct(FilterManager $filterManager, FilterService $filterService)
     {

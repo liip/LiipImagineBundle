@@ -17,17 +17,12 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 final class LazyFilterRuntime implements RuntimeExtensionInterface
 {
-    /**
-     * @var CacheManager
-     */
-    private $cache;
+    private CacheManager $cache;
 
     /**
      * Optional version to remove from the asset filename and re-append to the URL.
-     *
-     * @var string|null
      */
-    private $assetVersion;
+    private ?string $assetVersion;
 
     public function __construct(CacheManager $cache, ?string $assetVersion = null)
     {

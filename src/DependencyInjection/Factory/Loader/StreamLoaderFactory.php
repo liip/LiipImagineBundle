@@ -19,19 +19,19 @@ class StreamLoaderFactory extends AbstractLoaderFactory
     /**
      * {@inheritdoc}
      */
-    public function create(ContainerBuilder $container, $loaderName, array $config)
+    public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $definition = $this->getChildLoaderDefinition();
         $definition->replaceArgument(0, $config['wrapper']);
         $definition->replaceArgument(1, $config['context']);
 
-        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+        return $this->setTaggedLoaderDefinition($name, $definition, $container);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'stream';
     }
@@ -39,7 +39,7 @@ class StreamLoaderFactory extends AbstractLoaderFactory
     /**
      * {@inheritdoc}
      */
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

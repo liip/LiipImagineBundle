@@ -22,15 +22,9 @@ use ValueError;
  */
 final class ImagineStyle
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private SymfonyStyle $io;
 
-    /**
-     * @var bool
-     */
-    private $decoration;
+    private bool $decoration;
 
     public function __construct(InputInterface $input, OutputInterface $output, bool $decoration = true)
     {

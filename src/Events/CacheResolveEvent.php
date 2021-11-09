@@ -17,33 +17,23 @@ class CacheResolveEvent extends Event
 {
     /**
      * Resource path.
-     *
-     * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * Filter name.
-     *
-     * @var string
      */
-    protected $filter;
+    protected string $filter;
 
     /**
      * Resource url.
-     *
-     * @var null
      */
-    protected $url;
+    protected ?string $url;
 
     /**
      * Init default event state.
-     *
-     * @param string      $path
-     * @param string      $filter
-     * @param string|null $url
      */
-    public function __construct($path, $filter, $url = null)
+    public function __construct(string $path, string $filter, ?string $url = null)
     {
         $this->path = $path;
         $this->filter = $filter;
@@ -52,20 +42,16 @@ class CacheResolveEvent extends Event
 
     /**
      * Sets resource path.
-     *
-     * @param $path
      */
-    public function setPath($path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
 
     /**
      * Returns resource path.
-     *
-     * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -75,27 +61,23 @@ class CacheResolveEvent extends Event
      *
      * @param $filter
      */
-    public function setFilter($filter)
+    public function setFilter(string $filter): void
     {
         $this->filter = $filter;
     }
 
     /**
      * Returns filter name.
-     *
-     * @return string
      */
-    public function getFilter()
+    public function getFilter(): string
     {
         return $this->filter;
     }
 
     /**
      * Sets resource url.
-     *
-     * @param $url
      */
-    public function setUrl($url)
+    public function setUrl(?string $url): void
     {
         $this->url = $url;
     }
@@ -103,7 +85,7 @@ class CacheResolveEvent extends Event
     /**
      * Returns resource url.
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }

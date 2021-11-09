@@ -232,12 +232,12 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode)
+    private function addResolversSections(ArrayNodeDefinition $resolversPrototypeNode): void
     {
         $this->addConfigurationSections($this->resolversFactories, $resolversPrototypeNode, 'resolver');
     }
 
-    private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode)
+    private function addLoadersSections(ArrayNodeDefinition $resolversPrototypeNode): void
     {
         $this->addConfigurationSections($this->loadersFactories, $resolversPrototypeNode, 'loader');
     }
@@ -245,7 +245,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @param FactoryInterface[] $factories
      */
-    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition, $type)
+    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition, $type): void
     {
         foreach ($factories as $f) {
             $f->addConfiguration($definition->children()->arrayNode($f->getName()));

@@ -36,7 +36,7 @@ class LiipImagineBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
@@ -49,8 +49,8 @@ class LiipImagineBundle extends Bundle
         $container->addCompilerPass(new ResolversCompilerPass());
         $container->addCompilerPass(new MetadataReaderCompilerPass());
 
-        /** @var $extension LiipImagineExtension */
         $extension = $container->getExtension('liip_imagine');
+        \assert($extension instanceof LiipImagineExtension);
 
         $extension->addResolverFactory(new WebPathResolverFactory());
         $extension->addResolverFactory(new AwsS3ResolverFactory());

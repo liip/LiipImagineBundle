@@ -17,16 +17,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 interface FactoryInterface
 {
     /**
-     * @param string $name
-     *
      * @return string The resolver service id
      */
-    public function create(ContainerBuilder $container, $name, array $config);
+    public function create(ContainerBuilder $container, string $name, array $config): string;
 
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 
-    public function addConfiguration(ArrayNodeDefinition $builder);
+    public function addConfiguration(ArrayNodeDefinition $builder): void;
 }

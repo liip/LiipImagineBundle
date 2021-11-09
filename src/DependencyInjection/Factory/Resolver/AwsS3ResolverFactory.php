@@ -21,9 +21,9 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     /**
      * {@inheritdoc}
      */
-    public function create(ContainerBuilder $container, $resolverName, array $config)
+    public function create(ContainerBuilder $container, string $name, array $config): string
     {
-        $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
+        $awsS3ClientId = 'liip_imagine.cache.resolver.'.$name.'.client';
         $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
         $awsS3ClientDefinition->setFactory(['Aws\S3\S3Client', 'factory']);
         $awsS3ClientDefinition->addArgument($config['client_config']);
@@ -36,7 +36,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         $resolverDefinition->replaceArgument(3, $config['get_options']);
         $resolverDefinition->replaceArgument(4, $config['put_options']);
 
-        $resolverId = 'liip_imagine.cache.resolver.'.$resolverName;
+        $resolverId = 'liip_imagine.cache.resolver.'.$name;
         $container->setDefinition($resolverId, $resolverDefinition);
 
         if (isset($config['cache_prefix'])) {
@@ -44,7 +44,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         }
 
         if ($config['proxies']) {
-            $proxiedResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.proxied';
+            $proxiedResolverId = 'liip_imagine.cache.resolver.'.$name.'.proxied';
 
             $container->setDefinition($proxiedResolverId, $resolverDefinition);
 
@@ -56,7 +56,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         }
 
         if ($config['cache']) {
-            $cachedResolverId = 'liip_imagine.cache.resolver.'.$resolverName.'.cached';
+            $cachedResolverId = 'liip_imagine.cache.resolver.'.$name.'.cached';
 
             $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
@@ -68,7 +68,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         }
 
         $container->getDefinition($resolverId)->addTag('liip_imagine.cache.resolver', [
-            'resolver' => $resolverName,
+            'resolver' => $name,
         ]);
 
         return $resolverId;
@@ -77,7 +77,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'aws_s3';
     }
@@ -85,7 +85,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     /**
      * {@inheritdoc}
      */
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

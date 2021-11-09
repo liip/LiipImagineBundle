@@ -26,10 +26,7 @@ class ResolveCacheCommand extends Command
 
     protected static $defaultName = 'liip:imagine:cache:resolve';
 
-    /**
-     * @var FilterService
-     */
-    private $filterService;
+    private FilterService $filterService;
 
     public function __construct(CacheManager $cacheManager, FilterManager $filterManager, FilterService $filterService)
     {

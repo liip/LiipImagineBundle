@@ -28,25 +28,13 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class ImagineController
 {
-    /**
-     * @var FilterService
-     */
-    private $filterService;
+    private FilterService $filterService;
 
-    /**
-     * @var DataManager
-     */
-    private $dataManager;
+    private DataManager $dataManager;
 
-    /**
-     * @var SignerInterface
-     */
-    private $signer;
+    private SignerInterface $signer;
 
-    /**
-     * @var ControllerConfig
-     */
-    private $controllerConfig;
+    private ControllerConfig $controllerConfig;
 
     public function __construct(
         FilterService $filterService,
@@ -67,15 +55,10 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param string $path
-     * @param string $filter
-     *
-     * @throws RuntimeException
      * @throws NotFoundHttpException
-     *
-     * @return RedirectResponse
+     * @throws RuntimeException
      */
-    public function filterAction(Request $request, $path, $filter)
+    public function filterAction(Request $request, string $path, string $filter): RedirectResponse
     {
         $path = PathHelper::urlPathToFilePath($path);
         $resolver = $request->get('resolver');
@@ -97,17 +80,11 @@ class ImagineController
      * The resulting image is cached so subsequent requests will redirect to the cached image instead applying the
      * filter and storing the image again.
      *
-     * @param string $hash
-     * @param string $path
-     * @param string $filter
-     *
-     * @throws RuntimeException
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
-     *
-     * @return RedirectResponse
+     * @throws RuntimeException
      */
-    public function filterRuntimeAction(Request $request, $hash, $path, $filter)
+    public function filterRuntimeAction(Request $request, string $hash, string $path, string $filter): RedirectResponse
     {
         $resolver = $request->get('resolver');
         $path = PathHelper::urlPathToFilePath($path);

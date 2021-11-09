@@ -19,20 +19,11 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class MetadataReaderCompilerPass extends AbstractCompilerPass
 {
-    /**
-     * @var string
-     */
-    private static $metadataReaderServiceId = 'liip_imagine.meta_data.reader';
+    private static string $metadataReaderServiceId = 'liip_imagine.meta_data.reader';
 
-    /**
-     * @var string
-     */
-    private static $metadataReaderDefaultClass = 'Imagine\Image\Metadata\DefaultMetadataReader';
+    private static string $metadataReaderDefaultClass = 'Imagine\Image\Metadata\DefaultMetadataReader';
 
-    /**
-     * @var string
-     */
-    private static $metadataReaderExifClass = 'Imagine\Image\Metadata\ExifMetadataReader';
+    private static string $metadataReaderExifClass = 'Imagine\Image\Metadata\ExifMetadataReader';
 
     /**
      * {@inheritdoc}

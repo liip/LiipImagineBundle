@@ -15,17 +15,9 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
 
 abstract class AbstractResolverFactory implements ResolverFactoryInterface
 {
-    /**
-     * @var string
-     */
-    protected static $namePrefix = 'liip_imagine.cache.resolver';
+    protected static string $namePrefix = 'liip_imagine.cache.resolver';
 
-    /**
-     * @param string|null $name
-     *
-     * @return ChildDefinition
-     */
-    final protected function getChildResolverDefinition($name = null)
+    final protected function getChildResolverDefinition(?string $name = null): ChildDefinition
     {
         return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }

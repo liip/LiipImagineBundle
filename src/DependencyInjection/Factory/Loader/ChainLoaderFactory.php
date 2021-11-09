@@ -20,12 +20,12 @@ class ChainLoaderFactory extends AbstractLoaderFactory
     /**
      * {@inheritdoc}
      */
-    public function create(ContainerBuilder $container, $loaderName, array $config): string
+    public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $definition = $this->getChildLoaderDefinition();
         $definition->replaceArgument(0, $this->createLoaderReferences($config['loaders']));
 
-        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+        return $this->setTaggedLoaderDefinition($name, $definition, $container);
     }
 
     /**
@@ -59,7 +59,7 @@ class ChainLoaderFactory extends AbstractLoaderFactory
      */
     private function createLoaderReferences(array $loaders): array
     {
-        return array_combine($loaders, array_map(function ($name) {
+        return array_combine($loaders, array_map(function (string $name): Reference {
             return new Reference(sprintf('liip_imagine.binary.loader.%s', $name));
         }, $loaders));
     }

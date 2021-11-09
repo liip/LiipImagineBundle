@@ -23,30 +23,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 trait CacheCommandTrait
 {
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
+    private CacheManager $cacheManager;
 
-    /**
-     * @var FilterManager
-     */
-    private $filterManager;
+    private FilterManager $filterManager;
 
-    /**
-     * @var ImagineStyle
-     */
-    private $io;
+    private ImagineStyle $io;
 
-    /**
-     * @var bool
-     */
-    private $outputMachineReadable;
+    private bool $outputMachineReadable;
 
-    /**
-     * @var int
-     */
-    private $failures = 0;
+    private int $failures = 0;
 
     private function setupOutputStyle(InputInterface $input, OutputInterface $output): void
     {
