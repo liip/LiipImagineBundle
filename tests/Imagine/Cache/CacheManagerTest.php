@@ -20,8 +20,9 @@ use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Fixtures\CacheManagerAwareResolver;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 /**
@@ -303,19 +304,17 @@ class CacheManagerTest extends AbstractTest
 
     /**
      * @dataProvider invalidPathProvider
-     *
-     * @param string $path
      */
-    public function testResolveInvalidPath($path): void
+    public function testResolveInvalidPath(string $path): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-
         $cacheManager = new CacheManager(
             $this->createFilterConfigurationMock(),
             $this->createRouterInterfaceMock(),
             new Signer('secret'),
             $this->createEventDispatcherInterfaceMock()
         );
+
+        $this->expectException(NotFoundHttpException::class);
 
         $cacheManager->resolve($path, 'thumbnail');
     }
@@ -858,7 +857,7 @@ class CacheManagerTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|ResolverInterface
+     * @return MockObject&ResolverInterface
      */
     private function createCacheManagerAwareResolverMock()
     {

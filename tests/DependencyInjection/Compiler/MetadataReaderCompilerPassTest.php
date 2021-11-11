@@ -98,7 +98,7 @@ class MetadataReaderCompilerPassTest extends TestCase
     }
 
     /**
-     * @return MockObject|MetadataReaderCompilerPass
+     * @return MockObject&MetadataReaderCompilerPass
      */
     private function getMetadataReaderCompilerPass(bool $isExifExtensionLoaded)
     {

@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class ProxyResolverTest extends AbstractTest
 {
     /**
-     * @var MockObject|ResolverInterface
+     * @var MockObject&ResolverInterface
      */
     private $primaryResolver;
 

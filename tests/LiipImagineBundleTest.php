@@ -139,7 +139,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|ContainerBuilder
+     * @return MockObject&ContainerBuilder
      */
     protected function createContainerBuilderMock()
     {
@@ -147,7 +147,7 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|LiipImagineExtension
+     * @return MockObject&LiipImagineExtension
      */
     protected function createLiipImagineExtensionMock()
     {

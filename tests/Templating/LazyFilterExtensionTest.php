@@ -19,10 +19,7 @@ use Liip\ImagineBundle\Tests\AbstractTest;
  */
 class LazyFilterExtensionTest extends AbstractTest
 {
-    /**
-     * @var LazyFilterExtension
-     */
-    private $extension;
+    private LazyFilterExtension $extension;
 
     protected function setUp(): void
     {

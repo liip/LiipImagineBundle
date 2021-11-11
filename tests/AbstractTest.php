@@ -28,28 +28,18 @@ use Liip\ImagineBundle\Service\FilterService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractTest extends TestCase
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected ?Filesystem $filesystem = null;
 
-    /**
-     * @var string
-     */
-    protected $fixturesPath;
+    protected string $fixturesPath = '';
 
-    /**
-     * @var string
-     */
-    protected $temporaryPath;
+    protected string $temporaryPath;
 
     protected function setUp(): void
     {
@@ -108,7 +98,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|CacheManager
+     * @return MockObject&CacheManager
      */
     protected function createCacheManagerMock()
     {
@@ -124,7 +114,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|FilterConfiguration
+     * @return MockObject&FilterConfiguration
      */
     protected function createFilterConfigurationMock()
     {
@@ -132,7 +122,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|SignerInterface
+     * @return MockObject&SignerInterface
      */
     protected function createSignerInterfaceMock()
     {
@@ -140,7 +130,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|RouterInterface
+     * @return MockObject&RouterInterface
      */
     protected function createRouterInterfaceMock()
     {
@@ -148,7 +138,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|ResolverInterface
+     * @return MockObject&ResolverInterface
      */
     protected function createCacheResolverInterfaceMock()
     {
@@ -156,7 +146,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|EventDispatcherInterface
+     * @return MockObject&EventDispatcherInterface
      */
     protected function createEventDispatcherInterfaceMock()
     {
@@ -164,7 +154,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|ImageInterface
+     * @return MockObject&ImageInterface
      */
     protected function getImageInterfaceMock()
     {
@@ -172,7 +162,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|MetadataBag
+     * @return MockObject&MetadataBag
      */
     protected function getMetadataBagMock()
     {
@@ -180,7 +170,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|ImagineInterface
+     * @return MockObject&ImagineInterface
      */
     protected function createImagineInterfaceMock()
     {
@@ -188,7 +178,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|LoggerInterface
+     * @return MockObject&LoggerInterface
      */
     protected function createLoggerInterfaceMock()
     {
@@ -196,7 +186,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|LoaderInterface
+     * @return MockObject&LoaderInterface
      */
     protected function createBinaryLoaderInterfaceMock()
     {
@@ -204,7 +194,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|MimeTypeGuesserInterface
+     * @return MockObject&MimeTypeGuesserInterface
      */
     protected function createMimeTypeGuesserInterfaceMock()
     {
@@ -212,19 +202,15 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|ExtensionGuesserInterface
+     * @return MockObject&MimeTypesInterface
      */
     protected function createExtensionGuesserInterfaceMock()
     {
-        if (!interface_exists(MimeTypesInterface::class)) {
-            return $this->createObjectMock(ExtensionGuesserInterface::class);
-        }
-
         return $this->createObjectMock(MimeTypesInterface::class);
     }
 
     /**
-     * @return MockObject|PostProcessorInterface
+     * @return MockObject&PostProcessorInterface
      */
     protected function createPostProcessorInterfaceMock()
     {
@@ -232,7 +218,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|FilterManager
+     * @return MockObject&FilterManager
      */
     protected function createFilterManagerMock()
     {
@@ -240,7 +226,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|FilterService
+     * @return MockObject&FilterService
      */
     protected function createFilterServiceMock()
     {
@@ -248,7 +234,7 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return MockObject|DataManager
+     * @return MockObject&DataManager
      */
     protected function createDataManagerMock()
     {

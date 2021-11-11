@@ -24,8 +24,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * @requires PHP 7.1
- *
  * @covers \Liip\ImagineBundle\Message\Handler\WarmupCacheHandler
  */
 class WarmupCacheHandlerTest extends AbstractWebTestCase

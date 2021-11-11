@@ -19,9 +19,6 @@ use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
@@ -152,19 +149,11 @@ class ChainLoaderTest extends AbstractTest
 
     private function createFileSystemLoader(LocatorInterface $locator): FileSystemLoader
     {
-        if (interface_exists(MimeTypeGuesserInterface::class)) {
-            $mimeTypes = MimeTypes::getDefault();
-
-            return new FileSystemLoader(
-                $mimeTypes,
-                $mimeTypes,
-                $locator
-            );
-        }
+        $mimeTypes = MimeTypes::getDefault();
 
         return new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
+            $mimeTypes,
+            $mimeTypes,
             $locator
         );
     }

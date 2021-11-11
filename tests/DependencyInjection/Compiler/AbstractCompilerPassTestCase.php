@@ -51,7 +51,7 @@ class AbstractCompilerPassTestCase extends AbstractTest
      * @param string[]     $methods
      * @param Definition[] $definitions
      *
-     * @return ContainerBuilder|MockObject
+     * @return ContainerBuilder&MockObject
      */
     protected function createContainerBuilderMock(array $methods = [], array $definitions = [])
     {

@@ -11,8 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Binary\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository as LegacyObjectRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
@@ -26,25 +24,19 @@ use PHPUnit\Framework\TestCase;
 class AbstractDoctrineLoaderTest extends TestCase
 {
     /**
-     * @var MockObject|ObjectRepository|LegacyObjectRepository
+     * @var MockObject&ObjectRepository
      */
     private $om;
 
     /**
-     * @var MockObject|AbstractDoctrineLoader
+     * @var MockObject&AbstractDoctrineLoader
      */
     private $loader;
 
     protected function setUp(): void
     {
-        if (interface_exists(LegacyObjectManager::class)) {
-            $omClassName = LegacyObjectManager::class;
-        } else {
-            $omClassName = ObjectManager::class;
-        }
-
         $this->om = $this
-            ->getMockBuilder($omClassName)
+            ->getMockBuilder(ObjectManager::class)
             ->getMock();
 
         $this->loader = $this

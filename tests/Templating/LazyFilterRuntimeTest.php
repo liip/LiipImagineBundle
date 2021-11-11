@@ -24,10 +24,7 @@ class LazyFilterRuntimeTest extends AbstractTest
     private const FILTER = 'thumbnail';
     private const VERSION = 'v2';
 
-    /**
-     * @var LazyFilterRuntime
-     */
-    private $runtime;
+    private LazyFilterRuntime $runtime;
     /**
      * @var CacheManager&MockObject
      */
@@ -51,7 +48,7 @@ class LazyFilterRuntimeTest extends AbstractTest
     /**
      * @dataProvider provideImageNames
      */
-    public function testInvokeFilterMethod($image, $urlimage): void
+    public function testInvokeFilterMethod(string $image, string $urlimage): void
     {
         $this->manager
             ->expects($this->once())

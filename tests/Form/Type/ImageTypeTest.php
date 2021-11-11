@@ -29,6 +29,8 @@ class ImageTypeTest extends AbstractTest
         if (!class_exists(AbstractType::class)) {
             $this->markTestSkipped('Requires the symfony/form package.');
         }
+
+        parent::setUp();
     }
 
     public function testGetParent(): void

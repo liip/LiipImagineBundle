@@ -351,7 +351,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|Model
+     * @return MockObject&Model
      */
     protected function getS3ResponseMock()
     {
@@ -359,7 +359,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|\Aws\S3\S3Client
+     * @return MockObject&\Aws\S3\S3Client
      */
     protected function getS3ClientMock()
     {
