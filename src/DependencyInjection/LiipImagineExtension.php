@@ -39,12 +39,12 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
      */
     private $loadersFactories = [];
 
-    public function addResolverFactory(ResolverFactoryInterface $resolverFactory)
+    public function addResolverFactory(ResolverFactoryInterface $resolverFactory): void
     {
         $this->resolversFactories[$resolverFactory->getName()] = $resolverFactory;
     }
 
-    public function addLoaderFactory(LoaderFactoryInterface $loaderFactory)
+    public function addLoaderFactory(LoaderFactoryInterface $loaderFactory): void
     {
         $this->loadersFactories[$loaderFactory->getName()] = $loaderFactory;
     }
@@ -54,10 +54,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         return new Configuration($this->resolversFactories, $this->loadersFactories);
     }
 
-    /**
-     * @see \Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(
             $this->getConfiguration($configs, $container),

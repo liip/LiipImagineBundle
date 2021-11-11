@@ -20,20 +20,14 @@ namespace Liip\ImagineBundle\Message;
  */
 class WarmupCache
 {
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
 
     /**
      * @var string[]|null
      */
-    private $filters;
+    private ?array $filters;
 
-    /**
-     * @var bool
-     */
-    private $force;
+    private bool $force;
 
     /**
      * @param string[]|null $filters List of filter set names to warm up. If not set, all available filter sets are warmed up

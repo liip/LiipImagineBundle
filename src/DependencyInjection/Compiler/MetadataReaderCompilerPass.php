@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
+use Imagine\Image\Metadata\DefaultMetadataReader;
+use Imagine\Image\Metadata\ExifMetadataReader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -19,20 +21,11 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class MetadataReaderCompilerPass extends AbstractCompilerPass
 {
-    /**
-     * @var string
-     */
-    private static $metadataReaderServiceId = 'liip_imagine.meta_data.reader';
+    private static string $metadataReaderServiceId = 'liip_imagine.meta_data.reader';
 
-    /**
-     * @var string
-     */
-    private static $metadataReaderDefaultClass = 'Imagine\Image\Metadata\DefaultMetadataReader';
+    private static string $metadataReaderDefaultClass = DefaultMetadataReader::class;
 
-    /**
-     * @var string
-     */
-    private static $metadataReaderExifClass = 'Imagine\Image\Metadata\ExifMetadataReader';
+    private static string $metadataReaderExifClass = ExifMetadataReader::class;
 
     /**
      * {@inheritdoc}

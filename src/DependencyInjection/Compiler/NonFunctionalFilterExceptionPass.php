@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class NonFunctionalFilterExceptionPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $canFiltersStillFunction = $container->hasParameter('kernel.root_dir');
         $throwWarning = function (string $filterName) use ($canFiltersStillFunction) {

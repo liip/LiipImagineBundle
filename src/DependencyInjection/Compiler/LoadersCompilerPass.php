@@ -19,7 +19,7 @@ class LoadersCompilerPass extends AbstractCompilerPass
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $tags = $container->findTaggedServiceIds('liip_imagine.binary.loader');
 

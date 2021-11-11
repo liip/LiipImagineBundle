@@ -478,7 +478,7 @@ class ConfigurationTest extends TestCase
 
 class FooLoaderFactory implements LoaderFactoryInterface
 {
-    public function create(ContainerBuilder $container, $loaderName, array $config)
+    public function create(ContainerBuilder $container, string $name, array $config): string
     {
     }
 
@@ -498,7 +498,7 @@ class FooLoaderFactory implements LoaderFactoryInterface
 
 class BarResolverFactory implements ResolverFactoryInterface
 {
-    public function create(ContainerBuilder $container, $resolverName, array $config)
+    public function create(ContainerBuilder $container, string $name, array $config): string
     {
     }
 

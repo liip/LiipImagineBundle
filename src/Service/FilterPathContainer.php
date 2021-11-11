@@ -13,20 +13,14 @@ namespace Liip\ImagineBundle\Service;
 
 final class FilterPathContainer
 {
-    /**
-     * @var string
-     */
-    private $source;
+    private string $source;
 
-    /**
-     * @var string
-     */
-    private $target;
+    private string $target;
 
     /**
      * @var mixed[]
      */
-    private $options;
+    private array $options;
 
     /**
      * @param mixed[] $options

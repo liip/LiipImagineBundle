@@ -17,27 +17,14 @@ use Symfony\Component\DependencyInjection\Definition;
 
 abstract class AbstractLoaderFactory implements LoaderFactoryInterface
 {
-    /**
-     * @var string
-     */
-    protected static $namePrefix = 'liip_imagine.binary.loader';
+    protected static string $namePrefix = 'liip_imagine.binary.loader';
 
-    /**
-     * @param string|null $name
-     *
-     * @return ChildDefinition
-     */
-    final protected function getChildLoaderDefinition($name = null)
+    final protected function getChildLoaderDefinition(?string $name = null): ChildDefinition
     {
         return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    final protected function setTaggedLoaderDefinition($name, Definition $definition, ContainerBuilder $container)
+    final protected function setTaggedLoaderDefinition(string $name, Definition $definition, ContainerBuilder $container): string
     {
         $definition->addTag(static::$namePrefix, [
             'loader' => $name,
