@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
+use Aws\S3\S3Client;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -24,8 +25,8 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$name.'.client';
-        $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
-        $awsS3ClientDefinition->setFactory(['Aws\S3\S3Client', 'factory']);
+        $awsS3ClientDefinition = new Definition(S3Client::class);
+        $awsS3ClientDefinition->setFactory([S3Client::class, 'factory']);
         $awsS3ClientDefinition->addArgument($config['client_config']);
         $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
 
