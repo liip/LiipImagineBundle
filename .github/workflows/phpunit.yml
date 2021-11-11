@@ -47,6 +47,12 @@ jobs:
             dependencies: highest
             symfony: '5.4.*'
             stability: 'dev'
+
+          # Test Symfony 6.0 dev version
+          - php: '8.0'
+            dependencies: highest
+            symfony: '6.0.*'
+            stability: 'dev'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
