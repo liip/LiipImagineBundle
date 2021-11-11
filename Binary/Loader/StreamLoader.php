@@ -60,7 +60,7 @@ class StreamLoader implements LoaderInterface
          * The error suppression is solely to determine whether the file exists.
          * file_exists() is not used as not all wrappers support stat() to actually check for existing resources.
          */
-        if (($this->context && !$resource = @fopen($name, 'rb', null, $this->context)) || !$resource = @fopen($name, 'rb')) {
+        if (($this->context && !$resource = @fopen($name, 'rb', false, $this->context)) || !$resource = @fopen($name, 'rb')) {
             throw new NotLoadableException(sprintf('Source image %s not found.', $name));
         }
 
@@ -68,7 +68,7 @@ class StreamLoader implements LoaderInterface
         fclose($resource);
 
         try {
-            $content = file_get_contents($name, null, $this->context);
+            $content = file_get_contents($name, false, $this->context);
         } catch (\Exception $e) {
             throw new NotLoadableException(sprintf('Source image %s could not be loaded.', $name), $e->getCode(), $e);
         }

@@ -209,6 +209,10 @@ final class PsrCacheResolver implements ResolverInterface
      */
     private function sanitizeCacheKeyPart($cacheKeyPart)
     {
+        if (null === $cacheKeyPart) {
+            return '';
+        }
+
         return str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
     }
 

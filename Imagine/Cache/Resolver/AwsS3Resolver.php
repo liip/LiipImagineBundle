@@ -130,7 +130,7 @@ class AwsS3Resolver implements ResolverInterface
                 'exception' => $e,
             ]);
 
-            throw new NotStorableException('The object could not be created on Amazon S3.', null, $e);
+            throw new NotStorableException('The object could not be created on Amazon S3.', $e->getCode(), $e);
         }
     }
 
