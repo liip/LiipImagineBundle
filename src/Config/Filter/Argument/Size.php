@@ -16,15 +16,9 @@ namespace Liip\ImagineBundle\Config\Filter\Argument;
  */
 final class Size
 {
-    /**
-     * @var int
-     */
-    private $width;
+    private ?int $width;
 
-    /**
-     * @var int
-     */
-    private $height;
+    private ?int $height;
 
     /**
      * To allow keeping aspect ratio, it is allowed to only specify one of width or height.

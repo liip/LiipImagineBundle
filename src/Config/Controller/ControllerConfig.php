@@ -17,7 +17,7 @@ final class ControllerConfig
 {
     public const REDIRECT_RESPONSE_CODES = [201, 301, 302, 303, 307, 308];
 
-    private $redirectResponseCode;
+    private int $redirectResponseCode;
 
     public function __construct(int $redirectResponseCode)
     {

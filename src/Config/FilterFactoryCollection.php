@@ -19,7 +19,7 @@ class FilterFactoryCollection
     /**
      * @var FilterFactoryInterface[]
      */
-    private $filterFactories = [];
+    private array $filterFactories = [];
 
     /**
      * @param FilterFactoryInterface ...$filterFactories
@@ -46,7 +46,7 @@ class FilterFactoryCollection
     /**
      * @return FilterFactoryInterface[]
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->filterFactories;
     }

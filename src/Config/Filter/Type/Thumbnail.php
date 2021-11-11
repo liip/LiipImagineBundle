@@ -20,25 +20,13 @@ final class Thumbnail extends FilterAbstract
 {
     public const NAME = 'thumbnail';
 
-    /**
-     * @var Size
-     */
-    private $size;
+    private Size $size;
 
-    /**
-     * @var string
-     */
-    private $mode;
+    private ?string $mode;
 
-    /**
-     * @var bool
-     */
-    private $allowUpscale;
+    private ?bool $allowUpscale;
 
-    /**
-     * @var string
-     */
-    private $filter;
+    private ?string $filter;
 
     public function __construct(
         Size $size,

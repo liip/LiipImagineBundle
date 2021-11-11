@@ -23,15 +23,9 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class CropFactory implements FilterFactoryInterface
 {
-    /**
-     * @var SizeFactory
-     */
-    private $sizeFactory;
+    private SizeFactory $sizeFactory;
 
-    /**
-     * @var PointFactory
-     */
-    private $pointFactory;
+    private PointFactory $pointFactory;
 
     public function __construct(SizeFactory $sizeFactory, PointFactory $pointFactory)
     {

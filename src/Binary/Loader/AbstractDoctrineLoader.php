@@ -11,30 +11,19 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
-use Doctrine\Common\Persistence\ObjectManager as LegacyObjectManager;
 use Doctrine\Persistence\ObjectManager;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 abstract class AbstractDoctrineLoader implements LoaderInterface
 {
-    /**
-     * @var ObjectManager|LegacyObjectManager
-     */
-    protected $manager;
+    protected ObjectManager $manager;
 
-    /**
-     * @var string
-     */
-    protected $class;
+    protected string $modelClass;
 
-    /**
-     * @param ObjectManager|LegacyObjectManager $manager
-     * @param string                            $class
-     */
-    public function __construct($manager, $class = null)
+    public function __construct(ObjectManager $manager, string $modelClass)
     {
         $this->manager = $manager;
-        $this->class = $class;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -42,14 +31,14 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
      */
     public function find($path)
     {
-        $image = $this->manager->find($this->class, $this->mapPathToId($path));
+        $image = $this->manager->find($this->modelClass, $this->mapPathToId($path));
 
         if (!$image) {
             // try to find the image without extension
             $info = pathinfo($path);
             $name = $info['dirname'].'/'.$info['filename'];
 
-            $image = $this->manager->find($this->class, $this->mapPathToId($name));
+            $image = $this->manager->find($this->modelClass, $this->mapPathToId($name));
         }
 
         if (!$image) {
@@ -62,18 +51,14 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
     /**
      * Map the requested path (ie. subpath in the URL) to an id that can be used to lookup the image in the Doctrine store.
      *
-     * @param string $path
-     *
-     * @return string
+     * @return string|int
      */
-    abstract protected function mapPathToId($path);
+    abstract protected function mapPathToId(string $path);
 
     /**
      * Return a stream resource from the Doctrine entity/document with the image content.
      *
-     * @param object $image
-     *
      * @return resource
      */
-    abstract protected function getStreamFromImage($image);
+    abstract protected function getStreamFromImage(object $image);
 }

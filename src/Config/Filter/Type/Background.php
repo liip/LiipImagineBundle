@@ -20,25 +20,13 @@ final class Background extends FilterAbstract
 {
     public const NAME = 'background';
 
-    /**
-     * @var string
-     */
-    private $color;
+    private ?string $color;
 
-    /**
-     * @var string
-     */
-    private $transparency;
+    private ?string $transparency;
 
-    /**
-     * @var string
-     */
-    private $position;
+    private ?string $position;
 
-    /**
-     * @var Size
-     */
-    private $size;
+    private Size $size;
 
     /**
      * @param string|null $color        background color HEX value
@@ -46,9 +34,9 @@ final class Background extends FilterAbstract
      * @param string|null $position     position of the input image on the newly created background image. Valid values: topleft, top, topright, left, center, right, bottomleft, bottom, and bottomright
      */
     public function __construct(
-        string $color = null,
-        string $transparency = null,
-        string $position = null,
+        ?string $color,
+        ?string $transparency,
+        ?string $position,
         Size $size
     ) {
         $this->color = $color;

@@ -15,53 +15,30 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 
 class Binary implements BinaryInterface
 {
-    /**
-     * @var string
-     */
-    protected $content;
+    protected string $content;
 
-    /**
-     * @var string
-     */
-    protected $mimeType;
+    protected ?string $mimeType;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected ?string $format;
 
-    /**
-     * @param string $content
-     * @param string $mimeType
-     * @param string $format
-     */
-    public function __construct($content, $mimeType, $format = null)
+    public function __construct(string $content, ?string $mimeType, ?string $format = null)
     {
         $this->content = $content;
         $this->mimeType = $mimeType;
         $this->format = $format;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return string
-     */
-    public function getMimeType()
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
 
-    /**
-     * @return string
-     */
-    public function getFormat()
+    public function getFormat(): ?string
     {
         return $this->format;
     }

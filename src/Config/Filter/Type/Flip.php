@@ -18,10 +18,7 @@ final class Flip extends FilterAbstract
 {
     public const NAME = 'flip';
 
-    /**
-     * @var string
-     */
-    private $axis;
+    private string $axis;
 
     /**
      * @param string $axis possible values are: "x", "horizontal", "y", or "vertical"

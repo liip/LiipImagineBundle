@@ -13,17 +13,11 @@ namespace Liip\ImagineBundle\Config;
 
 final class StackCollection
 {
-    private $stacks = [];
+    private array $stacks = [];
 
-    /**
-     * @var StackBuilderInterface
-     */
-    private $stackBuilder;
+    private StackBuilderInterface $stackBuilder;
 
-    /**
-     * @var array
-     */
-    private $filtersConfiguration;
+    private array $filtersConfiguration;
 
     public function __construct(StackBuilderInterface $stackBuilder, array $filtersConfiguration = [])
     {
@@ -34,7 +28,7 @@ final class StackCollection
     /**
      * @return StackInterface[]
      */
-    public function getStacks()
+    public function getStacks(): array
     {
         if (!empty($this->stacks)) {
             return $this->stacks;

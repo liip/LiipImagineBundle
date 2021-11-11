@@ -18,20 +18,11 @@ final class Watermark extends FilterAbstract
 {
     public const NAME = 'watermark';
 
-    /**
-     * @var string
-     */
-    private $image;
+    private string $image;
 
-    /**
-     * @var string
-     */
-    private $position;
+    private string $position;
 
-    /**
-     * @var float
-     */
-    private $size;
+    private ?float $size;
 
     public function __construct(string $image, string $position, float $size = null)
     {

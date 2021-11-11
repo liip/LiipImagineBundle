@@ -20,10 +20,7 @@ final class Resize extends FilterAbstract
 {
     public const NAME = 'resize';
 
-    /**
-     * @var Size
-     */
-    private $size;
+    private Size $size;
 
     public function __construct(Size $size)
     {

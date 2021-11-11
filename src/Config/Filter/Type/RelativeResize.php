@@ -18,25 +18,13 @@ final class RelativeResize extends FilterAbstract
 {
     public const NAME = 'relative_resize';
 
-    /**
-     * @var float
-     */
-    private $heighten;
+    private ?float $heighten;
 
-    /**
-     * @var float
-     */
-    private $widen;
+    private ?float $widen;
 
-    /**
-     * @var float
-     */
-    private $increase;
+    private ?float $increase;
 
-    /**
-     * @var float
-     */
-    private $scale;
+    private ?float $scale;
 
     public function __construct(
         float $heighten = null,

@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\ObjectRepository as LegacyObjectRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use Liip\ImagineBundle\Binary\Loader\AbstractDoctrineLoader;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,7 +49,7 @@ class AbstractDoctrineLoaderTest extends TestCase
 
         $this->loader = $this
             ->getMockBuilder(AbstractDoctrineLoader::class)
-            ->setConstructorArgs([$this->om])
+            ->setConstructorArgs([$this->om, \stdClass::class])
             ->getMockForAbstractClass();
     }
 
@@ -71,7 +72,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
-            ->with(null, 1337)
+            ->with(\stdClass::class, 1337)
             ->willReturn($image);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar'));
@@ -99,8 +100,8 @@ class AbstractDoctrineLoaderTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('find')
             ->willReturnMap([
-                [null, 1337, null],
-                [null, 4711, $image],
+                [\stdClass::class, 1337, null],
+                [\stdClass::class, 4711, $image],
             ]);
 
         $this->assertSame('foo', $this->loader->find('/foo/bar.png'));
@@ -108,7 +109,7 @@ class AbstractDoctrineLoaderTest extends TestCase
 
     public function testFindWithInvalidObject(): void
     {
-        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectException(NotLoadableException::class);
 
         $this->loader
             ->expects($this->atLeastOnce())
@@ -123,7 +124,7 @@ class AbstractDoctrineLoaderTest extends TestCase
         $this->om
             ->expects($this->atLeastOnce())
             ->method('find')
-            ->with(null, 1337)
+            ->with(\stdClass::class, 1337)
             ->willReturn(null);
 
         $this->loader->find('/foo/bar');

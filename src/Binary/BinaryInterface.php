@@ -13,18 +13,9 @@ namespace Liip\ImagineBundle\Binary;
 
 interface BinaryInterface
 {
-    /**
-     * @return string
-     */
-    public function getContent();
+    public function getContent(): string;
 
-    /**
-     * @return string
-     */
-    public function getMimeType();
+    public function getMimeType(): ?string;
 
-    /**
-     * @return string
-     */
-    public function getFormat();
+    public function getFormat(): ?string;
 }

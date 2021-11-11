@@ -15,31 +15,19 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
 
 final class Stack implements StackInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var string
-     */
-    private $dataLoader;
+    private ?string $dataLoader;
 
-    /**
-     * @var int
-     */
-    private $quality;
+    private ?int $quality;
 
-    /**
-     * @var FilterInterface[]
-     */
-    private $filters = [];
+    private array $filters = [];
 
     /**
      * @param string|null       $dataLoader name of a custom data loader. Default value: filesystem (which means the standard filesystem loader is used).
      * @param FilterInterface[] $filters
      */
-    public function __construct(string $name, string $dataLoader = null, int $quality = null, array $filters)
+    public function __construct(string $name, string $dataLoader = null, int $quality = null, array $filters = [])
     {
         $this->name = $name;
         $this->dataLoader = $dataLoader;

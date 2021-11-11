@@ -20,15 +20,9 @@ final class Downscale extends FilterAbstract
 {
     public const NAME = 'downscale';
 
-    /**
-     * @var Size
-     */
-    private $max;
+    private ?Size $max;
 
-    /**
-     * @var float
-     */
-    private $by;
+    private ?float $by;
 
     /**
      * @param float|null $by sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
