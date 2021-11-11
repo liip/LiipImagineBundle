@@ -42,7 +42,7 @@ class ResampleFilterLoader implements LoaderInterface
             $this->delTemporaryFile($tmpFile);
         } catch (\Exception $exception) {
             $this->delTemporaryFile($tmpFile);
-            throw new LoadFilterException('Unable to save/open file in resample filter loader.', null, $exception);
+            throw new LoadFilterException('Unable to save/open file in resample filter loader.', $exception->getCode(), $exception);
         }
 
         return $image;
@@ -129,7 +129,7 @@ class ResampleFilterLoader implements LoaderInterface
         try {
             return $resolver->resolve($options);
         } catch (ExceptionInterface $exception) {
-            throw new InvalidArgumentException(sprintf('Invalid option(s) passed to %s::load().', __CLASS__), null, $exception);
+            throw new InvalidArgumentException(sprintf('Invalid option(s) passed to %s::load().', __CLASS__), $exception->getCode(), $exception);
         }
     }
 }

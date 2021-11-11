@@ -4,6 +4,11 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+
+## [2.7.2](https://github.com/liip/LiipImagineBundle/tree/2.7.2)
+
+- Address PHP 8.1 deprecations [\#1427](https://github.com/liip/LiipImagineBundle/pull/1427) ([franmomu](https://github.com/franmomu))
+
 ## [2.7.1](https://github.com/liip/LiipImagineBundle/tree/2.7.1)
 
 - Bugfix: Don't resolve to webp in the controller if webp generation is disabled [\#1410](https://github.com/liip/LiipImagineBundle/pull/1410) ([mynameisbogdan](https://github.com/mynameisbogdan) / [dbu](https://github.com/dbu))
