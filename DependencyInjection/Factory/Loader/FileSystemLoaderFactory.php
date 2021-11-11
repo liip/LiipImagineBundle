@@ -165,7 +165,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
             try {
                 $r = new \ReflectionClass($c);
             } catch (\ReflectionException $exception) {
-                throw new InvalidArgumentException(sprintf('Unable to resolve bundle "%s" while auto-registering bundle resource paths.', $c), null, $exception);
+                throw new InvalidArgumentException(sprintf('Unable to resolve bundle "%s" while auto-registering bundle resource paths.', $c), $exception->getCode(), $exception);
             }
 
             $paths[$r->getShortName()] = \dirname($r->getFileName());
