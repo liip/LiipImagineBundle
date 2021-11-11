@@ -17,17 +17,14 @@ use League\Flysystem\FilesystemInterface;
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * @requires PHP 5.4
- *
  * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemLoader
  */
 class FlysystemLoaderTest extends AbstractTest
 {
-    private $flyFilesystem;
+    private Filesystem $flyFilesystem;
 
     protected function setUp(): void
     {
@@ -42,7 +39,7 @@ class FlysystemLoaderTest extends AbstractTest
 
     public function getFlysystemLoader(): FlysystemLoader
     {
-        $extensionGuesser = class_exists(MimeTypes::class) ? MimeTypes::getDefault() : ExtensionGuesser::getInstance();
+        $extensionGuesser = MimeTypes::getDefault();
 
         return new FlysystemLoader($extensionGuesser, $this->flyFilesystem);
     }

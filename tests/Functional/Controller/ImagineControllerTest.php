@@ -23,10 +23,8 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 {
     /**
      * PHP compiled with WebP support.
-     *
-     * @var bool
      */
-    private $webp_generate;
+    private bool $webp_generate;
 
     protected function setUp(): void
     {

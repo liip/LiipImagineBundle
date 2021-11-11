@@ -24,11 +24,8 @@ class ResampleFilterLoaderTest extends AbstractTest
 {
     /**
      * @dataProvider provideResampleData
-     *
-     * @param string $imgPath
-     * @param float  $resolution
      */
-    public function testResample($imgPath, $resolution): void
+    public function testResample(string $imgPath, float $resolution): void
     {
         $imgType = static::getSupportedDriver();
         $tmpPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.sprintf('liip-imagine-bundle-test-%s-%d.%s', md5($imgPath), time(), pathinfo($imgPath, PATHINFO_EXTENSION));

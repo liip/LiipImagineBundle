@@ -1060,7 +1060,7 @@ class FilterManagerTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|LoaderInterface
+     * @return MockObject&LoaderInterface
      */
     protected function createFilterLoaderInterfaceMock()
     {

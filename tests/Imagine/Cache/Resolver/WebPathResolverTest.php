@@ -502,7 +502,7 @@ class WebPathResolverTest extends TestCase
     }
 
     /**
-     * @return MockObject|Filesystem
+     * @return MockObject&Filesystem
      */
     protected function createFilesystemMock()
     {

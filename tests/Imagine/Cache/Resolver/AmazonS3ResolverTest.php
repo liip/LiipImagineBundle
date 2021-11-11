@@ -302,7 +302,7 @@ class AmazonS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|\CFResponse
+     * @return MockObject&\CFResponse
      */
     protected function createCFResponseMock(bool $ok)
     {
@@ -316,7 +316,7 @@ class AmazonS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|\AmazonS3
+     * @return MockObject&\AmazonS3
      */
     protected function createAmazonS3Mock()
     {

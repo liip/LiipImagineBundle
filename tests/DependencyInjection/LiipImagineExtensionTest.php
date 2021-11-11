@@ -28,10 +28,7 @@ use Symfony\Component\Yaml\Parser;
  */
 class LiipImagineExtensionTest extends AbstractTest
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
-     */
-    protected $containerBuilder;
+    protected ContainerBuilder $containerBuilder;
 
     public function testUserLoadThrowsExceptionUnlessDriverIsValid(): void
     {

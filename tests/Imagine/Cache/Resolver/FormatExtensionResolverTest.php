@@ -24,7 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class FormatExtensionResolverTest extends AbstractTest
 {
     /**
-     * @var MockObject|ResolverInterface
+     * @var MockObject&ResolverInterface
      */
     private $primaryResolver;
 

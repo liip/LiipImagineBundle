@@ -15,10 +15,7 @@ use Symfony\Component\Console\Output\Output;
 
 class BufferedOutput extends Output
 {
-    /**
-     * @var string
-     */
-    private $buffer = '';
+    private string $buffer = '';
 
     public function getBuffer(): string
     {

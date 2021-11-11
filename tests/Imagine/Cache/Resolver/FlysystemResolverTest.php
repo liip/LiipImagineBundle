@@ -237,7 +237,7 @@ class FlysystemResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject|Filesystem
+     * @return MockObject&Filesystem
      */
     protected function createFlySystemMock()
     {

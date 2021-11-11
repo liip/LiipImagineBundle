@@ -27,19 +27,16 @@ use PHPUnit\Framework\TestCase;
 class FilterSetBuilderTest extends TestCase
 {
     /**
-     * @var StackFactory|MockObject
+     * @var StackFactory&MockObject
      */
     private $filterSetFactoryMock;
 
     /**
-     * @var FilterFactoryCollection|MockObject
+     * @var FilterFactoryCollection&MockObject
      */
     private $filterFactoryCollectionMock;
 
-    /**
-     * @var StackBuilder
-     */
-    private $model;
+    private StackBuilder $model;
 
     protected function setUp(): void
     {

@@ -42,22 +42,22 @@ final class FilterServiceTest extends TestCase
     ];
 
     /**
-     * @var MockObject|DataManager
+     * @var MockObject&DataManager
      */
     private $dataManager;
 
     /**
-     * @var MockObject|FilterManager
+     * @var MockObject&FilterManager
      */
     private $filterManager;
 
     /**
-     * @var MockObject|CacheManager
+     * @var MockObject&CacheManager
      */
     private $cacheManager;
 
     /**
-     * @var MockObject|LoggerInterface
+     * @var MockObject&LoggerInterface
      */
     private $logger;
 

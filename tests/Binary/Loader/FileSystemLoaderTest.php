@@ -15,11 +15,9 @@ use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
@@ -143,10 +141,10 @@ class FileSystemLoaderTest extends TestCase
      */
     public function testThrowsIfRealPathOutsideRootPath($path): void
     {
-        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectException(NotLoadableException::class);
         $this->expectExceptionMessage('Source image invalid');
 
-        $loader = $this->getFileSystemLoader()->find($path);
+        $this->getFileSystemLoader()->find($path);
     }
 
     public function testPathWithDoublePeriodBackStep(): void
@@ -156,7 +154,7 @@ class FileSystemLoaderTest extends TestCase
 
     public function testThrowsIfFileDoesNotExist(): void
     {
-        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectException(NotLoadableException::class);
         $this->expectExceptionMessage('Source image not resolvable');
 
         $loader = $this->getFileSystemLoader()->find('fileNotExist');
@@ -182,19 +180,11 @@ class FileSystemLoaderTest extends TestCase
 
     private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null): FileSystemLoader
     {
-        if (interface_exists(MimeTypeGuesserInterface::class)) {
-            $mimeTypes = MimeTypes::getDefault();
-
-            return new FileSystemLoader(
-                $mimeTypes,
-                $mimeTypes,
-                $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
-            );
-        }
+        $mimeTypes = MimeTypes::getDefault();
 
         return new FileSystemLoader(
-            MimeTypeGuesser::getInstance(),
-            ExtensionGuesser::getInstance(),
+            $mimeTypes,
+            $mimeTypes,
             $locator ?? $this->getFileSystemLocator(\count($roots) ? $roots : $this->getDefaultDataRoots())
         );
     }
