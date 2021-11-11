@@ -76,7 +76,7 @@ class WarmupCacheHandlerTest extends AbstractWebTestCase
      */
     private function createFilterManagerMock()
     {
-        return $this->getService('liip_imagine.filter.manager');
+        return $this->getService('test.liip_imagine.filter.manager');
     }
 
     /**
@@ -84,6 +84,6 @@ class WarmupCacheHandlerTest extends AbstractWebTestCase
      */
     private function createFilterServiceMock()
     {
-        return $this->getService('liip_imagine.service.filter');
+        return $this->getService('test.liip_imagine.service.filter');
     }
 }
