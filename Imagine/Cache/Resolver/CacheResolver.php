@@ -192,6 +192,10 @@ class CacheResolver implements ResolverInterface
      */
     protected function sanitizeCacheKeyPart($cacheKeyPart)
     {
+        if (null === $cacheKeyPart) {
+            return '';
+        }
+
         return str_replace('.', '_', $cacheKeyPart);
     }
 
