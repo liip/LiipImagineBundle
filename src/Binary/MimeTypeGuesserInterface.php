@@ -18,5 +18,5 @@ interface MimeTypeGuesserInterface
      *
      * @return string|null mime type or null if it could be not be guessed
      */
-    public function guess($binary);
+    public function guess(string $binary): ?string;
 }

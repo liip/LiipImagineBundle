@@ -19,15 +19,9 @@ use Symfony\Component\Mime\MimeTypesInterface;
 
 class FlysystemV2Loader implements LoaderInterface
 {
-    /**
-     * @var FilesystemOperator
-     */
-    protected $filesystem;
+    protected FilesystemOperator $filesystem;
 
-    /**
-     * @var MimeTypesInterface
-     */
-    protected $extensionGuesser;
+    protected MimeTypesInterface $extensionGuesser;
 
     public function __construct(
         MimeTypesInterface $extensionGuesser,

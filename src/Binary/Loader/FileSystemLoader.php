@@ -18,20 +18,11 @@ use Symfony\Component\Mime\MimeTypesInterface;
 
 class FileSystemLoader implements LoaderInterface
 {
-    /**
-     * @var MimeTypeGuesserInterface
-     */
-    protected $mimeTypeGuesser;
+    protected MimeTypeGuesserInterface $mimeTypeGuesser;
 
-    /**
-     * @var MimeTypesInterface
-     */
-    protected $extensionGuesser;
+    protected MimeTypesInterface $extensionGuesser;
 
-    /**
-     * @var LocatorInterface
-     */
-    protected $locator;
+    protected LocatorInterface $locator;
 
     public function __construct(
         MimeTypeGuesserInterface $mimeGuesser,

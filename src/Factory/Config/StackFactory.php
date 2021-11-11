@@ -22,7 +22,7 @@ final class StackFactory implements StackFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters): StackInterface
+    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters = []): StackInterface
     {
         return new Stack($name, $dataLoader, $quality, $filters);
     }

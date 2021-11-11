@@ -27,7 +27,8 @@ class DataManagerTest extends AbstractTest
         $loader
             ->expects($this->once())
             ->method('find')
-            ->with('cats.jpeg');
+            ->with('cats.jpeg')
+            ->willReturn('content');
 
         $config = $this->createFilterConfigurationMock();
         $config
@@ -58,7 +59,8 @@ class DataManagerTest extends AbstractTest
         $loader
             ->expects($this->once())
             ->method('find')
-            ->with('cats.jpeg');
+            ->with('cats.jpeg')
+            ->willReturn('content');
 
         $config = $this->createFilterConfigurationMock();
         $config
@@ -85,14 +87,12 @@ class DataManagerTest extends AbstractTest
 
     public function testThrowsIfMimeTypeWasNotGuessedOnFind(): void
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The mime type of image cats.jpeg was not guessed');
-
         $loader = $this->createBinaryLoaderInterfaceMock();
         $loader
             ->expects($this->once())
             ->method('find')
-            ->with('cats.jpeg');
+            ->with('cats.jpeg')
+            ->willReturn('content');
 
         $config = $this->createFilterConfigurationMock();
         $config
@@ -113,6 +113,10 @@ class DataManagerTest extends AbstractTest
 
         $dataManager = new DataManager($mimeTypeGuesser, $this->createExtensionGuesserInterfaceMock(), $config);
         $dataManager->addLoader('the_loader', $loader);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('The mime type of image cats.jpeg was not guessed');
+
         $dataManager->find('thumbnail', 'cats.jpeg');
     }
 

@@ -17,10 +17,8 @@ class StreamLoader implements LoaderInterface
 {
     /**
      * The wrapper prefix to append to the path to be loaded.
-     *
-     * @var string
      */
-    protected $wrapperPrefix;
+    protected string $wrapperPrefix;
 
     /**
      * A stream context resource to use.
@@ -30,12 +28,11 @@ class StreamLoader implements LoaderInterface
     protected $context;
 
     /**
-     * @param string        $wrapperPrefix
      * @param resource|null $context
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($wrapperPrefix, $context = null)
+    public function __construct(string $wrapperPrefix, $context = null)
     {
         $this->wrapperPrefix = $wrapperPrefix;
 

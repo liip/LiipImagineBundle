@@ -24,6 +24,8 @@ been removed.
 
 - __[BC BREAK]__ Argument 4 of `ImagineController` is a mandatory instance of `ControllerConfig`
 
+- __[BC BREAK]__ Argument 2 of `AbstractDoctrineLoader` is mandatory now, you MUST pass the model class name.
+
 ## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`

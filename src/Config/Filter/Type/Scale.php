@@ -20,15 +20,9 @@ final class Scale extends FilterAbstract
 {
     public const NAME = 'scale';
 
-    /**
-     * @var Size
-     */
-    private $dimensions;
+    private Size $dimensions;
 
-    /**
-     * @var float
-     */
-    private $to;
+    private ?float $to;
 
     /**
      * @param float|null $to proportional scale operation computed by multiplying all image sides by this value

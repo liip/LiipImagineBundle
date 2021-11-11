@@ -15,10 +15,7 @@ use Symfony\Component\Mime\MimeTypesInterface;
 
 class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
 {
-    /**
-     * @var MimeTypesInterface
-     */
-    protected $mimeTypeGuesser;
+    protected MimeTypesInterface $mimeTypeGuesser;
 
     public function __construct(MimeTypesInterface $mimeTypeGuesser)
     {
@@ -28,7 +25,7 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
     /**
      * {@inheritdoc}
      */
-    public function guess($binary)
+    public function guess(string $binary): ?string
     {
         if (false === $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle')) {
             throw new \RuntimeException(sprintf('Temp file can not be created in "%s".', sys_get_temp_dir()));

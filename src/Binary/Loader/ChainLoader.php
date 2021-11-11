@@ -18,7 +18,7 @@ class ChainLoader implements LoaderInterface
     /**
      * @var LoaderInterface[]
      */
-    private $loaders;
+    private array $loaders;
 
     /**
      * @param LoaderInterface[] $loaders
