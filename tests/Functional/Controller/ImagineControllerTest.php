@@ -35,7 +35,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
         // not supported.
         if ($this->webp_generate) {
-            $filterService = self::getService('liip_imagine.service.filter');
+            $filterService = self::getService('test.liip_imagine.service.filter');
             $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
             $webpGenerate->setAccessible(true);
             $webpGenerate->setValue($filterService, true);
