@@ -89,7 +89,6 @@ class BackgroundFilterLoader implements LoaderInterface
                     break;
                 default:
                     throw new \InvalidArgumentException("Unexpected position '{$position}'");
-                    break;
             }
 
             $size = new Box($width, $height);

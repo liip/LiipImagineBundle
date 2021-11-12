@@ -110,7 +110,6 @@ class WatermarkFilterLoader implements LoaderInterface
                 break;
             default:
                 throw new \InvalidArgumentException("Unexpected position '{$options['position']}'");
-                break;
         }
 
         return $image->paste($watermark, new Point($x, $y));

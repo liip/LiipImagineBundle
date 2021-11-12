@@ -26,12 +26,12 @@ class Configuration implements ConfigurationInterface
     /**
      * @var ResolverFactoryInterface[]
      */
-    protected $resolversFactories;
+    protected array $resolversFactories;
 
     /**
      * @var LoaderFactoryInterface[]
      */
-    protected $loadersFactories;
+    protected array $loadersFactories;
 
     /**
      * @param ResolverFactoryInterface[] $resolversFactories
@@ -251,7 +251,11 @@ class Configuration implements ConfigurationInterface
             $f->addConfiguration($definition->children()->arrayNode($f->getName()));
         }
 
-        $definition->end()
+        $nodeDefinition = $definition->end();
+
+        \assert($nodeDefinition instanceof ArrayNodeDefinition);
+
+        $nodeDefinition
             ->validate()
             ->ifTrue(function ($array) use ($type) {
                 foreach ($array as $name => $element) {
