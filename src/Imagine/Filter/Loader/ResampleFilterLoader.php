@@ -49,13 +49,9 @@ class ResampleFilterLoader implements LoaderInterface
     }
 
     /**
-     * @param string $path
-     *
      * @throws \RuntimeException
-     *
-     * @return string
      */
-    private function getTemporaryFile($path)
+    private function getTemporaryFile(string $path): string
     {
         if (!is_dir($path) || false === $file = tempnam($path, 'liip-imagine-bundle')) {
             throw new \RuntimeException(sprintf('Unable to create temporary file in "%s" base path.', $path));
@@ -65,21 +61,16 @@ class ResampleFilterLoader implements LoaderInterface
     }
 
     /**
-     * @param $file
-     *
      * @throws \RuntimeException
      */
-    private function delTemporaryFile($file)
+    private function delTemporaryFile(string $file): void
     {
         if (file_exists($file)) {
             unlink($file);
         }
     }
 
-    /**
-     * @return array
-     */
-    private function getImagineSaveOptions(array $options)
+    private function getImagineSaveOptions(array $options): array
     {
         $saveOptions = [
             'resolution-units' => $options['unit'],
@@ -94,10 +85,7 @@ class ResampleFilterLoader implements LoaderInterface
         return $saveOptions;
     }
 
-    /**
-     * @return array
-     */
-    private function resolveOptions(array $options)
+    private function resolveOptions(array $options): array
     {
         $resolver = new OptionsResolver();
 

@@ -42,7 +42,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
         $this->quality = $quality;
     }
 
-    /*
+    /**
      * @throws ProcessFailedException
      */
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface

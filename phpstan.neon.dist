@@ -1,10 +1,14 @@
 includes:
     - .phpstan/baseline.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
-    level: 1
+    level: 4
     paths:
         - src
+    treatPhpDocTypesAsCertain: false
     scanFiles:
         - .phpstan/stubs/AdapterInterface.stub
         - .phpstan/stubs/FilesystemInterface.stub
         - .phpstan/stubs/ReadInterface.stub
+    dynamicConstantNames:
+        - Symfony\Component\HttpKernel\Kernel::VERSION

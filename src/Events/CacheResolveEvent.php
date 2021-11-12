@@ -58,8 +58,6 @@ class CacheResolveEvent extends Event
 
     /**
      * Sets filter name.
-     *
-     * @param $filter
      */
     public function setFilter(string $filter): void
     {

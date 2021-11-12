@@ -32,12 +32,12 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
     /**
      * @var ResolverFactoryInterface[]
      */
-    private $resolversFactories = [];
+    private array $resolversFactories = [];
 
     /**
      * @var LoaderFactoryInterface[]
      */
-    private $loadersFactories = [];
+    private array $loadersFactories = [];
 
     public function addResolverFactory(ResolverFactoryInterface $resolverFactory): void
     {

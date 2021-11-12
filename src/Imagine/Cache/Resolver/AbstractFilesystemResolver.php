@@ -28,7 +28,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     protected int $folderPermissions = 0777;
 
-    private Request $request;
+    private ?Request $request = null;
 
     /**
      * Constructs a filesystem based cache resolver.
@@ -112,7 +112,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      */
     protected function getRequest(): Request
     {
-        if (false === $this->request) {
+        if (null === $this->request) {
             throw new \LogicException('The request was not injected, inject it before using resolver.');
         }
 
