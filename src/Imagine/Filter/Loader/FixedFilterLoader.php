@@ -45,8 +45,8 @@ class FixedFilterLoader implements LoaderInterface
         // define filters
         $resize = new Resize($size);
         $origin = new Point(
-            floor(($size->getWidth() - $box->getWidth()) / 2),
-            floor(($size->getHeight() - $box->getHeight()) / 2)
+            (int) floor(($size->getWidth() - $box->getWidth()) / 2),
+            (int) floor(($size->getHeight() - $box->getHeight()) / 2)
         );
         $crop = new Crop($origin, $box);
 

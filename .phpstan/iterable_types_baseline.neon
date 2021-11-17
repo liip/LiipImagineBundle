@@ -1,0 +1,622 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Command\\\\RemoveCacheCommand\\:\\:resolveInputFiltersAndPaths\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Command/RemoveCacheCommand.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Command\\\\ResolveCacheCommand\\:\\:resolveInputFiltersAndPaths\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Command/ResolveCacheCommand.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Component\\\\Console\\\\Style\\\\ImagineStyle\\:\\:compileString\\(\\) has parameter \\$replacements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Component/Console/Style/ImagineStyle.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Component\\\\Console\\\\Style\\\\ImagineStyle\\:\\:critBlock\\(\\) has parameter \\$replacements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Component/Console/Style/ImagineStyle.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Component\\\\Console\\\\Style\\\\ImagineStyle\\:\\:line\\(\\) has parameter \\$replacements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Component/Console/Style/ImagineStyle.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Component\\\\Console\\\\Style\\\\ImagineStyle\\:\\:okayBlock\\(\\) has parameter \\$replacements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Component/Console/Style/ImagineStyle.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Component\\\\Console\\\\Style\\\\ImagineStyle\\:\\:text\\(\\) has parameter \\$replacements with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Component/Console/Style/ImagineStyle.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Config\\\\Stack\\:\\:\\$filters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/Stack.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Config\\\\StackBuilder\\:\\:build\\(\\) has parameter \\$stackData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/StackBuilder.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Config\\\\StackBuilderInterface\\:\\:build\\(\\) has parameter \\$stackData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/StackBuilderInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Config\\\\StackCollection\\:\\:__construct\\(\\) has parameter \\$filtersConfiguration with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/StackCollection.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Config\\\\StackCollection\\:\\:\\$filtersConfiguration type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/StackCollection.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Config\\\\StackCollection\\:\\:\\$stacks type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Config/StackCollection.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Controller\\\\ImagineController\\:\\:getFiltersBc\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Controller/ImagineController.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\FactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/FactoryInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\ChainLoaderFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/ChainLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\FileSystemLoaderFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/FileSystemLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\FileSystemLoaderFactory\\:\\:getBundlePathsUsingMetadata\\(\\) has parameter \\$metadata with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/FileSystemLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\FileSystemLoaderFactory\\:\\:resolveDataRoots\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/FileSystemLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\FlysystemLoaderFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/FlysystemLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Loader\\\\StreamLoaderFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Loader/StreamLoaderFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Resolver\\\\AwsS3ResolverFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Resolver/AwsS3ResolverFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Resolver\\\\FlysystemResolverFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Resolver/FlysystemResolverFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\Resolver\\\\WebPathResolverFactory\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/Factory/Resolver/WebPathResolverFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:createFactories\\(\\) has parameter \\$configurations with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:createFactories\\(\\) has parameter \\$factories with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:createFilterSets\\(\\) has parameter \\$defaultFilterSets with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:createFilterSets\\(\\) has parameter \\$filterSets with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:createFilterSets\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:getConfiguration\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:loadLoaders\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:loadResolvers\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\LiipImagineExtension\\:\\:loadTwig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/DependencyInjection/LiipImagineExtension.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Exception\\\\Imagine\\\\Filter\\\\PostProcessor\\\\InvalidOptionException\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Exception/Imagine/Filter/PostProcessor/InvalidOptionException.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Exception\\\\Imagine\\\\Filter\\\\PostProcessor\\\\InvalidOptionException\\:\\:stringifyOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Exception/Imagine/Filter/PostProcessor/InvalidOptionException.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\Argument\\\\PointFactory\\:\\:createFromOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/Argument/PointFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\Argument\\\\SizeFactory\\:\\:createFromOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/Argument/SizeFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\AutoRotateFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/AutoRotateFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\BackgroundFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/BackgroundFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\CropFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/CropFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\DownscaleFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/DownscaleFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\FlipFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/FlipFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\GrayscaleFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/GrayscaleFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\InterlaceFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/InterlaceFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\PasteFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/PasteFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\RelativeResizeFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/RelativeResizeFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\ResizeFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/ResizeFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\RotateFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/RotateFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\ScaleFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/ScaleFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\StripFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/StripFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\ThumbnailFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/ThumbnailFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\UpscaleFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/UpscaleFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\Filter\\\\WatermarkFactory\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/Filter/WatermarkFactory.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Factory\\\\Config\\\\FilterFactoryInterface\\:\\:create\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Factory/Config/FilterFactoryInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\CacheManager\\:\\:generateUrl\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/CacheManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\CacheManager\\:\\:getBrowserPath\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/CacheManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\CacheManager\\:\\:getRuntimePath\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/CacheManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AmazonS3Resolver\\:\\:__construct\\(\\) has parameter \\$objUrlOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AmazonS3Resolver\\:\\:logError\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AmazonS3Resolver\\:\\:\\$objUrlOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:__construct\\(\\) has parameter \\$getOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:__construct\\(\\) has parameter \\$putOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:logError\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:\\$getOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:\\$putOptions type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\ProxyResolver\\:\\:\\$hosts type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/ProxyResolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\PsrCacheResolver\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/PsrCacheResolver.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\PsrCacheResolver\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Resolver/PsrCacheResolver.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Signer\\:\\:check\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Signer.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Signer\\:\\:sign\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/Signer.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\SignerInterface\\:\\:check\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/SignerInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\SignerInterface\\:\\:sign\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Cache/SignerInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterConfiguration\\:\\:__construct\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterConfiguration.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterConfiguration\\:\\:all\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterConfiguration.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterConfiguration\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterConfiguration.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterConfiguration\\:\\:set\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterConfiguration.php
+
+		-
+			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterConfiguration\\:\\:\\$filters type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterConfiguration.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:apply\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:applyFilter\\(\\) has parameter \\$runtimeConfig with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:applyFilters\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:applyPostProcessors\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:exportConfiguredImageBinary\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:sanitizeFilters\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:sanitizeFilters\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:sanitizePostProcessors\\(\\) has parameter \\$processors with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\FilterManager\\:\\:sanitizePostProcessors\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/FilterManager.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\AutoRotateFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/AutoRotateFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\BackgroundFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/BackgroundFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\CropFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/CropFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\FixedFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/FixedFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\FlipFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/FlipFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\FlipFilterLoader\\:\\:sanitizeOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/FlipFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\FlipFilterLoader\\:\\:sanitizeOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/FlipFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\GrayscaleFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/GrayscaleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\InterlaceFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/InterlaceFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\LoaderInterface\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/LoaderInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\PasteFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/PasteFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\RelativeResizeFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/RelativeResizeFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResampleFilterLoader\\:\\:getImagineSaveOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResampleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResampleFilterLoader\\:\\:getImagineSaveOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResampleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResampleFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResampleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResampleFilterLoader\\:\\:resolveOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResampleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResampleFilterLoader\\:\\:resolveOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResampleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ResizeFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ResizeFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\RotateFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/RotateFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ScaleFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ScaleFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\StripFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/StripFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\ThumbnailFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/ThumbnailFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\Loader\\\\WatermarkFilterLoader\\:\\:load\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/Loader/WatermarkFilterLoader.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\AbstractPostProcessor\\:\\:acquireTemporaryFilePath\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\AbstractPostProcessor\\:\\:createProcess\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\AbstractPostProcessor\\:\\:createProcess\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\AbstractPostProcessor\\:\\:isBinaryTypeMatch\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\AbstractPostProcessor\\:\\:writeTemporaryFile\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\JpegOptimPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/JpegOptimPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\MozJpegPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/MozJpegPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\OptiPngPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/OptiPngPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\PngquantPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/PngquantPostProcessor.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\PostProcessorInterface\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Imagine/Filter/PostProcessor/PostProcessorInterface.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Service\\\\FilterPathContainer\\:\\:createWebp\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Service/FilterPathContainer.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Service\\\\FilterService\\:\\:__construct\\(\\) has parameter \\$webpOptions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Service/FilterService.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Service\\\\FilterService\\:\\:getUrlOfFilteredImageWithRuntimeFilters\\(\\) has parameter \\$runtimeFilters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Service/FilterService.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Templating\\\\LazyFilterRuntime\\:\\:filter\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Templating/LazyFilterRuntime.php
+
+		-
+			message: "#^Method Liip\\\\ImagineBundle\\\\Templating\\\\LazyFilterRuntime\\:\\:filterCache\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../src/Templating/LazyFilterRuntime.php
+

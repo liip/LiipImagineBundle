@@ -245,7 +245,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @param FactoryInterface[] $factories
      */
-    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition, $type): void
+    private function addConfigurationSections(array $factories, ArrayNodeDefinition $definition, string $type): void
     {
         foreach ($factories as $f) {
             $f->addConfiguration($definition->children()->arrayNode($f->getName()));

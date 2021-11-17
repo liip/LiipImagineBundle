@@ -64,7 +64,7 @@ class ScaleFilterLoader implements LoaderInterface
         }
 
         if ($this->isImageProcessable($ratio)) {
-            $filter = new Resize(new Box(round($origWidth * $ratio), round($origHeight * $ratio)));
+            $filter = new Resize(new Box((int) round($origWidth * $ratio), (int) round($origHeight * $ratio)));
 
             return $filter->apply($image);
         }

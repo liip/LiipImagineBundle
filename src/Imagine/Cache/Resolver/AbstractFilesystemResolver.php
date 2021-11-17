@@ -83,8 +83,14 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
             return;
         }
 
+        $firstFilter = current($filters);
+
+        if (!\is_string($firstFilter) || '' === $firstFilter) {
+            return;
+        }
+
         // TODO: this logic has to be refactored.
-        [$rootCachePath] = explode(current($filters), $this->getFilePath('whateverpath', current($filters)));
+        [$rootCachePath] = explode($firstFilter, $this->getFilePath('whateverpath', $firstFilter));
 
         if (empty($paths)) {
             $filtersCachePaths = [];

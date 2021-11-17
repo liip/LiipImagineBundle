@@ -23,10 +23,7 @@ abstract class AbstractWebTestCase extends WebTestCase
         return AppKernel::class;
     }
 
-    /**
-     * @return object
-     */
-    protected function getService(string $name)
+    protected function getService(string $name): ?object
     {
         if (property_exists($this, 'container')) {
             return static::$container->get($name);
@@ -48,11 +45,9 @@ abstract class AbstractWebTestCase extends WebTestCase
     }
 
     /**
-     * @param object $object
-     *
      * @return mixed
      */
-    protected function getPrivateProperty($object, string $name)
+    protected function getPrivateProperty(object $object, string $name)
     {
         $r = new \ReflectionObject($object);
 

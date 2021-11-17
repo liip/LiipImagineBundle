@@ -19,25 +19,13 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class AbstractSetupWebTestCase extends AbstractWebTestCase
 {
-    /**
-     * @var KernelBrowser
-     */
-    protected $client;
+    protected KernelBrowser $client;
 
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
-    /**
-     * @var string
-     */
-    protected $webRoot;
+    protected string $webRoot;
 
-    /**
-     * @var string
-     */
-    protected $cacheRoot;
+    protected string $cacheRoot;
 
     protected function setUp(): void
     {

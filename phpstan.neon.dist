@@ -1,8 +1,9 @@
 includes:
     - .phpstan/baseline.neon
+    - .phpstan/iterable_types_baseline.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:
-    level: 4
+    level: 6
     paths:
         - src
     treatPhpDocTypesAsCertain: false
