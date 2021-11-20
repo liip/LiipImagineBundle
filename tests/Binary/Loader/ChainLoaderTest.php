@@ -23,6 +23,8 @@ use Symfony\Component\Mime\MimeTypes;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Loader\ChainLoader
+ * @covers \Liip\ImagineBundle\Exception\Binary\Loader\ChainAttemptNotLoadableException
+ * @covers \Liip\ImagineBundle\Exception\Binary\Loader\ChainNotLoadableException
  */
 class ChainLoaderTest extends AbstractTest
 {
