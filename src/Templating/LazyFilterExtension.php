@@ -27,10 +27,7 @@ final class LazyFilterExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'liip_imagine_lazy';
     }

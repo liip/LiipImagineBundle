@@ -13,3 +13,8 @@ parameters:
         - message: "#^Unreachable statement \\- code above always terminates\\.$#"
           count: 1
           path: ../src/Controller/ImagineController.php
+
+        # BC Layer for Symfony < 5.1
+        - message: "#^Parameter \\#2 \\$default of method Symfony\\\\Component\\\\HttpFoundation\\\\InputBag\\<string\\>\\:\\:get\\(\\) expects string\\|null, array given\\.$#"
+          count: 1
+          path: ../src/Controller/ImagineController.php

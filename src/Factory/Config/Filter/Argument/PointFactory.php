@@ -20,7 +20,7 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
  */
 final class PointFactory
 {
-    public function create($x = null, $y = null): Point
+    public function create(int $x = null, int $y = null): Point
     {
         return new Point($x, $y);
     }

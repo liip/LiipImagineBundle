@@ -123,17 +123,17 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         }, $filterSets);
     }
 
-    private function loadResolvers(array $config, ContainerBuilder $container)
+    private function loadResolvers(array $config, ContainerBuilder $container): void
     {
         $this->createFactories($this->resolversFactories, $config, $container);
     }
 
-    private function loadLoaders(array $config, ContainerBuilder $container)
+    private function loadLoaders(array $config, ContainerBuilder $container): void
     {
         $this->createFactories($this->loadersFactories, $config, $container);
     }
 
-    private function createFactories(array $factories, array $configurations, ContainerBuilder $container)
+    private function createFactories(array $factories, array $configurations, ContainerBuilder $container): void
     {
         foreach ($configurations as $name => $conf) {
             $factories[key($conf)]->create($container, $name, $conf[key($conf)]);

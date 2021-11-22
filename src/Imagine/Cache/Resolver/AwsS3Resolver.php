@@ -110,7 +110,7 @@ class AwsS3Resolver implements ResolverInterface
 
         if (empty($paths)) {
             try {
-                $this->storage->deleteMatchingObjects($this->bucket, null, sprintf(
+                $this->storage->deleteMatchingObjects($this->bucket, '', sprintf(
                     '/%s/i',
                     implode('|', $filters)
                 ));

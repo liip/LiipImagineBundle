@@ -18,8 +18,14 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
 {
     protected ObjectManager $manager;
 
+    /**
+     * @phpstan-var class-string
+     */
     protected string $modelClass;
 
+    /**
+     * @phpstan-param class-string $modelClass
+     */
     public function __construct(ObjectManager $manager, string $modelClass)
     {
         $this->manager = $manager;

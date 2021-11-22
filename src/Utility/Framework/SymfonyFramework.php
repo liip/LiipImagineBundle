@@ -35,6 +35,6 @@ final class SymfonyFramework
 
     private static function kernelVersionCompare(string $operator, int $major, int $minor = null, int $patch = null): bool
     {
-        return version_compare(Kernel::VERSION_ID, sprintf("%d%'.02d%'.02d", $major, $minor ?: 0, $patch ?: 0), $operator);
+        return version_compare((string) Kernel::VERSION_ID, sprintf("%d%'.02d%'.02d", $major, $minor ?: 0, $patch ?: 0), $operator);
     }
 }

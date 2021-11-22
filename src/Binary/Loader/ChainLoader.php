@@ -49,23 +49,24 @@ class ChainLoader implements LoaderInterface
     }
 
     /**
-     * @param \Exception[] $exceptions
+     * @param array<string, LoaderInterface> $exceptions
+     * @param array<string, LoaderInterface> $loaders
      */
     private static function getLoaderExceptionMessage(string $path, array $exceptions, array $loaders): string
     {
-        array_walk($loaders, function (LoaderInterface &$loader, string $name): void {
-            $loader = sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $name);
-        });
+        $loaderMessages = array_map(static function (string $name, LoaderInterface $loader) {
+            return sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $name);
+        }, array_keys($loaders), $loaders);
 
-        array_walk($exceptions, function (LoaderInterface &$loader, string $message): void {
-            $loader = sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $message);
-        });
+        $exceptionMessages = array_map(static function (string $message, LoaderInterface $loader) {
+            return sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $message);
+        }, array_keys($exceptions), $exceptions);
 
         return vsprintf('Source image not resolvable "%s" using "%s" %d loaders (internal exceptions: %s).', [
             $path,
-            implode(', ', $loaders),
+            implode(', ', $loaderMessages),
             \count($loaders),
-            implode(', ', $exceptions),
+            implode(', ', $exceptionMessages),
         ]);
     }
 }
