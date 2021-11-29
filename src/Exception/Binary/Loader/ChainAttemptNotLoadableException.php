@@ -15,39 +15,39 @@ use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 
 final class ChainAttemptNotLoadableException extends NotLoadableException
 {
-    private string          $configName;
-    private LoaderInterface $loaderInst;
+    private string          $loaderIndex;
+    private LoaderInterface $loaderClass;
 
-    public function __construct(string $configName, LoaderInterface $loaderInst, NotLoadableException $loaderException)
+    public function __construct(string $loaderIndex, LoaderInterface $loaderClass, NotLoadableException $loaderException)
     {
-        $this->configName = $configName;
-        $this->loaderInst = $loaderInst;
+        $this->loaderIndex = $loaderIndex;
+        $this->loaderClass = $loaderClass;
 
-        parent::__construct($this->compileFailureText(), 0, $loaderException);
+        parent::__construct($this->compileMessageTxt(), 0, $loaderException);
     }
 
-    public function getLoaderConfigName(): string
+    public function getLoaderIndex(): string
     {
-        return $this->configName;
+        return $this->loaderIndex;
     }
 
-    public function getLoaderObjectInst(): LoaderInterface
+    public function getLoaderClass(): LoaderInterface
     {
-        return $this->loaderInst;
+        return $this->loaderClass;
     }
 
-    public function getLoaderObjectName(): string
+    public function getLoaderClassName(): string
     {
-        return (new \ReflectionObject($this->getLoaderObjectInst()))->getShortName();
+        return (new \ReflectionObject($this->getLoaderClass()))->getShortName();
     }
 
-    public function getLoaderPriorError(): string
+    public function getLoaderException(): string
     {
         return $this->getPrevious()->getMessage();
     }
 
-    private function compileFailureText(): string
+    private function compileMessageTxt(): string
     {
-        return sprintf('%s=[%s]', $this->getLoaderObjectName(), $this->getLoaderConfigName());
+        return sprintf('%s=[%s]', $this->getLoaderClassName(), $this->getLoaderIndex());
     }
 }

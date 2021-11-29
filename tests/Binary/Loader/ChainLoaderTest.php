@@ -16,6 +16,8 @@ use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\ChainAttemptNotLoadableException;
+use Liip\ImagineBundle\Exception\Binary\Loader\ChainNotLoadableException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -28,44 +30,48 @@ use Symfony\Component\Mime\MimeTypes;
  */
 class ChainLoaderTest extends AbstractTest
 {
-    public function testImplementsLoaderInterface(): void
+    public function testChainLoaderImplementsLoaderInterface(): void
     {
-        $this->assertInstanceOf(LoaderInterface::class, $this->getChainLoader());
+        $this->assertInstanceOf(LoaderInterface::class, self::instantiateChainLoader());
     }
 
-    /**
-     * @return array[]
-     */
-    public static function provideLoadCases(): array
+    public function testChainAttemptNotLoadableExceptionImplementsNotLoadableException(): void
+    {
+        $this->assertInstanceOfNotLoadableException(
+            self::instantiateChainAttemptNotLoadableException(),
+            vsprintf('Expected "%s" to be an instance of "%s"', [
+                ChainAttemptNotLoadableException::class,
+                NotLoadableException::class,
+            ])
+        );
+    }
+
+    public function testChainNotLoadableExceptionImplementsNotLoadableException(): void
+    {
+        $this->assertInstanceOfNotLoadableException(
+            self::instantiateChainNotLoadableException()
+        );
+    }
+
+    private function assertInstanceOfNotLoadableException(object $provided, string $message = ''): void
+    {
+        $this->assertInstanceOf(NotLoadableException::class, $provided, $message
+            ?? vsprintf('Expected class "%s" to be an instance of "%s"', [
+                self::getReflectionObjectName($provided), NotLoadableException::class,
+            ])
+        );
+    }
+
+    public static function provideLoadCases(): \Generator
     {
         $file = pathinfo(__FILE__, PATHINFO_BASENAME);
 
-        return [
-            [
-                __DIR__,
-                $file,
-            ],
-            [
-                __DIR__.'/',
-                $file,
-            ],
-            [
-                __DIR__, '/'.
-                $file,
-            ],
-            [
-                __DIR__.'/../../Binary/Loader',
-                '/'.$file,
-            ],
-            [
-                realpath(__DIR__.'/..'),
-                'Loader/'.$file,
-            ],
-            [
-                __DIR__.'/../',
-                '/Loader/../../Binary/Loader/'.$file,
-            ],
-        ];
+        yield [__DIR__, $file];
+        yield [__DIR__.'/', $file];
+        yield [__DIR__, '/'.$file];
+        yield [__DIR__.'/../../Binary/Loader', '/'.$file];
+        yield [realpath(__DIR__.'/..'), 'Loader/'.$file];
+        yield [__DIR__.'/../', '/Loader/../../Binary/Loader/'.$file];
     }
 
     /**
@@ -73,18 +79,19 @@ class ChainLoaderTest extends AbstractTest
      */
     public function testLoad(string $root, string $path): void
     {
-        $this->assertValidLoaderFindReturn($this->getChainLoader([$root])->find($path));
+        $this->assertValidLoaderFindReturn(self::instantiateChainLoader([$root])->find($path), vsprintf(
+            'Expected valid "%s::find()" return with root of "%s" and file path of "%s".', [
+                ChainLoader::class,
+                $root,
+                $path,
+            ]
+        ));
     }
 
-    /**
-     * @return array[]
-     */
-    public function provideInvalidPathsData(): array
+    public function provideInvalidPathsData(): \Generator
     {
-        return [
-            ['../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'],
-            ['../../Binary/'],
-        ];
+        yield ['../Loader/../../Binary/Loader/../../../Resources/config/routing.yaml'];
+        yield ['../../Binary/'];
     }
 
     /**
@@ -93,9 +100,10 @@ class ChainLoaderTest extends AbstractTest
     public function testThrowsIfFileDoesNotExist(string $path): void
     {
         $this->expectException(NotLoadableException::class);
+        $this->expectException(ChainNotLoadableException::class);
         $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\]" 1 loaders}');
 
-        $this->getChainLoader()->find($path);
+        self::instantiateChainLoader()->find($path);
     }
 
     /**
@@ -104,43 +112,25 @@ class ChainLoaderTest extends AbstractTest
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
+        $this->expectException(ChainNotLoadableException::class);
+        $this->expectExceptionMessageMatchesBC(
+            '{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], '.
+            'FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], '.
+            'FileSystemLoader=\[.+\]\)\.}'
+        );
 
-        $this->getChainLoader([], [
-            'foo' => $this->createFileSystemLoader(
-                $this->getFileSystemLocator([
+        self::instantiateChainLoader([], [
+            'foo' => self::instantiateFileSystemLoader(
+                self::instantiateFileSystemLocator([
                     realpath(__DIR__.'/../../'),
                 ])
             ),
-            'bar' => $this->createFileSystemLoader(
-                $this->getFileSystemLocator([
+            'bar' => self::instantiateFileSystemLoader(
+                self::instantiateFileSystemLocator([
                     realpath(__DIR__.'/../../../'),
                 ])
             ),
         ])->find($path);
-    }
-
-    /**
-     * @param string[] $paths
-     */
-    private function getFileSystemLocator(array $paths = []): FileSystemLocator
-    {
-        return new FileSystemLocator($paths);
-    }
-
-    /**
-     * @param string[]           $paths
-     * @param FileSystemLoader[] $loaders
-     */
-    private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
-    {
-        if (null === $loaders) {
-            $loaders = [
-                'foo' => $this->createFileSystemLoader($this->getFileSystemLocator($paths ?: [__DIR__])),
-            ];
-        }
-
-        return new ChainLoader($loaders);
     }
 
     private function assertValidLoaderFindReturn(FileBinary $return, string $message = ''): void
@@ -149,14 +139,52 @@ class ChainLoaderTest extends AbstractTest
         $this->assertStringStartsWith('text/', $return->getMimeType(), $message);
     }
 
-    private function createFileSystemLoader(LocatorInterface $locator): FileSystemLoader
+    private static function instantiateRandomlyPopulatedChainNotLoadableException(string $loaderPath = null, int $maxInternalExceptions = 10): ChainNotLoadableException
     {
-        $mimeTypes = MimeTypes::getDefault();
+        self::instantiateChainNotLoadableException($loaderPath, ...array_map(function (): ChainAttemptNotLoadableException {
+            return self::instantiateChainAttemptNotLoadableException();
+        }, range(0, self::generateRandomInteger(1, $maxInternalExceptions))));
+    }
 
-        return new FileSystemLoader(
-            $mimeTypes,
-            $mimeTypes,
-            $locator
+    private static function instantiateChainNotLoadableException(string $loaderPath = null, ChainAttemptNotLoadableException ...$exceptions): ChainNotLoadableException
+    {
+        return new ChainNotLoadableException($loaderPath ?? (__DIR__), ...$exceptions);
+    }
+
+    private static function instantiateChainAttemptNotLoadableException(): ChainAttemptNotLoadableException
+    {
+        return new ChainAttemptNotLoadableException(
+            $name = sprintf('conf-item-%d', static::generateRandomInteger(1000, 9999)),
+            self::instantiateFileSystemLoader(self::instantiateFileSystemLocator()),
+            new NotLoadableException(sprintf('the "%s" loader encountered an error', $name))
         );
+    }
+
+    private static function instantiateFileSystemLoader(LocatorInterface $locator = null): FileSystemLoader
+    {
+        return new FileSystemLoader(
+            $mime = MimeTypes::getDefault(), $mime, $locator ?? self::instantiateFileSystemLocator()
+        );
+    }
+
+    /**
+     * @param string[] $paths
+     */
+    private static function instantiateFileSystemLocator(array $paths = []): FileSystemLocator
+    {
+        return new FileSystemLocator($paths);
+    }
+
+    /**
+     * @param string[]                        $paths
+     * @param array<string, FileSystemLoader> $loaders
+     */
+    private static function instantiateChainLoader(array $paths = [], array $loaders = null): ChainLoader
+    {
+        return new ChainLoader($loaders ?? [
+            'foo' => self::instantiateFileSystemLoader(
+                self::instantiateFileSystemLocator($paths ?: [__DIR__])
+            ),
+        ]);
     }
 }

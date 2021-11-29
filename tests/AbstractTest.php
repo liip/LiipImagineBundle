@@ -271,16 +271,39 @@ abstract class AbstractTest extends TestCase
         return $builder->getMock();
     }
 
-    /**
-     * @param object $object
-     */
+    protected static function getReflectionObject(object $object): \ReflectionObject
+    {
+        return new \ReflectionObject($object);
+    }
+
+    protected static function getReflectionObjectName(object $object): string
+    {
+        return self::getReflectionObject($object)->getName();
+    }
+
     protected function getVisibilityRestrictedMethod($object, string $name): \ReflectionMethod
     {
-        $r = new \ReflectionObject($object);
-
-        $m = $r->getMethod($name);
+        $m = self::getReflectionObject($object)->getMethod($name);
         $m->setAccessible(true);
 
         return $m;
+    }
+
+    protected static function generateRandomInteger(int $lowerBound = null, int $upperBound = null): int
+    {
+        $lowerBound = $lowerBound ?? 0;
+        $upperBound = $upperBound ?? 100000000;
+
+        if ($lowerBound > $upperBound) {
+            throw new \LogicException('Lower-bound argument must be less-than or equal-to upper-bound argument!');
+        }
+
+        try {
+            return random_int($lowerBound, $upperBound);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException(vsprintf('Failed to generate random number between %d and %d: %s', [
+                $lowerBound, $upperBound, $e->getMessage()
+            ]));
+        }
     }
 }

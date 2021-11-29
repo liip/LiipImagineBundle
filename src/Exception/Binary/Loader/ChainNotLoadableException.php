@@ -21,25 +21,28 @@ final class ChainNotLoadableException extends NotLoadableException
     private static function compileExceptionMessage(string $path, ChainAttemptNotLoadableException ...$exceptions): string
     {
         return vsprintf('Source image not resolvable "%s" using "%s" %d loaders (internal exceptions: %s).', [
-            $path, self::compileLoaderConfigMaps(...$exceptions), \count($exceptions), self::compileLoaderErrorsList(...$exceptions),
+            $path,
+            self::compileLoaderConfigMaps(...$exceptions),
+            \count($exceptions),
+            self::compileLoaderErrorsList(...$exceptions),
         ]);
     }
 
     private static function compileLoaderConfigMaps(ChainAttemptNotLoadableException ...$exceptions): string
     {
-        return self::implodeArrayMappedExceptions(static function (ChainAttemptNotLoadableException $e): string {
+        return self::implodeMappedExceptions(static function (ChainAttemptNotLoadableException $e): string {
             return $e->getMessage();
         }, ...$exceptions);
     }
 
     private static function compileLoaderErrorsList(ChainAttemptNotLoadableException ...$exceptions): string
     {
-        return self::implodeArrayMappedExceptions(static function (ChainAttemptNotLoadableException $e): string {
-            return sprintf('%s=[%s]', $e->getLoaderObjectName(), $e->getLoaderPriorError());
+        return self::implodeMappedExceptions(static function (ChainAttemptNotLoadableException $e): string {
+            return sprintf('%s=[%s]', $e->getLoaderClassName(), $e->getLoaderException());
         }, ...$exceptions);
     }
 
-    private static function implodeArrayMappedExceptions(\Closure $mapper, ChainAttemptNotLoadableException ...$exceptions): string
+    private static function implodeMappedExceptions(\Closure $mapper, ChainAttemptNotLoadableException ...$exceptions): string
     {
         return implode(', ', array_map($mapper, $exceptions));
     }
