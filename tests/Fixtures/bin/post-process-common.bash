@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function writeScriptInformation()
 {
@@ -36,7 +36,7 @@ function writeScriptInformation()
 
 function writeScriptDebugFile()
 {
-  local debugFile="/tmp/post-process-fixture-bin.log"
+  local debugFile="${TMPDIR:-/tmp}/post-process-fixture-bin.log"
 
   if read -t 0; then
     cat | tee "${debugFile}"
