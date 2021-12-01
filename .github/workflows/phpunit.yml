@@ -102,7 +102,7 @@ jobs:
         run: vendor/bin/simple-phpunit -v
 
       - name: Install php-coveralls
-        run: composer require --no-interaction --no-progress php-coveralls/php-coveralls:^2.5
+        run: composer global require --no-interaction --no-progress php-coveralls/php-coveralls:^2.5
 
       - name: Upload coverage results to Coveralls
         uses: nick-invision/retry@v2
