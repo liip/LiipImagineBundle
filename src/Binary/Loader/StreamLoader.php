@@ -46,7 +46,7 @@ class StreamLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function find($path)
+    public function find($path): string
     {
         $name = $this->wrapperPrefix.$path;
 

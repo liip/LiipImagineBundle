@@ -33,7 +33,7 @@ class FlysystemLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function find($path)
+    public function find($path): Binary
     {
         if (false === $this->filesystem->has($path)) {
             throw new NotLoadableException(sprintf('Source image "%s" not found.', $path));

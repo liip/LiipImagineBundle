@@ -37,7 +37,7 @@ class FileSystemLoader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function find($path)
+    public function find($path): FileBinary
     {
         $path = $this->locator->locate($path);
         $mimeType = $this->mimeTypeGuesser->guessMimeType($path);

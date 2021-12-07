@@ -34,7 +34,7 @@ class FlysystemV2Loader implements LoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function find($path)
+    public function find($path): Binary
     {
         try {
             $mimeType = $this->filesystem->mimeType($path);
