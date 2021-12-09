@@ -167,7 +167,7 @@ class FilterService
         $basePathContainer = new FilterPathContainer($source, $target, $options);
         $filterPathContainers = [$basePathContainer];
 
-        if ($this->webpGenerate) {
+        if ($this->webpGenerate && !$basePathContainer->isGif()) {
             $filterPathContainers[] = $basePathContainer->createWebp($this->webpOptions);
         }
 
@@ -182,7 +182,7 @@ class FilterService
     ): string {
         $path = $filterPathContainer->getTarget();
 
-        if ($this->webpGenerate && $webpSupported) {
+        if ($this->webpGenerate && $webpSupported && !$filterPathContainer->isGif()) {
             $path = $filterPathContainer->createWebp($this->webpOptions)->getTarget();
         }
 

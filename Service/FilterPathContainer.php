@@ -49,6 +49,11 @@ final class FilterPathContainer
         );
     }
 
+    public function isGif(): bool
+    {
+        return preg_match("/\.gif$/",$this->source);
+    }
+
     public function getSource(): string
     {
         return $this->source;
