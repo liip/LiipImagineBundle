@@ -4,6 +4,10 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+## [2.7.4](https://github.com/liip/LiipImagineBundle/tree/2.7.4)
+
+- Fix confusing deprecation message [\#1443](https://github.com/liip/LiipImagineBundle/pull/1443) ([bastien70](https://github.com/bastien70))
+
 ## [2.7.3](https://github.com/liip/LiipImagineBundle/tree/2.7.3)
 
 - Allow Symfony 6.0 [\#1431](https://github.com/liip/LiipImagineBundle/pull/1431) ([franmomu](https://github.com/franmomu))
