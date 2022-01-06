@@ -160,7 +160,16 @@ class FilterManager
         }
 
         $filteredFormat = $config['format'] ?? $binary->getFormat();
-        $filteredString = $image->get($filteredFormat, $options);
+        try {
+            $filteredString = $image->get($filteredFormat, $options);
+        } catch (\Exception $exception) {
+            if ('webp' === $filteredFormat && true === $options['animated']) {
+                $filteredFormat = 'gif';
+                $filteredString = $image->get($filteredFormat, $options);
+            } else {
+                throw $exception;
+            }
+        }
 
         $this->destroyImage($image);
 

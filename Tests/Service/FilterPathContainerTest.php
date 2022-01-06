@@ -31,19 +31,6 @@ final class FilterPathContainerTest extends TestCase
         $this->assertSame($options, $container->getOptions());
     }
 
-    public function testIsGif(): void
-    {
-        $source = 'images/cats.gif';
-        $container = new FilterPathContainer($source);
-
-        $this->assertTrue($container->isGif());
-
-        $source = 'images/cats.jpeg';
-        $container = new FilterPathContainer($source);
-
-        $this->assertFalse($container->isGif());
-    }
-
     public function testCustomTarget(): void
     {
         $source = 'images/cats.jpeg';
