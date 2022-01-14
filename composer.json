@@ -36,7 +36,7 @@
         "doctrine/cache": "^1.11|^2.0",
         "doctrine/persistence": "^1.3|^2.0",
         "enqueue/enqueue-bundle": "^0.9|^0.10",
-        "league/flysystem": "^1.0|^2.0",
+        "league/flysystem": "^1.0|^2.0|^3.0",
         "phpstan/phpstan": "^0.12.64",
         "psr/cache": "^1.0|^2.0|^3.0",
         "psr/log": "^1.0",
