@@ -28,8 +28,9 @@ class LazyFilterRuntimeTest extends AbstractTest
      * @var LazyFilterRuntime
      */
     private $runtime;
+
     /**
-     * @var CacheManager&MockObject
+     * @var CacheManager|MockObject
      */
     private $manager;
 
