@@ -156,7 +156,7 @@ Here's how you can run it:
 
 .. code-block:: bash
 
-    $ ./app/console enqueue:consume --setup-broker -vvv
+    $ ./bin/console enqueue:consume --setup-broker -vvv
 
 Step 4: Send resolve cache message
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
