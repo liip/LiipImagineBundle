@@ -55,7 +55,7 @@ of ``ImageInterface`` and an array of options. It must return an
 
 You need to `configure a service`_ and tag it ``liip_imagine.filter.loader``.
 
-To register a filter ``AppBundle\Imagine\Filter\Loader\MyCustomFilter`` as
+To register a filter ``App\Service\MyCustomFilter`` as
 ``my_custom_filter``, use the following configuration:
 
 .. configuration-block::
@@ -66,7 +66,7 @@ To register a filter ``AppBundle\Imagine\Filter\Loader\MyCustomFilter`` as
 
         services:
             app.filter.my_custom_filter:
-                class: AppBundle\Imagine\Filter\Loader\MyCustomFilter
+                class: App\Service\MyCustomFilter
                 tags:
                     - { name: "liip_imagine.filter.loader", loader: my_custom_filter }
 
@@ -74,7 +74,7 @@ To register a filter ``AppBundle\Imagine\Filter\Loader\MyCustomFilter`` as
 
         <!-- app/config/services.xml -->
 
-        <service id="app.filter.my_custom_filter" class="AppBundle\Imagine\Filter\Loader\MyCustomFilter">
+        <service id="app.filter.my_custom_filter" class="App\Service\MyCustomFilter">
             <tag name="liip_imagine.filter.loader" loader="my_custom_filter" />
         </service>
 
