@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Guzzle\Service\Resource;
+namespace Liip\ImagineBundle\Tests\Fixtures;
 
 class Model
 {
