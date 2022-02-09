@@ -43,7 +43,9 @@ class FileBinary implements FileBinaryInterface
     }
 
     /**
-     * @return string
+     * TODO: in version 3, restrict return type to string and throw an exception when file_get_contents fails.
+     *
+     * @return string|false
      */
     public function getContent()
     {
