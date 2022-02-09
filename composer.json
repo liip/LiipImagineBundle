@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": "^8.0",
+        "php": "^7.4|^8.0",
         "ext-mbstring": "*",
         "imagine/imagine": "dev-develop",
         "symfony/filesystem": "^4.4|^5.3|^6.0",
