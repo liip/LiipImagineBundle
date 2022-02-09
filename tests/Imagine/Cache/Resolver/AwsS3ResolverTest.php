@@ -12,11 +12,11 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Aws\S3\S3Client;
-use Guzzle\Service\Resource\Model;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Liip\ImagineBundle\Tests\Fixtures\Model;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
