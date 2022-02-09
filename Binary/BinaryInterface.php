@@ -14,7 +14,7 @@ namespace Liip\ImagineBundle\Binary;
 interface BinaryInterface
 {
     /**
-     * @return string
+     * @return string|false
      */
     public function getContent();
 
