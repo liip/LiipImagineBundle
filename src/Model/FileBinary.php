@@ -30,7 +30,14 @@ class FileBinary implements FileBinaryInterface
 
     public function getContent(): string
     {
-        return file_get_contents($this->path);
+        $content = file_get_contents($this->path);
+        if (false === $content) {
+            $error = error_get_last();
+
+            throw new \ErrorException($error['message'] ?? 'An error occured', 0, $error['type'] ?? 1);
+        }
+
+        return $content;
     }
 
     public function getPath(): string
