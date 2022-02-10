@@ -21,9 +21,6 @@ class FilterFactoryCollection
      */
     private array $filterFactories = [];
 
-    /**
-     * @param FilterFactoryInterface ...$filterFactories
-     */
     public function __construct(FilterFactoryInterface ...$filterFactories)
     {
         foreach ($filterFactories as $filterFactory) {
