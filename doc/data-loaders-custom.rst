@@ -28,7 +28,7 @@ path to the image and needs to return an instance of ``BinaryInterface``.
 You need to `configure a service`_ with your custom loader and tag it with
 ``liip_imagine.binary.loader``.
 
-To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
+To register ``App\Service\MyCustomDataLoader`` with the name
 ``my_custom_data_loader``, you would use the following configuration:
 
 .. configuration-block::
@@ -39,7 +39,7 @@ To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
 
         services:
             imagine.data.loader.my_custom:
-                class: AppBundle\Imagine\Binary\Loader\MyCustomDataLoader
+                class: App\Service\MyCustomDataLoader
                 arguments:
                     - "@liip_imagine"
                     - "%liip_imagine.formats%"
@@ -50,7 +50,7 @@ To register ``AppBundle\Imagine\Binary\Loader\MyCustomDataLoader`` with the name
 
         <!-- app/config/services.xml -->
 
-        <service id="imagine.data.loader.my_custom" class="AppBundle\Imagine\Binary\Loader\MyCustomDataLoader">
+        <service id="imagine.data.loader.my_custom" class="App\Service\MyCustomDataLoader">
             <tag name="liip_imagine.binary.loader" loader="my_custom_data_loader" />
             <argument type="service" id="liip_imagine" />
             <argument type="parameter" id="liip_imagine.formats" />
