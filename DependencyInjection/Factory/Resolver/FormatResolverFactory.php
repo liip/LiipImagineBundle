@@ -3,7 +3,6 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * Class FormatResolverFactory
