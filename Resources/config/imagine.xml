@@ -377,9 +377,9 @@
         <service id="liip_imagine.cache.resolver.prototype.format" class="Liip\ImagineBundle\Imagine\Cache\Resolver\FormatResolver" public="true" abstract="true">
             <argument type="service" id="filesystem" />
             <argument type="service" id="router.request_context" />
-            <argument><!-- will be injected by FormatResolverFactory --></argument>
-            <argument><!-- will be injected by FormatResolverFactory --></argument>
             <argument type="service" id="liip_imagine.filter.manager" />
+            <argument><!-- will be injected by FormatResolverFactory --></argument>
+            <argument><!-- will be injected by FormatResolverFactory --></argument>
         </service>
 
         <!-- Form types -->

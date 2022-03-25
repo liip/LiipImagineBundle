@@ -19,8 +19,8 @@ class FormatResolverFactory extends WebPathResolverFactory
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
         $resolverDefinition = $this->getChildResolverDefinition('format');
-        $resolverDefinition->replaceArgument(2, $config['web_root']);
-        $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
+        $resolverDefinition->replaceArgument(3, $config['web_root']);
+        $resolverDefinition->replaceArgument(4, $config['cache_prefix']);
         $resolverDefinition->addTag('liip_imagine.cache.resolver', [
             'resolver' => $resolverName
         ]);

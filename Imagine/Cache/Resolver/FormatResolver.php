@@ -23,16 +23,16 @@ class FormatResolver extends WebPathResolver
     /**
      * @param Filesystem     $filesystem
      * @param RequestContext $requestContext
+     * @param FilterManager  $filterManager
      * @param string         $webRootDir
      * @param string         $cachePrefix
-     * @param FilterManager  $filterManager
      */
     public function __construct(
         Filesystem $filesystem,
         RequestContext $requestContext,
+        FilterManager $filterManager,
         $webRootDir,
-        $cachePrefix = 'media/cache',
-        FilterManager $filterManager
+        $cachePrefix = 'media/cache'
     ) {
         parent::__construct($filesystem, $requestContext, $webRootDir, $cachePrefix);
 
