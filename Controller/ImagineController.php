@@ -15,11 +15,13 @@ use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -44,6 +46,11 @@ class ImagineController
     private $signer;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
      * @var ControllerConfig
      */
     private $controllerConfig;
@@ -52,11 +59,13 @@ class ImagineController
         FilterService $filterService,
         DataManager $dataManager,
         SignerInterface $signer,
+        CacheManager $cacheManager,
         ?ControllerConfig $controllerConfig = null
     ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
+        $this->cacheManager = $cacheManager;
 
         if (null === $controllerConfig) {
             @trigger_error(sprintf(
@@ -176,5 +185,59 @@ class ImagineController
     private function isWebpSupported(Request $request): bool
     {
         return false !== mb_stripos($request->headers->get('accept', ''), 'image/webp');
+    }
+
+    /**
+     * This action applies a given filter to a given image, saves the image and serves it to the browser right away.
+     *
+     * @param Request $request
+     * @param string  $path
+     * @param string  $filter
+     *
+     * @throws RuntimeException
+     * @throws NotFoundHttpException
+     *
+     * @return BinaryFileResponse
+     */
+    public function readAction(Request $request, $path, $filter)
+    {
+        $path = urldecode($path);
+        $resolver = $request->get('resolver');
+
+        try {
+            if ($this->cacheManager->isStored($path, $filter, $resolver)) {
+                $content = file_get_contents($this->cacheManager->resolve($path, $filter, $resolver));
+            } else {
+                $binary  = $this->filterService->getFilteredImageContent($path, $filter, $resolver);
+                $content = $binary->getContent();
+            }
+
+            return $this->serveFileContent($content);
+        } catch (NotLoadableException $e) {
+            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
+                $content = file_get_contents($this->dataManager->getDefaultImageUrl($filter));
+
+                return $this->serveFileContent($content);
+            }
+
+            throw new NotFoundHttpException(sprintf('Source image for path "%s" could not be found', $path));
+        } catch (NonExistingFilterException $e) {
+            throw new NotFoundHttpException(sprintf('Requested non-existing filter "%s"', $filter));
+        } catch (RuntimeException $e) {
+            throw new \RuntimeException(sprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', $path, $filter, $e->getMessage()), 0, $e);
+        }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return BinaryFileResponse
+     */
+    private function serveFileContent($content)
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle-serve');
+        file_put_contents($tmpFile, $content);
+
+        return new BinaryFileResponse($tmpFile, 201);
     }
 }

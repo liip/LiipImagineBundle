@@ -131,6 +131,29 @@ class FilterService
      * @param string      $filter
      * @param string|null $resolver
      *
+     * @return BinaryInterface
+     */
+    public function getFilteredImageContent($path, $filter, $resolver = null)
+    {
+        $filterPathContainer = new FilterPathContainer($path);
+        $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
+        $filteredBinary = $this->createFilteredBinary($filterPathContainer, $filter);
+
+        $this->cacheManager->store(
+            $filteredBinary,
+            $filterPathContainer->getTarget(),
+            $filter,
+            $resolver
+        );
+
+        return $filteredBinary;
+    }
+
+    /**
+     * @param string      $path
+     * @param string      $filter
+     * @param string|null $resolver
+     *
      * @return string
      */
     public function getUrlOfFilteredImageWithRuntimeFilters(

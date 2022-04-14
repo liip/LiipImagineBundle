@@ -31,6 +31,21 @@ class FilterExtension extends AbstractExtension
         return [
             new TwigFilter('imagine_filter', [$this, 'filter']),
             new TwigFilter('imagine_filter_cache', [$this, 'filterCache']),
+            new TwigFilter('imagine_resolve', [$this, 'resolve']),
         ];
+    }
+
+    /**
+     * Gets target browser path for the image and filter to apply.
+     *
+     * @param string      $path
+     * @param string      $filter
+     * @param string|null $resolver
+     *
+     * @return string
+     */
+    public function resolve($path, $filter, $resolver = null)
+    {
+        return $this->cache->resolve($path, $filter, $resolver);
     }
 }
