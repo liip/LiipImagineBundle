@@ -19,5 +19,9 @@
             <tag name="console.command" command="liip:imagine:cache:resolve" alias="imagine:get" />
         </service>
 
+        <service id="liip_imagine.command.cache_warm" class="Liip\ImagineBundle\Command\WarmCacheCommand">
+            <tag name="console.command" command="liip:imagine:cache:warm" alias="imagine:warm" />
+        </service>
+
     </services>
 </container>
