@@ -28,6 +28,18 @@
 
         <parameter key="liip_imagine.mozjpeg.binary">/opt/mozjpeg/bin/cjpeg</parameter>
 
+        <!-- cwebp parameters -->
+
+        <parameter key="liip_imagine.cwebp.binary">/usr/bin/cwebp</parameter>
+        <parameter key="liip_imagine.cwebp.near_lossless">100</parameter>
+        <parameter key="liip_imagine.cwebp.q">75</parameter>
+        <parameter key="liip_imagine.cwebp.alpha_q">100</parameter>
+        <parameter key="liip_imagine.cwebp.m">4</parameter>
+        <parameter key="liip_imagine.cwebp.alpha_filter">fast</parameter>
+        <parameter key="liip_imagine.cwebp.alpha_method">1</parameter>
+        <parameter key="liip_imagine.cwebp.exact">false</parameter>
+        <parameter key="liip_imagine.cwebp.metadata">none</parameter>
+
     </parameters>
 
     <services>
@@ -422,6 +434,11 @@
         <service id="liip_imagine.filter.post_processor.mozjpeg" class="Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor">
             <argument>%liip_imagine.mozjpeg.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
+        </service>
+
+        <service id="liip_imagine.filter.post_processor.cwebp" class="Liip\ImagineBundle\Imagine\Filter\PostProcessor\CwebpPostProcessor">
+            <argument>%liip_imagine.cwebp.binary%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="cwebp" />
         </service>
 
     </services>
