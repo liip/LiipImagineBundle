@@ -34,10 +34,10 @@ class GrayscaleFilterLoaderTest extends AbstractTest
         // Generate blue image
         $image = $imagine->create(new Box(20, 20), $palette->color([20, 90, 240]));
 
-        //Apply Grayscale filter
+        // Apply Grayscale filter
         $result = $loader->load($image);
 
-        //Test result
+        // Test result
         $pixel = $result->getColorAt(new Point(10, 10));
         $this->assertSame('#565656', (string) $pixel);
     }
