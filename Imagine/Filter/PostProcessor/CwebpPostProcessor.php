@@ -10,16 +10,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class CwebpPostProcessor extends AbstractPostProcessor
 {
     /**
-     * Specify the level of near-lossless image preprocessing. This option adjusts pixel values to help
-     * compressibility, but has minimal impact on the visual quality. It triggers lossless compression mode
-     * automatically. The range is **0** (maximum preprocessing) to **100** (no preprocessing). The typical value is
-     * around **60**. Note that lossy with **-q 100** can at times yield better results.
-     *
-     * @var int
-     */
-    protected $nearLossless;
-
-    /**
      * Specify the compression factor for RGB channels between **0** and **100**. The default is **75**.
      *
      * In case of lossy compression , a small factor produces a smaller file with lower quality. Best quality is
@@ -90,7 +80,6 @@ class CwebpPostProcessor extends AbstractPostProcessor
     public function __construct(
         string $executablePath = '/usr/bin/cwebp',
         string $temporaryRootPath = null,
-        int $nearLossless = null,
         int $q = null,
         int $alphaQ = null,
         int $m = null,
@@ -101,7 +90,6 @@ class CwebpPostProcessor extends AbstractPostProcessor
     ) {
         parent::__construct($executablePath, $temporaryRootPath);
 
-        $this->nearLossless = $nearLossless;
         $this->q = $q;
         $this->alphaQ = $alphaQ;
         $this->m = $m;
@@ -152,15 +140,6 @@ class CwebpPostProcessor extends AbstractPostProcessor
     private function getProcessArguments(array $options = []): array
     {
         $arguments = [$this->executablePath];
-
-        if ($nearLossless = $options['nearLossless'] ?? $this->nearLossless) {
-            if (!\in_array($nearLossless, range(0, 100), true)) {
-                throw new InvalidOptionException('The "nearLossless" option must be an int between 0 and 100', $options);
-            }
-
-            $arguments[] = '-near_lossless';
-            $arguments[] = $nearLossless;
-        }
 
         if ($q = $options['q'] ?? $this->q) {
             if (!\in_array($q, range(0, 100), true)) {

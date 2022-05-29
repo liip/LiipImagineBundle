@@ -31,7 +31,6 @@
         <!-- cwebp parameters -->
 
         <parameter key="liip_imagine.cwebp.binary">/usr/bin/cwebp</parameter>
-        <parameter key="liip_imagine.cwebp.near_lossless">100</parameter>
         <parameter key="liip_imagine.cwebp.q">75</parameter>
         <parameter key="liip_imagine.cwebp.alpha_q">100</parameter>
         <parameter key="liip_imagine.cwebp.m">4</parameter>

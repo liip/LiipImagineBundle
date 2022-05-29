@@ -23,14 +23,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
 {
-    public function testNearLosslessOptionThrowsOnOutOfScopeInt(): void
-    {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "nearLossless" option must be an int between 0 and 100');
-
-        $this->getProcessArguments(['nearLossless' => 101]);
-    }
-
     public function testQOptionThrowsOnOutOfScopeInt(): void
     {
         $this->expectException(InvalidOptionException::class);
@@ -83,7 +75,6 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
     {
         $data = [
             [[], []],
-            [['nearLossless' => 80], ['-near_lossless', 80]],
             [['q' => 80], ['-q', 80]],
             [['alphaQ' => 80], ['-alpha_q', 80]],
             [['m' => 6], ['-m', 6]],
@@ -113,7 +104,6 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
         $file = 'stdio-file-content-string';
         $data = [
             [[], ''],
-            [['nearLossless' => 80], '-near_lossless 80'],
             [['q' => 80], '-q 80'],
             [['alphaQ' => 80], '-alpha_q 80'],
             [['m' => 6], '-m 6'],
