@@ -38,7 +38,9 @@
         <parameter key="liip_imagine.cwebp.alphaFilter">fast</parameter>
         <parameter key="liip_imagine.cwebp.alphaMethod">1</parameter>
         <parameter key="liip_imagine.cwebp.exact">false</parameter>
-        <parameter key="liip_imagine.cwebp.metadata">none</parameter>
+        <parameter key="liip_imagine.cwebp.metadata" type="collection">
+            <parameter>none</parameter>
+        </parameter>
 
     </parameters>
 

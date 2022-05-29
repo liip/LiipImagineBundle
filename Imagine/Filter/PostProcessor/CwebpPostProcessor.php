@@ -68,12 +68,12 @@ class CwebpPostProcessor extends AbstractPostProcessor
     protected $exact;
 
     /**
-     * A comma separated list of metadata to copy from the input to the output if present. Valid values: **all**,
-     * **none**, **exif**, **icc**, **xmp**.
+     * An array of metadata to copy from the input to the output if present. Valid values: **all**, **none**, **exif**,
+     * **icc**, **xmp**.
      *
      * Note that each input format may not support all combinations.
      *
-     * @var string
+     * @var string[]
      */
     protected $metadata;
 
@@ -86,7 +86,7 @@ class CwebpPostProcessor extends AbstractPostProcessor
         string $alphaFilter = null,
         int $alphaMethod = null,
         bool $exact = null,
-        string $metadata = null
+        array $metadata = []
     ) {
         parent::__construct($executablePath, $temporaryRootPath);
 
@@ -192,16 +192,14 @@ class CwebpPostProcessor extends AbstractPostProcessor
         }
 
         if ($metadata = $options['metadata'] ?? $this->metadata) {
-            $metadataValues = explode(',', $metadata);
-
-            foreach ($metadataValues as $metadataValue) {
+            foreach ($metadata as $metadataValue) {
                 if (!\in_array($metadataValue, ['all', 'none', 'exif', 'icc', 'xmp'], true)) {
-                    throw new InvalidOptionException('The "metadata" option must be a list of string (all, none, exif, icc, xmp)', $options);
+                    throw new InvalidOptionException('The "metadata" option must be an array of string (all, none, exif, icc, xmp)', $options);
                 }
             }
 
             $arguments[] = '-metadata';
-            $arguments[] = $metadata;
+            $arguments[] = implode(',', $metadata);
         }
 
         return $arguments;

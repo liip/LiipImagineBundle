@@ -66,9 +66,9 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
     public function testMetadataOptionThrowsOnOutOfScopeInt(): void
     {
         $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "metadata" option must be a list of string (all, none, exif, icc, xmp)');
+        $this->expectExceptionMessage('The "metadata" option must be an array of string (all, none, exif, icc, xmp)');
 
-        $this->getProcessArguments(['metadata' => 'dummy']);
+        $this->getProcessArguments(['metadata' => ['dummy']]);
     }
 
     public static function provideProcessArgumentsData(): array
@@ -81,7 +81,7 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
             [['alphaFilter' => 'best'], ['-alpha_filter', 'best']],
             [['alphaMethod' => 0], ['-alpha_method', 0]],
             [['exact' => true], ['-exact']],
-            [['metadata' => 'all'], ['-metadata', 'all']],
+            [['metadata' => ['exif', 'icc']], ['-metadata', 'exif,icc']],
         ];
 
         return array_map(static function (array $d) {
@@ -110,7 +110,7 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
             [['alphaFilter' => 'best'], '-alpha_filter best'],
             [['alphaMethod' => 0], '-alpha_method 0'],
             [['exact' => true], '-exact'],
-            [['metadata' => 'all'], '-metadata all'],
+            [['metadata' => ['all']], '-metadata all'],
         ];
 
         return array_map(static function ($d) use ($file) {
