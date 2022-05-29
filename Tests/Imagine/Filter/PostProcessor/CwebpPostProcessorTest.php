@@ -11,10 +11,10 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
-use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\CwebpPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -25,48 +25,48 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
 {
     public function testQOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "q" option must be an int between 0 and 100');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "q" with value 101 is invalid.');
 
         $this->getProcessArguments(['q' => 101]);
     }
 
     public function testAlphaQOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "alphaQ" option must be an int between 0 and 100');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "alphaQ" with value 101 is invalid.');
 
         $this->getProcessArguments(['alphaQ' => 101]);
     }
 
     public function testMOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "m" option must be an int between 0 and 6');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "m" with value 7 is invalid.');
 
         $this->getProcessArguments(['m' => 7]);
     }
 
     public function testAlphaFilterOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "alphaFilter" option must be a string (none, fast or best)');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "alphaFilter" with value "dummy" is invalid.');
 
         $this->getProcessArguments(['alphaFilter' => 'dummy']);
     }
 
     public function testAlphaMethodOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "alphaMethod" option must be an int between 0 and 1');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "alphaMethod" with value 7 is invalid.');
 
         $this->getProcessArguments(['alphaMethod' => 7]);
     }
 
     public function testMetadataOptionThrowsOnOutOfScopeInt(): void
     {
-        $this->expectException(InvalidOptionException::class);
-        $this->expectExceptionMessage('The "metadata" option must be an array of string (all, none, exif, icc, xmp)');
+        $this->expectException(InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "metadata" with value array is invalid.');
 
         $this->getProcessArguments(['metadata' => ['dummy']]);
     }

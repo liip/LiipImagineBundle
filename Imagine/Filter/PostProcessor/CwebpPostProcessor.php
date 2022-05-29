@@ -3,8 +3,8 @@
 namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Model\Binary;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class CwebpPostProcessor extends AbstractPostProcessor
@@ -77,6 +77,11 @@ class CwebpPostProcessor extends AbstractPostProcessor
      */
     protected $metadata;
 
+    /**
+     * @var OptionsResolver
+     */
+    private $resolver;
+
     public function __construct(
         string $executablePath = '/usr/bin/cwebp',
         string $temporaryRootPath = null,
@@ -97,6 +102,9 @@ class CwebpPostProcessor extends AbstractPostProcessor
         $this->alphaMethod = $alphaMethod;
         $this->exact = $exact;
         $this->metadata = $metadata;
+        $this->resolver = new OptionsResolver();
+
+        $this->configureOptions($this->resolver);
     }
 
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
@@ -132,72 +140,140 @@ class CwebpPostProcessor extends AbstractPostProcessor
         return $this->isBinaryTypeMatch($binary, ['image/webp']);
     }
 
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver
+            ->define('q')
+            ->default($this->q)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                return $value >= 0 && $value <= 100;
+            })
+        ;
+
+        $resolver
+            ->define('alphaQ')
+            ->default($this->alphaQ)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                return $value >= 0 && $value <= 100;
+            })
+        ;
+
+        $resolver
+            ->define('m')
+            ->default($this->m)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                return $value >= 0 && $value <= 6;
+            })
+        ;
+
+        $resolver
+            ->define('alphaFilter')
+            ->default($this->alphaFilter)
+            ->allowedTypes('null', 'string')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                return \in_array($value, ['none', 'fast', 'best'], true);
+            })
+        ;
+
+        $resolver
+            ->define('alphaMethod')
+            ->default($this->alphaMethod)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                return $value >= 0 && $value <= 1;
+            })
+        ;
+
+        $resolver
+            ->define('exact')
+            ->default($this->exact)
+            ->allowedTypes('null', 'bool')
+        ;
+
+        $resolver
+            ->define('metadata')
+            ->default($this->metadata)
+            ->allowedTypes('null', 'array')
+            ->allowedValues(static function ($value) {
+                if (null === $value) {
+                    return true;
+                }
+
+                foreach ($value as $metadata) {
+                    if (!\in_array($metadata, ['all', 'none', 'exif', 'icc', 'xmp'], true)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            })
+        ;
+    }
+
     /**
      * @param int|string[] $options
      *
      * @return string[]
      */
-    private function getProcessArguments(array $options = []): array
+    protected function getProcessArguments(array $options = []): array
     {
+        $options = $this->resolver->resolve($options);
         $arguments = [$this->executablePath];
 
-        if ($q = $options['q'] ?? $this->q) {
-            if (!\in_array($q, range(0, 100), true)) {
-                throw new InvalidOptionException('The "q" option must be an int between 0 and 100', $options);
-            }
-
+        if ($q = $options['q']) {
             $arguments[] = '-q';
             $arguments[] = $q;
         }
 
-        if ($alphaQ = $options['alphaQ'] ?? $this->alphaQ) {
-            if (!\in_array($alphaQ, range(0, 100), true)) {
-                throw new InvalidOptionException('The "alphaQ" option must be an int between 0 and 100', $options);
-            }
-
+        if ($alphaQ = $options['alphaQ']) {
             $arguments[] = '-alpha_q';
             $arguments[] = $alphaQ;
         }
 
-        if ($m = $options['m'] ?? $this->m) {
-            if (!\in_array($m, range(0, 6), true)) {
-                throw new InvalidOptionException('The "m" option must be an int between 0 and 6', $options);
-            }
-
+        if ($m = $options['m']) {
             $arguments[] = '-m';
             $arguments[] = $m;
         }
 
-        if ($alphaFilter = $options['alphaFilter'] ?? $this->alphaFilter) {
-            if (!\in_array($alphaFilter, ['none', 'fast', 'best'], true)) {
-                throw new InvalidOptionException('The "alphaFilter" option must be a string (none, fast or best)', $options);
-            }
-
+        if ($alphaFilter = $options['alphaFilter']) {
             $arguments[] = '-alpha_filter';
             $arguments[] = $alphaFilter;
         }
 
-        $alphaMethod = $options['alphaMethod'] ?? $this->alphaMethod;
+        $alphaMethod = $options['alphaMethod'];
         if (null !== $alphaMethod) {
-            if (!\in_array($alphaMethod, range(0, 1), true)) {
-                throw new InvalidOptionException('The "alphaMethod" option must be an int between 0 and 1', $options);
-            }
-
             $arguments[] = '-alpha_method';
             $arguments[] = $alphaMethod;
         }
 
-        if ($options['exact'] ?? $this->exact) {
+        if ($options['exact']) {
             $arguments[] = '-exact';
         }
 
-        if ($metadata = $options['metadata'] ?? $this->metadata) {
-            foreach ($metadata as $metadataValue) {
-                if (!\in_array($metadataValue, ['all', 'none', 'exif', 'icc', 'xmp'], true)) {
-                    throw new InvalidOptionException('The "metadata" option must be an array of string (all, none, exif, icc, xmp)', $options);
-                }
-            }
-
+        if ($metadata = $options['metadata']) {
             $arguments[] = '-metadata';
             $arguments[] = implode(',', $metadata);
         }
