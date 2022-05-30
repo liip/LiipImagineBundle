@@ -143,10 +143,9 @@ class CwebpPostProcessor extends AbstractPostProcessor
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->define('q')
-            ->default($this->q)
-            ->allowedTypes('null', 'int')
-            ->allowedValues(static function ($value) {
+            ->setDefault('q', $this->q)
+            ->setAllowedTypes('q', ['null', 'int'])
+            ->setAllowedValues('q', static function ($value) {
                 if (null === $value) {
                     return true;
                 }
@@ -156,10 +155,9 @@ class CwebpPostProcessor extends AbstractPostProcessor
         ;
 
         $resolver
-            ->define('alphaQ')
-            ->default($this->alphaQ)
-            ->allowedTypes('null', 'int')
-            ->allowedValues(static function ($value) {
+            ->setDefault('alphaQ', $this->alphaQ)
+            ->setAllowedTypes('alphaQ', ['null', 'int'])
+            ->setAllowedValues('alphaQ', static function ($value) {
                 if (null === $value) {
                     return true;
                 }
@@ -169,10 +167,9 @@ class CwebpPostProcessor extends AbstractPostProcessor
         ;
 
         $resolver
-            ->define('m')
-            ->default($this->m)
-            ->allowedTypes('null', 'int')
-            ->allowedValues(static function ($value) {
+            ->setDefault('m', $this->m)
+            ->setAllowedTypes('m', ['null', 'int'])
+            ->setAllowedValues('m', static function ($value) {
                 if (null === $value) {
                     return true;
                 }
@@ -182,30 +179,26 @@ class CwebpPostProcessor extends AbstractPostProcessor
         ;
 
         $resolver
-            ->define('alphaFilter')
-            ->default($this->alphaFilter)
-            ->allowedTypes('null', 'string')
-            ->allowedValues(null, 'none', 'fast', 'best')
+            ->setDefault('alphaFilter', $this->alphaFilter)
+            ->setAllowedTypes('alphaFilter', ['null', 'string'])
+            ->setAllowedValues('alphaFilter', [null, 'none', 'fast', 'best'])
         ;
 
         $resolver
-            ->define('alphaMethod')
-            ->default($this->alphaMethod)
-            ->allowedTypes('null', 'int')
-            ->allowedValues(null, 0, 1)
+            ->setDefault('alphaMethod', $this->alphaMethod)
+            ->setAllowedTypes('alphaMethod', ['null', 'int'])
+            ->setAllowedValues('alphaMethod', [null, 0, 1])
         ;
 
         $resolver
-            ->define('exact')
-            ->default($this->exact)
-            ->allowedTypes('null', 'bool')
+            ->setDefault('exact', $this->exact)
+            ->setAllowedTypes('exact', ['null', 'bool'])
         ;
 
         $resolver
-            ->define('metadata')
-            ->default($this->metadata)
-            ->allowedTypes('null', 'array')
-            ->allowedValues(static function ($value) {
+            ->setDefault('metadata', $this->metadata)
+            ->setAllowedTypes('metadata', ['null', 'array'])
+            ->setAllowedValues('metadata', static function ($value) {
                 if (null === $value) {
                     return true;
                 }
