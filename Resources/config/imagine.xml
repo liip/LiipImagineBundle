@@ -28,6 +28,20 @@
 
         <parameter key="liip_imagine.mozjpeg.binary">/opt/mozjpeg/bin/cjpeg</parameter>
 
+        <!-- cwebp parameters -->
+
+        <parameter key="liip_imagine.cwebp.binary">/usr/bin/cwebp</parameter>
+        <parameter key="liip_imagine.cwebp.tempDir">null</parameter>
+        <parameter key="liip_imagine.cwebp.q">75</parameter>
+        <parameter key="liip_imagine.cwebp.alphaQ">100</parameter>
+        <parameter key="liip_imagine.cwebp.m">4</parameter>
+        <parameter key="liip_imagine.cwebp.alphaFilter">fast</parameter>
+        <parameter key="liip_imagine.cwebp.alphaMethod">1</parameter>
+        <parameter key="liip_imagine.cwebp.exact">false</parameter>
+        <parameter key="liip_imagine.cwebp.metadata" type="collection">
+            <parameter>none</parameter>
+        </parameter>
+
     </parameters>
 
     <services>
@@ -422,6 +436,19 @@
         <service id="liip_imagine.filter.post_processor.mozjpeg" class="Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor">
             <argument>%liip_imagine.mozjpeg.binary%</argument>
             <tag name="liip_imagine.filter.post_processor" post_processor="mozjpeg" />
+        </service>
+
+        <service id="liip_imagine.filter.post_processor.cwebp" class="Liip\ImagineBundle\Imagine\Filter\PostProcessor\CwebpPostProcessor">
+            <argument>%liip_imagine.cwebp.binary%</argument>
+            <argument>%liip_imagine.cwebp.tempDir%</argument>
+            <argument>%liip_imagine.cwebp.q%</argument>
+            <argument>%liip_imagine.cwebp.alphaQ%</argument>
+            <argument>%liip_imagine.cwebp.m%</argument>
+            <argument>%liip_imagine.cwebp.alphaFilter%</argument>
+            <argument>%liip_imagine.cwebp.alphaMethod%</argument>
+            <argument>%liip_imagine.cwebp.exact%</argument>
+            <argument>%liip_imagine.cwebp.metadata%</argument>
+            <tag name="liip_imagine.filter.post_processor" post_processor="cwebp" />
         </service>
 
     </services>
