@@ -90,6 +90,9 @@ class CwebpPostProcessor extends AbstractPostProcessor
      */
     private $resolver;
 
+    /**
+     * @param string[] $metadata
+     */
     public function __construct(
         string $executablePath = '/usr/bin/cwebp',
         string $temporaryRootPath = null,
@@ -216,7 +219,7 @@ class CwebpPostProcessor extends AbstractPostProcessor
     }
 
     /**
-     * @param int|string[] $options
+     * @param array<mixed> $options
      *
      * @return string[]
      */
