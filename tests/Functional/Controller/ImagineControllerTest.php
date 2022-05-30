@@ -63,7 +63,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
      */
     public function testShouldResolvePopulatingCacheFirst($image, $urlimage): void
     {
-        //guard
+        // guard
         $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/'.$image);
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/'.$urlimage);
@@ -84,7 +84,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testShouldResolvePopulatingCacheFirstWebP(): void
     {
-        //guard
+        // guard
         $this->assertFileDoesNotExist($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
@@ -216,7 +216,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
-        //guard
+        // guard
         $this->assertFileDoesNotExist($this->cacheRoot.'/'.$expectedCachePath);
 
         $this->client->request('GET', $url);
@@ -254,7 +254,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $url = 'http://localhost/media/cache/resolve/'.$expectedCachePath.'?'.http_build_query($params);
 
-        //guard
+        // guard
         $this->assertFileDoesNotExist($this->cacheRoot.'/'.$expectedCachePath);
 
         $this->client->request('GET', $url, [], [], [

@@ -12,7 +12,6 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Aws\S3\S3Client;
-use Guzzle\Service\Resource\Model;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
@@ -88,8 +87,7 @@ class AwsS3ResolverTest extends AbstractTest
         $s3 = $this->getS3ClientMock();
         $s3
             ->expects($this->once())
-            ->method('putObject')
-            ->willReturn($this->getS3ResponseMock());
+            ->method('putObject');
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->store($binary, 'thumb/foobar.jpg', 'thumb');
@@ -178,8 +176,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->with([
                 'Bucket' => 'images.example.com',
                 'Key' => 'thumb/some-folder/path.jpg',
-            ])
-            ->willReturn($this->getS3ResponseMock());
+            ]);
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(['some-folder/path.jpg'], ['thumb']);
@@ -207,8 +204,7 @@ class AwsS3ResolverTest extends AbstractTest
                     'Bucket' => 'images.example.com',
                     'Key' => 'thumb/pathTwo.jpg',
                 ]
-            )
-            ->willReturn($this->getS3ResponseMock());
+            );
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -249,8 +245,7 @@ class AwsS3ResolverTest extends AbstractTest
                     'Bucket' => 'images.example.com',
                     'Key' => 'filterTwo/pathTwo.jpg',
                 ]
-            )
-            ->willReturn($this->getS3ResponseMock());
+            );
 
         $resolver = new AwsS3Resolver($s3, 'images.example.com');
         $resolver->remove(
@@ -348,14 +343,6 @@ class AwsS3ResolverTest extends AbstractTest
         $resolver = new AwsS3Resolver($s3, $expectedBucket);
         $resolver->setLogger($logger);
         $resolver->remove([], [$expectedFilter]);
-    }
-
-    /**
-     * @return MockObject&Model
-     */
-    protected function getS3ResponseMock()
-    {
-        return $this->createObjectMock(Model::class);
     }
 
     /**

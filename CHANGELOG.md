@@ -1,34 +1,58 @@
-# Change Log
+# Changelog
 
 This file contains a complete enumeration of all [pull requests](https://github.com/liip/LiipImagineBundle/pulls) merged
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
-## [2.7.6](https://github.com/liip/LiipImagineBundle/tree/2.7.6)
+## [2.8.0](https://github.com/liip/LiipImagineBundle/tree/2.8.0)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.6...2.8.0)
+
+- adjust codestyle to newest php-cs-fixer [\#1468](https://github.com/liip/LiipImagineBundle/pull/1468) ([dbu](https://github.com/dbu))
+- feat: add a cwebp post-processor for WebP images [\#1466](https://github.com/liip/LiipImagineBundle/pull/1466) ([DjLeChuck](https://github.com/DjLeChuck))
+- return values from the aws client are not used [\#1461](https://github.com/liip/LiipImagineBundle/pull/1461) ([dbu](https://github.com/dbu))
+- file\_get\_contents might return false. related to \#1452 [\#1453](https://github.com/liip/LiipImagineBundle/pull/1453) ([dbu](https://github.com/dbu))
+- Use bin/console in documentation [\#1448](https://github.com/liip/LiipImagineBundle/pull/1448) ([tbredillet](https://github.com/tbredillet))
+
+## [2.7.6](https://github.com/liip/LiipImagineBundle/tree/2.7.6) (2022-01-14)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.5...2.7.6)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.5...2.7.6)
 
 - Allow Flysystem 3.0 [\#1445](https://github.com/liip/LiipImagineBundle/pull/1445) ([mbabker](https://github.com/mbabker))
 
-## [2.7.5](https://github.com/liip/LiipImagineBundle/tree/2.7.5)
+## [2.7.5](https://github.com/liip/LiipImagineBundle/tree/2.7.5) (2022-01-11)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.4...2.7.5)
 
 - Fix animated gifs can not be transformed to the webp format [\#1444](https://github.com/liip/LiipImagineBundle/pull/1444) ([Yoann-TYT](https://github.com/Yoann-TYT))
 
-## [2.7.4](https://github.com/liip/LiipImagineBundle/tree/2.7.4)
+## [2.7.4](https://github.com/liip/LiipImagineBundle/tree/2.7.4) (2021-12-27)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.3...2.7.4)
 
 - Fix confusing deprecation message [\#1443](https://github.com/liip/LiipImagineBundle/pull/1443) ([bastien70](https://github.com/bastien70))
 
-## [2.7.3](https://github.com/liip/LiipImagineBundle/tree/2.7.3)
+## [2.7.3](https://github.com/liip/LiipImagineBundle/tree/2.7.3) (2021-12-03)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.2...2.7.3)
 
 - Allow Symfony 6.0 [\#1431](https://github.com/liip/LiipImagineBundle/pull/1431) ([franmomu](https://github.com/franmomu))
 
-## [2.7.2](https://github.com/liip/LiipImagineBundle/tree/2.7.2)
+## [2.7.2](https://github.com/liip/LiipImagineBundle/tree/2.7.2) (2021-11-11)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.1...2.7.2)
 
 - Address PHP 8.1 deprecations [\#1427](https://github.com/liip/LiipImagineBundle/pull/1427) ([franmomu](https://github.com/franmomu))
 
-## [2.7.1](https://github.com/liip/LiipImagineBundle/tree/2.7.1)
+## [2.7.1](https://github.com/liip/LiipImagineBundle/tree/2.7.1) (2021-11-02)
+
+[Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.0...2.7.1)
 
 - Bugfix: Don't resolve to webp in the controller if webp generation is disabled [\#1410](https://github.com/liip/LiipImagineBundle/pull/1410) ([mynameisbogdan](https://github.com/mynameisbogdan) / [dbu](https://github.com/dbu))
 
-## [2.7.0](https://github.com/liip/LiipImagineBundle/tree/2.7.0)
+## [2.7.0](https://github.com/liip/LiipImagineBundle/tree/2.7.0) (2021-10-28)
 
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.6.1...2.7.0)
 
