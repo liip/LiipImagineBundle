@@ -185,26 +185,14 @@ class CwebpPostProcessor extends AbstractPostProcessor
             ->define('alphaFilter')
             ->default($this->alphaFilter)
             ->allowedTypes('null', 'string')
-            ->allowedValues(static function ($value) {
-                if (null === $value) {
-                    return true;
-                }
-
-                return \in_array($value, ['none', 'fast', 'best'], true);
-            })
+            ->allowedValues(null, 'none', 'fast', 'best')
         ;
 
         $resolver
             ->define('alphaMethod')
             ->default($this->alphaMethod)
             ->allowedTypes('null', 'int')
-            ->allowedValues(static function ($value) {
-                if (null === $value) {
-                    return true;
-                }
-
-                return $value >= 0 && $value <= 1;
-            })
+            ->allowedValues(null, 0, 1)
         ;
 
         $resolver
