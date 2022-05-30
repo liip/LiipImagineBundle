@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the `liip/LiipImagineBundle` project.
+ *
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Liip\ImagineBundle\Imagine\Filter\PostProcessor;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
@@ -17,7 +26,6 @@ class CwebpPostProcessor extends AbstractPostProcessor
      *
      * In case of lossless compression (specified by the **-lossless** option), a small factor enables faster
      * compression speed, but produces a larger file. Maximum compression is achieved by using a value of **100**.
-     *
      *
      * @var int
      */
@@ -151,8 +159,7 @@ class CwebpPostProcessor extends AbstractPostProcessor
                 }
 
                 return $value >= 0 && $value <= 100;
-            })
-        ;
+            });
 
         $resolver
             ->setDefault('alphaQ', $this->alphaQ)
@@ -163,8 +170,7 @@ class CwebpPostProcessor extends AbstractPostProcessor
                 }
 
                 return $value >= 0 && $value <= 100;
-            })
-        ;
+            });
 
         $resolver
             ->setDefault('m', $this->m)
@@ -175,25 +181,21 @@ class CwebpPostProcessor extends AbstractPostProcessor
                 }
 
                 return $value >= 0 && $value <= 6;
-            })
-        ;
+            });
 
         $resolver
             ->setDefault('alphaFilter', $this->alphaFilter)
             ->setAllowedTypes('alphaFilter', ['null', 'string'])
-            ->setAllowedValues('alphaFilter', [null, 'none', 'fast', 'best'])
-        ;
+            ->setAllowedValues('alphaFilter', [null, 'none', 'fast', 'best']);
 
         $resolver
             ->setDefault('alphaMethod', $this->alphaMethod)
             ->setAllowedTypes('alphaMethod', ['null', 'int'])
-            ->setAllowedValues('alphaMethod', [null, 0, 1])
-        ;
+            ->setAllowedValues('alphaMethod', [null, 0, 1]);
 
         $resolver
             ->setDefault('exact', $this->exact)
-            ->setAllowedTypes('exact', ['null', 'bool'])
-        ;
+            ->setAllowedTypes('exact', ['null', 'bool']);
 
         $resolver
             ->setDefault('metadata', $this->metadata)
@@ -210,8 +212,7 @@ class CwebpPostProcessor extends AbstractPostProcessor
                 }
 
                 return true;
-            })
-        ;
+            });
     }
 
     /**

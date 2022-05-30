@@ -154,8 +154,7 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
         $binary
             ->expects($this->atLeastOnce())
             ->method('getMimeType')
-            ->willReturn('application/x-php')
-        ;
+            ->willReturn('application/x-php');
 
         $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
     }
