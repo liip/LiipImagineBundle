@@ -24,8 +24,6 @@ class RemoveCacheCommand extends Command
 {
     use CacheCommandTrait;
 
-    protected static $defaultName = 'liip:imagine:cache:remove';
-
     /**
      * @var FilterService
      */
@@ -43,6 +41,7 @@ class RemoveCacheCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setName('liip:imagine:cache:remove')
             ->setDescription('Remove cache entries for given paths and filters.')
             ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
                 'Image file path(s) to run resolution on.')
