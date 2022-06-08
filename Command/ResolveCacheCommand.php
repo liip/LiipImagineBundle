@@ -24,8 +24,6 @@ class ResolveCacheCommand extends Command
 {
     use CacheCommandTrait;
 
-    protected static $defaultName = 'liip:imagine:cache:resolve';
-
     /**
      * @var FilterService
      */
@@ -43,6 +41,7 @@ class ResolveCacheCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setName('liip:imagine:cache:resolve')
             ->setDescription('Warms up the cache for the specified image sources with all or specified filters applied, and prints the list of cache files.')
             ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
                 'Image file path(s) for which to generate the cached images.')
