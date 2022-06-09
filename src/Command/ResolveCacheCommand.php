@@ -14,17 +14,17 @@ namespace Liip\ImagineBundle\Command;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'liip:imagine:cache:resolve', description: 'Warms up the cache for the specified image sources with all or specified filters applied, and prints the list of cache files.')]
 class ResolveCacheCommand extends Command
 {
     use CacheCommandTrait;
-
-    protected static $defaultName = 'liip:imagine:cache:resolve';
 
     private FilterService $filterService;
 
@@ -40,7 +40,6 @@ class ResolveCacheCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Warms up the cache for the specified image sources with all or specified filters applied, and prints the list of cache files.')
             ->addArgument('paths', InputArgument::REQUIRED | InputArgument::IS_ARRAY,
                 'Image file path(s) for which to generate the cached images.')
             ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
