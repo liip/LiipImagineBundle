@@ -132,13 +132,13 @@ class FilterManager
             'quality' => $config['quality'],
         ];
 
-        if (isset($config['jpeg_quality'])) {
+        if (\array_key_exists('jpeg_quality', $config)) {
             $options['jpeg_quality'] = $config['jpeg_quality'];
         }
-        if (isset($config['png_compression_level'])) {
+        if (\array_key_exists('png_compression_level', $config)) {
             $options['png_compression_level'] = $config['png_compression_level'];
         }
-        if (isset($config['png_compression_filter'])) {
+        if (\array_key_exists('png_compression_filter', $config)) {
             $options['png_compression_filter'] = $config['png_compression_filter'];
         }
 
@@ -171,7 +171,7 @@ class FilterManager
     private function sanitizeFilters(array $filters): array
     {
         $sanitized = array_filter($filters, function (string $name): bool {
-            return isset($this->loaders[$name]);
+            return \array_key_exists($name, $this->loaders);
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($filters) !== \count($sanitized)) {
@@ -184,7 +184,7 @@ class FilterManager
     private function sanitizePostProcessors(array $processors): array
     {
         $sanitized = array_filter($processors, function (string $name): bool {
-            return isset($this->postProcessors[$name]);
+            return \array_key_exists($name, $this->postProcessors);
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($processors) !== \count($sanitized)) {

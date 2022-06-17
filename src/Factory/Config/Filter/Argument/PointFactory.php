@@ -28,7 +28,7 @@ final class PointFactory
 
     public function createFromOptions(array $options, string $propertyName): Point
     {
-        if (!isset($options[$propertyName])) {
+        if (!\array_key_exists($propertyName, $options)) {
             return new Point();
         }
 

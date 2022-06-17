@@ -69,7 +69,7 @@ class DataManager
 
         $loaderName = empty($config['data_loader']) ? $this->defaultLoader : $config['data_loader'];
 
-        if (!isset($this->loaders[$loaderName])) {
+        if (!\array_key_exists($loaderName, $this->loaders)) {
             throw new \InvalidArgumentException(sprintf('Could not find data loader "%s" for "%s" filter type', $loaderName, $filter));
         }
 

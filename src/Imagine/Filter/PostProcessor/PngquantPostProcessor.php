@@ -65,7 +65,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
     }
 
     /**
-     * @param string[] $options
+     * @param array<string, string|int|bool> $options
      *
      * @return string[]
      */
@@ -94,7 +94,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
             $arguments[] = sprintf('%d-%d', $quality[0], $quality[1]);
         }
 
-        if (isset($options['speed'])) {
+        if (\array_key_exists('speed', $options) && null !== $options['speed']) {
             if (!\in_array($options['speed'], range(1, 11), true)) {
                 throw new InvalidOptionException('the "speed" option must be an int between 1 and 11', $options);
             }
@@ -103,7 +103,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
             $arguments[] = $options['speed'];
         }
 
-        if (isset($options['dithering'])) {
+        if (\array_key_exists('dithering', $options) && null !== $options['dithering']) {
             if (false === $options['dithering']) {
                 $arguments[] = '--nofs';
             } elseif ($options['dithering'] >= 0 && $options['dithering'] <= 1) {

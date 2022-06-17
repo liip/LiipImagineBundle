@@ -78,7 +78,7 @@ class ResampleFilterLoader implements LoaderInterface
             'resolution-y' => $options['y'],
         ];
 
-        if (isset($options['filter'])) {
+        if (\array_key_exists('filter', $options)) {
             $saveOptions['resampling-filter'] = $options['filter'];
         }
 

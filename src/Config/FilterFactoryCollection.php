@@ -33,7 +33,7 @@ class FilterFactoryCollection
      */
     public function getFilterFactoryByName(string $name): FilterFactoryInterface
     {
-        if (!isset($this->filterFactories[$name])) {
+        if (!\array_key_exists($name, $this->filterFactories)) {
             throw new NotFoundException(sprintf("Filter factory with name '%s' was not found.", $name));
         }
 

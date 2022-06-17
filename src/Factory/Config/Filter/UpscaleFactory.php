@@ -38,7 +38,7 @@ final class UpscaleFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         $min = $this->sizeFactory->createFromOptions($options, 'min');
-        $by = isset($options['by']) ? (float) $options['by'] : null;
+        $by = \array_key_exists('by', $options) ? (float) $options['by'] : null;
 
         return new Upscale($min, $by);
     }

@@ -69,7 +69,7 @@ class FileSystemLocator implements LocatorInterface
 
     private function locateUsingRootPlaceholder(string $path): ?string
     {
-        if (0 !== mb_strpos($path, '@') || 1 !== preg_match('{^@(?<name>[^:]+):(?<path>.+)$}', $path, $match)) {
+        if (!str_starts_with($path, '@') || 1 !== preg_match('{^@(?<name>[^:]+):(?<path>.+)$}', $path, $match)) {
             return null;
         }
 

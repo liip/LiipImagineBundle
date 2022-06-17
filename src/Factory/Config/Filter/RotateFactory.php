@@ -29,7 +29,7 @@ final class RotateFactory implements FilterFactoryInterface
 
     public function create(array $options): FilterInterface
     {
-        $angle = isset($options['angle']) ? (int) $options['angle'] : 0;
+        $angle = \array_key_exists('angle', $options) ? (int) $options['angle'] : 0;
 
         return new Rotate($angle);
     }

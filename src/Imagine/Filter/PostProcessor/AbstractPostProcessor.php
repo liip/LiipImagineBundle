@@ -36,19 +36,19 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
     {
         $process = new Process($arguments);
 
-        if (!isset($options['process'])) {
+        if (!\array_key_exists('process', $options)) {
             return $process;
         }
 
-        if (isset($options['process']['timeout'])) {
+        if (\array_key_exists('timeout', $options['process'])) {
             $process->setTimeout($options['process']['timeout']);
         }
 
-        if (isset($options['process']['working_directory'])) {
+        if (\array_key_exists('working_directory', $options['process'])) {
             $process->setWorkingDirectory($options['process']['working_directory']);
         }
 
-        if (isset($options['process']['environment_variables']) && \is_array($options['process']['environment_variables'])) {
+        if (\array_key_exists('environment_variables', $options['process']) && \is_array($options['process']['environment_variables'])) {
             $process->setEnv($options['process']['environment_variables']);
         }
 

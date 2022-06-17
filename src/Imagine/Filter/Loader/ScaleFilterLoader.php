@@ -37,21 +37,17 @@ class ScaleFilterLoader implements LoaderInterface
 
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
-        if (!isset($options[$this->dimensionKey]) && !isset($options[$this->ratioKey])) {
-            throw new \InvalidArgumentException("Missing $this->dimensionKey or $this->ratioKey option.");
-        }
-
         $size = $image->getSize();
         $origWidth = $size->getWidth();
         $origHeight = $size->getHeight();
         $ratio = 1;
 
-        if (isset($options[$this->ratioKey])) {
+        if (\array_key_exists($this->ratioKey, $options)) {
             $ratio = $this->absoluteRatio ? $options[$this->ratioKey] : $this->calcAbsoluteRatio($options[$this->ratioKey]);
-        } elseif (isset($options[$this->dimensionKey])) {
+        } elseif (\array_key_exists($this->dimensionKey, $options)) {
             $size = $options[$this->dimensionKey];
-            $width = isset($size[0]) ? $size[0] : null;
-            $height = isset($size[1]) ? $size[1] : null;
+            $width = $size[0] ?? null;
+            $height = $size[1] ?? null;
 
             $widthRatio = $width / $origWidth;
             $heightRatio = $height / $origHeight;
@@ -61,6 +57,8 @@ class ScaleFilterLoader implements LoaderInterface
             } else {
                 $ratio = ('min' === $this->dimensionKey) ? max($widthRatio, $heightRatio) : min($widthRatio, $heightRatio);
             }
+        } else {
+            throw new \InvalidArgumentException("Missing $this->dimensionKey or $this->ratioKey option.");
         }
 
         if ($this->isImageProcessable($ratio)) {

@@ -28,17 +28,17 @@ class BackgroundFilterLoader implements LoaderInterface
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $background = $image->palette()->color(
-            isset($options['color']) ? $options['color'] : '#fff',
-            isset($options['transparency']) ? $options['transparency'] : null
+            $options['color'] ?? '#fff',
+            $options['transparency'] ?? null
         );
         $topLeft = new Point(0, 0);
         $size = $image->getSize();
 
-        if (isset($options['size'])) {
-            $width = isset($options['size'][0]) ? $options['size'][0] : null;
-            $height = isset($options['size'][1]) ? $options['size'][1] : null;
+        if (\array_key_exists('size', $options)) {
+            $width = $options['size'][0] ?? null;
+            $height = $options['size'][1] ?? null;
 
-            $position = isset($options['position']) ? $options['position'] : 'center';
+            $position = $options['position'] ?? 'center';
             switch ($position) {
                 case 'topleft':
                     $x = 0;
@@ -92,8 +92,6 @@ class BackgroundFilterLoader implements LoaderInterface
             $topLeft = new Point($x, $y);
         }
 
-        $canvas = $this->imagine->create($size, $background);
-
-        return $canvas->paste($image, $topLeft);
+        return $this->imagine->create($size, $background)->paste($image, $topLeft);
     }
 }

@@ -28,7 +28,7 @@ final class SizeFactory
 
     public function createFromOptions(array $options, string $propertyName = 'size'): Size
     {
-        if (!isset($options[$propertyName])) {
+        if (!\array_key_exists($propertyName, $options)) {
             return new Size();
         }
 

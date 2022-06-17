@@ -38,7 +38,7 @@ final class DownscaleFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         $max = $this->sizeFactory->createFromOptions($options, 'max');
-        $by = isset($options['by']) ? (float) $options['by'] : null;
+        $by = \array_key_exists('by', $options) ? (float) $options['by'] : null;
 
         return new Downscale($max, $by);
     }
