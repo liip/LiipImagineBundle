@@ -14,12 +14,14 @@ namespace Liip\ImagineBundle\Command;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Service\FilterService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'liip:imagine:cache:remove', description: 'Remove cache entries for given paths and filters.')]
 class RemoveCacheCommand extends Command
 {
     use CacheCommandTrait;
@@ -38,8 +40,6 @@ class RemoveCacheCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('liip:imagine:cache:remove')
-            ->setDescription('Remove cache entries for given paths and filters.')
             ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
                 'Image file path(s) to run resolution on.')
             ->addOption('filter', 'f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,

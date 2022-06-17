@@ -15,36 +15,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['8.0', '8.1']
         dependencies: [highest]
         symfony: ['*']
         stability: ['stable']
         include:
-          # Minimum supported dependencies with the oldest supported PHP version
-          - php: '7.4'
-            dependencies: lowest
-            symfony: '*'
-            stability: 'stable'
-
           # Minimum supported dependencies with the latest supported PHP version
           - php: '8.0'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
 
-          # Test each supported Symfony version with lowest supported PHP version
-          - php: '7.4'
-            dependencies: highest
-            symfony: '4.4.*'
+          - php: '8.1'
+            dependencies: lowest
+            symfony: '*'
             stability: 'stable'
-
-          - php: '7.4'
+            
+          - php: '8.0'
             dependencies: highest
             symfony: '5.3.*'
             stability: 'stable'
 
           # Test Symfony 5.4 dev version
-          - php: '7.4'
+          - php: '8.0'
             dependencies: highest
             symfony: '5.4.*'
             stability: 'dev'
