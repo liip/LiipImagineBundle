@@ -571,31 +571,6 @@ parameters:
 			path: ../src/Imagine/Filter/PostProcessor/AbstractPostProcessor.php
 
 		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\JpegOptimPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Filter/PostProcessor/JpegOptimPostProcessor.php
-
-		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\MozJpegPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Filter/PostProcessor/MozJpegPostProcessor.php
-
-		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\OptiPngPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Filter/PostProcessor/OptiPngPostProcessor.php
-
-		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\PngquantPostProcessor\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Filter/PostProcessor/PngquantPostProcessor.php
-
-		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Filter\\\\PostProcessor\\\\PostProcessorInterface\\:\\:process\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Filter/PostProcessor/PostProcessorInterface.php
-
-		-
 			message: "#^Method Liip\\\\ImagineBundle\\\\Service\\\\FilterPathContainer\\:\\:createWebp\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../src/Service/FilterPathContainer.php
@@ -619,4 +594,3 @@ parameters:
 			message: "#^Method Liip\\\\ImagineBundle\\\\Templating\\\\LazyFilterRuntime\\:\\:filterCache\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../src/Templating/LazyFilterRuntime.php
-
