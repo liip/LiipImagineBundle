@@ -27,7 +27,7 @@ class GrayscaleFilterLoaderTest extends AbstractWebTestCase
 
         $this->assertInstanceOf(
             GrayscaleFilterLoader::class,
-                self::$kernel->getContainer()->get('liip_imagine.filter.loader.grayscale')
+            self::$kernel->getContainer()->get('liip_imagine.filter.loader.grayscale')
         );
     }
 }

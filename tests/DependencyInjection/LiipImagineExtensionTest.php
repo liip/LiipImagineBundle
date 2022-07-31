@@ -281,12 +281,12 @@ EOF;
 
     private function assertHasDefinition(string $id): void
     {
-        $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
+        $this->assertTrue($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id));
     }
 
     private function assertHasNotDefinition(string $id): void
     {
-        $this->assertFalse(($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id)));
+        $this->assertFalse($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id));
     }
 
     private function assertDICConstructorArguments(Definition $definition, array $arguments): void
