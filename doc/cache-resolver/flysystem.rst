@@ -63,7 +63,8 @@ There are several configuration options available:
   prefix inside the given Flysystem.
   Default value: ``media/cache``
 * ``visibility``: one of the two predefined flysystem visibility constants
-  (``AdapterInterface::VISIBILITY_PUBLIC`` [``public``] / ``AdapterInterface::VISIBILITY_PRIVATE`` [``private``])
+  (``Visibility::PUBLIC`` / ``Visibility::PRIVATE`` or if you use flysystem 1.*
+  ``AdapterInterface::VISIBILITY_PUBLIC`` [``public``] / ``AdapterInterface::VISIBILITY_PRIVATE`` [``private``])
   The visibility is applied, when the objects are stored on a flysystem filesystem.
   You will most probably want to leave the default or explicitly set ``public``.
   Default value: ``public``
