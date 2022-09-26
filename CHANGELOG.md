@@ -4,6 +4,10 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+## Next minor
+
+- Allow extra keys to generate correct Symfony configuration class [\#1484](https://github.com/liip/LiipImagineBundle/pull/1484) ([bobvandevijver](https://github.com/bobvandevijver))
+
 ## [2.8.0](https://github.com/liip/LiipImagineBundle/tree/2.8.0)
 
 [Full Changelog](https://github.com/liip/LiipImagineBundle/compare/2.7.6...2.8.0)
