@@ -25,6 +25,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 {
     /**
      * @group legacy
+     *
      * @expectedDeprecation The %s::setMax() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
     public function testDeprecatedSetMaxMethod(): void
@@ -34,6 +35,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @group legacy
+     *
      * @expectedDeprecation The %s::setProgressive() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
     public function testDeprecatedSetProgressiveMethod(): void
@@ -43,6 +45,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
 
     /**
      * @group legacy
+     *
      * @expectedDeprecation The %s::setStripAll() method was deprecated in %s and will be removed in %s. You must setup the class state via its __construct() method. You can still pass filter-specific options to the process() method to overwrite behavior.
      */
     public function testDeprecatedSetStripAllMethod(): void
