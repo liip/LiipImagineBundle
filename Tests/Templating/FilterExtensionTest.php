@@ -18,6 +18,7 @@ use Twig\Extension\AbstractExtension;
 /**
  * @covers \Liip\ImagineBundle\Templating\FilterTrait
  * @covers \Liip\ImagineBundle\Templating\FilterExtension
+ *
  * @group legacy
  */
 class FilterExtensionTest extends AbstractFilterTest
