@@ -66,11 +66,6 @@ parameters:
 			path: ../src/Config/StackCollection.php
 
 		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Controller\\\\ImagineController\\:\\:getFiltersBc\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Controller/ImagineController.php
-
-		-
 			message: "#^Method Liip\\\\ImagineBundle\\\\DependencyInjection\\\\Factory\\\\FactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../src/DependencyInjection/Factory/FactoryInterface.php

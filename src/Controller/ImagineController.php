@@ -19,12 +19,10 @@ use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Kernel;
 
 class ImagineController
 {
@@ -88,7 +86,7 @@ class ImagineController
     {
         $resolver = $request->get('resolver');
         $path = PathHelper::urlPathToFilePath($path);
-        $runtimeConfig = $this->getFiltersBc($request);
+        $runtimeConfig = $request->query->all('filters');
 
         if (true !== $this->signer->check($hash, $path, $runtimeConfig)) {
             throw new BadRequestHttpException(sprintf('Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s', $path, $filter, json_encode($runtimeConfig)));
@@ -103,27 +101,6 @@ class ImagineController
                 $this->isWebpSupported($request)
             );
         }, $path, $filter, $hash);
-    }
-
-    private function getFiltersBc(Request $request): array
-    {
-        if (version_compare(Kernel::VERSION, '5.1', '>=')) {
-            try {
-                return $request->query->all('filters');
-            } catch (BadRequestException $e) {
-                // for strict BC - BadRequestException seems more suited to this situation.
-                // remove the try-catch in version 3
-                throw new NotFoundHttpException(sprintf('Filters must be an array. Value was "%s"', $request->query->get('filters')));
-            }
-        }
-
-        $runtimeConfig = $request->query->get('filters', []);
-
-        if (!\is_array($runtimeConfig)) {
-            throw new NotFoundHttpException(sprintf('Filters must be an array. Value was "%s"', $runtimeConfig));
-        }
-
-        return $runtimeConfig;
     }
 
     private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse

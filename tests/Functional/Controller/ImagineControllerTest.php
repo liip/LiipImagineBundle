@@ -15,6 +15,8 @@ use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @covers \Liip\ImagineBundle\Controller\ImagineController
@@ -171,10 +173,10 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         ]));
     }
 
-    public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray(): void
+    public function testShouldThrowBadRequestHttpExceptionIfFiltersNotArray(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-        $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage('Unexpected value for parameter "filters": expecting "array", got "string".');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
             'filters' => 'some-string',
@@ -184,7 +186,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
@@ -192,7 +194,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testInvalidFilterShouldThrowNotFoundHttpException(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
 
         $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
     }
