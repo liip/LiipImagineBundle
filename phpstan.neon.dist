@@ -1,5 +1,4 @@
 includes:
-    - .phpstan/baseline.neon
     - .phpstan/iterable_types_baseline.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
 parameters:

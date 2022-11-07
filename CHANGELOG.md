@@ -4,6 +4,10 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+## 3.x (unreleased)
+
+- The response when the `filter` parameter in a resolve request is not an array is now 400 bad request, and no longer 404 not found.
+
 ## [2.9.0](https://github.com/liip/LiipImagineBundle/tree/2.9.0)
 
 - Fix Symfony 6.1 deprecations [\#1472](https://github.com/liip/LiipImagineBundle/pull/1472) ([willemverspyck](https://github.com/willemverspyck))

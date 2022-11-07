@@ -19,7 +19,6 @@ use Liip\ImagineBundle\Message\Handler\WarmupCacheHandler;
 use Liip\ImagineBundle\Message\WarmupCache;
 use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
-use ReflectionClass;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -37,7 +36,7 @@ class WarmupCacheHandlerTest extends AbstractWebTestCase
 
     public function testShouldImplementMessageHandlerInterface(): void
     {
-        $rc = new ReflectionClass(WarmupCacheHandler::class);
+        $rc = new \ReflectionClass(WarmupCacheHandler::class);
 
         $this->assertTrue($rc->implementsInterface(MessageHandlerInterface::class));
     }

@@ -111,7 +111,7 @@ class ResampleFilterLoader implements LoaderInterface
                 }
             }
 
-            throw new InvalidArgumentException('Invalid value for "filter" option: must be a valid constant resolvable using one of formats '.'"\Imagine\Image\ImageInterface::FILTER_%s", "\Imagine\Image\ImageInterface::%s", or "%s".');
+            throw new InvalidArgumentException('Invalid value for "filter" option: must be a valid constant resolvable using one of formats "\Imagine\Image\ImageInterface::FILTER_%s", "\Imagine\Image\ImageInterface::%s", or "%s".');
         });
 
         try {
