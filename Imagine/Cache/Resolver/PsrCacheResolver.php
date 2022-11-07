@@ -212,7 +212,7 @@ final class PsrCacheResolver implements ResolverInterface
             return '';
         }
 
-        return \str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
+        return str_replace(self::RESERVED_CHARACTERS, '_', $cacheKeyPart);
     }
 
     /**
