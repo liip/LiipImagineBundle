@@ -15,7 +15,6 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use ValueError;
 
 /**
  * @internal
@@ -150,7 +149,7 @@ final class ImagineStyle
             if (false !== $compiled = @vsprintf($format, $replacements)) {
                 return $compiled;
             }
-        } catch (ValueError $error) {
+        } catch (\ValueError $error) {
         }
 
         throw new InvalidArgumentException(sprintf('Invalid string format "%s" or replacements "%s".', $format, implode(', ', array_map(function ($replacement) { return var_export($replacement, true); }, $replacements))));

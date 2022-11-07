@@ -65,8 +65,6 @@ class CacheResolveEvent extends BCEvent
 
     /**
      * Sets resource path.
-     *
-     * @param $path
      */
     public function setPath($path)
     {
@@ -85,8 +83,6 @@ class CacheResolveEvent extends BCEvent
 
     /**
      * Sets filter name.
-     *
-     * @param $filter
      */
     public function setFilter($filter)
     {
@@ -105,8 +101,6 @@ class CacheResolveEvent extends BCEvent
 
     /**
      * Sets resource url.
-     *
-     * @param $url
      */
     public function setUrl($url)
     {

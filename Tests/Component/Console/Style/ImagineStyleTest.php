@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Component\Console\IO;
 
-use Generator;
 use Liip\ImagineBundle\Component\Console\Style\ImagineStyle;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -35,7 +34,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(vsprintf($format, $replacements), $output->getBuffer());
     }
 
-    public static function provideTextData(): Generator
+    public static function provideTextData(): \Generator
     {
         yield ['Text with <em>0</em> replacements.', []];
         yield ['Text with a <comment>%s string</comment>.', ['replacement']];
@@ -54,7 +53,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(strip_tags(vsprintf($format, $replacements)), $output->getBuffer());
     }
 
-    public static function provideTextWithoutDecorationData(): Generator
+    public static function provideTextWithoutDecorationData(): \Generator
     {
         return static::provideTextData();
     }
@@ -70,7 +69,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(vsprintf($format, $replacements).PHP_EOL, $output->getBuffer());
     }
 
-    public static function provideLineData(): Generator
+    public static function provideLineData(): \Generator
     {
         return static::provideTextData();
     }
@@ -88,7 +87,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(sprintf('%1$s%2$s%1$s', $separator, str_repeat(PHP_EOL, $newlineCount)), $output->getBuffer());
     }
 
-    public static function provideNewlineData(): Generator
+    public static function provideNewlineData(): \Generator
     {
         for ($i = 0; $i <= 200; $i += 50) {
             yield [$i, sprintf('[abcdef0123-%d]', $i)];
@@ -120,7 +119,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString($expected, $output->getBuffer());
     }
 
-    public static function provideTitleData(): Generator
+    public static function provideTitleData(): \Generator
     {
         $titles = [
             'A simple title',
@@ -151,7 +150,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(sprintf($expectedFormat, $compiled), $output->getBuffer());
     }
 
-    public static function provideBlockTypesData(): Generator
+    public static function provideBlockTypesData(): \Generator
     {
         $types = [
             'okay' => ['<fg=black;bg=green> - [OKAY] %s', '[OKAY] %s'],
@@ -185,7 +184,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(sprintf('(%s)', $status), strip_tags($output->getBuffer()));
     }
 
-    public static function provideStatusData(): Generator
+    public static function provideStatusData(): \Generator
     {
         $states = ['resolved', 'skipped', 'failed', 'cached', 'ignored'];
 
@@ -209,7 +208,7 @@ class ImagineStyleTest extends AbstractTest
         $this->assertStringContainsString(sprintf('%s[%s]', $item, $group), strip_tags($output->getBuffer()));
     }
 
-    public static function provideGroupData(): Generator
+    public static function provideGroupData(): \Generator
     {
         foreach (static::getConsoleColors() as $color) {
             for ($i = 1; $i < 10; $i += 3) {
@@ -232,7 +231,7 @@ class ImagineStyleTest extends AbstractTest
         $style->text($format, $replacements);
     }
 
-    public static function provideInvalidFormatAndReplacementsData(): Generator
+    public static function provideInvalidFormatAndReplacementsData(): \Generator
     {
         yield ['%s %s', ['bad-replacements-array']];
         yield ['%s %s %s %s %s', ['not', 'enough', 'replacements']];

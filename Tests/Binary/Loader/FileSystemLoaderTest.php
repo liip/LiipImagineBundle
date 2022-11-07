@@ -36,10 +36,6 @@ class FileSystemLoaderTest extends TestCase
 
     /**
      * @dataProvider provideMultipleWrongArgumentsConstructorCases
-     *
-     * @param $expectedMessage
-     * @param $mimeGuesser
-     * @param $extensionGuesser
      */
     public function testThrowsIfConstructedWithWrongTypeArguments($expectedMessage, $mimeGuesser, $extensionGuesser): void
     {

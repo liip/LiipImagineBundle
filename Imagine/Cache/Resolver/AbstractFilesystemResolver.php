@@ -67,8 +67,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
 
     /**
      * Set the base path to.
-     *
-     * @param $basePath
      */
     public function setBasePath($basePath)
     {

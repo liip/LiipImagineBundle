@@ -74,8 +74,6 @@ class ProxyResolver implements ResolverInterface
     }
 
     /**
-     * @param $url
-     *
      * @return string
      */
     protected function rewriteUrl($url)
