@@ -14,9 +14,6 @@ namespace Liip\ImagineBundle\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-
-use function str_replace;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PsrCacheResolver implements ResolverInterface
