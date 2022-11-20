@@ -56,7 +56,7 @@ class ProxyResolver implements ResolverInterface
         $this->resolver->remove($paths, $filters);
     }
 
-    protected function rewriteUrl(string $url): string
+    protected function rewriteUrl(string $url): ?string
     {
         if (empty($this->hosts)) {
             return $url;
