@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection;
 
+use Imagine\Vips\Imagine;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
@@ -101,13 +102,24 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $loader->load('templating.xml');
         }
 
-        $container->setParameter('liip_imagine.driver_service', 'liip_imagine.'.$config['driver']);
+        $driver = $config['driver'];
+        if ('vips' === $driver) {
+            if (!\class_exists(Imagine::class)) {
+                $vipsImagineClass = Imagine::class;
+
+                throw new \RuntimeException("Unable to use 'vips' driver without '{$vipsImagineClass}' class.");
+            }
+
+            $loader->load('imagine_vips.xml');
+        }
+
+        $container->setParameter('liip_imagine.driver_service', "liip_imagine.{$driver}");
 
         $container
             ->getDefinition('liip_imagine.controller.config')
             ->replaceArgument(0, $config['controller']['redirect_response_code']);
 
-        $container->setAlias('liip_imagine', new Alias('liip_imagine.'.$config['driver']));
+        $container->setAlias('liip_imagine', new Alias("liip_imagine.{$driver}"));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
         $container->setAlias(DataManager::class, new Alias('liip_imagine.data.manager', false));
         $container->setAlias(FilterManager::class, new Alias('liip_imagine.filter.manager', false));
