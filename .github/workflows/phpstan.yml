@@ -23,5 +23,8 @@ jobs:
       - name: Update project dependencies
         uses: ramsey/composer-install@v1
 
+      - name: Add vips
+        run: composer require rokka/imagine-vips
+
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze
