@@ -109,7 +109,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !\in_array($v, ['gd', 'imagick', 'gmagick'], true);
+                            return !\in_array($v, ['gd', 'imagick', 'gmagick', 'vips'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()
