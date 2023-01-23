@@ -11,17 +11,19 @@
 
 namespace Liip\ImagineBundle\Binary\Loader;
 
+use Liip\ImagineBundle\Exception\Binary\Loader\ChainAttemptNotLoadableException;
+use Liip\ImagineBundle\Exception\Binary\Loader\ChainNotLoadableException;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 
 class ChainLoader implements LoaderInterface
 {
     /**
-     * @var LoaderInterface[]
+     * @var array<string, LoaderInterface>
      */
     private array $loaders;
 
     /**
-     * @param LoaderInterface[] $loaders
+     * @param array<string, LoaderInterface> $loaders
      */
     public function __construct(array $loaders)
     {
@@ -37,36 +39,14 @@ class ChainLoader implements LoaderInterface
     {
         $exceptions = [];
 
-        foreach ($this->loaders as $loader) {
+        foreach ($this->loaders as $configName => $loader) {
             try {
                 return $loader->find($path);
-            } catch (\Exception $e) {
-                $exceptions[$e->getMessage()] = $loader;
+            } catch (NotLoadableException $loaderException) {
+                $exceptions[] = new ChainAttemptNotLoadableException($configName, $loader, $loaderException);
             }
         }
 
-        throw new NotLoadableException(self::getLoaderExceptionMessage($path, $exceptions, $this->loaders));
-    }
-
-    /**
-     * @param array<string, LoaderInterface> $exceptions
-     * @param array<string, LoaderInterface> $loaders
-     */
-    private static function getLoaderExceptionMessage(string $path, array $exceptions, array $loaders): string
-    {
-        $loaderMessages = array_map(static function (string $name, LoaderInterface $loader) {
-            return sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $name);
-        }, array_keys($loaders), $loaders);
-
-        $exceptionMessages = array_map(static function (string $message, LoaderInterface $loader) {
-            return sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $message);
-        }, array_keys($exceptions), $exceptions);
-
-        return vsprintf('Source image not resolvable "%s" using "%s" %d loaders (internal exceptions: %s).', [
-            $path,
-            implode(', ', $loaderMessages),
-            \count($loaders),
-            implode(', ', $exceptionMessages),
-        ]);
+        throw new ChainNotLoadableException($path, ...$exceptions);
     }
 }
