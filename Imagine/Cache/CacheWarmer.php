@@ -141,7 +141,7 @@ class CacheWarmer
                 );
                 $warmedPaths = $this->warmPaths($paths, $filters, $force);
                 $warmer->setWarmed($warmedPaths);
-                $start += count($paths) - count($warmedPaths);
+                $start += count($paths);
             }
             $this->log(sprintf('Finished processing warmer "%s"', $warmerName));
         }
