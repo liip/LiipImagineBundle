@@ -46,7 +46,7 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
         adapters:
             profile_photos:
                 local:
-                    directory:  "path/to/profile/photos"
+                    location:  "path/to/profile/photos"
 
         filesystems:
             profile_photos:
