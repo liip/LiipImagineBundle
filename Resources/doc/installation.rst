@@ -71,7 +71,7 @@ routing file:
 
     .. code-block:: yaml
 
-        # app/config/routing.yml
+        # app/config/route/liip_imagine.yml
         _liip_imagine:
             resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 
