@@ -263,7 +263,6 @@ for the list of available options.
 Note, that the following options are configured automatically and will be
 ignored, even if you configure it via ObjectOptions:
 
-* ``ACL``
 * ``Bucket``
 * ``Key``
 * ``Body``
