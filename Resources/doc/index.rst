@@ -45,6 +45,7 @@ usage to the architecture of bundle.
     cache-manager
     asset-versioning
     commands
+    events
     optimizations
 
 .. _`LiipImagineBundle`: https://github.com/liip/LiipImagineBundle
