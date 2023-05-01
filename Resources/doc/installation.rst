@@ -14,7 +14,9 @@ and add it as a dependency to your project:
 
     composer require liip/imagine-bundle
     
-If you accept the Symfony Flex recipe during installation you are done!
+If you accept the Symfony Flex recipe during installation, the bundle is
+registered, routing set up and the configuration skeleton file is created. You
+can now adapt the configuration to your needs.
 Otherwise, you need to configure the bundle with the next steps.
 
 Step 2: Enable the Bundle
