@@ -307,7 +307,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
             tags:
                 - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
-
+.. _`signed url with events`: https://github.com/liip/LiipImagineBundle/tree/2.x/Resources/doc/events
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
 .. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
 .. _`Default Credential Provider Chain`: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html
