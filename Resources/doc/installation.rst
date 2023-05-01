@@ -13,6 +13,9 @@ and add it as a dependency to your project:
 .. code-block:: bash
 
     composer require liip/imagine-bundle
+    
+If you accept the Symfony Flex recipe during installation you are done!
+Otherwise, you need to configure the bundle with the next steps.
 
 Step 2: Enable the Bundle
 -------------------------
