@@ -1,22 +1,24 @@
 
 
 Events
-============
+======
 
-Events availables in the bundle are **PRE_RESOLVE** and **POST_RESOLVE**.
-Both receive a CacheResolveEvent as event .
+Events availables in the bundle are ``PRE_RESOLVE`` and ``POST_RESOLVE``.
+Both receive a CacheResolveEvent as event.
 
 PRE_RESOLVE
--------------------
+-----------
 
 Called before url to the cached filtered image is generated.
 
 
 POST_RESOLVE
------------------
+------------
 
 Called after url to the cached filtered image is generated.
 
+Example: Signed URLs
+--------------------
 Here is an implementation example about users media with differents filters and an S3 as IONOS. At the end we will update the url to get a temporary signed url to a private resource:
 
 First, we need to configure the adapters and the filesystem where will be loaded the images. Normally no need to configure where the cached images will be stored, but we will need it in the next step to generate a signed url.
