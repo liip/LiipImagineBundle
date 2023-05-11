@@ -29,7 +29,7 @@ and the cache resolver service to decorate.
             class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
             arguments:
                 - "@acme.imagine.cache.resolver.amazon_s3"
-                - [ "http://images0.domain.com", "http://images1.domain.com", "http://images2.domain.com" ]
+                - [ "https://images0.domain.com", "https://images1.domain.com", "https://images2.domain.com" ]
             tags:
                 - { name: "liip_imagine.cache.resolver", resolver: "proxy" }
 

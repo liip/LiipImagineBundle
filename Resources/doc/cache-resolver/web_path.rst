@@ -86,6 +86,6 @@ filter set using the following configuration.
                     # the filter list
 
 
-.. _`request context`: http://symfony.com/doc/current/components/http_foundation.html#request
-.. _`trusted proxies`: https://symfony.com/doc/current/request/load_balancer_reverse_proxy.html#solution-trusted-proxies
-.. _`embedded controllers`: https://symfony.com/doc/current/templating/embedding_controllers.html
+.. _`request context`: https://symfony.com/doc/current/components/http_foundation.html#request
+.. _`trusted proxies`: https://symfony.com/doc/current/deployment/proxies.html#solution-trusted-proxies
+.. _`embedded controllers`: https://symfony.com/doc/current/templates.html#embedding-controllers

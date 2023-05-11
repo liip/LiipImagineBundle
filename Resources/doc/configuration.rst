@@ -133,4 +133,4 @@ Each filter set that you specify has the following options:
   Imagine (PR pending))
 
 
-.. _`PHP Manual`: http://php.net/imagepng
+.. _`PHP Manual`: https://php.net/imagepng
