@@ -34,9 +34,6 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
      */
     private static $metadataReaderExifClass = 'Imagine\Image\Metadata\ExifMetadataReader';
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$this->isExifExtensionLoaded() && $this->isExifMetadataReaderSet($container)) {
