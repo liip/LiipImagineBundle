@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AssetsVersionCompilerPass extends AbstractCompilerPass
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!class_exists(StaticVersionStrategy::class)
             // this application has no asset version configured

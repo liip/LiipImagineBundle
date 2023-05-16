@@ -23,9 +23,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class MaybeSetMimeServicesAsAliasesCompilerPass extends AbstractCompilerPass
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition('mime_types')) {

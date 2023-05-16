@@ -61,7 +61,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
     /**
      * @see \Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(
             $this->getConfiguration($configs, $container),
