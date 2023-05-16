@@ -4,6 +4,11 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+## [2.11.0](https://github.com/liip/LiipImagineBundle/tree/2.11.0)
+
+- Compatibility with Symfony 6.3 (We do not expect users to extend a compiler passes or the DI extension of this bundle. If you did, you might need to adjust return types) ([mbabker](https://github.com/liip/LiipImagineBundle/pull/1514))
+- Documentation improvements ([StevenRenaux](https://github.com/liip/LiipImagineBundle/pull/1511), [StevenRenaux](https://github.com/liip/LiipImagineBundle/pull/1510), [mysterty](https://github.com/liip/LiipImagineBundle/pull/1507))
+
 ## [2.10.0](https://github.com/liip/LiipImagineBundle/tree/2.10.0)
 
 - Allow configuring the `vips` imagine driver provided by `rokka/imagine-vips` [\#1496](https://github.com/liip/LiipImagineBundle/pull/1496) ([PabloKowalczyk](https://github.com/PabloKowalczyk))
