@@ -38,9 +38,6 @@ class SimpleMimeTypeGuesser implements MimeTypeGuesserInterface
         $this->mimeTypeGuesser = $mimeTypeGuesser;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guess($binary)
     {
         if (false === $tmpFile = tempnam(sys_get_temp_dir(), 'liip-imagine-bundle')) {

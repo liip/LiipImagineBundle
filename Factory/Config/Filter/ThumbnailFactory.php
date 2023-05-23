@@ -33,17 +33,11 @@ final class ThumbnailFactory implements FilterFactoryInterface
         $this->sizeFactory = $sizeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Thumbnail::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         $size = $this->sizeFactory->createFromOptions($options);

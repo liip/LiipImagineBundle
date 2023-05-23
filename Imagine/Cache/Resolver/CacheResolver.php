@@ -59,21 +59,15 @@ class CacheResolver implements ResolverInterface
         $this->options = $optionsResolver->resolve($options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         $cacheKey = $this->generateCacheKey($path, $filter);
 
         return
-            $this->cache->contains($cacheKey) ||
-            $this->resolver->isStored($path, $filter);
+            $this->cache->contains($cacheKey)
+            || $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         $key = $this->generateCacheKey($path, $filter);
@@ -88,17 +82,11 @@ class CacheResolver implements ResolverInterface
         return $resolved;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->resolver->store($binary, $path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         $this->resolver->remove($paths, $filters);
@@ -203,7 +191,6 @@ class CacheResolver implements ResolverInterface
      * Save the given content to the cache and update the cache index.
      *
      * @param string $cacheKey
-     * @param mixed  $content
      *
      * @return bool
      */

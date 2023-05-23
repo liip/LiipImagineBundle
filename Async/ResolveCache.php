@@ -62,9 +62,6 @@ class ResolveCache implements \JsonSerializable
         return $this->force;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize(): array
     {
         return ['path' => $this->path, 'filters' => $this->filters, 'force' => $this->force];

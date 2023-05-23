@@ -153,17 +153,11 @@ class FlysystemV2Resolver implements ResolverInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getFilePath($path, $filter)
     {
         return $this->getFileUrl($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getFileUrl($path, $filter)
     {
         // crude way of sanitizing URL scheme ("protocol") part

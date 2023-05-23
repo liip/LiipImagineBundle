@@ -22,9 +22,6 @@ use Imagine\Image\ImageInterface;
  */
 class ResizeFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = [])
     {
         $width = isset($options['size'][0]) ? $options['size'][0] : null;

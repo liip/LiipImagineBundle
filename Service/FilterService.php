@@ -57,7 +57,7 @@ class FilterService
         CacheManager $cacheManager,
         bool $webpGenerate,
         array $webpOptions,
-        ?LoggerInterface $logger = null
+        LoggerInterface $logger = null
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
@@ -96,7 +96,7 @@ class FilterService
     public function warmUpCache(
         string $path,
         string $filter,
-        ?string $resolver = null,
+        string $resolver = null,
         bool $forced = false
     ): bool {
         $warmedUp = false;
@@ -177,7 +177,7 @@ class FilterService
     private function resolveFilterPathContainer(
         FilterPathContainer $filterPathContainer,
         string $filter,
-        ?string $resolver = null,
+        string $resolver = null,
         bool $webpSupported = false
     ): string {
         $path = $filterPathContainer->getTarget();
@@ -197,7 +197,7 @@ class FilterService
     private function warmUpCacheFilterPathContainer(
         FilterPathContainer $filterPathContainer,
         string $filter,
-        ?string $resolver = null,
+        string $resolver = null,
         bool $forced = false
     ): bool {
         if ($forced || !$this->cacheManager->isStored($filterPathContainer->getTarget(), $filter, $resolver)) {

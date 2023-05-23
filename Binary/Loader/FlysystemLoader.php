@@ -46,9 +46,6 @@ class FlysystemLoader implements LoaderInterface
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($path)
     {
         if (false === $this->filesystem->has($path)) {

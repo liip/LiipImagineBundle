@@ -27,17 +27,11 @@ class NoCacheWebPathResolver implements ResolverInterface
         $this->requestContext = $requestContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         $port = '';
@@ -56,16 +50,10 @@ class NoCacheWebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
     }

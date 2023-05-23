@@ -53,7 +53,7 @@ trait FilterTrait
         string $path,
         string $filter,
         array $config = [],
-        ?string $resolver = null
+        string $resolver = null
     ): string {
         $path = parse_url($path, PHP_URL_PATH);
 
@@ -65,8 +65,6 @@ trait FilterTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
     public function getName()

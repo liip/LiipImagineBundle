@@ -23,17 +23,11 @@ use Liip\ImagineBundle\Factory\Config\FilterFactoryInterface;
  */
 final class InterlaceFactory implements FilterFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Interlace::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         $mode = $options['mode'] ?? ImageInterface::INTERLACE_LINE;

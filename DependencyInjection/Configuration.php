@@ -69,10 +69,10 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->ifTrue(function ($v) {
                     return
-                        empty($v['loaders']) ||
-                        empty($v['loaders']['default']) ||
-                        empty($v['resolvers']) ||
-                        empty($v['resolvers']['default']);
+                        empty($v['loaders'])
+                        || empty($v['loaders']['default'])
+                        || empty($v['resolvers'])
+                        || empty($v['resolvers']['default']);
                 })
                 ->then(function ($v) {
                     if (empty($v['loaders'])) {

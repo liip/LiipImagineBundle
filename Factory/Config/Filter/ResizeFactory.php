@@ -33,17 +33,11 @@ final class ResizeFactory implements FilterFactoryInterface
         $this->sizeFactory = $sizeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Resize::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         return new Resize($this->sizeFactory->createFromOptions($options));

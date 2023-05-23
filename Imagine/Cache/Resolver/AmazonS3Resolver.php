@@ -63,25 +63,16 @@ class AmazonS3Resolver implements ResolverInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         return $this->objectExists($this->getObjectPath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
@@ -104,9 +95,6 @@ class AmazonS3Resolver implements ResolverInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         if (empty($paths) && empty($filters)) {
@@ -200,9 +188,6 @@ class AmazonS3Resolver implements ResolverInterface
         return $this->storage->if_object_exists($this->bucket, $objectPath);
     }
 
-    /**
-     * @param mixed $message
-     */
     protected function logError($message, array $context = [])
     {
         if ($this->logger) {

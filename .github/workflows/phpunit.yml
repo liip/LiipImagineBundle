@@ -60,7 +60,7 @@ jobs:
             stability: 'dev'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure coverage driver
         id: coverage
@@ -94,12 +94,12 @@ jobs:
         run: composer remove --dev --no-update symfony/messenger
 
       - name: Update project dependencies
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           dependency-versions: ${{ matrix.dependencies }}
 
       - name: Cache PHPUnit
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor/bin/.phpunit
           key: ${{ runner.os }}-phpunit-${{ matrix.php }}

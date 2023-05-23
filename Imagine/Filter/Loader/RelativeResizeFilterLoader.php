@@ -22,9 +22,6 @@ use Liip\ImagineBundle\Imagine\Filter\RelativeResize;
  */
 class RelativeResizeFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = [])
     {
         foreach ($options as $method => $parameter) {

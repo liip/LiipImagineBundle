@@ -66,9 +66,6 @@ class FileSystemLoader implements LoaderInterface
         $this->locator = $locator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($path)
     {
         $path = $this->locator->locate($path);

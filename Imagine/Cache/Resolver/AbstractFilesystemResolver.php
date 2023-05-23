@@ -81,17 +81,11 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->folderPermissions = $folderPermissions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         return file_exists($this->getFilePath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $filePath = $this->getFilePath($path, $filter);
@@ -103,9 +97,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         file_put_contents($filePath, $binary->getContent());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         if (empty($paths) && empty($filters)) {

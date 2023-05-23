@@ -18,9 +18,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class FlysystemResolverFactory extends AbstractResolverFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
         $resolverDefinition = $this->getChildResolverDefinition($this->getChildResolverName());
@@ -38,17 +35,11 @@ class FlysystemResolverFactory extends AbstractResolverFactory
         return $resolverId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'flysystem';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder
