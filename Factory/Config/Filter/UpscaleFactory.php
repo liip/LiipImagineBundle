@@ -33,17 +33,11 @@ final class UpscaleFactory implements FilterFactoryInterface
         $this->sizeFactory = $sizeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Upscale::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         $min = $this->sizeFactory->createFromOptions($options, 'min');

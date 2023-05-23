@@ -23,9 +23,6 @@ class FilterExtension extends AbstractExtension
 {
     use FilterTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters()
     {
         return [

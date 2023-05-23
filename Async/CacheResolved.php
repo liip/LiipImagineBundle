@@ -51,9 +51,6 @@ class CacheResolved implements \JsonSerializable
         return $this->uris;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize(): array
     {
         return ['path' => $this->path, 'uris' => $this->uris];

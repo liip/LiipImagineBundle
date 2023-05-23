@@ -30,9 +30,6 @@ class ChainLoader implements LoaderInterface
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($path)
     {
         $exceptions = [];

@@ -37,9 +37,6 @@ class FlysystemV2Loader implements LoaderInterface
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($path)
     {
         try {

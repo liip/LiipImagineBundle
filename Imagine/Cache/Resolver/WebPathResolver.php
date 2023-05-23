@@ -61,9 +61,6 @@ class WebPathResolver implements ResolverInterface
         $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         return sprintf('%s/%s',
@@ -72,17 +69,11 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         return is_file($this->getFilePath($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->filesystem->dumpFile(
@@ -91,9 +82,6 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         if (empty($paths) && empty($filters)) {
@@ -118,17 +106,11 @@ class WebPathResolver implements ResolverInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getFilePath($path, $filter)
     {
         return $this->webRoot.'/'.$this->getFullPath($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getFileUrl($path, $filter)
     {
         return PathHelper::filePathToUrlPath($this->getFullPath($path, $filter));

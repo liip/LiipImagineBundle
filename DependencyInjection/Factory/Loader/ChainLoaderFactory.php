@@ -17,9 +17,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ChainLoaderFactory extends AbstractLoaderFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, $loaderName, array $config): string
     {
         $definition = $this->getChildLoaderDefinition();
@@ -28,17 +25,11 @@ class ChainLoaderFactory extends AbstractLoaderFactory
         return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'chain';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder

@@ -41,33 +41,21 @@ class ProxyResolver implements ResolverInterface
         $this->hosts = $hosts;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         return $this->rewriteUrl($this->resolver->resolve($path, $filter));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $targetPath, $filter)
     {
         return $this->resolver->store($binary, $targetPath, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         return $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         return $this->resolver->remove($paths, $filters);

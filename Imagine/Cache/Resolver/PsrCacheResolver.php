@@ -71,21 +71,15 @@ final class PsrCacheResolver implements ResolverInterface
         $this->options = $optionsResolver->resolve($options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         $cacheKey = $this->generateCacheKey($path, $filter);
 
         return
-            $this->cache->hasItem($cacheKey) ||
-            $this->resolver->isStored($path, $filter);
+            $this->cache->hasItem($cacheKey)
+            || $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         $key = $this->generateCacheKey($path, $filter);
@@ -102,17 +96,11 @@ final class PsrCacheResolver implements ResolverInterface
         return $resolved;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $this->resolver->store($binary, $path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         $this->resolver->remove($paths, $filters);

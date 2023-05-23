@@ -33,17 +33,11 @@ final class DownscaleFactory implements FilterFactoryInterface
         $this->sizeFactory = $sizeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Downscale::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         $max = $this->sizeFactory->createFromOptions($options, 'max');

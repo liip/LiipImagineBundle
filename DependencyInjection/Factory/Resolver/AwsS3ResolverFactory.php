@@ -18,9 +18,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AwsS3ResolverFactory extends AbstractResolverFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
@@ -74,17 +71,11 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         return $resolverId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'aws_s3';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         $builder

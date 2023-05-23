@@ -17,9 +17,6 @@ use Imagine\Image\ImageInterface;
 
 class ThumbnailFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = [])
     {
         $mode = ImageInterface::THUMBNAIL_OUTBOUND;

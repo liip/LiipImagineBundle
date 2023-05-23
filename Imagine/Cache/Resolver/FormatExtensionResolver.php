@@ -32,9 +32,6 @@ class FormatExtensionResolver implements ResolverInterface
         $this->filterConfig = $filterConfig;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve($path, $filter)
     {
         $path = $this->replaceExtension($path, $filter);
@@ -42,9 +39,6 @@ class FormatExtensionResolver implements ResolverInterface
         return $this->resolver->resolve($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(BinaryInterface $binary, $targetPath, $filter)
     {
         $targetPath = $this->replaceExtension($targetPath, $filter);
@@ -52,9 +46,6 @@ class FormatExtensionResolver implements ResolverInterface
         return $this->resolver->store($binary, $targetPath, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored($path, $filter)
     {
         $path = $this->replaceExtension($path, $filter);
@@ -62,9 +53,6 @@ class FormatExtensionResolver implements ResolverInterface
         return $this->resolver->isStored($path, $filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function remove(array $paths, array $filters)
     {
         $newPaths = [];

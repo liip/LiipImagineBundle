@@ -40,17 +40,11 @@ final class CropFactory implements FilterFactoryInterface
         $this->pointFactory = $pointFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Crop::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         return new Crop(

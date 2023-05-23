@@ -89,4 +89,5 @@ return (new Config())
         'semicolon_after_instruction' => true,
         'strict_comparison' => true,
         'strict_param' => true,
+        'get_class_to_class_keyword' => false, // not compatible with PHP 7
     ]);

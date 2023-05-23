@@ -44,9 +44,6 @@ class ScaleFilterLoader implements LoaderInterface
         $this->absoluteRatio = $absoluteRatio;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = [])
     {
         if (!isset($options[$this->dimensionKey]) && !isset($options[$this->ratioKey])) {

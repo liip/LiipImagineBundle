@@ -33,17 +33,11 @@ final class BackgroundFactory implements FilterFactoryInterface
         $this->sizeFactory = $sizeFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return Background::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(array $options): FilterInterface
     {
         $color = $options['color'] ?? null;
