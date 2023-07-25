@@ -52,6 +52,30 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
             profile_photos:
                 adapter: profile_photos
 
+
+Using `The League FlysystemBundle`_:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        loaders:
+            profile_photos:
+                flysystem:
+                    #⚠️ do not use the full flysystem service alias (which would be `flysystem.adapter.profile_photos.storage`) 
+                    filesystem_service: 'profile_photos.storage'
+        data_loader: profile_photos
+
+    flysystem:
+        storages:
+            profile_photos.storage:
+                adapter: 'local'
+                options:
+                    directory:  "path/to/profile/photos"
+    
+
+
 .. _`Flysystem`: https://github.com/thephpleague/flysystem
 .. _`OneupFlysystemBundle`: https://github.com/1up-lab/OneupFlysystemBundle
 .. _`The League FlysystemBundle`: https://github.com/thephpleague/flysystem-bundle
