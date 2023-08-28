@@ -29,10 +29,16 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      */
     private $assetVersion;
 
-    public function __construct(CacheManager $cache, string $assetVersion = null)
+    /**
+     * @var array|null
+     */
+    private $jsonManifest;
+
+    public function __construct(CacheManager $cache, string $assetVersion = null, array $jsonManifest = null)
     {
         $this->cache = $cache;
         $this->assetVersion = $assetVersion;
+        $this->jsonManifest = $jsonManifest;
     }
 
     /**
@@ -41,9 +47,9 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
     public function filter(string $path, string $filter, array $config = [], string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         $path = $this->cleanPath($path);
-        $path = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
+        $resolvedPath = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
 
-        return $this->appendAssetVersion($path);
+        return $this->appendAssetVersion($resolvedPath, $path);
     }
 
     /**
@@ -57,33 +63,53 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
         if (\count($config)) {
             $path = $this->cache->getRuntimePath($path, $config);
         }
-        $path = $this->cache->resolve($path, $filter, $resolver);
+        $resolvedPath = $this->cache->resolve($path, $filter, $resolver);
 
-        return $this->appendAssetVersion($path);
+        return $this->appendAssetVersion($resolvedPath, $path);
     }
 
     private function cleanPath(string $path): string
     {
-        if (!$this->assetVersion) {
+        if (!$this->assetVersion && !$this->jsonManifest) {
             return $path;
         }
 
-        $start = mb_strrpos($path, $this->assetVersion);
-        if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
-            return rtrim(mb_substr($path, 0, $start), '?');
+        if ($this->assetVersion) {
+            $start = mb_strrpos($path, $this->assetVersion);
+            if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
+                return rtrim(mb_substr($path, 0, $start), '?');
+            }
+        } elseif ($this->jsonManifest) {
+            $asset = array_search($path, $this->jsonManifest, true);
+            if ($asset) {
+                return $asset;
+            }
         }
 
         return $path;
     }
 
-    private function appendAssetVersion(string $path): string
+    private function appendAssetVersion(string $resolvedPath, string $path): string
     {
-        if (!$this->assetVersion) {
-            return $path;
+        if (!$this->assetVersion && !$this->jsonManifest) {
+            return $resolvedPath;
         }
 
-        $separator = false !== mb_strpos($path, '?') ? '&' : '?';
+        if ($this->assetVersion) {
+            $separator = false !== mb_strpos($resolvedPath, '?') ? '&' : '?';
 
-        return $path.$separator.$this->assetVersion;
+            return $resolvedPath.$separator.$this->assetVersion;
+        } elseif ($this->jsonManifest) {
+            $manifestVersion = array_key_exists($path, $this->jsonManifest) ? $this->jsonManifest[$path] : null;
+            if ($manifestVersion) {
+                $resolvedPath = str_replace($path, $resolvedPath, $manifestVersion);
+
+                if (str_starts_with($manifestVersion, '/') && !str_starts_with($resolvedPath, '/')) {
+                    $resolvedPath = '/' . $resolvedPath;
+                }
+            }
+        }
+
+        return $resolvedPath;
     }
 }
