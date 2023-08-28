@@ -23,6 +23,7 @@ class LazyFilterRuntimeTest extends AbstractTest
 {
     private const FILTER = 'thumbnail';
     private const VERSION = 'v2';
+    private const JSON_MANIFEST = ['image/cats.png' => '/image/cats.png?v2'];
 
     /**
      * @var LazyFilterRuntime
@@ -99,6 +100,25 @@ class LazyFilterRuntimeTest extends AbstractTest
         $actualPath = $this->runtime->filter($sourcePath, self::FILTER);
 
         $this->assertSame($cachePath.'?'.self::VERSION, $actualPath);
+    }
+
+    public function testJsonManifestVersionHandling(): void
+    {
+        $this->runtime = new LazyFilterRuntime($this->manager, null, self::JSON_MANIFEST);
+
+        $sourcePath = array_keys(self::JSON_MANIFEST)[0];
+        $versionedPath = array_values(self::JSON_MANIFEST)[0];
+
+        $cachePath = str_replace('image/', 'image/cache/' . self::FILTER . '/', $sourcePath);
+        $expectedPath = str_replace('image/', 'image/cache/' . self::FILTER . '/', $versionedPath);
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($sourcePath, self::FILTER)
+            ->willReturn($cachePath);
+
+        $this->assertSame($expectedPath, $this->runtime->filter($versionedPath, self::FILTER));
     }
 
     public function testInvokeFilterCacheMethod(): void

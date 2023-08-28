@@ -53,6 +53,7 @@
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
+        "ext-json": "required to read JSON manifest versioning",
         "ext-gd": "required to use gd driver",
         "ext-gmagick": "required to use gmagick driver",
         "ext-imagick": "required to use imagick driver",
