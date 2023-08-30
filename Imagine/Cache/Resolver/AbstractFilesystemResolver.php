@@ -52,9 +52,6 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @param Request $request
-     */
     public function setRequest(Request $request = null)
     {
         $this->request = $request;
