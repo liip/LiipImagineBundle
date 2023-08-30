@@ -17,7 +17,6 @@ interface SignerInterface
      * Return the hash for path and runtime config.
      *
      * @param string $path
-     * @param array  $runtimeConfig
      *
      * @return string
      */
@@ -28,7 +27,6 @@ interface SignerInterface
      *
      * @param string $hash
      * @param string $path
-     * @param array  $runtimeConfig
      *
      * @return bool
      */
