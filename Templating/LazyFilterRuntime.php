@@ -34,11 +34,17 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      */
     private $jsonManifest;
 
+    /**
+     * @var array|null
+     */
+    private $jsonManifestLookup;
+
     public function __construct(CacheManager $cache, string $assetVersion = null, array $jsonManifest = null)
     {
         $this->cache = $cache;
         $this->assetVersion = $assetVersion;
         $this->jsonManifest = $jsonManifest;
+        $this->jsonManifestLookup = $jsonManifest ? array_flip($jsonManifest) : null;
     }
 
     /**
@@ -79,10 +85,11 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
             if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
                 return rtrim(mb_substr($path, 0, $start), '?');
             }
-        } elseif ($this->jsonManifest) {
-            $asset = array_search($path, $this->jsonManifest, true);
-            if ($asset) {
-                return $asset;
+        }
+
+        if ($this->jsonManifest) {
+            if (\array_key_exists($path, $this->jsonManifestLookup)) {
+                return $this->jsonManifestLookup[$path];
             }
         }
 
@@ -99,11 +106,10 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
             $separator = false !== mb_strpos($resolvedPath, '?') ? '&' : '?';
 
             return $resolvedPath.$separator.$this->assetVersion;
-        } elseif ($this->jsonManifest) {
-            $manifestVersion = \array_key_exists($path, $this->jsonManifest) ? $this->jsonManifest[$path] : null;
-            if ($manifestVersion) {
-                $resolvedPath = str_replace($path, $manifestVersion, $resolvedPath);
-            }
+        }
+
+        if (\array_key_exists($path, $this->jsonManifest)) {
+            $resolvedPath = str_replace($path, $this->jsonManifest[$path], $resolvedPath);
         }
 
         return $resolvedPath;
