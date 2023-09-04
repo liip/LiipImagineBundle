@@ -56,7 +56,6 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
         }
         $version = $versionStrategyDefinition->getArgument(0);
         $format = $versionStrategyDefinition->getArgument(1);
-
         $format = $container->resolveEnvPlaceholders($format);
         if ($format && !$this->str_ends_with($format, '?%%s')) {
             $this->log($container, 'Can not handle assets versioning with custom format "'.$format.'". asset twig function can likely not be used with the imagine_filter');
@@ -67,15 +66,15 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
         $runtimeDefinition->setArgument(1, $version);
 
         if (is_a($versionStrategyDefinition->getClass(), JsonManifestVersionStrategy::class, true)) {
-            $jsonManifest = file_get_contents($version);
+            $jsonManifestString = file_get_contents($version);
 
-            if (!is_string($jsonManifest)) {
+            if (!\is_string($jsonManifestString)) {
                 $this->log($container, 'Can not handle assets versioning with "'.$versionStrategyDefinition->getClass().'". The manifest file at "'.$version.' " could not be read');
 
                 return;
             }
-            $jsonManifest = \json_decode($jsonManifest, true);
-            if (!is_array($jsonManifest)) {
+            $jsonManifest = json_decode($jsonManifestString, true);
+            if (!\is_array($jsonManifest)) {
                 $this->log($container, 'Can not handle assets versioning with "'.$versionStrategyDefinition->getClass().'". The manifest file at "'.$version.' " does not contain valid JSON');
 
                 return;

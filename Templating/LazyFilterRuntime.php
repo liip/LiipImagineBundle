@@ -100,7 +100,7 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
 
             return $resolvedPath.$separator.$this->assetVersion;
         } elseif ($this->jsonManifest) {
-            $manifestVersion = array_key_exists($path, $this->jsonManifest) ? $this->jsonManifest[$path] : null;
+            $manifestVersion = \array_key_exists($path, $this->jsonManifest) ? $this->jsonManifest[$path] : null;
             if ($manifestVersion) {
                 $resolvedPath = str_replace($path, $manifestVersion, $resolvedPath);
             }

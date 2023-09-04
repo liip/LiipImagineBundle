@@ -15,7 +15,6 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\LazyFilterRuntime;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Templating\LazyFilterRuntime
@@ -110,8 +109,8 @@ class LazyFilterRuntimeTest extends AbstractTest
         $sourcePath = array_keys(self::JSON_MANIFEST)[0];
         $versionedPath = array_values(self::JSON_MANIFEST)[0];
 
-        $cachePath = 'image/cache/' . self::FILTER . '/' . $sourcePath;
-        $expectedPath = 'image/cache/' . self::FILTER . '/' . $versionedPath;
+        $cachePath = 'image/cache/'.self::FILTER.'/'.$sourcePath;
+        $expectedPath = 'image/cache/'.self::FILTER.'/'.$versionedPath;
 
         $this->manager
             ->expects($this->once())
