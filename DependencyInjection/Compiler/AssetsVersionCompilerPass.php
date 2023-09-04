@@ -34,7 +34,7 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!class_exists(StaticVersionStrategy::class) || !class_exists(JsonManifestVersionStrategy::class)
+        if (!class_exists(StaticVersionStrategy::class)
             // this application has no asset version configured
             || !$container->has('assets._version__default')
             // we are not using the new LazyFilterRuntime
