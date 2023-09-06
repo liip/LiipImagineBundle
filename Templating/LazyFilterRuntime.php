@@ -109,7 +109,10 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
         }
 
         if (\array_key_exists($path, $this->jsonManifest)) {
-            $resolvedPath = str_replace($path, $this->jsonManifest[$path], $resolvedPath);
+            $prefixedSlash = '/' !== mb_substr($path, 0, 1) && '/' === mb_substr($this->jsonManifest[$path], 0, 1);
+            $versionedPath = $prefixedSlash ? mb_substr($this->jsonManifest[$path], 1) : $this->jsonManifest[$path];
+
+            $resolvedPath = str_replace($path, $versionedPath, $resolvedPath);
         }
 
         return $resolvedPath;
