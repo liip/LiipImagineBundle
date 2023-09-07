@@ -14,13 +14,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
         dependencies: [highest]
         symfony: ['*']
         stability: ['stable']
         include:
           # Minimum supported dependencies with the oldest supported PHP version
-          - php: '7.1'
+          - php: '7.2'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
@@ -32,12 +32,12 @@ jobs:
             stability: 'stable'
 
           # Test each supported Symfony version with lowest supported PHP version
-          - php: '7.1'
+          - php: '7.2'
             dependencies: highest
             symfony: '3.4.*'
             stability: 'stable'
 
-          - php: '7.1'
+          - php: '7.2'
             dependencies: highest
             symfony: '4.4.*'
             stability: 'stable'
@@ -64,7 +64,7 @@ jobs:
 
       - name: Configure coverage driver
         id: coverage
-        run: echo ::set-output name=driver::$([ "${{ matrix.php }}" = "7.1" ] && echo "xdebug" || echo "pcov")
+        run: echo ::set-output name=driver::xdebug
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -90,7 +90,7 @@ jobs:
 
       # Incompatible with symfony/framework-bundle v3
       - name: Remove symfony/messenger
-        if: ${{ matrix.php == '7.1' && matrix.symfony == '3.4.*' }}
+        if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
         run: composer remove --dev --no-update symfony/messenger
 
       - name: Update project dependencies
