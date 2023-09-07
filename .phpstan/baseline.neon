@@ -1,8 +1,5 @@
 parameters:
     ignoreErrors:
-        - message: '#^Access to undefined constant static\(Liip\\ImagineBundle\\Config\\Filter\\Type\\FilterAbstract\)::NAME\.$#'
-          paths:
-              - ../Config/Filter/Type/FilterAbstract.php
         - message: '#^Unsafe usage of new static\(\)\.$#'
           paths:
               - ../Async/CacheResolved.php
