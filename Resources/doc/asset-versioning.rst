@@ -17,6 +17,11 @@ setting for ``framework.assets.version``. It strips the version from the file
 name and appends it to the resulting image URL so that the file is found and
 cache busting is used.
 
+Since LiipImagineBundle version 2.12, we integrate with the configuration
+setting for ``framework.assets.json_manifest_path``. The manifest file is used
+to lookup the location of the actual file, and append the versioning string to
+the resulting image URL so that cache busting is used.
+
 Cache Busting
 ~~~~~~~~~~~~~
 
@@ -25,6 +30,12 @@ versioning to bust the cache of your images. This can help for example after
 you changed the settings of a filter set.
 
 If you use ``framework.assets.version``, change the asset version in that case.
+If you use ``framework.assets.json_manifest_path``, then rebuild the manifest
+in your asset pipeline. Note that your versioning string might be calculated
+using a content hash. Changing a filter setting in these cases will *not* bust
+the previous cache. Either rename your filter in that case or use a different
+versioning strategy within your asset pipeline that ensures a new hash for each
+build.
 If you do not use Symfony asset versioning, set the
 ``liip_imagine.twig.assets_version`` parameter. Note that you still need to
 clear/refresh the cached images to have them updated, the asset version is only
