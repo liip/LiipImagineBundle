@@ -23,6 +23,12 @@ class LazyFilterRuntimeTest extends AbstractTest
 {
     private const FILTER = 'thumbnail';
     private const VERSION = 'v2';
+    private const JSON_MANIFEST = [
+        'image/cats.png' => '/image/cats.png?v=bc321bd12a',
+        'image/dogs.png' => '/image/dogs.ac38d2a1bc.png',
+        '/image/cows.png' => '/image/cows.png?v=a5de32a2c4',
+        '/image/sheep.png' => '/image/sheep.7ca26b36af.png',
+    ];
 
     /**
      * @var LazyFilterRuntime
@@ -99,6 +105,37 @@ class LazyFilterRuntimeTest extends AbstractTest
         $actualPath = $this->runtime->filter($sourcePath, self::FILTER);
 
         $this->assertSame($cachePath.'?'.self::VERSION, $actualPath);
+    }
+
+    /**
+     * @dataProvider provideJsonManifest
+     */
+    public function testJsonManifestVersionHandling(string $sourcePath, string $versionedPath): void
+    {
+        $this->runtime = new LazyFilterRuntime($this->manager, null, self::JSON_MANIFEST);
+
+        $cachePath = 'image/cache/'.self::FILTER.'/'.('/' === (mb_substr($sourcePath, 0, 1)) ? mb_substr($sourcePath, 1) : $sourcePath);
+        $expectedPath = 'image/cache/'.self::FILTER.'/'.('/' === (mb_substr($versionedPath, 0, 1)) ? mb_substr($versionedPath, 1) : $versionedPath);
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($sourcePath, self::FILTER)
+            ->willReturn($cachePath);
+
+        $actualPath = $this->runtime->filter($versionedPath, self::FILTER);
+
+        $this->assertSame($expectedPath, $actualPath);
+    }
+
+    public function provideJsonManifest(): array
+    {
+        return [
+            'query parameter, no slash' => [array_keys(self::JSON_MANIFEST)[0], array_values(self::JSON_MANIFEST)[0]],
+            'in filename, no slash' => [array_keys(self::JSON_MANIFEST)[1], array_values(self::JSON_MANIFEST)[1]],
+            'query parameter, slash' => [array_keys(self::JSON_MANIFEST)[2], array_values(self::JSON_MANIFEST)[2]],
+            'in filename, slash' => [array_keys(self::JSON_MANIFEST)[3], array_values(self::JSON_MANIFEST)[3]],
+        ];
     }
 
     public function testInvokeFilterCacheMethod(): void

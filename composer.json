@@ -40,6 +40,7 @@
         "phpstan/phpstan": "^1.10.0",
         "psr/cache": "^1.0|^2.0|^3.0",
         "psr/log": "^1.0",
+        "symfony/asset": "^3.4|^4.4|^5.3|^6.0",
         "symfony/browser-kit": "^3.4|^4.4|^5.3|^6.0",
         "symfony/cache": "^3.4|^4.4|^5.3|^6.0",
         "symfony/console": "^3.4|^4.4|^5.3|^6.0",
@@ -53,6 +54,7 @@
     },
     "suggest": {
         "ext-exif": "required to read EXIF metadata from images",
+        "ext-json": "required to read JSON manifest versioning",
         "ext-gd": "required to use gd driver",
         "ext-gmagick": "required to use gmagick driver",
         "ext-imagick": "required to use imagick driver",
@@ -65,6 +67,7 @@
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
         "rokka/imagine-vips": "required to use 'vips' driver",
+        "symfony/asset": "If you want to use asset versioning",
         "symfony/messenger": "If you like to process images in background",
         "symfony/templating": "required to use deprecated Templating component instead of Twig"
     },

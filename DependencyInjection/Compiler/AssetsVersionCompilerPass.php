@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -18,14 +19,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Inject the Symfony framework assets version parameter to the
  * LiipImagineBundle twig extension if possible.
  *
- * We extract the version parameter from the StaticVersionStrategy service
- * definition. If anything is not as expected, we log a warning and do nothing.
+ * We extract either:
+ *  - the version parameter from the StaticVersionStrategy service
+ *  - the json manifest from the JsonManifestVersionStrategy service
+ * If anything is not as expected, we log a warning and do nothing.
  *
  * The expectation is for the user to configure the assets version in liip
  * imagine for custom setups.
  *
- * Anything other than StaticVersionStrategy needs to be implemented by the
- * user in CacheResolveEvent event listeners.
+ * Anything other than StaticVersionStrategy or JsonManifestVersionStrategy needs
+ * to be implemented by the user in CacheResolveEvent event listeners.
  */
 class AssetsVersionCompilerPass extends AbstractCompilerPass
 {
@@ -46,7 +49,7 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
         }
 
         $versionStrategyDefinition = $container->findDefinition('assets._version__default');
-        if (!is_a($versionStrategyDefinition->getClass(), StaticVersionStrategy::class, true)) {
+        if (!is_a($versionStrategyDefinition->getClass(), StaticVersionStrategy::class, true) && !is_a($versionStrategyDefinition->getClass(), JsonManifestVersionStrategy::class, true)) {
             $this->log($container, 'Symfony assets versioning strategy "'.$versionStrategyDefinition->getClass().'" not automatically supported. Configure liip_imagine.twig.assets_version if you have problems with assets versioning');
 
             return;
@@ -61,6 +64,24 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
         }
 
         $runtimeDefinition->setArgument(1, $version);
+
+        if (is_a($versionStrategyDefinition->getClass(), JsonManifestVersionStrategy::class, true)) {
+            $jsonManifestString = file_get_contents($version);
+
+            if (!\is_string($jsonManifestString)) {
+                $this->log($container, 'Can not handle assets versioning with "'.$versionStrategyDefinition->getClass().'". The manifest file at "'.$version.' " could not be read');
+
+                return;
+            }
+            $jsonManifest = json_decode($jsonManifestString, true);
+            if (!\is_array($jsonManifest)) {
+                $this->log($container, 'Can not handle assets versioning with "'.$versionStrategyDefinition->getClass().'". The manifest file at "'.$version.' " does not contain valid JSON');
+
+                return;
+            }
+            $runtimeDefinition->setArgument(1, null);
+            $runtimeDefinition->setArgument(2, $jsonManifest);
+        }
     }
 
     /**
