@@ -24,7 +24,7 @@ class RelativeResize implements FilterInterface
 {
     private string $method;
 
-    private $parameter;
+    private mixed $parameter;
 
     /**
      * Constructs a RelativeResize filter with the given method and argument.
@@ -32,9 +32,9 @@ class RelativeResize implements FilterInterface
      * @param string $method    BoxInterface method
      * @param mixed  $parameter Parameter for BoxInterface method
      *
-     * @throws \Imagine\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function __construct(string $method, $parameter)
+    public function __construct(string $method, mixed $parameter)
     {
         if (!\in_array($method, ['heighten', 'increase', 'scale', 'widen'], true)) {
             throw new InvalidArgumentException(sprintf('Unsupported method: %s', $method));

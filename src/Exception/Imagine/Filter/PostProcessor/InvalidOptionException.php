@@ -36,7 +36,7 @@ class InvalidOptionException extends \RuntimeException implements ExceptionInter
         return sprintf('[%s]', implode(', ', $options));
     }
 
-    private function stringifyOptionValue($value): string
+    private function stringifyOptionValue(mixed $value): string
     {
         if (\is_scalar($value)) {
             return $value;

@@ -286,11 +286,6 @@ parameters:
 			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
 
 		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AmazonS3Resolver\\:\\:logError\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
-
-		-
 			message: "#^Property Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AmazonS3Resolver\\:\\:\\$objUrlOptions type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../src/Imagine/Cache/Resolver/AmazonS3Resolver.php
@@ -302,11 +297,6 @@ parameters:
 
 		-
 			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:__construct\\(\\) has parameter \\$putOptions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
-
-		-
-			message: "#^Method Liip\\\\ImagineBundle\\\\Imagine\\\\Cache\\\\Resolver\\\\AwsS3Resolver\\:\\:logError\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../src/Imagine/Cache/Resolver/AwsS3Resolver.php
 
