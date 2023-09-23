@@ -4,6 +4,14 @@ This file contains a complete enumeration of all [pull requests](https://github.
 for a given releases. Unreleased, upcoming changes will be updated here periodically; reference the next release on our
 [milestones](https://github.com/liip/LiipImagineBundle/milestones) page for the latest changes.
 
+## [2.12.0](https://github.com/liip/LiipImagineBundle/tree/2.12.0)
+
+- Fix documentation filter command parameter name ([rdavaillaud](https://github.com/liip/LiipImagineBundle/pull/1515))
+- Add return types in form ([garak](https://github.com/liip/LiipImagineBundle/pull/1518)) (fixes support of new Symfony versions)
+- Improved documentation for flysystem adapter ([gregberger](https://github.com/liip/LiipImagineBundle/pull/1522))
+- Drop support for PHP 7.1, minimum version is now 7.2.
+- PHPStan and CS fixes
+
 ## [2.11.0](https://github.com/liip/LiipImagineBundle/tree/2.11.0)
 
 - Compatibility with Symfony 6.3 (We do not expect users to extend a compiler passes or the DI extension of this bundle. If you did, you might need to adjust return types) ([mbabker](https://github.com/liip/LiipImagineBundle/pull/1514))
