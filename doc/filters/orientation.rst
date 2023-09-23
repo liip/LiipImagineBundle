@@ -111,5 +111,5 @@ Flip Options
     ``x``, ``horizontal``, ``y``, ``vertical``.
 
 
-.. _`BoxInterface`: http://imagine.readthedocs.io/en/latest/usage/coordinates.html#boxinterface
-.. _`Imagine Library`: http://imagine.readthedocs.io/en/latest/
+.. _`BoxInterface`: https://imagine.readthedocs.io/en/latest/usage/coordinates.html#boxinterface
+.. _`Imagine Library`: https://imagine.readthedocs.io/en/latest/

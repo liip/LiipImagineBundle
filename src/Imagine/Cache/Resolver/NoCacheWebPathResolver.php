@@ -24,17 +24,11 @@ class NoCacheWebPathResolver implements ResolverInterface
         $this->requestContext = $requestContext;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isStored(string $path, string $filter): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve(string $path, string $filter): string
     {
         $port = '';

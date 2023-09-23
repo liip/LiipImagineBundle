@@ -100,8 +100,9 @@ There are several configuration options available:
       (which means the standard filesystem loader is used).
     * ``post_processors`` - sets post-processors to be applied on filtered image
       (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
-* ``driver`` - one of the three drivers: ``gd``, ``imagick``, ``gmagick``.
+* ``driver`` - one of the drivers: ``gd``, ``imagick``, ``gmagick``, ``vips``.
   Default value: ``gd``
+  * If you want to use vips, you need to additionally require ``rokka/imagine-vips``
 * ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in
   ``filter_sets``. These values will be overridden if they are specified in the each set. In case of ``filters`` and
   ``post_processors``, the specified values will be merged with the default ones.
@@ -130,4 +131,4 @@ Each filter set that you specify has the following options:
   Imagine (PR pending))
 
 
-.. _`PHP Manual`: http://php.net/imagepng
+.. _`PHP Manual`: https://php.net/imagepng

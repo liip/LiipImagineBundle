@@ -80,4 +80,4 @@ Alternatively, you can set the custom data loader for a specific filter set:
                     # your filters
 
 
-.. _`configure a service`: http://symfony.com/doc/current/book/service_container.html
+.. _`configure a service`: https://symfony.com/doc/current/service_container.html

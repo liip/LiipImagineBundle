@@ -103,7 +103,7 @@ class ImagineController
         }, $path, $filter, $hash);
     }
 
-    private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
+    private function createRedirectResponse(\Closure $url, string $path, string $filter, string $hash = null): RedirectResponse
     {
         try {
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());

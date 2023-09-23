@@ -27,9 +27,6 @@ class MetadataReaderCompilerPass extends AbstractCompilerPass
 
     private static string $metadataReaderExifClass = ExifMetadataReader::class;
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$this->isExifExtensionLoaded() && $this->isExifMetadataReaderSet($container)) {

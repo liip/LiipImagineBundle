@@ -67,10 +67,10 @@ class Configuration implements ConfigurationInterface
             ->beforeNormalization()
                 ->ifTrue(function ($v) {
                     return
-                        empty($v['loaders']) ||
-                        empty($v['loaders']['default']) ||
-                        empty($v['resolvers']) ||
-                        empty($v['resolvers']['default']);
+                        empty($v['loaders'])
+                        || empty($v['loaders']['default'])
+                        || empty($v['resolvers'])
+                        || empty($v['resolvers']['default']);
                 })
                 ->then(function ($v) {
                     if (empty($v['loaders'])) {
@@ -107,7 +107,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
                         ->ifTrue(function ($v) {
-                            return !\in_array($v, ['gd', 'imagick', 'gmagick'], true);
+                            return !\in_array($v, ['gd', 'imagick', 'gmagick', 'vips'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
                     ->end()

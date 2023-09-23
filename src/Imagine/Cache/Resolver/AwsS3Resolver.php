@@ -220,9 +220,6 @@ class AwsS3Resolver implements ResolverInterface
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
     }
 
-    /**
-     * @param mixed $message
-     */
     protected function logError($message, array $context = []): void
     {
         if ($this->logger) {

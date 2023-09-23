@@ -62,7 +62,7 @@ Background Options
     ``bottom``, and ``bottomright``.
 
 **transparency:** ``integer``
-    Sets the background alpha value. The value should be within a range of 0 - 100.
+    Sets the background alpha value. The value should be within a range of 0 (opaque) - 100 (fully transparent).
 
 
 .. _filter-grayscale:

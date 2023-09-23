@@ -32,9 +32,6 @@ abstract class AbstractDoctrineLoader implements LoaderInterface
         $this->modelClass = $modelClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($path)
     {
         $image = $this->manager->find($this->modelClass, $this->mapPathToId($path));

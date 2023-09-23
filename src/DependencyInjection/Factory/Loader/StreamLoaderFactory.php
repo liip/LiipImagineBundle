@@ -16,9 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class StreamLoaderFactory extends AbstractLoaderFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $definition = $this->getChildLoaderDefinition();
@@ -28,17 +25,11 @@ class StreamLoaderFactory extends AbstractLoaderFactory
         return $this->setTaggedLoaderDefinition($name, $definition, $container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'stream';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder

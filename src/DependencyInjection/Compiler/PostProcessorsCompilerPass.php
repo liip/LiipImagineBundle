@@ -21,9 +21,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class PostProcessorsCompilerPass extends AbstractCompilerPass
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         $tags = $container->findTaggedServiceIds('liip_imagine.filter.post_processor');

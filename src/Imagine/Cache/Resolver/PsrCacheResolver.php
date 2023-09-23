@@ -65,8 +65,8 @@ final class PsrCacheResolver implements ResolverInterface
         $cacheKey = $this->generateCacheKey($path, $filter);
 
         return
-            $this->cache->hasItem($cacheKey) ||
-            $this->resolver->isStored($path, $filter);
+            $this->cache->hasItem($cacheKey)
+            || $this->resolver->isStored($path, $filter);
     }
 
     public function resolve(string $path, string $filter): string

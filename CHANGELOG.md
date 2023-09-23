@@ -8,6 +8,24 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 - The response when the `filter` parameter in a resolve request is not an array is now 400 bad request, and no longer 404 not found.
 
+## [2.12.0](https://github.com/liip/LiipImagineBundle/tree/2.12.0)
+
+- Fix documentation filter command parameter name ([rdavaillaud](https://github.com/liip/LiipImagineBundle/pull/1515))
+- Add return types in form ([garak](https://github.com/liip/LiipImagineBundle/pull/1518)) (fixes support of new Symfony versions)
+- Improved documentation for flysystem adapter ([gregberger](https://github.com/liip/LiipImagineBundle/pull/1522))
+- Drop support for PHP 7.1, minimum version is now 7.2.
+- PHPStan and CS fixes
+
+## [2.11.0](https://github.com/liip/LiipImagineBundle/tree/2.11.0)
+
+- Compatibility with Symfony 6.3 (We do not expect users to extend a compiler passes or the DI extension of this bundle. If you did, you might need to adjust return types) ([mbabker](https://github.com/liip/LiipImagineBundle/pull/1514))
+- Documentation improvements ([StevenRenaux](https://github.com/liip/LiipImagineBundle/pull/1511), [StevenRenaux](https://github.com/liip/LiipImagineBundle/pull/1510), [mysterty](https://github.com/liip/LiipImagineBundle/pull/1507))
+
+## [2.10.0](https://github.com/liip/LiipImagineBundle/tree/2.10.0)
+
+- Allow configuring the `vips` imagine driver provided by `rokka/imagine-vips` [\#1496](https://github.com/liip/LiipImagineBundle/pull/1496) ([PabloKowalczyk](https://github.com/PabloKowalczyk))
+- Fix PHP 8.1 issues with `imagine/imagine` [\#1491](https://github.com/liip/LiipImagineBundle/pull/1491) ([LoicBoursin](https://github.com/LoicBoursin))
+
 ## [2.9.0](https://github.com/liip/LiipImagineBundle/tree/2.9.0)
 
 - Fix Symfony 6.1 deprecations [\#1472](https://github.com/liip/LiipImagineBundle/pull/1472) ([willemverspyck](https://github.com/willemverspyck))

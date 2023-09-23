@@ -24,7 +24,7 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      */
     private ?string $assetVersion;
 
-    public function __construct(CacheManager $cache, ?string $assetVersion = null)
+    public function __construct(CacheManager $cache, string $assetVersion = null)
     {
         $this->cache = $cache;
         $this->assetVersion = $assetVersion;
@@ -33,7 +33,7 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
     /**
      * Gets the browser path for the image and filter to apply.
      */
-    public function filter(string $path, string $filter, array $config = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function filter(string $path, string $filter, array $config = [], string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         $path = $this->cleanPath($path);
         $path = $this->cache->getBrowserPath($path, $filter, $config, $resolver, $referenceType);
@@ -46,7 +46,7 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
      *
      * This does not check whether the cached image exists or not.
      */
-    public function filterCache(string $path, string $filter, array $config = [], ?string $resolver = null): string
+    public function filterCache(string $path, string $filter, array $config = [], string $resolver = null): string
     {
         $path = $this->cleanPath($path);
         if (\count($config)) {

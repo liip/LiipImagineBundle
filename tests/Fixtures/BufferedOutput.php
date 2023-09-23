@@ -22,9 +22,6 @@ class BufferedOutput extends Output
         return $this->buffer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function write($messages, $newline = false, $options = self::OUTPUT_NORMAL): void
     {
         $messages = (array) $messages;

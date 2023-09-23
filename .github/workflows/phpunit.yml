@@ -15,12 +15,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.0', '8.1']
+        php: ['8.0', '8.1', '8.2']
         dependencies: [highest]
         symfony: ['*']
         stability: ['stable']
         include:
-          # Minimum supported dependencies with the latest supported PHP version
+          # Minimum supported dependencies with the oldest supported PHP version
           - php: '8.0'
             dependencies: lowest
             symfony: '*'
@@ -30,7 +30,7 @@ jobs:
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
-            
+
           - php: '8.0'
             dependencies: highest
             symfony: '5.3.*'
@@ -49,11 +49,11 @@ jobs:
             stability: 'dev'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure coverage driver
         id: coverage
-        run: echo ::set-output name=driver::$([ "${{ matrix.php }}" = "7.1" ] && echo "xdebug" || echo "pcov")
+        run: echo ::set-output name=driver::xdebug
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -74,16 +74,16 @@ jobs:
 
       # Incompatible with symfony/framework-bundle v3
       - name: Remove symfony/messenger
-        if: ${{ matrix.php == '7.1' && matrix.symfony == '3.4.*' }}
+        if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
         run: composer remove --dev --no-update symfony/messenger
 
       - name: Update project dependencies
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
         with:
           dependency-versions: ${{ matrix.dependencies }}
 
       - name: Cache PHPUnit
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor/bin/.phpunit
           key: ${{ runner.os }}-phpunit-${{ matrix.php }}

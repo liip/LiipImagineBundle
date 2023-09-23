@@ -203,7 +203,7 @@ current. You just need to configure them with defined options.
            aws_s3_resolver:
               aws_s3:
                   #...
-                  proxies: ["http://one.domain.com", "http://two.domain.com"]
+                  proxies: ["https://one.domain.com", "https://two.domain.com"]
                   cache: true
 
 
@@ -263,7 +263,6 @@ for the list of available options.
 Note, that the following options are configured automatically and will be
 ignored, even if you configure it via ObjectOptions:
 
-* ``ACL``
 * ``Bucket``
 * ``Key``
 * ``Body``
@@ -308,7 +307,8 @@ You can also use the constructor of the resolver to directly inject multiple opt
             tags:
                 - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
+You can find an example with private ACL and signed url on the :doc:`events chapter <../events.rst>`.
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
-.. _`S3 SDK documentation`: http://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
+.. _`S3 SDK documentation`: https://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
 .. _`Default Credential Provider Chain`: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html

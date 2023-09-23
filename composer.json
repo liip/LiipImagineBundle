@@ -39,7 +39,7 @@
         "aws/aws-sdk-php": "^2.4",
         "doctrine/persistence": "^1.3|^2.0",
         "league/flysystem": "^1.0|^2.0|^3.0",
-        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-symfony": "^1.0",
         "psr/cache": "^1.0|^2.0|^3.0",
         "psr/log": "^1.0",
@@ -66,6 +66,7 @@
         "doctrine/mongodb-odm": "required to use mongodb-backed doctrine components",
         "league/flysystem": "required to use FlySystem data loader or cache resolver",
         "monolog/monolog": "A psr/log compatible logger is required to enable logging",
+        "rokka/imagine-vips": "required to use 'vips' driver",
         "symfony/messenger": "If you like to process images in background",
         "symfony/templating": "required to use deprecated Templating component instead of Twig"
     },

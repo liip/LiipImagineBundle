@@ -26,9 +26,6 @@ class FormatExtensionResolver implements ResolverInterface
         $this->filterConfig = $filterConfig;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve(string $path, string $filter): string
     {
         $path = $this->replaceExtension($path, $filter);
