@@ -17,7 +17,7 @@ abstract class AbstractResolverFactory implements ResolverFactoryInterface
 {
     protected static string $namePrefix = 'liip_imagine.cache.resolver';
 
-    final protected function getChildResolverDefinition(?string $name = null): ChildDefinition
+    final protected function getChildResolverDefinition(string $name = null): ChildDefinition
     {
         return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }

@@ -24,9 +24,6 @@ class RelativeResize implements FilterInterface
 {
     private string $method;
 
-    /**
-     * @var mixed
-     */
     private $parameter;
 
     /**

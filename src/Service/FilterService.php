@@ -92,7 +92,7 @@ class FilterService
         return $warmedUp;
     }
 
-    public function getUrlOfFilteredImage(string $path, string $filter, ?string $resolver = null, bool $webpSupported = false): string
+    public function getUrlOfFilteredImage(string $path, string $filter, string $resolver = null, bool $webpSupported = false): string
     {
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
             $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
@@ -105,7 +105,7 @@ class FilterService
         string $path,
         string $filter,
         array $runtimeFilters = [],
-        ?string $resolver = null,
+        string $resolver = null,
         bool $webpSupported = false
     ): string {
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
