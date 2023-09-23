@@ -20,7 +20,7 @@ interface LoaderInterface
      *
      * The path may be a file path on a filesystem, or any unique identifier among the storage engine implemented by this Loader.
      *
-     * @param mixed $path
+     * @param string $path
      *
      * @return BinaryInterface|string An image binary content
      */

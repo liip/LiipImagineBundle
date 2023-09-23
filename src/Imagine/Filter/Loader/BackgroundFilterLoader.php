@@ -25,9 +25,6 @@ class BackgroundFilterLoader implements LoaderInterface
         $this->imagine = $imagine;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $background = $image->palette()->color(

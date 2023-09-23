@@ -13,6 +13,11 @@ and add it as a dependency to your project:
 .. code-block:: bash
 
     composer require liip/imagine-bundle
+    
+If you accept the Symfony Flex recipe during installation, the bundle is
+registered, routing set up and the configuration skeleton file is created. You
+can now adapt the configuration to your needs.
+Otherwise, you need to configure the bundle with the next steps.
 
 Step 2: Enable the Bundle
 -------------------------
@@ -71,7 +76,7 @@ routing file:
 
     .. code-block:: yaml
 
-        # app/config/routing.yml
+        # app/config/route/liip_imagine.yml
         _liip_imagine:
             resource: "@LiipImagineBundle/Resources/config/routing.yaml"
 

@@ -32,9 +32,6 @@ abstract class AbstractWebTestCase extends WebTestCase
         return static::$kernel->getContainer()->get($name);
     }
 
-    /**
-     * @return mixed
-     */
     protected function getParameter(string $name)
     {
         if (property_exists($this, 'container')) {
@@ -44,9 +41,6 @@ abstract class AbstractWebTestCase extends WebTestCase
         return static::$kernel->getContainer()->getParameter($name);
     }
 
-    /**
-     * @return mixed
-     */
     protected function getPrivateProperty(object $object, string $name)
     {
         $r = new \ReflectionObject($object);

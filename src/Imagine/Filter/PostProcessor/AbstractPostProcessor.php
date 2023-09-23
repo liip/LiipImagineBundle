@@ -25,7 +25,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
 
     private Filesystem $filesystem;
 
-    public function __construct(string $executablePath, ?string $temporaryRootPath = null)
+    public function __construct(string $executablePath, string $temporaryRootPath = null)
     {
         $this->executablePath = $executablePath;
         $this->temporaryRootPath = $temporaryRootPath;

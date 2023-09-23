@@ -40,7 +40,7 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
             profile_photos:
                 flysystem:
                     filesystem_service: oneup_flysystem.profile_photos_filesystem
-                    root_url:           "http://images.example.com"
+                    root_url:           "https://images.example.com"
                     cache_prefix:       media/cache
                     visibility:         public
 

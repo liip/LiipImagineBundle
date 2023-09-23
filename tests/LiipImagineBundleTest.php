@@ -57,7 +57,7 @@ class LiipImagineBundleTest extends AbstractTest
         $containerMock
             ->method('addCompilerPass')
             ->with($this->callback(static function (CompilerPassInterface $pass) use (&$passes): bool {
-                $passes[] = \get_class($pass);
+                $passes[] = $pass::class;
 
                 return true;
             }));
@@ -88,7 +88,7 @@ class LiipImagineBundleTest extends AbstractTest
         $extensionMock
             ->method('addResolverFactory')
             ->with($this->callback(static function (ResolverFactoryInterface $resolver) use (&$resolvers): bool {
-                $resolvers[] = \get_class($resolver);
+                $resolvers[] = $resolver::class;
 
                 return true;
             }));
@@ -117,7 +117,7 @@ class LiipImagineBundleTest extends AbstractTest
         $extensionMock
             ->method('addLoaderFactory')
             ->with($this->callback(static function (LoaderFactoryInterface $loader) use (&$loaders): bool {
-                $loaders[] = \get_class($loader);
+                $loaders[] = $loader::class;
 
                 return true;
             }));

@@ -19,7 +19,7 @@ abstract class AbstractLoaderFactory implements LoaderFactoryInterface
 {
     protected static string $namePrefix = 'liip_imagine.binary.loader';
 
-    final protected function getChildLoaderDefinition(?string $name = null): ChildDefinition
+    final protected function getChildLoaderDefinition(string $name = null): ChildDefinition
     {
         return new ChildDefinition(sprintf('%s.prototype.%s', static::$namePrefix, $name ?: $this->getName()));
     }

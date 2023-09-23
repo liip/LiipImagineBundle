@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class FileSystemLoaderFactory extends AbstractLoaderFactory
 {
-    /**
-     * {@inheritdoc}
-     */
     public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $locatorDefinition = new ChildDefinition(sprintf('liip_imagine.binary.locator.%s', $config['locator']));
@@ -35,17 +32,11 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
         return $this->setTaggedLoaderDefinition($name, $definition, $container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'filesystem';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder

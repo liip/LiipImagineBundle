@@ -18,9 +18,6 @@ use Imagine\Image\Point;
 
 class CropFilterLoader implements LoaderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
         $x = isset($options['start'][0]) ? $options['start'][0] : null;

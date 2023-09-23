@@ -68,4 +68,4 @@ filter set:
                 cache: my_custom_cache
 
 
-.. _`Symfony Service Container documentation`: http://symfony.com/doc/current/book/service_container.html
+.. _`Symfony Service Container documentation`: https://symfony.com/doc/current/service_container.html

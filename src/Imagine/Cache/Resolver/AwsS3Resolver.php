@@ -91,7 +91,7 @@ class AwsS3Resolver implements ResolverInterface
                 )
             );
         } catch (\Exception $e) {
-            $this->logError('The object could not be created on Amazon S3.', [
+            $this->logger?->error('The object could not be created on Amazon S3.', [
                 'objectPath' => $objectPath,
                 'filter' => $filter,
                 'bucket' => $this->bucket,
@@ -115,7 +115,7 @@ class AwsS3Resolver implements ResolverInterface
                     implode('|', $filters)
                 ));
             } catch (\Exception $e) {
-                $this->logError('The objects could not be deleted from Amazon S3.', [
+                $this->logger?->error('The objects could not be deleted from Amazon S3.', [
                     'filter' => implode(', ', $filters),
                     'bucket' => $this->bucket,
                     'exception' => $e,
@@ -138,7 +138,7 @@ class AwsS3Resolver implements ResolverInterface
                         'Key' => $objectPath,
                     ]);
                 } catch (\Exception $e) {
-                    $this->logError('The object could not be deleted from Amazon S3.', [
+                    $this->logger?->error('The object could not be deleted from Amazon S3.', [
                         'objectPath' => $objectPath,
                         'filter' => $filter,
                         'bucket' => $this->bucket,
@@ -218,15 +218,5 @@ class AwsS3Resolver implements ResolverInterface
     protected function objectExists(string $objectPath): bool
     {
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
-    }
-
-    /**
-     * @param mixed $message
-     */
-    protected function logError($message, array $context = []): void
-    {
-        if ($this->logger) {
-            $this->logger->error($message, $context);
-        }
     }
 }

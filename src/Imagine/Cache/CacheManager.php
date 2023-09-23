@@ -48,7 +48,7 @@ class CacheManager
         RouterInterface $router,
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
-        ?string $defaultResolver = null,
+        string $defaultResolver = null,
         bool $webpGenerate = false
     ) {
         $this->filterConfig = $filterConfig;
@@ -77,7 +77,7 @@ class CacheManager
      *
      * @param string $path The path where the resolved file is expected
      */
-    public function getBrowserPath(string $path, string $filter, array $runtimeConfig = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function getBrowserPath(string $path, string $filter, array $runtimeConfig = [], string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
@@ -109,7 +109,7 @@ class CacheManager
      * @param string $filter        The name of the imagine filter in effect
      * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      */
-    public function generateUrl(string $path, string $filter, array $runtimeConfig = [], ?string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
+    public function generateUrl(string $path, string $filter, array $runtimeConfig = [], string $resolver = null, int $referenceType = UrlGeneratorInterface::ABSOLUTE_URL): string
     {
         $params = [
             'path' => ltrim($path, '/'),
@@ -135,7 +135,7 @@ class CacheManager
     /**
      * Checks whether the path is already stored within the respective Resolver.
      */
-    public function isStored(string $path, string $filter, ?string $resolver = null): bool
+    public function isStored(string $path, string $filter, string $resolver = null): bool
     {
         return $this->getResolver($filter, $resolver)->isStored($path, $filter);
     }
@@ -147,7 +147,7 @@ class CacheManager
      *
      * @return string The url of resolved image
      */
-    public function resolve(string $path, string $filter, ?string $resolver = null): string
+    public function resolve(string $path, string $filter, string $resolver = null): string
     {
         if (false !== mb_strpos($path, '/../') || 0 === mb_strpos($path, '../')) {
             throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
@@ -167,7 +167,7 @@ class CacheManager
     /**
      * @see ResolverInterface::store
      */
-    public function store(BinaryInterface $binary, string $path, string $filter, ?string $resolver = null): void
+    public function store(BinaryInterface $binary, string $path, string $filter, string $resolver = null): void
     {
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
     }
