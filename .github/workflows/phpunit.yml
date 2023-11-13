@@ -26,7 +26,7 @@ jobs:
             stability: 'stable'
 
           # Minimum supported dependencies with the latest supported PHP version
-          - php: '8.0'
+          - php: '8.2'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
@@ -47,20 +47,20 @@ jobs:
             symfony: '5.3.*'
             stability: 'stable'
 
-          # Test Symfony 5.4 dev version
-          - php: '7.4'
+          # Test Symfony 6.4 dev version
+          - php: '8.2'
             dependencies: highest
-            symfony: '5.4.*'
+            symfony: '6.4.*'
             stability: 'dev'
 
-          # Test Symfony 6.0 dev version
-          - php: '8.0'
+          # Test Symfony 7.0 dev version
+          - php: '8.2'
             dependencies: highest
-            symfony: '6.0.*'
+            symfony: '7.0.*'
             stability: 'dev'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure coverage driver
         id: coverage
@@ -77,13 +77,13 @@ jobs:
         if: matrix.symfony != '*'
         run: |
           composer global config --no-plugins allow-plugins.symfony/flex true
-          composer global require --no-interaction --no-progress symfony/flex:^1.11
+          composer global require --no-interaction --no-progress symfony/flex
           composer config extra.symfony.require ${{ matrix.symfony }}
 
-      - name: Remove non-compatible dependencies with Symfony 6
-        if: matrix.symfony == '6.0.*'
+      - name: Remove non-compatible dependencies with Symfony 7
+        if: matrix.symfony == '7.0.*'
         run: |
-          composer remove enqueue/enqueue-bundle --dev --no-update
+          composer remove enqueue/enqueue-bundle symfony/templating --dev --no-update
 
       - name: Set minimum-stability
         run: composer config minimum-stability ${{ matrix.stability }}
