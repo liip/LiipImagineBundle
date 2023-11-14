@@ -14,14 +14,13 @@ namespace Liip\ImagineBundle\Message\Handler;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Message\WarmupCache;
 use Liip\ImagineBundle\Service\FilterService;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * Listen to WarmupCache messages and prepare the cache for those images.
  *
  * @experimental
  */
-class WarmupCacheHandler implements MessageHandlerInterface
+class WarmupCacheHandler
 {
     /** @var FilterManager */
     private $filterManager;

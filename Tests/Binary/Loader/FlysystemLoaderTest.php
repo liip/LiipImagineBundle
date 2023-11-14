@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * @requires PHP 5.4
- *
  * @covers \Liip\ImagineBundle\Binary\Loader\FlysystemLoader
  */
 class FlysystemLoaderTest extends AbstractTest
