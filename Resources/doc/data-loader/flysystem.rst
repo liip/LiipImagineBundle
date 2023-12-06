@@ -33,7 +33,7 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # /config/liip_imagine.yaml
 
     liip_imagine:
         loaders:
@@ -41,6 +41,9 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
                 flysystem:
                     filesystem_service: oneup_flysystem.profile_photos_filesystem
         data_loader: profile_photos
+
+
+    # /config/oneup_flysystem.yaml
 
     oneup_flysystem:
         adapters:
@@ -57,7 +60,7 @@ Using `The League FlysystemBundle`_:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # /config/liip_imagine.yaml
 
     liip_imagine:
         loaders:
@@ -67,6 +70,9 @@ Using `The League FlysystemBundle`_:
                     filesystem_service: 'profile_photos.storage'
         data_loader: profile_photos
 
+
+    # /config/flysystem.yaml
+    
     flysystem:
         storages:
             profile_photos.storage:
