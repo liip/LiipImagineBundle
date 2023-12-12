@@ -130,6 +130,81 @@ Interlace Options
     ``plane``, and ``partition``.
 
 
+.. _filter-resample:
+
+Resample
+--------
+
+The built-in ``resample`` filter provides a resampling transformation by allows you to
+change the resolution of an image. This filter exposes a number of `resample options`_ which
+may be used to configure its behavior.
+
+.. tip::
+
+    Resampling changes the image resolution (also known as "pixel density") of an image
+    and is useful when you need to present different versions of an image dependent on
+    the user's screen density. For example, you may need to provide a "normal" and a
+    "retina" variant.
+
+    The use of "resolution" is not to be confused with "dimensions". This filter does not
+    affect the dimentions of an image, only the pixel density.
+
+
+Example configuration:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        filter_sets:
+
+            # name our filter set "my_resample_filter"
+            my_resample_filter:
+                filters:
+
+                    # use and setup the "resample" filter
+                    resample:
+
+                        # set the unit to use for pixel density
+                        unit: ppi
+
+                        # set the horizontal pixel density
+                        x: 72
+
+                        # set the vertical pixel density
+                        y: 72
+
+                        # set the resampling filter
+                        filter: lanczos
+
+                        # set the temporary path to use for resampling work
+                        tmp_dir: /my/custom/temporary/directory/path
+
+
+Resample Options
+~~~~~~~~~~~~~~~~
+
+**unit:** ``string``
+    Sets the unit to use for pixel density, either "pixels per inch" or "pixels per centimeter".
+    Valid values: ``ppi`` and ``ppc``.
+
+**x:** ``int|float``
+    Sets the horizontal (x) pixel density to resample the image to.
+
+**y:** ``int|float``
+    Sets the vertical (y) pixel density to resample the image to.
+
+**filter:** ``string``
+    Sets the optional filter to use during the resampling operation. It must be a string resolvable
+    as a constant from `Imagine\Image\ImageInterface`_ (you may omit the ``FILTER_`` prefix)
+    or a valid fully qualified constant. By default it is set to ``FILTER_UNDEFINED``.
+
+**tmp_dir:** ``string``
+    Sets the optional temporary work directory. This filter requires a temporary location to save
+    out and read back in the image binary, as these operations are requires to resample an image.
+    By default, it is set to the value of the `sys_get_temp_dir()`_ function.
+
 .. _filter-strip:
 
 Strip
