@@ -40,8 +40,8 @@ The default configuration for the bundle looks like this:
             filters: []
             post_processors: []
         controller:
-            filter_action:          liip_imagine.controller:filterAction
-            filter_runtime_action:  liip_imagine.controller:filterRuntimeAction
+            filter_action:          liip_imagine.controller::filterAction
+            filter_runtime_action:  liip_imagine.controller::filterRuntimeAction
             redirect_response_code: 302
         webp:
             generate:    false

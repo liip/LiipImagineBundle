@@ -12,3 +12,7 @@ parameters:
         - .phpstan/stubs/ReadInterface.stub
     dynamicConstantNames:
         - Symfony\Component\HttpKernel\Kernel::VERSION
+    ignoreErrors:
+        # Depending on aws sdk version, this method has 2 or 4 parameters. The extra parameters will just be ignored.
+        # https://github.com/liip/LiipImagineBundle/issues/1457
+        - '#^Method Aws\\S3\\S3Client::getObjectUrl\(\) invoked with 4 parameters, 2 required\.$#'

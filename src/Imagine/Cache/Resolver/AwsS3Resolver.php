@@ -159,7 +159,7 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @return $this
      *
-     * @see \Aws\S3\S3Client::getObjectUrl() for available options
+     * @see S3Client::getObjectUrl() for available options
      */
     public function setGetOption(string $key, $value): self
     {
@@ -178,7 +178,7 @@ class AwsS3Resolver implements ResolverInterface
      *
      * @return $this
      *
-     * @see \Aws\S3\S3Client::putObject() for available options
+     * @see S3Client::putObject() for available options
      */
     public function setPutOption(string $key, $value): self
     {
