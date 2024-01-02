@@ -16,9 +16,9 @@ Dependencies
 This cache resolver requires a PSR-6 implementation, e.g. `symfony/cache`, which can be installed
 by executing the following command in your project directory:
 
-.. code-block:: bash
-
-    $ composer require symfony/cache
+```bash
+composer require symfony/cache
+```
 
 Configuration
 -------------
