@@ -10,10 +10,10 @@ Open a command console, enter your project directory, and execute the
 following command to download the latest stable version of this bundle
 and add it as a dependency to your project:
 
-.. code-block:: bash
+```bash
+composer require liip/imagine-bundle
+```
 
-    composer require liip/imagine-bundle
-    
 If you accept the Symfony Flex recipe during installation, the bundle is
 registered, routing set up and the configuration skeleton file is created. You
 can now adapt the configuration to your needs.
@@ -21,46 +21,16 @@ Otherwise, you need to configure the bundle with the next steps.
 
 Step 2: Enable the Bundle
 -------------------------
-
-Then, enable the bundle by adding ``new Liip\ImagineBundle\LiipImagineBundle()``
-to the bundles array of the ``registerBundles`` method in your project's
-``app/AppKernel.php`` file:
-
-.. code-block:: php
-
-    <?php
-
-    // app/AppKernel.php
-
-    // ...
-    class AppKernel extends Kernel
-    {
-        public function registerBundles()
-        {
-            $bundles = array(
-                // ...
-
-                new Liip\ImagineBundle\LiipImagineBundle(),
-            );
-
-            // ...
-        }
-
-        // ...
-    }
-
-If you are using Symfony 5.x, enable the bundle by adding ``new Liip\ImagineBundle\LiipImagineBundle()``
-to the bundles array of the ``return`` method in your project's
+Enable the bundle by adding ``new Liip\ImagineBundle\LiipImagineBundle() to the bundles array of the ``return`` method in your project's
 ``config/bundles.php`` file:
 
 .. code-block:: php
-    
+
     <?php
 
     return [
-    
         // ...
-        
+
         Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true]
     ];
 
