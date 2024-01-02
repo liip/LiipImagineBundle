@@ -289,10 +289,10 @@ lifting for you.
 ```php
 <?php
 
-class MyController extends AbstractController
-{
 use Liip\ImagineBundle\Service\FilterService;
 
+class MyController extends AbstractController
+{
     public function index(FilterService $imagine)
     {
         // 1) Simple filter, OR
