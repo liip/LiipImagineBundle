@@ -218,7 +218,7 @@ web_profiler :
 
 ### Runtime Options
 
-Sometime, you may may need to modify your filter at runtime.  You can do so by 
+Sometime, you may may need to modify your filter at runtime. You can do so by 
 passing the template helper an options array.
 
 ```twig
