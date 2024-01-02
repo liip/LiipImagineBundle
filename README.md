@@ -115,8 +115,8 @@ our [data loaders](http://symfony.com/doc/current/bundles/LiipImagineBundle/data
 and [cache resolvers](http://symfony.com/doc/current/bundles/LiipImagineBundle/cache-resolvers.html)
 operate correctly. Use the following boilerplate in your configuration file.
 
-```yml
-# app/config/config.yml
+```yaml
+# config/packages/liip_imagine.yaml
 
 liip_imagine :
 
@@ -149,7 +149,7 @@ name `my_thumb`) with two *filters* configured: the `thumbnail` and `background`
 *filters*.
 
 ```yml
-# app/config/config.yml
+# config/packages/liip_imagine.yaml
 
 liip_imagine :
     resolvers :
@@ -193,16 +193,8 @@ There are a number of additional [filters](http://symfony.com/doc/current/bundle
 but for now you can use your newly defined ``my_thumb`` *filter set* immediately
 within a template.
 
-*For Twig-based template, use:*
-
 ```twig
 <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb') }}" />
-```
-
-*Or, for PHP-based template, use:*
-
-```php
-<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb') ?>" />
 ```
 
 Behind the scenes, the bundle applies the filter(s) to the image on-the-fly
@@ -217,7 +209,7 @@ rendered via the template helper. This is often caused by having
 images are rendered, it is strongly suggested to disable this option:
 
 ```yml
-# app/config/config_dev.yml
+# config/packages/web_profiler.yaml
 
 web_profiler :
     intercept_redirects : false
@@ -226,12 +218,8 @@ web_profiler :
 
 ### Runtime Options
 
-Sometime, you may have a filter defined that fulfills 99% of your usage
-scenarios. Instead of defining a new filter for the erroneous 1% of cases,
-you may instead choose to alter the behavior of a filter at runtime by
+Sometime, you may may need to modify your filter at runtime.  You can do so by 
 passing the template helper an options array.
-
-*For Twig-based template, use:*
 
 ```twig
 {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}
@@ -239,24 +227,9 @@ passing the template helper an options array.
 <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my_thumb', runtimeConfig) }}" />
 ```
 
-*Or, for PHP-based template, use:*
-
-```php
-<?php
-$runtimeConfig = array(
-    "thumbnail" => array(
-        "size" => array(50, 50)
-    )
-);
-?>
-
-<img src="<?php $this['imagine']->filter('/relative/path/to/image.jpg', 'my_thumb', $runtimeConfig) ?>" />
-```
-
-
 ### Path Resolution
 
-Sometime you need to resolve the image path returned by this bundle for a
+Sometimes you need to resolve the image path returned by this bundle for a
 filtered image. This can easily be achieved using Symfony's console binary
 or programmatically from within a controller or other piece of code.
 
@@ -268,7 +241,7 @@ You can resolve an image URL using the console command
 relative image paths (which must be separated by a space).
 
 ```bash
-$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
+php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg relative/path/to/image2.jpg
 ```
 
 Additionally, you can use the ``--filter`` option to specify which filter
@@ -276,7 +249,7 @@ you want to resolve for (if the ``--filter`` option is omitted, all
 available filters will be resolved).
 
 ```bash
-$ php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filter=my_thumb
+php bin/console liip:imagine:cache:resolve relative/path/to/image1.jpg --filter=my_thumb
 ```
 
 
@@ -288,23 +261,16 @@ have the service assigned to a variable called `$imagineCacheManager`,
 you would run:
 
 ```php
-$imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+
+public function __construct(private CacheManager $imageCacheManager) {
+}
+
+public function doSomething() {
+    $this->imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
+}
 ```
-
-Often, you need to perform this operation in a controller. Assuming your
-controller inherits from the base Symfony controller, you can take advantage
-of the inherited ``get`` method to request the ``liip_imagine.cache.manager``
-service, from which you can call ``getBrowserPath`` on a relative image
-path to get its resolved location.
-
-```php
-/** @var CacheManager */
-$imagineCacheManager = $this->get('liip_imagine.cache.manager');
-
-/** @var string */
-$resolvedPath = $imagineCacheManager->getBrowserPath('/relative/path/to/image.jpg', 'my_thumb');
-```
-
 
 ## Filters
 
@@ -323,15 +289,12 @@ lifting for you.
 ```php
 <?php
 
-class MyController extends Controller
+class MyController extends AbstractController
 {
-    public function indexAction()
-    {
-        /** @var FilterService */
-        $imagine = $this
-            ->container
-            ->get('liip_imagine.service.filter');
+use Liip\ImagineBundle\Service\FilterService;
 
+    public function index(FilterService $imagine)
+    {
         // 1) Simple filter, OR
         $resourcePath = $imagine->getUrlOfFilteredImage('uploads/foo.jpg', 'my_thumb');
         
@@ -361,7 +324,7 @@ assets from. For many installations this will be sufficient, but sometime you
 may need to load images from other locations. To do this, you must set the
 `data_root` parameter in your configuration (often located at `app/config/config.yml`).
 
-```yml
+```yaml
 liip_imagine:
     loaders:
         default:
@@ -372,7 +335,7 @@ liip_imagine:
 As of version `1.7.2` you can register multiple data root paths, and the 
 file locator will search each for the requested file.
 
-```yml
+```yaml
 liip_imagine:
     loaders:
         default:
