@@ -22,7 +22,7 @@ class RotateFilterLoader implements LoaderInterface
 {
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {
-        $angle = isset($options['angle']) ? (int) $options['angle'] : 0;
+        $angle = \array_key_exists('angle', $options) ? (int) $options['angle'] : 0;
 
         return 0 === $angle ? $image : $image->rotate($angle);
     }

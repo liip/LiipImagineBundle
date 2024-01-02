@@ -37,7 +37,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         $resolverId = 'liip_imagine.cache.resolver.'.$name;
         $container->setDefinition($resolverId, $resolverDefinition);
 
-        if (isset($config['cache_prefix'])) {
+        if (\array_key_exists('cache_prefix', $config)) {
             $resolverDefinition->addMethodCall('setCachePrefix', [$config['cache_prefix']]);
         }
 

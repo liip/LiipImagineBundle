@@ -38,7 +38,7 @@ final class ScaleFactory implements FilterFactoryInterface
     public function create(array $options): FilterInterface
     {
         $dimensions = $this->sizeFactory->createFromOptions($options, 'dim');
-        $to = isset($options['to']) ? (float) $options['to'] : null;
+        $to = \array_key_exists('to', $options) ? (float) $options['to'] : null;
 
         return new Scale($dimensions, $to);
     }

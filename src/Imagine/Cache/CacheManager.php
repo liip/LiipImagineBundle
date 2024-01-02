@@ -194,7 +194,7 @@ class CacheManager
         foreach ($filters as $filter) {
             $resolver = $this->getResolver($filter, null);
 
-            $list = isset($mapping[$resolver]) ? $mapping[$resolver] : [];
+            $list = $mapping[$resolver] ?? [];
 
             $list[] = $filter;
 
@@ -213,18 +213,14 @@ class CacheManager
      *
      * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
      */
-    protected function getResolver(string $filter, ?string $resolver): ResolverInterface
+    protected function getResolver(string $filter, ?string $resolverName): ResolverInterface
     {
-        // BC
-        if (!$resolver) {
+        if (!$resolverName) {
             $config = $this->filterConfig->get($filter);
-
-            $resolverName = empty($config['cache']) ? $this->defaultResolver : $config['cache'];
-        } else {
-            $resolverName = $resolver;
+            $resolverName = $config['cache'] ?? $this->defaultResolver;
         }
 
-        if (!isset($this->resolvers[$resolverName])) {
+        if (!\array_key_exists($resolverName, $this->resolvers)) {
             throw new \OutOfBoundsException(sprintf('Could not find resolver "%s" for "%s" filter type', $resolverName, $filter));
         }
 
