@@ -15,6 +15,8 @@ use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @covers \Liip\ImagineBundle\Controller\ImagineController
@@ -37,7 +39,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
         // not supported.
         if ($this->webp_generate) {
-            $filterService = self::getService('test.liip_imagine.service.filter');
+            $filterService = $this->getService('test.liip_imagine.service.filter');
             $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
             $webpGenerate->setAccessible(true);
             $webpGenerate->setValue($filterService, true);
@@ -162,7 +164,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
+        $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
@@ -175,7 +177,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testShouldThrowNotFoundHttpExceptionIfFiltersNotArray(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Filters must be an array. Value was "some-string"');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([
@@ -186,7 +188,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testShouldThrowNotFoundHttpExceptionIfFileNotExists(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Source image for path "images/shrodinger_cats_which_not_exist.jpeg" could not be found');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
@@ -194,7 +196,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testInvalidFilterShouldThrowNotFoundHttpException(): void
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
 
         $this->client->request('GET', '/media/cache/resolve/invalid-filter/images/cats.jpeg');
     }
@@ -202,7 +204,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirst(): void
     {
         /** @var Signer $signer */
-        $signer = self::getService('liip_imagine.cache.signer');
+        $signer = $this->getService('liip_imagine.cache.signer');
 
         $params = [
             'filters' => [
@@ -240,7 +242,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolveWithCustomFiltersPopulatingCacheFirstWebP(): void
     {
         /** @var Signer $signer */
-        $signer = self::getService('liip_imagine.cache.signer');
+        $signer = $this->getService('liip_imagine.cache.signer');
 
         $params = [
             'filters' => [
@@ -283,7 +285,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
     public function testShouldResolveWithCustomFiltersFromCache(): void
     {
         /** @var Signer $signer */
-        $signer = self::getService('liip_imagine.cache.signer');
+        $signer = $this->getService('liip_imagine.cache.signer');
 
         $params = [
             'filters' => [

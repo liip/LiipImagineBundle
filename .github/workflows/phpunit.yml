@@ -31,7 +31,7 @@ jobs:
             symfony: '*'
             stability: 'stable'
 
-          # Test each supported Symfony version with lowest supported PHP version
+          # Test each supported Symfony version with the lowest supported PHP version
           - php: '7.2'
             dependencies: highest
             symfony: '3.4.*'

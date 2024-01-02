@@ -177,7 +177,7 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \Aws\S3\S3Client::getObjectUrl() for available options
+     * @see S3Client::getObjectUrl() for available options
      *
      * @param string $key   The name of the option
      * @param mixed  $value The value to be set
@@ -196,7 +196,7 @@ class AwsS3Resolver implements ResolverInterface
      *
      * If the option is already set, it will be overwritten.
      *
-     * @see \Aws\S3\S3Client::putObject() for available options
+     * @see S3Client::putObject() for available options
      *
      * @param string $key   The name of the option
      * @param mixed  $value The value to be set
