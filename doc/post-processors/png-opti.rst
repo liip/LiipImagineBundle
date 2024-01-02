@@ -49,6 +49,12 @@ Options
     When multi-images are encountered (for example, an animated image), this causes one of the images to be kept and drops
     the other ones. Depending on the input format, this may be either the first or the most relevant (e.g. the largest) image.
 
+**strip_all:** ``bool`` (deprecated)
+    Removes all comments, EXIF markers, and other image metadata.
+
+**level:** ``int``
+    Sets the image optimization factor, from 0 to 7.
+
 **strip:** ``bool|string``
     When set to ``true``, all extra image headers, such as its comments, EXIF markers, and other metadata, will be removed.
     Equivalently, the string value ``all`` also removes all extra metadata.

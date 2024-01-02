@@ -28,7 +28,7 @@ class PasteFilterLoader implements LoaderInterface
     }
 
     /**
-     * @see \Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface::load()
+     * @see LoaderInterface::load
      */
     public function load(ImageInterface $image, array $options = []): ImageInterface
     {

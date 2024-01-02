@@ -8,6 +8,12 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 - The response when the `filter` parameter in a resolve request is not an array is now 400 bad request, and no longer 404 not found.
 
+# 2.x
+
+## [2.12.1](https://github.com/liip/LiipImagineBundle/tree/2.12.1)
+
+- Adjustments to install with Symfony 7 ([mbabker](https://github.com/liip/LiipImagineBundle/pull/1535))
+
 ## [2.12.0](https://github.com/liip/LiipImagineBundle/tree/2.12.0)
 
 - Fix documentation filter command parameter name ([rdavaillaud](https://github.com/liip/LiipImagineBundle/pull/1515))
