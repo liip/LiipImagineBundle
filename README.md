@@ -283,8 +283,7 @@ from our documentation.
 ## Use as a Service
 
 If you need to use your defined "filter sets" from within your controller, you 
-can fetch this bundle's FilterService from the service container to do the heavy
-lifting for you.
+can inject the bundle's FilterService to do the heavy lifting for you.
 
 ```php
 <?php
