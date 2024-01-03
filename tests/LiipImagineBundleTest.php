@@ -16,7 +16,6 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
-use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
@@ -65,7 +64,7 @@ class LiipImagineBundleTest extends AbstractTest
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
 
-        $this->assertCount(8, $passes);
+        $this->assertCount(7, $passes);
 
         sort($passes);
 
@@ -75,7 +74,6 @@ class LiipImagineBundleTest extends AbstractTest
             FiltersCompilerPass::class,
             LoadersCompilerPass::class,
             MetadataReaderCompilerPass::class,
-            NonFunctionalFilterExceptionPass::class,
             PostProcessorsCompilerPass::class,
             ResolversCompilerPass::class,
         ], $passes);
