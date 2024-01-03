@@ -5,8 +5,8 @@ ProxyResolver
 =============
 
 The ``ProxyResolver`` cannot be used by itself. Instead, it is a "decorator" for
-another resolver. It add the ability to use "Proxy Hosts" for your assets. If no
-"Proxy Domains" are set, it behaves like the  underlying cache resolver.
+another resolver. It adds the ability to use "Proxy Hosts" for your assets. If no
+"Proxy Domains" are set, it behaves like the underlying cache resolver.
 
 Prerequisites
 -------------
@@ -14,10 +14,10 @@ Prerequisites
 Create Service
 ~~~~~~~~~~~~~~
 
-To use this cache resolver, you must first define the cache resolver it will decorate.
+To use this cache resolver, you need to first define the cache resolver it will decorate.
 In this example, we will use the :ref:`AWS Cache Resolver <cache-resolver-aws-s3>`.
 
-Next, we need to define a service for this cache resolver and inject an array of domains
+We define a service for this cache resolver and inject an array of domains
 and the cache resolver service to decorate.
 
 .. code-block:: yaml
@@ -38,6 +38,9 @@ With this configuration, the cache resolver will generate paths such as
 ``//images2.domain.com/.../image.jpg`` (instead of the original path
 returned from the decorated cache resolver, in this example using AWS,
 ``//bucket.s3.awsamazoncloud.com/.../image.jpg``).
+
+The domains you configure need the scheme (``http`` or ``https``), the full domain name and the port if it is not the
+default port for the scheme.
 
 Usage
 -----
