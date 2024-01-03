@@ -56,29 +56,21 @@ class ProxyResolver implements ResolverInterface
         $this->resolver->remove($paths, $filters);
     }
 
+    /**
+     * If you need more complex logic, extend the proxy resolver and overwrite this method.
+     */
     protected function rewriteUrl(string $url): string
     {
         if (empty($this->hosts)) {
             return $url;
         }
 
-        $randKey = array_rand($this->hosts, 1);
+        $randKey = array_rand($this->hosts);
 
-        // BC
-        if (is_numeric($randKey)) {
-            $port = parse_url($url, PHP_URL_PORT);
-            $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST).($port ? ':'.$port : '');
-            $proxyHost = $this->hosts[$randKey];
+        $port = parse_url($url, PHP_URL_PORT);
+        $host = parse_url($url, PHP_URL_SCHEME).'://'.parse_url($url, PHP_URL_HOST).($port ? ':'.$port : '');
+        $proxyHost = $this->hosts[$randKey];
 
-            return str_replace($host, $proxyHost, $url);
-        }
-
-        if (0 === mb_strpos($randKey, 'regexp/')) {
-            $regExp = mb_substr($randKey, 6);
-
-            return preg_replace($regExp, $this->hosts[$randKey], $url);
-        }
-
-        return str_replace($randKey, $this->hosts[$randKey], $url);
+        return str_replace($host, $proxyHost, $url);
     }
 }

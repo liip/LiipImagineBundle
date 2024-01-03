@@ -233,38 +233,6 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
     }
 
-    public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate(): void
-    {
-        $container = new ContainerBuilder();
-
-        $resolver = new AwsS3ResolverFactory();
-
-        $resolver->create($container, 'the_resolver_name', [
-            'client_config' => [],
-            'bucket' => 'aBucket',
-            'acl' => 'aAcl',
-            'get_options' => [],
-            'put_options' => [],
-            'cache' => 'the_cache_service_id',
-            'proxies' => ['foo' => 'bar'],
-        ]);
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
-        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
-        $this->assertInstanceOf(ChildDefinition::class, $proxiedResolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
-
-        $this->assertInstanceOf(Reference::class, $cachedResolverDefinition->getArgument(0));
-        $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.proxied', (string) $cachedResolverDefinition->getArgument(0));
-
-        $this->assertSame(['foo' => 'bar'], $cachedResolverDefinition->getArgument(1));
-    }
-
     public function testSetCachePrefixIfDefined(): void
     {
         $container = new ContainerBuilder();
