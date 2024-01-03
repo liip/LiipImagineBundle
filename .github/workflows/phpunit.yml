@@ -21,13 +21,13 @@ jobs:
         stability: ['stable']
         include:
           # Minimum supported dependencies with the oldest supported PHP version
-          - php: '8.0'
+          - php: '8.1'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
 
           # Minimum supported dependencies with the latest supported PHP version
-          - php: '8.2'
+          - php: '8.3'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
@@ -35,25 +35,25 @@ jobs:
           # Test each supported Symfony version with the lowest supported PHP version
           - php: '8.1'
             dependencies: highest
-            symfony: '5.4.*'
-            stability: 'stable'
-
-          - php: '8.1'
-            dependencies: highest
             symfony: '6.4.*'
             stability: 'stable'
 
-          # Test Symfony 6.4 dev version
-          - php: '8.2'
-            dependencies: highest
-            symfony: '6.4.*'
-            stability: 'dev'
-
-          # Test Symfony 7.0 dev version
           - php: '8.2'
             dependencies: highest
             symfony: '7.0.*'
+            stability: 'stable'
+
+          - php: '8.3'
+            dependencies: highest
+            symfony: '7.0.*'
+            stability: 'stable'
+
+          # Test Symfony 7.1 dev
+          - php: '8.2'
+            dependencies: highest
+            symfony: '7.1.*'
             stability: 'dev'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -76,18 +76,8 @@ jobs:
           composer global require --no-interaction --no-progress symfony/flex
           composer config extra.symfony.require ${{ matrix.symfony }}
 
-      - name: Remove non-compatible dependencies with Symfony 7
-        if: matrix.symfony == '7.0.*'
-        run: |
-          composer remove enqueue/enqueue-bundle symfony/templating --dev --no-update
-
       - name: Set minimum-stability
         run: composer config minimum-stability ${{ matrix.stability }}
-
-      # Incompatible with symfony/framework-bundle v3
-      - name: Remove symfony/messenger
-        if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
-        run: composer remove --dev --no-update symfony/messenger
 
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
