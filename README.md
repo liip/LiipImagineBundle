@@ -218,8 +218,7 @@ web_profiler :
 
 ### Runtime Options
 
-Sometime, you may may need to modify your filter at runtime. You can do so by 
-passing the template helper an options array.
+If you need to set filter options at runtime, you can pass options to the filter:
 
 ```twig
 {% set runtimeConfig = {"thumbnail": {"size": [50, 50] }} %}

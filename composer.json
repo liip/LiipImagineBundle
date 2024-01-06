@@ -48,7 +48,7 @@
         "symfony/dependency-injection": "^6.4|^7.0",
         "symfony/form": "^6.4|^7.0",
         "symfony/messenger": "^6.4|^7.0",
-        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "symfony/phpunit-bridge": "^7.0.2",
         "symfony/validator": "^6.4|^7.0",
         "symfony/yaml": "^6.4|^7.0"
     },
