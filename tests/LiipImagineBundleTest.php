@@ -47,7 +47,7 @@ class LiipImagineBundleTest extends AbstractTest
     public function testAddPasses(): void
     {
         $passes = [];
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
@@ -91,7 +91,7 @@ class LiipImagineBundleTest extends AbstractTest
                 return true;
             }));
 
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
@@ -119,7 +119,7 @@ class LiipImagineBundleTest extends AbstractTest
 
                 return true;
             }));
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
@@ -137,22 +137,19 @@ class LiipImagineBundleTest extends AbstractTest
     }
 
     /**
-     * @return MockObject&ContainerBuilder
-     */
-    protected function createContainerBuilderMock()
-    {
-        return $this->createObjectMock(ContainerBuilder::class, [], false);
-    }
-
-    /**
      * @return MockObject&LiipImagineExtension
      */
     protected function createLiipImagineExtensionMock()
     {
-        return $this->createObjectMock(LiipImagineExtension::class, [
+        $builder = $this->getMockBuilder(LiipImagineExtension::class);
+        $builder->setMethods([
             'getNamespace',
             'addResolverFactory',
             'addLoaderFactory',
-        ], false);
+        ]);
+
+        $builder->disableOriginalConstructor();
+
+        return $builder->getMock();
     }
 }

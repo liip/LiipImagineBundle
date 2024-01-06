@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\RotateFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -25,7 +26,7 @@ class RotateFilterLoaderTest extends AbstractTest
     {
         $loader = new RotateFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
 
         $result = $loader->load($image, ['angle' => 0]);
         $this->assertSame($image, $result);
@@ -35,8 +36,8 @@ class RotateFilterLoaderTest extends AbstractTest
     {
         $loader = new RotateFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
-        $rotatedImage = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
+        $rotatedImage = $this->createMock(ImageInterface::class);
 
         $image
             ->expects($this->once())

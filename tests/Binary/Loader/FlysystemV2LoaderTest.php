@@ -32,10 +32,6 @@ class FlysystemV2LoaderTest extends AbstractTest
     {
         parent::setUp();
 
-        if (!interface_exists(FilesystemOperator::class)) {
-            $this->markTestSkipped('Requires the league/flysystem:^2.0 package.');
-        }
-
         $this->flyFilesystem = new Filesystem(new LocalFilesystemAdapter($this->fixturesPath));
     }
 
@@ -57,7 +53,7 @@ class FlysystemV2LoaderTest extends AbstractTest
     public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageMatchesBC('{Source image .+ not found}');
+        $this->expectExceptionMessageMatches('{Source image .+ not found}');
 
         $loader = $this->getFlysystemLoader();
 

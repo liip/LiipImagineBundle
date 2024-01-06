@@ -12,6 +12,8 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
 use Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -44,7 +46,7 @@ class PasteFilterLoaderTest extends AbstractTest
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
         );
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->method('getSize')->willReturn($mockImageSize);
         $image->method('copy')->willReturn($image);
         $image->expects($this->once())
@@ -52,7 +54,7 @@ class PasteFilterLoaderTest extends AbstractTest
             ->with($image, $expected)
             ->willReturn($image);
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->method('open')
             ->willReturn($image);

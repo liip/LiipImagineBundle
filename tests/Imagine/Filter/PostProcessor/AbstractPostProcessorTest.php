@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\AbstractPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
@@ -25,8 +26,7 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
 {
     public function testIsBinaryOfType(): void
     {
-        $binary = $this->getBinaryInterfaceMock();
-
+        $binary = $this->createMock(BinaryInterface::class);
         $binary
             ->expects($this->atLeastOnce())
             ->method('getMimeType')
@@ -133,15 +133,10 @@ class AbstractPostProcessorTest extends AbstractPostProcessorTestCase
      */
     public function testIsValidReturn(array $validReturns, array $errorString, bool $expected): void
     {
-        $process = $this
-            ->getMockBuilder(Process::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $process = $this->createMock(Process::class);
         $process
             ->method('getExitCode')
             ->willReturn(0);
-
         $process
             ->method('getOutput')
             ->willReturn('foo bar baz');

@@ -11,7 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
-use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
 abstract class AbstractPostProcessorTestCase extends AbstractTest
@@ -37,13 +36,6 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
     }
 
     abstract protected function getPostProcessorInstance(array $parameters = []);
-
-    protected function getBinaryInterfaceMock(): BinaryInterface
-    {
-        return $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-    }
 
     protected function assertTemporaryFile(string $content, string $file, string $context, array $options = []): void
     {

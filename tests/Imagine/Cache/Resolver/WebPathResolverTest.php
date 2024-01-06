@@ -14,7 +14,6 @@ namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\WebPathResolver;
 use Liip\ImagineBundle\Model\Binary;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\RequestContext;
@@ -62,7 +61,7 @@ class WebPathResolverTest extends TestCase
 
     public function testCouldBeConstructedWithRequiredArguments(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $requestContext = new RequestContext();
         $webRoot = 'theWebRoot';
 
@@ -76,7 +75,7 @@ class WebPathResolverTest extends TestCase
     public function testCouldBeConstructedWithOptionalArguments(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'aWebRoot',
             'theCachePrefix'
@@ -88,7 +87,7 @@ class WebPathResolverTest extends TestCase
     public function testTrimRightSlashFromWebPathOnConstruct(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'aWebRoot/',
             'theCachePrefix'
@@ -100,7 +99,7 @@ class WebPathResolverTest extends TestCase
     public function testRemoveDoubleSlashFromWebRootOnConstruct(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'aWeb//Root',
             '/aCachePrefix'
@@ -112,7 +111,7 @@ class WebPathResolverTest extends TestCase
     public function testTrimRightSlashFromCachePrefixOnConstruct(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'aWebRoot',
             '/aCachePrefix'
@@ -124,7 +123,7 @@ class WebPathResolverTest extends TestCase
     public function testRemoveDoubleSlashFromCachePrefixOnConstruct(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'aWebRoot',
             'aCache//Prefix'
@@ -136,7 +135,7 @@ class WebPathResolverTest extends TestCase
     public function testReturnTrueIfFileExistsOnIsStored(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             $this->basePath,
             'aCachePrefix'
@@ -148,7 +147,7 @@ class WebPathResolverTest extends TestCase
     public function testReturnFalseIfFileNotExistsOnIsStored(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             $this->basePath,
             'aCachePrefix'
@@ -160,7 +159,7 @@ class WebPathResolverTest extends TestCase
     public function testReturnFalseIfIsNotFile(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             $this->basePath,
             'aCachePrefix'
@@ -176,7 +175,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setHost('thehost');
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -196,7 +195,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setBaseUrl('/theBasePath/app.php');
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -216,7 +215,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setBaseUrl('/theBasePath/app.php');
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             ''
@@ -236,7 +235,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setBaseUrl('/theBasePath/theSubBasePath');
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -256,7 +255,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setBaseUrl('\\');
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -276,7 +275,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setHttpPort(88);
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -296,7 +295,7 @@ class WebPathResolverTest extends TestCase
         $requestContext->setHttpsPort(444);
 
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             $requestContext,
             '/aWebRoot',
             'aCachePrefix'
@@ -312,7 +311,7 @@ class WebPathResolverTest extends TestCase
     {
         $binary = new Binary('theContent', 'aMimeType', 'aFormat');
 
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('dumpFile')
@@ -330,7 +329,7 @@ class WebPathResolverTest extends TestCase
 
     public function testDoNothingIfFiltersAndPathsEmptyOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->never())
             ->method('remove');
@@ -347,7 +346,7 @@ class WebPathResolverTest extends TestCase
 
     public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
@@ -365,7 +364,7 @@ class WebPathResolverTest extends TestCase
 
     public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->exactly(2))
             ->method('remove')
@@ -386,7 +385,7 @@ class WebPathResolverTest extends TestCase
 
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->exactly(4))
             ->method('remove')
@@ -412,7 +411,7 @@ class WebPathResolverTest extends TestCase
 
     public function testRemoveCacheForFilterOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
@@ -432,7 +431,7 @@ class WebPathResolverTest extends TestCase
 
     public function testRemoveCacheForSomeFiltersOnRemove(): void
     {
-        $filesystemMock = $this->createFilesystemMock();
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('remove')
@@ -454,7 +453,7 @@ class WebPathResolverTest extends TestCase
     public function testShouldRemoveDoubleSlashInUrl(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
@@ -472,7 +471,7 @@ class WebPathResolverTest extends TestCase
     public function testShouldSanitizeSeparatorBetweenSchemeAndAuthorityInUrl(): void
     {
         $resolver = new WebPathResolver(
-            $this->createFilesystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             '/aWebRoot',
             'aCachePrefix'
@@ -499,13 +498,5 @@ class WebPathResolverTest extends TestCase
         $attribute->setAccessible(false);
 
         self::assertSame($expected, $actual, $message);
-    }
-
-    /**
-     * @return MockObject&Filesystem
-     */
-    protected function createFilesystemMock()
-    {
-        return $this->getMockBuilder(Filesystem::class)->getMock();
     }
 }

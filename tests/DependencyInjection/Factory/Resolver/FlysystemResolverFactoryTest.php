@@ -11,8 +11,6 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Resolver;
 
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use PHPUnit\Framework\TestCase;
@@ -26,17 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class FlysystemResolverFactoryTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        if (!interface_exists(FilesystemInterface::class)
-            && !interface_exists(FilesystemOperator::class)
-        ) {
-            $this->markTestSkipped('Requires the league/flysystem package.');
-        }
-    }
-
     public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemResolverFactory::class);
@@ -75,11 +62,7 @@ class FlysystemResolverFactoryTest extends TestCase
 
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        if (interface_exists(FilesystemOperator::class)) {
-            $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem2';
-        } else {
-            $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem';
-        }
+        $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem2';
         $this->assertSame($resolverName, $resolverDefinition->getParent());
 
         $this->assertSame('http://images.example.com', $resolverDefinition->getArgument(2));
@@ -95,12 +78,8 @@ class FlysystemResolverFactoryTest extends TestCase
         $expectedVisibility = 'public';
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
-
         $resolver = new FlysystemResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'flysystem' => [
@@ -129,12 +108,8 @@ class FlysystemResolverFactoryTest extends TestCase
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
-
         $resolver = new FlysystemResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, [
             'flysystem' => [],
@@ -143,8 +118,6 @@ class FlysystemResolverFactoryTest extends TestCase
 
     protected function processConfigTree(TreeBuilder $treeBuilder, array $configs): array
     {
-        $processor = new Processor();
-
-        return $processor->process($treeBuilder->buildTree(), $configs);
+        return (new Processor())->process($treeBuilder->buildTree(), $configs);
     }
 }

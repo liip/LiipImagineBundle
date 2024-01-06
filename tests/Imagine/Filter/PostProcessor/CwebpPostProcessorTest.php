@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\CwebpPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
@@ -149,8 +150,7 @@ class CwebpPostProcessorTest extends AbstractPostProcessorTestCase
 
     public function testProcessWithNonSupportedMimeType(): void
     {
-        $binary = $this->getBinaryInterfaceMock();
-
+        $binary = $this->createMock(BinaryInterface::class);
         $binary
             ->expects($this->atLeastOnce())
             ->method('getMimeType')

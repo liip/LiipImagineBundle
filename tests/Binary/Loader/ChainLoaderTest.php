@@ -91,7 +91,7 @@ class ChainLoaderTest extends AbstractTest
     public function testThrowsIfFileDoesNotExist(string $path): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\]" 1 loaders}');
+        $this->expectExceptionMessageMatches('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\]" 1 loaders}');
 
         $this->getChainLoader()->find($path);
     }
@@ -102,7 +102,7 @@ class ChainLoaderTest extends AbstractTest
     public function testThrowsIfFileDoesNotExistWithMultipleLoaders(string $path): void
     {
         $this->expectException(NotLoadableException::class);
-        $this->expectExceptionMessageMatchesBC('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
+        $this->expectExceptionMessageMatches('{Source image not resolvable "[^"]+" using "FileSystemLoader=\[foo\], FileSystemLoader=\[bar\]" 2 loaders \(internal exceptions: FileSystemLoader=\[.+\], FileSystemLoader=\[.+\]\)\.}');
 
         $this->getChainLoader([], [
             'foo' => $this->createFileSystemLoader(

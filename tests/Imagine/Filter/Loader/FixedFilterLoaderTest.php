@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Liip\ImagineBundle\Imagine\Filter\Loader\FixedFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -55,7 +56,7 @@ class FixedFilterLoaderTest extends AbstractTest
             floor(($resize->getHeight() - $expected->getHeight()) / 2)
         );
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->method('getSize')->willReturn($mockImageSize);
         $image->expects($this->once())
             ->method('resize')

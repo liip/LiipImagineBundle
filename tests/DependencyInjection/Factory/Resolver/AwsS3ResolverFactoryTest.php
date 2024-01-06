@@ -263,15 +263,11 @@ class AwsS3ResolverFactoryTest extends AbstractTest
     public function testThrowBucketNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, []);
     }
@@ -279,15 +275,11 @@ class AwsS3ResolverFactoryTest extends AbstractTest
     public function testThrowClientConfigNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, [
             'aws_s3' => [
@@ -299,15 +291,11 @@ class AwsS3ResolverFactoryTest extends AbstractTest
     public function testThrowClientConfigNotArrayOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
+        $this->expectExceptionMessageMatches('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, [
             'aws_s3' => [
@@ -336,12 +324,8 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedCachePrefix = 'theCachePrefix';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'aws_s3' => [
@@ -378,12 +362,8 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedAcl = 'public-read';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'aws_s3' => [
@@ -426,12 +406,8 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedCachePrefix = 'theCachePrefix';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
-
         $resolver = new AwsS3ResolverFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'aws_s3' => [

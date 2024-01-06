@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Model\FileBinary;
@@ -97,8 +98,7 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
 
     public function testProcessWithNonSupportedMimeType(): void
     {
-        $binary = $this->getBinaryInterfaceMock();
-
+        $binary = $this->createMock(BinaryInterface::class);
         $binary
             ->expects($this->atLeastOnce())
             ->method('getMimeType')

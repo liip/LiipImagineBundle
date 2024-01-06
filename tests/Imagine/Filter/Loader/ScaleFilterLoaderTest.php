@@ -12,9 +12,11 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader;
 use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\Loader\ScaleFilterLoader
@@ -49,7 +51,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     public function testItShouldPreserveRatio(): void
     {
         $loader = new ScaleFilterLoader();
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createImageInterfaceMock();
         $image->expects($this->once())
             ->method('resize')
             ->with(new Box(
@@ -69,13 +71,12 @@ class ScaleFilterLoaderTest extends AbstractTest
      * @dataProvider dimensionsDataProvider
      *
      * @param int[] $dimensions
-     * @param Box   $expected
      */
-    public function testItShouldUseDimensions($dimensions, $expected): void
+    public function testItShouldUseDimensions(array $dimensions, Box $expected): void
     {
         $loader = new ScaleFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createImageInterfaceMock();
         $image->expects($this->once())
             ->method('resize')
             ->with($expected)
@@ -96,7 +97,7 @@ class ScaleFilterLoaderTest extends AbstractTest
         $this->expectException(\InvalidArgumentException::class);
 
         $scale = new ScaleFilterLoader('foo', 'bar');
-        $scale->load($this->getImageInterfaceMock(), []);
+        $scale->load($this->createImageInterfaceMock(), []);
     }
 
     public function dimensionsDataProvider(): array
@@ -117,7 +118,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     public function testShouldScale($dimensions, $expected): void
     {
         $loader = new UpscaleFilterLoader();
-        $image = $this->getUpscaleMockImage();
+        $image = $this->createUpscaleMockImage();
         $image->expects($this->once())
             ->method('resize')
             ->with($expected)
@@ -147,7 +148,7 @@ class ScaleFilterLoaderTest extends AbstractTest
     public function testShouldNotScale($dimensions, $expected): void
     {
         $loader = new UpscaleFilterLoader();
-        $image = $this->getUpscaleMockImage();
+        $image = $this->createUpscaleMockImage();
         $image->expects($this->never())
             ->method('resize')
             ->with($expected)
@@ -168,9 +169,9 @@ class ScaleFilterLoaderTest extends AbstractTest
         ];
     }
 
-    protected function getUpscaleMockImage()
+    private function createUpscaleMockImage(): ImageInterface&MockObject
     {
-        $mockImage = parent::getImageInterfaceMock();
+        $mockImage = $this->createMock(ImageInterface::class);
         $mockImage->method('getSize')->willReturn(new Box(
             self::UPSCALE_DUMMY_IMAGE_WIDTH,
             self::UPSCALE_DUMMY_IMAGE_HEIGHT
@@ -179,9 +180,9 @@ class ScaleFilterLoaderTest extends AbstractTest
         return $mockImage;
     }
 
-    protected function getImageInterfaceMock()
+    private function createImageInterfaceMock(): ImageInterface&MockObject
     {
-        $mockImage = parent::getImageInterfaceMock();
+        $mockImage = $this->createMock(ImageInterface::class);
         $mockImage->method('getSize')->willReturn(new Box(
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT

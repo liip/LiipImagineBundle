@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\AutoRotateFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -23,7 +24,7 @@ class AutoRotateFilterLoaderTest extends AbstractTest
     {
         $loader = new AutoRotateFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('metadata');
 

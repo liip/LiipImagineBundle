@@ -15,20 +15,12 @@ namespace Liip\ImagineBundle\Tests\Message;
 
 use Liip\ImagineBundle\Message\WarmupCache;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Message\WarmupCache
  */
 class WarmupCacheTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        if (!interface_exists(MessageBusInterface::class)) {
-            $this->markTestSkipped('Requires the symfony/messenger package.');
-        }
-    }
-
     public function testMessageWithoutFiltersAndForce(): void
     {
         $message = new WarmupCache('thePath');

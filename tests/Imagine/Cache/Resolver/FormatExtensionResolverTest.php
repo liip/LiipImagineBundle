@@ -35,7 +35,7 @@ class FormatExtensionResolverTest extends AbstractTest
 
     protected function setUp(): void
     {
-        $this->primaryResolver = $this->createObjectMock(ResolverInterface::class);
+        $this->primaryResolver = $this->createMock(ResolverInterface::class);
         $filterConfiguration = new FilterConfiguration([
             'thumbnail' => [
                 'format' => 'webp',

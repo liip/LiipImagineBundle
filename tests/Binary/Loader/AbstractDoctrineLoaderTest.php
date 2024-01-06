@@ -35,9 +35,7 @@ class AbstractDoctrineLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->om = $this
-            ->getMockBuilder(ObjectManager::class)
-            ->getMock();
+        $this->om = $this->createMock(ObjectManager::class);
 
         $this->loader = $this
             ->getMockBuilder(AbstractDoctrineLoader::class)

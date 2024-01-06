@@ -21,13 +21,3 @@ EOM;
         exit(1);
     }
 }
-
-namespace Symfony\Component\ExpressionLanguage {
-    if (interface_exists(ExpressionFunctionProviderInterface::class)) {
-        return;
-    }
-
-    interface ExpressionFunctionProviderInterface
-    {
-    }
-}

@@ -54,20 +54,12 @@ class AssetsVersionCompilerPass extends AbstractCompilerPass
         $version = $versionStrategyDefinition->getArgument(0);
         $format = $versionStrategyDefinition->getArgument(1);
         $format = $container->resolveEnvPlaceholders($format);
-        if ($format && !$this->str_ends_with($format, '?%%s')) {
+        if ($format && !str_ends_with($format, '?%%s')) {
             $this->log($container, 'Can not handle assets versioning with custom format "'.$format.'". asset twig function can likely not be used with the imagine_filter');
 
             return;
         }
 
         $runtimeDefinition->setArgument(1, $version);
-    }
-
-    /**
-     * Can be replaced with the built-in method when dropping support for PHP < 8.0
-     */
-    private function str_ends_with(string $haystack, string $needle): bool
-    {
-        return mb_substr($haystack, -mb_strlen($needle)) === $needle;
     }
 }

@@ -56,7 +56,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
         $initialSize = new Box(50, 200);
         $resultSize = new Box(50, 200);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->method('getSize')
             ->willReturn($initialSize);

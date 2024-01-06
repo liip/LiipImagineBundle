@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Gmagick\Imagine as GmagickImagine;
+use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Imagick\Imagine as ImagickImagine;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ResampleFilterLoader;
@@ -87,12 +88,12 @@ class ResampleFilterLoaderTest extends AbstractTest
      */
     public function testOptions(array $options): void
     {
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('save')
             ->willReturn($image);
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine->expects($this->once())
             ->method('open')
             ->willReturn($image);
@@ -131,7 +132,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $this->expectExceptionMessage('Invalid option(s) passed to Liip\\ImagineBundle\\Imagine\\Filter\\Loader\\ResampleFilterLoader::load().');
 
         $loader = $this->createResampleFilterLoaderInstance();
-        $loader->load($this->getImageInterfaceMock(), $options);
+        $loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function testThrowsOnInvalidFilterOption(): void
@@ -140,7 +141,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $this->expectExceptionMessage('Invalid value for "filter" option: must be a valid constant resolvable using one of formats "\\Imagine\\Image\\ImageInterface::FILTER_%s", "\\Imagine\\Image\\ImageInterface::%s", or "%s".');
 
         $loader = $this->createResampleFilterLoaderInstance();
-        $loader->load($this->getImageInterfaceMock(), [
+        $loader->load($this->createMock(ImageInterface::class), [
             'x' => 120,
             'y' => 120,
             'unit' => 'ppi',
@@ -151,10 +152,10 @@ class ResampleFilterLoaderTest extends AbstractTest
     public function testThrowsOnInvalidTemporaryPathOption(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageMatchesBC('{Unable to create temporary file in ".+" base path.}');
+        $this->expectExceptionMessageMatches('{Unable to create temporary file in ".+" base path.}');
 
         $loader = $this->createResampleFilterLoaderInstance();
-        $loader->load($this->getImageInterfaceMock(), [
+        $loader->load($this->createMock(ImageInterface::class), [
             'x' => 120,
             'y' => 120,
             'unit' => 'ppi',
@@ -166,7 +167,7 @@ class ResampleFilterLoaderTest extends AbstractTest
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Filter\LoadFilterException::class);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception('Error saving file!'));
@@ -176,7 +177,7 @@ class ResampleFilterLoaderTest extends AbstractTest
 
     private function createResampleFilterLoaderInstance(ImagineInterface $imagine = null): ResampleFilterLoader
     {
-        return new ResampleFilterLoader($imagine ?: $this->createImagineInterfaceMock());
+        return new ResampleFilterLoader($imagine ?: $this->createMock(ImagineInterface::class));
     }
 
     private static function getSupportedDriver(): string

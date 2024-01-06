@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\FlipFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -32,7 +33,7 @@ class FlipFilterLoaderTest extends AbstractTest
      */
     public function testLoadWithAxisXOption(string $axis): void
     {
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('flipHorizontally')
             ->willReturn($image);
@@ -53,7 +54,7 @@ class FlipFilterLoaderTest extends AbstractTest
      */
     public function testLoadWithAxisYOption(string $axis): void
     {
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('flipVertically')
             ->willReturn($image);
@@ -67,7 +68,7 @@ class FlipFilterLoaderTest extends AbstractTest
         $this->expectExceptionMessage('The "axis" option must be set to "x", "horizontal", "y", or "vertical".');
 
         $loader = new FlipFilterLoader();
-        $loader->load($this->getImageInterfaceMock(), [
+        $loader->load($this->createMock(ImageInterface::class), [
             'axis' => 'invalid',
         ]);
     }

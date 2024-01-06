@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -31,7 +32,7 @@ class ResizeFilterLoaderTest extends AbstractTest
     {
         $loader = new ResizeFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('resize')
             ->with(new Box($width, $height))

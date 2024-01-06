@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Liip\ImagineBundle\Imagine\Filter\Loader\CropFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -41,7 +42,7 @@ class CropFilterLoaderTest extends AbstractTest
 
         $loader = new CropFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->expects($this->once())
             ->method('crop')
             ->with(new Point($x, $y), new Box($width, $height))
