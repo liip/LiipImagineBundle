@@ -167,7 +167,7 @@ for ``LiipImagineBundle`` using the following configuration:
 Usage on a Specific Filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alternatively, you can set ``AmazonS3Resolver`` as the cache resolver for a specific
+Alternatively, you can set ``AwsS3Resolver`` as the cache resolver for a specific
 filter set using the following configuration.
 
 .. code-block:: yaml
