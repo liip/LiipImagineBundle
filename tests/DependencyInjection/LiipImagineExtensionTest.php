@@ -155,19 +155,11 @@ class LiipImagineExtensionTest extends AbstractTest
 
     protected function createConfigurationWithDefaultsFilterSets(): void
     {
-        if (!class_exists(Parser::class)) {
-            $this->markTestSkipped('Requires the symfony/yaml package.');
-        }
-
         $this->createConfiguration($this->getConfigurationWithDefaultsFilterSets());
     }
 
     protected function createConfigurationWithOneEmptyFilterSet(): void
     {
-        if (!class_exists(Parser::class)) {
-            $this->markTestSkipped('Requires the symfony/yaml package.');
-        }
-
         $this->createConfiguration($this->getConfigurationWithOneEmptyFilterSet());
     }
 
@@ -177,9 +169,8 @@ class LiipImagineExtensionTest extends AbstractTest
 filter_sets:
     empty_filter_set: ~
 EOF;
-        $parser = new Parser();
 
-        return $parser->parse($yaml);
+        return (new Parser())->parse($yaml);
     }
 
     protected function getConfigurationWithDefaultsFilterSets()
@@ -205,9 +196,8 @@ filter_sets:
             thumbnail: { size: [483, 350] }
             fixed: { width: 120, height: 90 }
 EOF;
-        $parser = new Parser();
 
-        return $parser->parse($yaml);
+        return (new Parser())->parse($yaml);
     }
 
     protected function createEmptyConfiguration(): void
@@ -264,9 +254,8 @@ filter_sets:
         quality: 100
 data_loader: my_loader
 EOF;
-        $parser = new Parser();
 
-        return $parser->parse($yaml);
+        return (new Parser())->parse($yaml);
     }
 
     private function assertAlias(string $value, string $key): void
@@ -281,7 +270,7 @@ EOF;
 
     private function assertHasDefinition(string $id): void
     {
-        $this->assertTrue($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id));
+        $this->assertTrue($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id));
     }
 
     private function assertHasNotDefinition(string $id): void
@@ -313,7 +302,6 @@ EOF;
         $definition = $this->containerBuilder->getDefinition($id);
 
         $this->assertTrue($definition->isDeprecated());
-        $deprecation = method_exists(Definition::class, 'getDeprecation') ? $definition->getDeprecation($id)['message'] : $definition->getDeprecationMessage($id);
-        $this->assertSame($message, $deprecation);
+        $this->assertSame($message, $definition->getDeprecation($id)['message']);
     }
 }

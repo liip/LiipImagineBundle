@@ -12,9 +12,13 @@
 namespace Liip\ImagineBundle\Tests\Templating;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Templating\LazyFilterRuntime;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Templating\LazyFilterRuntime
@@ -138,5 +142,32 @@ class LazyFilterRuntimeTest extends AbstractTest
         $actualPath = $this->runtime->filterCache($expectedInputPath, self::FILTER, $runtimeConfig);
 
         $this->assertSame($expectedCachePath, $actualPath);
+    }
+
+    /**
+     * @return MockObject&CacheManager
+     */
+    private function createCacheManagerMock()
+    {
+        return $this
+            ->getMockBuilder(CacheManager::class)
+            ->setConstructorArgs([
+                $this->createFilterConfiguration(),
+                $this->createMock(RouterInterface::class),
+                $this->createMock(SignerInterface::class),
+                $this->createMock(EventDispatcherInterface::class),
+            ])
+            ->getMock();
+    }
+
+    private function createFilterConfiguration(): FilterConfiguration
+    {
+        $config = new FilterConfiguration();
+        $config->set('thumbnail', [
+            'size' => [180, 180],
+            'mode' => 'outbound',
+        ]);
+
+        return $config;
     }
 }

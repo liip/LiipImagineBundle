@@ -11,12 +11,11 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,12 +28,6 @@ class FlysystemLoaderFactoryTest extends AbstractTest
     protected function setUp(): void
     {
         parent::setUp();
-
-        if (!interface_exists(FilesystemInterface::class)
-            && !interface_exists(FilesystemOperator::class)
-        ) {
-            $this->markTestSkipped('Requires the league/flysystem package.');
-        }
     }
 
     public function testImplementsLoaderFactoryInterface(): void
@@ -72,11 +65,7 @@ class FlysystemLoaderFactoryTest extends AbstractTest
 
         $loaderDefinition = $container->getDefinition('liip_imagine.binary.loader.the_loader_name');
         $this->assertInstanceOf(ChildDefinition::class, $loaderDefinition);
-        if (interface_exists(FilesystemOperator::class)) {
-            $loaderName = 'liip_imagine.binary.loader.prototype.flysystem2';
-        } else {
-            $loaderName = 'liip_imagine.binary.loader.prototype.flysystem';
-        }
+        $loaderName = 'liip_imagine.binary.loader.prototype.flysystem2';
         $this->assertSame($loaderName, $loaderDefinition->getParent());
 
         $reference = $loaderDefinition->getArgument(1);
@@ -85,16 +74,12 @@ class FlysystemLoaderFactoryTest extends AbstractTest
 
     public function testThrowIfFileSystemServiceNotSetOnAddConfiguration(): void
     {
-        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessageMatches('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
-
         $resolver = new FlysystemLoaderFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, []);
     }
@@ -104,12 +89,8 @@ class FlysystemLoaderFactoryTest extends AbstractTest
         $expectedService = 'theService';
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
-
         $loader = new FlysystemLoaderFactory();
-        $loader->addConfiguration($rootNode);
+        $loader->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'flysystem' => [

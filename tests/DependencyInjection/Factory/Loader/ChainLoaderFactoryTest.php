@@ -64,12 +64,8 @@ class ChainLoaderFactoryTest extends FactoryTestCase
     public function testProcessOptionsOnAddConfiguration(): void
     {
         $treeBuilder = new TreeBuilder('chain');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('chain');
-
         $loader = new ChainLoaderFactory();
-        $loader->addConfiguration($rootNode);
+        $loader->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'chain' => [

@@ -17,6 +17,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
@@ -70,7 +71,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('putObject')
             ->will($this->throwException(new \Exception('Put object on amazon failed')));
 
-        $logger = $this->createLoggerInterfaceMock();
+        $logger = $this->createMock(LoggerInterface::class);
         $logger
             ->expects($this->once())
             ->method('error');
@@ -283,7 +284,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('deleteObject')
             ->will($this->throwException(new \Exception()));
 
-        $logger = $this->createLoggerInterfaceMock();
+        $logger = $this->createMock(LoggerInterface::class);
         $logger
             ->expects($this->once())
             ->method('error');
@@ -335,7 +336,7 @@ class AwsS3ResolverTest extends AbstractTest
             ->method('deleteMatchingObjects')
             ->will($this->throwException(new \Exception()));
 
-        $logger = $this->createLoggerInterfaceMock();
+        $logger = $this->createMock(LoggerInterface::class);
         $logger
             ->expects($this->once())
             ->method('error');

@@ -69,15 +69,11 @@ class StreamLoaderFactoryTest extends AbstractTest
     public function testThrowIfWrapperNotSetOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
+        $this->expectExceptionMessageMatches('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
-
         $resolver = new StreamLoaderFactory();
-        $resolver->addConfiguration($rootNode);
+        $resolver->addConfiguration($treeBuilder->getRootNode());
 
         $this->processConfigTree($treeBuilder, []);
     }
@@ -88,12 +84,8 @@ class StreamLoaderFactoryTest extends AbstractTest
         $expectedContext = 'theContext';
 
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
-
         $loader = new StreamLoaderFactory();
-        $loader->addConfiguration($rootNode);
+        $loader->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'stream' => [
@@ -112,12 +104,8 @@ class StreamLoaderFactoryTest extends AbstractTest
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
-
         $loader = new StreamLoaderFactory();
-        $loader->addConfiguration($rootNode);
+        $loader->addConfiguration($treeBuilder->getRootNode());
 
         $config = $this->processConfigTree($treeBuilder, [
             'stream' => [

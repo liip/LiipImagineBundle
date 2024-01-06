@@ -50,12 +50,7 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(function (ContainerBuilder $container) use ($loader) {
-            if (version_compare(self::VERSION, '5.3', '>=')) {
-                $loader->load($this->getProjectDir().'/config/symfony_5-3.yaml');
-            } else {
-                $loader->load($this->getProjectDir().'/config/symfony_legacy.yaml');
-            }
-
+            $loader->load($this->getProjectDir().'/config/symfony.yaml');
             $loader->load($this->getProjectDir().'/config/config.yml');
 
             $container

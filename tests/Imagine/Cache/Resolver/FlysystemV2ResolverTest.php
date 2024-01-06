@@ -12,12 +12,10 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use League\Flysystem\Filesystem;
-use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Routing\RequestContext;
 
 /**
@@ -25,15 +23,6 @@ use Symfony\Component\Routing\RequestContext;
  */
 class FlysystemV2ResolverTest extends AbstractTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        if (!interface_exists(FilesystemOperator::class)) {
-            $this->markTestSkipped('The league/flysystem:^2.0 PHP library is not available.');
-        }
-    }
-
     public function testImplementsResolverInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemV2Resolver::class);
@@ -44,7 +33,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     public function testResolveUriForFilter(): void
     {
         $resolver = new FlysystemV2Resolver(
-            $this->createFlySystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'http://images.example.com'
         );
@@ -58,7 +47,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     public function testRemoveObjectsForFilter(): void
     {
         $expectedFilter = 'theFilter';
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('deleteDirectory')
@@ -72,7 +61,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpeg');
 
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('write');
@@ -84,7 +73,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testIsStoredChecksObjectExistence(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('fileExists')
@@ -97,7 +86,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testReturnResolvedImageUrlOnResolve(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
 
@@ -110,7 +99,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     public function testResolveWithPrefixCacheEmpty(): void
     {
         $resolver = new FlysystemV2Resolver(
-            $this->createFlySystemMock(),
+            $this->createMock(Filesystem::class),
             new RequestContext(),
             'http://images.example.com',
             ''
@@ -124,7 +113,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testRemoveCacheForPathAndFilterOnRemove(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('fileExists')
@@ -141,7 +130,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testRemoveCacheForSomePathsAndFilterOnRemove(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->exactly(2))
             ->method('fileExists')
@@ -166,7 +155,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->exactly(4))
             ->method('fileExists')
@@ -195,7 +184,7 @@ class FlysystemV2ResolverTest extends AbstractTest
 
     public function testDoNothingWhenObjectNotExistForPathAndFilterOnRemove(): void
     {
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('fileExists')
@@ -213,7 +202,7 @@ class FlysystemV2ResolverTest extends AbstractTest
     {
         $expectedFilter = 'theFilter';
 
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->once())
             ->method('deleteDirectory')
@@ -228,7 +217,7 @@ class FlysystemV2ResolverTest extends AbstractTest
         $expectedFilterOne = 'theFilterOne';
         $expectedFilterTwo = 'theFilterTwo';
 
-        $fs = $this->createFlySystemMock();
+        $fs = $this->createMock(Filesystem::class);
         $fs
             ->expects($this->exactly(2))
             ->method('deleteDirectory')
@@ -239,16 +228,5 @@ class FlysystemV2ResolverTest extends AbstractTest
 
         $resolver = new FlysystemV2Resolver($fs, new RequestContext(), 'http://images.example.com');
         $resolver->remove([], [$expectedFilterOne, $expectedFilterTwo]);
-    }
-
-    /**
-     * @return MockObject&Filesystem
-     */
-    protected function createFlySystemMock()
-    {
-        return $this
-            ->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

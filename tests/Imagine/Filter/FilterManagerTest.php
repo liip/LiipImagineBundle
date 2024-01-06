@@ -11,12 +11,16 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\FilterManager
@@ -28,7 +32,7 @@ class FilterManagerTest extends AbstractTest
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Could not find filter(s): "thumbnail"');
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -47,8 +51,8 @@ class FilterManagerTest extends AbstractTest
 
         $filterManager = new FilterManager(
             $config,
-            $this->createImagineInterfaceMock(),
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(ImagineInterface::class),
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
 
         $filterManager->applyFilter($binary, 'thumbnail');
@@ -66,7 +70,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -78,20 +82,20 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($expectedFilteredContent);
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -101,7 +105,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -123,7 +127,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -135,19 +139,19 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -157,7 +161,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -180,7 +184,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -193,19 +197,19 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -215,7 +219,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -237,7 +241,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -249,24 +253,24 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
+        $mimeTypeGuesser = $this->createMock(MimeTypeGuesserInterface::class);
         $mimeTypeGuesser
             ->expects($this->never())
             ->method('guess');
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -300,7 +304,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -313,26 +317,26 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($expectedContent);
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
+        $mimeTypeGuesser = $this->createMock(MimeTypeGuesserInterface::class);
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
             ->willReturn($expectedMimeType);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -364,7 +368,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -377,20 +381,20 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -400,7 +404,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -419,7 +423,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -431,20 +435,20 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -454,7 +458,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -484,7 +488,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -496,19 +500,19 @@ class FilterManagerTest extends AbstractTest
                 'post_processors' => [],
             ]);
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagine = $this->createImagineInterfaceMock();
+        $imagine = $this->createMock(ImagineInterface::class);
         $imagine
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -518,7 +522,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagine,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -536,9 +540,9 @@ class FilterManagerTest extends AbstractTest
         $binary = new Binary('aContent', 'image/png', 'png');
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
-            $this->createImagineInterfaceMock(),
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(FilterConfiguration::class),
+            $this->createMock(ImagineInterface::class),
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
 
         $filterManager->apply($binary, [
@@ -563,20 +567,20 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($expectedFilteredContent);
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -584,9 +588,9 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -613,19 +617,19 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -633,9 +637,9 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -663,19 +667,19 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -683,9 +687,9 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -713,24 +717,24 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn('aFilteredContent');
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
+        $mimeTypeGuesser = $this->createMock(MimeTypeGuesserInterface::class);
         $mimeTypeGuesser
             ->expects($this->never())
             ->method('guess');
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -738,7 +742,7 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
             $mimeTypeGuesser
         );
@@ -769,26 +773,26 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($expectedContent);
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
+        $mimeTypeGuesser = $this->createMock(MimeTypeGuesserInterface::class);
         $mimeTypeGuesser
             ->expects($this->once())
             ->method('guess')
             ->with($expectedContent)
             ->willReturn($expectedMimeType);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -796,7 +800,7 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
             $mimeTypeGuesser
         );
@@ -826,20 +830,20 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
             ->willReturn('aFilteredContent');
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -847,9 +851,9 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -876,20 +880,20 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->with('png', ['quality' => $expectedQuality])
             ->willReturn('aFilteredContent');
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -897,9 +901,9 @@ class FilterManagerTest extends AbstractTest
             ->willReturnArgument(0);
 
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
+            $this->createMock(FilterConfiguration::class),
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
 
@@ -924,7 +928,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -943,20 +947,20 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($originalContent);
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -965,7 +969,7 @@ class FilterManagerTest extends AbstractTest
 
         $processedBinary = new Binary($expectedPostProcessedContent, 'image/png', 'png');
 
-        $postProcessor = $this->createPostProcessorInterfaceMock();
+        $postProcessor = $this->createMock(PostProcessorInterface::class);
         $postProcessor
             ->expects($this->once())
             ->method('process')
@@ -975,7 +979,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
         $filterManager->addLoader('thumbnail', $loader);
         $filterManager->addPostProcessor('foo', $postProcessor);
@@ -998,7 +1002,7 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $config = $this->createFilterConfigurationMock();
+        $config = $this->createMock(FilterConfiguration::class);
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
@@ -1017,20 +1021,20 @@ class FilterManagerTest extends AbstractTest
             'mode' => 'outbound',
         ];
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('get')
             ->willReturn($originalContent);
 
-        $imagineMock = $this->createImagineInterfaceMock();
+        $imagineMock = $this->createMock(ImagineInterface::class);
         $imagineMock
             ->expects($this->once())
             ->method('load')
             ->with($originalContent)
             ->willReturn($image);
 
-        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader
             ->expects($this->once())
             ->method('load')
@@ -1040,7 +1044,7 @@ class FilterManagerTest extends AbstractTest
         $filterManager = new FilterManager(
             $config,
             $imagineMock,
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
 
         $filterManager->addLoader('thumbnail', $loader);
@@ -1049,21 +1053,13 @@ class FilterManagerTest extends AbstractTest
 
     public function testApplyPostProcessorsWhenNotDefined(): void
     {
-        $binary = $this->getMockBuilder(BinaryInterface::class)->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
         $filterManager = new FilterManager(
-            $this->createFilterConfigurationMock(),
-            $this->createImagineInterfaceMock(),
-            $this->createMimeTypeGuesserInterfaceMock()
+            $this->createMock(FilterConfiguration::class),
+            $this->createMock(ImagineInterface::class),
+            $this->createMock(MimeTypeGuesserInterface::class)
         );
 
         $this->assertSame($binary, $filterManager->applyPostProcessors($binary, []));
-    }
-
-    /**
-     * @return MockObject&LoaderInterface
-     */
-    protected function createFilterLoaderInterfaceMock()
-    {
-        return $this->createObjectMock(LoaderInterface::class);
     }
 }

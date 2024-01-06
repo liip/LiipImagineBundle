@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -45,7 +46,7 @@ class ThumbnailFilterLoaderTest extends AbstractTest
             self::DUMMY_IMAGE_WIDTH,
             self::DUMMY_IMAGE_HEIGHT
         );
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image->method('getSize')->willReturn($mockImageSize);
         $image->method('copy')->willReturn($image);
         $image->expects($this->once())

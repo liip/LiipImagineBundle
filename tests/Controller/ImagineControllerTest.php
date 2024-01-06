@@ -14,6 +14,9 @@ namespace Liip\ImagineBundle\Tests\Controller;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
+use Liip\ImagineBundle\Imagine\Data\DataManager;
+use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Config\Controller\ControllerConfigTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,10 +30,10 @@ class ImagineControllerTest extends AbstractTest
     public function testConstruction(): void
     {
         $controller = new ImagineController(
-            $this->createFilterServiceMock(),
-            $this->createDataManagerMock(),
-            $this->createSignerInterfaceMock(),
-            $this->createControllerConfigInstance()
+            $this->createMock(FilterService::class),
+            $this->createMock(DataManager::class),
+            $this->createMock(SignerInterface::class),
+            new ControllerConfig(301)
         );
 
         $this->assertInstanceOf(ImagineController::class, $controller);
@@ -84,7 +87,7 @@ class ImagineControllerTest extends AbstractTest
 
     private function createControllerInstance(string $path, string $filter, string $hash, int $redirectResponseCode, bool $expectation = true): ImagineController
     {
-        $filterService = $this->createFilterServiceMock();
+        $filterService = $this->createMock(FilterService::class);
         $filterService
             ->expects($expectation ? $this->atLeastOnce() : $this->never())
             ->method('getUrlOfFilteredImage')
@@ -97,7 +100,7 @@ class ImagineControllerTest extends AbstractTest
             ->with($path, $filter, [], null)
             ->willReturn(sprintf('/resolved/image%s', $path));
 
-        $signer = $this->createSignerInterfaceMock();
+        $signer = $this->createMock(SignerInterface::class);
         $signer
             ->expects($expectation ? $this->once() : $this->never())
             ->method('check')
@@ -106,7 +109,7 @@ class ImagineControllerTest extends AbstractTest
 
         return new ImagineController(
             $filterService,
-            $this->createDataManagerMock(),
+            $this->createMock(DataManager::class),
             $signer,
             new ControllerConfig($redirectResponseCode)
         );

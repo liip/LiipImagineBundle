@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Tests\Imagine\Cache\Resolver;
 
 use Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -25,18 +26,9 @@ class PsrCacheResolverTest extends AbstractTest
     protected $path = 'MadCat2.jpeg';
     protected $webPath = '/media/cache/thumbnail/MadCat2.jpeg';
 
-    protected function setUp(): void
-    {
-        if (!class_exists(ArrayAdapter::class)) {
-            $this->markTestSkipped('Requires the symfony/cache package.');
-        }
-
-        parent::setUp();
-    }
-
     public function testResolveIsSavedToCache(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -54,7 +46,7 @@ class PsrCacheResolverTest extends AbstractTest
 
     public function testNotCallInternalResolverIfCachedOnIsStored(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -75,7 +67,7 @@ class PsrCacheResolverTest extends AbstractTest
 
     public function testCallInternalResolverIfNotCachedOnIsStored(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->exactly(2))
             ->method('isStored')
@@ -91,7 +83,7 @@ class PsrCacheResolverTest extends AbstractTest
     {
         $binary = new Binary('aContent', 'image/jpeg', 'jpg');
 
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->exactly(2))
             ->method('store')
@@ -106,7 +98,7 @@ class PsrCacheResolverTest extends AbstractTest
 
     public function testSavesToCacheIfInternalResolverReturnUrlOnResolve(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -124,7 +116,7 @@ class PsrCacheResolverTest extends AbstractTest
 
     public function testRemoveSinglePathCacheOnRemove(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -154,7 +146,7 @@ class PsrCacheResolverTest extends AbstractTest
 
     public function testRemoveAllFilterCacheOnRemove(): void
     {
-        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->exactly(4))
             ->method('resolve')

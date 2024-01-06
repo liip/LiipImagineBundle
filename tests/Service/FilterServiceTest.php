@@ -65,21 +65,10 @@ final class FilterServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->dataManager = $this
-            ->getMockBuilder(DataManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterManager = $this
-            ->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cacheManager = $this
-            ->getMockBuilder(CacheManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->logger = $this
-            ->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $this->dataManager = $this->createMock(DataManager::class);
+        $this->filterManager = $this->createMock(FilterManager::class);
+        $this->cacheManager = $this->createMock(CacheManager::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
     }
 
     public function provideWebpGeneration(): \Traversable
@@ -162,9 +151,7 @@ final class FilterServiceTest extends TestCase
     public function testWarmsUpCacheForced(bool $webpGenerate): void
     {
         $resolver = null;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
 
         $service = $this->createFilterService($webpGenerate);
 
@@ -184,9 +171,7 @@ final class FilterServiceTest extends TestCase
     public function testWarmsUpCacheNotStored(bool $webpGenerate): void
     {
         $resolver = null;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
 
         $service = $this->createFilterService($webpGenerate);
 
@@ -204,12 +189,7 @@ final class FilterServiceTest extends TestCase
     public function testWarmsUpCacheNotStoredForced(bool $webpGenerate): void
     {
         $resolver = null;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
 
         $service = $this->createFilterService($webpGenerate);
 
@@ -231,9 +211,7 @@ final class FilterServiceTest extends TestCase
         $this->expectException(NonExistingFilterException::class);
 
         $resolver = null;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
         $exception = new NonExistingFilterException('Filter not found');
 
         $service = $this->createFilterService($webpGenerate);
@@ -300,9 +278,7 @@ final class FilterServiceTest extends TestCase
     {
         $resolver = null;
         $url = 'https://example.com/cache'.self::SOURCE_IMAGE;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
 
         $service = $this->createFilterService($webpGenerate);
 
@@ -328,9 +304,7 @@ final class FilterServiceTest extends TestCase
         $this->expectException(NonExistingFilterException::class);
 
         $resolver = null;
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
         $exception = new NonExistingFilterException('Filter not found');
 
         $service = $this->createFilterService($webpGenerate);
@@ -418,9 +392,7 @@ final class FilterServiceTest extends TestCase
         $runtimeOptions = [
             'filters' => self::RUNTIME_FILTERS,
         ];
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
 
         $service = $this->createFilterService($webpGenerate);
 
@@ -459,9 +431,7 @@ final class FilterServiceTest extends TestCase
         $runtimeOptions = [
             'filters' => self::RUNTIME_FILTERS,
         ];
-        $binary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $binary = $this->createMock(BinaryInterface::class);
         $exception = new NonExistingFilterException('Filter not found');
 
         $service = $this->createFilterService($webpGenerate);
@@ -541,9 +511,7 @@ final class FilterServiceTest extends TestCase
 
     private function expectCacheManagerStore(string $image, bool $webpGenerate, $resolver): void
     {
-        $filteredBinary = $this
-            ->getMockBuilder(BinaryInterface::class)
-            ->getMock();
+        $filteredBinary = $this->createMock(BinaryInterface::class);
 
         if ($webpGenerate) {
             $this->cacheManager

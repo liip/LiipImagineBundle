@@ -24,7 +24,7 @@ class InterlaceFilterLoaderTest extends AbstractTest
     {
         $loader = new InterlaceFilterLoader();
 
-        $image = $this->getImageInterfaceMock();
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('interlace')

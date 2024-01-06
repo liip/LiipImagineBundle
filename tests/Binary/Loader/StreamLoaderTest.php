@@ -22,7 +22,7 @@ class StreamLoaderTest extends AbstractTest
     public function testThrowsIfInvalidPathGivenOnFind(): void
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
-        $this->expectExceptionMessageMatchesBC('{Source image file://.+ not found.}');
+        $this->expectExceptionMessageMatches('{Source image file://.+ not found.}');
 
         $loader = new StreamLoader('file://');
         $loader->find($this->temporaryPath.'/invalid.jpeg');

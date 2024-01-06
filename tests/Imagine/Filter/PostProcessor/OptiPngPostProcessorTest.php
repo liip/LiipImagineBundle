@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Filter\PostProcessor;
 
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Filter\PostProcessor\InvalidOptionException;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor;
 use Liip\ImagineBundle\Model\Binary;
@@ -132,8 +133,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
 
     public function testProcessWithNonSupportedMimeType(): void
     {
-        $binary = $this->getBinaryInterfaceMock();
-
+        $binary = $this->createMock(BinaryInterface::class);
         $binary
             ->expects($this->atLeastOnce())
             ->method('getMimeType')

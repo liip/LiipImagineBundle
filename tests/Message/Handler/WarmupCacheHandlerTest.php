@@ -19,20 +19,12 @@ use Liip\ImagineBundle\Message\Handler\WarmupCacheHandler;
 use Liip\ImagineBundle\Message\WarmupCache;
 use Liip\ImagineBundle\Service\FilterService;
 use Liip\ImagineBundle\Tests\Functional\AbstractWebTestCase;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @covers \Liip\ImagineBundle\Message\Handler\WarmupCacheHandler
  */
 class WarmupCacheHandlerTest extends AbstractWebTestCase
 {
-    protected function setUp(): void
-    {
-        if (!interface_exists(MessageBusInterface::class)) {
-            $this->markTestSkipped('Requires the symfony/messenger package.');
-        }
-    }
-
     public function testCouldBeConstructedWithExpectedArguments(): void
     {
         static::createClient();
