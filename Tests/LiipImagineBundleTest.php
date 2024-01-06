@@ -145,7 +145,11 @@ class LiipImagineBundleTest extends AbstractTest
      */
     protected function createContainerBuilderMock()
     {
-        return $this->createObjectMock(ContainerBuilder::class, [], false);
+        return $this->createObjectMock(ContainerBuilder::class, [
+            'getExtension',
+            'addCompilerPass',
+            'registerForAutoconfiguration',
+        ], false);
     }
 
     /**
