@@ -131,7 +131,17 @@ for your custom post-processor.
         }
     }
 
-You need to `configure a service`_ with your custom post-processor and tag it
+Register it: automatically
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, your post-processor will be automatically registered as it implements the ``PostProcessorInterface``.
+
+You will be able to reference and use your custom post-processor in your configuration by using its Fully Qualified Class Name.
+
+Register it: manually
+^^^^^^^^^^^^^^^^^^^^^
+
+If you want to give it a different name you need to `configure a service`_ with your custom post-processor and tag it
 with ``liip_imagine.filter.post_processor``.
 
 To register ``App\Service\MyCustomPostProcessor`` with the name
