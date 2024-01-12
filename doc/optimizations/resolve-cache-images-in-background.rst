@@ -7,7 +7,7 @@ the result. Then it redirects the client to the generated image file.
 
 This works without any further tooling. There are some important disadvantages however:
 
-* Applying all the filters to an images can take a lot of time and memory;
+* Applying all the filters to an image can take a lot of time and memory;
 * The images have to be processed by the web server answering web requests. This increases the load
   on the server and may affect performance;
 * The resolve controller URL is different from the cached image URL. When the image needs to be
@@ -33,7 +33,7 @@ First, `install symfony/messenger`_ with composer:
 
 .. code-block:: terminal
 
-    $ composer require symfony/messenger
+    composer require symfony/messenger
 
 .. code-block:: yaml
 
@@ -70,7 +70,7 @@ We need to run at least one consumer for the messages:
 
 .. code-block:: terminal
 
-    $ php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M
+    php bin/console messenger:consume liip_imagine --time-limit=3600 --memory-limit=256M
 
 You can run the consumers on a separate machine, as long as it shares the same storage for the
 cached images. In a cloud system, you could even scale consumers based on the queue size to get
