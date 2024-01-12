@@ -25,7 +25,17 @@ path to the image and needs to return an instance of ``BinaryInterface``.
     to sanitize this parameter in your loader to avoid exposing files outside
     of your image collections.
 
-You need to `configure a service`_ with your custom loader and tag it with
+Register it: automatically
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, your loader will be automatically registered as it implements the ``LoaderInterface``.
+
+You will be able to reference and use your custom loader in your configuration by using its Fully Qualified Class Name.
+
+Register it: manually
+^^^^^^^^^^^^^^^^^^^^^
+
+If you want to give it a different name you need to `configure a service`_ with your custom loader and tag it with
 ``liip_imagine.binary.loader``.
 
 To register ``App\Service\MyCustomDataLoader`` with the name

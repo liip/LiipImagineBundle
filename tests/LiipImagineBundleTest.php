@@ -30,6 +30,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFacto
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -60,6 +61,10 @@ class LiipImagineBundleTest extends AbstractTest
 
                 return true;
             }));
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -97,6 +102,10 @@ class LiipImagineBundleTest extends AbstractTest
             ->method('getExtension')
             ->with('liip_imagine')
             ->willReturn($extensionMock);
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -125,6 +134,11 @@ class LiipImagineBundleTest extends AbstractTest
             ->method('getExtension')
             ->with('liip_imagine')
             ->willReturn($extensionMock);
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
+
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
 
