@@ -32,6 +32,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFacto
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\LiipImagineBundle;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -49,7 +50,7 @@ class LiipImagineBundleTest extends AbstractTest
     public function testAddPasses(): void
     {
         $passes = [];
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
@@ -62,6 +63,10 @@ class LiipImagineBundleTest extends AbstractTest
 
                 return true;
             }));
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -95,12 +100,16 @@ class LiipImagineBundleTest extends AbstractTest
                 return true;
             }));
 
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
             ->willReturn($extensionMock);
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
 
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
@@ -123,12 +132,17 @@ class LiipImagineBundleTest extends AbstractTest
 
                 return true;
             }));
-        $containerMock = $this->createContainerBuilderMock();
+        $containerMock = $this->createMock(ContainerBuilder::class);
         $containerMock
             ->expects($this->atLeastOnce())
             ->method('getExtension')
             ->with('liip_imagine')
             ->willReturn($extensionMock);
+        $containerMock
+            ->expects($this->exactly(3))
+            ->method('registerForAutoconfiguration')
+            ->willReturn($this->createMock(ChildDefinition::class));
+
         $bundle = new LiipImagineBundle();
         $bundle->build($containerMock);
 
@@ -138,14 +152,6 @@ class LiipImagineBundleTest extends AbstractTest
             FlysystemLoaderFactory::class,
             ChainLoaderFactory::class,
         ], $loaders);
-    }
-
-    /**
-     * @return MockObject|ContainerBuilder
-     */
-    protected function createContainerBuilderMock()
-    {
-        return $this->createObjectMock(ContainerBuilder::class, [], false);
     }
 
     /**

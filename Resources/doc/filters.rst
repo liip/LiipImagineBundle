@@ -53,7 +53,17 @@ The ``LoaderInterface`` has the method ``load``, which is provided an instance
 of ``ImageInterface`` and an array of options. It must return an
 ``ImageInterface``.
 
-You need to `configure a service`_ and tag it ``liip_imagine.filter.loader``.
+Register it: automatically
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+By default, your filter will be automatically registered as it implements the ``LoaderInterface``.
+
+You will be able to reference and use your custom filter when defining filter sets in your configuration by using its Fully Qualified Class Name.
+
+Register it: manually
+^^^^^^^^^^^^^^^^^^^^^
+
+If you want to give it a different name you need to `configure a service`_ and tag it ``liip_imagine.filter.loader``.
 
 To register a filter ``App\Service\MyCustomFilter`` as
 ``my_custom_filter``, use the following configuration:
@@ -124,7 +134,7 @@ to the image, by passing configuration as third parameter to ``applyFilter``:
         public function filter(int $width, int $height) {
             $filter = '...'; // Name of the `filter_set` in `config/packages/liip_imagine.yaml`
             $path = '...'; // Path of the image, relative to `/public/`
-            
+
             if (!$this->cacheManager->isStored($path, $filter)) {
                 $binary = $this->dataManager->find($filter, $path);
 

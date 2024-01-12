@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle;
 
 use Enqueue\Bundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Liip\ImagineBundle\Async\Topics;
+use Liip\ImagineBundle\Binary\Loader\LoaderInterface as BinaryLoaderInterface;
 use Liip\ImagineBundle\DependencyInjection\Compiler\AssetsVersionCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\DriverCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\FiltersCompilerPass;
@@ -30,6 +31,8 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface as LoaderLoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -67,5 +70,9 @@ class LiipImagineBundle extends Bundle
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
         $extension->addLoaderFactory(new ChainLoaderFactory());
+
+        $container->registerForAutoconfiguration(LoaderLoaderInterface::class)->addTag('liip_imagine.filter.loader');
+        $container->registerForAutoconfiguration(PostProcessorInterface::class)->addTag('liip_imagine.filter.post_processor');
+        $container->registerForAutoconfiguration(BinaryLoaderInterface::class)->addTag('liip_imagine.binary.loader');
     }
 }
