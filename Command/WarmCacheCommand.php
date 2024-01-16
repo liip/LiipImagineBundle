@@ -2,11 +2,8 @@
 
 namespace Liip\ImagineBundle\Command;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheWarmer;
-use Liip\ImagineBundle\Imagine\Data\DataManager;
-use Liip\ImagineBundle\Imagine\Filter\FilterManager;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,8 +14,20 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
-class WarmCacheCommand extends ContainerAwareCommand
+class WarmCacheCommand extends Command
 {
+    /**
+     * @var CacheWarmer
+     */
+    private $cacheWarmer;
+
+    public function __construct(CacheWarmer $cacheWarmer)
+    {
+        parent::__construct();
+
+        $this->cacheWarmer = $cacheWarmer;
+    }
+
     protected function configure()
     {
         $this
@@ -51,12 +60,10 @@ EOF
     {
         $warmers = $input->getArgument('warmers');
 
-        /** @var CacheWarmer $cacheWarmer */
-        $cacheWarmer = $this->getContainer()->get('liip_imagine.cache.warmer');
-        $cacheWarmer->setLoggerClosure($this->getLoggerClosure($output));
+        $this->cacheWarmer->setLoggerClosure($this->getLoggerClosure($output));
 
         if ($chunkSize = $input->getOption('chunk-size')) {
-            $cacheWarmer->setChunkSize($chunkSize);
+            $this->cacheWarmer->setChunkSize($chunkSize);
         }
 
         $force = false;
@@ -64,7 +71,7 @@ EOF
             $force = true;
         }
 
-        $cacheWarmer->warm($force, $warmers);
+        $this->cacheWarmer->warm($force, $warmers);
     }
 
     /**

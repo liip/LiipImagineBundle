@@ -20,6 +20,7 @@
         </service>
 
         <service id="liip_imagine.command.cache_warm" class="Liip\ImagineBundle\Command\WarmCacheCommand">
+            <argument type="service" id="liip_imagine.cache.warmer" />
             <tag name="console.command" command="liip:imagine:cache:warm" alias="imagine:warm" />
         </service>
 
