@@ -431,7 +431,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame([], $config['get_options']);
 
         $this->assertArrayHasKey('cache_prefix', $config);
-        $this->assertNull($config['cache_prefix']);
+        $this->assertSame('', $config['cache_prefix']);
     }
 
     public function testSupportAwsV3ClientConfig(): void

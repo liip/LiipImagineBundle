@@ -92,7 +92,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache_prefix')
-                    ->defaultValue(null)
+                    ->defaultValue('')
                 ->end()
                 ->arrayNode('client_config')
                     ->isRequired()

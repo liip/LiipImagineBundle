@@ -49,7 +49,7 @@ class FlysystemResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache_prefix')
-                    ->defaultValue(null)
+                    ->defaultValue('')
                 ->end()
                 ->scalarNode('root_url')
                     ->isRequired()
