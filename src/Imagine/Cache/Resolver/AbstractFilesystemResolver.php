@@ -38,7 +38,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem = $filesystem;
     }
 
-    public function setRequest(Request $request = null): void
+    public function setRequest(?Request $request = null): void
     {
         $this->request = $request;
     }

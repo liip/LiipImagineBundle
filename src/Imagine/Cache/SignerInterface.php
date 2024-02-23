@@ -16,10 +16,10 @@ interface SignerInterface
     /**
      * Return the hash for path and runtime config.
      */
-    public function sign(string $path, array $runtimeConfig = null): string;
+    public function sign(string $path, ?array $runtimeConfig = null): string;
 
     /**
      * Check hash is correct.
      */
-    public function check(string $hash, string $path, array $runtimeConfig = null): bool;
+    public function check(string $hash, string $path, ?array $runtimeConfig = null): bool;
 }

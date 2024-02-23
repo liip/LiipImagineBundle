@@ -97,7 +97,7 @@ class ImagineStyleTest extends AbstractTest
     /**
      * @dataProvider provideTitleData
      */
-    public function testTitle(string $title, string $type = null, bool $decoration): void
+    public function testTitle(string $title, ?string $type, bool $decoration): void
     {
         $style = $this->createImagineStyle($output = $this->createBufferedOutput(), $decoration);
         $style->title($title, $type);
@@ -174,7 +174,7 @@ class ImagineStyleTest extends AbstractTest
     /**
      * @dataProvider provideStatusData
      */
-    public function testStatus(string $status, string $fg = null, string $bg = null): void
+    public function testStatus(string $status, ?string $fg = null, ?string $bg = null): void
     {
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->status($status, $fg);
@@ -198,7 +198,7 @@ class ImagineStyleTest extends AbstractTest
     /**
      * @dataProvider provideGroupData
      */
-    public function testGroup(string $item, string $group, string $fg = null, string $bg = null): void
+    public function testGroup(string $item, string $group, ?string $fg = null, ?string $bg = null): void
     {
         $style = $this->createImagineStyle($output = $this->createBufferedOutput());
         $style->group($item, $group, $fg, $bg);

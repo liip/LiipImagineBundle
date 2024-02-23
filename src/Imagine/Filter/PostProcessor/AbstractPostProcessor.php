@@ -25,7 +25,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
 
     private Filesystem $filesystem;
 
-    public function __construct(string $executablePath, string $temporaryRootPath = null)
+    public function __construct(string $executablePath, ?string $temporaryRootPath = null)
     {
         $this->executablePath = $executablePath;
         $this->temporaryRootPath = $temporaryRootPath;
@@ -70,7 +70,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
         return \in_array($binary->getMimeType(), $types, true);
     }
 
-    protected function writeTemporaryFile(BinaryInterface $binary, array $options = [], string $prefix = null): string
+    protected function writeTemporaryFile(BinaryInterface $binary, array $options = [], ?string $prefix = null): string
     {
         $temporary = $this->acquireTemporaryFilePath($options, $prefix);
 
@@ -83,7 +83,7 @@ abstract class AbstractPostProcessor implements PostProcessorInterface
         return $temporary;
     }
 
-    protected function acquireTemporaryFilePath(array $options, string $prefix = null): string
+    protected function acquireTemporaryFilePath(array $options, ?string $prefix = null): string
     {
         $root = $options['temp_dir'] ?? $this->temporaryRootPath ?: sys_get_temp_dir();
 

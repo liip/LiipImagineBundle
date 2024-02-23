@@ -19,5 +19,5 @@ interface StackFactoryInterface
     /**
      * @param FilterInterface[] $filters
      */
-    public function create(string $name, string $dataLoader = null, int $quality = null, array $filters = []): StackInterface;
+    public function create(string $name, ?string $dataLoader, ?int $quality, array $filters = []): StackInterface;
 }

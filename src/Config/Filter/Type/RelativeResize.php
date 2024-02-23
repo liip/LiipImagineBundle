@@ -27,10 +27,10 @@ final class RelativeResize extends FilterAbstract
     private ?float $scale;
 
     public function __construct(
-        float $heighten = null,
-        float $widen = null,
-        float $increase = null,
-        float $scale = null
+        ?float $heighten = null,
+        ?float $widen = null,
+        ?float $increase = null,
+        ?float $scale = null
     ) {
         $this->heighten = $heighten;
         $this->widen = $widen;

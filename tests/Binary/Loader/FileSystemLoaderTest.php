@@ -178,7 +178,7 @@ class FileSystemLoaderTest extends TestCase
         return [__DIR__];
     }
 
-    private function getFileSystemLoader(array $roots = [], LocatorInterface $locator = null): FileSystemLoader
+    private function getFileSystemLoader(array $roots = [], ?LocatorInterface $locator = null): FileSystemLoader
     {
         $mimeTypes = MimeTypes::getDefault();
 

@@ -38,7 +38,7 @@ class ImagineController
         FilterService $filterService,
         DataManager $dataManager,
         SignerInterface $signer,
-        ControllerConfig $controllerConfig
+        ?ControllerConfig $controllerConfig
     ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
@@ -103,7 +103,7 @@ class ImagineController
         }, $path, $filter, $hash);
     }
 
-    private function createRedirectResponse(\Closure $url, string $path, string $filter, string $hash = null): RedirectResponse
+    private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
     {
         try {
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());

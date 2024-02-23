@@ -20,7 +20,7 @@ class Signer implements SignerInterface
         $this->secret = $secret;
     }
 
-    public function sign(string $path, array $runtimeConfig = null): string
+    public function sign(string $path, ?array $runtimeConfig = null): string
     {
         if ($runtimeConfig) {
             array_walk_recursive($runtimeConfig, function (&$value) {
@@ -31,7 +31,7 @@ class Signer implements SignerInterface
         return mb_substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/').(null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
     }
 
-    public function check(string $hash, string $path, array $runtimeConfig = null): bool
+    public function check(string $hash, string $path, ?array $runtimeConfig = null): bool
     {
         return $hash === $this->sign($path, $runtimeConfig);
     }
