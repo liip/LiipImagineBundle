@@ -104,5 +104,5 @@ abstract class AbstractFilterTest extends AbstractTest
     /**
      * @return FilterExtension|FilterHelper
      */
-    abstract protected function createTemplatingMock(CacheManager $manager = null);
+    abstract protected function createTemplatingMock(?CacheManager $manager = null);
 }

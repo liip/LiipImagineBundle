@@ -46,9 +46,9 @@ final class Background extends FilterAbstract
      * @param string|null $position     position of the input image on the newly created background image. Valid values: topleft, top, topright, left, center, right, bottomleft, bottom, and bottomright
      */
     public function __construct(
-        string $color = null,
-        string $transparency = null,
-        string $position = null,
+        ?string $color,
+        ?string $transparency,
+        ?string $position,
         Size $size
     ) {
         $this->color = $color;

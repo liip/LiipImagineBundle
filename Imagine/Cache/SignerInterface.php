@@ -20,7 +20,7 @@ interface SignerInterface
      *
      * @return string
      */
-    public function sign($path, array $runtimeConfig = null);
+    public function sign($path, ?array $runtimeConfig = null);
 
     /**
      * Check hash is correct.
@@ -30,5 +30,5 @@ interface SignerInterface
      *
      * @return bool
      */
-    public function check($hash, $path, array $runtimeConfig = null);
+    public function check($hash, $path, ?array $runtimeConfig = null);
 }

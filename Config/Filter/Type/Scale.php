@@ -33,7 +33,7 @@ final class Scale extends FilterAbstract
     /**
      * @param float|null $to proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(Size $dimensions, float $to = null)
+    public function __construct(Size $dimensions, ?float $to = null)
     {
         $this->dimensions = $dimensions;
         $this->to = $to;

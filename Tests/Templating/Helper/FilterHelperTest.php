@@ -29,7 +29,7 @@ class FilterHelperTest extends AbstractFilterTest
         $this->assertInstanceOf(Helper::class, $this->createTemplatingMock());
     }
 
-    protected function createTemplatingMock(CacheManager $manager = null): FilterHelper
+    protected function createTemplatingMock(?CacheManager $manager = null): FilterHelper
     {
         $mock = new FilterHelper($manager ?: $this->createCacheManagerMock());
 

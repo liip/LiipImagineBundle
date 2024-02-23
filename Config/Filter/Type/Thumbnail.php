@@ -42,9 +42,9 @@ final class Thumbnail extends FilterAbstract
 
     public function __construct(
         Size $size,
-        string $mode = null,
-        bool $allowUpscale = null,
-        string $filter = null
+        ?string $mode = null,
+        ?bool $allowUpscale = null,
+        ?string $filter = null
     ) {
         $this->size = $size;
         $this->mode = $mode;

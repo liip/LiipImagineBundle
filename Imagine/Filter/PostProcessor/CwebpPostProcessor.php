@@ -95,13 +95,13 @@ class CwebpPostProcessor extends AbstractPostProcessor
      */
     public function __construct(
         string $executablePath = '/usr/bin/cwebp',
-        string $temporaryRootPath = null,
-        int $q = null,
-        int $alphaQ = null,
-        int $m = null,
-        string $alphaFilter = null,
-        int $alphaMethod = null,
-        bool $exact = null,
+        ?string $temporaryRootPath = null,
+        ?int $q = null,
+        ?int $alphaQ = null,
+        ?int $m = null,
+        ?string $alphaFilter = null,
+        ?int $alphaMethod = null,
+        ?bool $exact = null,
         array $metadata = []
     ) {
         parent::__construct($executablePath, $temporaryRootPath);

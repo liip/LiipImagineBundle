@@ -33,7 +33,7 @@ final class Watermark extends FilterAbstract
      */
     private $size;
 
-    public function __construct(string $image, string $position, float $size = null)
+    public function __construct(string $image, string $position, ?float $size = null)
     {
         $this->image = $image;
         $this->position = $position;
