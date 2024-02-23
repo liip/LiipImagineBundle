@@ -33,7 +33,7 @@ final class Upscale extends FilterAbstract
     /**
      * @param float $by sets the "ratio multiple" which initiates a proportional scale operation computed by multiplying all image sides by this value
      */
-    public function __construct(Size $min, float $by = null)
+    public function __construct(Size $min, ?float $by = null)
     {
         $this->min = $min;
         $this->by = $by;

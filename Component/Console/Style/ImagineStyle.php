@@ -58,14 +58,14 @@ final class ImagineStyle
         return $this;
     }
 
-    public function status(string $status, string $fg = null): self
+    public function status(string $status, ?string $fg = null): self
     {
         return $this->text(
             sprintf('<fg=%2$s>(</><fg=%2$s;options=bold>%1$s</><fg=%2$s>)</>', $status, $fg ?: 'default')
         );
     }
 
-    public function group(string $item, string $group, string $fg = null): self
+    public function group(string $item, string $group, ?string $fg = null): self
     {
         $this->text(
             sprintf('<fg=%3$s;options=bold>%1$s[</><fg=%3$s>%2$s</><fg=%3$s;options=bold>]</>', $item, $group, $fg ?: 'default')
@@ -74,7 +74,7 @@ final class ImagineStyle
         return $this->space();
     }
 
-    public function title(string $title, string $type = null): self
+    public function title(string $title, ?string $type = null): self
     {
         if (!$this->decoration) {
             return $this->plainTitle($title, $type);
@@ -93,7 +93,7 @@ final class ImagineStyle
         return $this->largeBlock($this->compileString(strip_tags($string), $replacements), 'ERROR', 'white', 'red', '#');
     }
 
-    private function largeBlock(string $string, string $type, string $fg = null, string $bg = null, string $prefix = null): self
+    private function largeBlock(string $string, string $type, ?string $fg = null, ?string $bg = null, ?string $prefix = null): self
     {
         return $this->block($string, $type, $fg, $bg, $prefix, true);
     }
@@ -103,7 +103,7 @@ final class ImagineStyle
         return $this->text(str_repeat(' ', $count));
     }
 
-    private function plainTitle(string $title, string $type = null): self
+    private function plainTitle(string $title, ?string $type = null): self
     {
         $this->newline();
 
@@ -116,7 +116,7 @@ final class ImagineStyle
         return $this->newline();
     }
 
-    private function block(string $string, string $type = null, string $fg = null, string $bg = null, string $prefix = null, bool $padding = true): self
+    private function block(string $string, ?string $type = null, ?string $fg = null, ?string $bg = null, ?string $prefix = null, bool $padding = true): self
     {
         if (!$this->decoration) {
             return $this->plainBlock($string, $type);

@@ -26,7 +26,7 @@ final class Point
      */
     private $y;
 
-    public function __construct(int $x = null, int $y = null)
+    public function __construct(?int $x = null, ?int $y = null)
     {
         $this->x = $x;
         $this->y = $y;

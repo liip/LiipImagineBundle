@@ -37,7 +37,7 @@ class ResolveCache implements \JsonSerializable
     /**
      * @param string[]|null $filters
      */
-    public function __construct(string $path, array $filters = null, bool $force = false)
+    public function __construct(string $path, ?array $filters = null, bool $force = false)
     {
         $this->path = $path;
         $this->filters = $filters;

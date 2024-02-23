@@ -21,7 +21,7 @@ use Liip\ImagineBundle\Exception\InvalidArgumentException;
  */
 final class SizeFactory
 {
-    public function create(int $width = null, int $height = null): Size
+    public function create(?int $width = null, ?int $height = null): Size
     {
         return new Size($width, $height);
     }

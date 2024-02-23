@@ -255,7 +255,7 @@ abstract class AbstractTest extends TestCase
         return $this->createObjectMock(DataManager::class, [], false);
     }
 
-    protected function createControllerConfigInstance(int $redirectResponseCode = null): ControllerConfig
+    protected function createControllerConfigInstance(?int $redirectResponseCode = null): ControllerConfig
     {
         return new ControllerConfig($redirectResponseCode ?? 301);
     }

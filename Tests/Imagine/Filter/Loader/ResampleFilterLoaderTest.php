@@ -177,7 +177,7 @@ class ResampleFilterLoaderTest extends AbstractTest
         $this->createResampleFilterLoaderInstance()->load($image, ['x' => 120, 'y' => 120, 'unit' => 'ppi']);
     }
 
-    private function createResampleFilterLoaderInstance(ImagineInterface $imagine = null): ResampleFilterLoader
+    private function createResampleFilterLoaderInstance(?ImagineInterface $imagine = null): ResampleFilterLoader
     {
         return new ResampleFilterLoader($imagine ?: $this->createImagineInterfaceMock());
     }
