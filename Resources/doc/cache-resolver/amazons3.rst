@@ -7,6 +7,8 @@ Amazon S3 Resolver
 The ``AmazonS3Resolver`` resolver enables cache resolution using the
 ``\AmazonS3`` storage API.
 
+**Deprecated**, use the aws-s3 resolver instead. The legacy AmazonS3Resolver will be removed in version 3.
+
 Dependencies
 ------------
 
@@ -15,7 +17,7 @@ by executing the following command in your project directory:
 
 .. code-block:: bash
 
-    $ composer require aws/aws-sdk-php
+    composer require aws/aws-sdk-php
 
 Configuration
 -------------
