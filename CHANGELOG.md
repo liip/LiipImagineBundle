@@ -15,6 +15,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.12.2](https://github.com/liip/LiipImagineBundle/tree/2.12.2)
+
+- Avoid PHP 8.3 warning with default empty prefix ([simonberger](https://github.com/liip/LiipImagineBundle/pull/1568))
+
 ## [2.12.1](https://github.com/liip/LiipImagineBundle/tree/2.12.1)
 
 - Adjustments to install with Symfony 7 ([mbabker](https://github.com/liip/LiipImagineBundle/pull/1535))

@@ -34,7 +34,7 @@ class OptiPngPostProcessor extends AbstractPostProcessor
      * @param bool        $strip             Strip metadata objects
      * @param string|null $temporaryRootPath Directory where temporary file will be written
      */
-    public function __construct(string $executablePath = '/usr/bin/optipng', int $level = 7, bool $strip = true, string $temporaryRootPath = null)
+    public function __construct(string $executablePath = '/usr/bin/optipng', int $level = 7, bool $strip = true, ?string $temporaryRootPath = null)
     {
         parent::__construct($executablePath, $temporaryRootPath);
 

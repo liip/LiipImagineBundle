@@ -33,7 +33,7 @@ class CacheResolveEvent extends Event
     /**
      * Init default event state.
      */
-    public function __construct(string $path, string $filter, string $url = null)
+    public function __construct(string $path, string $filter, ?string $url = null)
     {
         $this->path = $path;
         $this->filter = $filter;

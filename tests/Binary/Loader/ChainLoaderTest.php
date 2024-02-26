@@ -130,7 +130,7 @@ class ChainLoaderTest extends AbstractTest
      * @param string[]           $paths
      * @param FileSystemLoader[] $loaders
      */
-    private function getChainLoader(array $paths = [], array $loaders = null): ChainLoader
+    private function getChainLoader(array $paths = [], ?array $loaders = null): ChainLoader
     {
         if (null === $loaders) {
             $loaders = [

@@ -21,7 +21,7 @@ class FileBinary implements FileBinaryInterface
 
     protected ?string $format;
 
-    public function __construct(string $path, ?string $mimeType, string $format = null)
+    public function __construct(string $path, ?string $mimeType, ?string $format = null)
     {
         $this->path = $path;
         $this->mimeType = $mimeType;
