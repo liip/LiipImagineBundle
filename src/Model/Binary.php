@@ -21,7 +21,7 @@ class Binary implements BinaryInterface
 
     protected ?string $format;
 
-    public function __construct(string $content, ?string $mimeType, string $format = null)
+    public function __construct(string $content, ?string $mimeType, ?string $format = null)
     {
         $this->content = $content;
         $this->mimeType = $mimeType;

@@ -34,7 +34,7 @@ class MozJpegPostProcessor extends AbstractPostProcessor
      * @param string   $executablePath Path to the mozjpeg cjpeg binary
      * @param int|null $quality        Quality factor
      */
-    public function __construct(string $executablePath = '/opt/mozjpeg/bin/cjpeg', int $quality = null)
+    public function __construct(string $executablePath = '/opt/mozjpeg/bin/cjpeg', ?int $quality = null)
     {
         parent::__construct($executablePath);
 

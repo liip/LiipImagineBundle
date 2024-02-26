@@ -40,8 +40,8 @@ class DataManager
         MimeTypeGuesserInterface $mimeTypeGuesser,
         MimeTypesInterface $extensionGuesser,
         FilterConfiguration $filterConfig,
-        string $defaultLoader = null,
-        string $globalDefaultImage = null
+        ?string $defaultLoader = null,
+        ?string $globalDefaultImage = null
     ) {
         $this->mimeTypeGuesser = $mimeTypeGuesser;
         $this->filterConfig = $filterConfig;

@@ -40,7 +40,7 @@ class JpegOptimPostProcessor extends AbstractPostProcessor
      * @param bool        $progressive       Force output to be progressive
      * @param string|null $temporaryRootPath Directory where temporary file will be written
      */
-    public function __construct(string $executablePath = '/usr/bin/jpegoptim', bool $strip = true, int $quality = null, bool $progressive = true, string $temporaryRootPath = null)
+    public function __construct(string $executablePath = '/usr/bin/jpegoptim', bool $strip = true, ?int $quality = null, bool $progressive = true, ?string $temporaryRootPath = null)
     {
         parent::__construct($executablePath, $temporaryRootPath);
 
