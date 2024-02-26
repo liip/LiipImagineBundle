@@ -125,6 +125,7 @@
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
         </service>
+        <service id="Liip\ImagineBundle\Imagine\Filter\FilterManager" alias="liip_imagine.filter.manager"/>
 
         <service id="liip_imagine.data.manager" class="Liip\ImagineBundle\Imagine\Data\DataManager" public="true">
             <argument type="service" id="liip_imagine.binary.mime_type_guesser" />
@@ -133,6 +134,7 @@
             <argument>%liip_imagine.binary.loader.default%</argument>
             <argument>%liip_imagine.default_image%</argument>
         </service>
+        <service id="Liip\ImagineBundle\Imagine\Data\DataManager" alias="liip_imagine.data.manager"/>
 
         <service id="liip_imagine.cache.manager" class="Liip\ImagineBundle\Imagine\Cache\CacheManager" public="true">
             <argument type="service" id="liip_imagine.filter.configuration" />
@@ -142,6 +144,7 @@
             <argument>%liip_imagine.cache.resolver.default%</argument>
             <argument>%liip_imagine.webp.generate%</argument>
         </service>
+        <service id="Liip\ImagineBundle\Imagine\Cache\CacheManager" alias="liip_imagine.cache.manager"/>
 
         <service id="liip_imagine.filter.configuration" class="Liip\ImagineBundle\Imagine\Filter\FilterConfiguration">
             <argument>%liip_imagine.filter_sets%</argument>

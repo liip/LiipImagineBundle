@@ -203,9 +203,9 @@ available filters will be resolved).
 Resolve Programmatically
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can resolve the image URL in your code using the ``getBrowserPath``
-method of the ``liip_imagine.cache.manager`` service. Assuming you already
-have the service assigned to a variable called ``$imagineCacheManager``,
+You can resolve the image URL in your code using the ``getBrowserPath`` method
+of the ``Liip\ImagineBundle\Imagine\Cache\CacheManager`` service. Assuming you
+already have the service assigned to a variable called ``$imagineCacheManager``,
 you would run:
 
 .. code-block:: php
@@ -214,9 +214,7 @@ you would run:
 
 Often, you need to perform this operation in a controller.
 
-You can access the ``CacheManager`` simply by type hinting it in your controller method: the service
-``liip_imagine.cache.manager`` will be automatically injected and you will be able to call
-``getBrowserPath`` on a relative image path to get its resolved location.
+In a controller, this can look as follows:
 
 .. code-block:: php
 
@@ -224,7 +222,7 @@ You can access the ``CacheManager`` simply by type hinting it in your controller
     
     namespace App\Controller;
     
-    use \Liip\ImagineBundle\Imagine\Cache\CacheManager;
+    use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
     class YourController
     {
