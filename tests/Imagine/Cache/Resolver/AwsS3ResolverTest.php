@@ -347,7 +347,7 @@ class AwsS3ResolverTest extends AbstractTest
     }
 
     /**
-     * @return MockObject&\Aws\S3\S3Client
+     * @return MockObject&S3Client
      */
     protected function getS3ClientMock()
     {
