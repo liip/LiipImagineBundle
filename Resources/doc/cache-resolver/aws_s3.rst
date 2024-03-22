@@ -307,7 +307,7 @@ You can also use the constructor of the resolver to directly inject multiple opt
             tags:
                 - { name: "liip_imagine.cache.resolver", resolver: "aws_s3_resolver" }
 
-You can find an example with private ACL and signed url on the :doc:`events chapter <../events.rst>`.
+You can find an example with private ACL and signed url on the :doc:`events chapter </events>`.
 
 .. _`aws-sdk-php`: https://github.com/amazonwebservices/aws-sdk-for-php
 .. _`S3 SDK documentation`: https://docs.aws.amazon.com/aws-sdk-php/latest/class-Aws.S3.S3Client.html#_putObject
