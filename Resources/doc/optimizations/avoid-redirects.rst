@@ -33,7 +33,7 @@ configure your webserver to route requests for missing images to Symfony.
       try_files $uri $uri/ /index.php?$query_string;
     }
 
-    location ~* .(js|jpg|jpeg|gif|png|css|tgz|gz|rar|bz2|doc|pdf|ppt|tar|wav|bmp|rtf|swf|ico|flv|txt|woff|woff2|svg)$ {
+    location ~* \.(js|jpg|jpeg|gif|png|css|tgz|gz|rar|bz2|doc|pdf|ppt|tar|wav|bmp|rtf|swf|ico|flv|txt|woff|woff2|svg)$ {
         expires 30d;
         add_header Pragma "public";
         add_header Cache-Control "public";
