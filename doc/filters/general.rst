@@ -197,13 +197,13 @@ Resample Options
 
 **filter:** ``string``
     Sets the optional filter to use during the resampling operation. It must be a string resolvable
-    as a constant from `Imagine\Image\ImageInterface`_ (you may omit the ``FILTER_`` prefix)
+    as a constant from ``Imagine\Image\ImageInterface`` (you may omit the ``FILTER_`` prefix)
     or a valid fully qualified constant. By default it is set to ``FILTER_UNDEFINED``.
 
 **tmp_dir:** ``string``
     Sets the optional temporary work directory. This filter requires a temporary location to save
     out and read back in the image binary, as these operations are requires to resample an image.
-    By default, it is set to the value of the `sys_get_temp_dir()`_ function.
+    By default, it is set to the value of the ``sys_get_temp_dir()`` function.
 
 .. _filter-strip:
 
