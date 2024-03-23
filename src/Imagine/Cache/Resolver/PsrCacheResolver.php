@@ -229,9 +229,9 @@ final class PsrCacheResolver implements ResolverInterface
         ]);
 
         $allowedTypesList = [
-          'global_prefix' => 'string',
-          'prefix' => 'string',
-          'index_key' => 'string',
+            'global_prefix' => 'string',
+            'prefix' => 'string',
+            'index_key' => 'string',
         ];
 
         foreach ($allowedTypesList as $option => $allowedTypes) {
