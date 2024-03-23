@@ -59,7 +59,7 @@ class ScaleFilterLoaderTest extends AbstractTest
             ->willReturn($image);
 
         $loader->load($image, [
-          'to' => 1.0,
+            'to' => 1.0,
         ]);
     }
 

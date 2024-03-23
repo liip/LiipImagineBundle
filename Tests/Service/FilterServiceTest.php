@@ -579,8 +579,8 @@ final class FilterServiceTest extends TestCase
                 ->withConsecutive(
                     [$binary, self::FILTER, $runtimeOptions],
                     [$binary, self::FILTER, [
-                            'format' => 'webp',
-                        ] + self::WEBP_OPTIONS + $runtimeOptions]
+                        'format' => 'webp',
+                    ] + self::WEBP_OPTIONS + $runtimeOptions]
                 )
                 ->willReturn($binary);
         } else {
