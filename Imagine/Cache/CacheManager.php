@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
-class CacheManager
+class CacheManager implements CacheManagerInterface
 {
     /**
      * @var FilterConfiguration
@@ -63,7 +63,7 @@ class CacheManager
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
      * @param string $defaultResolver
-     * @param bool   $webpGenerate
+     * @param bool $webpGenerate
      */
     public function __construct(
         FilterConfiguration $filterConfig,
@@ -99,15 +99,20 @@ class CacheManager
      * Gets filtered path for rendering in the browser.
      * It could be the cached one or an url of filter action.
      *
-     * @param string $path          The path where the resolved file is expected
+     * @param string $path The path where the resolved file is expected
      * @param string $filter
      * @param string $resolver
-     * @param int    $referenceType
+     * @param int $referenceType
      *
      * @return string
      */
-    public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
-    {
+    public function getBrowserPath(
+        $path,
+        $filter,
+        array $runtimeConfig = [],
+        $resolver = null,
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_URL
+    ) {
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
@@ -138,15 +143,20 @@ class CacheManager
     /**
      * Returns a web accessible URL.
      *
-     * @param string $path          The path where the resolved file is expected
-     * @param string $filter        The name of the imagine filter in effect
+     * @param string $path The path where the resolved file is expected
+     * @param string $filter The name of the imagine filter in effect
      * @param string $resolver
-     * @param int    $referenceType The type of reference to be generated (one of the UrlGenerator constants)
+     * @param int $referenceType The type of reference to be generated (one of the UrlGenerator constants)
      *
      * @return string
      */
-    public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
-    {
+    public function generateUrl(
+        $path,
+        $filter,
+        array $runtimeConfig = [],
+        $resolver = null,
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_URL
+    ) {
         $params = [
             'path' => ltrim($path, '/'),
             'filter' => $filter,
@@ -189,20 +199,25 @@ class CacheManager
      * @param string $filter
      * @param string $resolver
      *
+     * @return string The url of resolved image
      * @throws NotFoundHttpException if the path can not be resolved
      *
-     * @return string The url of resolved image
      */
     public function resolve($path, $filter, $resolver = null)
     {
         if (false !== mb_strpos($path, '/../') || 0 === mb_strpos($path, '../')) {
-            throw new NotFoundHttpException(sprintf("Source image was searched with '%s' outside of the defined root path", $path));
+            throw new NotFoundHttpException(
+                sprintf("Source image was searched with '%s' outside of the defined root path", $path)
+            );
         }
 
         $preEvent = new CacheResolveEvent($path, $filter);
         $this->dispatchWithBC($preEvent, ImagineEvents::PRE_RESOLVE);
 
-        $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve($preEvent->getPath(), $preEvent->getFilter());
+        $url = $this->getResolver($preEvent->getFilter(), $resolver)->resolve(
+            $preEvent->getPath(),
+            $preEvent->getFilter()
+        );
 
         $postEvent = new CacheResolveEvent($preEvent->getPath(), $preEvent->getFilter(), $url);
         $this->dispatchWithBC($postEvent, ImagineEvents::POST_RESOLVE);
@@ -211,11 +226,11 @@ class CacheManager
     }
 
     /**
-     * @see ResolverInterface::store
-     *
      * @param string $path
      * @param string $filter
      * @param string $resolver
+     * @see ResolverInterface::store
+     *
      */
     public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
     {
@@ -264,9 +279,9 @@ class CacheManager
      * @param string $filter
      * @param string $resolver
      *
+     * @return ResolverInterface
      * @throws \OutOfBoundsException If neither a specific nor a default resolver is available
      *
-     * @return ResolverInterface
      */
     protected function getResolver($filter, $resolver)
     {
@@ -280,7 +295,9 @@ class CacheManager
         }
 
         if (!isset($this->resolvers[$resolverName])) {
-            throw new \OutOfBoundsException(sprintf('Could not find resolver "%s" for "%s" filter type', $resolverName, $filter));
+            throw new \OutOfBoundsException(
+                sprintf('Could not find resolver "%s" for "%s" filter type', $resolverName, $filter)
+            );
         }
 
         return $this->resolvers[$resolverName];
