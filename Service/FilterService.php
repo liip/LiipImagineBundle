@@ -269,6 +269,6 @@ class FilterService
      */
     protected function isSvg(BinaryInterface $binary)
     {
-        return $binary->getMimeType() == 'image/svg+xml';
+        return $binary->getMimeType() == 'image/svg+xml' || $binary->getMimeType() == 'image/svg';
     }
 }
