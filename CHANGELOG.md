@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.13.3](https://github.com/liip/LiipImagineBundle/tree/2.13.3)
+
+- Prevent InvalidArgumentException from FileinfoMimeTypeGuesser when chain loading an image that is not a file ([revoltek-daniel](https://github.com/liip/LiipImagineBundle/pull/1614))
+
 ## [2.13.2](https://github.com/liip/LiipImagineBundle/tree/2.13.2)
 
 - Remove deprecated spaceless filter from twig template ([JohJohan](https://github.com/liip/LiipImagineBundle/pull/1609))
