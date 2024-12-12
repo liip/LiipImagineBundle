@@ -25,7 +25,7 @@ class ResolveCache implements \JsonSerializable
     private $path;
 
     /**
-     * @var array|\string[]|null
+     * @var array|string[]|null
      */
     private $filters;
 
@@ -50,7 +50,7 @@ class ResolveCache implements \JsonSerializable
     }
 
     /**
-     * @return \string[]|null
+     * @return string[]|null
      */
     public function getFilters()
     {
