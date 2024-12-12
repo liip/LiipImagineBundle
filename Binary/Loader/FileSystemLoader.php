@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface as DeprecatedExtensionGuesserInterface;
@@ -69,6 +70,11 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         $path = $this->locator->locate($path);
+        
+        if (\is_file($path) === false) {
+            throw new NotLoadableException(\sprintf('Source image: "%s" is no file.', $path));
+        }
+        
         $mimeType = $this->mimeTypeGuesser instanceof DeprecatedMimeTypeGuesserInterface ? $this->mimeTypeGuesser->guess($path) : $this->mimeTypeGuesser->guessMimeType($path);
         $extension = $this->getExtension($mimeType);
 
