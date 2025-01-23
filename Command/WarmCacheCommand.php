@@ -72,6 +72,8 @@ EOF
         }
 
         $this->cacheWarmer->warm($force, $warmers);
+
+        return Command::SUCCESS;
     }
 
     /**
