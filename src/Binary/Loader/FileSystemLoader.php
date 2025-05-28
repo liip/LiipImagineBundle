@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\FileBinary;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypesInterface;
@@ -37,6 +38,9 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         $path = $this->locator->locate($path);
+        if (false === \is_file($path)) {
+            throw new NotLoadableException(\sprintf('Source image: "%s" is no file.', $path));
+        }
         $mimeType = $this->mimeTypeGuesser->guessMimeType($path);
         $extension = $this->getExtension($mimeType);
 
