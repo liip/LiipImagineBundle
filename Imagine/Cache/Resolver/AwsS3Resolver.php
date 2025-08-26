@@ -58,17 +58,17 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
-     * @param S3Client $storage    The Amazon S3 storage API. It's required to know authentication information
-     * @param string   $bucket     The bucket name to operate on
-     * @param string   $acl        The ACL to use when storing new objects. Default: owner read/write, public read
-     * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
-     * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
+     * @param S3Client    $storage    The Amazon S3 storage API. It's required to know authentication information
+     * @param string      $bucket     The bucket name to operate on
+     * @param string|null $acl        The ACL to use when storing new objects. Default: owner read/write, public read
+     * @param array       $getOptions A list of options to be passed when retrieving the object url from Amazon S3
+     * @param array       $putOptions A list of options to be passed when saving the object to Amazon S3
      */
     public function __construct(S3Client $storage, $bucket, $acl = 'public-read', array $getOptions = [], $putOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
-        $this->acl = $acl;
+        $this->acl = $acl ?? '';
         $this->getOptions = $getOptions;
         $this->putOptions = $putOptions;
     }
@@ -99,20 +99,19 @@ class AwsS3Resolver implements ResolverInterface
     public function store(BinaryInterface $binary, $path, $filter)
     {
         $objectPath = $this->getObjectPath($path, $filter);
+        $options = [
+            'Bucket' => $this->bucket,
+            'Key' => $objectPath,
+            'Body' => $binary->getContent(),
+            'ContentType' => $binary->getMimeType(),
+        ];
+
+        if ('' !== $this->acl) {
+            $options['ACL'] = $this->acl;
+        }
 
         try {
-            $this->storage->putObject(
-                array_merge(
-                    $this->putOptions,
-                    [
-                        'ACL' => $this->acl,
-                        'Bucket' => $this->bucket,
-                        'Key' => $objectPath,
-                        'Body' => $binary->getContent(),
-                        'ContentType' => $binary->getMimeType(),
-                    ]
-                )
-            );
+            $this->storage->putObject(array_merge($this->putOptions, $options));
         } catch (\Exception $e) {
             $this->logError('The object could not be created on Amazon S3.', [
                 'objectPath' => $objectPath,
