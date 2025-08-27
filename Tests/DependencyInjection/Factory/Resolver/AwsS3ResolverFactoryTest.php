@@ -57,6 +57,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'theBucket',
             'acl' => 'theAcl',
@@ -88,6 +89,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => ['theClientConfigKey' => 'theClientConfigVal'],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -111,6 +113,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => ['theClientConfigKey' => 'theClientConfigVal'],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -124,6 +127,29 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame([S3Client::class, 'factory'], $clientDefinition->getFactory());
     }
 
+    public function testCreateS3ClientAliasOnCreate(): void
+    {
+        $container = new ContainerBuilder();
+
+        $resolver = new AwsS3ResolverFactory();
+
+        $resolver->create($container, 'the_resolver_name', [
+            'client_id' => 's3.client.default',
+            'client_config' => [],
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'get_options' => [],
+            'put_options' => [],
+            'cache' => false,
+            'proxies' => [],
+        ]);
+
+        $this->assertTrue($container->hasAlias('liip_imagine.cache.resolver.the_resolver_name.client'));
+
+        $clientAlias = $container->getAlias('liip_imagine.cache.resolver.the_resolver_name.client');
+        $this->assertSame('s3.client.default', (string) $clientAlias);
+    }
+
     public function testWrapResolverWithProxyOnCreateWithoutCache(): void
     {
         $container = new ContainerBuilder();
@@ -131,6 +157,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -170,6 +197,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -206,6 +234,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -247,6 +276,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -296,6 +326,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -329,6 +360,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolver = new AwsS3ResolverFactory();
 
         $resolver->create($container, 'the_resolver_name', [
+            'client_id' => null,
             'client_config' => [],
             'bucket' => 'aBucket',
             'acl' => 'aAcl',
@@ -402,6 +434,28 @@ class AwsS3ResolverFactoryTest extends AbstractTest
             'aws_s3' => [
                 'bucket' => 'aBucket',
                 'client_config' => 'not_array',
+            ],
+        ]);
+    }
+
+    public function testThrowClientConfigAmbiguousOnAddConfiguration(): void
+    {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessageMatchesBC('/Children config "client_id" and "client_config" cannot be configured at the same time./');
+
+        $treeBuilder = new TreeBuilder('aws_s3');
+        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
+            ? $treeBuilder->getRootNode()
+            : $treeBuilder->root('aws_s3');
+
+        $resolver = new AwsS3ResolverFactory();
+        $resolver->addConfiguration($rootNode);
+
+        $this->processConfigTree($treeBuilder, [
+            'aws_s3' => [
+                'bucket' => 'aBucket',
+                'client_id' => 'aClientId',
+                'client_config' => [],
             ],
         ]);
     }
