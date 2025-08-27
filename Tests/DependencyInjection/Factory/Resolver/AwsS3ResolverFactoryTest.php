@@ -15,6 +15,7 @@ use Aws\S3\S3Client;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Tests\AbstractTest;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -26,6 +27,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AwsS3ResolverFactoryTest extends AbstractTest
 {
+    use ExpectDeprecationTrait;
+
     public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(AwsS3ResolverFactory::class);
@@ -155,8 +158,13 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame(['foo'], $resolverDefinition->getArgument(1));
     }
 
+    /**
+     * @group legacy
+     */
     public function testWrapResolverWithCacheOnCreateWithoutProxy(): void
     {
+        $this->expectDeprecation('Since liip/imagine-bundle 2.13.4: Setting the "liip_imagine.resolvers.the_resolver_name.aws_s3.use_psr_cache" config option to "false" is deprecated.');
+
         $container = new ContainerBuilder();
 
         $resolver = new AwsS3ResolverFactory();
@@ -168,6 +176,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
             'get_options' => [],
             'put_options' => [],
             'cache' => 'the_cache_service_id',
+            'use_psr_cache' => false,
             'proxies' => [],
         ]);
 
@@ -190,7 +199,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
     }
 
-    public function testWrapResolverWithProxyAndCacheOnCreate(): void
+    public function testWrapResolverWithPsrCacheOnCreateWithoutProxy(): void
     {
         $container = new ContainerBuilder();
 
@@ -203,6 +212,48 @@ class AwsS3ResolverFactoryTest extends AbstractTest
             'get_options' => [],
             'put_options' => [],
             'cache' => 'the_cache_service_id',
+            'use_psr_cache' => true,
+            'proxies' => [],
+        ]);
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
+        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
+        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
+        $this->assertSame('liip_imagine.cache.resolver.prototype.aws_s3', $cachedResolverDefinition->getParent());
+
+        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
+
+        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
+        $this->assertSame('liip_imagine.cache.resolver.prototype.psr_cache', $resolverDefinition->getParent());
+
+        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
+        $this->assertSame('the_cache_service_id', (string) $resolverDefinition->getArgument(0));
+
+        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(1));
+        $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testWrapResolverWithProxyAndCacheOnCreate(): void
+    {
+        $this->expectDeprecation('Since liip/imagine-bundle 2.13.4: Setting the "liip_imagine.resolvers.the_resolver_name.aws_s3.use_psr_cache" config option to "false" is deprecated.');
+
+        $container = new ContainerBuilder();
+
+        $resolver = new AwsS3ResolverFactory();
+
+        $resolver->create($container, 'the_resolver_name', [
+            'client_config' => [],
+            'bucket' => 'aBucket',
+            'acl' => 'aAcl',
+            'get_options' => [],
+            'put_options' => [],
+            'cache' => 'the_cache_service_id',
+            'use_psr_cache' => false,
             'proxies' => ['foo'],
         ]);
 
@@ -233,8 +284,13 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
     }
 
+    /**
+     * @group legacy
+     */
     public function testWrapResolverWithProxyMatchReplaceStrategyOnCreate(): void
     {
+        $this->expectDeprecation('Since liip/imagine-bundle 2.13.4: Setting the "liip_imagine.resolvers.the_resolver_name.aws_s3.use_psr_cache" config option to "false" is deprecated.');
+
         $container = new ContainerBuilder();
 
         $resolver = new AwsS3ResolverFactory();
@@ -246,6 +302,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
             'get_options' => [],
             'put_options' => [],
             'cache' => 'the_cache_service_id',
+            'use_psr_cache' => false,
             'proxies' => ['foo' => 'bar'],
         ]);
 

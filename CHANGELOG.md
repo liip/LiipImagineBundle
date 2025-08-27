@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## Next Release
+
+- Add `use_psr_cache` option to AWS S3 resolver configuration in order to support PSR cache. Configuring a doctrine cache now will trigger a deprecation ([deguif](https://github.com/liip/LiipImagineBundle/pull/1630))
+
 ## [2.13.3](https://github.com/liip/LiipImagineBundle/tree/2.13.3)
 
 - Prevent InvalidArgumentException from FileinfoMimeTypeGuesser when chain loading an image that is not a file ([revoltek-daniel](https://github.com/liip/LiipImagineBundle/pull/1614))
