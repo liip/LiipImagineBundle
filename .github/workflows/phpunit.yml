@@ -93,6 +93,11 @@ jobs:
         if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
         run: composer remove --dev --no-update symfony/messenger
 
+      # Latest enqueue install on PHP 7.4 but uses PHP 8 features
+      - name: Pin enqueue/enqueue on PHP 7.4
+        if: ${{ matrix.php == '7.4' }}
+        run: composer require --no-update enqueue/enqueue 0.10.18
+
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
         with:
