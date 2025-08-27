@@ -85,7 +85,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache')
-                    ->defaultValue(false)
+                    ->defaultFalse()
                 ->end()
                 ->scalarNode('acl')
                     ->defaultValue('public-read')
