@@ -10,7 +10,7 @@ on:
 jobs:
   phpunit:
     name: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -60,7 +60,7 @@ jobs:
             stability: 'dev'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configure coverage driver
         id: coverage
@@ -92,6 +92,11 @@ jobs:
       - name: Remove symfony/messenger
         if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
         run: composer remove --dev --no-update symfony/messenger
+
+      # Latest enqueue install on PHP 7.4 but uses PHP 8 features
+      - name: Pin enqueue/enqueue on PHP 7.4
+        if: ${{ matrix.php == '7.4' }}
+        run: composer require --no-update enqueue/enqueue 0.10.18
 
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
@@ -128,7 +133,7 @@ jobs:
 
   coveralls-finish:
     needs: [phpunit]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Notify Coveralls when build is finished
         uses: coverallsapp/github-action@master

@@ -59,7 +59,7 @@ class LiipImagineBundle extends Bundle
             );
         }
 
-        /** @var $extension LiipImagineExtension */
+        /** @var LiipImagineExtension $extension */
         $extension = $container->getExtension('liip_imagine');
 
         $extension->addResolverFactory(new WebPathResolverFactory());
