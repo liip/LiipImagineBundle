@@ -204,8 +204,12 @@ current. You just need to configure them with defined options.
               aws_s3:
                   #...
                   proxies: ["https://one.domain.com", "https://two.domain.com"]
-                  cache: true
+                  cache: 'cache_name'
 
+.. note::
+
+    The ``cache`` option accepts a doctrine cache, but this is now deprecated.
+    Use the ``use_psr_cache`` boolean option set to ``true`` so that a psr cache can be used instead.
 
 If enabled both first one will be :ref:`Cache <cache-resolver-cache>`, then
 :ref:`Proxy <cache-resolver-proxy>` and after all process delegates to AwsS3 resolver.
