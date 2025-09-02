@@ -158,6 +158,7 @@
             <argument>%liip_imagine.webp.options%</argument>
             <argument type="service" id="logger" on-invalid="ignore" />
         </service>
+        <service id="Liip\ImagineBundle\Service\FilterService" alias="liip_imagine.service.filter"/>
 
         <!-- Config -->
 
