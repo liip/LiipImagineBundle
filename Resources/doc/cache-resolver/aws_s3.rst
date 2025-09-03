@@ -83,6 +83,24 @@ Create Resolver from a Factory
                     region: "%amazon.s3.region%"
                     bucket: "%amazon.s3.bucket%"
 
+Create Resolver from a custom S3 client service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        resolvers:
+            aws_s3_resolver:
+                aws_s3:
+                    client_id: 'custom_aws_s3_client_service'
+                    bucket: "%amazon.s3.bucket%"
+                    get_options:
+                        Scheme: https
+                    put_options:
+                        CacheControl: "max-age=86400"
+
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -12,6 +12,8 @@
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -21,10 +23,15 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     public function create(ContainerBuilder $container, $resolverName, array $config)
     {
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$resolverName.'.client';
-        $awsS3ClientDefinition = new Definition('Aws\S3\S3Client');
-        $awsS3ClientDefinition->setFactory(['Aws\S3\S3Client', 'factory']);
-        $awsS3ClientDefinition->addArgument($config['client_config']);
-        $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
+
+        if ($config['client_id']) {
+            $container->setAlias($awsS3ClientId, new Alias($config['client_id']));
+        } else {
+            $container->setDefinition($awsS3ClientId, (new Definition('Aws\S3\S3Client'))
+                ->setFactory(['Aws\S3\S3Client', 'factory'])
+                ->addArgument($config['client_config'])
+            );
+        }
 
         $resolverDefinition = $this->getChildResolverDefinition();
         $resolverDefinition->replaceArgument(0, new Reference($awsS3ClientId));
@@ -101,6 +108,9 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                 ->scalarNode('cache_prefix')
                     ->defaultValue('')
                 ->end()
+                ->scalarNode('client_id')
+                    ->defaultNull()
+                ->end()
                 ->arrayNode('client_config')
                     ->isRequired()
                     ->prototype('variable')
@@ -123,6 +133,24 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                         ->prototype('scalar')
                     ->end()
                 ->end()
+            ->end()
+            ->beforeNormalization()
+                ->ifTrue(static function ($v) {
+                    return isset($v['client_id']) && isset($v['client_config']);
+                })
+                ->then(static function ($v) {
+                    throw new InvalidConfigurationException('Children config "client_id" and "client_config" cannot be configured at the same time.');
+                })
+            ->end()
+            ->beforeNormalization()
+                ->ifTrue(static function ($v) {
+                    return isset($v['client_id']);
+                })
+                ->then(function ($config) {
+                    $config['client_config'] = [];
+
+                    return $config;
+                })
             ->end();
     }
 }
