@@ -6,7 +6,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
-## Next Release
+## [2.14.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
 
 - Allow configuring empty ACLs on AWS S3 resolver to skip ACLs ([deguif](https://github.com/liip/LiipImagineBundle/pull/1629))
 - Add `use_psr_cache` option to AWS S3 resolver configuration in order to support PSR cache. Configuring a doctrine cache now will trigger a deprecation ([deguif](https://github.com/liip/LiipImagineBundle/pull/1630))
