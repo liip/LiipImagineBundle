@@ -85,6 +85,7 @@ class ImagineController
     public function filterAction(Request $request, $path, $filter)
     {
         $path = PathHelper::urlPathToFilePath($path);
+        // TODO once we limit `symfony/http-foundation` to 6.4 or newer, use `$request->query->getString()`
         $resolver = $request->query->has('resolver') ? (string) $request->query->get('resolver') : null;
 
         return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
