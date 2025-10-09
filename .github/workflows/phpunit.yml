@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2']
+        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
         dependencies: [highest]
         symfony: ['*']
         stability: ['stable']
@@ -26,7 +26,7 @@ jobs:
             stability: 'stable'
 
           # Minimum supported dependencies with the latest supported PHP version
-          - php: '8.2'
+          - php: '8.4'
             dependencies: lowest
             symfony: '*'
             stability: 'stable'
@@ -34,29 +34,18 @@ jobs:
           # Test each supported Symfony version with the lowest supported PHP version
           - php: '7.2'
             dependencies: highest
-            symfony: '3.4.*'
+            symfony: '5.4.*'
             stability: 'stable'
 
-          - php: '7.2'
-            dependencies: highest
-            symfony: '4.4.*'
-            stability: 'stable'
-
-          - php: '7.2'
-            dependencies: highest
-            symfony: '5.3.*'
-            stability: 'stable'
-
-          # Test Symfony 6.4 dev version
-          - php: '8.2'
+          - php: '8.1'
             dependencies: highest
             symfony: '6.4.*'
-            stability: 'dev'
+            stability: 'stable'
 
           # Test Symfony 7.0 dev version
           - php: '8.2'
             dependencies: highest
-            symfony: '7.0.*'
+            symfony: '7.3.*'
             stability: 'dev'
     steps:
       - name: Checkout
@@ -87,11 +76,6 @@ jobs:
 
       - name: Set minimum-stability
         run: composer config minimum-stability ${{ matrix.stability }}
-
-      # Incompatible with symfony/framework-bundle v3
-      - name: Remove symfony/messenger
-        if: ${{ matrix.php == '7.2' && matrix.symfony == '3.4.*' }}
-        run: composer remove --dev --no-update symfony/messenger
 
       # Latest enqueue install on PHP 7.4 but uses PHP 8 features
       - name: Pin enqueue/enqueue on PHP 7.4
