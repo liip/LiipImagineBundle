@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.15.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
+
+- Refactored `Request::get()` to `Request::query::get()` to avoid deprecation with Symfony 7.4 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1636))
+
 ## [2.14.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
 
 - Allow configuring empty ACLs on AWS S3 resolver to skip ACLs ([deguif](https://github.com/liip/LiipImagineBundle/pull/1629))
