@@ -85,7 +85,8 @@ class ImagineController
     public function filterAction(Request $request, $path, $filter)
     {
         $path = PathHelper::urlPathToFilePath($path);
-        $resolver = $request->get('resolver');
+        // TODO once we limit `symfony/http-foundation` to 6.4 or newer, use `$request->query->getString()`
+        $resolver = $request->query->has('resolver') ? (string) $request->query->get('resolver') : null;
 
         return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
             return $this->filterService->getUrlOfFilteredImage(
@@ -116,7 +117,7 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, $hash, $path, $filter)
     {
-        $resolver = $request->get('resolver');
+        $resolver = $request->query->has('resolver') ? (string) $request->query->get('resolver') : null;
         $path = PathHelper::urlPathToFilePath($path);
         $runtimeConfig = $this->getFiltersBc($request);
 
