@@ -20,12 +20,14 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
@@ -81,6 +83,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
+        $phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
 
@@ -88,18 +91,18 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $this->loadTwig($config['twig'], $loader, $container);
         }
 
-        $loader->load('commands.xml');
+        $phpLoader->load('commands.php');
 
         if ($this->isConfigEnabled($container, $config['messenger'])) {
-            $this->registerMessengerConfiguration($loader);
+            $this->registerMessengerConfiguration($phpLoader);
         }
 
         if ($config['enqueue']) {
-            $loader->load('enqueue.xml');
+            $phpLoader->load('enqueue.php');
         }
 
         if ($config['templating']) {
-            $loader->load('templating.xml');
+            $phpLoader->load('templating.php');
         }
 
         $driver = $config['driver'];
@@ -145,8 +148,6 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
                 ->replaceArgument(1, $mimeTypes);
         }
 
-        $this->deprecationTemplatingFilterHelper($container);
-
         $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
         $webpOptions = $config['webp'];
         unset($webpOptions['generate']);
@@ -184,25 +185,13 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         }
     }
 
-    private function registerMessengerConfiguration(XmlFileLoader $loader): void
+    private function registerMessengerConfiguration(LoaderInterface $loader): void
     {
         if (!interface_exists(MessageBusInterface::class)) {
             throw new LogicException('Messenger support cannot be enabled as the Messenger component is not installed. Try running "composer require symfony/messenger".');
         }
 
-        $loader->load('messenger.xml');
-    }
-
-    private function deprecationTemplatingFilterHelper(ContainerBuilder $container): void
-    {
-        if (!$container->hasDefinition('liip_imagine.templating.filter_helper')) {
-            return;
-        }
-
-        $message = 'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.';
-        $definition = $container->getDefinition('liip_imagine.templating.filter_helper');
-
-        $definition->setDeprecated('liip/imagine-bundle', '2.2', $message);
+        $loader->load('messenger.php');
     }
 
     private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void
