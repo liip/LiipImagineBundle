@@ -387,9 +387,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('/^The child (node|config) "bucket" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -403,9 +401,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('/^The child (node|config) "client_config" (at path|under) "aws_s3" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -423,9 +419,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('{^Invalid type for path "aws_s3.client_config". Expected (\")?array(\")?, but got (\")?string(\")?$}');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -444,9 +438,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('/Children config "client_id" and "client_config" cannot be configured at the same time./');
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -479,9 +471,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedCachePrefix = 'theCachePrefix';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -521,9 +511,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedAcl = 'public-read';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);
@@ -569,9 +557,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $expectedCachePrefix = 'theCachePrefix';
 
         $treeBuilder = new TreeBuilder('aws_s3');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('aws_s3');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new AwsS3ResolverFactory();
         $resolver->addConfiguration($rootNode);

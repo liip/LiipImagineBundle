@@ -89,9 +89,7 @@ class FlysystemLoaderFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('/^The child (node|config) "filesystem_service" (at path|under) "flysystem" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new FlysystemLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -104,9 +102,7 @@ class FlysystemLoaderFactoryTest extends AbstractTest
         $expectedService = 'theService';
 
         $treeBuilder = new TreeBuilder('flysystem');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('flysystem');
+        $rootNode = $treeBuilder->getRootNode();
 
         $loader = new FlysystemLoaderFactory();
         $loader->addConfiguration($rootNode);

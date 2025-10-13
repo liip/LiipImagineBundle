@@ -202,11 +202,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $message = 'The "%service_id%" service is deprecated since LiipImagineBundle 2.2 and will be removed in 3.0.';
         $definition = $container->getDefinition('liip_imagine.templating.filter_helper');
 
-        if (method_exists(Definition::class, 'getDeprecation')) {
-            $definition->setDeprecated('liip/imagine-bundle', '2.2', $message);
-        } else {
-            $definition->setDeprecated(true, $message);
-        }
+        $definition->setDeprecated('liip/imagine-bundle', '2.2', $message);
     }
 
     private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void

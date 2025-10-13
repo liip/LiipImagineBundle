@@ -72,9 +72,7 @@ class StreamLoaderFactoryTest extends AbstractTest
         $this->expectExceptionMessageMatchesBC('/^The child (node|config) "wrapper" (at path|under) "stream" must be configured\.$/');
 
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
+        $rootNode = $treeBuilder->getRootNode();
 
         $resolver = new StreamLoaderFactory();
         $resolver->addConfiguration($rootNode);
@@ -88,9 +86,7 @@ class StreamLoaderFactoryTest extends AbstractTest
         $expectedContext = 'theContext';
 
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
+        $rootNode = $treeBuilder->getRootNode();
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);
@@ -112,9 +108,7 @@ class StreamLoaderFactoryTest extends AbstractTest
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void
     {
         $treeBuilder = new TreeBuilder('stream');
-        $rootNode = method_exists(TreeBuilder::class, 'getRootNode')
-            ? $treeBuilder->getRootNode()
-            : $treeBuilder->root('stream');
+        $rootNode = $treeBuilder->getRootNode();
 
         $loader = new StreamLoaderFactory();
         $loader->addConfiguration($rootNode);

@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Kernel;
 
 class ImagineController
 {
@@ -138,23 +137,13 @@ class ImagineController
 
     private function getFiltersBc(Request $request): array
     {
-        if (version_compare(Kernel::VERSION, '5.1', '>=')) {
-            try {
-                return $request->query->all('filters');
-            } catch (BadRequestException $e) {
-                // for strict BC - BadRequestException seems more suited to this situation.
-                // remove the try-catch in version 3
-                throw new NotFoundHttpException(\sprintf('Filters must be an array. Value was "%s"', $request->query->get('filters')));
-            }
+        try {
+            return $request->query->all('filters');
+        } catch (BadRequestException $e) {
+            // for strict BC - BadRequestException seems more suited to this situation.
+            // remove the try-catch in version 3
+            throw new NotFoundHttpException(\sprintf('Filters must be an array. Value was "%s"', $request->query->get('filters')));
         }
-
-        $runtimeConfig = $request->query->get('filters', []);
-
-        if (!\is_array($runtimeConfig)) {
-            throw new NotFoundHttpException(\sprintf('Filters must be an array. Value was "%s"', $runtimeConfig));
-        }
-
-        return $runtimeConfig;
     }
 
     private function createRedirectResponse(\Closure $url, string $path, string $filter, ?string $hash = null): RedirectResponse
