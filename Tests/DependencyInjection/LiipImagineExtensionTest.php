@@ -346,7 +346,7 @@ EOF;
         $definition = $this->containerBuilder->getDefinition($id);
 
         $this->assertTrue($definition->isDeprecated());
-        $deprecation = method_exists(Definition::class, 'getDeprecation') ? $definition->getDeprecation($id)['message'] : $definition->getDeprecationMessage($id);
+        $deprecation = $definition->getDeprecation($id)['message'];
         $this->assertSame($message, $deprecation);
     }
 }
