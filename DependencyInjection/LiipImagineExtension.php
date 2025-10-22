@@ -85,7 +85,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $phpLoader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('imagine.xml');
+        $phpLoader->load('imagine.php');
 
         if ('none' !== $config['twig']['mode']) {
             $this->loadTwig($config['twig'], $loader, $container);
