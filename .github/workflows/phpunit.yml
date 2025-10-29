@@ -42,10 +42,16 @@ jobs:
             symfony: '6.4.*'
             stability: 'stable'
 
-          # Test Symfony 7.3 dev version
-          - php: '8.2'
+          # Test Symfony 7.4 dev version
+          - php: '8.4'
             dependencies: highest
-            symfony: '7.3.*'
+            symfony: '7.4.*'
+            stability: 'dev'
+            
+          # Test Symfony 8.0 dev version
+          - php: '8.4'
+            dependencies: highest
+            symfony: '8.0.*'
             stability: 'dev'
     steps:
       - name: Checkout
@@ -62,20 +68,17 @@ jobs:
           coverage: ${{ steps.coverage.outputs.driver }}
           extensions: gd, imagick
 
-      - name: Require Symfony version
-        if: matrix.symfony != '*'
+      - name: Install symfony/flex
         run: |
           composer global config --no-plugins allow-plugins.symfony/flex true
           composer global require --no-interaction --no-progress symfony/flex
-          composer config extra.symfony.require ${{ matrix.symfony }}
-
-      - name: Remove non-compatible dependencies with Symfony 7
-        if: matrix.symfony == '7.0.*'
-        run: |
-          composer remove enqueue/enqueue-bundle symfony/templating --dev --no-update
 
       - name: Set minimum-stability
         run: composer config minimum-stability ${{ matrix.stability }}
+
+      - name: Remove enqueue/enqueue-bundle for Symfony 8
+        if:  matrix.symfony == '8.0.*'
+        run: composer remove --no-update enqueue/enqueue-bundle --dev
 
       # Latest enqueue install on PHP 7.4 but uses PHP 8 features
       - name: Pin enqueue/enqueue on PHP 7.4
@@ -86,6 +89,8 @@ jobs:
         uses: ramsey/composer-install@v2
         with:
           dependency-versions: ${{ matrix.dependencies }}
+        env:
+          SYMFONY_REQUIRE: "${{ matrix.symfony }}"
 
       - name: Cache PHPUnit
         uses: actions/cache@v3
