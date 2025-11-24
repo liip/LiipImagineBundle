@@ -293,7 +293,10 @@ abstract class AbstractTest extends TestCase
         $r = new \ReflectionObject($object);
 
         $m = $r->getMethod($name);
-        $m->setAccessible(true);
+        // remove when we drop support for PHP older than 8.1
+        if (PHP_VERSION_ID < 80100) {
+            $m->setAccessible(true);
+        }
 
         return $m;
     }

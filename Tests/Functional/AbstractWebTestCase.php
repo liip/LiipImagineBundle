@@ -52,7 +52,10 @@ abstract class AbstractWebTestCase extends WebTestCase
         $r = new \ReflectionObject($object);
 
         $p = $r->getProperty($name);
-        $p->setAccessible(true);
+        // remove when we drop support for PHP older than 8.1
+        if (PHP_VERSION_ID < 80100) {
+            $p->setAccessible(true);
+        }
 
         return $p->getValue($object);
     }

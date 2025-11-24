@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Data;
 
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -23,7 +24,7 @@ class DataManagerTest extends AbstractTest
 {
     public function testThrowsIfConstructedWithWrongTypeArguments(): void
     {
-        $this->expectException(\Liip\ImagineBundle\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$extensionGuesser must be an instance of Symfony\Component\Mime\MimeTypesInterface or Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
 
         $mimeTypeGuesser = $this->createMimeTypeGuesserInterfaceMock();
