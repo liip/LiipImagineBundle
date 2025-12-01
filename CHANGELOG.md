@@ -6,11 +6,13 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
-## 2.16.0 (unreleased)
+## [2.16.0](https://github.com/liip/LiipImagineBundle/tree/2.16.0)
 
+- Compatible with Symfony 8 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1642)) (including a bunch of PRs to change all XML configuration to PHP configuration)
+- Test with PHP 8.5 and fix deprecations([dbu](https://github.com/liip/LiipImagineBundle/pull/1644))
 - Drop support for unmaintained Symfony versions ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1639))
 
-## [2.15.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
+## [2.15.0](https://github.com/liip/LiipImagineBundle/tree/2.15.0)
 
 - Refactored `Request::get()` to `Request::query::get()` to avoid deprecation with Symfony 7.4 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1636))
 

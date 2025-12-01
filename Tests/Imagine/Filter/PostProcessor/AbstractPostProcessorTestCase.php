@@ -68,7 +68,10 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
         }
 
         $m = $r->getMethod($method);
-        $m->setAccessible(true);
+        // remove when we drop support for PHP older than 8.1
+        if (PHP_VERSION_ID < 80100) {
+            $m->setAccessible(true);
+        }
 
         return $m;
     }
@@ -85,7 +88,10 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
         }
 
         $p = $r->getProperty($property);
-        $p->setAccessible(true);
+        // remove when we drop support for PHP older than 8.1
+        if (PHP_VERSION_ID < 80100) {
+            $p->setAccessible(true);
+        }
 
         return $p;
     }
