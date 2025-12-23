@@ -16,11 +16,13 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Imagine\Gd\Imagine;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Metadata\ExifMetadataReader;
+use Liip\ImagineBundle\Binary\Loader\AssetMapperLoader;
 use Liip\ImagineBundle\Binary\Loader\ChainLoader;
 use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader;
 use Liip\ImagineBundle\Binary\Loader\StreamLoader;
+use Liip\ImagineBundle\Binary\Locator\AssetMapperLocator;
 use Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
@@ -419,6 +421,12 @@ return static function (ContainerConfigurator $container) {
     $services->set('liip_imagine.binary.loader.prototype.chain', ChainLoader::class)
         ->abstract()
         ->args(['']); // will be injected by ChainLoaderFactory
+	$services->set('liip_imagine.binary.loader.prototype.asset_mapper', AssetMapperLoader::class)
+		->args([
+			service('liip_imagine.mime_type_guesser'),
+			service('liip_imagine.extension_guesser'),
+			'', // will be injected by FileSystemLoaderFactory
+		]);
 
     // Data loader locators
     $services->set('liip_imagine.binary.locator.filesystem', FileSystemLocator::class)
@@ -428,6 +436,13 @@ return static function (ContainerConfigurator $container) {
             '', // will be injected by FilesystemLoaderFactory
             '', // will be injected by FilesystemLoaderFactory
         ])
+        ->tag('liip_imagine.binary.locator', ['shared' => false]);
+    $services->set('liip_imagine.binary.locator.asset_mapper', AssetMapperLocator::class)
+        ->share(true)
+        ->public()
+        ->args([
+			''
+		])
         ->tag('liip_imagine.binary.locator', ['shared' => false]);
 
     $services->set('liip_imagine.binary.locator.filesystem_insecure', FileSystemInsecureLocator::class)

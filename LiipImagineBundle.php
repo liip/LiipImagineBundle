@@ -23,6 +23,7 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\AssetMapperLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
@@ -69,6 +70,7 @@ class LiipImagineBundle extends Bundle
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
+        $extension->addLoaderFactory(new AssetMapperLoaderFactory());
         $extension->addLoaderFactory(new ChainLoaderFactory());
 
         $container->registerForAutoconfiguration(LoaderLoaderInterface::class)->addTag('liip_imagine.filter.loader');
