@@ -11,31 +11,29 @@
 
 namespace Liip\ImagineBundle\DependencyInjection\Factory\Loader;
 
-use Symfony\Component\AssetMapper\AssetMapper;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 class AssetMapperLoaderFactory extends AbstractLoaderFactory
 {
-	public function create(ContainerBuilder $container, $loaderName, array $config)
-	{
-		$locatorDefinition = new ChildDefinition(\sprintf('liip_imagine.binary.locator.asset_mapper'));
-		$locatorDefinition->replaceArgument(0,new Reference('asset_mapper'));
+    public function create(ContainerBuilder $container, $loaderName, array $config)
+    {
+        $locatorDefinition = new ChildDefinition('liip_imagine.binary.locator.asset_mapper');
+        $locatorDefinition->replaceArgument(0, new Reference('asset_mapper'));
 
-		$definition = $this->getChildLoaderDefinition('filesystem');
+        $definition = $this->getChildLoaderDefinition('filesystem');
 
-		if ($container->hasDefinition('liip_imagine.mime_types')) {
-			$mimeTypes = $container->getDefinition('liip_imagine.mime_types');
-			$definition->replaceArgument(0, $mimeTypes);
-			$definition->replaceArgument(1, $mimeTypes);
-		}
-		$definition->replaceArgument(2, $locatorDefinition);
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $definition->replaceArgument(0, $mimeTypes);
+            $definition->replaceArgument(1, $mimeTypes);
+        }
+        $definition->replaceArgument(2, $locatorDefinition);
 
-		return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
-	}
+        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+    }
 
     public function getName()
     {
@@ -52,5 +50,4 @@ class AssetMapperLoaderFactory extends AbstractLoaderFactory
 //                ->end()
             ->end();
     }
-
 }

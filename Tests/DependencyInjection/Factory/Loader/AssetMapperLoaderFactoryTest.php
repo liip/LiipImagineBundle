@@ -16,6 +16,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface
 use Liip\ImagineBundle\Tests\DependencyInjection\Factory\FactoryTestCase;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Loader\AssetMapperLoaderFactory<extended>
  */
@@ -46,7 +47,5 @@ class AssetMapperLoaderFactoryTest extends FactoryTestCase
 
         $this->assertInstanceOfChildDefinition($loaderDefinition);
         $this->assertSame('liip_imagine.binary.loader.prototype.filesystem', $loaderDefinition->getParent());
-
     }
-
 }

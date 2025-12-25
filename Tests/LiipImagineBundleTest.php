@@ -151,8 +151,8 @@ class LiipImagineBundleTest extends AbstractTest
             StreamLoaderFactory::class,
             FileSystemLoaderFactory::class,
             FlysystemLoaderFactory::class,
-			AssetMapperLoaderFactory::class,
-            ChainLoaderFactory::class
+            AssetMapperLoaderFactory::class,
+            ChainLoaderFactory::class,
         ], $loaders);
     }
 

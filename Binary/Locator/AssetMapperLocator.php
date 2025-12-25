@@ -12,27 +12,24 @@
 namespace Liip\ImagineBundle\Binary\Locator;
 
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
-use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 
 class AssetMapperLocator implements LocatorInterface
 {
-	public function __construct(
-		private readonly AssetMapperInterface $assetMapper,
+    public function __construct(
+        private readonly AssetMapperInterface $assetMapper,
+    ) {
+    }
 
-	) { }
-
-	public function locate(string $path): string {
-
-
-		$asset = null;
-		$path = "/".ltrim($path, '/');
-		foreach ($this->assetMapper->allAssets() as $assetCandidate) {
-			if ($path === $assetCandidate->publicPath) {
-				return $assetCandidate->sourcePath;
-			}
-		}
-		throw new NotLoadableException(\sprintf('Asset with public path "%s" not found.', $path));
-
-	}
+    public function locate(string $path): string
+    {
+        $asset = null;
+        $path = '/'.mb_ltrim($path, '/');
+        foreach ($this->assetMapper->allAssets() as $assetCandidate) {
+            if ($path === $assetCandidate->publicPath) {
+                return $assetCandidate->sourcePath;
+            }
+        }
+        throw new NotLoadableException(\sprintf('Asset with public path "%s" not found.', $path));
+    }
 }
