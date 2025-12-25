@@ -44,10 +44,6 @@ class AssetMapperLoaderFactory extends AbstractLoaderFactory
     {
         $builder
             ->children()
-//                ->scalarNode('superfoo')
-//                    ->isRequired()
-//                    ->cannotBeEmpty()
-//                ->end()
             ->end();
     }
 }
