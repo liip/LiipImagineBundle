@@ -17,13 +17,12 @@ use Symfony\Component\AssetMapper\AssetMapperInterface;
 class AssetMapperLocator implements LocatorInterface
 {
     public function __construct(
-        private readonly AssetMapperInterface $assetMapper,
+        private AssetMapperInterface $assetMapper,
     ) {
     }
 
     public function locate(string $path): string
     {
-        $asset = null;
         $path = '/'.mb_ltrim($path, '/');
         foreach ($this->assetMapper->allAssets() as $assetCandidate) {
             if ($path === $assetCandidate->publicPath) {
