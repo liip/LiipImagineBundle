@@ -25,7 +25,7 @@ class AssetMapperLoaderFactory extends AbstractLoaderFactory
 		$locatorDefinition = new ChildDefinition(\sprintf('liip_imagine.binary.locator.asset_mapper'));
 		$locatorDefinition->replaceArgument(0,new Reference('asset_mapper'));
 
-		$definition = $this->getChildLoaderDefinition();
+		$definition = $this->getChildLoaderDefinition('filesystem');
 
 		if ($container->hasDefinition('liip_imagine.mime_types')) {
 			$mimeTypes = $container->getDefinition('liip_imagine.mime_types');

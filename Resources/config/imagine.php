@@ -421,12 +421,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('liip_imagine.binary.loader.prototype.chain', ChainLoader::class)
         ->abstract()
         ->args(['']); // will be injected by ChainLoaderFactory
-	$services->set('liip_imagine.binary.loader.prototype.asset_mapper', AssetMapperLoader::class)
-		->args([
-			service('liip_imagine.mime_type_guesser'),
-			service('liip_imagine.extension_guesser'),
-			'', // will be injected by FileSystemLoaderFactory
-		]);
+
 
     // Data loader locators
     $services->set('liip_imagine.binary.locator.filesystem', FileSystemLocator::class)
