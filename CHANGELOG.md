@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.17.0](https://github.com/liip/LiipImagineBundle/tree/2.17.0)
+
+- Drop support for PHP 7 ([dbu](https://github.com/liip/LiipImagineBundle/pull/1646))
+
 ## [2.16.0](https://github.com/liip/LiipImagineBundle/tree/2.16.0)
 
 - Compatible with Symfony 8 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1642)) (including a bunch of PRs to change all XML configuration to PHP configuration)
