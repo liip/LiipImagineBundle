@@ -77,7 +77,8 @@ There are several configuration options available:
 * ``cache`` - default cache resolver. Default value: ``web_path`` (which means
   the standard web_path resolver is used)
 * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
-  (which means the standard filesystem loader is used).
+  (which means the standard filesystem loader is used). Built-in loaders include:
+  ``filesystem``, ``chain``, ``flysystem``, ``stream``, and ``asset_mapper``.
 * ``twig.mode`` - Twig filter integration. ``none`` disables the twig filters, ``lazy`` enables
   Twig using the Twig runtime for lazy loading. The default value is ``legacy`` and enables the
   old Twig integration that is loaded on each request. Version 3 will drop ``legacy`` and default
@@ -99,7 +100,8 @@ There are several configuration options available:
     * ``cache`` - default cache resolver. Default value: ``web_path`` (which means
       the standard web_path resolver is used)
     * ``data_loader`` - name of a custom data loader. Default value: ``filesystem``
-      (which means the standard filesystem loader is used).
+      (which means the standard filesystem loader is used). Built-in loaders include:
+      ``filesystem``, ``chain``, ``flysystem``, ``stream``, and ``asset_mapper``.
     * ``post_processors`` - sets post-processors to be applied on filtered image
       (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
 * ``driver`` - one of the drivers: ``gd``, ``imagick``, ``gmagick``, ``vips``.

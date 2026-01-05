@@ -21,6 +21,7 @@ use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\FlysystemLoader;
 use Liip\ImagineBundle\Binary\Loader\FlysystemV2Loader;
 use Liip\ImagineBundle\Binary\Loader\StreamLoader;
+use Liip\ImagineBundle\Binary\Locator\AssetMapperLocator;
 use Liip\ImagineBundle\Binary\Locator\FileSystemInsecureLocator;
 use Liip\ImagineBundle\Binary\Locator\FileSystemLocator;
 use Liip\ImagineBundle\Binary\SimpleMimeTypeGuesser;
@@ -427,6 +428,13 @@ return static function (ContainerConfigurator $container) {
         ->args([
             '', // will be injected by FilesystemLoaderFactory
             '', // will be injected by FilesystemLoaderFactory
+        ])
+        ->tag('liip_imagine.binary.locator', ['shared' => false]);
+    $services->set('liip_imagine.binary.locator.asset_mapper', AssetMapperLocator::class)
+        ->share(true)
+        ->public()
+        ->args([
+            '', // will be injected by AssetMapperLoaderFactory
         ])
         ->tag('liip_imagine.binary.locator', ['shared' => false]);
 

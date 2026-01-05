@@ -20,6 +20,7 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\NonFunctionalFilterExceptionPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\AssetMapperLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
@@ -150,6 +151,7 @@ class LiipImagineBundleTest extends AbstractTest
             StreamLoaderFactory::class,
             FileSystemLoaderFactory::class,
             FlysystemLoaderFactory::class,
+            AssetMapperLoaderFactory::class,
             ChainLoaderFactory::class,
         ], $loaders);
     }
