@@ -26,5 +26,8 @@ jobs:
       - name: Add vips
         run: composer require rokka/imagine-vips
 
+      - name: Add asset mapper
+        run: composer require symfony/asset-mapper
+
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze
