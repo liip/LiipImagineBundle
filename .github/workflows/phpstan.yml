@@ -27,7 +27,6 @@ jobs:
         run: composer require rokka/imagine-vips
 
       - name: Add asset mapper
-        if: ${{ matrix.php-version >= '8.0' || (matrix.php-version == '' && 8.2 >= 8.0) }}
         run: composer require symfony/asset-mapper
 
       - name: Run PHPStan
