@@ -1,8 +1,8 @@
 
 .. _data-loaders-asset-mapper:
 
-Asset Mapper Loader
-===================
+Asset Mapper Loader (for dev)
+============================
 
 The ``AssetMapper`` data loader allows for loading images using Symfony's AssetMapper component.
 
