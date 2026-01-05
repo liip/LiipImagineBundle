@@ -85,6 +85,7 @@ jobs:
         run: vendor/bin/simple-phpunit -v
 
       - name: Add asset mapper
+        # asset mapper support is optional in LiipImagineBundle. asset mapper was only added in symfony 6
         if: ${{ matrix.symfony >= '6.4' }}
         run: composer require --no-update symfony/asset-mapper --dev
 
