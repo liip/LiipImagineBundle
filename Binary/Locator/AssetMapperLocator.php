@@ -59,7 +59,7 @@ class AssetMapperLocator implements LocatorInterface
 			$asset = $cachedAsset->isHit() ? $this->assetMapper->getAsset($cachedAsset->get()) : null;
 
 			if (null !== $asset && $asset->publicPath === $pathInfo) {
-				return $asset;
+				return $asset->sourcePath;
 			}
 		}
 
@@ -73,7 +73,7 @@ class AssetMapperLocator implements LocatorInterface
 		}
 
 		if (null === $asset) {
-			throw new NotLoadableException(\sprintf('Asset with public path "%s" not found.', $path));
+			throw new NotLoadableException(\sprintf('Asset with public path "%s" not found.', $pathInfo));
 		}
 
 		if (null !== $cachedAsset) {
@@ -81,6 +81,6 @@ class AssetMapperLocator implements LocatorInterface
 			$this->cacheMapCache->save($cachedAsset);
 		}
 
-		return $asset;
+		return $asset->sourcePath;
 	}
 }

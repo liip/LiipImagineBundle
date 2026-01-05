@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\DependencyInjection\Factory\Loader;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\AssetMapperLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\Tests\DependencyInjection\Factory\FactoryTestCase;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -22,6 +23,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AssetMapperLoaderFactoryTest extends FactoryTestCase
 {
+    protected function setUp(): void
+    {
+        if (!interface_exists(AssetMapperInterface::class)) {
+            $this->markTestSkipped('symfony/asset-mapper is required for this test.');
+        }
+    }
+
     public function testImplementsLoaderFactoryInterface(): void
     {
         $this->assertInstanceOf(LoaderFactoryInterface::class, new AssetMapperLoaderFactory());
