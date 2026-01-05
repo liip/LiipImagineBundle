@@ -70,8 +70,8 @@ class FlysystemResolver implements ResolverInterface
         $this->flysystem = $flysystem;
         $this->requestContext = $requestContext;
 
-        $this->webRoot = rtrim($rootUrl, '/');
-        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
+        $this->webRoot = mb_rtrim($rootUrl, '/');
+        $this->cachePrefix = mb_ltrim(str_replace('//', '/', $cachePrefix), '/');
         $this->cacheRoot = $this->cachePrefix;
         $this->visibility = $visibility;
     }
@@ -103,8 +103,8 @@ class FlysystemResolver implements ResolverInterface
     {
         return \sprintf(
             '%s/%s',
-            rtrim($this->webRoot, '/'),
-            ltrim($this->getFileUrl($path, $filter), '/')
+            mb_rtrim($this->webRoot, '/'),
+            mb_ltrim($this->getFileUrl($path, $filter), '/')
         );
     }
 
@@ -162,6 +162,6 @@ class FlysystemResolver implements ResolverInterface
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
 
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        return $this->cachePrefix.'/'.$filter.'/'.mb_ltrim($path, '/');
     }
 }

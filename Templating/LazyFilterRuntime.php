@@ -83,7 +83,7 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
         if ($this->assetVersion) {
             $start = mb_strrpos($path, $this->assetVersion);
             if (mb_strlen($path) - mb_strlen($this->assetVersion) === $start) {
-                return rtrim(mb_substr($path, 0, $start), '?');
+                return mb_rtrim(mb_substr($path, 0, $start), '?');
             }
         }
 

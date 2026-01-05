@@ -72,6 +72,9 @@
         "symfony/messenger": "If you like to process images in background",
         "symfony/templating": "required to use deprecated Templating component instead of Twig"
     },
+    "conflict": {
+        "symfony/polyfill": "<1.31.0"
+    },
     "config": {
         "sort-packages": true
     }

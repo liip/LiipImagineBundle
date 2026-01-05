@@ -130,7 +130,7 @@ class CacheManager
      */
     public function getRuntimePath($path, array $runtimeConfig)
     {
-        $path = ltrim($path, '/');
+        $path = mb_ltrim($path, '/');
 
         return 'rc/'.$this->signer->sign($path, $runtimeConfig).'/'.$path;
     }
@@ -148,7 +148,7 @@ class CacheManager
     public function generateUrl($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         $params = [
-            'path' => ltrim($path, '/'),
+            'path' => mb_ltrim($path, '/'),
             'filter' => $filter,
         ];
 
