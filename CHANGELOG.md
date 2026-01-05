@@ -8,6 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## [2.17.0](https://github.com/liip/LiipImagineBundle/tree/2.17.0)
 
+- Add AssetMapperLocator to work with the asset mapper in development mode ([tito10047](https://github.com/liip/LiipImagineBundle/pull/1645))
 - Drop support for PHP 7 ([dbu](https://github.com/liip/LiipImagineBundle/pull/1646))
 
 ## [2.16.0](https://github.com/liip/LiipImagineBundle/tree/2.16.0)
