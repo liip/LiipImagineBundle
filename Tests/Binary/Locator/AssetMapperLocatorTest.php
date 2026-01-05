@@ -15,8 +15,6 @@ use Liip\ImagineBundle\Binary\Locator\AssetMapperLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\AssetMapper\MappedAsset;
 
@@ -53,80 +51,6 @@ class AssetMapperLocatorTest extends TestCase
             ->willReturn([$asset]);
 
         $locator = new AssetMapperLocator($assetMapper);
-        $result = $locator->locate($path);
-
-        $this->assertSame($sourcePath, $result);
-    }
-
-    public function testLocateWithCacheHit(): void
-    {
-        $path = 'images/logo.png';
-        $pathInfo = '/images/logo.png';
-        $logicalPath = 'logo.png';
-        $sourcePath = '/path/to/logo.png';
-
-        $asset = new MappedAsset($logicalPath, $sourcePath, $pathInfo, $pathInfo);
-
-        $cacheItem = $this->createMock(CacheItemInterface::class);
-        $cacheItem->expects($this->once())
-            ->method('isHit')
-            ->willReturn(true);
-        $cacheItem->expects($this->once())
-            ->method('get')
-            ->willReturn($logicalPath);
-
-        $cache = $this->createMock(CacheItemPoolInterface::class);
-        $cache->expects($this->once())
-            ->method('getItem')
-            ->with(hash('xxh128', $pathInfo))
-            ->willReturn($cacheItem);
-
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->once())
-            ->method('getAsset')
-            ->with($logicalPath)
-            ->willReturn($asset);
-        $assetMapper->expects($this->never())
-            ->method('allAssets');
-
-        $locator = new AssetMapperLocator($assetMapper, $cache);
-        $result = $locator->locate($path);
-
-        $this->assertSame($sourcePath, $result);
-    }
-
-    public function testLocateWithCacheMissAndSave(): void
-    {
-        $path = 'images/logo.png';
-        $pathInfo = '/images/logo.png';
-        $logicalPath = 'logo.png';
-        $sourcePath = '/path/to/logo.png';
-
-        $asset = new MappedAsset($logicalPath, $sourcePath, $pathInfo, $pathInfo);
-
-        $cacheItem = $this->createMock(CacheItemInterface::class);
-        $cacheItem->expects($this->once())
-            ->method('isHit')
-            ->willReturn(false);
-        $cacheItem->expects($this->once())
-            ->method('set')
-            ->with($logicalPath);
-
-        $cache = $this->createMock(CacheItemPoolInterface::class);
-        $cache->expects($this->once())
-            ->method('getItem')
-            ->with(hash('xxh128', $pathInfo))
-            ->willReturn($cacheItem);
-        $cache->expects($this->once())
-            ->method('save')
-            ->with($cacheItem);
-
-        $assetMapper = $this->createMock(AssetMapperInterface::class);
-        $assetMapper->expects($this->once())
-            ->method('allAssets')
-            ->willReturn([$asset]);
-
-        $locator = new AssetMapperLocator($assetMapper, $cache);
         $result = $locator->locate($path);
 
         $this->assertSame($sourcePath, $result);

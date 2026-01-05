@@ -435,7 +435,6 @@ return static function (ContainerConfigurator $container) {
         ->public()
         ->args([
             '', // will be injected by AssetMapperLoaderFactory
-            '', // will be injected by AssetMapperLoaderFactory
         ])
         ->tag('liip_imagine.binary.locator', ['shared' => false]);
 

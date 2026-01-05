@@ -22,7 +22,6 @@ class AssetMapperLoaderFactory extends AbstractLoaderFactory
     {
         $locatorDefinition = new ChildDefinition('liip_imagine.binary.locator.asset_mapper');
         $locatorDefinition->replaceArgument(0, new Reference('asset_mapper'));
-        $locatorDefinition->replaceArgument(1, new Reference('cache.asset_mapper'));
 
         $definition = $this->getChildLoaderDefinition('filesystem');
 
