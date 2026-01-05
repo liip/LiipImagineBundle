@@ -14,45 +14,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+        php: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
         dependencies: [highest]
         symfony: ['*']
-        stability: ['stable']
         include:
           # Minimum supported dependencies with the oldest supported PHP version
-          - php: '7.2'
+          - php: '8.0'
             dependencies: lowest
             symfony: '*'
-            stability: 'stable'
 
           # Minimum supported dependencies with the latest supported PHP version
           - php: '8.5'
             dependencies: lowest
             symfony: '*'
-            stability: 'stable'
 
           # Test each supported Symfony version with the lowest supported PHP version
-          - php: '7.2'
-            dependencies: highest
-            symfony: '5.4.*'
-            stability: 'stable'
-
           - php: '8.1'
             dependencies: highest
             symfony: '6.4.*'
-            stability: 'stable'
-
-          # Test Symfony 7.4
-          - php: '8.5'
+          - php: '8.2'
             dependencies: highest
             symfony: '7.4.*'
-            stability: 'stable'
-            
-          # Test Symfony 8.0
-          - php: '8.5'
+          - php: '8.4'
             dependencies: highest
-            symfony: '8.0.*'
-            stability: 'stable'
+            symfony: '8.*'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -73,21 +59,9 @@ jobs:
           composer global config --no-plugins allow-plugins.symfony/flex true
           composer global require --no-interaction --no-progress symfony/flex
 
-      - name: Set minimum-stability
-        run: composer config minimum-stability ${{ matrix.stability }}
-
       - name: Remove enqueue/enqueue-bundle for Symfony 8
         if:  matrix.symfony == '8.0.*'
         run: composer remove --no-update enqueue/enqueue-bundle --dev
-
-      # Latest enqueue install on PHP 7.4 but uses PHP 8 features
-      - name: Pin enqueue/enqueue on PHP 7.4
-        if: ${{ matrix.php == '7.4' }}
-        run: composer require --no-update enqueue/enqueue 0.10.18
-
-      - name: Add asset mapper
-        if: ${{ matrix.php >= '8.0' }}
-        run: composer require --no-update symfony/asset-mapper
 
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
