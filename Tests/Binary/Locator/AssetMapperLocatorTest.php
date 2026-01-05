@@ -15,10 +15,10 @@ use Liip\ImagineBundle\Binary\Locator\AssetMapperLocator;
 use Liip\ImagineBundle\Binary\Locator\LocatorInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\AssetMapper\AssetMapperInterface;
-use Symfony\Component\AssetMapper\MappedAsset;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
+use Symfony\Component\AssetMapper\MappedAsset;
 
 /**
  * @covers \Liip\ImagineBundle\Binary\Locator\AssetMapperLocator

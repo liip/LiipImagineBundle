@@ -18,33 +18,33 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AssetMapperLoaderFactory extends AbstractLoaderFactory
 {
-	public function create(ContainerBuilder $container, $loaderName, array $config)
-	{
-		$locatorDefinition = new ChildDefinition('liip_imagine.binary.locator.asset_mapper');
-		$locatorDefinition->replaceArgument(0, new Reference('asset_mapper'));
-		$locatorDefinition->replaceArgument(1, new Reference('cache.asset_mapper'));
+    public function create(ContainerBuilder $container, $loaderName, array $config)
+    {
+        $locatorDefinition = new ChildDefinition('liip_imagine.binary.locator.asset_mapper');
+        $locatorDefinition->replaceArgument(0, new Reference('asset_mapper'));
+        $locatorDefinition->replaceArgument(1, new Reference('cache.asset_mapper'));
 
-		$definition = $this->getChildLoaderDefinition('filesystem');
+        $definition = $this->getChildLoaderDefinition('filesystem');
 
-		if ($container->hasDefinition('liip_imagine.mime_types')) {
-			$mimeTypes = $container->getDefinition('liip_imagine.mime_types');
-			$definition->replaceArgument(0, $mimeTypes);
-			$definition->replaceArgument(1, $mimeTypes);
-		}
-		$definition->replaceArgument(2, $locatorDefinition);
+        if ($container->hasDefinition('liip_imagine.mime_types')) {
+            $mimeTypes = $container->getDefinition('liip_imagine.mime_types');
+            $definition->replaceArgument(0, $mimeTypes);
+            $definition->replaceArgument(1, $mimeTypes);
+        }
+        $definition->replaceArgument(2, $locatorDefinition);
 
-		return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
-	}
+        return $this->setTaggedLoaderDefinition($loaderName, $definition, $container);
+    }
 
-	public function getName()
-	{
-		return 'asset_mapper';
-	}
+    public function getName()
+    {
+        return 'asset_mapper';
+    }
 
-	public function addConfiguration(ArrayNodeDefinition $builder)
-	{
-		$builder
-			->children()
-			->end();
-	}
+    public function addConfiguration(ArrayNodeDefinition $builder)
+    {
+        $builder
+            ->children()
+            ->end();
+    }
 }
