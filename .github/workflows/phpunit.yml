@@ -84,6 +84,10 @@ jobs:
           SYMFONY_DEPRECATIONS_HELPER: max[self]=0
         run: vendor/bin/simple-phpunit -v
 
+      - name: Add asset mapper
+        if: ${{ matrix.symfony >= '6.4' }}
+        run: composer require --no-update symfony/asset-mapper --dev
+
       - name: Install php-coveralls
         run: composer global require --no-interaction --no-progress php-coveralls/php-coveralls
 
