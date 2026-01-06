@@ -63,12 +63,20 @@ jobs:
         if:  matrix.symfony == '8.0.*'
         run: composer remove --no-update enqueue/enqueue-bundle --dev
 
+      - name: Add asset mapper
+        # asset mapper support is optional in LiipImagineBundle. asset mapper was only added in Symfony 6
+        if: ${{ matrix.symfony >= '6.4' }}
+        run: composer require --no-update symfony/asset-mapper --dev
+
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
         with:
           dependency-versions: ${{ matrix.dependencies }}
         env:
           SYMFONY_REQUIRE: "${{ matrix.symfony }}"
+
+      - name: Lint container
+        run: ./Tests/Functional/app/bin/console lint:container
 
       - name: Cache PHPUnit
         uses: actions/cache@v3
@@ -83,11 +91,6 @@ jobs:
         env:
           SYMFONY_DEPRECATIONS_HELPER: max[self]=0
         run: vendor/bin/simple-phpunit -v
-
-      - name: Add asset mapper
-        # asset mapper support is optional in LiipImagineBundle. asset mapper was only added in symfony 6
-        if: ${{ matrix.symfony >= '6.4' }}
-        run: composer require --no-update symfony/asset-mapper --dev
 
       - name: Install php-coveralls
         run: composer global require --no-interaction --no-progress php-coveralls/php-coveralls
