@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## 2.17.1
+
+- Fix for AssetMapperLoaderFactory to not fail when not configured ([dbu](https://github.com/liip/LiipImagineBundle/pull/1649))
+
 ## [2.17.0](https://github.com/liip/LiipImagineBundle/tree/2.17.0)
 
 - Add AssetMapperLocator to work with the asset mapper in development mode ([tito10047](https://github.com/liip/LiipImagineBundle/pull/1645))

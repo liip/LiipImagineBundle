@@ -431,12 +431,12 @@ return static function (ContainerConfigurator $container) {
         ])
         ->tag('liip_imagine.binary.locator', ['shared' => false]);
     $services->set('liip_imagine.binary.locator.asset_mapper', AssetMapperLocator::class)
-        ->share(true)
-        ->public()
+        ->abstract()
+        ->private()
         ->args([
             '', // will be injected by AssetMapperLoaderFactory
         ])
-        ->tag('liip_imagine.binary.locator', ['shared' => false]);
+        ->tag('liip_imagine.binary.locator', ['shared' => true]);
 
     $services->set('liip_imagine.binary.locator.filesystem_insecure', FileSystemInsecureLocator::class)
         ->share(false)
