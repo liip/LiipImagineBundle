@@ -38,13 +38,21 @@ final class FilterPathContainer
         $this->options = $options;
     }
 
+    /**
+     * @deprecated since 2.12, use createAlternative('webp', $options) instead.
+     */
     public function createWebp(array $options): self
+    {
+        return $this->createAlternative('webp', $options);
+    }
+
+    public function createAlternative(string $format, array $options): self
     {
         return new self(
             $this->source,
-            $this->target.'.webp',
+            $this->target.'.'.$format,
             [
-                'format' => 'webp',
+                'format' => $format,
             ] + $options + $this->options
         );
     }
