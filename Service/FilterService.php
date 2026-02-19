@@ -122,7 +122,7 @@ class FilterService
      *
      * @return string
      */
-    public function getUrlOfFilteredImage($path, $filter, $resolver = null, $webpSupported = false, array $alternativeFormatsSupported = [])
+    public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webpSupported = false, array $alternativeFormatsSupported = [])
     {
         if (true === $webpSupported && !\in_array('webp', $alternativeFormatsSupported, true)) {
             @trigger_error('The $webpSupported argument is deprecated since 2.12 and will be removed in 3.0. Use the $alternativeFormatsSupported argument instead.', E_USER_DEPRECATED);
@@ -149,7 +149,7 @@ class FilterService
         $filter,
         array $runtimeFilters = [],
         $resolver = null,
-        $webpSupported = false,
+		bool $webpSupported = false,
         array $alternativeFormatsSupported = []
     ) {
         if (false !== $webpSupported) {
