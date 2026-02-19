@@ -51,9 +51,9 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
     {
         $data = [
             [[], []],
-            [['quality' => 100], ['--min', 0, '--max', 0]],
-            [['quality' => 0], ['--min', 63, '--max', 63]],
-            [['quality' => 75], ['--min', 16, '--max', 16]],
+            [['quality' => 100], ['-q', 100]],
+            [['quality' => 0], ['-q', 0]],
+            [['quality' => 75], ['-q', 75]],
             [['speed' => 6], ['--speed', 6]],
             [['jobs' => 4], ['--jobs', 4]],
         ];
@@ -78,7 +78,7 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
         $file = 'stdio-file-content-string';
         $data = [
             [[], ''],
-            [['quality' => 100], '--min 0 --max 0'],
+            [['quality' => 100], '-q 100'],
             [['speed' => 6], '--speed 6'],
             [['jobs' => 4], '--jobs 4'],
         ];
@@ -127,6 +127,21 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
             ->willReturn('application/x-php');
 
         $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
+    }
+
+    public function testProcessFromJpeg(): void
+    {
+        $content = 'jpeg-content';
+        $file = sys_get_temp_dir().'/test.jpg';
+        file_put_contents($file, $content);
+
+        $process = $this->getPostProcessorInstance();
+        $result = $process->process(new FileBinary($file, 'image/jpeg', 'jpg'), []);
+
+        $this->assertSame('image/avif', $result->getMimeType());
+        $this->assertSame('avif', $result->getFormat());
+
+        @unlink($file);
     }
 
     protected function getPostProcessorInstance(array $parameters = []): AvifPostProcessor

@@ -57,15 +57,23 @@ class AvifPostProcessor extends AbstractPostProcessor
 
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        if (!$this->isBinaryTypeAvifImage($binary)) {
+        if (!$this->isBinaryTypeSupported($binary)) {
             return $binary;
         }
 
         $input = $this->writeTemporaryFile($binary, $options, 'imagine-post-processor-avif-input');
-        $output = $this->acquireTemporaryFilePath($options, 'imagine-post-processor-avif-output');
+        if (false === mb_strpos(basename($input), '.')) {
+            $inputWithExtension = $input.$this->getExtensionFromMimeType($binary->getMimeType());
+            if (rename($input, $inputWithExtension)) {
+                $input = $inputWithExtension;
+            }
+        }
+
+        $output = $this->acquireTemporaryFilePath($options, 'imagine-post-processor-avif-output').'.avif';
 
         $arguments = $this->getProcessArguments($options);
         $arguments[] = $input;
+        $arguments[] = '-o';
         $arguments[] = $output;
         $process = $this->createProcess($arguments, $options);
 
@@ -78,7 +86,7 @@ class AvifPostProcessor extends AbstractPostProcessor
             throw new ProcessFailedException($process);
         }
 
-        $result = new Binary(file_get_contents($output), $binary->getMimeType(), $binary->getFormat());
+        $result = new Binary(file_get_contents($output), 'image/avif', 'avif');
 
         unlink($input);
         unlink($output);
@@ -86,9 +94,24 @@ class AvifPostProcessor extends AbstractPostProcessor
         return $result;
     }
 
-    protected function isBinaryTypeAvifImage(BinaryInterface $binary): bool
+    private function getExtensionFromMimeType(string $mimeType): string
     {
-        return $this->isBinaryTypeMatch($binary, ['image/avif']);
+        switch ($mimeType) {
+            case 'image/jpeg':
+            case 'image/jpg':
+                return '.jpg';
+            case 'image/png':
+                return '.png';
+            case 'image/avif':
+                return '.avif';
+            default:
+                return '';
+        }
+    }
+
+    protected function isBinaryTypeSupported(BinaryInterface $binary): bool
+    {
+        return $this->isBinaryTypeMatch($binary, ['image/avif', 'image/jpeg', 'image/jpg', 'image/png']);
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
@@ -138,11 +161,8 @@ class AvifPostProcessor extends AbstractPostProcessor
         $arguments = [$this->executablePath];
 
         if (null !== $options['quality']) {
-            $q = 63 - (int) round($options['quality'] * 0.63);
-            $arguments[] = '--min';
-            $arguments[] = $q;
-            $arguments[] = '--max';
-            $arguments[] = $q;
+            $arguments[] = '-q';
+            $arguments[] = $options['quality'];
         }
 
         if (null !== $options['speed']) {

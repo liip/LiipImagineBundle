@@ -216,9 +216,9 @@ class LiipImagineExtensionTest extends AbstractTest
     {
         $this->createEmptyConfiguration();
 
-        $this->assertHasDefinition('liip_imagine.filter.post_processor.avif');
+        $this->assertHasDefinition('liip_imagine.filter.post_processor.avifenc');
         $this->assertDICConstructorArguments(
-            $this->containerBuilder->getDefinition('liip_imagine.filter.post_processor.avif'),
+            $this->containerBuilder->getDefinition('liip_imagine.filter.post_processor.avifenc'),
             [
                 '%liip_imagine.avif.binary%',
                 '%liip_imagine.avif.tempDir%',

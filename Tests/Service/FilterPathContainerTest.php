@@ -58,6 +58,16 @@ final class FilterPathContainerTest extends TestCase
             'images/cats.jpeg.avif',
         ];
 
+        yield 'avif with use_default_driver false' => [
+            'avif',
+            [],
+            [
+                'use_default_driver' => false,
+            ],
+            [],
+            'images/cats.jpeg.avif',
+        ];
+
         yield 'custom avif options' => [
             'avif',
             [],

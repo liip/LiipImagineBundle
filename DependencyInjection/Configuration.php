@@ -242,6 +242,7 @@ class Configuration implements ConfigurationInterface
                                 ->prototype('scalar')->end()
                             ->end()
                             ->integerNode('priority')->defaultNull()->end()
+                            ->booleanNode('use_default_driver')->defaultTrue()->end()
                         ->end()
                     ->end()
                 ->end()

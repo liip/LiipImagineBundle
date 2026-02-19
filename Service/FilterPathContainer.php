@@ -48,12 +48,18 @@ final class FilterPathContainer
 
     public function createAlternative(string $format, array $options): self
     {
+        $useDefaultDriver = $options['use_default_driver'] ?? true;
+        unset($options['use_default_driver']);
+
+        $finalOptions = $options + $this->options;
+        if ($useDefaultDriver) {
+            $finalOptions = ['format' => $format] + $finalOptions;
+        }
+
         return new self(
             $this->source,
             $this->target.'.'.$format,
-            [
-                'format' => $format,
-            ] + $options + $this->options
+            $finalOptions
         );
     }
 

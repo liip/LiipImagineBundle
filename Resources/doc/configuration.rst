@@ -131,6 +131,11 @@ There are several configuration options available:
               quality: 75
               mime_types: ['image/avif']
               priority: 1  # higher priority than WebP
+              use_default_driver: false
+              post_processors:
+                  avifenc:
+                      q: 80
+                      metadata: none
 
 * ``webp`` - **DEPRECATED** since 2.x, will be removed in 3.0. Use ``alternative_formats.webp`` instead.
   This configuration is automatically transformed to ``alternative_formats.webp``.
