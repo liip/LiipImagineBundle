@@ -162,6 +162,41 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
     }
 
+    public function testShouldResolveAvifFromCache(): void
+    {
+        $this->configureAlternativeFormats([
+            'avif' => [
+                'generate' => true,
+                'quality' => 75,
+                'mime_types' => ['image/avif'],
+            ],
+            'webp' => [
+                'generate' => true,
+                'quality' => 75,
+                'mime_types' => ['image/webp'],
+            ],
+        ]);
+
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
+            'anImageContent'
+        );
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.avif',
+            'anImageContentAvif'
+        );
+
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
+            'HTTP_ACCEPT' => 'image/avif,image/webp,*/*',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.avif', $response->getTargetUrl());
+    }
+
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
     {
         $this->expectException(BadRequestHttpException::class);

@@ -212,6 +212,23 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.format_negotiator'));
     }
 
+    public function testAvifPostProcessorDefinition(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('liip_imagine.filter.post_processor.avif');
+        $this->assertDICConstructorArguments(
+            $this->containerBuilder->getDefinition('liip_imagine.filter.post_processor.avif'),
+            [
+                '%liip_imagine.avif.binary%',
+                '%liip_imagine.avif.tempDir%',
+                '%liip_imagine.avif.quality%',
+                '%liip_imagine.avif.speed%',
+                '%liip_imagine.avif.jobs%',
+            ]
+        );
+    }
+
     public function testLoadWebpNormalization(): void
     {
         $this->createConfiguration([

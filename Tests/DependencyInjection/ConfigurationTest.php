@@ -532,6 +532,32 @@ class ConfigurationTest extends TestCase
         $this->assertArrayHasKey('jpegoptim', $config['alternative_formats']['webp']['post_processors']);
     }
 
+    public function testAlternativeFormatsMimeTypesDefaultNormalization(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            [[
+                'alternative_formats' => [
+                    'webp' => [
+                        'generate' => true,
+                    ],
+                    'avif' => [
+                        'generate' => true,
+                    ],
+                ],
+            ]]
+        );
+
+        $this->assertSame(['image/webp'], $config['alternative_formats']['webp']['mime_types']);
+        $this->assertSame(['image/avif'], $config['alternative_formats']['avif']['mime_types']);
+    }
+
     protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array
     {
         $processor = new Processor();

@@ -61,6 +61,18 @@ class Configuration implements ConfigurationInterface
                         unset($v['webp']);
                     }
 
+                    if (\is_array($v) && \array_key_exists('alternative_formats', $v)) {
+                        $defaults = [
+                            'webp' => ['image/webp'],
+                            'avif' => ['image/avif'],
+                        ];
+                        foreach ($v['alternative_formats'] as $format => &$config) {
+                            if (isset($defaults[$format]) && (empty($config['mime_types']) || !\is_array($config['mime_types']))) {
+                                $config['mime_types'] = $defaults[$format];
+                            }
+                        }
+                    }
+
                     return $v;
                 })
             ->end();
