@@ -19,6 +19,7 @@ use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
+use Liip\ImagineBundle\Service\FormatNegotiator;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,11 +48,23 @@ class ImagineController
      */
     private $controllerConfig;
 
+    /**
+     * @var FormatNegotiator
+     */
+    private $formatNegotiator;
+
+    /**
+     * @var array
+     */
+    private $alternativeFormats;
+
     public function __construct(
         FilterService $filterService,
         DataManager $dataManager,
         SignerInterface $signer,
-        ?ControllerConfig $controllerConfig = null
+        ?ControllerConfig $controllerConfig = null,
+        ?FormatNegotiator $formatNegotiator = null,
+        array $alternativeFormats = []
     ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
@@ -64,6 +77,8 @@ class ImagineController
         }
 
         $this->controllerConfig = $controllerConfig ?? new ControllerConfig(301);
+        $this->formatNegotiator = $formatNegotiator;
+        $this->alternativeFormats = $alternativeFormats;
     }
 
     /**
@@ -92,7 +107,8 @@ class ImagineController
                 $path,
                 $filter,
                 $resolver,
-                $this->isWebpSupported($request)
+                false,
+                $this->getAlternativeFormats($request)
             );
         }, $path, $filter);
     }
@@ -130,7 +146,8 @@ class ImagineController
                 $filter,
                 $runtimeConfig,
                 $resolver,
-                $this->isWebpSupported($request)
+                false,
+                $this->getAlternativeFormats($request)
             );
         }, $path, $filter, $hash);
     }
@@ -163,8 +180,24 @@ class ImagineController
         }
     }
 
+    private function getAlternativeFormats(Request $request): array
+    {
+        if (null === $this->formatNegotiator) {
+            return $this->isWebpSupported($request) ? ['webp'] : [];
+        }
+
+        return $this->formatNegotiator->negotiate($request, $this->alternativeFormats);
+    }
+
+    /**
+     * @deprecated since 2.12, use FormatNegotiator instead.
+     */
     private function isWebpSupported(Request $request): bool
     {
+        if (null !== $this->formatNegotiator) {
+            return $this->formatNegotiator->isFormatAccepted('webp', $request);
+        }
+
         return false !== mb_stripos($request->headers->get('accept', ''), 'image/webp');
     }
 }
