@@ -42,29 +42,32 @@ class FilterService
     private $logger;
 
     /**
-     * @var bool
+     * @var array
      */
-    private $webpGenerate;
+    private $alternativeFormats;
 
     /**
-     * @var mixed[]
+     * @param array|bool $alternativeFormats (previously webpGenerate)
      */
-    private $webpOptions;
-
     public function __construct(
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
-        bool $webpGenerate = false,
+        $alternativeFormats = [],
         array $webpOptions = [],
         ?LoggerInterface $logger = null
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
-        $this->webpGenerate = $webpGenerate;
-        $this->webpOptions = $webpOptions;
         $this->logger = $logger ?: new NullLogger();
+
+        if (\is_bool($alternativeFormats)) {
+            @trigger_error('Passing a boolean as the 4th argument to '.__METHOD__.' is deprecated since 2.12 and will be removed in 3.0. Pass an array of alternative formats instead.', E_USER_DEPRECATED);
+            $this->alternativeFormats = ['webp' => array_merge(['generate' => $alternativeFormats], $webpOptions)];
+        } else {
+            $this->alternativeFormats = $alternativeFormats;
+        }
     }
 
     /**
@@ -114,22 +117,31 @@ class FilterService
      * @param string      $path
      * @param string      $filter
      * @param string|null $resolver
+     * @param bool        $webpSupported
+     * @param array       $alternativeFormatsSupported
      *
      * @return string
      */
-    public function getUrlOfFilteredImage($path, $filter, $resolver = null, bool $webpSupported = false)
+    public function getUrlOfFilteredImage($path, $filter, $resolver = null, $webpSupported = false, array $alternativeFormatsSupported = [])
     {
+        if (true === $webpSupported && !\in_array('webp', $alternativeFormatsSupported, true)) {
+             @trigger_error('The $webpSupported argument is deprecated since 2.12 and will be removed in 3.0. Use the $alternativeFormatsSupported argument instead.', E_USER_DEPRECATED);
+             $alternativeFormatsSupported[] = 'webp';
+        }
+
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
             $this->warmUpCacheFilterPathContainer($filterPathContainer, $filter, $resolver);
         }
 
-        return $this->resolveFilterPathContainer(new FilterPathContainer($path), $filter, $resolver, $webpSupported);
+        return $this->resolveFilterPathContainer(new FilterPathContainer($path), $filter, $resolver, $alternativeFormatsSupported);
     }
 
     /**
      * @param string      $path
      * @param string      $filter
      * @param string|null $resolver
+     * @param bool        $webpSupported
+     * @param array       $alternativeFormatsSupported
      *
      * @return string
      */
@@ -138,8 +150,16 @@ class FilterService
         $filter,
         array $runtimeFilters = [],
         $resolver = null,
-        bool $webpSupported = false
+        $webpSupported = false,
+        array $alternativeFormatsSupported = []
     ) {
+        if (false !== $webpSupported) {
+            @trigger_error('The $webpSupported argument is deprecated since 2.12 and will be removed in 3.0. Use the $alternativeFormatsSupported argument instead.', E_USER_DEPRECATED);
+            if (!\in_array('webp', $alternativeFormatsSupported, true)) {
+                $alternativeFormatsSupported[] = 'webp';
+            }
+        }
+
         $runtimePath = $this->cacheManager->getRuntimePath($path, $runtimeFilters);
         $runtimeOptions = [
             'filters' => $runtimeFilters,
@@ -153,7 +173,7 @@ class FilterService
             new FilterPathContainer($path, $runtimePath, $runtimeOptions),
             $filter,
             $resolver,
-            $webpSupported
+            $alternativeFormatsSupported
         );
     }
 
@@ -167,8 +187,12 @@ class FilterService
         $basePathContainer = new FilterPathContainer($source, $target, $options);
         $filterPathContainers = [$basePathContainer];
 
-        if ($this->webpGenerate) {
-            $filterPathContainers[] = $basePathContainer->createWebp($this->webpOptions);
+        foreach ($this->alternativeFormats as $format => $formatOptions) {
+            if (isset($formatOptions['generate']) && $formatOptions['generate']) {
+                $cleanOptions = $formatOptions;
+                unset($cleanOptions['generate']);
+                $filterPathContainers[] = $basePathContainer->createAlternative($format, $cleanOptions);
+            }
         }
 
         return $filterPathContainers;
@@ -178,15 +202,17 @@ class FilterService
         FilterPathContainer $filterPathContainer,
         string $filter,
         ?string $resolver = null,
-        bool $webpSupported = false
+        array $clientSupportedFormats = []
     ): string {
-        $path = $filterPathContainer->getTarget();
-
-        if ($this->webpGenerate && $webpSupported) {
-            $path = $filterPathContainer->createWebp($this->webpOptions)->getTarget();
+        foreach ($this->alternativeFormats as $format => $formatOptions) {
+            if (isset($formatOptions['generate']) && $formatOptions['generate'] && \in_array($format, $clientSupportedFormats, true)) {
+                $cleanOptions = $formatOptions;
+                unset($cleanOptions['generate']);
+                return $this->cacheManager->resolve($filterPathContainer->createAlternative($format, $cleanOptions)->getTarget(), $filter, $resolver);
+            }
         }
 
-        return $this->cacheManager->resolve($path, $filter, $resolver);
+        return $this->cacheManager->resolve($filterPathContainer->getTarget(), $filter, $resolver);
     }
 
     /**
