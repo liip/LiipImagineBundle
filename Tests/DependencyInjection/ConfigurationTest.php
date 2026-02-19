@@ -440,17 +440,8 @@ class ConfigurationTest extends TestCase
             []
         );
 
-        $this->assertArrayHasKey('webp', $config);
-        $this->assertArrayHasKey('generate', $config['webp']);
-        $this->assertFalse($config['webp']['generate']);
-        $this->assertArrayHasKey('quality', $config['webp']);
-        $this->assertSame(100, $config['webp']['quality']);
-        $this->assertArrayHasKey('cache', $config['webp']);
-        $this->assertNull($config['webp']['cache']);
-        $this->assertArrayHasKey('data_loader', $config['webp']);
-        $this->assertNull($config['webp']['data_loader']);
-        $this->assertArrayHasKey('post_processors', $config['webp']);
-        $this->assertSame([], $config['webp']['post_processors']);
+        $this->assertArrayHasKey('alternative_formats', $config);
+        $this->assertArrayNotHasKey('webp', $config);
     }
 
     public function testWebpEnableGenerate(): void
@@ -470,9 +461,75 @@ class ConfigurationTest extends TestCase
             ]]
         );
 
-        $this->assertArrayHasKey('webp', $config);
-        $this->assertArrayHasKey('generate', $config['webp']);
-        $this->assertTrue($config['webp']['generate']);
+        $this->assertArrayNotHasKey('webp', $config);
+        $this->assertArrayHasKey('alternative_formats', $config);
+        $this->assertArrayHasKey('webp', $config['alternative_formats']);
+        $this->assertTrue($config['alternative_formats']['webp']['generate']);
+    }
+
+    public function testAlternativeFormatsSection(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            [[
+                'alternative_formats' => [
+                    'webp' => [
+                        'generate' => true,
+                        'quality' => 80,
+                    ],
+                    'avif' => [
+                        'generate' => false,
+                        'mime_types' => ['image/avif'],
+                        'priority' => 10,
+                    ],
+                ],
+            ]]
+        );
+
+        $this->assertArrayHasKey('alternative_formats', $config);
+        $this->assertArrayHasKey('webp', $config['alternative_formats']);
+        $this->assertTrue($config['alternative_formats']['webp']['generate']);
+        $this->assertSame(80, $config['alternative_formats']['webp']['quality']);
+
+        $this->assertArrayHasKey('avif', $config['alternative_formats']);
+        $this->assertFalse($config['alternative_formats']['avif']['generate']);
+        $this->assertSame(['image/avif'], $config['alternative_formats']['avif']['mime_types']);
+        $this->assertSame(10, $config['alternative_formats']['avif']['priority']);
+    }
+
+    public function testWebpNormalization(): void
+    {
+        $config = $this->processConfiguration(
+            new Configuration(
+                [
+                    new WebPathResolverFactory(),
+                ], [
+                    new FileSystemLoaderFactory(),
+                ]
+            ),
+            [[
+                'webp' => [
+                    'generate' => true,
+                    'quality' => 90,
+                    'post_processors' => [
+                        'jpegoptim' => ['strip_all' => true],
+                    ],
+                ],
+            ]]
+        );
+
+        $this->assertArrayNotHasKey('webp', $config);
+        $this->assertArrayHasKey('alternative_formats', $config);
+        $this->assertArrayHasKey('webp', $config['alternative_formats']);
+        $this->assertTrue($config['alternative_formats']['webp']['generate']);
+        $this->assertSame(90, $config['alternative_formats']['webp']['quality']);
+        $this->assertArrayHasKey('jpegoptim', $config['alternative_formats']['webp']['post_processors']);
     }
 
     protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array

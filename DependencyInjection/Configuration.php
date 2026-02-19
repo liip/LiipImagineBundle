@@ -48,6 +48,23 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('liip_imagine');
         $rootNode = $treeBuilder->getRootNode();
 
+        $rootNode
+            ->beforeNormalization()
+                ->always(function ($v) {
+                    if (\is_array($v) && \array_key_exists('webp', $v)) {
+                        if (!\array_key_exists('alternative_formats', $v)) {
+                            $v['alternative_formats'] = [];
+                        }
+                        if (!\array_key_exists('webp', $v['alternative_formats'])) {
+                            $v['alternative_formats']['webp'] = $v['webp'];
+                        }
+                        unset($v['webp']);
+                    }
+
+                    return $v;
+                })
+            ->end();
+
         $resolversPrototypeNode = $rootNode
             ->children()
                 ->arrayNode('resolvers')
@@ -195,8 +212,28 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-            ->arrayNode('twig')
+                ->end()
+                ->arrayNode('alternative_formats')
+                    ->useAttributeAsKey('format')
+                    ->prototype('array')
+                        ->children()
+                            ->booleanNode('generate')->defaultFalse()->end()
+                            ->integerNode('quality')->defaultValue(100)->end()
+                            ->scalarNode('cache')->defaultNull()->end()
+                            ->scalarNode('data_loader')->defaultNull()->end()
+                            ->arrayNode('post_processors')
+                                ->defaultValue([])
+                                ->useAttributeAsKey('name')
+                                ->prototype('variable')->end()
+                            ->end()
+                            ->arrayNode('mime_types')
+                                ->prototype('scalar')->end()
+                            ->end()
+                            ->integerNode('priority')->defaultNull()->end()
+                        ->end()
+                    ->end()
+                ->end()
+        ->arrayNode('twig')
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->enumNode('mode')
@@ -242,7 +279,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('webp')
-                    ->addDefaultsIfNotSet()
+                    ->setDeprecated('liip/imagine-bundle', '2.x', 'The "webp" option is deprecated and will be removed in 3.0. Use "alternative_formats" instead.')
                     ->children()
                         ->booleanNode('generate')->defaultFalse()->end()
                         ->integerNode('quality')->defaultValue(100)->end()

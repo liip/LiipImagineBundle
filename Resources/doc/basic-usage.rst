@@ -235,11 +235,12 @@ In a controller, this can look as follows:
         }
     }
 
-WebP image format
------------------
+Modern image formats (WebP, AVIF)
+----------------------------------
 
-The WebP format better optimizes the quality and size of the compressed image
-compared to JPEG and PNG. Google strongly recommends using this format.
+Modern image formats like WebP and AVIF better optimize the quality and size of
+the compressed image compared to JPEG and PNG. These formats are strongly
+recommended for better performance.
 
 WebP for all
 ~~~~~~~~~~~~
@@ -255,14 +256,14 @@ can configure the generation of all images in the WebP format.
         default_filter_set_settings:
             format: webp
 
-Use WebP if supported
-~~~~~~~~~~~~~~~~~~~~~
+Use modern formats if supported (recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-However, not all `browsers support the WebP format`_, and for compatibility with
+However, not all browsers support modern formats, and for compatibility with
 all browsers it is recommended to return images in their original format for
-those browsers that do not support WebP. This means that you need to store 2
-versions of the image. One in WebP format and the other in original format.
-**Remember that this almost doubles the amount of used space on the server for
+those browsers that do not support them. The bundle automatically generates
+multiple versions of images based on browser support (using ``Accept`` header).
+**Remember that this increases the amount of used space on the server for
 storing filtered images.**
 
 .. code-block:: yaml
@@ -270,9 +271,15 @@ storing filtered images.**
     # app/config/config.yml
 
     liip_imagine:
-        # configure webp
-        webp:
-            generate: true
+        # configure alternative formats
+        alternative_formats:
+            webp:
+                generate: true
+                quality: 80
+            avif:
+                generate: true
+                quality: 75
+                priority: 1  # AVIF has higher priority than WebP
 
         # example filter
         filter_sets:
@@ -280,9 +287,28 @@ storing filtered images.**
                 filters:
                     thumbnail: { size: [223, 223], mode: inset }
 
-If browser supports WebP, the request ``https://localhost/media/cache/resolve/thumbnail_web_path/images/cats.jpeg``
-will be redirected to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.webp``
-otherwise to ``https://localhost/media/cache/thumbnail_web_path/images/cats.jpeg``
+With this configuration:
+
+- If browser supports AVIF, the request will be redirected to ``images/cats.jpeg.avif``
+- If browser supports WebP (but not AVIF), redirect to ``images/cats.jpeg.webp``
+- Otherwise, redirect to ``images/cats.jpeg`` (original format)
+
+The bundle automatically detects browser support from the ``Accept`` header.
+
+Legacy WebP configuration (deprecated)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+    The ``webp`` configuration is deprecated since 2.x and will be removed in 3.0.
+    Use ``alternative_formats.webp`` instead (see above).
+
+.. code-block:: yaml
+
+    # DEPRECATED - use alternative_formats instead
+    liip_imagine:
+        webp:
+            generate: true
 
 Optimize Firewall Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -307,7 +333,7 @@ following code snippet:
 
     Using an unsecured connection (non HTTPS) on your site can cause problems with
     caching the resolved paths for users, which can lead to the fact that users
-    whose browser does not support WebP will serve a picture in WebP format.
+    whose browser does not support modern formats will be served a picture in that format.
     You can fix this problem by changing the redirect code from 301 *(Moved
     Permanently)* to 302 *(Moved Temporarily)*.
 
@@ -322,10 +348,9 @@ following code snippet:
 Client side resolving
 ~~~~~~~~~~~~~~~~~~~~~
 
-For better performance, you can use the ``<picture>`` tag to resolve a supported
-image formats on client-side in the browser. This will complicate the HTML code
-and require registering two identical filters that generate images in different
-formats.
+For better performance, you can use the ``<picture>`` tag to resolve supported
+image formats on the client-side in the browser. This will complicate the HTML code
+and require registering multiple filters that generate images in different formats.
 
 .. code-block:: yaml
 
@@ -343,10 +368,16 @@ formats.
                 quality: 100
                 filters:
                     thumbnail: { size: [223, 223], mode: inset }
+            my_thumb_avif:
+                format: avif
+                quality: 75
+                filters:
+                    thumbnail: { size: [223, 223], mode: inset }
 
 .. code-block:: html
 
     <picture>
+      <source srcset="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_avif') }}" type="image/avif">
       <source srcset="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_webp') }}" type="image/webp">
       <source srcset="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_jpeg') }}" type="image/jpeg">
       <img src="{{ '/relative/path/to/image.jpg' | imagine_filter('my_thumb_jpeg') }}" alt="Alt Text!">
