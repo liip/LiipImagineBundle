@@ -243,7 +243,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.cache.signer'),
             service('event_dispatcher'),
             '%liip_imagine.cache.resolver.default%',
-            '%liip_imagine.webp.generate%',
+            '%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias(CacheManager::class, 'liip_imagine.cache.manager');
@@ -256,8 +256,8 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.filter.manager'),
             service('liip_imagine.cache.manager'),
-            '%liip_imagine.webp.generate%',
-            '%liip_imagine.webp.options%',
+            '%liip_imagine.alternative_formats%',
+            [],
             service('logger')->ignoreOnInvalid(),
         ]);
 

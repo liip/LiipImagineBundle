@@ -1,41 +1,28 @@
 parameters:
-
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
-
 services:
     logger:
         class: \Psr\Log\NullLogger
-
 framework:
-
     secret:         "%secret%"
     default_locale: "%locale%"
     test:           ~
-
     router:
         resource: "%kernel.project_dir%/config/routing.yml"
-
 liip_imagine:
-
     controller:
-
         redirect_response_code: 302
-
     loaders:
-
         default:
             filesystem:
                 data_root: "%kernel.project_dir%/public"
-
         foo:
             filesystem:
                 data_root: "%kernel.project_dir%/../../Fixtures/FileSystemLocator/root-01"
-
         bar:
             filesystem:
                 data_root: "%kernel.project_dir%/../../Fixtures/FileSystemLocator/root-02"
-
         baz:
             chain:
                 loaders:
@@ -43,13 +30,11 @@ liip_imagine:
                     - bar
                     - default
                     - bundles_all
-
         bundles_all:
             filesystem:
                 data_root: ~
                 bundle_resources:
                     enabled: true
-
         bundles_only_foo:
             filesystem:
                 data_root: ~
@@ -57,7 +42,6 @@ liip_imagine:
                     enabled:             true
                     access_control_type: blacklist
                     access_control_list: [ 'LiipBarBundle' ]
-
         bundles_only_bar:
             filesystem:
                 data_root: ~
@@ -65,20 +49,15 @@ liip_imagine:
                     enabled:             true
                     access_control_type: whitelist
                     access_control_list: [ 'LiipBarBundle' ]
-
     resolvers:
-
         default:
             web_path:
                 web_root:     "%kernel.project_dir%/public"
                 cache_prefix: media/cache
-
     filter_sets:
-
         thumbnail_web_path:
             filters:
                 thumbnail: { size: [223, 223], mode: inset }
-
         thumbnail_default:
             filters:
                 thumbnail: { size: [223, 223], mode: inset }
