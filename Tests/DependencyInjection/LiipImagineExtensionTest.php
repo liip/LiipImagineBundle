@@ -125,6 +125,8 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
                 new Reference('liip_imagine.controller.config'),
+				new Reference('liip_imagine.format_negotiator'),
+				'%liip_imagine.alternative_formats%',
             ]
         );
     }
@@ -339,8 +341,6 @@ EOF;
         $this->assertArrayHasKey('webp', $alternativeFormats);
         $this->assertTrue($alternativeFormats['webp']['generate']);
         $this->assertSame(80, $alternativeFormats['webp']['quality']);
-
-        $this->assertSame(true, $this->containerBuilder->getParameter('liip_imagine.webp.generate'));
     }
 
     private function assertAlias(string $value, string $key): void

@@ -173,9 +173,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         ]);
         $container->setDefinition('liip_imagine.format_negotiator', $formatNegotiatorDefinition);
 
-        $container->getDefinition('liip_imagine.controller')
-            ->replaceArgument(4, new Reference('liip_imagine.format_negotiator'))
-            ->replaceArgument(5, $alternativeFormats);
+		$container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
 
         $container->getDefinition('liip_imagine.service.filter')
             ->replaceArgument(3, $alternativeFormats);
