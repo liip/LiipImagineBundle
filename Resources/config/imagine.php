@@ -256,9 +256,10 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.filter.manager'),
             service('liip_imagine.cache.manager'),
-            '%liip_imagine.alternative_formats%',
+			false,
             [],
             service('logger')->ignoreOnInvalid(),
+			'%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias(FilterService::class, 'liip_imagine.service.filter');

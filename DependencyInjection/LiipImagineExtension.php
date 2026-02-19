@@ -176,7 +176,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
 
         $container->getDefinition('liip_imagine.service.filter')
-            ->replaceArgument(3, $alternativeFormats);
+            ->replaceArgument(6, $alternativeFormats);
     }
 
     public function prepend(ContainerBuilder $container): void

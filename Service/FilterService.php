@@ -53,20 +53,21 @@ class FilterService
         DataManager $dataManager,
         FilterManager $filterManager,
         CacheManager $cacheManager,
-        $alternativeFormats = [],
+		bool $webpGenerate = false,
         array $webpOptions = [],
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+		$alternativeFormats = [],
     ) {
         $this->dataManager = $dataManager;
         $this->filterManager = $filterManager;
         $this->cacheManager = $cacheManager;
         $this->logger = $logger ?: new NullLogger();
 
-        if (\is_bool($alternativeFormats)) {
+        if ($webpGenerate!==false) {
             @trigger_error('Passing a boolean as the 4th argument to '.__METHOD__.' is deprecated since 2.12 and will be removed in 3.0. Pass an array of alternative formats instead.', E_USER_DEPRECATED);
-            $this->alternativeFormats = ['webp' => array_merge(['generate' => $alternativeFormats], $webpOptions)];
+            $this->alternativeFormats = ['webp' => array_merge(['generate' => $webpGenerate], $webpOptions)];
         } else {
-            $this->alternativeFormats = $alternativeFormats;
+            $this->alternativeFormats = (array) $alternativeFormats;
         }
     }
 
