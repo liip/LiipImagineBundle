@@ -102,6 +102,7 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
         $result = $process->process(new FileBinary($file, 'image/avif', 'avif'), $options);
 
         $this->assertStringContainsString($expected, $result->getContent());
+        $this->assertStringContainsString('argument-list:', $result->getContent());
 
         @unlink($file);
     }

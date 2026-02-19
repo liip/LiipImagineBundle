@@ -73,7 +73,6 @@ class AvifPostProcessor extends AbstractPostProcessor
 
         $arguments = $this->getProcessArguments($options);
         $arguments[] = $input;
-        $arguments[] = '-o';
         $arguments[] = $output;
         $process = $this->createProcess($arguments, $options);
 
