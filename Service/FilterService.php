@@ -118,15 +118,14 @@ class FilterService
      * @param string      $filter
      * @param string|null $resolver
      * @param bool        $webpSupported
-     * @param array       $alternativeFormatsSupported
      *
      * @return string
      */
     public function getUrlOfFilteredImage($path, $filter, $resolver = null, $webpSupported = false, array $alternativeFormatsSupported = [])
     {
         if (true === $webpSupported && !\in_array('webp', $alternativeFormatsSupported, true)) {
-             @trigger_error('The $webpSupported argument is deprecated since 2.12 and will be removed in 3.0. Use the $alternativeFormatsSupported argument instead.', E_USER_DEPRECATED);
-             $alternativeFormatsSupported[] = 'webp';
+            @trigger_error('The $webpSupported argument is deprecated since 2.12 and will be removed in 3.0. Use the $alternativeFormatsSupported argument instead.', E_USER_DEPRECATED);
+            $alternativeFormatsSupported[] = 'webp';
         }
 
         foreach ($this->buildFilterPathContainers($path) as $filterPathContainer) {
@@ -141,7 +140,6 @@ class FilterService
      * @param string      $filter
      * @param string|null $resolver
      * @param bool        $webpSupported
-     * @param array       $alternativeFormatsSupported
      *
      * @return string
      */
@@ -208,6 +206,7 @@ class FilterService
             if (isset($formatOptions['generate']) && $formatOptions['generate'] && \in_array($format, $clientSupportedFormats, true)) {
                 $cleanOptions = $formatOptions;
                 unset($cleanOptions['generate']);
+
                 return $this->cacheManager->resolve($filterPathContainer->createAlternative($format, $cleanOptions)->getTarget(), $filter, $resolver);
             }
         }

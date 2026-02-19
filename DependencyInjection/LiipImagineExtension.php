@@ -24,11 +24,11 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
@@ -173,7 +173,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         ]);
         $container->setDefinition('liip_imagine.format_negotiator', $formatNegotiatorDefinition);
 
-		$container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
+        $container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
 
         $container->getDefinition('liip_imagine.service.filter')
             ->replaceArgument(3, $alternativeFormats);

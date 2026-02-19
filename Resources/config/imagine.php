@@ -276,8 +276,8 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.cache.signer'),
             service('liip_imagine.controller.config'),
-			service('liip_imagine.format_negotiator'),
-			'%liip_imagine.alternative_formats%',
+            service('liip_imagine.format_negotiator'),
+            '%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias('liip_imagine.controller', ImagineController::class)

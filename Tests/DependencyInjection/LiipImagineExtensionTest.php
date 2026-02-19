@@ -125,8 +125,8 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
                 new Reference('liip_imagine.controller.config'),
-				new Reference('liip_imagine.format_negotiator'),
-				'%liip_imagine.alternative_formats%',
+                new Reference('liip_imagine.format_negotiator'),
+                '%liip_imagine.alternative_formats%',
             ]
         );
     }
@@ -186,6 +186,45 @@ class LiipImagineExtensionTest extends AbstractTest
             'templating' => false,
         ]);
         $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testLoadAlternativeFormats(): void
+    {
+        $this->createConfiguration([
+            'alternative_formats' => [
+                'avif' => [
+                    'generate' => true,
+                    'quality' => 85,
+                    'mime_types' => ['image/avif'],
+                ],
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('avif', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['avif']['generate']);
+        $this->assertSame(85, $alternativeFormats['avif']['quality']);
+        $this->assertSame(['image/avif'], $alternativeFormats['avif']['mime_types']);
+
+        $mimeMap = $this->containerBuilder->getParameter('liip_imagine.format_negotiator.mime_map');
+        $this->assertSame(['avif' => ['image/avif']], $mimeMap);
+
+        $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.format_negotiator'));
+    }
+
+    public function testLoadWebpNormalization(): void
+    {
+        $this->createConfiguration([
+            'webp' => [
+                'generate' => true,
+                'quality' => 80,
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('webp', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['webp']['generate']);
+        $this->assertSame(80, $alternativeFormats['webp']['quality']);
     }
 
     protected function createConfigurationWithDefaultsFilterSets(): void
@@ -302,45 +341,6 @@ EOF;
         $parser = new Parser();
 
         return $parser->parse($yaml);
-    }
-
-    public function testLoadAlternativeFormats(): void
-    {
-        $this->createConfiguration([
-            'alternative_formats' => [
-                'avif' => [
-                    'generate' => true,
-                    'quality' => 85,
-                    'mime_types' => ['image/avif'],
-                ],
-            ],
-        ]);
-
-        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
-        $this->assertArrayHasKey('avif', $alternativeFormats);
-        $this->assertTrue($alternativeFormats['avif']['generate']);
-        $this->assertSame(85, $alternativeFormats['avif']['quality']);
-        $this->assertSame(['image/avif'], $alternativeFormats['avif']['mime_types']);
-
-        $mimeMap = $this->containerBuilder->getParameter('liip_imagine.format_negotiator.mime_map');
-        $this->assertSame(['avif' => ['image/avif']], $mimeMap);
-        
-        $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.format_negotiator'));
-    }
-
-    public function testLoadWebpNormalization(): void
-    {
-        $this->createConfiguration([
-            'webp' => [
-                'generate' => true,
-                'quality' => 80,
-            ],
-        ]);
-
-        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
-        $this->assertArrayHasKey('webp', $alternativeFormats);
-        $this->assertTrue($alternativeFormats['webp']['generate']);
-        $this->assertSame(80, $alternativeFormats['webp']['quality']);
     }
 
     private function assertAlias(string $value, string $key): void

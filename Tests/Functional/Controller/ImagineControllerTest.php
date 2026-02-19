@@ -46,46 +46,6 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         }
     }
 
-    private function configureAlternativeFormats(array $formats): void
-    {
-        $container = $this->client->getContainer();
-        $services = [
-            'liip_imagine.service.filter',
-            'liip_imagine.cache.manager',
-            ImagineController::class,
-        ];
-
-        foreach ($services as $serviceId) {
-            if ($container->has($serviceId)) {
-                $service = $container->get($serviceId);
-                $this->setPrivateProperty($service, 'alternativeFormats', $formats);
-            }
-        }
-
-        if ($container->has('liip_imagine.format_negotiator')) {
-            $formatNegotiator = $container->get('liip_imagine.format_negotiator');
-            foreach ($formats as $format => $config) {
-                if (isset($config['mime_types'])) {
-                    $formatNegotiator->registerMimeTypes($format, $config['mime_types']);
-                }
-            }
-        }
-    }
-
-    private function setPrivateProperty($object, string $propertyName, $value): void
-    {
-        $reflection = new \ReflectionClass($object);
-        while (!$reflection->hasProperty($propertyName)) {
-            $reflection = $reflection->getParentClass();
-            if (!$reflection) {
-                return;
-            }
-        }
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
-    }
-
     public function testCouldBeGetFromContainer(): void
     {
         $this->assertInstanceOf(ImagineController::class, self::$kernel->getContainer()->get(ImagineController::class));
@@ -389,5 +349,45 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
         }
+    }
+
+    private function configureAlternativeFormats(array $formats): void
+    {
+        $container = $this->client->getContainer();
+        $services = [
+            'liip_imagine.service.filter',
+            'liip_imagine.cache.manager',
+            ImagineController::class,
+        ];
+
+        foreach ($services as $serviceId) {
+            if ($container->has($serviceId)) {
+                $service = $container->get($serviceId);
+                $this->setPrivateProperty($service, 'alternativeFormats', $formats);
+            }
+        }
+
+        if ($container->has('liip_imagine.format_negotiator')) {
+            $formatNegotiator = $container->get('liip_imagine.format_negotiator');
+            foreach ($formats as $format => $config) {
+                if (isset($config['mime_types'])) {
+                    $formatNegotiator->registerMimeTypes($format, $config['mime_types']);
+                }
+            }
+        }
+    }
+
+    private function setPrivateProperty($object, string $propertyName, $value): void
+    {
+        $reflection = new \ReflectionClass($object);
+        while (!$reflection->hasProperty($propertyName)) {
+            $reflection = $reflection->getParentClass();
+            if (!$reflection) {
+                return;
+            }
+        }
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
     }
 }

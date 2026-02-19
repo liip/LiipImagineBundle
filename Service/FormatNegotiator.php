@@ -1,11 +1,11 @@
 <?php
 
 /*
- * This file is part of the `liip/imagine-bundle` project.
+ * This file is part of the `liip/LiipImagineBundle` project.
  *
- * (c) Lukas Kahwe Smith <smith@pooteeweet.org>
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
@@ -35,8 +35,7 @@ class FormatNegotiator
     /**
      * Negotiate the best format based on the Request's Accept header and configured alternative formats.
      *
-     * @param Request $request
-     * @param array   $configuredAlternativeFormats Configuration from alternative_formats
+     * @param array $configuredAlternativeFormats Configuration from alternative_formats
      *
      * @return string[] Sorted array of format names (e.g., ['avif', 'webp'])
      */
@@ -90,7 +89,7 @@ class FormatNegotiator
         $acceptHeader = $request->headers->get('Accept', '');
 
         foreach ($mimeTypes as $mimeType) {
-            if (preg_match('#' . preg_quote($mimeType, '#') . '(;q=([0-9\.]+))?#', $acceptHeader, $matches)) {
+            if (preg_match('#'.preg_quote($mimeType, '#').'(;q=([0-9\.]+))?#', $acceptHeader, $matches)) {
                 $q = isset($matches[2]) ? (float) $matches[2] : 1.0;
                 if ($q > 0) {
                     return true;
@@ -99,27 +98,6 @@ class FormatNegotiator
         }
 
         return false;
-    }
-
-    /**
-     * Get the max q-factor for a given format from the Accept header.
-     */
-    private function getMaxQForFormat(string $format, Request $request): float
-    {
-        $mimeTypes = $this->getMimeTypesForFormat($format);
-        $acceptHeader = $request->headers->get('Accept', '');
-        $maxQ = 0.0;
-
-        foreach ($mimeTypes as $mimeType) {
-            if (preg_match('#' . preg_quote($mimeType, '#') . '(;q=([0-9\.]+))?#', $acceptHeader, $matches)) {
-                $q = isset($matches[2]) ? (float) $matches[2] : 1.0;
-                if ($q > $maxQ) {
-                    $maxQ = $q;
-                }
-            }
-        }
-
-        return $maxQ;
     }
 
     /**
@@ -139,12 +117,12 @@ class FormatNegotiator
             $subParts = explode(';', trim($part));
             $mimeType = trim($subParts[0]);
             $q = 1.0;
-            if (isset($subParts[1]) && strpos(trim($subParts[1]), 'q=') === 0) {
-                $q = (float) substr(trim($subParts[1]), 2);
+            if (isset($subParts[1]) && str_starts_with(trim($subParts[1]), 'q=')) {
+                $q = (float) mb_substr(trim($subParts[1]), 2);
             }
 
             foreach ($this->mimeMap as $format => $mimes) {
-                if (in_array($mimeType, (array) $mimes)) {
+                if (\in_array($mimeType, (array) $mimes, true)) {
                     $accepted[$format] = max($accepted[$format] ?? 0, $q);
                 }
             }
@@ -158,6 +136,27 @@ class FormatNegotiator
     public function registerMimeTypes(string $format, array $mimeTypes): void
     {
         $this->mimeMap[$format] = $mimeTypes;
+    }
+
+    /**
+     * Get the max q-factor for a given format from the Accept header.
+     */
+    private function getMaxQForFormat(string $format, Request $request): float
+    {
+        $mimeTypes = $this->getMimeTypesForFormat($format);
+        $acceptHeader = $request->headers->get('Accept', '');
+        $maxQ = 0.0;
+
+        foreach ($mimeTypes as $mimeType) {
+            if (preg_match('#'.preg_quote($mimeType, '#').'(;q=([0-9\.]+))?#', $acceptHeader, $matches)) {
+                $q = isset($matches[2]) ? (float) $matches[2] : 1.0;
+                if ($q > $maxQ) {
+                    $maxQ = $q;
+                }
+            }
+        }
+
+        return $maxQ;
     }
 
     private function getMimeTypesForFormat(string $format): array

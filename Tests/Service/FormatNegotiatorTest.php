@@ -1,11 +1,11 @@
 <?php
 
 /*
- * This file is part of the `liip/imagine-bundle` project.
+ * This file is part of the `liip/LiipImagineBundle` project.
  *
- * (c) Lukas Kahwe Smith <smith@pooteeweet.org>
+ * (c) https://github.com/liip/LiipImagineBundle/graphs/contributors
  *
- * For the full copyright and license information, please view the LICENSE
+ * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
@@ -49,28 +49,28 @@ class FormatNegotiatorTest extends TestCase
             'webp' => ['generate' => true, 'priority' => 20],
         ];
 
-        // Case 1: Client prefers AVIF (equal q, but avif is first in Accept or higher priority?) 
+        // Case 1: Client prefers AVIF (equal q, but avif is first in Accept or higher priority?)
         // In my implementation, if q is equal, it uses priority from config.
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/avif,image/webp']);
         $result = $negotiator->negotiate($request, $config);
-        $this->assertEquals(['webp', 'avif'], $result); // webp has higher priority (20 > 10)
+        $this->assertSame(['webp', 'avif'], $result); // webp has higher priority (20 > 10)
 
         // Case 2: Client prefers AVIF with higher q
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/avif;q=1.0,image/webp;q=0.9']);
         $result = $negotiator->negotiate($request, $config);
-        $this->assertEquals(['avif', 'webp'], $result);
+        $this->assertSame(['avif', 'webp'], $result);
 
         // Case 3: One format disabled
         $configDisabled = $config;
         $configDisabled['webp']['generate'] = false;
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/avif,image/webp']);
         $result = $negotiator->negotiate($request, $configDisabled);
-        $this->assertEquals(['avif'], $result);
+        $this->assertSame(['avif'], $result);
 
         // Case 4: Client supports nothing from config
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/jpeg']);
         $result = $negotiator->negotiate($request, $config);
-        $this->assertEquals([], $result);
+        $this->assertSame([], $result);
     }
 
     public function testGetAcceptedFormats(): void
@@ -79,15 +79,15 @@ class FormatNegotiatorTest extends TestCase
 
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/avif;q=1.0,image/webp;q=0.8']);
         $result = $negotiator->getAcceptedFormats($request);
-        
-        $this->assertEquals(['avif' => 1.0, 'webp' => 0.8], $result);
+
+        $this->assertSame(['avif' => 1.0, 'webp' => 0.8], $result);
     }
 
     public function testRegisterMimeTypes(): void
     {
         $negotiator = new FormatNegotiator();
         $negotiator->registerMimeTypes('png', ['image/png']);
-        
+
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT' => 'image/png']);
         $this->assertTrue($negotiator->isFormatAccepted('png', $request));
     }

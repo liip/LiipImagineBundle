@@ -74,7 +74,7 @@ class CacheManager
         $alternativeFormats = false
     ) {
         if (\is_bool($alternativeFormats)) {
-            @trigger_error(\sprintf('Passing a boolean as the second argument to %s is deprecated since LiipImagineBundle 2.x and will be removed in 3.0. Pass an array of alternative formats instead.', __METHOD__), \E_USER_DEPRECATED);
+            @trigger_error(\sprintf('Passing a boolean as the second argument to %s is deprecated since LiipImagineBundle 2.x and will be removed in 3.0. Pass an array of alternative formats instead.', __METHOD__), E_USER_DEPRECATED);
         }
 
         $this->filterConfig = $filterConfig;
