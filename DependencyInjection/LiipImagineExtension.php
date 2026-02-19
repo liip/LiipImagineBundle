@@ -177,6 +177,25 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $container->getDefinition('liip_imagine.service.filter')
             ->replaceArgument(6, $alternativeFormats);
+
+        $this->setWebpCompatibilityParameters($container, $alternativeFormats);
+    }
+
+    private function setWebpCompatibilityParameters(ContainerBuilder $container, array $alternativeFormats): void
+    {
+        $webpConfig = $alternativeFormats['webp'] ?? [
+            'generate' => false,
+            'quality' => 100,
+            'cache' => null,
+            'data_loader' => null,
+            'post_processors' => [],
+        ];
+
+        $container->setParameter('liip_imagine.webp.generate', $webpConfig['generate']);
+        $container->setParameter('liip_imagine.webp.quality', $webpConfig['quality']);
+        $container->setParameter('liip_imagine.webp.cache', $webpConfig['cache']);
+        $container->setParameter('liip_imagine.webp.data_loader', $webpConfig['data_loader']);
+        $container->setParameter('liip_imagine.webp.post_processors', $webpConfig['post_processors']);
     }
 
     public function prepend(ContainerBuilder $container): void

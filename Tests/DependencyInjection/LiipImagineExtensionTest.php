@@ -242,6 +242,25 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertArrayHasKey('webp', $alternativeFormats);
         $this->assertTrue($alternativeFormats['webp']['generate']);
         $this->assertSame(80, $alternativeFormats['webp']['quality']);
+
+        $this->assertTrue($this->containerBuilder->hasParameter('liip_imagine.webp.generate'));
+        $this->assertTrue($this->containerBuilder->getParameter('liip_imagine.webp.generate'));
+        $this->assertSame(80, $this->containerBuilder->getParameter('liip_imagine.webp.quality'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.cache'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.data_loader'));
+        $this->assertSame([], $this->containerBuilder->getParameter('liip_imagine.webp.post_processors'));
+    }
+
+    public function testWebpCompatibilityParametersWithEmptyConfig(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertTrue($this->containerBuilder->hasParameter('liip_imagine.webp.generate'));
+        $this->assertFalse($this->containerBuilder->getParameter('liip_imagine.webp.generate'));
+        $this->assertSame(100, $this->containerBuilder->getParameter('liip_imagine.webp.quality'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.cache'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.data_loader'));
+        $this->assertSame([], $this->containerBuilder->getParameter('liip_imagine.webp.post_processors'));
     }
 
     protected function createConfigurationWithDefaultsFilterSets(): void
