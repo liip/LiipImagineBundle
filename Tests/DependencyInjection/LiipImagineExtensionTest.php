@@ -302,6 +302,47 @@ EOF;
         return $parser->parse($yaml);
     }
 
+    public function testLoadAlternativeFormats(): void
+    {
+        $this->createConfiguration([
+            'alternative_formats' => [
+                'avif' => [
+                    'generate' => true,
+                    'quality' => 85,
+                    'mime_types' => ['image/avif'],
+                ],
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('avif', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['avif']['generate']);
+        $this->assertSame(85, $alternativeFormats['avif']['quality']);
+        $this->assertSame(['image/avif'], $alternativeFormats['avif']['mime_types']);
+
+        $mimeMap = $this->containerBuilder->getParameter('liip_imagine.format_negotiator.mime_map');
+        $this->assertSame(['avif' => ['image/avif']], $mimeMap);
+        
+        $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.format_negotiator'));
+    }
+
+    public function testLoadWebpNormalization(): void
+    {
+        $this->createConfiguration([
+            'webp' => [
+                'generate' => true,
+                'quality' => 80,
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('webp', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['webp']['generate']);
+        $this->assertSame(80, $alternativeFormats['webp']['quality']);
+
+        $this->assertSame(true, $this->containerBuilder->getParameter('liip_imagine.webp.generate'));
+    }
+
     private function assertAlias(string $value, string $key): void
     {
         $this->assertSame($value, (string) $this->containerBuilder->getAlias($key), \sprintf('%s alias is correct', $key));
