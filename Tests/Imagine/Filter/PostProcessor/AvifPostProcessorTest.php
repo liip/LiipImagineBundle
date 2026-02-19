@@ -51,9 +51,9 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
     {
         $data = [
             [[], []],
-            [['quality' => 100], ['-q', 100]],
-            [['quality' => 0], ['-q', 0]],
-            [['quality' => 75], ['-q', 75]],
+            [['quality' => 100], ['--min', 0, '--max', 0]],
+            [['quality' => 0], ['--min', 63, '--max', 63]],
+            [['quality' => 75], ['--min', 16, '--max', 16]],
             [['speed' => 6], ['--speed', 6]],
             [['jobs' => 4], ['--jobs', 4]],
         ];
@@ -78,7 +78,7 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
         $file = 'stdio-file-content-string';
         $data = [
             [[], ''],
-            [['quality' => 100], '-q 100'],
+            [['quality' => 100], '--min 0 --max 0'],
             [['speed' => 6], '--speed 6'],
             [['jobs' => 4], '--jobs 4'],
         ];

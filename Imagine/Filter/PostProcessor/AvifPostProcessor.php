@@ -160,8 +160,11 @@ class AvifPostProcessor extends AbstractPostProcessor
         $arguments = [$this->executablePath];
 
         if (null !== $options['quality']) {
-            $arguments[] = '-q';
-            $arguments[] = $options['quality'];
+            $quantizer = (int) round(63 * (1 - $options['quality'] / 100));
+            $arguments[] = '--min';
+            $arguments[] = $quantizer;
+            $arguments[] = '--max';
+            $arguments[] = $quantizer;
         }
 
         if (null !== $options['speed']) {
