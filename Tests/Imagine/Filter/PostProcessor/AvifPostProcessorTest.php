@@ -130,17 +130,20 @@ class AvifPostProcessorTest extends AbstractPostProcessorTestCase
         $this->assertSame($binary, $this->getPostProcessorInstance()->process($binary, []));
     }
 
-    public function testProcessFromJpeg(): void
+    /**
+     * AvifPostProcessor acts as an optimizer only; it should ignore non-AVIF inputs.
+     */
+    public function testProcessIgnoresNonAvif(): void
     {
         $content = 'jpeg-content';
         $file = sys_get_temp_dir().'/test.jpg';
         file_put_contents($file, $content);
 
         $process = $this->getPostProcessorInstance();
-        $result = $process->process(new FileBinary($file, 'image/jpeg', 'jpg'), []);
+        $original = new FileBinary($file, 'image/jpeg', 'jpg');
+        $result = $process->process($original, []);
 
-        $this->assertSame('image/avif', $result->getMimeType());
-        $this->assertSame('avif', $result->getFormat());
+        $this->assertSame($original, $result);
 
         @unlink($file);
     }

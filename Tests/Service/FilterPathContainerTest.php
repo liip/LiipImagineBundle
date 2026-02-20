@@ -64,7 +64,10 @@ final class FilterPathContainerTest extends TestCase
             [
                 'use_default_driver' => false,
             ],
-            [],
+            [
+                'format' => 'avif',
+                'use_default_driver' => false,
+            ],
             'images/cats.jpeg.avif',
         ];
 

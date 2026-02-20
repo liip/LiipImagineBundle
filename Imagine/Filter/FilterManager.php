@@ -159,7 +159,11 @@ class FilterManager
             $options['animated'] = $config['animated'];
         }
 
-        $filteredFormat = $config['format'] ?? $binary->getFormat();
+        // If user explicitly requests to NOT use the default driver for conversion,
+        // ignore the configured target format here and export using the original format.
+        $useDefaultDriver = $config['use_default_driver'] ?? true;
+        $filteredFormat = $useDefaultDriver ? ($config['format'] ?? $binary->getFormat()) : $binary->getFormat();
+
         try {
             $filteredString = $image->get($filteredFormat, $options);
         } catch (\Exception $exception) {

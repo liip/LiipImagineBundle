@@ -57,11 +57,12 @@ class AvifPostProcessor extends AbstractPostProcessor
 
     public function process(BinaryInterface $binary, array $options = []): BinaryInterface
     {
-        if (!$this->isBinaryTypeSupported($binary)) {
-            return $binary;
-        }
+		if (!$this->isBinaryTypeAvifImage($binary)) {
+			return $binary;
+		}
 
-        $input = $this->writeTemporaryFile($binary, $options, 'imagine-post-processor-avif-input');
+
+		$input = $this->writeTemporaryFile($binary, $options, 'imagine-post-processor-avif-input');
         if (false === mb_strpos(basename($input), '.')) {
             $inputWithExtension = $input.$this->getExtensionFromMimeType($binary->getMimeType());
             if (rename($input, $inputWithExtension)) {
@@ -85,7 +86,7 @@ class AvifPostProcessor extends AbstractPostProcessor
             throw new ProcessFailedException($process);
         }
 
-        $result = new Binary(file_get_contents($output), 'image/avif', 'avif');
+		$result = new Binary(file_get_contents($output), $binary->getMimeType(), $binary->getFormat());
 
         unlink($input);
         unlink($output);
@@ -93,25 +94,25 @@ class AvifPostProcessor extends AbstractPostProcessor
         return $result;
     }
 
-    private function getExtensionFromMimeType(string $mimeType): string
-    {
-        switch ($mimeType) {
-            case 'image/jpeg':
-            case 'image/jpg':
-                return '.jpg';
-            case 'image/png':
-                return '.png';
-            case 'image/avif':
-                return '.avif';
-            default:
-                return '';
-        }
-    }
+	protected function isBinaryTypeAvifImage(BinaryInterface $binary): bool
+	{
+		return $this->isBinaryTypeMatch($binary, ['image/avif']);
+	}
 
-    protected function isBinaryTypeSupported(BinaryInterface $binary): bool
-    {
-        return $this->isBinaryTypeMatch($binary, ['image/avif', 'image/jpeg', 'image/jpg', 'image/png']);
-    }
+	private function getExtensionFromMimeType(string $mimeType): string
+	{
+		switch ($mimeType) {
+			case 'image/jpeg':
+			case 'image/jpg':
+				return '.jpg';
+			case 'image/png':
+				return '.png';
+			case 'image/avif':
+				return '.avif';
+			default:
+				return '';
+		}
+	}
 
     protected function configureOptions(OptionsResolver $resolver): void
     {
