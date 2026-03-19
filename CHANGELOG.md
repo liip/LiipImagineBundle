@@ -15,6 +15,31 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.17.1](https://github.com/liip/LiipImagineBundle/tree/2.17.1)
+
+- Fix for AssetMapperLoaderFactory service definition to not fail when not configured ([dbu](https://github.com/liip/LiipImagineBundle/pull/1649))
+
+## [2.17.0](https://github.com/liip/LiipImagineBundle/tree/2.17.0)
+
+- Add AssetMapperLocator to work with the asset mapper in development mode ([tito10047](https://github.com/liip/LiipImagineBundle/pull/1645))
+- Drop support for PHP 7 ([dbu](https://github.com/liip/LiipImagineBundle/pull/1646))
+
+## [2.16.0](https://github.com/liip/LiipImagineBundle/tree/2.16.0)
+
+- Compatible with Symfony 8 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1642)) (including a bunch of PRs to change all XML configuration to PHP configuration)
+- Test with PHP 8.5 and fix deprecations([dbu](https://github.com/liip/LiipImagineBundle/pull/1644))
+- Drop support for unmaintained Symfony versions ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1639))
+
+## [2.15.0](https://github.com/liip/LiipImagineBundle/tree/2.15.0)
+
+- Refactored `Request::get()` to `Request::query::get()` to avoid deprecation with Symfony 7.4 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1636))
+
+## [2.14.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
+
+- Allow configuring empty ACLs on AWS S3 resolver to skip ACLs ([deguif](https://github.com/liip/LiipImagineBundle/pull/1629))
+- Add `use_psr_cache` option to AWS S3 resolver configuration in order to support PSR cache. Configuring a doctrine cache now will trigger a deprecation ([deguif](https://github.com/liip/LiipImagineBundle/pull/1630))
+- Add ability to specify a custom s3 client service in aws s3 resolver configuration ([deguif](https://github.com/liip/LiipImagineBundle/pull/1632))
+
 ## [2.13.3](https://github.com/liip/LiipImagineBundle/tree/2.13.3)
 
 - Prevent InvalidArgumentException from FileinfoMimeTypeGuesser when chain loading an image that is not a file ([revoltek-daniel](https://github.com/liip/LiipImagineBundle/pull/1614))

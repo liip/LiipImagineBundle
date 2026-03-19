@@ -10,10 +10,10 @@ on:
 
 jobs:
   phpstan:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -26,6 +26,9 @@ jobs:
 
       - name: Add vips
         run: composer require rokka/imagine-vips
+
+      - name: Add asset mapper
+        run: composer require symfony/asset-mapper
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze

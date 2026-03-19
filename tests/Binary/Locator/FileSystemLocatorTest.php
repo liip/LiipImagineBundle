@@ -23,7 +23,10 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
     {
         $locator = new FileSystemLocator(['/does/not/exist/foo', '/does/not/exist/bar', $temp = sys_get_temp_dir()], true);
         $roots = (new \ReflectionObject($locator))->getProperty('roots');
-        $roots->setAccessible(true);
+        // remove when we drop support for PHP older than 8.1
+        if (PHP_VERSION_ID < 80100) {
+            $roots->setAccessible(true);
+        }
         $array = [
             '',
             '',
