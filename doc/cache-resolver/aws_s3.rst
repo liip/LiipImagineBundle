@@ -83,6 +83,24 @@ Create Resolver from a Factory
                     region: "%amazon.s3.region%"
                     bucket: "%amazon.s3.bucket%"
 
+Create Resolver from a custom S3 client service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        resolvers:
+            aws_s3_resolver:
+                aws_s3:
+                    client_id: 'custom_aws_s3_client_service'
+                    bucket: "%amazon.s3.bucket%"
+                    get_options:
+                        Scheme: https
+                    put_options:
+                        CacheControl: "max-age=86400"
+
 Create Resolver as a Service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -204,8 +222,11 @@ current. You just need to configure them with defined options.
               aws_s3:
                   #...
                   proxies: ["https://one.domain.com", "https://two.domain.com"]
-                  cache: true
+                  cache: 'cache_name'
 
+.. note::
+
+    The ``cache`` needs to be a PSR cache instance.
 
 If enabled both first one will be :ref:`Cache <cache-resolver-cache>`, then
 :ref:`Proxy <cache-resolver-proxy>` and after all process delegates to AwsS3 resolver.

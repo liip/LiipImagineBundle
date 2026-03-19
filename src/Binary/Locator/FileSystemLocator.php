@@ -101,7 +101,7 @@ class FileSystemLocator implements LocatorInterface
      */
     private function sanitizeAbsolutePath(string $path): string
     {
-        $roots = array_filter($this->roots, function (string $root) use ($path): bool {
+        $roots = array_filter($this->roots, static function (string $root) use ($path): bool {
             return 0 === mb_strpos($path, $root);
         });
 

@@ -77,9 +77,9 @@ class ImagineControllerTest extends AbstractTest
     {
         $this->expectException(InvalidArgumentException::class);
         $this->createControllerInstance(
-            $path = '/foo',
-            $filter = 'filter',
-            $hash = 'hash',
+            '/foo',
+            'filter',
+            'hash',
             $redirectResponseCode,
             false
         );

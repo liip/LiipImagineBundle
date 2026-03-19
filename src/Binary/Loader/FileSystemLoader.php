@@ -38,7 +38,7 @@ class FileSystemLoader implements LoaderInterface
     public function find($path)
     {
         $path = $this->locator->locate($path);
-        if (false === \is_file($path)) {
+        if (false === is_file($path)) {
             throw new NotLoadableException(\sprintf('Source image: "%s" is no file.', $path));
         }
         $mimeType = $this->mimeTypeGuesser->guessMimeType($path);

@@ -59,7 +59,7 @@ class ImagineController
     public function filterAction(Request $request, string $path, string $filter): RedirectResponse
     {
         $path = PathHelper::urlPathToFilePath($path);
-        $resolver = $request->get('resolver');
+        $resolver = $request->query->has('resolver') ? $request->query->getString('resolver') : null;
 
         return $this->createRedirectResponse(function () use ($path, $filter, $resolver, $request) {
             return $this->filterService->getUrlOfFilteredImage(
@@ -84,7 +84,7 @@ class ImagineController
      */
     public function filterRuntimeAction(Request $request, string $hash, string $path, string $filter): RedirectResponse
     {
-        $resolver = $request->get('resolver');
+        $resolver = $request->query->has('resolver') ? $request->query->getString('resolver') : null;
         $path = PathHelper::urlPathToFilePath($path);
         $runtimeConfig = $request->query->all('filters');
 

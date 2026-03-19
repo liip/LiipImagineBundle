@@ -20,12 +20,13 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class LiipImagineExtension extends Extension implements PrependExtensionInterface
@@ -68,14 +69,14 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('imagine.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('imagine.php');
 
         if ('none' !== $config['twig']['mode']) {
             $this->loadTwig($config['twig'], $loader, $container);
         }
 
-        $loader->load('commands.xml');
+        $loader->load('commands.php');
 
         if ($this->isConfigEnabled($container, $config['messenger'])) {
             $this->registerMessengerConfiguration($loader);
@@ -89,7 +90,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
                 throw new \RuntimeException("Unable to use 'vips' driver without '{$vipsImagineClass}' class.");
             }
 
-            $loader->load('imagine_vips.xml');
+            $loader->load('imagine_vips.php');
         }
 
         $container->setParameter('liip_imagine.driver_service', "liip_imagine.{$driver}");
@@ -130,7 +131,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
     {
-        return array_map(function (array $filterSet) use ($defaultFilterSets) {
+        return array_map(static function (array $filterSet) use ($defaultFilterSets) {
             return array_replace_recursive($defaultFilterSets, $filterSet);
         }, $filterSets);
     }
@@ -152,19 +153,19 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         }
     }
 
-    private function registerMessengerConfiguration(XmlFileLoader $loader): void
+    private function registerMessengerConfiguration(LoaderInterface $loader): void
     {
         if (!interface_exists(MessageBusInterface::class)) {
             throw new LogicException('Messenger support cannot be enabled as the Messenger component is not installed. Try running "composer require symfony/messenger".');
         }
 
-        $loader->load('messenger.xml');
+        $loader->load('messenger.php');
     }
 
-    private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void
+    private function loadTwig(array $config, LoaderInterface $loader, ContainerBuilder $container): void
     {
         if ('lazy' === $config['mode']) {
-            $loader->load('imagine_twig_mode_lazy.xml');
+            $loader->load('imagine_twig_mode_lazy.php');
             if (\array_key_exists('assets_version', $config) && null !== $config['assets_version']) {
                 $runtime = $container->getDefinition('liip_imagine.templating.filter_runtime');
                 $runtime->setArgument(1, $config['assets_version']);

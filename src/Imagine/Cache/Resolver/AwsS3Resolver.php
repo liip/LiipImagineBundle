@@ -44,11 +44,11 @@ class AwsS3Resolver implements ResolverInterface
      * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
      * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
      */
-    public function __construct(S3Client $storage, string $bucket, string $acl = 'public-read', array $getOptions = [], $putOptions = [])
+    public function __construct(S3Client $storage, string $bucket, string $acl = 'public-read', array $getOptions = [], array $putOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
-        $this->acl = $acl;
+        $this->acl = $acl ?? '';
         $this->getOptions = $getOptions;
         $this->putOptions = $putOptions;
     }
@@ -76,20 +76,19 @@ class AwsS3Resolver implements ResolverInterface
     public function store(BinaryInterface $binary, string $path, string $filter): void
     {
         $objectPath = $this->getObjectPath($path, $filter);
+        $options = [
+            'Bucket' => $this->bucket,
+            'Key' => $objectPath,
+            'Body' => $binary->getContent(),
+            'ContentType' => $binary->getMimeType(),
+        ];
+
+        if ('' !== $this->acl) {
+            $options['ACL'] = $this->acl;
+        }
 
         try {
-            $this->storage->putObject(
-                array_merge(
-                    $this->putOptions,
-                    [
-                        'ACL' => $this->acl,
-                        'Bucket' => $this->bucket,
-                        'Key' => $objectPath,
-                        'Body' => $binary->getContent(),
-                        'ContentType' => $binary->getMimeType(),
-                    ]
-                )
-            );
+            $this->storage->putObject(array_merge($this->putOptions, $options));
         } catch (\Exception $e) {
             $this->logger?->error('The object could not be created on Amazon S3.', [
                 'objectPath' => $objectPath,

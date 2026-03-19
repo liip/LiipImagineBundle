@@ -441,7 +441,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -479,7 +479,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -515,7 +515,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -554,7 +554,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -595,7 +595,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -641,7 +641,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -680,7 +680,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -740,7 +740,7 @@ class CacheManagerTest extends AbstractTest
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -770,7 +770,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher = $this->createEventDispatcherMock();
         $dispatcher
             ->method('dispatch')
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -810,14 +810,14 @@ class CacheManagerTest extends AbstractTest
                 [
                     $this->logicalAnd(
                         $this->isInstanceOf(CacheResolveEvent::class),
-                        $this->callback(function (CacheResolveEvent $event) {
+                        $this->callback(static function (CacheResolveEvent $event) {
                             return 'changed_filter' === $event->getFilter() && 'changed_path' === $event->getPath();
                         })
                     ),
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -851,7 +851,7 @@ class CacheManagerTest extends AbstractTest
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::POST_RESOLVE !== $eventName) {
                     return;
                 }

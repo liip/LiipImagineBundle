@@ -65,14 +65,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->beforeNormalization()
-                ->ifTrue(function ($v) {
+                ->ifTrue(static function ($v) {
                     return
                         empty($v['loaders'])
                         || empty($v['loaders']['default'])
                         || empty($v['resolvers'])
                         || empty($v['resolvers']['default']);
                 })
-                ->then(function ($v) {
+                ->then(static function ($v) {
                     if (empty($v['loaders'])) {
                         $v['loaders'] = [];
                     }
@@ -106,7 +106,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
-                        ->ifTrue(function ($v) {
+                        ->ifTrue(static function ($v) {
                             return !\in_array($v, ['gd', 'imagick', 'gmagick', 'vips'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
@@ -154,7 +154,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('filter_runtime_action')->defaultValue(\sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
                         ->integerNode('redirect_response_code')->defaultValue(302)
                             ->validate()
-                                ->ifTrue(function ($redirectResponseCode) {
+                                ->ifTrue(static function ($redirectResponseCode) {
                                     return !\in_array($redirectResponseCode, ControllerConfig::REDIRECT_RESPONSE_CODES, true);
                                 })
                                 ->thenInvalid('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).')
@@ -262,7 +262,7 @@ class Configuration implements ConfigurationInterface
 
         $nodeDefinition
             ->validate()
-            ->ifTrue(function ($array) use ($type) {
+            ->ifTrue(static function ($array) use ($type) {
                 foreach ($array as $name => $element) {
                     if (!$element) {
                         throw new InvalidConfigurationException(ucfirst($type).' "'.$name.'" must have a factory configured');
