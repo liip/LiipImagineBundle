@@ -39,10 +39,6 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         if ($this->webp_generate) {
             $filterService = $this->getService('test.liip_imagine.service.filter');
             $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
-            // remove when we drop support for PHP older than 8.1
-            if (PHP_VERSION_ID < 80100) {
-                $webpGenerate->setAccessible(true);
-            }
             $webpGenerate->setValue($filterService, true);
         }
     }

@@ -36,12 +36,7 @@ abstract class AbstractWebTestCase extends WebTestCase
     protected function getPrivateProperty(object $object, string $name)
     {
         $r = new \ReflectionObject($object);
-
         $p = $r->getProperty($name);
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $p->setAccessible(true);
-        }
 
         return $p->getValue($object);
     }

@@ -38,13 +38,13 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * Constructs a cache resolver storing images on Amazon S3.
      *
-     * @param S3Client    $storage    The Amazon S3 storage API. It's required to know authentication information
-     * @param string      $bucket     The bucket name to operate on
-     * @param string|null $acl        The ACL to use when storing new objects. Default: owner read/write, public read
-     * @param array       $getOptions A list of options to be passed when retrieving the object url from Amazon S3
-     * @param array       $putOptions A list of options to be passed when saving the object to Amazon S3
+     * @param S3Client $storage    The Amazon S3 storage API. It's required to know authentication information
+     * @param string   $bucket     The bucket name to operate on
+     * @param string   $acl        The ACL to use when storing new objects. Default: owner read/write, public read
+     * @param array    $getOptions A list of options to be passed when retrieving the object url from Amazon S3
+     * @param array    $putOptions A list of options to be passed when saving the object to Amazon S3
      */
-    public function __construct(S3Client $storage, string $bucket, string $acl = 'public-read', array $getOptions = [], $putOptions = [])
+    public function __construct(S3Client $storage, string $bucket, string $acl = 'public-read', array $getOptions = [], array $putOptions = [])
     {
         $this->storage = $storage;
         $this->bucket = $bucket;

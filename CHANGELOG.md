@@ -12,6 +12,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Removed deprecated code and BC for old Symfony versions.
 - The response when the `filter` parameter in a resolve request is not an array is now 400 bad request, and no longer 404 not found.
 - Simplified the `ProxyResolver` to no longer do the undocumented regex replace logic on domain names (reverting [#687](https://github.com/liip/LiipImagineBundle/pull/687)).
+- Removed `use_psr_cache`, the cache now always needs to be a PSR cache and Doctrine cache is no longer supported.
 
 # 2.x
 

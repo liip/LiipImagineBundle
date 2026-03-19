@@ -461,10 +461,6 @@ class WebPathResolverTest extends TestCase
 
         $rc = new \ReflectionClass($resolver);
         $method = $rc->getMethod('getFileUrl');
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
 
         $result = $method->invokeArgs($resolver, ['/cats.jpg', 'some_filter']);
 
@@ -482,10 +478,6 @@ class WebPathResolverTest extends TestCase
 
         $rc = new \ReflectionClass($resolver);
         $method = $rc->getMethod('getFileUrl');
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $method->setAccessible(true);
-        }
 
         $result = $method->invokeArgs($resolver, ['https://some.meme.com/cute/cats.jpg', 'some_filter']);
 
@@ -499,15 +491,7 @@ class WebPathResolverTest extends TestCase
     {
         $reflector = new \ReflectionObject($actualClassOrObject);
         $attribute = $reflector->getProperty($actualAttributeName);
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $attribute->setAccessible(true);
-        }
         $actual = $attribute->getValue($actualClassOrObject);
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $attribute->setAccessible(false);
-        }
 
         self::assertSame($expected, $actual, $message);
     }

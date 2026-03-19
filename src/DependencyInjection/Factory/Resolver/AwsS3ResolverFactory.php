@@ -65,11 +65,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
 
             $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
-            if (false === $config['use_psr_cache']) {
-                trigger_deprecation('liip/imagine-bundle', '2.13.4', \sprintf('Setting the "liip_imagine.resolvers.%s.%s.use_psr_cache" config option to "false" is deprecated.', $resolverName, $this->getName()));
-            }
-
-            $cacheResolverDefinition = $this->getChildResolverDefinition($config['use_psr_cache'] ? 'psr_cache' : 'cache');
+            $cacheResolverDefinition = $this->getChildResolverDefinition('psr_cache');
             $cacheResolverDefinition->replaceArgument(0, new Reference($config['cache']));
             $cacheResolverDefinition->replaceArgument(1, new Reference($cachedResolverId));
 
@@ -97,9 +93,6 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache')
-                    ->defaultFalse()
-                ->end()
-                ->booleanNode('use_psr_cache')
                     ->defaultFalse()
                 ->end()
                 ->scalarNode('acl')

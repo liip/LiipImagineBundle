@@ -185,48 +185,6 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $this->assertSame(['foo'], $resolverDefinition->getArgument(1));
     }
 
-    /**
-     * @group legacy
-     */
-    public function testWrapResolverWithCacheOnCreateWithoutProxy(): void
-    {
-        $this->expectDeprecation('Since liip/imagine-bundle 2.13.4: Setting the "liip_imagine.resolvers.the_resolver_name.aws_s3.use_psr_cache" config option to "false" is deprecated.');
-
-        $container = new ContainerBuilder();
-
-        $resolver = new AwsS3ResolverFactory();
-
-        $resolver->create($container, 'the_resolver_name', [
-            'client_id' => null,
-            'client_config' => [],
-            'bucket' => 'aBucket',
-            'acl' => 'aAcl',
-            'get_options' => [],
-            'put_options' => [],
-            'cache' => 'the_cache_service_id',
-            'use_psr_cache' => false,
-            'proxies' => [],
-        ]);
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.aws_s3', $cachedResolverDefinition->getParent());
-
-        $this->assertFalse($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
-
-        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
-        $this->assertSame('the_cache_service_id', (string) $resolverDefinition->getArgument(0));
-
-        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(1));
-        $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
-    }
-
     public function testWrapResolverWithPsrCacheOnCreateWithoutProxy(): void
     {
         $container = new ContainerBuilder();
@@ -256,56 +214,6 @@ class AwsS3ResolverFactoryTest extends AbstractTest
         $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
         $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
         $this->assertSame('liip_imagine.cache.resolver.prototype.psr_cache', $resolverDefinition->getParent());
-
-        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
-        $this->assertSame('the_cache_service_id', (string) $resolverDefinition->getArgument(0));
-
-        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(1));
-        $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.cached', (string) $resolverDefinition->getArgument(1));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testWrapResolverWithProxyAndCacheOnCreate(): void
-    {
-        $this->expectDeprecation('Since liip/imagine-bundle 2.13.4: Setting the "liip_imagine.resolvers.the_resolver_name.aws_s3.use_psr_cache" config option to "false" is deprecated.');
-
-        $container = new ContainerBuilder();
-
-        $resolver = new AwsS3ResolverFactory();
-
-        $resolver->create($container, 'the_resolver_name', [
-            'client_id' => null,
-            'client_config' => [],
-            'bucket' => 'aBucket',
-            'acl' => 'aAcl',
-            'get_options' => [],
-            'put_options' => [],
-            'cache' => 'the_cache_service_id',
-            'use_psr_cache' => false,
-            'proxies' => ['foo'],
-        ]);
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied'));
-        $proxiedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.proxied');
-        $this->assertInstanceOf(ChildDefinition::class, $proxiedResolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.aws_s3', $proxiedResolverDefinition->getParent());
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name.cached'));
-        $cachedResolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name.cached');
-        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.proxy', $cachedResolverDefinition->getParent());
-
-        $this->assertInstanceOf(Reference::class, $cachedResolverDefinition->getArgument(0));
-        $this->assertSame('liip_imagine.cache.resolver.the_resolver_name.proxied', (string) $cachedResolverDefinition->getArgument(0));
-
-        $this->assertSame(['foo'], $cachedResolverDefinition->getArgument(1));
-
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
-        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        $this->assertSame('liip_imagine.cache.resolver.prototype.cache', $resolverDefinition->getParent());
 
         $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
         $this->assertSame('the_cache_service_id', (string) $resolverDefinition->getArgument(0));

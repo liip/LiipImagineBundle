@@ -76,10 +76,6 @@ class MetadataReaderCompilerPassTest extends TestCase
     private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, string $p): string
     {
         $property = $r->getProperty($p);
-        // remove when we drop support for PHP older than 8.1
-        if (PHP_VERSION_ID < 80100) {
-            $property->setAccessible(true);
-        }
 
         return $property->getValue();
     }
