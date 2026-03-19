@@ -280,11 +280,11 @@ EOF;
 
     private function assertDICConstructorArguments(Definition $definition, array $arguments): void
     {
-        $castArrayElementsToString = function (array $a): array {
-            return array_map(function ($v) { return (string) $v; }, $a);
+        $castArrayElementsToString = static function (array $a): array {
+            return array_map(static function ($v) { return (string) $v; }, $a);
         };
 
-        $implodeArrayElements = function (array $a): string {
+        $implodeArrayElements = static function (array $a): string {
             return \sprintf('[%s]:%d', implode(',', $a), \count($a));
         };
 

@@ -14,7 +14,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Liip\ImagineBundle\Message\Handler\WarmupCacheHandler;
 use Liip\ImagineBundle\Message\WarmupCache;
 
-return function (ContainerConfigurator $container): void {
+return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('liip_imagine.messenger.warmup_cache_processor', WarmupCacheHandler::class)
             ->tag('messenger.message_handler', ['handles' => WarmupCache::class])

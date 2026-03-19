@@ -139,7 +139,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                 ->ifTrue(static function ($v) {
                     return isset($v['client_id']);
                 })
-                ->then(function ($config) {
+                ->then(static function ($config) {
                     $config['client_config'] = [];
 
                     return $config;

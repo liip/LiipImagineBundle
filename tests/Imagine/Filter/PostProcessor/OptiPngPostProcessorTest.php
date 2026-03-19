@@ -65,7 +65,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
             [['level' => 4, 'snip' => true, 'preserve_attributes' => true, 'interlace_type' => 1, 'no_bit_depth_reductions' => true, 'no_palette_reductions' => true], ['-o4', '-strip', 'all', '-snip', '-preserve', '-i', 1, '-nb', '-np']],
         ];
 
-        return array_map(function (array $d) {
+        return array_map(static function (array $d) {
             array_unshift($d[1], AbstractPostProcessorTestCase::getPostProcessAsFileExecutable());
 
             return $d;
@@ -96,7 +96,7 @@ class OptiPngPostProcessorTest extends AbstractPostProcessorTestCase
             [['dithering' => 0.5], '--quality 80-100 --floyd 0.5'],
         ];
 
-        return array_map(function ($d) use ($file) {
+        return array_map(static function ($d) use ($file) {
             array_unshift($d, $file);
 
             return $d;

@@ -44,7 +44,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
             [[null, true, 85], ['progressive' => true], ['--strip-all', '--max=85', '--all-progressive']],
         ];
 
-        return array_map(function (array $d) {
+        return array_map(static function (array $d) {
             array_unshift($d[2], AbstractPostProcessorTestCase::getPostProcessAsFileExecutable());
 
             return $d;
@@ -86,7 +86,7 @@ class JpegOptimPostProcessorTest extends AbstractPostProcessorTestCase
             [['progressive' => true], '--strip-all --all-progressive'],
         ];
 
-        return array_map(function ($d) use ($file) {
+        return array_map(static function ($d) use ($file) {
             array_unshift($d, $file);
 
             return $d;

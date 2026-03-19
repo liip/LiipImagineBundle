@@ -37,16 +37,16 @@ class WebPathResolver implements ResolverInterface
         $this->filesystem = $filesystem;
         $this->requestContext = $requestContext;
 
-        $this->webRoot = rtrim(str_replace('//', '/', $webRootDir), '/');
-        $this->cachePrefix = ltrim(str_replace('//', '/', $cachePrefix), '/');
+        $this->webRoot = mb_rtrim(str_replace('//', '/', $webRootDir), '/');
+        $this->cachePrefix = mb_ltrim(str_replace('//', '/', $cachePrefix), '/');
         $this->cacheRoot = $this->webRoot.'/'.$this->cachePrefix;
     }
 
     public function resolve(string $path, string $filter): string
     {
         return \sprintf('%s/%s',
-            rtrim($this->getBaseUrl(), '/'),
-            ltrim($this->getFileUrl($path, $filter), '/')
+            mb_rtrim($this->getBaseUrl(), '/'),
+            mb_ltrim($this->getFileUrl($path, $filter), '/')
         );
     }
 
@@ -112,7 +112,7 @@ class WebPathResolver implements ResolverInterface
         if ('.php' === mb_substr($this->requestContext->getBaseUrl(), -4)) {
             $baseUrl = pathinfo($this->requestContext->getBaseurl(), PATHINFO_DIRNAME);
         }
-        $baseUrl = rtrim($baseUrl, '/\\');
+        $baseUrl = mb_rtrim($baseUrl, '/\\');
 
         return \sprintf('%s://%s%s%s',
             $this->requestContext->getScheme(),
@@ -127,6 +127,6 @@ class WebPathResolver implements ResolverInterface
         // crude way of sanitizing URL scheme ("protocol") part
         $path = str_replace('://', '---', $path);
 
-        return $this->cachePrefix.'/'.$filter.'/'.ltrim($path, '/');
+        return $this->cachePrefix.'/'.$filter.'/'.mb_ltrim($path, '/');
     }
 }

@@ -131,7 +131,7 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
     {
-        return array_map(function (array $filterSet) use ($defaultFilterSets) {
+        return array_map(static function (array $filterSet) use ($defaultFilterSets) {
             return array_replace_recursive($defaultFilterSets, $filterSet);
         }, $filterSets);
     }
