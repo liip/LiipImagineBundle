@@ -71,11 +71,16 @@ class CacheManager
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
         $defaultResolver = null,
-        $alternativeFormats = false
+        $alternativeFormats = []
     ) {
         if (\is_bool($alternativeFormats)) {
             @trigger_error(\sprintf('Passing a boolean as the second argument to %s is deprecated since LiipImagineBundle 2.x and will be removed in 3.0. Pass an array of alternative formats instead.', __METHOD__), E_USER_DEPRECATED);
-        }
+			$alternativeFormats = $alternativeFormats?["webp" => ["generate" => true]]:[];
+		}
+
+		if (!is_array($alternativeFormats)) {
+			throw new \InvalidArgumentException('The second argument to '.__METHOD__.' must be an array or boolean.');
+		}
 
         $this->filterConfig = $filterConfig;
         $this->router = $router;
@@ -113,16 +118,12 @@ class CacheManager
     public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         $shouldGenerateAlternative = false;
-        if (\is_bool($this->alternativeFormats)) {
-            $shouldGenerateAlternative = $this->alternativeFormats;
-        } elseif (\is_array($this->alternativeFormats)) {
-            foreach ($this->alternativeFormats as $formatConfig) {
-                if (isset($formatConfig['generate']) && true === $formatConfig['generate']) {
-                    $shouldGenerateAlternative = true;
-                    break;
-                }
-            }
-        }
+		foreach ($this->alternativeFormats as $formatConfig) {
+			if (isset($formatConfig['generate']) && true === $formatConfig['generate']) {
+				$shouldGenerateAlternative = true;
+				break;
+			}
+		}
 
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);

@@ -255,7 +255,6 @@ can configure the generation of all images in the WebP format.
     liip_imagine:
         default_filter_set_settings:
             format: webp
-
 Use modern formats if supported (recommended)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -266,34 +265,47 @@ multiple versions of images based on browser support (using ``Accept`` header).
 **Remember that this increases the amount of used space on the server for
 storing filtered images.**
 
+.. note::
+
+	The current approach of serving different formats under the same URL has some
+	limitations related to HTTP caching and requires the controller to be called
+	each time. For better performance and proper HTTP caching, consider using the
+	``<picture>`` element with client-side format selection (see below).
+
+```
+<picture>
+  <source srcset="photo.avif" type="image/avif" />
+  <source srcset="photo.webp" type="image/webp" />
+  <img src="photo.jpg" alt="photo" />
+</picture>
+```
+
 .. code-block:: yaml
 
-    # app/config/config.yml
+	# app/config/config.yml
 
-    liip_imagine:
-        # configure alternative formats
-        alternative_formats:
-            webp:
-                generate: true
-                quality: 80
-            avif:
-                generate: true
-                quality: 75
-                priority: 1  # AVIF has higher priority than WebP
+	liip_imagine:
+		# configure alternative formats
+		alternative_formats:
+			webp:
+				generate: true
+				quality: 80
+			avif:
+				generate: true
+				quality: 75
+				priority: 1  # AVIF has higher priority than WebP
 
-        # example filter
-        filter_sets:
-            thumbnail_web_path:
-                filters:
-                    thumbnail: { size: [223, 223], mode: inset }
+		# example filter
+		filter_sets:
+			thumbnail_web_path:
+				filters:
+					thumbnail: { size: [223, 223], mode: inset }
 
 With this configuration:
 
 - If browser supports AVIF, the request will be redirected to ``images/cats.jpeg.avif``
 - If browser supports WebP (but not AVIF), redirect to ``images/cats.jpeg.webp``
-- Otherwise, redirect to ``images/cats.jpeg`` (original format)
 
-The bundle automatically detects browser support from the ``Accept`` header.
 
 Legacy WebP configuration (deprecated)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,6 +363,8 @@ Client side resolving
 For better performance, you can use the ``<picture>`` tag to resolve supported
 image formats on the client-side in the browser. This will complicate the HTML code
 and require registering multiple filters that generate images in different formats.
+If you have a suggestion how a convenient setup for this would look, please open
+an issue on github to discuss the topic.
 
 .. code-block:: yaml
 
