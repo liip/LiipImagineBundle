@@ -72,6 +72,20 @@ class LazyFilterRuntimeTest extends AbstractTest
         $this->assertSame($urlimage, $actualPath);
     }
 
+    public function testLocalPathContainingQuestionMarkIsNotTruncated(): void
+    {
+        // guards the host check in cleanPath(): without it, parse_url() would reduce this to "cat"
+        $path = 'cat?question.jpeg';
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($path, self::FILTER)
+            ->willReturn('irrelevant');
+
+        $this->runtime->filter($path, self::FILTER);
+    }
+
     public function testVersionHandling(): void
     {
         $this->runtime = new LazyFilterRuntime($this->manager, self::VERSION);
