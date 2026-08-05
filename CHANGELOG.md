@@ -6,6 +6,11 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## [2.17.2](https://github.com/liip/LiipImagineBundle/tree/2.17.2)
+
+- Fix lazy Twig mode dropping the path for absolute image URLs ([Atesca](https://github.com/Atesca))
+  Fixing a regression introduced in 2.7.0.
+
 ## [2.17.1](https://github.com/liip/LiipImagineBundle/tree/2.17.1)
 
 - Fix for AssetMapperLoaderFactory service definition to not fail when not configured ([dbu](https://github.com/liip/LiipImagineBundle/pull/1649))
