@@ -152,6 +152,6 @@ final class ImagineStyle
         } catch (\ValueError $error) {
         }
 
-        throw new InvalidArgumentException(\sprintf('Invalid string format "%s" or replacements "%s".', $format, implode(', ', array_map(function ($replacement) { return var_export($replacement, true); }, $replacements))));
+        throw new InvalidArgumentException(\sprintf('Invalid string format "%s" or replacements "%s".', $format, implode(', ', array_map(static function ($replacement) { return var_export($replacement, true); }, $replacements))));
     }
 }

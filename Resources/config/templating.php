@@ -13,7 +13,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Liip\ImagineBundle\Templating\Helper\FilterHelper;
 
-return function (ContainerConfigurator $container): void {
+return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('liip_imagine.templating.filter_helper', FilterHelper::class)
             ->tag('templating.helper', ['alias' => 'imagine'])

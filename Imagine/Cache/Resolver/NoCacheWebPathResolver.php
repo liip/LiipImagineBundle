@@ -50,11 +50,11 @@ class NoCacheWebPathResolver implements ResolverInterface
         );
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
     }
 }

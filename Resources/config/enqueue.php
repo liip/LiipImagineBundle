@@ -14,7 +14,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Enqueue\Client\ProducerInterface;
 use Liip\ImagineBundle\Async\ResolveCacheProcessor;
 
-return function (ContainerConfigurator $container): void {
+return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('liip_imagine.async.resolve_cache_processor', ResolveCacheProcessor::class)
             ->public()

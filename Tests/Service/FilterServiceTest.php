@@ -570,7 +570,7 @@ final class FilterServiceTest extends TestCase
             ->willReturn($binary);
     }
 
-    private function expectFilterManagerApplyFilter(bool $webpGenerate, BinaryInterface $binary, array $runtimeOptions = [])
+    private function expectFilterManagerApplyFilter(bool $webpGenerate, BinaryInterface $binary, array $runtimeOptions = []): void
     {
         if ($webpGenerate) {
             $this->filterManager

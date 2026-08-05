@@ -18,7 +18,7 @@ trait CacheManagerAwareTrait
      */
     protected $cacheManager;
 
-    public function setCacheManager(CacheManager $cacheManager)
+    public function setCacheManager(CacheManager $cacheManager): void
     {
         $this->cacheManager = $cacheManager;
     }

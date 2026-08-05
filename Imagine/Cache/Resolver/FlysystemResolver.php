@@ -115,7 +115,7 @@ class FlysystemResolver implements ResolverInterface
      * @param string          $path   The path where the original file is expected to be
      * @param string          $filter The name of the imagine filter in effect
      */
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $this->flysystem->put(
             $this->getFilePath($path, $filter),
@@ -128,7 +128,7 @@ class FlysystemResolver implements ResolverInterface
      * @param string[] $paths   The paths where the original files are expected to be
      * @param string[] $filters The imagine filters in effect
      */
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;

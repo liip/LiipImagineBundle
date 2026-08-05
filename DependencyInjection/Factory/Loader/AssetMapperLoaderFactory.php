@@ -40,7 +40,7 @@ class AssetMapperLoaderFactory extends AbstractLoaderFactory
         return 'asset_mapper';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

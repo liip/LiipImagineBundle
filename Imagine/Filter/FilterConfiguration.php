@@ -48,7 +48,7 @@ class FilterConfiguration
      *
      * @param string $filter
      */
-    public function set($filter, array $config)
+    public function set($filter, array $config): void
     {
         $this->filters[$filter] = $config;
     }

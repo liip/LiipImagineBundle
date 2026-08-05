@@ -85,7 +85,7 @@ class DataManager
      *
      * @param string $filter
      */
-    public function addLoader($filter, LoaderInterface $loader)
+    public function addLoader($filter, LoaderInterface $loader): void
     {
         $this->loaders[$filter] = $loader;
     }

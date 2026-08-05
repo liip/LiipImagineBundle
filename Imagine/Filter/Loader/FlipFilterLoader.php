@@ -37,7 +37,7 @@ class FlipFilterLoader implements LoaderInterface
         $resolver = new OptionsResolver();
         $resolver->setDefault('axis', 'x');
         $resolver->setAllowedValues('axis', ['x', 'horizontal', 'y', 'vertical']);
-        $resolver->setNormalizer('axis', function (Options $options, $value) {
+        $resolver->setNormalizer('axis', static function (Options $options, $value) {
             return 'horizontal' === $value ? 'x' : ('vertical' === $value ? 'y' : $value);
         });
 

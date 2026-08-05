@@ -94,12 +94,12 @@ final class PsrCacheResolver implements ResolverInterface
         return $resolved;
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $this->resolver->store($binary, $path, $filter);
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         $this->resolver->remove($paths, $filters);
 
@@ -134,7 +134,7 @@ final class PsrCacheResolver implements ResolverInterface
         ]);
     }
 
-    private function removePathAndFilter($path, $filter)
+    private function removePathAndFilter($path, $filter): void
     {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         $indexItem = $this->cache->getItem($indexKey);
@@ -230,7 +230,7 @@ final class PsrCacheResolver implements ResolverInterface
         return $this->cache->commit();
     }
 
-    private function configureOptions(OptionsResolver $resolver)
+    private function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'global_prefix' => 'liip_imagine.resolver_psr_cache',
@@ -249,7 +249,7 @@ final class PsrCacheResolver implements ResolverInterface
         }
     }
 
-    private function setDefaultOptions(OptionsResolver $resolver)
+    private function setDefaultOptions(OptionsResolver $resolver): void
     {
         $this->configureOptions($resolver);
     }

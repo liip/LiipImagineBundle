@@ -37,7 +37,7 @@ class FlysystemLoaderFactory extends AbstractLoaderFactory
         return 'flysystem';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

@@ -98,7 +98,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
             [['dithering' => 0.5], ['80-100', '--floyd', 0.5]],
         ];
 
-        return array_map(function (array $d) {
+        return array_map(static function (array $d) {
             array_unshift($d[1], '--quality');
             array_unshift($d[1], AbstractPostProcessorTestCase::getPostProcessAsStdInExecutable());
 
@@ -130,7 +130,7 @@ class PngquantPostProcessorTest extends AbstractPostProcessorTestCase
             [['dithering' => 0.5], '--quality 80-100 --floyd 0.5'],
         ];
 
-        return array_map(function ($d) use ($file) {
+        return array_map(static function ($d) use ($file) {
             array_unshift($d, $file);
 
             return $d;

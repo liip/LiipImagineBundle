@@ -29,7 +29,7 @@ class Signer implements SignerInterface
     public function sign($path, ?array $runtimeConfig = null)
     {
         if ($runtimeConfig) {
-            array_walk_recursive($runtimeConfig, function (&$value) {
+            array_walk_recursive($runtimeConfig, static function (&$value) {
                 $value = (string) $value;
             });
         }

@@ -188,7 +188,7 @@ class FilterManager
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($filters) !== \count($sanitized)) {
-            throw new \InvalidArgumentException(\sprintf('Could not find filter(s): %s', implode(', ', array_map(function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($filters), array_keys($sanitized))))));
+            throw new \InvalidArgumentException(\sprintf('Could not find filter(s): %s', implode(', ', array_map(static function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($filters), array_keys($sanitized))))));
         }
 
         return $sanitized;
@@ -201,7 +201,7 @@ class FilterManager
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($processors) !== \count($sanitized)) {
-            throw new \InvalidArgumentException(\sprintf('Could not find post processor(s): %s', implode(', ', array_map(function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($processors), array_keys($sanitized))))));
+            throw new \InvalidArgumentException(\sprintf('Could not find post processor(s): %s', implode(', ', array_map(static function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($processors), array_keys($sanitized))))));
         }
 
         return $sanitized;
