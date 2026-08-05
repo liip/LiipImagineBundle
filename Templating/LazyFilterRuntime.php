@@ -76,6 +76,12 @@ final class LazyFilterRuntime implements RuntimeExtensionInterface
 
     private function cleanPath(string $path): string
     {
+        // strip absolute URLs (e.g. remote filesystems like S3) to their path
+        // host guard: parse_url(PHP_URL_PATH) would also truncate local names at "?"/"#" and strip the version query string
+        if (null !== parse_url($path, PHP_URL_HOST)) {
+            $path = parse_url($path, PHP_URL_PATH) ?? $path;
+        }
+
         if (!$this->assetVersion && !$this->jsonManifest) {
             return $path;
         }

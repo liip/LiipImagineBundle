@@ -48,27 +48,42 @@ class LazyFilterRuntimeTest extends AbstractTest
 
     public function provideImageNames(): iterable
     {
-        yield 'regular' => ['image' => 'cats.jpeg', 'urlimage' => 'cats.jpeg'];
-        yield 'whitespace' => ['image' => 'white cat.jpeg', 'urlimage' => 'white%20cat.jpeg'];
-        yield 'plus' => ['image' => 'cat+plus.jpeg', 'urlimage' => 'cat%2Bplus.jpeg'];
-        yield 'questionmark' => ['image' => 'cat?question.jpeg', 'urlimage' => 'cat%3Fquestion.jpeg'];
-        yield 'hash' => ['image' => 'cat#hash.jpeg', 'urlimage' => 'cat%23hash.jpeg'];
+        yield 'regular' => ['image' => 'cats.jpeg', 'callingimage' => 'cats.jpeg', 'urlimage' => 'cats.jpeg'];
+        yield 'whitespace' => ['image' => 'white cat.jpeg', 'callingimage' => 'white cat.jpeg', 'urlimage' => 'white%20cat.jpeg'];
+        yield 'plus' => ['image' => 'cat+plus.jpeg', 'callingimage' => 'cat+plus.jpeg', 'urlimage' => 'cat%2Bplus.jpeg'];
+        yield 'questionmark' => ['image' => 'cat?question.jpeg', 'callingimage' => 'cat?question.jpeg', 'urlimage' => 'cat%3Fquestion.jpeg'];
+        yield 'hash' => ['image' => 'cat#hash.jpeg', 'callingimage' => 'cat#hash.jpeg', 'urlimage' => 'cat%23hash.jpeg'];
+        yield 'absolute url' => ['image' => 'https://www.example.org/images/dogs.jpg', 'callingimage' => '/images/dogs.jpg', 'urlimage' => '/media/cache/thumbnail/images/dogs.jpg'];
     }
 
     /**
      * @dataProvider provideImageNames
      */
-    public function testInvokeFilterMethod($image, $urlimage): void
+    public function testInvokeFilterMethod($image, $callingimage, $urlimage): void
     {
         $this->manager
             ->expects($this->once())
             ->method('getBrowserPath')
-            ->with($image, self::FILTER)
+            ->with($callingimage, self::FILTER)
             ->willReturn($urlimage);
 
         $actualPath = $this->runtime->filter($image, self::FILTER);
 
         $this->assertSame($urlimage, $actualPath);
+    }
+
+    public function testLocalPathContainingQuestionMarkIsNotTruncated(): void
+    {
+        // guards the host check in cleanPath(): without it, parse_url() would reduce this to "cat"
+        $path = 'cat?question.jpeg';
+
+        $this->manager
+            ->expects($this->once())
+            ->method('getBrowserPath')
+            ->with($path, self::FILTER)
+            ->willReturn('irrelevant');
+
+        $this->runtime->filter($path, self::FILTER);
     }
 
     public function testVersionHandling(): void
@@ -183,6 +198,22 @@ class LazyFilterRuntimeTest extends AbstractTest
             ->willReturn($expectedCachePath);
 
         $actualPath = $this->runtime->filterCache($expectedInputPath, self::FILTER);
+
+        $this->assertSame($expectedCachePath, $actualPath);
+    }
+
+    public function testInvokeFilterCacheMethodWithAbsoluteUrl(): void
+    {
+        $expectedInputPath = '/images/dogs.jpg';
+        $expectedCachePath = '/media/cache/thumbnail/images/dogs.jpg';
+
+        $this->manager
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($expectedInputPath, self::FILTER)
+            ->willReturn($expectedCachePath);
+
+        $actualPath = $this->runtime->filterCache('https://www.example.org/images/dogs.jpg', self::FILTER);
 
         $this->assertSame($expectedCachePath, $actualPath);
     }
