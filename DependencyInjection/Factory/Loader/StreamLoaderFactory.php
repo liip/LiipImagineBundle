@@ -30,7 +30,7 @@ class StreamLoaderFactory extends AbstractLoaderFactory
         return 'stream';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

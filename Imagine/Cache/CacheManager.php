@@ -86,7 +86,7 @@ class CacheManager
      *
      * @param string $filter
      */
-    public function addResolver($filter, ResolverInterface $resolver)
+    public function addResolver($filter, ResolverInterface $resolver): void
     {
         $this->resolvers[$filter] = $resolver;
 
@@ -217,7 +217,7 @@ class CacheManager
      * @param string $filter
      * @param string $resolver
      */
-    public function store(BinaryInterface $binary, $path, $filter, $resolver = null)
+    public function store(BinaryInterface $binary, $path, $filter, $resolver = null): void
     {
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
     }
@@ -226,7 +226,7 @@ class CacheManager
      * @param string|string[]|null $paths
      * @param string|string[]|null $filters
      */
-    public function remove($paths = null, $filters = null)
+    public function remove($paths = null, $filters = null): void
     {
         if (null === $filters) {
             $filters = array_keys($this->filterConfig->all());

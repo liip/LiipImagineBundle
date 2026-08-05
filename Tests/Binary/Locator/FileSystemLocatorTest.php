@@ -87,7 +87,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
             realpath(__DIR__.'/../../../'),
         ];
 
-        return array_map(function ($params) use ($prepend) {
+        return array_map(static function ($params) use ($prepend) {
             return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }

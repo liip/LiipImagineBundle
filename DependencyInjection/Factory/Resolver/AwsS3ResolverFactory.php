@@ -87,7 +87,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
         return 'aws_s3';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()
@@ -145,7 +145,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                 ->ifTrue(static function ($v) {
                     return isset($v['client_id']);
                 })
-                ->then(function ($config) {
+                ->then(static function ($config) {
                     $config['client_config'] = [];
 
                     return $config;

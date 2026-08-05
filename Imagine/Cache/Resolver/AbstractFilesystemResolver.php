@@ -52,12 +52,12 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         $this->filesystem = $filesystem;
     }
 
-    public function setRequest(?Request $request = null)
+    public function setRequest(?Request $request = null): void
     {
         $this->request = $request;
     }
 
-    public function setCacheManager(CacheManager $cacheManager)
+    public function setCacheManager(CacheManager $cacheManager): void
     {
         $this->cacheManager = $cacheManager;
     }
@@ -65,7 +65,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * Set the base path to.
      */
-    public function setBasePath($basePath)
+    public function setBasePath($basePath): void
     {
         $this->basePath = $basePath;
     }
@@ -73,7 +73,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
     /**
      * @param int $folderPermissions
      */
-    public function setFolderPermissions($folderPermissions)
+    public function setFolderPermissions($folderPermissions): void
     {
         $this->folderPermissions = $folderPermissions;
     }
@@ -83,7 +83,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         return file_exists($this->getFilePath($path, $filter));
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $filePath = $this->getFilePath($path, $filter);
 
@@ -94,7 +94,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
         file_put_contents($filePath, $binary->getContent());
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -143,7 +143,7 @@ abstract class AbstractFilesystemResolver implements ResolverInterface, CacheMan
      *
      * @throws \RuntimeException
      */
-    protected function makeFolder($dir)
+    protected function makeFolder($dir): void
     {
         if (!is_dir($dir)) {
             $parent = \dirname($dir);

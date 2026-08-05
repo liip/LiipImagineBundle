@@ -25,7 +25,7 @@ class ChainLoader implements LoaderInterface
      */
     public function __construct(array $loaders)
     {
-        $this->loaders = array_filter($loaders, function ($loader) {
+        $this->loaders = array_filter($loaders, static function ($loader) {
             return $loader instanceof LoaderInterface;
         });
     }
@@ -50,11 +50,11 @@ class ChainLoader implements LoaderInterface
      */
     private static function getLoaderExceptionMessage(string $path, array $exceptions, array $loaders): string
     {
-        array_walk($loaders, function (LoaderInterface &$loader, string $name): void {
+        array_walk($loaders, static function (LoaderInterface &$loader, string $name): void {
             $loader = \sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $name);
         });
 
-        array_walk($exceptions, function (LoaderInterface &$loader, string $message): void {
+        array_walk($exceptions, static function (LoaderInterface &$loader, string $message): void {
             $loader = \sprintf('%s=[%s]', (new \ReflectionObject($loader))->getShortName(), $message);
         });
 

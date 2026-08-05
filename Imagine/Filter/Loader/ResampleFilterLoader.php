@@ -72,7 +72,7 @@ class ResampleFilterLoader implements LoaderInterface
     /**
      * @throws \RuntimeException
      */
-    private function delTemporaryFile($file)
+    private function delTemporaryFile($file): void
     {
         if (file_exists($file)) {
             unlink($file);
@@ -119,7 +119,7 @@ class ResampleFilterLoader implements LoaderInterface
             ImageInterface::RESOLUTION_PIXELSPERCENTIMETER,
         ]);
 
-        $resolver->setNormalizer('filter', function (Options $options, $value) {
+        $resolver->setNormalizer('filter', static function (Options $options, $value) {
             foreach (['\Imagine\Image\ImageInterface::FILTER_%s', '\Imagine\Image\ImageInterface::%s', '%s'] as $format) {
                 if (\defined($constant = \sprintf($format, mb_strtoupper($value))) || \defined($constant = \sprintf($format, $value))) {
                     return \constant($constant);

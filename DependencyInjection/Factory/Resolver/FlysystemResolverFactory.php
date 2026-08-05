@@ -40,7 +40,7 @@ class FlysystemResolverFactory extends AbstractResolverFactory
         return 'flysystem';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

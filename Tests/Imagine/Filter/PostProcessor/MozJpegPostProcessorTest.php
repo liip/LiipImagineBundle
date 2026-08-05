@@ -43,7 +43,7 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
             [['quant_table' => 4, 'optimise' => true, 'quality' => 100], ['-quant-table', 4, '-optimise', '-quality', 100]],
         ];
 
-        return array_map(function (array $d) {
+        return array_map(static function (array $d) {
             array_unshift($d[1], AbstractPostProcessorTestCase::getPostProcessAsStdInExecutable());
 
             return $d;
@@ -70,7 +70,7 @@ class MozJpegPostProcessorTest extends AbstractPostProcessorTestCase
             [['quant_table' => 4, 'optimise' => true, 'quality' => 100], '-quant-table 4 -optimise -quality 100'],
         ];
 
-        return array_map(function ($d) use ($file) {
+        return array_map(static function ($d) use ($file) {
             array_unshift($d, $file);
 
             return $d;

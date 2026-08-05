@@ -80,12 +80,12 @@ class CacheResolver implements ResolverInterface
         return $resolved;
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $this->resolver->store($binary, $path, $filter);
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         $this->resolver->remove($paths, $filters);
 
@@ -120,7 +120,7 @@ class CacheResolver implements ResolverInterface
         ]);
     }
 
-    protected function removePathAndFilter($path, $filter)
+    protected function removePathAndFilter($path, $filter): void
     {
         $indexKey = $this->generateIndexKey($this->generateCacheKey($path, $filter));
         if (!$this->cache->contains($indexKey)) {
@@ -219,7 +219,7 @@ class CacheResolver implements ResolverInterface
         return false;
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'global_prefix' => 'liip_imagine.resolver_cache',
@@ -238,7 +238,7 @@ class CacheResolver implements ResolverInterface
         }
     }
 
-    protected function setDefaultOptions(OptionsResolver $resolver)
+    protected function setDefaultOptions(OptionsResolver $resolver): void
     {
         $this->configureOptions($resolver);
     }

@@ -96,7 +96,7 @@ class PngquantPostProcessor extends AbstractPostProcessor
                     'will be removed in 3.0. Instead, pass wither an integer representing the max value or an array '.
                     'representing the minimum and maximum values.', E_USER_DEPRECATED);
 
-                $quality = array_map(function ($q) {
+                $quality = array_map(static function ($q) {
                     return (int) $q;
                 }, explode('-', $quality));
             }

@@ -14,7 +14,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Liip\ImagineBundle\Command\RemoveCacheCommand;
 use Liip\ImagineBundle\Command\ResolveCacheCommand;
 
-return function (ContainerConfigurator $container): void {
+return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('liip_imagine.command.cache_remove', RemoveCacheCommand::class)
             ->tag('console.command', ['command' => 'liip:imagine:cache:remove', 'alias' => 'imagine:del'])

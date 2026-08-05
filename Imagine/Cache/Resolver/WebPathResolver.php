@@ -74,7 +74,7 @@ class WebPathResolver implements ResolverInterface
         return is_file($this->getFilePath($path, $filter));
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $this->filesystem->dumpFile(
             $this->getFilePath($path, $filter),
@@ -82,7 +82,7 @@ class WebPathResolver implements ResolverInterface
         );
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;

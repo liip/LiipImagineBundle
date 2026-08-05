@@ -73,7 +73,7 @@ class AwsS3Resolver implements ResolverInterface
         $this->putOptions = $putOptions;
     }
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
@@ -81,7 +81,7 @@ class AwsS3Resolver implements ResolverInterface
     /**
      * @param string $cachePrefix
      */
-    public function setCachePrefix($cachePrefix)
+    public function setCachePrefix($cachePrefix): void
     {
         $this->cachePrefix = $cachePrefix;
     }
@@ -96,7 +96,7 @@ class AwsS3Resolver implements ResolverInterface
         return $this->getObjectUrl($this->getObjectPath($path, $filter));
     }
 
-    public function store(BinaryInterface $binary, $path, $filter)
+    public function store(BinaryInterface $binary, $path, $filter): void
     {
         $objectPath = $this->getObjectPath($path, $filter);
         $options = [
@@ -124,7 +124,7 @@ class AwsS3Resolver implements ResolverInterface
         }
     }
 
-    public function remove(array $paths, array $filters)
+    public function remove(array $paths, array $filters): void
     {
         if (empty($paths) && empty($filters)) {
             return;
@@ -250,7 +250,7 @@ class AwsS3Resolver implements ResolverInterface
         return $this->storage->doesObjectExist($this->bucket, $objectPath);
     }
 
-    protected function logError($message, array $context = [])
+    protected function logError($message, array $context = []): void
     {
         if ($this->logger) {
             $this->logger->error($message, $context);

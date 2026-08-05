@@ -37,7 +37,7 @@ class WebPathResolverFactory extends AbstractResolverFactory
         return 'web_path';
     }
 
-    public function addConfiguration(ArrayNodeDefinition $builder)
+    public function addConfiguration(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()

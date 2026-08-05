@@ -127,7 +127,7 @@ class FileSystemLoaderTest extends TestCase
             realpath(__DIR__.'/../../../'),
         ];
 
-        return array_map(function ($parameters) use ($pathsPrepended) {
+        return array_map(static function ($parameters) use ($pathsPrepended) {
             return [[$pathsPrepended[mt_rand(0, \count($pathsPrepended) - 1)], $parameters[0]], $parameters[1]];
         }, static::provideLoadCases());
     }

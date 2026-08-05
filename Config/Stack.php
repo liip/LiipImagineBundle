@@ -76,7 +76,7 @@ final class Stack implements StackInterface
     private function setFilters(array $filters): void
     {
         foreach ($filters as $filter) {
-            if (!($filter instanceof FilterInterface)) {
+            if (!$filter instanceof FilterInterface) {
                 throw new InvalidArgumentException('Unknown filter provided.');
             }
         }

@@ -375,7 +375,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $filterServiceMock
             ->expects($this->exactly(3))
             ->method('getUrlOfFilteredImage')
-            ->willReturnCallback(function ($path, $filter) {
+            ->willReturnCallback(static function ($path, $filter) {
                 return $path.$filter.'Uri';
             });
 
@@ -435,7 +435,7 @@ class ResolveCacheProcessorTest extends AbstractTest
         $cacheManagerMock
             ->expects($this->atLeastOnce())
             ->method('resolve')
-            ->willReturnCallback(function ($path, $filter) {
+            ->willReturnCallback(static function ($path, $filter) {
                 return $path.$filter.'Uri';
             });
 
