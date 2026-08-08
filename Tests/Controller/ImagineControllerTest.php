@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Controller;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Exception\Signer\InvalidSignedUrlException;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Config\Controller\ControllerConfigTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -96,6 +97,43 @@ class ImagineControllerTest extends AbstractTest
             $redirectResponseCode,
             false
         );
+    }
+
+    public function testFilterRuntimeActionThrowsInvalidSignedUrlExceptionWhenSignCheckFails(): void
+    {
+        $path = 'uploads/foo.jpg';
+        $filter = 'thumbnail';
+        $hash = 'bad-hash';
+        $runtimeConfig = ['thumbnail' => ['size' => [50, 50]]];
+
+        $signer = $this->createSignerInterfaceMock();
+        $signer
+            ->expects($this->once())
+            ->method('check')
+            ->with($hash, $path, $runtimeConfig)
+            ->willReturn(false);
+
+        $controller = new ImagineController(
+            $this->createFilterServiceMock(),
+            $this->createDataManagerMock(),
+            $signer,
+            $this->createControllerConfigInstance()
+        );
+
+        $request = new Request(['filters' => $runtimeConfig]);
+
+        try {
+            $controller->filterRuntimeAction($request, $hash, $path, $filter);
+            $this->fail('Expected InvalidSignedUrlException was not thrown.');
+        } catch (InvalidSignedUrlException $exception) {
+            $this->assertSame($path, $exception->getPath());
+            $this->assertSame($filter, $exception->getFilter());
+            $this->assertSame($runtimeConfig, $exception->getRuntimeConfig());
+            $this->assertSame(
+                'Signed url does not pass the sign check for path "uploads/foo.jpg" and filter "thumbnail" and runtime config {"thumbnail":{"size":[50,50]}}',
+                $exception->getMessage()
+            );
+        }
     }
 
     private function createControllerInstance(string $path, string $filter, string $hash, int $redirectResponseCode, bool $expectation = true): ImagineController

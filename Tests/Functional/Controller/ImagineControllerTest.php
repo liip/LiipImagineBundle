@@ -12,10 +12,10 @@
 namespace Liip\ImagineBundle\Tests\Functional\Controller;
 
 use Liip\ImagineBundle\Controller\ImagineController;
+use Liip\ImagineBundle\Exception\Signer\InvalidSignedUrlException;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
 use Liip\ImagineBundle\Tests\Functional\AbstractSetupWebTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -167,7 +167,7 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
     {
-        $this->expectException(BadRequestHttpException::class);
+        $this->expectException(InvalidSignedUrlException::class);
         $this->expectExceptionMessage('Signed url does not pass the sign check for path "images/cats.jpeg" and filter "thumbnail_web_path" and runtime config {"thumbnail":{"size":["50","50"]}}');
 
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/rc/invalidHash/images/cats.jpeg?'.http_build_query([

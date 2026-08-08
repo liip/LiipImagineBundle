@@ -9,6 +9,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 ## 2.18.0 (unreleased)
 
 - Drop support for PHP 8.0.
+- Throw `InvalidSignedUrlException` (extends `BadRequestHttpException`) when a runtime signed URL fails the HMAC check ([BriceFab](https://github.com/liip/LiipImagineBundle/issues/1656))
 
 ## [2.17.2](https://github.com/liip/LiipImagineBundle/tree/2.17.2)
 
