@@ -520,6 +520,42 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->remove([$expectedPathOne, $expectedPathTwo], $expectedFilter);
     }
 
+    public function testRemoveAlsoClearsWebpVariantWhenWebpGenerationEnabled(): void
+    {
+        $expectedPath = 'thePath';
+        $expectedFilter = 'theFilter';
+
+        $resolver = $this->createCacheResolverInterfaceMock();
+        $resolver
+            ->expects($this->once())
+            ->method('remove')
+            ->with(
+                [$expectedPath, $expectedPath.'.webp'],
+                [$expectedFilter]
+            );
+
+        $config = $this->createFilterConfigurationMock();
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnCallback(static function ($filter) {
+                return [
+                    'cache' => $filter,
+                ];
+            });
+
+        $cacheManager = new CacheManager(
+            $config,
+            $this->createRouterInterfaceMock(),
+            new Signer('secret'),
+            $this->createEventDispatcherInterfaceMock(),
+            null,
+            true
+        );
+        $cacheManager->addResolver($expectedFilter, $resolver);
+        $cacheManager->remove($expectedPath, $expectedFilter);
+    }
+
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
     {
         $expectedPathOne = 'thePath';
