@@ -43,7 +43,7 @@ class RelativeResize implements FilterInterface
         $this->parameter = $parameter;
     }
 
-    public function apply(ImageInterface $image)
+    public function apply(ImageInterface $image): ImageInterface
     {
         return $image->resize(\call_user_func([$image->getSize(), $this->method], $this->parameter));
     }
