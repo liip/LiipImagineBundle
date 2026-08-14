@@ -125,6 +125,8 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
                 new Reference('liip_imagine.controller.config'),
+                new Reference('liip_imagine.format_negotiator'),
+                '%liip_imagine.alternative_formats%',
             ]
         );
     }
@@ -184,6 +186,81 @@ class LiipImagineExtensionTest extends AbstractTest
             'templating' => false,
         ]);
         $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testLoadAlternativeFormats(): void
+    {
+        $this->createConfiguration([
+            'alternative_formats' => [
+                'avif' => [
+                    'generate' => true,
+                    'quality' => 85,
+                    'mime_types' => ['image/avif'],
+                ],
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('avif', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['avif']['generate']);
+        $this->assertSame(85, $alternativeFormats['avif']['quality']);
+        $this->assertSame(['image/avif'], $alternativeFormats['avif']['mime_types']);
+
+        $mimeMap = $this->containerBuilder->getParameter('liip_imagine.format_negotiator.mime_map');
+        $this->assertSame(['avif' => ['image/avif']], $mimeMap);
+
+        $this->assertTrue($this->containerBuilder->hasDefinition('liip_imagine.format_negotiator'));
+    }
+
+    public function testAvifPostProcessorDefinition(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('liip_imagine.filter.post_processor.avifenc');
+        $this->assertDICConstructorArguments(
+            $this->containerBuilder->getDefinition('liip_imagine.filter.post_processor.avifenc'),
+            [
+                '%liip_imagine.avif.binary%',
+                '%liip_imagine.avif.tempDir%',
+                '%liip_imagine.avif.quality%',
+                '%liip_imagine.avif.speed%',
+                '%liip_imagine.avif.jobs%',
+            ]
+        );
+    }
+
+    public function testLoadWebpNormalization(): void
+    {
+        $this->createConfiguration([
+            'webp' => [
+                'generate' => true,
+                'quality' => 80,
+            ],
+        ]);
+
+        $alternativeFormats = $this->containerBuilder->getParameter('liip_imagine.alternative_formats');
+        $this->assertArrayHasKey('webp', $alternativeFormats);
+        $this->assertTrue($alternativeFormats['webp']['generate']);
+        $this->assertSame(80, $alternativeFormats['webp']['quality']);
+
+        $this->assertTrue($this->containerBuilder->hasParameter('liip_imagine.webp.generate'));
+        $this->assertTrue($this->containerBuilder->getParameter('liip_imagine.webp.generate'));
+        $this->assertSame(80, $this->containerBuilder->getParameter('liip_imagine.webp.quality'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.cache'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.data_loader'));
+        $this->assertSame([], $this->containerBuilder->getParameter('liip_imagine.webp.post_processors'));
+    }
+
+    public function testWebpCompatibilityParametersWithEmptyConfig(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertTrue($this->containerBuilder->hasParameter('liip_imagine.webp.generate'));
+        $this->assertFalse($this->containerBuilder->getParameter('liip_imagine.webp.generate'));
+        $this->assertSame(100, $this->containerBuilder->getParameter('liip_imagine.webp.quality'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.cache'));
+        $this->assertNull($this->containerBuilder->getParameter('liip_imagine.webp.data_loader'));
+        $this->assertSame([], $this->containerBuilder->getParameter('liip_imagine.webp.post_processors'));
     }
 
     protected function createConfigurationWithDefaultsFilterSets(): void

@@ -104,13 +104,13 @@ class ImagineControllerTest extends AbstractTest
         $filterService
             ->expects($expectation ? $this->atLeastOnce() : $this->never())
             ->method('getUrlOfFilteredImage')
-            ->with($path, $filter, null)
+            ->with($path, $filter, null, false, [])
             ->willReturn(\sprintf('/resolved/image%s', $path));
 
         $filterService
             ->expects($expectation ? $this->once() : $this->never())
             ->method('getUrlOfFilteredImageWithRuntimeFilters')
-            ->with($path, $filter, [], null)
+            ->with($path, $filter, [], null, false, [])
             ->willReturn(\sprintf('/resolved/image%s', $path));
 
         $signer = $this->createSignerInterfaceMock();

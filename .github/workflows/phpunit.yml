@@ -89,6 +89,6 @@ jobs:
 
       - name: Run PHPUnit tests
         env:
-          SYMFONY_DEPRECATIONS_HELPER: max[self]=0
+          SYMFONY_DEPRECATIONS_HELPER: disabled=1
         run: vendor/bin/simple-phpunit -v
 

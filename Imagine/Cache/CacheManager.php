@@ -62,15 +62,15 @@ class CacheManager
     protected $defaultResolver;
 
     /**
-     * @var bool
+     * @var array|bool
      */
-    private $webpGenerate;
+    private $alternativeFormats;
 
     /**
      * Constructs the cache manager to handle Resolvers based on the provided FilterConfiguration.
      *
-     * @param string $defaultResolver
-     * @param bool   $webpGenerate
+     * @param string     $defaultResolver
+     * @param array|bool $alternativeFormats
      */
     public function __construct(
         FilterConfiguration $filterConfig,
@@ -78,14 +78,23 @@ class CacheManager
         SignerInterface $signer,
         EventDispatcherInterface $dispatcher,
         $defaultResolver = null,
-        $webpGenerate = false
+        $alternativeFormats = []
     ) {
+        if (\is_bool($alternativeFormats)) {
+            @trigger_error(\sprintf('Passing a boolean as the second argument to %s is deprecated since LiipImagineBundle 2.x and will be removed in 3.0. Pass an array of alternative formats instead.', __METHOD__), E_USER_DEPRECATED);
+			$alternativeFormats = $alternativeFormats?["webp" => ["generate" => true]]:[];
+		}
+
+		if (!is_array($alternativeFormats)) {
+			throw new \InvalidArgumentException('The second argument to '.__METHOD__.' must be an array or boolean.');
+		}
+
         $this->filterConfig = $filterConfig;
         $this->router = $router;
         $this->signer = $signer;
         $this->dispatcher = $dispatcher;
         $this->defaultResolver = $defaultResolver ?: 'default';
-        $this->webpGenerate = $webpGenerate;
+        $this->alternativeFormats = $alternativeFormats;
     }
 
     /**
@@ -115,15 +124,23 @@ class CacheManager
      */
     public function getBrowserPath($path, $filter, array $runtimeConfig = [], $resolver = null, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
+        $shouldGenerateAlternative = false;
+		foreach ($this->alternativeFormats as $formatConfig) {
+			if (isset($formatConfig['generate']) && true === $formatConfig['generate']) {
+				$shouldGenerateAlternative = true;
+				break;
+			}
+		}
+
         if (!empty($runtimeConfig)) {
             $rcPath = $this->getRuntimePath($path, $runtimeConfig);
 
-            return !$this->webpGenerate && $this->isStored($rcPath, $filter, $resolver) ?
+            return !$shouldGenerateAlternative && $this->isStored($rcPath, $filter, $resolver) ?
                 $this->resolve($rcPath, $filter, $resolver) :
                 $this->generateUrl($path, $filter, $runtimeConfig, $resolver, $referenceType);
         }
 
-        return !$this->webpGenerate && $this->isStored($path, $filter, $resolver) ?
+        return !$shouldGenerateAlternative && $this->isStored($path, $filter, $resolver) ?
             $this->resolve($path, $filter, $resolver) :
             $this->generateUrl($path, $filter, [], $resolver, $referenceType);
     }

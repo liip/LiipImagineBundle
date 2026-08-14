@@ -36,6 +36,11 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
         return realpath(__DIR__.'/../../../Fixtures/bin/post-process-as-stdin-error.bash');
     }
 
+    public static function getPostProcessOutputFileExecutable(): string
+    {
+        return realpath(__DIR__.'/../../../Fixtures/bin/post-process-output-file.bash');
+    }
+
     abstract protected function getPostProcessorInstance(array $parameters = []);
 
     protected function getBinaryInterfaceMock(): BinaryInterface

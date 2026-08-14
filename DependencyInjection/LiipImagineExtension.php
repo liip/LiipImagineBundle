@@ -28,6 +28,7 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
@@ -146,10 +147,55 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
                 ->replaceArgument(1, $mimeTypes);
         }
 
-        $container->setParameter('liip_imagine.webp.generate', $config['webp']['generate']);
-        $webpOptions = $config['webp'];
-        unset($webpOptions['generate']);
-        $container->setParameter('liip_imagine.webp.options', $webpOptions);
+        $alternativeFormats = $config['alternative_formats'] ?? [];
+        $container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
+
+        $mimeMap = [];
+        foreach ($alternativeFormats as $format => $formatConfig) {
+            if (!empty($formatConfig['mime_types'])) {
+                $mimeMap[$format] = $formatConfig['mime_types'];
+            }
+        }
+        $container->setParameter('liip_imagine.format_negotiator.mime_map', $mimeMap);
+
+        $postProcessorsMap = [];
+        foreach ($alternativeFormats as $format => $formatConfig) {
+            if (!empty($formatConfig['post_processors'])) {
+                $postProcessorsMap[$format] = $formatConfig['post_processors'];
+            }
+        }
+        $container->setParameter('liip_imagine.post_processors.map', $postProcessorsMap);
+
+        $formatNegotiatorDefinition = new Definition('Liip\ImagineBundle\Service\FormatNegotiator');
+        $formatNegotiatorDefinition->setArguments([
+            $container->getParameter('liip_imagine.format_negotiator.mime_map'),
+            new Reference('logger', ContainerBuilder::IGNORE_ON_INVALID_REFERENCE),
+        ]);
+        $container->setDefinition('liip_imagine.format_negotiator', $formatNegotiatorDefinition);
+
+        $container->setParameter('liip_imagine.alternative_formats', $alternativeFormats);
+
+        $container->getDefinition('liip_imagine.service.filter')
+            ->replaceArgument(6, $alternativeFormats);
+
+        $this->setWebpCompatibilityParameters($container, $alternativeFormats);
+    }
+
+    private function setWebpCompatibilityParameters(ContainerBuilder $container, array $alternativeFormats): void
+    {
+        $webpConfig = $alternativeFormats['webp'] ?? [
+            'generate' => false,
+            'quality' => 100,
+            'cache' => null,
+            'data_loader' => null,
+            'post_processors' => [],
+        ];
+
+        $container->setParameter('liip_imagine.webp.generate', $webpConfig['generate']);
+        $container->setParameter('liip_imagine.webp.quality', $webpConfig['quality']);
+        $container->setParameter('liip_imagine.webp.cache', $webpConfig['cache']);
+        $container->setParameter('liip_imagine.webp.data_loader', $webpConfig['data_loader']);
+        $container->setParameter('liip_imagine.webp.post_processors', $webpConfig['post_processors']);
     }
 
     public function prepend(ContainerBuilder $container): void

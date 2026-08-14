@@ -46,6 +46,75 @@ final class FilterPathContainerTest extends TestCase
         $this->assertSame($options, $container->getOptions());
     }
 
+    public function provideAlternativeOptions(): \Traversable
+    {
+        yield 'avif options' => [
+            'avif',
+            [],
+            [],
+            [
+                'format' => 'avif',
+            ],
+            'images/cats.jpeg.avif',
+        ];
+
+        yield 'avif with use_default_driver false' => [
+            'avif',
+            [],
+            [
+                'use_default_driver' => false,
+            ],
+            [
+                'format' => 'avif',
+                'use_default_driver' => false,
+            ],
+            'images/cats.jpeg.avif',
+        ];
+
+        yield 'custom avif options' => [
+            'avif',
+            [],
+            [
+                'quality' => 90,
+            ],
+            [
+                'format' => 'avif',
+                'quality' => 90,
+            ],
+            'images/cats.jpeg.avif',
+        ];
+
+        yield 'overwrite base options with avif' => [
+            'avif',
+            [
+                'format' => 'jpeg',
+                'quality' => 80,
+            ],
+            [
+                'quality' => 70,
+            ],
+            [
+                'format' => 'avif',
+                'quality' => 70,
+            ],
+            'images/cats.jpeg.avif',
+        ];
+    }
+
+    /**
+     * @dataProvider provideAlternativeOptions
+     */
+    public function testCreateAlternative(string $format, array $baseOptions, array $altOptions, array $expectedOptions, string $expectedTarget): void
+    {
+        $source = 'images/cats.jpeg';
+
+        $container = (new FilterPathContainer($source, '', $baseOptions))->createAlternative($format, $altOptions);
+
+        $this->assertSame($source, $container->getSource());
+        $this->assertSame($expectedTarget, $container->getTarget());
+        $this->assertSame($expectedOptions, $container->getOptions());
+    }
+
     public function provideWebpOptions(): \Traversable
     {
         yield 'empty options' => [

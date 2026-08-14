@@ -35,17 +35,14 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         parent::setUp();
         $this->webp_generate = \function_exists('imagewebp');
 
-        // We turn on generation through reflection, since only in runtime we can determine whether the WebP is
-        // supported by the current PHP build or not. Enabling WebP in configurations will drop all tests if WebP is
-        // not supported.
         if ($this->webp_generate) {
-            $filterService = $this->getService('test.liip_imagine.service.filter');
-            $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
-            // remove when we drop support for PHP older than 8.1
-            if (PHP_VERSION_ID < 80100) {
-                $webpGenerate->setAccessible(true);
-            }
-            $webpGenerate->setValue($filterService, true);
+            $this->configureAlternativeFormats([
+                'webp' => [
+                    'generate' => true,
+                    'quality' => 75,
+                    'mime_types' => ['image/webp'],
+                ],
+            ]);
         }
     }
 
@@ -163,6 +160,41 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
 
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg');
         $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.webp');
+    }
+
+    public function testShouldResolveAvifFromCache(): void
+    {
+        $this->configureAlternativeFormats([
+            'avif' => [
+                'generate' => true,
+                'quality' => 75,
+                'mime_types' => ['image/avif'],
+            ],
+            'webp' => [
+                'generate' => true,
+                'quality' => 75,
+                'mime_types' => ['image/webp'],
+            ],
+        ]);
+
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg',
+            'anImageContent'
+        );
+        $this->filesystem->dumpFile(
+            $this->cacheRoot.'/thumbnail_web_path/images/cats.jpeg.avif',
+            'anImageContentAvif'
+        );
+
+        $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/cats.jpeg', [], [], [
+            'HTTP_ACCEPT' => 'image/avif,image/webp,*/*',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('http://localhost/media/cache/thumbnail_web_path/images/cats.jpeg.avif', $response->getTargetUrl());
     }
 
     public function testThrowBadRequestIfSignInvalidWhileUsingCustomFilters(): void
@@ -352,5 +384,45 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         if ($this->webp_generate) {
             $this->assertFileExists($this->cacheRoot.'/thumbnail_web_path/images/foo bar.jpeg.webp');
         }
+    }
+
+    private function configureAlternativeFormats(array $formats): void
+    {
+        $container = $this->client->getContainer();
+        $services = [
+            'liip_imagine.service.filter',
+            'liip_imagine.cache.manager',
+            ImagineController::class,
+        ];
+
+        foreach ($services as $serviceId) {
+            if ($container->has($serviceId)) {
+                $service = $container->get($serviceId);
+                $this->setPrivateProperty($service, 'alternativeFormats', $formats);
+            }
+        }
+
+        if ($container->has('liip_imagine.format_negotiator')) {
+            $formatNegotiator = $container->get('liip_imagine.format_negotiator');
+            foreach ($formats as $format => $config) {
+                if (isset($config['mime_types'])) {
+                    $formatNegotiator->registerMimeTypes($format, $config['mime_types']);
+                }
+            }
+        }
+    }
+
+    private function setPrivateProperty($object, string $propertyName, $value): void
+    {
+        $reflection = new \ReflectionClass($object);
+        while (!$reflection->hasProperty($propertyName)) {
+            $reflection = $reflection->getParentClass();
+            if (!$reflection) {
+                return;
+            }
+        }
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
     }
 }

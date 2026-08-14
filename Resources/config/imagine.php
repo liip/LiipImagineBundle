@@ -79,6 +79,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\StripFilterLoader;
 use Liip\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader;
 use Liip\ImagineBundle\Imagine\Filter\Loader\UpscaleFilterLoader;
 use Liip\ImagineBundle\Imagine\Filter\Loader\WatermarkFilterLoader;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\AvifPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\CwebpPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\JpegOptimPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor;
@@ -119,6 +120,13 @@ return static function (ContainerConfigurator $container) {
     $parameters->set('liip_imagine.cwebp.alphaMethod', 1);
     $parameters->set('liip_imagine.cwebp.exact', false);
     $parameters->set('liip_imagine.cwebp.metadata', ['none']);
+
+    // avif parameters
+    $parameters->set('liip_imagine.avif.binary', '/usr/bin/avifenc');
+    $parameters->set('liip_imagine.avif.tempDir', null);
+    $parameters->set('liip_imagine.avif.quality', 75);
+    $parameters->set('liip_imagine.avif.speed', 6);
+    $parameters->set('liip_imagine.avif.jobs', null);
 
     // Factory services
     $services->set('liip_imagine.factory.config.filter.argument.point', PointFactory::class);
@@ -241,7 +249,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.cache.signer'),
             service('event_dispatcher'),
             '%liip_imagine.cache.resolver.default%',
-            '%liip_imagine.webp.generate%',
+            '%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias(CacheManager::class, 'liip_imagine.cache.manager');
@@ -254,9 +262,10 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.filter.manager'),
             service('liip_imagine.cache.manager'),
-            '%liip_imagine.webp.generate%',
-            '%liip_imagine.webp.options%',
+			false,
+            [],
             service('logger')->ignoreOnInvalid(),
+			'%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias(FilterService::class, 'liip_imagine.service.filter');
@@ -274,6 +283,8 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.cache.signer'),
             service('liip_imagine.controller.config'),
+            service('liip_imagine.format_negotiator'),
+            '%liip_imagine.alternative_formats%',
         ]);
 
     $services->alias('liip_imagine.controller', ImagineController::class)
@@ -578,4 +589,14 @@ return static function (ContainerConfigurator $container) {
             '%liip_imagine.cwebp.metadata%',
         ])
         ->tag('liip_imagine.filter.post_processor', ['post_processor' => 'cwebp']);
+
+    $services->set('liip_imagine.filter.post_processor.avifenc', AvifPostProcessor::class)
+        ->args([
+            '%liip_imagine.avif.binary%',
+            '%liip_imagine.avif.tempDir%',
+            '%liip_imagine.avif.quality%',
+            '%liip_imagine.avif.speed%',
+            '%liip_imagine.avif.jobs%',
+        ])
+        ->tag('liip_imagine.filter.post_processor', ['post_processor' => 'avifenc']);
 };

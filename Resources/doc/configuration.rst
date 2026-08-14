@@ -43,6 +43,16 @@ The default configuration for the bundle looks like this:
             filter_action:          liip_imagine.controller::filterAction
             filter_runtime_action:  liip_imagine.controller::filterRuntimeAction
             redirect_response_code: 302
+        alternative_formats:
+            # Prototype
+            format_name:
+                generate:    false
+                quality:     100
+                cache:       ~
+                data_loader: ~
+                post_processors: []
+                mime_types:  []
+                priority:    ~
         webp:
             generate:    false
             quality:     100
@@ -94,7 +104,41 @@ There are several configuration options available:
     * ``redirect_response_code`` - The HTTP redirect response code to return from the imagine controller,
       one of ``201``, ``301``, ``302``, ``303``, ``307``, or ``308``. Default value: ``302``
       See :doc:`optimizations/avoid-redirects` if you want to change this configuration.
-* ``webp``
+* ``alternative_formats`` - configure generation of alternative modern image formats (WebP, AVIF, etc.).
+  Each format is configured as a separate entry with the following options:
+    * ``generate`` - enable generation of a copy of the image in this format.
+    * ``quality`` - override the quality from filter option. Default value: ``100``
+    * ``cache`` - default cache resolver for this format. Default value: ``~`` (uses default resolver)
+    * ``data_loader`` - name of a custom data loader for this format. Default value: ``~`` (uses default loader)
+    * ``post_processors`` - sets post-processors to be applied on filtered image in this format
+      (see Post-Processors section in the :doc:`filters chapter <filters>` for details).
+    * ``mime_types`` - array of MIME types for this format (e.g. ``['image/webp']``). Used for content negotiation.
+    * ``priority`` - priority for content negotiation. Lower number = higher priority.
+  Example:
+
+  .. code-block:: yaml
+
+      alternative_formats:
+          webp:
+              generate: true
+              quality: 80
+              post_processors:
+                  cwebp:
+                      q: 80
+                      metadata: none
+          avif:
+              generate: true
+              quality: 75
+              mime_types: ['image/avif']
+              priority: 1  # higher priority than WebP
+              use_default_driver: false
+              post_processors:
+                  avifenc:
+                      q: 80
+                      metadata: none
+
+* ``webp`` - **DEPRECATED** since 2.x, will be removed in 3.0. Use ``alternative_formats.webp`` instead.
+  This configuration is automatically transformed to ``alternative_formats.webp``.
     * ``generate`` - enabling the generation a copy of the image in the WebP format.
     * ``quality`` - override the quality from filter option.
     * ``cache`` - default cache resolver. Default value: ``web_path`` (which means

@@ -9,3 +9,5 @@
 /Tests/Functional/app/web/media/cache
 /var/
 /vendor/
+/.idea/
+/.junie/guidelines.md
