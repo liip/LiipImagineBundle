@@ -8,6 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## 2.18.0 (unreleased)
 
+- Fix bug that we did not delete the webp variant when enabled, when deleting an image through the CacheManager ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1661))
 - Drop support for PHP 8.0.
 
 ## [2.17.2](https://github.com/liip/LiipImagineBundle/tree/2.17.2)
