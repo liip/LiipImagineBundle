@@ -25,6 +25,13 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEvent
 class CacheManager
 {
     /**
+     * Suffix appended to a cached path to reach its WebP variant.
+     *
+     * @see \Liip\ImagineBundle\Service\FilterPathContainer::createWebp()
+     */
+    private const WEBP_SUFFIX = '.webp';
+
+    /**
      * @var FilterConfiguration
      */
     protected $filterConfig;
@@ -239,6 +246,14 @@ class CacheManager
 
         $paths = array_filter($paths);
         $filters = array_filter($filters);
+
+        // When WebP generation is enabled, each cached image also has a
+        // "<path>.webp" companion (see FilterService::buildFilterPathContainers).
+        // Remove it alongside the original so the WebP cache is not left stale.
+        if ($this->webpGenerate && [] !== $paths) {
+            $webpPaths = array_map(static fn (string $path): string => $path.self::WEBP_SUFFIX, $paths);
+            $paths = array_values(array_unique(array_merge($paths, $webpPaths)));
+        }
 
         $mapping = new \SplObjectStorage();
         foreach ($filters as $filter) {
