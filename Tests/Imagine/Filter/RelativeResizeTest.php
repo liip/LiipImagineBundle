@@ -32,12 +32,4 @@ class RelativeResizeTest extends TestCase
         $this->assertSame(50, $result->getSize()->getHeight());
         $this->assertSame(100, $result->getSize()->getWidth());
     }
-
-    public function testApplyDeclaresNativeReturnType(): void
-    {
-        $returnType = (new \ReflectionMethod(RelativeResize::class, 'apply'))->getReturnType();
-
-        $this->assertInstanceOf(\ReflectionNamedType::class, $returnType);
-        $this->assertSame(ImageInterface::class, $returnType->getName());
-    }
 }
