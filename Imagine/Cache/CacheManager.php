@@ -12,7 +12,9 @@
 namespace Liip\ImagineBundle\Imagine\Cache;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Events\CacheRemoveEvent;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use Liip\ImagineBundle\Events\CacheStoreEvent;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\ImagineEvents;
@@ -226,7 +228,11 @@ class CacheManager
      */
     public function store(BinaryInterface $binary, $path, $filter, $resolver = null): void
     {
+        $this->dispatchWithBC(new CacheStoreEvent($binary, $path, $filter, $resolver), ImagineEvents::PRE_STORE);
+
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
+
+        $this->dispatchWithBC(new CacheStoreEvent($binary, $path, $filter, $resolver), ImagineEvents::POST_STORE);
     }
 
     /**
@@ -255,6 +261,8 @@ class CacheManager
             $paths = array_values(array_unique(array_merge($paths, $webpPaths)));
         }
 
+        $this->dispatchWithBC(new CacheRemoveEvent($paths, $filters), ImagineEvents::PRE_REMOVE);
+
         $mapping = new \SplObjectStorage();
         foreach ($filters as $filter) {
             $resolver = $this->getResolver($filter, null);
@@ -269,6 +277,8 @@ class CacheManager
         foreach ($mapping as $resolver) {
             $resolver->remove($paths, $mapping[$resolver]);
         }
+
+        $this->dispatchWithBC(new CacheRemoveEvent($paths, $filters), ImagineEvents::POST_REMOVE);
     }
 
     /**
@@ -304,7 +314,7 @@ class CacheManager
     /**
      * BC Layer for Symfony < 4.3
      */
-    private function dispatchWithBC(CacheResolveEvent $event, string $eventName): void
+    private function dispatchWithBC(object $event, string $eventName): void
     {
         if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
             $this->dispatcher->dispatch($event, $eventName);
