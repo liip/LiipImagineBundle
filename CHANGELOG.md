@@ -6,6 +6,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## 3.x (unreleased)
 
+- Allow Flysystem resolvers to cache resolved URLs with a PSR-6 cache pool.
 - Dropped support for PHP templating [#1549](https://github.com/liip/LiipImagineBundle/pull/1549).
 - Dropped support for old PHP versions, minimum version is now 8.1 [#1549](https://github.com/liip/LiipImagineBundle/pull/1549).
 - Removed legacy `AmazonS3Resolver` for the outdated `amazonwebservices/aws-sdk-for-php`, use `AwsS3Resolver` with `aws/aws-sdk-php` instead [#1549](https://github.com/liip/LiipImagineBundle/pull/1549).

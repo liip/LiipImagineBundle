@@ -18,6 +18,14 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class FlysystemResolverFactory extends AbstractResolverFactory
 {
+    private const CACHE_ARGUMENT_INDEX = 0;
+    private const CACHE_CONFIG_KEY = 'cache';
+    private const CACHED_RESOLVER_SUFFIX = '.cached';
+    private const PSR_CACHE_RESOLVER_NAME = 'psr_cache';
+    private const RESOLVER_ARGUMENT_INDEX = 1;
+    private const RESOLVER_TAG = 'liip_imagine.cache.resolver';
+    private const RESOLVER_TAG_KEY = 'resolver';
+
     public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $resolverDefinition = $this->getChildResolverDefinition($this->getChildResolverName());
@@ -25,12 +33,24 @@ class FlysystemResolverFactory extends AbstractResolverFactory
         $resolverDefinition->replaceArgument(2, $config['root_url']);
         $resolverDefinition->replaceArgument(3, $config['cache_prefix']);
         $resolverDefinition->replaceArgument(4, $config['visibility']);
-        $resolverDefinition->addTag('liip_imagine.cache.resolver', [
-            'resolver' => $name,
-        ]);
-
-        $resolverId = 'liip_imagine.cache.resolver.'.$name;
+        $resolverId = static::$namePrefix.'.'.$name;
         $container->setDefinition($resolverId, $resolverDefinition);
+
+        if ($config[self::CACHE_CONFIG_KEY]) {
+            $cachedResolverId = $resolverId.self::CACHED_RESOLVER_SUFFIX;
+
+            $container->setDefinition($cachedResolverId, $resolverDefinition);
+
+            $cacheResolverDefinition = $this->getChildResolverDefinition(self::PSR_CACHE_RESOLVER_NAME);
+            $cacheResolverDefinition->replaceArgument(self::CACHE_ARGUMENT_INDEX, new Reference($config[self::CACHE_CONFIG_KEY]));
+            $cacheResolverDefinition->replaceArgument(self::RESOLVER_ARGUMENT_INDEX, new Reference($cachedResolverId));
+
+            $container->setDefinition($resolverId, $cacheResolverDefinition);
+        }
+
+        $container->getDefinition($resolverId)->addTag(self::RESOLVER_TAG, [
+            self::RESOLVER_TAG_KEY => $name,
+        ]);
 
         return $resolverId;
     }
@@ -54,6 +74,9 @@ class FlysystemResolverFactory extends AbstractResolverFactory
                 ->scalarNode('root_url')
                     ->isRequired()
                     ->cannotBeEmpty()
+                ->end()
+                ->scalarNode(self::CACHE_CONFIG_KEY)
+                    ->defaultFalse()
                 ->end()
                 ->enumNode('visibility')
                     ->values(['public', 'private', 'noPredefinedVisibility'])
