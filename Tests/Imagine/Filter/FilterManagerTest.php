@@ -11,6 +11,8 @@
 
 namespace Liip\ImagineBundle\Tests\Filter;
 
+use Imagine\Gd\Imagine as GdImagine;
+use Imagine\Vips\Imagine as VipsImagine;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Events\FilterEvent;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -31,6 +33,8 @@ class FilterManagerTest extends AbstractTest
     private const EVENT_POST_FILTER = 'liip_imagine.post_filter';
     private const EVENT_PRE_POST_PROCESSOR = 'liip_imagine.pre_post_processor';
     private const EVENT_POST_POST_PROCESSOR = 'liip_imagine.post_post_processor';
+    private const VIPS_JPEG_QUALITY = 60;
+    private const VIPS_QUALITY = 80;
 
     public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter(): void
     {
@@ -414,6 +418,47 @@ class FilterManagerTest extends AbstractTest
         $filterManager->addLoader('thumbnail', $loader);
 
         $this->assertInstanceOf(Binary::class, $filterManager->applyFilter($binary, 'thumbnail'));
+    }
+
+    public function testMapsQualityToVipsFormatOptionsOnApply(): void
+    {
+        if (!class_exists(VipsImagine::class)) {
+            class_alias(GdImagine::class, VipsImagine::class);
+        }
+
+        $binary = new Binary('aOriginalContent', 'image/png', 'png');
+        $image = $this->getImageInterfaceMock();
+        $image
+            ->expects($this->once())
+            ->method('get')
+            ->with('png', [
+                'quality' => self::VIPS_QUALITY,
+                'jpeg_quality' => self::VIPS_JPEG_QUALITY,
+                'png_quality' => self::VIPS_QUALITY,
+                'webp_quality' => self::VIPS_QUALITY,
+                'heif_quality' => self::VIPS_QUALITY,
+                'avif_quality' => self::VIPS_QUALITY,
+                'jxl_quality' => self::VIPS_QUALITY,
+            ])
+            ->willReturn('aFilteredContent');
+
+        $imagine = $this->createMock(VipsImagine::class);
+        $imagine
+            ->expects($this->once())
+            ->method('load')
+            ->willReturn($image);
+
+        $filterManager = new FilterManager(
+            $this->createFilterConfigurationMock(),
+            $imagine,
+            $this->createMimeTypeGuesserInterfaceMock()
+        );
+
+        $this->assertInstanceOf(Binary::class, $filterManager->apply($binary, [
+            'quality' => self::VIPS_QUALITY,
+            'jpeg_quality' => self::VIPS_JPEG_QUALITY,
+            'post_processors' => [],
+        ]));
     }
 
     public function testAlters100QualityIfNotSetOnApplyFilter(): void
