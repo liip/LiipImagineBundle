@@ -15,6 +15,7 @@ use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
+use Liip\ImagineBundle\Exception\Signer\InvalidSignedUrlException;
 use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
@@ -22,7 +23,6 @@ use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ImagineController
@@ -109,7 +109,7 @@ class ImagineController
      * @param string $filter
      *
      * @throws RuntimeException
-     * @throws BadRequestHttpException
+     * @throws InvalidSignedUrlException
      * @throws NotFoundHttpException
      *
      * @return RedirectResponse
@@ -121,7 +121,7 @@ class ImagineController
         $runtimeConfig = $this->getFiltersBc($request);
 
         if (true !== $this->signer->check($hash, $path, $runtimeConfig)) {
-            throw new BadRequestHttpException(\sprintf('Signed url does not pass the sign check for path "%s" and filter "%s" and runtime config %s', $path, $filter, json_encode($runtimeConfig)));
+            throw new InvalidSignedUrlException($path, $filter, $runtimeConfig);
         }
 
         return $this->createRedirectResponse(function () use ($path, $filter, $runtimeConfig, $resolver, $request) {
