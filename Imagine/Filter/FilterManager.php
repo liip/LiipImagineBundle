@@ -13,6 +13,7 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use Imagine\Vips\Imagine as VipsImagine;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
@@ -22,6 +23,15 @@ use Liip\ImagineBundle\Model\Binary;
 
 class FilterManager
 {
+    private const VIPS_QUALITY_OPTIONS = [
+        'jpeg_quality',
+        'png_quality',
+        'webp_quality',
+        'heif_quality',
+        'avif_quality',
+        'jxl_quality',
+    ];
+
     /**
      * @var FilterConfiguration
      */
@@ -144,6 +154,12 @@ class FilterManager
         $options = [
             'quality' => $config['quality'],
         ];
+
+        if ($this->imagine instanceof VipsImagine) {
+            foreach (self::VIPS_QUALITY_OPTIONS as $qualityOption) {
+                $options[$qualityOption] = $config[$qualityOption] ?? $config['quality'];
+            }
+        }
 
         if (isset($config['jpeg_quality'])) {
             $options['jpeg_quality'] = $config['jpeg_quality'];

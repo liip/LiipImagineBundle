@@ -107,6 +107,7 @@ There are several configuration options available:
 * ``driver`` - one of the drivers: ``gd``, ``imagick``, ``gmagick``, ``vips``.
   Default value: ``gd``
   * If you want to use vips, you need to additionally require ``rokka/imagine-vips``
+  * With vips, ``quality`` is applied to each output format's quality option.
 * ``default_filter_set_settings`` - specify the default values that will be inherit for any set defined in
   ``filter_sets``. These values will be overridden if they are specified in the each set. In case of ``filters`` and
   ``post_processors``, the specified values will be merged with the default ones.
