@@ -19,17 +19,31 @@ final class ControllerConfig
 
     private $redirectResponseCode;
 
-    public function __construct(int $redirectResponseCode)
+    /**
+     * @var bool
+     */
+    private $debug;
+
+    public function __construct(int $redirectResponseCode, bool $debug = true)
     {
         if (!\in_array($redirectResponseCode, self::REDIRECT_RESPONSE_CODES, true)) {
             throw new InvalidArgumentException(\sprintf('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).', $redirectResponseCode));
         }
 
         $this->redirectResponseCode = $redirectResponseCode;
+        $this->debug = $debug;
     }
 
     public function getRedirectResponseCode(): int
     {
         return $this->redirectResponseCode;
+    }
+
+    /**
+     * Whether failures to generate an image must surface as an error rather than fall back to the default image.
+     */
+    public function isDebug(): bool
+    {
+        return $this->debug;
     }
 }

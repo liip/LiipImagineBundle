@@ -264,7 +264,7 @@ return static function (ContainerConfigurator $container) {
     // Config
     $services->set('liip_imagine.controller.config', ControllerConfig::class)
         ->private()
-        ->args(['']);
+        ->args(['', true]);
 
     // Controller
     $services->set(ImagineController::class)
@@ -274,6 +274,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.cache.signer'),
             service('liip_imagine.controller.config'),
+            service('logger')->ignoreOnInvalid(),
         ]);
 
     $services->alias('liip_imagine.controller', ImagineController::class)
