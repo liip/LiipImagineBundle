@@ -161,6 +161,7 @@ class ImagineController
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $exception) {
             // this fallback predates the debug mode check, so it keeps applying in debug mode
+            // TODO next major version: change to throw exception in debug mode and get rid fo the evenInDebug flag
             if (null !== $response = $this->createDefaultImageResponse($filter, $exception, true)) {
                 return $response;
             }
