@@ -11,13 +11,18 @@
 
 namespace Liip\ImagineBundle\Tests\Controller;
 
+use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Liip\ImagineBundle\Tests\Config\Controller\ControllerConfigTest;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @covers \Liip\ImagineBundle\Controller\ImagineController
@@ -95,6 +100,134 @@ class ImagineControllerTest extends AbstractTest
             'hash',
             $redirectResponseCode,
             false
+        );
+    }
+
+    public static function provideGenerationFailureData(): \Generator
+    {
+        yield 'non existing filter' => [
+            new NonExistingFilterException('Filter not found'),
+            NotFoundHttpException::class,
+            'Requested non-existing filter "filter"',
+        ];
+
+        yield 'image can not be generated' => [
+            new RuntimeException('Imagine gave up'),
+            \RuntimeException::class,
+            'Unable to create image for path "/foo" and filter "filter". Message was "Imagine gave up"',
+        ];
+    }
+
+    /**
+     * @dataProvider provideGenerationFailureData
+     */
+    public function testRedirectsToDefaultImageWhenDebugIsDisabled(\Exception $exception): void
+    {
+        $controller = $this->createFailingControllerInstance($exception, '/default/image.png', false);
+
+        $response = $controller->filterAction(new Request(), '/foo', 'filter');
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('/default/image.png', $response->getTargetUrl());
+    }
+
+    /**
+     * @dataProvider provideGenerationFailureData
+     */
+    public function testRuntimeActionRedirectsToDefaultImageWhenDebugIsDisabled(\Exception $exception): void
+    {
+        $controller = $this->createFailingControllerInstance($exception, '/default/image.png', false, true);
+
+        $response = $controller->filterRuntimeAction(new Request(), 'hash', '/foo', 'filter');
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('/default/image.png', $response->getTargetUrl());
+    }
+
+    /**
+     * @dataProvider provideGenerationFailureData
+     */
+    public function testThrowsWhenDebugIsEnabled(\Exception $exception, string $expectedException, string $expectedMessage): void
+    {
+        $controller = $this->createFailingControllerInstance($exception, '/default/image.png', true);
+
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedMessage);
+
+        $controller->filterAction(new Request(), '/foo', 'filter');
+    }
+
+    /**
+     * @dataProvider provideGenerationFailureData
+     */
+    public function testThrowsWithoutDefaultImageEvenWhenDebugIsDisabled(\Exception $exception, string $expectedException, string $expectedMessage): void
+    {
+        $controller = $this->createFailingControllerInstance($exception, null, false);
+
+        $this->expectException($expectedException);
+        $this->expectExceptionMessage($expectedMessage);
+
+        $controller->filterAction(new Request(), '/foo', 'filter');
+    }
+
+    public function testLogsTheExceptionItReplacedByTheDefaultImage(): void
+    {
+        $exception = new RuntimeException('Imagine gave up');
+
+        $logger = $this->createObjectMock(LoggerInterface::class);
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with(
+                'Failed to create image for filter "{filter}", falling back to the default image. Message was "{message}"',
+                [
+                    'filter' => 'filter',
+                    'message' => 'Imagine gave up',
+                    'exception' => $exception,
+                ]
+            );
+
+        $controller = $this->createFailingControllerInstance($exception, '/default/image.png', false, false, $logger);
+
+        $controller->filterAction(new Request(), '/foo', 'filter');
+    }
+
+    public function testNotLoadableSourceStillRedirectsToDefaultImageInDebugMode(): void
+    {
+        // this fallback predates the debug mode check, so enabling debug must not change it
+        $controller = $this->createFailingControllerInstance(new NotLoadableException('Source is gone'), '/default/image.png', true);
+
+        $response = $controller->filterAction(new Request(), '/foo', 'filter');
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('/default/image.png', $response->getTargetUrl());
+    }
+
+    private function createFailingControllerInstance(\Exception $exception, ?string $defaultImageUrl, bool $debug, bool $runtimeFilters = false, ?LoggerInterface $logger = null): ImagineController
+    {
+        $filterService = $this->createFilterServiceMock();
+        $filterService
+            ->expects($this->once())
+            ->method($runtimeFilters ? 'getUrlOfFilteredImageWithRuntimeFilters' : 'getUrlOfFilteredImage')
+            ->willThrowException($exception);
+
+        $dataManager = $this->createDataManagerMock();
+        $dataManager
+            ->method('getDefaultImageUrl')
+            ->with('filter')
+            ->willReturn($defaultImageUrl);
+
+        $signer = $this->createSignerInterfaceMock();
+        $signer
+            ->method('check')
+            ->willReturn(true);
+
+        return new ImagineController(
+            $filterService,
+            $dataManager,
+            $signer,
+            new ControllerConfig(301, $debug),
+            $logger
         );
     }
 

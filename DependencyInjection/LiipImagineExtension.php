@@ -118,7 +118,8 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $container
             ->getDefinition('liip_imagine.controller.config')
-            ->replaceArgument(0, $config['controller']['redirect_response_code']);
+            ->replaceArgument(0, $config['controller']['redirect_response_code'])
+            ->replaceArgument(1, $config['controller']['debug'] ?? '%kernel.debug%');
 
         $container->setAlias('liip_imagine', new Alias("liip_imagine.{$driver}"));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));

@@ -19,6 +19,8 @@ use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\SignerInterface;
 use Liip\ImagineBundle\Imagine\Data\DataManager;
 use Liip\ImagineBundle\Service\FilterService;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,15 +49,22 @@ class ImagineController
      */
     private $controllerConfig;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         FilterService $filterService,
         DataManager $dataManager,
         SignerInterface $signer,
-        ?ControllerConfig $controllerConfig = null
+        ?ControllerConfig $controllerConfig = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->filterService = $filterService;
         $this->dataManager = $dataManager;
         $this->signer = $signer;
+        $this->logger = $logger ?: new NullLogger();
 
         if (null === $controllerConfig) {
             @trigger_error(\sprintf(
@@ -151,16 +160,53 @@ class ImagineController
         try {
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $exception) {
-            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
-                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
+            // this fallback predates the debug mode check, so it keeps applying in debug mode
+            // TODO next major version: change to throw exception in debug mode and get rid fo the evenInDebug flag
+            if (null !== $response = $this->createDefaultImageResponse($filter, $exception, true)) {
+                return $response;
             }
 
             throw new NotFoundHttpException(\sprintf('Source image for path "%s" could not be found', $path), $exception);
         } catch (NonExistingFilterException $exception) {
+            if (null !== $response = $this->createDefaultImageResponse($filter, $exception)) {
+                return $response;
+            }
+
             throw new NotFoundHttpException(\sprintf('Requested non-existing filter "%s"', $filter), $exception);
         } catch (RuntimeException $exception) {
+            if (null !== $response = $this->createDefaultImageResponse($filter, $exception)) {
+                return $response;
+            }
+
             throw new \RuntimeException(vsprintf('Unable to create image for path "%s" and filter "%s". Message was "%s"', [$hash ? \sprintf('%s/%s', $hash, $path) : $path, $filter, $exception->getMessage()]), 0, $exception);
         }
+    }
+
+    /**
+     * Outside of debug mode, an image that can not be generated at all is replaced by the default image rather
+     * than by an error page. The exception is logged so that the problem is not silently swallowed.
+     *
+     * @param bool $evenInDebug Whether to fall back in debug mode too, for the callers that already did so
+     */
+    private function createDefaultImageResponse(string $filter, \Throwable $exception, bool $evenInDebug = false): ?RedirectResponse
+    {
+        if (!$evenInDebug && $this->controllerConfig->isDebug()) {
+            return null;
+        }
+
+        $defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter);
+
+        if (null === $defaultImageUrl) {
+            return null;
+        }
+
+        $this->logger->warning('Failed to create image for filter "{filter}", falling back to the default image. Message was "{message}"', [
+            'filter' => $filter,
+            'message' => $exception->getMessage(),
+            'exception' => $exception,
+        ]);
+
+        return new RedirectResponse($defaultImageUrl);
     }
 
     private function isWebpSupported(Request $request): bool

@@ -125,7 +125,22 @@ class LiipImagineExtensionTest extends AbstractTest
                 new Reference('liip_imagine.data.manager'),
                 new Reference('liip_imagine.cache.signer'),
                 new Reference('liip_imagine.controller.config'),
+                new Reference('logger'),
             ]
+        );
+        $this->assertSame(
+            [302, '%kernel.debug%'],
+            $this->containerBuilder->getDefinition('liip_imagine.controller.config')->getArguments()
+        );
+    }
+
+    public function testControllerDebugCanBeConfiguredExplicitly(): void
+    {
+        $this->createConfiguration(['controller' => ['debug' => false]]);
+
+        $this->assertSame(
+            [302, false],
+            $this->containerBuilder->getDefinition('liip_imagine.controller.config')->getArguments()
         );
     }
 
