@@ -160,8 +160,9 @@ class ImagineController
         try {
             return new RedirectResponse($url(), $this->controllerConfig->getRedirectResponseCode());
         } catch (NotLoadableException $exception) {
-            if (null !== $this->dataManager->getDefaultImageUrl($filter)) {
-                return new RedirectResponse($this->dataManager->getDefaultImageUrl($filter));
+            // this fallback predates the debug mode check, so it keeps applying in debug mode
+            if (null !== $response = $this->createDefaultImageResponse($filter, $exception, true)) {
+                return $response;
             }
 
             throw new NotFoundHttpException(\sprintf('Source image for path "%s" could not be found', $path), $exception);
@@ -183,10 +184,12 @@ class ImagineController
     /**
      * Outside of debug mode, an image that can not be generated at all is replaced by the default image rather
      * than by an error page. The exception is logged so that the problem is not silently swallowed.
+     *
+     * @param bool $evenInDebug Whether to fall back in debug mode too, for the callers that already did so
      */
-    private function createDefaultImageResponse(string $filter, \Throwable $exception): ?RedirectResponse
+    private function createDefaultImageResponse(string $filter, \Throwable $exception, bool $evenInDebug = false): ?RedirectResponse
     {
-        if ($this->controllerConfig->isDebug()) {
+        if (!$evenInDebug && $this->controllerConfig->isDebug()) {
             return null;
         }
 
@@ -196,7 +199,11 @@ class ImagineController
             return null;
         }
 
-        $this->logger->warning(\sprintf('Failed to create image for filter "%s", falling back to the default image. Message was "%s"', $filter, $exception->getMessage()), ['exception' => $exception]);
+        $this->logger->warning('Failed to create image for filter "{filter}", falling back to the default image. Message was "{message}"', [
+            'filter' => $filter,
+            'message' => $exception->getMessage(),
+            'exception' => $exception,
+        ]);
 
         return new RedirectResponse($defaultImageUrl);
     }

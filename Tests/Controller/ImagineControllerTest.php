@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Controller;
 use Imagine\Exception\RuntimeException;
 use Liip\ImagineBundle\Config\Controller\ControllerConfig;
 use Liip\ImagineBundle\Controller\ImagineController;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Exception\Imagine\Filter\NonExistingFilterException;
 use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Tests\AbstractTest;
@@ -178,13 +179,28 @@ class ImagineControllerTest extends AbstractTest
             ->expects($this->once())
             ->method('warning')
             ->with(
-                'Failed to create image for filter "filter", falling back to the default image. Message was "Imagine gave up"',
-                ['exception' => $exception]
+                'Failed to create image for filter "{filter}", falling back to the default image. Message was "{message}"',
+                [
+                    'filter' => 'filter',
+                    'message' => 'Imagine gave up',
+                    'exception' => $exception,
+                ]
             );
 
         $controller = $this->createFailingControllerInstance($exception, '/default/image.png', false, false, $logger);
 
         $controller->filterAction(new Request(), '/foo', 'filter');
+    }
+
+    public function testNotLoadableSourceStillRedirectsToDefaultImageInDebugMode(): void
+    {
+        // this fallback predates the debug mode check, so enabling debug must not change it
+        $controller = $this->createFailingControllerInstance(new NotLoadableException('Source is gone'), '/default/image.png', true);
+
+        $response = $controller->filterAction(new Request(), '/foo', 'filter');
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame('/default/image.png', $response->getTargetUrl());
     }
 
     private function createFailingControllerInstance(\Exception $exception, ?string $defaultImageUrl, bool $debug, bool $runtimeFilters = false, ?LoggerInterface $logger = null): ImagineController
