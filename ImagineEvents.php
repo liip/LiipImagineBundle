@@ -42,4 +42,24 @@ interface ImagineEvents
      * @Event("Liip\ImagineBundle\Events\CacheRemoveEvent")
      */
     public const POST_REMOVE = 'liip_imagine.post_remove';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\FilterEvent")
+     */
+    public const PRE_FILTER = 'liip_imagine.pre_filter';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\FilterEvent")
+     */
+    public const POST_FILTER = 'liip_imagine.post_filter';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\FilterEvent")
+     */
+    public const PRE_POST_PROCESSOR = 'liip_imagine.pre_post_processor';
+
+    /**
+     * @Event("Liip\ImagineBundle\Events\FilterEvent")
+     */
+    public const POST_POST_PROCESSOR = 'liip_imagine.post_post_processor';
 }
