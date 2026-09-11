@@ -39,6 +39,9 @@ answers that the source image could not be found. Use the
 :doc:`asset mapper data loader <data-loader/asset_mapper>`, which maps the
 versioned public path back to its source file.
 
+Images that are not AssetMapper assets, such as uploads, are not versioned and
+keep being loaded by the ``filesystem`` loader from wherever they are stored.
+
 Cache Busting
 ~~~~~~~~~~~~~
 
