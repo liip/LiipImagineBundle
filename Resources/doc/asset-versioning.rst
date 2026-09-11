@@ -22,6 +22,26 @@ setting for ``framework.assets.json_manifest_path``. The manifest file is used
 to lookup the location of the actual file, and append the versioning string to
 the resulting image URL so that cache busting is used.
 
+Asset Mapper
+~~~~~~~~~~~~
+
+Symfony's `AssetMapper`_ puts the version in the file name rather than in a
+query string or in a manifest, so neither of the two integrations above applies
+to it.
+
+In production there is nothing to configure: ``asset-map:compile`` writes the
+versioned files into the public directory, where the ``filesystem`` data loader
+finds them like any other file.
+
+In development the versioned files do not exist on disk, because AssetMapper
+serves the assets from their source directory, so the ``filesystem`` loader
+answers that the source image could not be found. Use the
+:doc:`asset mapper data loader <data-loader/asset_mapper>`, which maps the
+versioned public path back to its source file.
+
+Images that are not AssetMapper assets, such as uploads, are not versioned and
+keep being loaded by the ``filesystem`` loader from wherever they are stored.
+
 Cache Busting
 ~~~~~~~~~~~~~
 
@@ -59,3 +79,4 @@ configured Symfony to append an asset version, you now won't be able to use the
 ``asset`` Twig function with the ``imagine_filter``.
 
 .. _`asset version`: https://symfony.com/doc/current/reference/configuration/framework.html#reference-framework-assets-version
+.. _`AssetMapper`: https://symfony.com/doc/current/frontend/asset_mapper.html
