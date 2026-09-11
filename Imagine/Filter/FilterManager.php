@@ -16,9 +16,13 @@ use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Events\FilterEvent;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class FilterManager
 {
@@ -47,11 +51,17 @@ class FilterManager
      */
     protected $postProcessors = [];
 
-    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser)
+    /**
+     * @var EventDispatcherInterface|null
+     */
+    private $dispatcher;
+
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser, ?EventDispatcherInterface $dispatcher = null)
     {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
         $this->mimeTypeGuesser = $mimeTypeGuesser;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -97,8 +107,14 @@ class FilterManager
         }
 
         foreach ($this->sanitizeFilters($config['filters'] ?? []) as $name => $options) {
+            $event = new FilterEvent($name, $options);
+            $this->dispatchWithBC($event, ImagineEvents::PRE_FILTER);
             $prior = $image;
-            $image = $this->loaders[$name]->load($image, $options);
+            try {
+                $image = $this->loaders[$name]->load($image, $options);
+            } finally {
+                $this->dispatchWithBC($event, ImagineEvents::POST_FILTER);
+            }
 
             if ($prior !== $image) {
                 $this->destroyImage($prior);
@@ -133,7 +149,13 @@ class FilterManager
     public function applyPostProcessors(BinaryInterface $binary, array $config): BinaryInterface
     {
         foreach ($this->sanitizePostProcessors($config['post_processors'] ?? []) as $name => $options) {
-            $binary = $this->postProcessors[$name]->process($binary, $options);
+            $event = new FilterEvent($name, $options);
+            $this->dispatchWithBC($event, ImagineEvents::PRE_POST_PROCESSOR);
+            try {
+                $binary = $this->postProcessors[$name]->process($binary, $options);
+            } finally {
+                $this->dispatchWithBC($event, ImagineEvents::POST_POST_PROCESSOR);
+            }
         }
 
         return $binary;
@@ -215,6 +237,22 @@ class FilterManager
     {
         if (method_exists($image, '__destruct')) {
             $image->__destruct();
+        }
+    }
+
+    /**
+     * BC Layer for Symfony < 4.3.
+     */
+    private function dispatchWithBC(object $event, string $eventName): void
+    {
+        if (null === $this->dispatcher) {
+            return;
+        }
+
+        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+            $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            $this->dispatcher->dispatch($eventName, $event);
         }
     }
 }

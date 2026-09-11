@@ -12,17 +12,26 @@
 namespace Liip\ImagineBundle\Tests\Filter;
 
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Events\FilterEvent;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\Model\Binary;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * @covers \Liip\ImagineBundle\Imagine\Filter\FilterManager
+ * @covers \Liip\ImagineBundle\Events\FilterEvent
  */
 class FilterManagerTest extends AbstractTest
 {
+    private const EVENT_PRE_FILTER = 'liip_imagine.pre_filter';
+    private const EVENT_POST_FILTER = 'liip_imagine.post_filter';
+    private const EVENT_PRE_POST_PROCESSOR = 'liip_imagine.pre_post_processor';
+    private const EVENT_POST_POST_PROCESSOR = 'liip_imagine.post_post_processor';
+
     public function testThrowsIfNoLoadersAddedForFilterOnApplyFilter(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -1057,6 +1066,69 @@ class FilterManagerTest extends AbstractTest
         );
 
         $this->assertSame($binary, $filterManager->applyPostProcessors($binary, []));
+    }
+
+    public function testDispatchesEventsAroundFiltersAndPostProcessors(): void
+    {
+        $sequence = [];
+        $events = [];
+        $dispatcher = new EventDispatcher();
+        foreach ([self::EVENT_PRE_FILTER, self::EVENT_POST_FILTER, self::EVENT_PRE_POST_PROCESSOR, self::EVENT_POST_POST_PROCESSOR] as $eventName) {
+            $dispatcher->addListener($eventName, static function (FilterEvent $event) use (&$events, &$sequence, $eventName): void {
+                $sequence[] = $eventName;
+                $events[$eventName] = $event;
+            });
+        }
+
+        $image = $this->getImageInterfaceMock();
+        $loader = $this->createFilterLoaderInterfaceMock();
+        $loader
+            ->method('load')
+            ->willReturnCallback(static function () use (&$sequence, $image) {
+                $sequence[] = 'filter';
+
+                return $image;
+            });
+
+        $postProcessor = $this->createObjectMock(PostProcessorInterface::class);
+        $postProcessor
+            ->method('process')
+            ->willReturnCallback(static function (BinaryInterface $binary) use (&$sequence): BinaryInterface {
+                $sequence[] = 'post_processor';
+
+                return $binary;
+            });
+
+        $imagine = $this->createImagineInterfaceMock();
+        $imagine->method('load')->willReturn($image);
+        $image->method('get')->willReturn('filtered');
+
+        $filterManager = new FilterManager(
+            $this->createFilterConfigurationMock(),
+            $imagine,
+            $this->createMimeTypeGuesserInterfaceMock(),
+            $dispatcher
+        );
+        $filterManager->addLoader('thumbnail', $loader);
+        $filterManager->addPostProcessor('optimizer', $postProcessor);
+
+        $filterManager->apply(new Binary('original', 'image/jpeg', 'jpeg'), [
+            'filters' => ['thumbnail' => []],
+            'post_processors' => ['optimizer' => []],
+        ]);
+
+        $this->assertSame([
+            self::EVENT_PRE_FILTER,
+            'filter',
+            self::EVENT_POST_FILTER,
+            self::EVENT_PRE_POST_PROCESSOR,
+            'post_processor',
+            self::EVENT_POST_POST_PROCESSOR,
+        ], $sequence);
+        $this->assertSame('thumbnail', $events[self::EVENT_PRE_FILTER]->getName());
+        $this->assertSame([], $events[self::EVENT_PRE_FILTER]->getOptions());
+        $this->assertSame('optimizer', $events[self::EVENT_PRE_POST_PROCESSOR]->getName());
+        $this->assertSame([], $events[self::EVENT_PRE_POST_PROCESSOR]->getOptions());
     }
 
     /**
