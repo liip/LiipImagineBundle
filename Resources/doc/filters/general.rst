@@ -62,7 +62,9 @@ Background Options
     ``bottom``, and ``bottomright``.
 
 **transparency:** ``integer``
-    Sets the background alpha value. The value should be within a range of 0 (opaque) - 100 (fully transparent).
+    Sets the background alpha value, from ``0`` (fully transparent) to ``100`` (opaque).
+    The background is opaque when the option is omitted. Despite its name the value is an
+    opacity, because it is handed to Imagine as the alpha of the background color.
 
 
 .. _filter-grayscale:
