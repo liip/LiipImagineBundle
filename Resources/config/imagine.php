@@ -217,7 +217,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.filter.configuration'),
             service('liip_imagine'),
             service('liip_imagine.binary.mime_type_guesser'),
-            service('event_dispatcher'),
+            service('event_dispatcher')->nullOnInvalid(),
         ]);
 
     $services->alias(FilterManager::class, 'liip_imagine.filter.manager');

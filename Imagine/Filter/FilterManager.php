@@ -22,7 +22,6 @@ use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
 use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class FilterManager
 {
@@ -108,12 +107,12 @@ class FilterManager
 
         foreach ($this->sanitizeFilters($config['filters'] ?? []) as $name => $options) {
             $event = new FilterEvent($name, $options);
-            $this->dispatchWithBC($event, ImagineEvents::PRE_FILTER);
+            $this->dispatchEvent($event, ImagineEvents::PRE_FILTER);
             $prior = $image;
             try {
                 $image = $this->loaders[$name]->load($image, $options);
             } finally {
-                $this->dispatchWithBC($event, ImagineEvents::POST_FILTER);
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_FILTER);
             }
 
             if ($prior !== $image) {
@@ -150,11 +149,11 @@ class FilterManager
     {
         foreach ($this->sanitizePostProcessors($config['post_processors'] ?? []) as $name => $options) {
             $event = new FilterEvent($name, $options);
-            $this->dispatchWithBC($event, ImagineEvents::PRE_POST_PROCESSOR);
+            $this->dispatchEvent($event, ImagineEvents::PRE_POST_PROCESSOR);
             try {
                 $binary = $this->postProcessors[$name]->process($binary, $options);
             } finally {
-                $this->dispatchWithBC($event, ImagineEvents::POST_POST_PROCESSOR);
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_POST_PROCESSOR);
             }
         }
 
@@ -240,19 +239,12 @@ class FilterManager
         }
     }
 
-    /**
-     * BC Layer for Symfony < 4.3.
-     */
-    private function dispatchWithBC(object $event, string $eventName): void
+    private function dispatchEvent(object $event, string $eventName): void
     {
         if (null === $this->dispatcher) {
             return;
         }
 
-        if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-            $this->dispatcher->dispatch($event, $eventName);
-        } else {
-            $this->dispatcher->dispatch($eventName, $event);
-        }
+        $this->dispatcher->dispatch($event, $eventName);
     }
 }

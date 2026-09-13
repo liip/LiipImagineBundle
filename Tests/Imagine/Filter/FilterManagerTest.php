@@ -1068,7 +1068,7 @@ class FilterManagerTest extends AbstractTest
         $this->assertSame($binary, $filterManager->applyPostProcessors($binary, []));
     }
 
-    public function testDispatchesEventsAroundFiltersAndPostProcessors(): void
+    public function testDispatchesIndependentEventsAroundFiltersAndPostProcessors(): void
     {
         $sequence = [];
         $events = [];
@@ -1077,6 +1077,10 @@ class FilterManagerTest extends AbstractTest
             $dispatcher->addListener($eventName, static function (FilterEvent $event) use (&$events, &$sequence, $eventName): void {
                 $sequence[] = $eventName;
                 $events[$eventName] = $event;
+
+                if (self::EVENT_PRE_FILTER === $eventName || self::EVENT_PRE_POST_PROCESSOR === $eventName) {
+                    $event->stopPropagation();
+                }
             });
         }
 
@@ -1127,8 +1131,10 @@ class FilterManagerTest extends AbstractTest
         ], $sequence);
         $this->assertSame('thumbnail', $events[self::EVENT_PRE_FILTER]->getName());
         $this->assertSame([], $events[self::EVENT_PRE_FILTER]->getOptions());
+        $this->assertNotSame($events[self::EVENT_PRE_FILTER], $events[self::EVENT_POST_FILTER]);
         $this->assertSame('optimizer', $events[self::EVENT_PRE_POST_PROCESSOR]->getName());
         $this->assertSame([], $events[self::EVENT_PRE_POST_PROCESSOR]->getOptions());
+        $this->assertNotSame($events[self::EVENT_PRE_POST_PROCESSOR], $events[self::EVENT_POST_POST_PROCESSOR]);
     }
 
     /**

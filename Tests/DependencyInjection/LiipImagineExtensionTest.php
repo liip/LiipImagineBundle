@@ -15,8 +15,10 @@ use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
+use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
@@ -132,6 +134,16 @@ class LiipImagineExtensionTest extends AbstractTest
             [302, '%kernel.debug%'],
             $this->containerBuilder->getDefinition('liip_imagine.controller.config')->getArguments()
         );
+    }
+
+    public function testFilterManagerAllowsMissingEventDispatcher(): void
+    {
+        $this->createEmptyConfiguration();
+        $arguments = $this->containerBuilder->findDefinition(FilterManager::class)->getArguments();
+        $eventDispatcher = array_pop($arguments);
+
+        $this->assertInstanceOf(Reference::class, $eventDispatcher);
+        $this->assertSame(ContainerInterface::NULL_ON_INVALID_REFERENCE, $eventDispatcher->getInvalidBehavior());
     }
 
     public function testControllerDebugCanBeConfiguredExplicitly(): void
