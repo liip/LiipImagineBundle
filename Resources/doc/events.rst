@@ -8,6 +8,8 @@ The bundle dispatches the following events around the cache lifecycle:
 * ``PRE_RESOLVE`` and ``POST_RESOLVE``, both receiving a CacheResolveEvent.
 * ``PRE_STORE`` and ``POST_STORE``, both receiving a CacheStoreEvent.
 * ``PRE_REMOVE`` and ``POST_REMOVE``, both receiving a CacheRemoveEvent.
+* ``PRE_FILTER`` and ``POST_FILTER``, both receiving a FilterEvent.
+* ``PRE_POST_PROCESSOR`` and ``POST_POST_PROCESSOR``, both receiving a FilterEvent.
 
 PRE_RESOLVE
 -----------
@@ -47,6 +49,20 @@ POST_REMOVE
 -----------
 
 Called after the cached images have been removed from their cache resolvers.
+
+PRE_FILTER and POST_FILTER
+--------------------------
+
+Called immediately before and after each configured image filter runs. The
+FilterEvent exposes the filter name and its configured options. These events
+are informational and cannot change the filter operation.
+
+PRE_POST_PROCESSOR and POST_POST_PROCESSOR
+------------------------------------------
+
+Called immediately before and after each configured post-processor runs. The
+FilterEvent exposes the post-processor name and its configured options. These
+events are informational and cannot change the post-processing operation.
 
 Example: Signed URLs
 --------------------

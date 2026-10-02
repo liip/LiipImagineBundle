@@ -16,9 +16,12 @@ use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Events\FilterEvent;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class FilterManager
 {
@@ -47,11 +50,17 @@ class FilterManager
      */
     protected $postProcessors = [];
 
-    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser)
+    /**
+     * @var EventDispatcherInterface|null
+     */
+    private $dispatcher;
+
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser, ?EventDispatcherInterface $dispatcher = null)
     {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
         $this->mimeTypeGuesser = $mimeTypeGuesser;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -97,8 +106,14 @@ class FilterManager
         }
 
         foreach ($this->sanitizeFilters($config['filters'] ?? []) as $name => $options) {
+            $event = new FilterEvent($name, $options);
+            $this->dispatchEvent($event, ImagineEvents::PRE_FILTER);
             $prior = $image;
-            $image = $this->loaders[$name]->load($image, $options);
+            try {
+                $image = $this->loaders[$name]->load($image, $options);
+            } finally {
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_FILTER);
+            }
 
             if ($prior !== $image) {
                 $this->destroyImage($prior);
@@ -133,7 +148,13 @@ class FilterManager
     public function applyPostProcessors(BinaryInterface $binary, array $config): BinaryInterface
     {
         foreach ($this->sanitizePostProcessors($config['post_processors'] ?? []) as $name => $options) {
-            $binary = $this->postProcessors[$name]->process($binary, $options);
+            $event = new FilterEvent($name, $options);
+            $this->dispatchEvent($event, ImagineEvents::PRE_POST_PROCESSOR);
+            try {
+                $binary = $this->postProcessors[$name]->process($binary, $options);
+            } finally {
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_POST_PROCESSOR);
+            }
         }
 
         return $binary;
@@ -216,5 +237,14 @@ class FilterManager
         if (method_exists($image, '__destruct')) {
             $image->__destruct();
         }
+    }
+
+    private function dispatchEvent(object $event, string $eventName): void
+    {
+        if (null === $this->dispatcher) {
+            return;
+        }
+
+        $this->dispatcher->dispatch($event, $eventName);
     }
 }

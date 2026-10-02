@@ -8,6 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## 2.18.0 (unreleased)
 
+- Dispatch filter lifecycle events for telemetry and debugging ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1666))
 - Fall back to the `default_image` when a filter does not exist or the image can not be generated, unless the new `controller.debug` option is enabled ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
 - Dispatch pre/post store and pre/post remove events on the CacheManager, so applications can react to the cache storage lifecycle ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1664))
 - Fix bug that we did not delete the webp variant when enabled, when deleting an image through the CacheManager ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1661))
