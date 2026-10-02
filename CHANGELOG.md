@@ -6,7 +6,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
-## 2.18.0 (unreleased)
+## [2.18.0](https://github.com/liip/LiipImagineBundle/tree/2.18.0)
 
 - Dispatch filter lifecycle events for telemetry and debugging ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1666))
 - Fall back to the `default_image` when a filter does not exist or the image can not be generated, unless the new `controller.debug` option is enabled ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
