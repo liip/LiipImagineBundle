@@ -203,6 +203,35 @@ class ImagineControllerTest extends AbstractTest
         $this->assertSame('/default/image.png', $response->getTargetUrl());
     }
 
+    public function testNonExistingFilterIsNotFoundOutsideOfDebugMode(): void
+    {
+        $exception = new NonExistingFilterException('Filter not found');
+
+        $filterService = $this->createFilterServiceMock();
+        $filterService
+            ->method('getUrlOfFilteredImage')
+            ->willThrowException($exception);
+
+        // like the real DataManager, which can not read the default image of a filter that is not configured
+        $dataManager = $this->createDataManagerMock();
+        $dataManager
+            ->method('getDefaultImageUrl')
+            ->with('filter')
+            ->willThrowException(new NonExistingFilterException('Could not find configuration for a filter: filter'));
+
+        $controller = new ImagineController(
+            $filterService,
+            $dataManager,
+            $this->createSignerInterfaceMock(),
+            new ControllerConfig(301, false)
+        );
+
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Requested non-existing filter "filter"');
+
+        $controller->filterAction(new Request(), '/foo', 'filter');
+    }
+
     private function createFailingControllerInstance(\Exception $exception, ?string $defaultImageUrl, bool $debug, bool $runtimeFilters = false, ?LoggerInterface $logger = null): ImagineController
     {
         $filterService = $this->createFilterServiceMock();

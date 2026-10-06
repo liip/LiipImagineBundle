@@ -194,7 +194,12 @@ class ImagineController
             return null;
         }
 
-        $defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter);
+        try {
+            $defaultImageUrl = $this->dataManager->getDefaultImageUrl($filter);
+        } catch (NonExistingFilterException) {
+            // a filter that is not configured has no default image of its own, keep the not found response
+            return null;
+        }
 
         if (null === $defaultImageUrl) {
             return null;

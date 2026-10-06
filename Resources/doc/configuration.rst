@@ -162,12 +162,14 @@ Which failures are replaced by that image depends on ``controller.debug``:
 
 * A source image that can not be loaded always leads to the default image. This is the common case
   of a path that points at nothing.
-* A filter set that does not exist, or an image that the driver fails to process, leads to the
-  default image only when ``controller.debug`` is disabled, which by default means outside of the
-  Symfony debug mode. The exception is then logged with the ``warning`` level, so that a broken
-  filter or an unsupported source file does not go unnoticed.
+* An image that the driver fails to process leads to the default image only when
+  ``controller.debug`` is disabled, which by default means outside of the Symfony debug mode. The
+  exception is then logged with the ``warning`` level, so that an unsupported source file does not
+  go unnoticed.
+* A filter set that does not exist has no default image of its own, so it leads to a not found
+  response outside of the debug mode, and to an exception in debug mode.
 
-In debug mode those two remain exceptions, so that a mistake in the configuration or a file the
-driver chokes on is visible while developing instead of silently turning into a placeholder.
+In debug mode the driver failures remain exceptions, so that a file the driver chokes on is visible
+while developing instead of silently turning into a placeholder.
 
 .. _`PHP Manual`: https://php.net/imagepng
