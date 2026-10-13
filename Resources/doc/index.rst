@@ -44,6 +44,7 @@ usage to the architecture of bundle.
     cache-resolvers
     cache-manager
     asset-versioning
+    symfony-ux-image
     commands
     events
     optimizations

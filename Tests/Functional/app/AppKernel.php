@@ -14,6 +14,7 @@ namespace Liip\ImagineBundle\Tests\Functional\app;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\UX\Image\UXImageBundle;
 
 class AppKernel extends Kernel
 {
@@ -25,6 +26,10 @@ class AppKernel extends Kernel
             new \Liip\ImagineBundle\Tests\Functional\Fixtures\FooBundle\LiipFooBundle(),
             new \Liip\ImagineBundle\Tests\Functional\Fixtures\BarBundle\LiipBarBundle(),
         ];
+
+        if (class_exists(UXImageBundle::class)) {
+            $bundles[] = new UXImageBundle();
+        }
 
         return $bundles;
     }
@@ -53,6 +58,16 @@ class AppKernel extends Kernel
             $loader->load($this->getProjectDir().'/config/symfony_5-3.yaml');
 
             $loader->load($this->getProjectDir().'/config/config.yml');
+
+            if (class_exists(UXImageBundle::class)) {
+                $container->loadFromExtension('ux_image', ['provider' => 'liipimagine://ux_image']);
+                $container
+                    ->setAlias('test.ux_image.url_generator', 'ux_image.url_generator')
+                    ->setPublic(true);
+                $container
+                    ->setAlias('test.ux_image.provider', 'ux_image.provider')
+                    ->setPublic(true);
+            }
 
             $container
                 ->setAlias('test.liip_imagine.service.filter', 'liip_imagine.service.filter')

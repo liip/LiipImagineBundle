@@ -5,6 +5,7 @@ parameters:
     paths:
         - Async
         - Binary
+        - Bridge
         - Command
         - Component
         - Config

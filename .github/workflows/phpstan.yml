@@ -17,7 +17,8 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          # the Symfony UX Image bridge is analyzed too, and symfony/ux-image requires PHP 8.4
+          php-version: 8.4
           coverage: none
 
       - name: Update project dependencies
@@ -28,6 +29,9 @@ jobs:
 
       - name: Add asset mapper
         run: composer require symfony/asset-mapper
+
+      - name: Add symfony/ux-image
+        run: composer require --dev "symfony/ux-image:3.x-dev"
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyze

@@ -71,7 +71,8 @@
         "rokka/imagine-vips": "required to use 'vips' driver",
         "symfony/asset": "If you want to use asset versioning",
         "symfony/messenger": "If you like to process images in background",
-        "symfony/templating": "required to use deprecated Templating component instead of Twig"
+        "symfony/templating": "required to use deprecated Templating component instead of Twig",
+        "symfony/ux-image": "Integration to let you render images with the Symfony UX Image component"
     },
     "config": {
         "sort-packages": true,
