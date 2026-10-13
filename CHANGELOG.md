@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## Unreleased
+
+- Add a `liipimagine` provider for the [Symfony UX Image](https://symfony.com/bundles/ux-image/current/index.html) component, so that responsive images can be transformed by this bundle instead of a CDN. Registered only when `symfony/ux-image` is installed, see the [documentation](Resources/doc/symfony-ux-image.rst).
+
 ## [2.18.1](https://github.com/liip/LiipImagineBundle/tree/2.18.1)
 
 - Fix a non-existing filter throwing an uncaught exception instead of a not found response outside of the debug mode, a regression of the default image fallback ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))

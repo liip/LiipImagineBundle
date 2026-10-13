@@ -92,3 +92,38 @@ jobs:
           SYMFONY_DEPRECATIONS_HELPER: max[self]=0
         run: vendor/bin/simple-phpunit -v
 
+  ux-image:
+    name: "Symfony UX Image bridge"
+    runs-on: ubuntu-latest
+    # symfony/ux-image is experimental and has no stable release yet, so a push to its branch must not turn
+    # the matrix above red. Make this job blocking once the component is tagged.
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          # symfony/ux-image requires PHP 8.4, while this bundle still supports 8.1
+          php-version: '8.4'
+          coverage: none
+          extensions: gd, imagick
+
+      - name: Add symfony/ux-image
+        run: composer require --no-update --dev "symfony/ux-image:3.x-dev"
+
+      - name: Update project dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Lint container
+        run: ./Tests/Functional/app/bin/console lint:container
+
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit install
+
+      - name: Run PHPUnit tests
+        env:
+          SYMFONY_DEPRECATIONS_HELPER: max[self]=0
+        run: vendor/bin/simple-phpunit -v
+

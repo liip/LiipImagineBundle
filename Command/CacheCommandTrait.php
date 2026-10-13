@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Command;
 
 use Imagine\Exception\RuntimeException;
+use Liip\ImagineBundle\Bridge\SymfonyUx\UxImage;
 use Liip\ImagineBundle\Component\Console\Style\ImagineStyle;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -51,7 +52,7 @@ trait CacheCommandTrait
     private function setupOutputStyle(InputInterface $input, OutputInterface $output): void
     {
         $this->outputMachineReadable = $input->getOption('as-script');
-        $this->io = new ImagineStyle($input, $output, $this->outputMachineReadable ? false : !$input->getOption('no-colors'));
+        $this->io = new ImagineStyle($input, $output, !$this->outputMachineReadable && !$input->getOption('no-colors'));
     }
 
     /**
@@ -76,7 +77,15 @@ trait CacheCommandTrait
             return $filters;
         }
 
-        if (0 < \count($filters = array_keys((array) $this->filterManager->getFilterConfiguration()->all()))) {
+        // The Symfony UX Image filter sets carry no filters of their own - every transformation reaches them as
+        // a runtime configuration - so acting on them here would process each image at its original size for
+        // nothing. When one of the UX Image filters is explicitly named with --filter, still include it.
+        $filters = array_values(array_diff(
+            array_keys((array) $this->filterManager->getFilterConfiguration()->all()),
+            array_keys(UxImage::declaredFilterSets())
+        ));
+
+        if (0 < \count($filters)) {
             return $filters;
         }
 

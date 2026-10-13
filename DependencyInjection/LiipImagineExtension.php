@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\DependencyInjection;
 
 use Imagine\Vips\Imagine;
+use Liip\ImagineBundle\Bridge\SymfonyUx\UxImage;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
@@ -132,6 +133,12 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
         $filterSets = $this->createFilterSets($config['default_filter_set_settings'], $config['filter_sets']);
 
+        if (UxImage::isInstalled()) {
+            $loader->load('ux_image.php');
+
+            $filterSets = $this->addUxImageFilterSets($filterSets, $config['default_filter_set_settings']);
+        }
+
         $container->setParameter('liip_imagine.filter_sets', $filterSets);
         $container->setParameter('liip_imagine.binary.loader.default', $config['data_loader']);
 
@@ -158,6 +165,27 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', ['form_themes' => ['@LiipImagine/Form/form_div_layout.html.twig']]);
         }
+    }
+
+    /**
+     * Add or sanitize the filter sets for the UX Image bridge so that they exist for our provider.
+     *
+     * Create a filter set from the default settings if none is configured. Force the format, because that is the
+     * point of these filter sets.
+     */
+    private function addUxImageFilterSets(array $filterSets, array $defaultFilterSettings): array
+    {
+        // if the base filter set is configured, use that as base, otherwise the general default settings
+        $baseSettings = $filterSets[UxImage::FILTER_SET] ?? $defaultFilterSettings;
+
+        // define a filter set for each format, forcing the format
+        foreach (UxImage::declaredFilterSets() as $name => $format) {
+            $filterSet = $filterSets[$name] ?? $baseSettings;
+
+            $filterSets[$name] = null === $format ? $filterSet : ['format' => $format] + $filterSet;
+        }
+
+        return $filterSets;
     }
 
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array

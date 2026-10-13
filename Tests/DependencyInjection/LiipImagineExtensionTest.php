@@ -11,6 +11,7 @@
 
 namespace Liip\ImagineBundle\Tests\DependencyInjection;
 
+use Liip\ImagineBundle\Bridge\SymfonyUx\UxImage;
 use Liip\ImagineBundle\Controller\ImagineController;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
@@ -47,7 +48,7 @@ class LiipImagineExtensionTest extends AbstractTest
     public function testLoadFilterSetsDefaults(): void
     {
         $this->createConfigurationWithOneEmptyFilterSet();
-        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+        $filterSets = $this->getConfiguredFilterSets();
 
         $this->assertCount(1, $filterSets);
         $this->assertArrayHasKey('empty_filter_set', $filterSets);
@@ -68,7 +69,7 @@ class LiipImagineExtensionTest extends AbstractTest
     public function testLoadFilterSetsWithDefaults(): void
     {
         $this->createConfigurationWithDefaultsFilterSets();
-        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+        $filterSets = $this->getConfiguredFilterSets();
 
         $this->assertCount(2, $filterSets);
         $this->assertArrayHasKey('filter_set_1', $filterSets);
@@ -211,6 +212,51 @@ class LiipImagineExtensionTest extends AbstractTest
             'templating' => false,
         ]);
         $this->assertHasNotDefinition('liip_imagine.templating.filter_helper');
+    }
+
+    public function testUxImageFilterSetsInheritTheConfiguredBaseFilterSet(): void
+    {
+        if (!UxImage::isInstalled()) {
+            $this->markTestSkipped('Requires the symfony/ux-image package.');
+        }
+
+        $this->createConfiguration(['filter_sets' => [UxImage::FILTER_SET => ['quality' => 42, 'filters' => ['grayscale' => []]]]]);
+        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+
+        foreach (UxImage::declaredFilterSets() as $name => $format) {
+            $this->assertSame(42, $filterSets[$name]['quality'], $name);
+            $this->assertArrayHasKey('grayscale', $filterSets[$name]['filters'], $name);
+            $this->assertSame($format, $filterSets[$name]['format'], $name);
+        }
+    }
+
+    public function testADeclaredUxImageFilterSetKeepsItsFormat(): void
+    {
+        if (!UxImage::isInstalled()) {
+            $this->markTestSkipped('Requires the symfony/ux-image package.');
+        }
+
+        $this->createConfiguration(['filter_sets' => [
+            UxImage::FILTER_SET => ['quality' => 42],
+            UxImage::filterSet(UxImage::FILTER_SET, 'png') => ['quality' => 70],
+        ]]);
+        $filterSets = $this->containerBuilder->getParameter('liip_imagine.filter_sets');
+
+        $declared = $filterSets[UxImage::filterSet(UxImage::FILTER_SET, 'png')];
+
+        $this->assertSame(70, $declared['quality'], 'A declared filter set is taken as it stands');
+        $this->assertSame('png', $declared['format'], 'The provider renders png through this set, so it must encode png');
+    }
+
+    /**
+     * The filter sets the test configuration declares, without the ones the Symfony UX Image bridge adds.
+     */
+    protected function getConfiguredFilterSets(): array
+    {
+        return array_diff_key(
+            $this->containerBuilder->getParameter('liip_imagine.filter_sets'),
+            UxImage::declaredFilterSets()
+        );
     }
 
     protected function createConfigurationWithDefaultsFilterSets(): void
