@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## 2.19.0 (unreleased)
+
+- Add support for Twig 4. The deprecated `legacy` Twig mode (still the default) failed with a fatal error on Twig 4 because `FilterExtension::getFilters()` lacked the `array` return type.
+
 ## [2.18.1](https://github.com/liip/LiipImagineBundle/tree/2.18.1)
 
 - Fix a non-existing filter throwing an uncaught exception instead of a not found response outside of the debug mode, a regression of the default image fallback ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
