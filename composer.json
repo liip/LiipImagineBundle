@@ -29,7 +29,7 @@
         "symfony/mime": "^5.4|^6.4|^7.3|^8.0",
         "symfony/options-resolver": "^5.4|^6.4|^7.3|^8.0",
         "symfony/process": "^5.4|^6.4|^7.3|^8.0",
-        "twig/twig": "^1.44|^2.9|^3.0"
+        "twig/twig": "^1.44|^2.9|^3.0|^4.0"
     },
     "require-dev": {
         "ext-gd": "*",

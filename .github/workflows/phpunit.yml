@@ -9,7 +9,7 @@ on:
 
 jobs:
   phpunit:
-    name: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}"
+    name: "PHP ${{ matrix.php }} + ${{ matrix.dependencies }} dependencies + Symfony ${{ matrix.symfony }}${{ matrix.twig && format(' + Twig {0}', matrix.twig) || '' }}"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -39,6 +39,12 @@ jobs:
             dependencies: highest
             symfony: '8.*'
 
+          # Test the upcoming Twig major version, not stable yet
+          - php: '8.4'
+            dependencies: highest
+            symfony: '8.*'
+            twig: '4'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -67,6 +73,10 @@ jobs:
         # asset mapper support is optional in LiipImagineBundle. asset mapper was only added in Symfony 6
         if: ${{ matrix.symfony >= '6.4' }}
         run: composer require --no-update symfony/asset-mapper --dev
+
+      - name: Require Twig 4
+        if: matrix.twig == '4'
+        run: composer require --no-update "twig/twig:^4.0@dev"
 
       - name: Update project dependencies
         uses: ramsey/composer-install@v2
