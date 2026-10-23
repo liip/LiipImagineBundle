@@ -11,26 +11,32 @@
 
 namespace Liip\ImagineBundle\Tests\Templating;
 
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Templating\LazyFilterExtension;
-use Liip\ImagineBundle\Tests\AbstractTest;
+use Liip\ImagineBundle\Templating\LazyFilterRuntime;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 
 /**
  * @covers \Liip\ImagineBundle\Templating\LazyFilterExtension
  */
-class LazyFilterExtensionTest extends AbstractTest
+class LazyFilterExtensionTest extends AbstractFilterExtensionTest
 {
-    /**
-     * @var LazyFilterExtension
-     */
-    private $extension;
-
-    protected function setUp(): void
+    protected function createExtension(CacheManager $manager): AbstractExtension
     {
-        $this->extension = new LazyFilterExtension();
+        return new LazyFilterExtension();
     }
 
-    public function testAddsFilterMethodToFiltersList(): void
+    protected function createTwig(CacheManager $manager, string $template): Environment
     {
-        $this->assertCount(2, $this->extension->getFilters());
+        $twig = parent::createTwig($manager, $template);
+        $twig->addRuntimeLoader(new FactoryRuntimeLoader([
+            LazyFilterRuntime::class => static function () use ($manager) {
+                return new LazyFilterRuntime($manager);
+            },
+        ]));
+
+        return $twig;
     }
 }

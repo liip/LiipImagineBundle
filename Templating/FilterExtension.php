@@ -23,7 +23,10 @@ class FilterExtension extends AbstractExtension
 {
     use FilterTrait;
 
-    public function getFilters()
+    /**
+     * @return TwigFilter[]
+     */
+    public function getFilters(): array
     {
         return [
             new TwigFilter('imagine_filter', [$this, 'filter']),

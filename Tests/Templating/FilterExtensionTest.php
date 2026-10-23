@@ -21,28 +21,10 @@ use Twig\Extension\AbstractExtension;
  *
  * @group legacy
  */
-class FilterExtensionTest extends AbstractFilterTest
+class FilterExtensionTest extends AbstractFilterExtensionTest
 {
-    public function testAddsFilterMethodToFiltersList(): void
+    protected function createExtension(CacheManager $manager): AbstractExtension
     {
-        $this->assertCount(2, $this->createTemplatingMock()->getFilters());
-    }
-
-    public function testInstanceOfTwigFilter(): void
-    {
-        $this->assertInstanceOf(AbstractExtension::class, $this->createTemplatingMock());
-    }
-
-    protected function createTemplatingMock(?CacheManager $manager = null): FilterExtension
-    {
-        if (!class_exists(AbstractExtension::class)) {
-            $this->markTestSkipped('Requires the twig/twig package.');
-        }
-
-        $mock = new FilterExtension($manager ?: $this->createCacheManagerMock());
-
-        $this->assertInstanceOf(FilterExtension::class, $mock);
-
-        return $mock;
+        return new FilterExtension($manager);
     }
 }
