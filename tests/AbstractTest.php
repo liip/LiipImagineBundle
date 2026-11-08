@@ -50,9 +50,6 @@ abstract class AbstractTest extends TestCase
     {
         $r = new \ReflectionObject($object);
 
-        $m = $r->getMethod($name);
-        $m->setAccessible(true);
-
-        return $m;
+        return $r->getMethod($name);
     }
 }
