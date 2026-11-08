@@ -16,3 +16,6 @@ parameters:
         # Depending on aws sdk version, this method has 2 or 4 parameters. The extra parameters will just be ignored.
         # https://github.com/liip/LiipImagineBundle/issues/1457
         - '#^Method Aws\\S3\\S3Client::getObjectUrl\(\) invoked with 4 parameters, 2 required\.$#'
+        # phpstan-symfony 1.x does not understand the generic NodeBuilder/ExprBuilder types of symfony/config 7.4+.
+        # The errors are gone with phpstan 2 and phpstan-symfony 2.
+        - '#^Call to method [a-zA-Z]+\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\(NodeBuilder|ExprBuilder)<.+>\.$#'
