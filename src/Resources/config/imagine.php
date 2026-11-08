@@ -52,7 +52,6 @@ use Liip\ImagineBundle\Factory\Config\StackFactory;
 use Liip\ImagineBundle\Form\Type\ImageType;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
-use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
@@ -87,6 +86,9 @@ use Liip\ImagineBundle\Imagine\Filter\PostProcessor\MozJpegPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\OptiPngPostProcessor;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PngquantPostProcessor;
 use Liip\ImagineBundle\Service\FilterService;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -325,22 +327,6 @@ return static function (ContainerConfigurator $container) {
         ])
         ->tag('liip_imagine.filter.loader', ['loader' => 'paste_image']);
 
-    // not officially deprecated because still injected and appears "used"
-    $services->set('liip_imagine.filter.loader.paste', PasteFilterLoader::class)
-        ->args([
-            service('liip_imagine'),
-            '%kernel.root_dir%',
-        ])
-        ->tag('liip_imagine.filter.loader', ['loader' => 'paste']);
-
-    // not officially deprecated because still injected and appears "used"
-    $services->set('liip_imagine.filter.loader.watermark', WatermarkFilterLoader::class)
-        ->args([
-            service('liip_imagine'),
-            '%kernel.root_dir%',
-        ])
-        ->tag('liip_imagine.filter.loader', ['loader' => 'watermark']);
-
     $services->set('liip_imagine.filter.loader.watermark_image', WatermarkFilterLoader::class)
         ->args([
             service('liip_imagine'),
@@ -469,15 +455,6 @@ return static function (ContainerConfigurator $container) {
             '', // will be injected by AwsS3ResolverFactory
         ]);
 
-    $services->set('liip_imagine.cache.resolver.prototype.cache', CacheResolver::class)
-        ->public()
-        ->abstract()
-        ->args([
-            // args will be injected by a ResolverFactory
-            '',
-            '',
-        ]);
-
     $services->set('liip_imagine.cache.resolver.prototype.flysystem', FlysystemResolver::class)
         ->public()
         ->abstract()
@@ -526,11 +503,11 @@ return static function (ContainerConfigurator $container) {
         ->tag('form.type', ['alias' => 'liip_imagine_image']);
 
     // Guessers
-    $services->set('liip_imagine.mime_type_guesser', 'Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface')
-        ->factory(['Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser', 'getInstance']);
+    $services->set('liip_imagine.mime_type_guesser', MimeTypeGuesserInterface::class)
+        ->factory([MimeTypes::class, 'getDefault']);
 
-    $services->set('liip_imagine.extension_guesser', 'Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface')
-        ->factory(['Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser', 'getInstance']);
+    $services->set('liip_imagine.extension_guesser', MimeTypesInterface::class)
+        ->factory([MimeTypes::class, 'getDefault']);
 
     $services->set('liip_imagine.binary.mime_type_guesser', SimpleMimeTypeGuesser::class)
         ->args([service('liip_imagine.mime_type_guesser')]);
