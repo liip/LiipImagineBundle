@@ -298,7 +298,7 @@ class AwsS3ResolverFactoryTest extends AbstractTest
     public function testThrowClientConfigAmbiguousOnAddConfiguration(): void
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
-        $this->expectExceptionMessageMatchesBC('/Children config "client_id" and "client_config" cannot be configured at the same time./');
+        $this->expectExceptionMessageMatches('/Children config "client_id" and "client_config" cannot be configured at the same time./');
 
         $treeBuilder = new TreeBuilder('aws_s3');
         $rootNode = $treeBuilder->getRootNode();
