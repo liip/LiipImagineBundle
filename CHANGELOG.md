@@ -8,6 +8,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
 
+- Make compatible with Twig 4: Add missing return type declaration ([winniezzz](https://github.com/liip/LiipImagineBundle/pull/1673))
 - Fix quality fallback with rokka/imagine-vips ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1662))
 
 ## [2.18.1](https://github.com/liip/LiipImagineBundle/tree/2.18.1)
