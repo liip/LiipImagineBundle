@@ -53,6 +53,7 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\CacheResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\FormatExtensionResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver;
@@ -498,6 +499,14 @@ return static function (ContainerConfigurator $container) {
             '',
             '',
             '',
+        ]);
+
+    $services->set('liip_imagine.cache.resolver.prototype.format_extension', FormatExtensionResolver::class)
+        ->public()
+        ->abstract()
+        ->args([
+            '', // will be injected by FormatExtensionResolverFactory
+            service('liip_imagine.filter.configuration'),
         ]);
 
     $services->set('liip_imagine.cache.resolver.prototype.proxy', ProxyResolver::class)

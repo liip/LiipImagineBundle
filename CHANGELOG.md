@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## 2.19.0 (unreleased)
+
+- Add a `format_extension` resolver configuration, so the `FormatExtensionResolver` can decorate a configured resolver without declaring a service ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/XXXX))
+
 ## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
 
 - Make compatible with Twig 4: Add missing return type declaration ([winniezzz](https://github.com/liip/LiipImagineBundle/pull/1673))

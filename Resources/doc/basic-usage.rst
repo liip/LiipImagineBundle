@@ -255,6 +255,24 @@ can configure the generation of all images in the WebP format.
         default_filter_set_settings:
             format: webp
 
+The images are then encoded in WebP, but are still cached under the extension of the
+source image (``cats.jpeg``), so a web server serving them directly may send them with
+the wrong content type. To also give them the ``.webp`` extension, use the
+:ref:`format extension resolver <cache-resolver-format-extension>`:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+
+    liip_imagine:
+        resolvers:
+            format_extension:
+                format_extension:
+                    resolver: default
+        cache: format_extension
+        default_filter_set_settings:
+            format: webp
+
 Use WebP if supported
 ~~~~~~~~~~~~~~~~~~~~~
 
