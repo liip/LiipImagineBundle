@@ -6,6 +6,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## 2.19.0 (unreleased)
+
+- Add the `normalize_filter_set_names` option to allow `-` in filter set names, and deprecate the normalization of `-` to `_` ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1676))
+
 ## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
 
 - Make compatible with Twig 4: Add missing return type declaration ([winniezzz](https://github.com/liip/LiipImagineBundle/pull/1673))

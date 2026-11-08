@@ -475,6 +475,27 @@ class ConfigurationTest extends TestCase
         $this->assertTrue($config['webp']['generate']);
     }
 
+    public function testFilterSetNamesAreNormalizedByDefault(): void
+    {
+        $config = $this->processConfiguration(new Configuration([new WebPathResolverFactory()], [new FileSystemLoaderFactory()]), [[
+            'filter_sets' => ['my-thumb' => []],
+        ]]);
+
+        $this->assertSame(['my_thumb'], array_keys($config['filter_sets']));
+        $this->assertNull($config['normalize_filter_set_names']);
+    }
+
+    public function testFilterSetNamesAreKeptWhenNormalizationIsDisabled(): void
+    {
+        $config = $this->processConfiguration(new Configuration([new WebPathResolverFactory()], [new FileSystemLoaderFactory()], false), [[
+            'normalize_filter_set_names' => false,
+            'filter_sets' => ['my-thumb' => []],
+        ]]);
+
+        $this->assertSame(['my-thumb'], array_keys($config['filter_sets']));
+        $this->assertFalse($config['normalize_filter_set_names']);
+    }
+
     protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array
     {
         $processor = new Processor();

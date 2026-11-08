@@ -34,13 +34,20 @@ class Configuration implements ConfigurationInterface
     protected $loadersFactories;
 
     /**
+     * @var bool
+     */
+    protected $normalizeFilterSetNames;
+
+    /**
      * @param ResolverFactoryInterface[] $resolversFactories
      * @param LoaderFactoryInterface[]   $loadersFactories
+     * @param bool                       $normalizeFilterSetNames Whether to replace "-" by "_" in filter set names
      */
-    public function __construct(array $resolversFactories, array $loadersFactories)
+    public function __construct(array $resolversFactories, array $loadersFactories, bool $normalizeFilterSetNames = true)
     {
         $this->resolversFactories = $resolversFactories;
         $this->loadersFactories = $loadersFactories;
+        $this->normalizeFilterSetNames = $normalizeFilterSetNames;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -166,7 +173,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->booleanNode('normalize_filter_set_names')
+                    ->defaultNull()
+                    ->info('Whether to replace "-" by "_" in filter set names, as Symfony does for configuration keys. Not setting this option to false is deprecated: the normalization will be removed in 3.0.')
+                ->end()
                 ->arrayNode('filter_sets')
+                    ->normalizeKeys($this->normalizeFilterSetNames)
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->fixXmlConfig('filter', 'filters')
