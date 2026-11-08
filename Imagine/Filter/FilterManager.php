@@ -178,6 +178,8 @@ class FilterManager
 
         if ($this->imagine instanceof VipsImagine) {
             foreach (self::VIPS_QUALITY_OPTIONS as $qualityOption) {
+                // contrary to the other drivers, the rokka/imagine-vips does not fallback to the general `quality` configuration
+                // so we have to implement the fallback on our end.
                 $options[$qualityOption] = $config[$qualityOption] ?? $config['quality'];
             }
         }
