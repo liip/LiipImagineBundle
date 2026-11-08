@@ -43,7 +43,7 @@ class NoCacheWebPathResolver implements ResolverInterface
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
             $port,
-            mb_ltrim(PathHelper::filePathToUrlPath($path), '/')
+            ltrim(PathHelper::filePathToUrlPath($path), '/')
         );
     }
 
