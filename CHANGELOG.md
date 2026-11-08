@@ -9,6 +9,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 ## 2.19.0 (unreleased)
 
 - Add a `format_extension` resolver configuration, so the `FormatExtensionResolver` can decorate a configured resolver without declaring a service ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1675))
+- Add the `normalize_filter_set_names` option to allow `-` in filter set names, and deprecate the normalization of `-` to `_` ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/XXXX))
 
 ## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
 

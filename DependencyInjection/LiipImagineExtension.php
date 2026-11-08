@@ -56,7 +56,11 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
-        return new Configuration($this->resolversFactories, $this->loadersFactories);
+        return new Configuration(
+            $this->resolversFactories,
+            $this->loadersFactories,
+            false !== $this->getNormalizeFilterSetNames($config)
+        );
     }
 
     /**
@@ -68,6 +72,8 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $this->getConfiguration($configs, $container),
             $configs
         );
+
+        $this->triggerFilterSetNamesNormalizationDeprecation($configs);
 
         if (interface_exists(MimeTypeGuesserInterface::class)) {
             $mimeTypes = new Definition(MimeTypes::class);
@@ -157,6 +163,66 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
     {
         if ($container->hasExtension('twig')) {
             $container->prependExtensionConfig('twig', ['form_themes' => ['@LiipImagine/Form/form_div_layout.html.twig']]);
+        }
+    }
+
+    /**
+     * The option changes the configuration tree, so it has to be read from the raw configs.
+     *
+     * @param array<mixed> $configs
+     */
+    private function getNormalizeFilterSetNames(array $configs): ?bool
+    {
+        $normalize = null;
+
+        foreach ($configs as $config) {
+            foreach (['normalize_filter_set_names', 'normalize-filter-set-names'] as $key) {
+                if (\is_array($config) && isset($config[$key])) {
+                    $normalize = (bool) $config[$key];
+                }
+            }
+        }
+
+        return $normalize;
+    }
+
+    /**
+     * @param array<mixed> $configs
+     */
+    private function triggerFilterSetNamesNormalizationDeprecation(array $configs): void
+    {
+        $normalize = $this->getNormalizeFilterSetNames($configs);
+
+        if (false === $normalize) {
+            return;
+        }
+
+        if (true === $normalize) {
+            trigger_deprecation('liip/imagine-bundle', '2.19', 'Setting the "liip_imagine.normalize_filter_set_names" config option to true is deprecated, set it to false and use the filter set names as written in the configuration. The option will be removed in 3.0.');
+
+            return;
+        }
+
+        $renamed = [];
+        foreach ($configs as $config) {
+            foreach (['filter_sets', 'filter-sets'] as $key) {
+                if (!\is_array($config) || !\is_array($config[$key] ?? null)) {
+                    continue;
+                }
+
+                // same condition as Symfony\Component\Config\Definition\ArrayNode::preNormalize()
+                foreach (array_keys($config[$key]) as $name) {
+                    $name = (string) $name;
+                    $normalizedName = str_replace('-', '_', $name);
+                    if (str_contains($name, '-') && !str_contains($name, '_') && !\array_key_exists($normalizedName, $config[$key])) {
+                        $renamed[] = \sprintf('"%s" is used as "%s"', $name, $normalizedName);
+                    }
+                }
+            }
+        }
+
+        if ([] !== $renamed) {
+            trigger_deprecation('liip/imagine-bundle', '2.19', \sprintf('Filter set names are normalized: %s. This normalization is deprecated and will be removed in 3.0, set the "liip_imagine.normalize_filter_set_names" config option to false and use the filter set names as written in the configuration.', implode(', ', array_unique($renamed))));
         }
     }
 

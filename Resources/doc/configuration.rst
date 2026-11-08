@@ -50,6 +50,7 @@ The default configuration for the bundle looks like this:
             cache:       ~
             data_loader: ~
             post_processors: []
+        normalize_filter_set_names: ~ # true, deprecated
         filter_sets:
 
             # Prototype
@@ -117,6 +118,11 @@ There are several configuration options available:
   ``filter_sets``. These values will be overridden if they are specified in the each set. In case of ``filters`` and
   ``post_processors``, the specified values will be merged with the default ones.
 * ``filter_sets`` - specify the filter sets that you want to define and use.
+* ``normalize_filter_set_names`` - whether ``-`` is replaced by ``_`` in the filter set names,
+  following the Symfony convention for configuration keys. Default value: ``true``. When this
+  normalization renames one of your filter sets, a deprecation is triggered unless you set the
+  option to ``false``: version 3 will use the filter set names as written. See
+  `Filter set names`_ below.
 
 Each filter set that you specify has the following options:
 
@@ -141,6 +147,31 @@ Each filter set that you specify has the following options:
 * ``animated`` - support for resizing animated gif (currently not supported by
   Imagine (PR pending))
 
+
+Filter set names
+----------------
+
+By default, a filter set name that contains a ``-`` and no ``_`` is renamed by the Symfony
+configuration, so ``my-thumbnail`` has to be used as ``my_thumbnail`` in templates and in the URLs.
+This normalization is deprecated, and will be removed in version 3. To use your filter set names as
+written, set ``normalize_filter_set_names`` to ``false``, and replace the underscored names in your
+templates and code:
+
+.. code-block:: yaml
+
+    liip_imagine:
+        normalize_filter_set_names: false
+        filter_sets:
+            my-thumbnail:
+                filters:
+                    thumbnail: { size: [120, 90], mode: outbound }
+
+.. code-block:: twig
+
+    <img src="{{ asset('/relative/path/to/image.jpg') | imagine_filter('my-thumbnail') }}" />
+
+Names that already contain a ``_``, like ``my-thumbnail_v2``, and names coming from an XML
+configuration were never renamed and do not need any change.
 
 Default image
 -------------
