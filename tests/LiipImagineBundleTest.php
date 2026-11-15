@@ -26,6 +26,7 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Loader\LoaderFactoryInterface
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FormatExtensionResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\ResolverFactoryInterface;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
@@ -115,6 +116,7 @@ class LiipImagineBundleTest extends AbstractTest
             WebPathResolverFactory::class,
             AwsS3ResolverFactory::class,
             FlysystemResolverFactory::class,
+            FormatExtensionResolverFactory::class,
         ], $resolvers);
     }
 

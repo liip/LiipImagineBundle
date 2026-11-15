@@ -20,7 +20,7 @@ jobs:
         with:
           php-version: 8.3
           coverage: none
-          tools: php-cs-fixer
+          tools: php-cs-fixer:3.95.30
 
       - name: Run PHP-CS-Fixer
         run: php-cs-fixer fix --dry-run --diff

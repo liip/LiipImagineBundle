@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the `liip/LiipImagineBundle` project.
  *
@@ -54,6 +52,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\FlysystemV2Resolver;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\FormatExtensionResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\NoCacheWebPathResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\PsrCacheResolver;
@@ -221,6 +220,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.filter.configuration'),
             service('liip_imagine'),
             service('liip_imagine.binary.mime_type_guesser'),
+            service('event_dispatcher')->nullOnInvalid(),
         ]);
 
     $services->alias(FilterManager::class, 'liip_imagine.filter.manager');
@@ -268,7 +268,7 @@ return static function (ContainerConfigurator $container) {
     // Config
     $services->set('liip_imagine.controller.config', ControllerConfig::class)
         ->private()
-        ->args(['']);
+        ->args(['', true]);
 
     // Controller
     $services->set(ImagineController::class)
@@ -278,6 +278,7 @@ return static function (ContainerConfigurator $container) {
             service('liip_imagine.data.manager'),
             service('liip_imagine.cache.signer'),
             service('liip_imagine.controller.config'),
+            service('logger')->ignoreOnInvalid(),
         ]);
 
     $services->alias('liip_imagine.controller', ImagineController::class)
@@ -475,6 +476,14 @@ return static function (ContainerConfigurator $container) {
             '',
             '',
             '',
+        ]);
+
+    $services->set('liip_imagine.cache.resolver.prototype.format_extension', FormatExtensionResolver::class)
+        ->public()
+        ->abstract()
+        ->args([
+            '', // will be injected by FormatExtensionResolverFactory
+            service('liip_imagine.filter.configuration'),
         ]);
 
     $services->set('liip_imagine.cache.resolver.prototype.proxy', ProxyResolver::class)

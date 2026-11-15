@@ -26,6 +26,13 @@ been removed.
 
 - __[BC BREAK]__ Argument 2 of `AbstractDoctrineLoader` is mandatory now, you MUST pass the model class name.
 
+## 2.19.0
+
+- __[Deprecated]__ A filter set name that contains a `-` and no `_` is renamed by the Symfony configuration, so
+  `my-thumbnail` has to be used as `my_thumbnail`. This normalization is deprecated and will be removed in 3.0. Set the
+  new `liip_imagine.normalize_filter_set_names` option to `false` to use the filter set names as written, and make sure
+  the names in your configuration match the names used in your templates and code literally.
+
 ## 2.3.0 - 2.7.0
 
 - __[Deprecated]__ As `doctrine/cache` has been deprecated, the `Liip\ImagineBundle\Imagine\Resolver\CacheResolver`

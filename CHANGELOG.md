@@ -16,6 +16,33 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
+## 2.19.0 (unreleased)
+
+- Add a `format_extension` resolver configuration, so the `FormatExtensionResolver` can decorate a configured resolver without declaring a service ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1675))
+- Add the `normalize_filter_set_names` option to allow `-` in filter set names, and deprecate the normalization of `-` to `_` ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1676))
+
+## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
+
+- Make compatible with Twig 4: Add missing return type declaration ([winniezzz](https://github.com/liip/LiipImagineBundle/pull/1673))
+- Fix quality fallback with rokka/imagine-vips ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1662))
+
+## [2.18.1](https://github.com/liip/LiipImagineBundle/tree/2.18.1)
+
+- Fix a non-existing filter throwing an uncaught exception instead of a not found response outside of the debug mode, a regression of the default image fallback ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
+
+## [2.18.0](https://github.com/liip/LiipImagineBundle/tree/2.18.0)
+
+- Dispatch filter lifecycle events for telemetry and debugging ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1666))
+- Fall back to the `default_image` when a filter does not exist or the image can not be generated, unless the new `controller.debug` option is enabled ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
+- Dispatch pre/post store and pre/post remove events on the CacheManager, so applications can react to the cache storage lifecycle ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1664))
+- Fix bug that we did not delete the webp variant when enabled, when deleting an image through the CacheManager ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1661))
+- Drop support for PHP 8.0.
+
+## [2.17.2](https://github.com/liip/LiipImagineBundle/tree/2.17.2)
+
+- Fix lazy Twig mode dropping the path for absolute image URLs ([Atesca](https://github.com/Atesca))
+  Fixing a regression introduced in 2.7.0.
+
 ## [2.17.1](https://github.com/liip/LiipImagineBundle/tree/2.17.1)
 
 - Fix for AssetMapperLoaderFactory service definition to not fail when not configured ([dbu](https://github.com/liip/LiipImagineBundle/pull/1649))
