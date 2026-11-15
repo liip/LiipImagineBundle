@@ -154,8 +154,8 @@ Filter set names
 By default, a filter set name that contains a ``-`` and no ``_`` is renamed by the Symfony
 configuration, so ``my-thumbnail`` has to be used as ``my_thumbnail`` in templates and in the URLs.
 This normalization is deprecated, and will be removed in version 3. To use your filter set names as
-written, set ``normalize_filter_set_names`` to ``false``, and replace the underscored names in your
-templates and code:
+written, set ``normalize_filter_set_names`` to ``false``, and make sure the names in your
+configuration match the names used in your templates and code literally:
 
 .. code-block:: yaml
 
