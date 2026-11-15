@@ -48,7 +48,7 @@ class AwsS3Resolver implements ResolverInterface
     {
         $this->storage = $storage;
         $this->bucket = $bucket;
-        $this->acl = $acl ?? '';
+        $this->acl = $acl;
         $this->getOptions = $getOptions;
         $this->putOptions = $putOptions;
     }
