@@ -15,6 +15,7 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Events\CacheRemoveEvent;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
 use Liip\ImagineBundle\Events\CacheStoreEvent;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\ImagineEvents;
@@ -184,10 +185,14 @@ class CacheManager
      * @param string $filter
      * @param string $resolver
      *
+     * @throws NotFoundHttpException if the path tries to leave the cache directory
+     *
      * @return bool
      */
     public function isStored($path, $filter, $resolver = null)
     {
+        $this->assertPathDoesNotTraverse($path);
+
         return $this->getResolver($filter, $resolver)->isStored($path, $filter);
     }
 
@@ -204,9 +209,7 @@ class CacheManager
      */
     public function resolve($path, $filter, $resolver = null)
     {
-        if (false !== mb_strpos($path, '/../') || 0 === mb_strpos($path, '../')) {
-            throw new NotFoundHttpException(\sprintf("Source image was searched with '%s' outside of the defined root path", $path));
-        }
+        $this->assertPathDoesNotTraverse($path);
 
         $preEvent = new CacheResolveEvent($path, $filter);
         $this->dispatchWithBC($preEvent, ImagineEvents::PRE_RESOLVE);
@@ -225,9 +228,13 @@ class CacheManager
      * @param string $path
      * @param string $filter
      * @param string $resolver
+     *
+     * @throws NotFoundHttpException if the path tries to leave the cache directory
      */
     public function store(BinaryInterface $binary, $path, $filter, $resolver = null): void
     {
+        $this->assertPathDoesNotTraverse($path);
+
         $this->dispatchWithBC(new CacheStoreEvent($binary, $path, $filter, $resolver), ImagineEvents::PRE_STORE);
 
         $this->getResolver($filter, $resolver)->store($binary, $path, $filter);
@@ -238,6 +245,8 @@ class CacheManager
     /**
      * @param string|string[]|null $paths
      * @param string|string[]|null $filters
+     *
+     * @throws NotFoundHttpException if one of the paths tries to leave the cache directory
      */
     public function remove($paths = null, $filters = null): void
     {
@@ -252,6 +261,10 @@ class CacheManager
 
         $paths = array_filter($paths);
         $filters = array_filter($filters);
+
+        foreach ($paths as $path) {
+            $this->assertPathDoesNotTraverse($path);
+        }
 
         // When WebP generation is enabled, each cached image also has a
         // "<path>.webp" companion (see FilterService::buildFilterPathContainers).
@@ -309,6 +322,19 @@ class CacheManager
         }
 
         return $this->resolvers[$resolverName];
+    }
+
+    /**
+     * The path is appended to the cache directory of the filter by the resolvers. A ".." segment would allow to
+     * check, write or remove files outside of the cache directory.
+     *
+     * @throws NotFoundHttpException
+     */
+    private function assertPathDoesNotTraverse(string $path): void
+    {
+        if (PathHelper::containsTraversal($path)) {
+            throw new NotFoundHttpException(\sprintf("Source image was searched with '%s' outside of the defined root path", $path));
+        }
     }
 
     /**

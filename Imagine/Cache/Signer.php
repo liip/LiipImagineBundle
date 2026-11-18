@@ -39,6 +39,6 @@ class Signer implements SignerInterface
 
     public function check($hash, $path, ?array $runtimeConfig = null)
     {
-        return $hash === $this->sign($path, $runtimeConfig);
+        return \is_string($hash) && hash_equals($this->sign($path, $runtimeConfig), $hash);
     }
 }

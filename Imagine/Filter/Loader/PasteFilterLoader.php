@@ -14,6 +14,8 @@ namespace Liip\ImagineBundle\Imagine\Filter\Loader;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 
 class PasteFilterLoader implements LoaderInterface
 {
@@ -43,7 +45,12 @@ class PasteFilterLoader implements LoaderInterface
         $x = isset($options['start'][0]) ? $options['start'][0] : null;
         $y = isset($options['start'][1]) ? $options['start'][1] : null;
 
-        $destImage = $this->imagine->open($this->projectDir.'/'.$options['image']);
+        $imagePath = (string) $options['image'];
+        if (PathHelper::containsTraversal($imagePath)) {
+            throw new InvalidArgumentException(\sprintf('The "image" option "%s" must not contain ".." segments, it has to be inside the project directory.', $imagePath));
+        }
+
+        $destImage = $this->imagine->open($this->projectDir.'/'.$imagePath);
 
         return $image->paste($destImage, new Point($x, $y));
     }

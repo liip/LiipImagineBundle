@@ -12,6 +12,7 @@
 namespace Liip\ImagineBundle\Binary\Loader;
 
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 
 class StreamLoader implements LoaderInterface
 {
@@ -48,7 +49,15 @@ class StreamLoader implements LoaderInterface
 
     public function find($path)
     {
+        if (PathHelper::containsTraversal($path)) {
+            throw new NotLoadableException(\sprintf('Source image "%s" is invalid, it must not contain ".." segments.', $path));
+        }
+
         $name = $this->wrapperPrefix.$path;
+
+        if ($this->changesHost($name)) {
+            throw new NotLoadableException(\sprintf('Source image "%s" is invalid, it changes the host of the stream wrapper prefix "%s".', $path, $this->wrapperPrefix));
+        }
 
         /*
          * This looks strange, but at least in PHP 5.3.8 it will raise an E_WARNING if the 4th parameter is null.
@@ -75,5 +84,32 @@ class StreamLoader implements LoaderInterface
         }
 
         return $content;
+    }
+
+    /**
+     * When the wrapper prefix ends inside the host of a URL, e.g. "https://images.example.com" without a trailing
+     * slash, the path could point the stream to another host, e.g. with "@attacker.example/image.jpg".
+     *
+     * Prefixes without a host, like a local directory, or only a scheme like "file://", are not restricted.
+     */
+    private function changesHost(string $name): bool
+    {
+        $prefix = parse_url($this->wrapperPrefix);
+        if (false === $prefix || !isset($prefix['host'])) {
+            return false;
+        }
+
+        $url = parse_url($name);
+        if (false === $url) {
+            return true;
+        }
+
+        foreach (['scheme', 'user', 'pass', 'host', 'port'] as $component) {
+            if (($prefix[$component] ?? null) !== ($url[$component] ?? null)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
