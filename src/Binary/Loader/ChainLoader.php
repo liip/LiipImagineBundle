@@ -25,7 +25,7 @@ class ChainLoader implements LoaderInterface
      */
     public function __construct(array $loaders)
     {
-        $this->loaders = array_filter($loaders, function ($loader) {
+        $this->loaders = array_filter($loaders, static function ($loader) {
             return $loader instanceof LoaderInterface;
         });
     }

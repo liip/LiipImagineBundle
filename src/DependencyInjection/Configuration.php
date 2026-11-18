@@ -33,14 +33,18 @@ class Configuration implements ConfigurationInterface
      */
     protected array $loadersFactories;
 
+    protected bool $normalizeFilterSetNames;
+
     /**
      * @param ResolverFactoryInterface[] $resolversFactories
      * @param LoaderFactoryInterface[]   $loadersFactories
+     * @param bool                       $normalizeFilterSetNames Whether to replace "-" by "_" in filter set names
      */
-    public function __construct(array $resolversFactories, array $loadersFactories)
+    public function __construct(array $resolversFactories, array $loadersFactories, bool $normalizeFilterSetNames = true)
     {
         $this->resolversFactories = $resolversFactories;
         $this->loadersFactories = $loadersFactories;
+        $this->normalizeFilterSetNames = $normalizeFilterSetNames;
     }
 
     public function getConfigTreeBuilder(): TreeBuilder
@@ -65,14 +69,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->beforeNormalization()
-                ->ifTrue(function ($v) {
+                ->ifTrue(static function ($v) {
                     return
                         empty($v['loaders'])
                         || empty($v['loaders']['default'])
                         || empty($v['resolvers'])
                         || empty($v['resolvers']['default']);
                 })
-                ->then(function ($v) {
+                ->then(static function ($v) {
                     if (empty($v['loaders'])) {
                         $v['loaders'] = [];
                     }
@@ -106,7 +110,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('driver')->defaultValue('gd')
                     ->validate()
-                        ->ifTrue(function ($v) {
+                        ->ifTrue(static function ($v) {
                             return !\in_array($v, ['gd', 'imagick', 'gmagick', 'vips'], true);
                         })
                         ->thenInvalid('Invalid imagine driver specified: %s')
@@ -154,15 +158,24 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('filter_runtime_action')->defaultValue(\sprintf('%s::filterRuntimeAction', ImagineController::class))->end()
                         ->integerNode('redirect_response_code')->defaultValue(302)
                             ->validate()
-                                ->ifTrue(function ($redirectResponseCode) {
+                                ->ifTrue(static function ($redirectResponseCode) {
                                     return !\in_array($redirectResponseCode, ControllerConfig::REDIRECT_RESPONSE_CODES, true);
                                 })
                                 ->thenInvalid('Invalid redirect response code "%s" (must be 201, 301, 302, 303, 307, or 308).')
                             ->end()
                         ->end()
+                        ->booleanNode('debug')
+                            ->defaultNull()
+                            ->info('Whether to report images that can not be generated as an error. Defaults to the kernel debug mode. When disabled, the default image is served instead, if one is configured.')
+                        ->end()
                     ->end()
                 ->end()
+                ->booleanNode('normalize_filter_set_names')
+                    ->defaultNull()
+                    ->info('Whether to replace "-" by "_" in filter set names, as Symfony does for configuration keys. Not setting this option to false is deprecated: the normalization will be removed in 3.0.')
+                ->end()
                 ->arrayNode('filter_sets')
+                    ->normalizeKeys($this->normalizeFilterSetNames)
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->fixXmlConfig('filter', 'filters')
@@ -262,7 +275,7 @@ class Configuration implements ConfigurationInterface
 
         $nodeDefinition
             ->validate()
-            ->ifTrue(function ($array) use ($type) {
+            ->ifTrue(static function ($array) use ($type) {
                 foreach ($array as $name => $element) {
                     if (!$element) {
                         throw new InvalidConfigurationException(ucfirst($type).' "'.$name.'" must have a factory configured');

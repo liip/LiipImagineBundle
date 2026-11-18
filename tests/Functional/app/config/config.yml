@@ -73,6 +73,10 @@ liip_imagine:
                 web_root:     "%kernel.project_dir%/public"
                 cache_prefix: media/cache
 
+        format_extension:
+            format_extension:
+                resolver: default
+
     filter_sets:
 
         thumbnail_web_path:

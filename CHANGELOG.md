@@ -12,8 +12,61 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 - Removed deprecated code and BC for old Symfony versions.
 - The response when the `filter` parameter in a resolve request is not an array is now 400 bad request, and no longer 404 not found.
 - Simplified the `ProxyResolver` to no longer do the undocumented regex replace logic on domain names (reverting [#687](https://github.com/liip/LiipImagineBundle/pull/687)).
+- Removed `use_psr_cache`, the cache now always needs to be a PSR cache and Doctrine cache is no longer supported.
 
 # 2.x
+
+## 2.19.0 (unreleased)
+
+- Add a `format_extension` resolver configuration, so the `FormatExtensionResolver` can decorate a configured resolver without declaring a service ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1675))
+- Add the `normalize_filter_set_names` option to allow `-` in filter set names, and deprecate the normalization of `-` to `_` ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1676))
+
+## [2.18.2](https://github.com/liip/LiipImagineBundle/tree/2.18.2)
+
+- Make compatible with Twig 4: Add missing return type declaration ([winniezzz](https://github.com/liip/LiipImagineBundle/pull/1673))
+- Fix quality fallback with rokka/imagine-vips ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1662))
+
+## [2.18.1](https://github.com/liip/LiipImagineBundle/tree/2.18.1)
+
+- Fix a non-existing filter throwing an uncaught exception instead of a not found response outside of the debug mode, a regression of the default image fallback ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
+
+## [2.18.0](https://github.com/liip/LiipImagineBundle/tree/2.18.0)
+
+- Dispatch filter lifecycle events for telemetry and debugging ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1666))
+- Fall back to the `default_image` when a filter does not exist or the image can not be generated, unless the new `controller.debug` option is enabled ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1665))
+- Dispatch pre/post store and pre/post remove events on the CacheManager, so applications can react to the cache storage lifecycle ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1664))
+- Fix bug that we did not delete the webp variant when enabled, when deleting an image through the CacheManager ([ousamabenyounes](https://github.com/liip/LiipImagineBundle/pull/1661))
+- Drop support for PHP 8.0.
+
+## [2.17.2](https://github.com/liip/LiipImagineBundle/tree/2.17.2)
+
+- Fix lazy Twig mode dropping the path for absolute image URLs ([Atesca](https://github.com/Atesca))
+  Fixing a regression introduced in 2.7.0.
+
+## [2.17.1](https://github.com/liip/LiipImagineBundle/tree/2.17.1)
+
+- Fix for AssetMapperLoaderFactory service definition to not fail when not configured ([dbu](https://github.com/liip/LiipImagineBundle/pull/1649))
+
+## [2.17.0](https://github.com/liip/LiipImagineBundle/tree/2.17.0)
+
+- Add AssetMapperLocator to work with the asset mapper in development mode ([tito10047](https://github.com/liip/LiipImagineBundle/pull/1645))
+- Drop support for PHP 7 ([dbu](https://github.com/liip/LiipImagineBundle/pull/1646))
+
+## [2.16.0](https://github.com/liip/LiipImagineBundle/tree/2.16.0)
+
+- Compatible with Symfony 8 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1642)) (including a bunch of PRs to change all XML configuration to PHP configuration)
+- Test with PHP 8.5 and fix deprecations([dbu](https://github.com/liip/LiipImagineBundle/pull/1644))
+- Drop support for unmaintained Symfony versions ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1639))
+
+## [2.15.0](https://github.com/liip/LiipImagineBundle/tree/2.15.0)
+
+- Refactored `Request::get()` to `Request::query::get()` to avoid deprecation with Symfony 7.4 ([dmaicher](https://github.com/liip/LiipImagineBundle/pull/1636))
+
+## [2.14.0](https://github.com/liip/LiipImagineBundle/tree/2.14.0)
+
+- Allow configuring empty ACLs on AWS S3 resolver to skip ACLs ([deguif](https://github.com/liip/LiipImagineBundle/pull/1629))
+- Add `use_psr_cache` option to AWS S3 resolver configuration in order to support PSR cache. Configuring a doctrine cache now will trigger a deprecation ([deguif](https://github.com/liip/LiipImagineBundle/pull/1630))
+- Add ability to specify a custom s3 client service in aws s3 resolver configuration ([deguif](https://github.com/liip/LiipImagineBundle/pull/1632))
 
 ## [2.13.3](https://github.com/liip/LiipImagineBundle/tree/2.13.3)
 

@@ -10,17 +10,17 @@ on:
 
 jobs:
   php-cs-fixer:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
           coverage: none
-          tools: php-cs-fixer
+          tools: php-cs-fixer:3.95.30
 
       - name: Run PHP-CS-Fixer
         run: php-cs-fixer fix --dry-run --diff

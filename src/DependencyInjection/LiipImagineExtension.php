@@ -20,12 +20,13 @@ use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class LiipImagineExtension extends Extension implements PrependExtensionInterface
@@ -52,7 +53,11 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
 
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
-        return new Configuration($this->resolversFactories, $this->loadersFactories);
+        return new Configuration(
+            $this->resolversFactories,
+            $this->loadersFactories,
+            false !== $this->getNormalizeFilterSetNames($config)
+        );
     }
 
     public function load(array $configs, ContainerBuilder $container): void
@@ -62,20 +67,22 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
             $configs
         );
 
+        $this->triggerFilterSetNamesNormalizationDeprecation($configs);
+
         $container->setParameter('liip_imagine.resolvers', $config['resolvers']);
         $container->setParameter('liip_imagine.loaders', $config['loaders']);
 
         $this->loadResolvers($config['resolvers'], $container);
         $this->loadLoaders($config['loaders'], $container);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('imagine.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('imagine.php');
 
         if ('none' !== $config['twig']['mode']) {
             $this->loadTwig($config['twig'], $loader, $container);
         }
 
-        $loader->load('commands.xml');
+        $loader->load('commands.php');
 
         if ($this->isConfigEnabled($container, $config['messenger'])) {
             $this->registerMessengerConfiguration($loader);
@@ -89,14 +96,15 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
                 throw new \RuntimeException("Unable to use 'vips' driver without '{$vipsImagineClass}' class.");
             }
 
-            $loader->load('imagine_vips.xml');
+            $loader->load('imagine_vips.php');
         }
 
         $container->setParameter('liip_imagine.driver_service', "liip_imagine.{$driver}");
 
         $container
             ->getDefinition('liip_imagine.controller.config')
-            ->replaceArgument(0, $config['controller']['redirect_response_code']);
+            ->replaceArgument(0, $config['controller']['redirect_response_code'])
+            ->replaceArgument(1, $config['controller']['debug'] ?? '%kernel.debug%');
 
         $container->setAlias('liip_imagine', new Alias("liip_imagine.{$driver}"));
         $container->setAlias(CacheManager::class, new Alias('liip_imagine.cache.manager', false));
@@ -128,9 +136,69 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         }
     }
 
+    /**
+     * The option changes the configuration tree, so it has to be read from the raw configs.
+     *
+     * @param array<mixed> $configs
+     */
+    private function getNormalizeFilterSetNames(array $configs): ?bool
+    {
+        $normalize = null;
+
+        foreach ($configs as $config) {
+            foreach (['normalize_filter_set_names', 'normalize-filter-set-names'] as $key) {
+                if (\is_array($config) && isset($config[$key])) {
+                    $normalize = (bool) $config[$key];
+                }
+            }
+        }
+
+        return $normalize;
+    }
+
+    /**
+     * @param array<mixed> $configs
+     */
+    private function triggerFilterSetNamesNormalizationDeprecation(array $configs): void
+    {
+        $normalize = $this->getNormalizeFilterSetNames($configs);
+
+        if (false === $normalize) {
+            return;
+        }
+
+        if (true === $normalize) {
+            trigger_deprecation('liip/imagine-bundle', '2.19', 'Setting the "liip_imagine.normalize_filter_set_names" config option to true is deprecated, set it to false and use the filter set names as written in the configuration. The option will be removed in 3.0.');
+
+            return;
+        }
+
+        $renamed = [];
+        foreach ($configs as $config) {
+            foreach (['filter_sets', 'filter-sets'] as $key) {
+                if (!\is_array($config) || !\is_array($config[$key] ?? null)) {
+                    continue;
+                }
+
+                // same condition as Symfony\Component\Config\Definition\ArrayNode::preNormalize()
+                foreach (array_keys($config[$key]) as $name) {
+                    $name = (string) $name;
+                    $normalizedName = str_replace('-', '_', $name);
+                    if (str_contains($name, '-') && !str_contains($name, '_') && !\array_key_exists($normalizedName, $config[$key])) {
+                        $renamed[] = \sprintf('"%s" is used as "%s"', $name, $normalizedName);
+                    }
+                }
+            }
+        }
+
+        if ([] !== $renamed) {
+            trigger_deprecation('liip/imagine-bundle', '2.19', \sprintf('Filter set names are normalized: %s. This normalization is deprecated and will be removed in 3.0, set the "liip_imagine.normalize_filter_set_names" config option to false and use the filter set names as written in the configuration.', implode(', ', array_unique($renamed))));
+        }
+    }
+
     private function createFilterSets(array $defaultFilterSets, array $filterSets): array
     {
-        return array_map(function (array $filterSet) use ($defaultFilterSets) {
+        return array_map(static function (array $filterSet) use ($defaultFilterSets) {
             return array_replace_recursive($defaultFilterSets, $filterSet);
         }, $filterSets);
     }
@@ -152,19 +220,19 @@ class LiipImagineExtension extends Extension implements PrependExtensionInterfac
         }
     }
 
-    private function registerMessengerConfiguration(XmlFileLoader $loader): void
+    private function registerMessengerConfiguration(LoaderInterface $loader): void
     {
         if (!interface_exists(MessageBusInterface::class)) {
             throw new LogicException('Messenger support cannot be enabled as the Messenger component is not installed. Try running "composer require symfony/messenger".');
         }
 
-        $loader->load('messenger.xml');
+        $loader->load('messenger.php');
     }
 
-    private function loadTwig(array $config, XmlFileLoader $loader, ContainerBuilder $container): void
+    private function loadTwig(array $config, LoaderInterface $loader, ContainerBuilder $container): void
     {
         if ('lazy' === $config['mode']) {
-            $loader->load('imagine_twig_mode_lazy.xml');
+            $loader->load('imagine_twig_mode_lazy.php');
             if (\array_key_exists('assets_version', $config) && null !== $config['assets_version']) {
                 $runtime = $container->getDefinition('liip_imagine.templating.filter_runtime');
                 $runtime->setArgument(1, $config['assets_version']);

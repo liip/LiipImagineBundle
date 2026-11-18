@@ -23,12 +23,12 @@ class Signer implements SignerInterface
     public function sign(string $path, ?array $runtimeConfig = null): string
     {
         if ($runtimeConfig) {
-            array_walk_recursive($runtimeConfig, function (&$value) {
+            array_walk_recursive($runtimeConfig, static function (&$value) {
                 $value = (string) $value;
             });
         }
 
-        return mb_substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', ltrim($path, '/').(null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
+        return mb_substr(preg_replace('/[^a-zA-Z0-9-_]/', '', base64_encode(hash_hmac('sha256', mb_ltrim($path, '/').(null === $runtimeConfig ?: serialize($runtimeConfig)), $this->secret, true))), 0, 8);
     }
 
     public function check(string $hash, string $path, ?array $runtimeConfig = null): bool

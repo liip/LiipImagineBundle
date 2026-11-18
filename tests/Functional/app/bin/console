@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+use Liip\ImagineBundle\Tests\Functional\app\AppKernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+$vendorDir = dirname(dirname(dirname(dirname(__DIR__)))).'/vendor';
+if (!is_dir($vendorDir)) {
+    throw new LogicException('Dependencies are missing. Try running "composer install".');
+}
+
+if (!is_file("$vendorDir/autoload_runtime.php")) {
+    throw new LogicException('Symfony Runtime is missing. Try running "composer require symfony/runtime".');
+}
+
+require_once "$vendorDir/autoload_runtime.php";
+
+return function (array $context) {
+    $kernel = new AppKernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+
+    return new Application($kernel);
+};

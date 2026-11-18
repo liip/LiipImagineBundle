@@ -49,7 +49,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
                 ->arrayNode('data_root')
                     ->beforeNormalization()
                     ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                     ->end()
@@ -118,7 +118,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
             $paths = $this->getBundlePathsUsingNamedObj($container->getParameter('kernel.bundles'));
         }
 
-        return array_map(function (string $path): string {
+        return array_map(static function (string $path): string {
             return $path.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'public';
         }, $paths);
     }
@@ -130,7 +130,7 @@ class FileSystemLoaderFactory extends AbstractLoaderFactory
      */
     private function getBundlePathsUsingMetadata(array $metadata): array
     {
-        return array_combine(array_keys($metadata), array_map(function (array $data) {
+        return array_combine(array_keys($metadata), array_map(static function (array $data) {
             return $data['path'];
         }, $metadata));
     }

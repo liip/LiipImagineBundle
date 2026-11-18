@@ -50,7 +50,7 @@ class ChainLoaderFactory extends AbstractLoaderFactory
      */
     private function createLoaderReferences(array $loaders): array
     {
-        return array_combine($loaders, array_map(function (string $name): Reference {
+        return array_combine($loaders, array_map(static function (string $name): Reference {
             return new Reference(\sprintf('liip_imagine.binary.loader.%s', $name));
         }, $loaders));
     }

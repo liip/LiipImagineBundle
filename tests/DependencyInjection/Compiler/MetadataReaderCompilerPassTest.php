@@ -76,7 +76,6 @@ class MetadataReaderCompilerPassTest extends TestCase
     private static function getVisibilityRestrictedStaticProperty(\ReflectionClass $r, string $p): string
     {
         $property = $r->getProperty($p);
-        $property->setAccessible(true);
 
         return $property->getValue();
     }

@@ -23,7 +23,6 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
     {
         $locator = new FileSystemLocator(['/does/not/exist/foo', '/does/not/exist/bar', $temp = sys_get_temp_dir()], true);
         $roots = (new \ReflectionObject($locator))->getProperty('roots');
-        $roots->setAccessible(true);
         $array = [
             '',
             '',
@@ -84,7 +83,7 @@ class FileSystemLocatorTest extends AbstractFileSystemLocatorTest
             realpath(__DIR__.'/../../../'),
         ];
 
-        return array_map(function ($params) use ($prepend) {
+        return array_map(static function ($params) use ($prepend) {
             return [[$prepend[mt_rand(0, \count($prepend) - 1)], $params[0]], $params[1]];
         }, static::provideLoadCases());
     }

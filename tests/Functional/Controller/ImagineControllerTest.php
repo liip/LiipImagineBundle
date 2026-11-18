@@ -39,7 +39,6 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         if ($this->webp_generate) {
             $filterService = $this->getService('test.liip_imagine.service.filter');
             $webpGenerate = new \ReflectionProperty($filterService, 'webpGenerate');
-            $webpGenerate->setAccessible(true);
             $webpGenerate->setValue($filterService, true);
         }
     }

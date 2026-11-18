@@ -13,15 +13,28 @@ namespace Liip\ImagineBundle\Imagine\Filter;
 
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
+use Imagine\Vips\Imagine as VipsImagine;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\FileBinaryInterface;
 use Liip\ImagineBundle\Binary\MimeTypeGuesserInterface;
+use Liip\ImagineBundle\Events\FilterEvent;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Filter\PostProcessor\PostProcessorInterface;
+use Liip\ImagineBundle\ImagineEvents;
 use Liip\ImagineBundle\Model\Binary;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class FilterManager
 {
+    private const VIPS_QUALITY_OPTIONS = [
+        'jpeg_quality',
+        'png_quality',
+        'webp_quality',
+        'heif_quality',
+        'avif_quality',
+        'jxl_quality',
+    ];
+
     protected FilterConfiguration $filterConfig;
 
     protected ImagineInterface $imagine;
@@ -38,11 +51,14 @@ class FilterManager
      */
     protected array $postProcessors = [];
 
-    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser)
+    private ?EventDispatcherInterface $dispatcher;
+
+    public function __construct(FilterConfiguration $filterConfig, ImagineInterface $imagine, MimeTypeGuesserInterface $mimeTypeGuesser, ?EventDispatcherInterface $dispatcher = null)
     {
         $this->filterConfig = $filterConfig;
         $this->imagine = $imagine;
         $this->mimeTypeGuesser = $mimeTypeGuesser;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -88,8 +104,14 @@ class FilterManager
         }
 
         foreach ($this->sanitizeFilters($config['filters'] ?? []) as $name => $options) {
+            $event = new FilterEvent($name, $options);
+            $this->dispatchEvent($event, ImagineEvents::PRE_FILTER);
             $prior = $image;
-            $image = $this->loaders[$name]->load($image, $options);
+            try {
+                $image = $this->loaders[$name]->load($image, $options);
+            } finally {
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_FILTER);
+            }
 
             if ($prior !== $image) {
                 $this->destroyImage($prior);
@@ -120,7 +142,13 @@ class FilterManager
     public function applyPostProcessors(BinaryInterface $binary, array $config): BinaryInterface
     {
         foreach ($this->sanitizePostProcessors($config['post_processors'] ?? []) as $name => $options) {
-            $binary = $this->postProcessors[$name]->process($binary, $options);
+            $event = new FilterEvent($name, $options);
+            $this->dispatchEvent($event, ImagineEvents::PRE_POST_PROCESSOR);
+            try {
+                $binary = $this->postProcessors[$name]->process($binary, $options);
+            } finally {
+                $this->dispatchEvent(new FilterEvent($name, $options), ImagineEvents::POST_POST_PROCESSOR);
+            }
         }
 
         return $binary;
@@ -131,6 +159,14 @@ class FilterManager
         $options = [
             'quality' => $config['quality'],
         ];
+
+        if ($this->imagine instanceof VipsImagine) {
+            foreach (self::VIPS_QUALITY_OPTIONS as $qualityOption) {
+                // contrary to the other drivers, the rokka/imagine-vips does not fallback to the general `quality` configuration
+                // so we have to implement the fallback on our end.
+                $options[$qualityOption] = $config[$qualityOption] ?? $config['quality'];
+            }
+        }
 
         if (\array_key_exists('jpeg_quality', $config)) {
             $options['jpeg_quality'] = $config['jpeg_quality'];
@@ -175,7 +211,7 @@ class FilterManager
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($filters) !== \count($sanitized)) {
-            throw new \InvalidArgumentException(\sprintf('Could not find filter(s): %s', implode(', ', array_map(function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($filters), array_keys($sanitized))))));
+            throw new \InvalidArgumentException(\sprintf('Could not find filter(s): %s', implode(', ', array_map(static function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($filters), array_keys($sanitized))))));
         }
 
         return $sanitized;
@@ -188,7 +224,7 @@ class FilterManager
         }, ARRAY_FILTER_USE_KEY);
 
         if (\count($processors) !== \count($sanitized)) {
-            throw new \InvalidArgumentException(\sprintf('Could not find post processor(s): %s', implode(', ', array_map(function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($processors), array_keys($sanitized))))));
+            throw new \InvalidArgumentException(\sprintf('Could not find post processor(s): %s', implode(', ', array_map(static function (string $name): string { return \sprintf('"%s"', $name); }, array_diff(array_keys($processors), array_keys($sanitized))))));
         }
 
         return $sanitized;
@@ -203,5 +239,14 @@ class FilterManager
         if (method_exists($image, '__destruct')) {
             $image->__destruct();
         }
+    }
+
+    private function dispatchEvent(object $event, string $eventName): void
+    {
+        if (null === $this->dispatcher) {
+            return;
+        }
+
+        $this->dispatcher->dispatch($event, $eventName);
     }
 }

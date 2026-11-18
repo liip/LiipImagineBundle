@@ -461,7 +461,6 @@ class WebPathResolverTest extends TestCase
 
         $rc = new \ReflectionClass($resolver);
         $method = $rc->getMethod('getFileUrl');
-        $method->setAccessible(true);
 
         $result = $method->invokeArgs($resolver, ['/cats.jpg', 'some_filter']);
 
@@ -479,7 +478,6 @@ class WebPathResolverTest extends TestCase
 
         $rc = new \ReflectionClass($resolver);
         $method = $rc->getMethod('getFileUrl');
-        $method->setAccessible(true);
 
         $result = $method->invokeArgs($resolver, ['https://some.meme.com/cute/cats.jpg', 'some_filter']);
 
@@ -493,9 +491,7 @@ class WebPathResolverTest extends TestCase
     {
         $reflector = new \ReflectionObject($actualClassOrObject);
         $attribute = $reflector->getProperty($actualAttributeName);
-        $attribute->setAccessible(true);
         $actual = $attribute->getValue($actualClassOrObject);
-        $attribute->setAccessible(false);
 
         self::assertSame($expected, $actual, $message);
     }

@@ -13,6 +13,8 @@ namespace Liip\ImagineBundle\DependencyInjection\Factory\Resolver;
 
 use Aws\S3\S3Client;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,10 +24,15 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
     public function create(ContainerBuilder $container, string $name, array $config): string
     {
         $awsS3ClientId = 'liip_imagine.cache.resolver.'.$name.'.client';
-        $awsS3ClientDefinition = new Definition(S3Client::class);
-        $awsS3ClientDefinition->setFactory([S3Client::class, 'factory']);
-        $awsS3ClientDefinition->addArgument($config['client_config']);
-        $container->setDefinition($awsS3ClientId, $awsS3ClientDefinition);
+
+        if ($config['client_id']) {
+            $container->setAlias($awsS3ClientId, new Alias($config['client_id']));
+        } else {
+            $container->setDefinition($awsS3ClientId, (new Definition(S3Client::class))
+                ->setFactory([S3Client::class, 'factory'])
+                ->addArgument($config['client_config'])
+            );
+        }
 
         $resolverDefinition = $this->getChildResolverDefinition();
         $resolverDefinition->replaceArgument(0, new Reference($awsS3ClientId));
@@ -58,7 +65,7 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
 
             $container->setDefinition($cachedResolverId, $container->getDefinition($resolverId));
 
-            $cacheResolverDefinition = $this->getChildResolverDefinition('cache');
+            $cacheResolverDefinition = $this->getChildResolverDefinition('psr_cache');
             $cacheResolverDefinition->replaceArgument(0, new Reference($config['cache']));
             $cacheResolverDefinition->replaceArgument(1, new Reference($cachedResolverId));
 
@@ -86,14 +93,16 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache')
-                    ->defaultValue(false)
+                    ->defaultFalse()
                 ->end()
                 ->scalarNode('acl')
                     ->defaultValue('public-read')
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('cache_prefix')
                     ->defaultValue('')
+                ->end()
+                ->scalarNode('client_id')
+                    ->defaultNull()
                 ->end()
                 ->arrayNode('client_config')
                     ->isRequired()
@@ -117,6 +126,24 @@ class AwsS3ResolverFactory extends AbstractResolverFactory
                         ->prototype('scalar')
                     ->end()
                 ->end()
+            ->end()
+            ->beforeNormalization()
+                ->ifTrue(static function ($v) {
+                    return isset($v['client_id']) && isset($v['client_config']);
+                })
+                ->then(static function ($v) {
+                    throw new InvalidConfigurationException('Children config "client_id" and "client_config" cannot be configured at the same time.');
+                })
+            ->end()
+            ->beforeNormalization()
+                ->ifTrue(static function ($v) {
+                    return isset($v['client_id']);
+                })
+                ->then(static function ($config) {
+                    $config['client_config'] = [];
+
+                    return $config;
+                })
             ->end();
     }
 }

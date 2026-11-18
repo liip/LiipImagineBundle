@@ -11,7 +11,9 @@
 
 namespace Liip\ImagineBundle\Tests\Imagine\Cache;
 
+use Liip\ImagineBundle\Events\CacheRemoveEvent;
 use Liip\ImagineBundle\Events\CacheResolveEvent;
+use Liip\ImagineBundle\Events\CacheStoreEvent;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Cache\Signer;
@@ -31,6 +33,14 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class CacheManagerTest extends AbstractTest
 {
+    /**
+     * Markers recorded by the resolver mocks so that the cache lifecycle tests
+     * can assert the events are dispatched around the resolver call.
+     */
+    private const RESOLVER_STORE_CALL = 'resolver.store';
+
+    private const RESOLVER_REMOVE_CALL = 'resolver.remove';
+
     public function testAddCacheManagerAwareResolver(): void
     {
         $cacheManager = new CacheManager(
@@ -441,7 +451,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -479,7 +489,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -515,7 +525,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -529,6 +539,42 @@ class CacheManagerTest extends AbstractTest
         );
         $cacheManager->addResolver($expectedFilter, $resolver);
         $cacheManager->remove([$expectedPathOne, $expectedPathTwo], $expectedFilter);
+    }
+
+    public function testRemoveAlsoClearsWebpVariantWhenWebpGenerationEnabled(): void
+    {
+        $expectedPath = 'thePath';
+        $expectedFilter = 'theFilter';
+
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver
+            ->expects($this->once())
+            ->method('remove')
+            ->with(
+                [$expectedPath, $expectedPath.'.webp'],
+                [$expectedFilter]
+            );
+
+        $config = $this->createMock(FilterConfiguration::class);
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnCallback(static function ($filter) {
+                return [
+                    'cache' => $filter,
+                ];
+            });
+
+        $cacheManager = new CacheManager(
+            $config,
+            $this->createMock(RouterInterface::class),
+            new Signer('secret'),
+            $this->createEventDispatcherMock(),
+            null,
+            true
+        );
+        $cacheManager->addResolver($expectedFilter, $resolver);
+        $cacheManager->remove($expectedPath, $expectedFilter);
     }
 
     public function testRemoveCacheForSomePathsAndSomeFiltersOnRemove(): void
@@ -554,7 +600,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -595,7 +641,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -641,7 +687,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -680,7 +726,7 @@ class CacheManagerTest extends AbstractTest
         $config
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->willReturnCallback(function ($filter) {
+            ->willReturnCallback(static function ($filter) {
                 return [
                     'cache' => $filter,
                 ];
@@ -725,6 +771,104 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve('cats.jpg', 'thumbnail');
     }
 
+    public function testShouldDispatchCacheStoreEvents(): void
+    {
+        $binary = new Binary('aContent', 'image/jpeg', 'jpg');
+
+        $sequence = [];
+        $dispatched = [];
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnCallback(static function (CacheStoreEvent $event, string $eventName) use (&$sequence, &$dispatched): CacheStoreEvent {
+                $sequence[] = $eventName;
+                $dispatched[$eventName] = $event;
+
+                return $event;
+            });
+
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver
+            ->expects($this->once())
+            ->method('store')
+            ->with($binary, 'cats.jpg', 'thumbnail')
+            ->willReturnCallback(static function () use (&$sequence): void {
+                $sequence[] = self::RESOLVER_STORE_CALL;
+            });
+
+        $cacheManager = new CacheManager(
+            $this->createMock(FilterConfiguration::class),
+            $this->createMock(RouterInterface::class),
+            new Signer('secret'),
+            $dispatcher
+        );
+
+        $cacheManager->addResolver('the_resolver', $resolver);
+        $cacheManager->store($binary, 'cats.jpg', 'thumbnail', 'the_resolver');
+
+        $this->assertSame([ImagineEvents::PRE_STORE, self::RESOLVER_STORE_CALL, ImagineEvents::POST_STORE], $sequence);
+
+        foreach ($dispatched as $event) {
+            $this->assertSame($binary, $event->getBinary());
+            $this->assertSame('cats.jpg', $event->getPath());
+            $this->assertSame('thumbnail', $event->getFilter());
+            $this->assertSame('the_resolver', $event->getResolver());
+        }
+    }
+
+    public function testShouldDispatchCacheRemoveEvents(): void
+    {
+        $sequence = [];
+        $dispatched = [];
+        $dispatcher = $this->createEventDispatcherMock();
+        $dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnCallback(static function (CacheRemoveEvent $event, string $eventName) use (&$sequence, &$dispatched): CacheRemoveEvent {
+                $sequence[] = $eventName;
+                $dispatched[$eventName] = $event;
+
+                return $event;
+            });
+
+        $config = $this->createMock(FilterConfiguration::class);
+        $config
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnCallback(static function ($filter) {
+                return [
+                    'cache' => $filter,
+                ];
+            });
+
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver
+            ->expects($this->once())
+            ->method('remove')
+            ->with(['cats.jpg'], ['thumbnail'])
+            ->willReturnCallback(static function () use (&$sequence): void {
+                $sequence[] = self::RESOLVER_REMOVE_CALL;
+            });
+
+        $cacheManager = new CacheManager(
+            $config,
+            $this->createMock(RouterInterface::class),
+            new Signer('secret'),
+            $dispatcher
+        );
+
+        $cacheManager->addResolver('thumbnail', $resolver);
+        $cacheManager->remove('cats.jpg', 'thumbnail');
+
+        $this->assertSame([ImagineEvents::PRE_REMOVE, self::RESOLVER_REMOVE_CALL, ImagineEvents::POST_REMOVE], $sequence);
+
+        foreach ($dispatched as $event) {
+            $this->assertSame(['cats.jpg'], $event->getPaths());
+            $this->assertSame(['thumbnail'], $event->getFilters());
+        }
+    }
+
     public function testShouldAllowToPassChangedDataFromPreResolveEventToResolver(): void
     {
         $dispatcher = $this->createEventDispatcherMock();
@@ -740,7 +884,7 @@ class CacheManagerTest extends AbstractTest
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -770,7 +914,7 @@ class CacheManagerTest extends AbstractTest
         $dispatcher = $this->createEventDispatcherMock();
         $dispatcher
             ->method('dispatch')
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -810,14 +954,14 @@ class CacheManagerTest extends AbstractTest
                 [
                     $this->logicalAnd(
                         $this->isInstanceOf(CacheResolveEvent::class),
-                        $this->callback(function (CacheResolveEvent $event) {
+                        $this->callback(static function (CacheResolveEvent $event) {
                             return 'changed_filter' === $event->getFilter() && 'changed_path' === $event->getPath();
                         })
                     ),
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::PRE_RESOLVE !== $eventName) {
                     return;
                 }
@@ -851,7 +995,7 @@ class CacheManagerTest extends AbstractTest
                     ImagineEvents::POST_RESOLVE,
                 ]
             )
-            ->willReturnCallback(function (CacheResolveEvent $event, string $eventName) {
+            ->willReturnCallback(static function (CacheResolveEvent $event, string $eventName) {
                 if (ImagineEvents::POST_RESOLVE !== $eventName) {
                     return;
                 }

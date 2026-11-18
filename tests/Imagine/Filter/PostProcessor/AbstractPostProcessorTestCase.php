@@ -60,7 +60,6 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
         }
 
         $m = $r->getMethod($method);
-        $m->setAccessible(true);
 
         return $m;
     }
@@ -77,7 +76,6 @@ abstract class AbstractPostProcessorTestCase extends AbstractTest
         }
 
         $p = $r->getProperty($property);
-        $p->setAccessible(true);
 
         return $p;
     }

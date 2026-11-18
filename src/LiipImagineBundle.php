@@ -19,12 +19,14 @@ use Liip\ImagineBundle\DependencyInjection\Compiler\LoadersCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\MetadataReaderCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\PostProcessorsCompilerPass;
 use Liip\ImagineBundle\DependencyInjection\Compiler\ResolversCompilerPass;
+use Liip\ImagineBundle\DependencyInjection\Factory\Loader\AssetMapperLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\ChainLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FileSystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\FlysystemLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Loader\StreamLoaderFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\AwsS3ResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory;
+use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FormatExtensionResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFactory;
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface as LoaderLoaderInterface;
@@ -53,10 +55,12 @@ class LiipImagineBundle extends Bundle
         $extension->addResolverFactory(new WebPathResolverFactory());
         $extension->addResolverFactory(new AwsS3ResolverFactory());
         $extension->addResolverFactory(new FlysystemResolverFactory());
+        $extension->addResolverFactory(new FormatExtensionResolverFactory());
 
         $extension->addLoaderFactory(new StreamLoaderFactory());
         $extension->addLoaderFactory(new FileSystemLoaderFactory());
         $extension->addLoaderFactory(new FlysystemLoaderFactory());
+        $extension->addLoaderFactory(new AssetMapperLoaderFactory());
         $extension->addLoaderFactory(new ChainLoaderFactory());
 
         $container->registerForAutoconfiguration(LoaderLoaderInterface::class)->addTag('liip_imagine.filter.loader');

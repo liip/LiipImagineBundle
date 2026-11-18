@@ -62,7 +62,7 @@ class DownscaleFilterLoaderTest extends AbstractTest
             ->willReturn($initialSize);
         $image
             ->method('resize')
-            ->willReturnCallback(function (Box $box) use ($image, &$resultSize): ImageInterface {
+            ->willReturnCallback(static function (Box $box) use ($image, &$resultSize): ImageInterface {
                 $resultSize = $box;
 
                 return $image;
