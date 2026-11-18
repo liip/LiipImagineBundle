@@ -103,7 +103,7 @@ class FileSystemLocator implements LocatorInterface
     {
         $roots = array_filter($this->roots, static function (string $root) use ($path): bool {
             // the separator is needed, otherwise a sibling directory like "public_old" would be considered inside "public"
-            return $path === $root || 0 === mb_strpos($path, rtrim($root, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+            return $path === $root || 0 === mb_strpos($path, mb_rtrim($root, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
         });
 
         if (0 === \count($roots)) {
