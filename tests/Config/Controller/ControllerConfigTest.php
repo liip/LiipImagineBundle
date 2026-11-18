@@ -53,4 +53,15 @@ class ControllerConfigTest extends AbstractTest
         ));
         $this->assertSame($redirectResponseCode, (new ControllerConfig($redirectResponseCode))->getRedirectResponseCode());
     }
+
+    public function testDebugDefaultsToEnabled(): void
+    {
+        $this->assertTrue((new ControllerConfig(302))->isDebug());
+    }
+
+    public function testDebug(): void
+    {
+        $this->assertFalse((new ControllerConfig(302, false))->isDebug());
+        $this->assertTrue((new ControllerConfig(302, true))->isDebug());
+    }
 }
