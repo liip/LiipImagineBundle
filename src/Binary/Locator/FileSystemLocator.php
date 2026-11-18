@@ -102,7 +102,8 @@ class FileSystemLocator implements LocatorInterface
     private function sanitizeAbsolutePath(string $path): string
     {
         $roots = array_filter($this->roots, static function (string $root) use ($path): bool {
-            return 0 === mb_strpos($path, $root);
+            // the separator is needed, otherwise a sibling directory like "public_old" would be considered inside "public"
+            return $path === $root || 0 === mb_strpos($path, mb_rtrim($root, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
         });
 
         if (0 === \count($roots)) {

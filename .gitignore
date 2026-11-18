@@ -5,6 +5,7 @@
 /composer.phar
 /phpstan.neon
 /phpunit.xml
+/tests/Functional/app/config/reference.php
 /tests/Functional/app/public/media/cache
 /tests/Functional/app/web/media/cache
 /var/
