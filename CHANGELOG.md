@@ -6,7 +6,7 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 # 2.x
 
-## 2.19.0 (unreleased)
+## [2.19.0](https://github.com/liip/LiipImagineBundle/tree/2.19.1)
 
 - Security: Fix the `filesystem` loader accepting images from a sibling directory whose name starts with the name of a data root (e.g. `public_old` next to `public`).
 - Security: Reject paths with `..` segments in `CacheManager::isStored()`, `store()` and `remove()`, not only in `resolve()`. Previously, the filtered image was written to the cache before `resolve()` rejected the path, which allowed writing outside of the filter cache directory.
