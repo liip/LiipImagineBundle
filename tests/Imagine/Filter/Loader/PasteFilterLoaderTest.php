@@ -15,6 +15,7 @@ use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader;
 use Liip\ImagineBundle\Tests\AbstractTest;
 
@@ -65,6 +66,35 @@ class PasteFilterLoaderTest extends AbstractTest
         $options['image'] = '';
 
         $loader->load($image, $options);
+    }
+
+    /**
+     * @return string[][]
+     */
+    public static function invalidPathProvider(): array
+    {
+        return [
+            ['../outside/foobar.png'],
+            ['assets/../../outside/foobar.png'],
+            ['assets\\..\\..\\outside\\foobar.png'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidPathProvider
+     */
+    public function testThrowsIfImageOutsideProjectDir(string $path): void
+    {
+        $imagineMock = $this->createMock(ImagineInterface::class);
+        $imagineMock
+            ->expects($this->never())
+            ->method('open');
+        $loader = new PasteFilterLoader($imagineMock, '/project');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('must not contain ".." segments');
+
+        $loader->load($this->createMock(ImageInterface::class), ['start' => [0, 0], 'image' => $path]);
     }
 
     public function pasteProvider(): array

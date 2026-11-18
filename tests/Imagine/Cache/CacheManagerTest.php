@@ -342,6 +342,51 @@ class CacheManagerTest extends AbstractTest
         $cacheManager->resolve($path, 'thumbnail');
     }
 
+    /**
+     * @dataProvider invalidPathProvider
+     */
+    public function testIsStoredInvalidPath(string $path): void
+    {
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver->expects($this->never())->method('isStored');
+
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->createCacheManagerWithResolver($resolver)->isStored($path, 'thumbnail');
+    }
+
+    /**
+     * @dataProvider invalidPathProvider
+     */
+    public function testStoreInvalidPath(string $path): void
+    {
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver->expects($this->never())->method('store');
+
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $dispatcher->expects($this->never())->method('dispatch');
+
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->createCacheManagerWithResolver($resolver, $dispatcher)->store(new Binary('', 'image/jpeg', 'jpg'), $path, 'thumbnail');
+    }
+
+    /**
+     * @dataProvider invalidPathProvider
+     */
+    public function testRemoveInvalidPath(string $path): void
+    {
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver->expects($this->never())->method('remove');
+
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $dispatcher->expects($this->never())->method('dispatch');
+
+        $this->expectException(NotFoundHttpException::class);
+
+        $this->createCacheManagerWithResolver($resolver, $dispatcher)->remove(['cats.jpeg', $path], 'thumbnail');
+    }
+
     public function testThrowsIfConcreteResolverNotExists(): void
     {
         $this->expectException(\OutOfBoundsException::class);
@@ -1021,5 +1066,26 @@ class CacheManagerTest extends AbstractTest
             ->willReturn($this);
 
         return $mock;
+    }
+
+    /**
+     * @param (EventDispatcherInterface&MockObject)|null $dispatcher
+     */
+    private function createCacheManagerWithResolver(ResolverInterface&MockObject $resolver, ?EventDispatcherInterface $dispatcher = null): CacheManager
+    {
+        $config = $this->createMock(FilterConfiguration::class);
+        $config
+            ->method('get')
+            ->willReturn(['size' => [180, 180], 'mode' => 'outbound', 'cache' => null]);
+
+        $cacheManager = new CacheManager(
+            $config,
+            $this->createMock(RouterInterface::class),
+            new Signer('secret'),
+            $dispatcher ?? $this->createEventDispatcherMock()
+        );
+        $cacheManager->addResolver('default', $resolver);
+
+        return $cacheManager;
     }
 }

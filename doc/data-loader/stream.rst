@@ -16,7 +16,7 @@ Configuration
         loaders:
             stream.profile_photos:
                 stream:
-                    wrapper: gaufrette://profile_photos
+                    wrapper: gaufrette://profile_photos/
 
 
 Custom
@@ -63,7 +63,12 @@ loader, you can configure the following:
 .. note::
 
     The stream should be set up to load images from a specific source and only
-    accept relative paths to that source.
+    accept relative paths to that source. End the wrapper with a ``/``, so that
+    the path is appended after the host or directory.
+
+    The loader rejects paths with ``..`` segments, and paths that would change
+    the host of a wrapper like ``https://images.example.com``, e.g.
+    ``@attacker.example/image.jpg``.
 
     We do not recommend to set this loader up in a way that it accepts an
     absolute URL. Otherwise an attacker could make your controller load

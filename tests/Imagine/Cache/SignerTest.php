@@ -55,6 +55,29 @@ class SignerTest extends AbstractTest
         $this->assertTrue($singer->check($singer->sign('aPath', ['aConfig']), 'aPath', ['aConfig']));
     }
 
+    /**
+     * @return string[][]
+     */
+    public static function provideInvalidHashes(): array
+    {
+        return [
+            'wrong hash' => ['aaaaaaaa'],
+            'only the start of the hash' => ['Z0HuW8'],
+            'hash with additional characters' => ['Z0HuW8UHx'],
+            'empty' => [''],
+        ];
+    }
+
+    /**
+     * @dataProvider provideInvalidHashes
+     */
+    public function testShouldFailCheckWithInvalidHash(string $hash): void
+    {
+        $singer = new Signer('aSecret');
+
+        $this->assertFalse($singer->check($hash, 'aPath', ['aConfig']));
+    }
+
     public function testShouldConvertRecursivelyToStringAllRuntimeConfigParameters(): void
     {
         $singer = new Signer('aSecret');

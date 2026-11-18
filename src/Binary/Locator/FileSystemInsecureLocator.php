@@ -11,12 +11,13 @@
 
 namespace Liip\ImagineBundle\Binary\Locator;
 
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
+
 class FileSystemInsecureLocator extends FileSystemLocator
 {
     protected function generateAbsolutePath(string $root, string $path): ?string
     {
-        if (false === mb_strpos($path, '..'.DIRECTORY_SEPARATOR)
-            && false === mb_strpos($path, DIRECTORY_SEPARATOR.'..')
+        if (!PathHelper::containsTraversal($path)
             && false !== file_exists($absolute = $root.DIRECTORY_SEPARATOR.$path)
         ) {
             return $absolute;
