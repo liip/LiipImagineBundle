@@ -28,4 +28,14 @@ class PathHelper
         // revert the rawurlencode that the Symfony UrlGenerator applies to paths
         return rawurldecode($url);
     }
+
+    /**
+     * Whether the path contains a ".." segment that could be used to move out of the directory it is appended to.
+     *
+     * Both "/" and "\" are treated as separators, as Windows accepts both.
+     */
+    public static function containsTraversal(string $path): bool
+    {
+        return \in_array('..', preg_split('{[/\\\\]}', $path), true);
+    }
 }

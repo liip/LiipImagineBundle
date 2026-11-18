@@ -197,6 +197,28 @@ class ImagineControllerTest extends AbstractSetupWebTestCase
         $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/images/shrodinger_cats_which_not_exist.jpeg');
     }
 
+    /**
+     * A sibling directory whose name starts with the name of the data root is outside of the data root. The image must
+     * neither be loaded nor be written to the publicly accessible cache before the request is rejected.
+     */
+    public function testShouldNotStoreImageFromSiblingOfDataRoot(): void
+    {
+        $sibling = $this->webRoot.'_sibling';
+        $this->filesystem->copy($this->webRoot.'/images/cats.jpeg', $sibling.'/cats.jpeg');
+
+        try {
+            // double encoded, as a web server would normalize a plain "../" in the request path
+            $this->client->request('GET', '/media/cache/resolve/thumbnail_web_path/..%252Fpublic_sibling/cats.jpeg');
+            $this->fail('The request for an image outside of the data root should have been rejected');
+        } catch (NotFoundHttpException $exception) {
+            // expected
+        } finally {
+            $this->filesystem->remove($sibling);
+        }
+
+        $this->assertDirectoryDoesNotExist($this->cacheRoot.'/public_sibling');
+    }
+
     public function testInvalidFilterShouldThrowNotFoundHttpException(): void
     {
         $this->expectException(NotFoundHttpException::class);

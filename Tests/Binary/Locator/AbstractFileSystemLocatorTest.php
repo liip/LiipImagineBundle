@@ -111,6 +111,33 @@ abstract class AbstractFileSystemLocatorTest extends TestCase
     }
 
     /**
+     * @return string[][]
+     */
+    public static function provideSiblingOfRootPaths(): array
+    {
+        return [
+            ['../root-01-sibling/file.ext'],
+            ['/../root-01-sibling/file.ext'],
+            ['@root:../root-01-sibling/file.ext'],
+        ];
+    }
+
+    /**
+     * A directory next to the root whose name starts with the name of the root is not inside the root.
+     *
+     * @dataProvider provideSiblingOfRootPaths
+     */
+    public function testThrowsIfPathInSiblingDirectorySharingRootPrefix(string $path): void
+    {
+        $root = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
+        $this->assertFileExists($root.'-sibling/file.ext');
+
+        $this->expectException(NotLoadableException::class);
+
+        $this->getFileSystemLocator(['root' => $root])->locate($path);
+    }
+
+    /**
      * @param string[]|string $paths
      */
     abstract protected function getFileSystemLocator($paths): LocatorInterface;

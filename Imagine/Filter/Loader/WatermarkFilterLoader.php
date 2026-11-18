@@ -15,6 +15,8 @@ use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
+use Liip\ImagineBundle\Exception\InvalidArgumentException;
+use Liip\ImagineBundle\Imagine\Cache\Helper\PathHelper;
 
 class WatermarkFilterLoader implements LoaderInterface
 {
@@ -46,11 +48,16 @@ class WatermarkFilterLoader implements LoaderInterface
             'position' => 'center',
         ];
 
-        if ('%' === mb_substr($options['size'], -1)) {
+        if ('%' === mb_substr((string) $options['size'], -1)) {
             $options['size'] = mb_substr($options['size'], 0, -1) / 100;
         }
 
-        $watermark = $this->imagine->open($this->projectDir.'/'.$options['image']);
+        $imagePath = (string) $options['image'];
+        if (PathHelper::containsTraversal($imagePath)) {
+            throw new InvalidArgumentException(\sprintf('The "image" option "%s" must not contain ".." segments, it has to be inside the project directory.', $imagePath));
+        }
+
+        $watermark = $this->imagine->open($this->projectDir.'/'.$imagePath);
 
         $size = $image->getSize();
         $watermarkSize = $watermark->getSize();

@@ -8,6 +8,10 @@ for a given releases. Unreleased, upcoming changes will be updated here periodic
 
 ## 2.19.0 (unreleased)
 
+- Security: Fix the `filesystem` loader accepting images from a sibling directory whose name starts with the name of a data root (e.g. `public_old` next to `public`).
+- Security: Reject paths with `..` segments in `CacheManager::isStored()`, `store()` and `remove()`, not only in `resolve()`. Previously, the filtered image was written to the cache before `resolve()` rejected the path, which allowed writing outside of the filter cache directory.
+- Security: Fix the `filesystem_insecure` locator not detecting `../` on Windows, where it only checked for `..\`.
+- Security: Reject `..` segments in the `image` option of the `watermark` and `paste` filters. An image outside of the project directory can no longer be loaded, e.g. with a signed runtime filter configuration.
 - Add a `format_extension` resolver configuration, so the `FormatExtensionResolver` can decorate a configured resolver without declaring a service ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1675))
 - Add the `normalize_filter_set_names` option to allow `-` in filter set names, and deprecate the normalization of `-` to `_` ([Amoifr](https://github.com/liip/LiipImagineBundle/pull/1676))
 

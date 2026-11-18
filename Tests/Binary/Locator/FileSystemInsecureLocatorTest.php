@@ -33,6 +33,31 @@ class FileSystemInsecureLocatorTest extends AbstractFileSystemLocatorTest
         $this->getFileSystemLocator(realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'))->locate('/../root-01/file.ext');
     }
 
+    /**
+     * @return string[][]
+     */
+    public static function provideTraversalPaths(): array
+    {
+        return [
+            ['..'],
+            ['root-01/..'],
+            ['root-01/../root-01/file.ext'],
+            ['..\\root-01\\file.ext'],
+            ['root-01\\..\\root-01\\file.ext'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideTraversalPaths
+     */
+    public function testThrowsIfPathContainsTraversalSegment(string $path): void
+    {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+        $this->expectExceptionMessage('Source image not resolvable');
+
+        $this->getFileSystemLocator(realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-02'))->locate($path);
+    }
+
     public function testRootPlaceholders(): void
     {
         $root01 = realpath(__DIR__.'/../../Fixtures/FileSystemLocator/root-01');
