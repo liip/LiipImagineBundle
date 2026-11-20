@@ -18,12 +18,24 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @covers \Liip\ImagineBundle\DependencyInjection\Factory\Resolver\FlysystemResolverFactory<extended>
  */
 class FlysystemResolverFactoryTest extends TestCase
 {
+    private const CACHE_PREFIX = 'theCachePrefix';
+    private const CACHE_SERVICE_ID = 'the_cache_service_id';
+    private const CACHED_RESOLVER_ID = 'liip_imagine.cache.resolver.the_resolver_name.cached';
+    private const FILESYSTEM_SERVICE_ID = 'flyfilesystemservice';
+    private const FLYSYSTEM_RESOLVER_PARENT = 'liip_imagine.cache.resolver.prototype.flysystem2';
+    private const PSR_CACHE_RESOLVER_PARENT = 'liip_imagine.cache.resolver.prototype.psr_cache';
+    private const RESOLVER_ID = 'liip_imagine.cache.resolver.the_resolver_name';
+    private const RESOLVER_NAME = 'the_resolver_name';
+    private const RESOLVER_TAG = 'liip_imagine.cache.resolver';
+    private const ROOT_URL = 'http://images.example.com';
+
     public function testImplementsResolverFactoryInterface(): void
     {
         $rc = new \ReflectionClass(FlysystemResolverFactory::class);
@@ -51,30 +63,61 @@ class FlysystemResolverFactoryTest extends TestCase
 
         $resolver = new FlysystemResolverFactory();
 
-        $resolver->create($container, 'the_resolver_name', [
-            'filesystem_service' => 'flyfilesystemservice',
-            'root_url' => 'http://images.example.com',
-            'cache_prefix' => 'theCachePrefix',
+        $resolver->create($container, self::RESOLVER_NAME, [
+            'filesystem_service' => self::FILESYSTEM_SERVICE_ID,
+            'root_url' => self::ROOT_URL,
+            'cache_prefix' => self::CACHE_PREFIX,
             'visibility' => 'public',
+            'cache' => false,
         ]);
 
-        $this->assertTrue($container->hasDefinition('liip_imagine.cache.resolver.the_resolver_name'));
+        $this->assertTrue($container->hasDefinition(self::RESOLVER_ID));
 
-        $resolverDefinition = $container->getDefinition('liip_imagine.cache.resolver.the_resolver_name');
+        $resolverDefinition = $container->getDefinition(self::RESOLVER_ID);
         $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
-        $resolverName = 'liip_imagine.cache.resolver.prototype.flysystem2';
-        $this->assertSame($resolverName, $resolverDefinition->getParent());
+        $this->assertSame(self::FLYSYSTEM_RESOLVER_PARENT, $resolverDefinition->getParent());
 
-        $this->assertSame('http://images.example.com', $resolverDefinition->getArgument(2));
-        $this->assertSame('theCachePrefix', $resolverDefinition->getArgument(3));
+        $this->assertSame(self::ROOT_URL, $resolverDefinition->getArgument(2));
+        $this->assertSame(self::CACHE_PREFIX, $resolverDefinition->getArgument(3));
         $this->assertSame('public', $resolverDefinition->getArgument(4));
+    }
+
+    public function testWrapResolverWithPsrCacheOnCreate(): void
+    {
+        $container = new ContainerBuilder();
+
+        $resolver = new FlysystemResolverFactory();
+
+        $resolver->create($container, self::RESOLVER_NAME, [
+            'filesystem_service' => self::FILESYSTEM_SERVICE_ID,
+            'root_url' => self::ROOT_URL,
+            'cache_prefix' => self::CACHE_PREFIX,
+            'visibility' => 'public',
+            'cache' => self::CACHE_SERVICE_ID,
+        ]);
+
+        $this->assertTrue($container->hasDefinition(self::CACHED_RESOLVER_ID));
+        $cachedResolverDefinition = $container->getDefinition(self::CACHED_RESOLVER_ID);
+        $this->assertInstanceOf(ChildDefinition::class, $cachedResolverDefinition);
+        $this->assertSame(self::FLYSYSTEM_RESOLVER_PARENT, $cachedResolverDefinition->getParent());
+
+        $resolverDefinition = $container->getDefinition(self::RESOLVER_ID);
+        $this->assertInstanceOf(ChildDefinition::class, $resolverDefinition);
+        $this->assertSame(self::PSR_CACHE_RESOLVER_PARENT, $resolverDefinition->getParent());
+
+        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(0));
+        $this->assertSame(self::CACHE_SERVICE_ID, (string) $resolverDefinition->getArgument(0));
+
+        $this->assertInstanceOf(Reference::class, $resolverDefinition->getArgument(1));
+        $this->assertSame(self::CACHED_RESOLVER_ID, (string) $resolverDefinition->getArgument(1));
+        $this->assertSame([['resolver' => self::RESOLVER_NAME]], $resolverDefinition->getTag(self::RESOLVER_TAG));
     }
 
     public function testProcessCorrectlyOptionsOnAddConfiguration(): void
     {
-        $expectedRootUrl = 'http://images.example.com';
-        $expectedCachePrefix = 'theCachePrefix';
-        $expectedFlysystemService = 'flyfilesystemservice';
+        $expectedRootUrl = self::ROOT_URL;
+        $expectedCachePrefix = self::CACHE_PREFIX;
+        $expectedFlysystemService = self::FILESYSTEM_SERVICE_ID;
         $expectedVisibility = 'public';
 
         $treeBuilder = new TreeBuilder('flysystem');
@@ -101,6 +144,9 @@ class FlysystemResolverFactoryTest extends TestCase
 
         $this->assertArrayHasKey('visibility', $config);
         $this->assertSame($expectedVisibility, $config['visibility']);
+
+        $this->assertArrayHasKey('cache', $config);
+        $this->assertFalse($config['cache']);
     }
 
     public function testAddDefaultOptionsIfNotSetOnAddConfiguration(): void

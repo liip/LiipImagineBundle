@@ -6,6 +6,12 @@ parameters:
 services:
     logger:
         class: \Psr\Log\NullLogger
+    test.flysystem.adapter:
+        class: League\Flysystem\Local\LocalFilesystemAdapter
+        arguments: ["%kernel.cache_dir%/flysystem"]
+    test.flysystem:
+        class: League\Flysystem\Filesystem
+        arguments: ['@test.flysystem.adapter']
 
 framework:
 
@@ -67,6 +73,12 @@ liip_imagine:
                     access_control_list: [ 'LiipBarBundle' ]
 
     resolvers:
+
+        cached_flysystem:
+            flysystem:
+                filesystem_service: test.flysystem
+                root_url: "https://images.example.com"
+                cache: cache.app
 
         default:
             web_path:

@@ -43,6 +43,7 @@ Using `OneupFlysystemBundle`_, a basic configuration might look as follows:
                     root_url:           "https://images.example.com"
                     cache_prefix:       media/cache
                     visibility:         public
+                    cache:              cache.app
 
     oneup_flysystem:
         adapters:
@@ -68,6 +69,8 @@ There are several configuration options available:
   The visibility is applied, when the objects are stored on a flysystem filesystem.
   You will most probably want to leave the default or explicitly set ``public``.
   Default value: ``public``
+* ``cache``: an optional PSR-6 cache pool service used to cache resolved URLs and
+  avoid repeated remote filesystem lookups. Default value: ``false``
 
 Usage
 -----

@@ -59,6 +59,9 @@ class AppKernel extends Kernel
             $container
                 ->setAlias('test.liip_imagine.filter.manager', 'liip_imagine.filter.manager')
                 ->setPublic(true);
+            $container
+                ->setAlias('test.liip_imagine.cache.resolver.cached_flysystem', 'liip_imagine.cache.resolver.cached_flysystem')
+                ->setPublic(true);
         });
     }
 }
