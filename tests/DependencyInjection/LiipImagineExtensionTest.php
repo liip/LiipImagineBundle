@@ -17,7 +17,6 @@ use Liip\ImagineBundle\DependencyInjection\Factory\Resolver\WebPathResolverFacto
 use Liip\ImagineBundle\DependencyInjection\LiipImagineExtension;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Liip\ImagineBundle\Tests\AbstractTest;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
@@ -31,8 +30,6 @@ use Symfony\Component\Yaml\Parser;
  */
 class LiipImagineExtensionTest extends AbstractTest
 {
-    use ExpectDeprecationTrait;
-
     protected ContainerBuilder $containerBuilder;
 
     public function testUserLoadThrowsExceptionUnlessDriverIsValid(): void
@@ -183,13 +180,8 @@ class LiipImagineExtensionTest extends AbstractTest
         $this->assertSame($factory, $definition->getFactory());
     }
 
-    /**
-     * @group legacy
-     */
-    public function testFilterSetNamesAreNormalizedByDefault(): void
+    public function testFilterSetNamesAreKeptAsWritten(): void
     {
-        $this->expectDeprecation('Since liip/imagine-bundle 2.19: Filter set names are normalized: "my-thumb" is used as "my_thumb". This normalization is deprecated and will be removed in 3.0, set the "liip_imagine.normalize_filter_set_names" config option to false and use the filter set names as written in the configuration.');
-
         $this->createConfiguration([
             'filter_sets' => [
                 'my-thumb' => null,
@@ -199,38 +191,7 @@ class LiipImagineExtensionTest extends AbstractTest
         ]);
 
         $this->assertSame(
-            ['my_thumb', 'my-thumb_v2', 'small'],
-            array_keys($this->containerBuilder->getParameter('liip_imagine.filter_sets'))
-        );
-    }
-
-    public function testFilterSetNamesAreKeptWhenNormalizationIsDisabled(): void
-    {
-        $this->createConfigurations([
-            ['normalize_filter_set_names' => false],
-            ['filter_sets' => ['my-thumb' => null, 'small' => null]],
-        ]);
-
-        $this->assertSame(
-            ['my-thumb', 'small'],
-            array_keys($this->containerBuilder->getParameter('liip_imagine.filter_sets'))
-        );
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testEnablingFilterSetNamesNormalizationIsDeprecated(): void
-    {
-        $this->expectDeprecation('Since liip/imagine-bundle 2.19: Setting the "liip_imagine.normalize_filter_set_names" config option to true is deprecated, set it to false and use the filter set names as written in the configuration. The option will be removed in 3.0.');
-
-        $this->createConfiguration([
-            'normalize_filter_set_names' => true,
-            'filter_sets' => ['my-thumb' => null],
-        ]);
-
-        $this->assertSame(
-            ['my_thumb'],
+            ['my-thumb', 'my-thumb_v2', 'small'],
             array_keys($this->containerBuilder->getParameter('liip_imagine.filter_sets'))
         );
     }

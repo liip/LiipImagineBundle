@@ -26,6 +26,11 @@ been removed.
 
 - __[BC BREAK]__ Argument 2 of `AbstractDoctrineLoader` is mandatory now, you MUST pass the model class name.
 
+- __[Configuration]__ __[BC BREAK]__ Filter set names are used as written: a name that contains a `-` and no `_` is no
+  longer renamed, so `my-thumbnail` is used as `my-thumbnail` and no longer as `my_thumbnail`. The
+  `normalize_filter_set_names` option, deprecated in 2.19, has been removed: drop it from your configuration, and make
+  sure the names used in your templates and code match the names in your configuration literally.
+
 ## 2.19.0
 
 - __[Deprecated]__ A filter set name that contains a `-` and no `_` is renamed by the Symfony configuration, so
